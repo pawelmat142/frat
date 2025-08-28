@@ -2,7 +2,7 @@
 applyTo: '**/*.java'
 ---
 
-Always add "/** Created by Comarch **/" at the top of the file.
+Always add "/** Created by Pawel Malek **/" at the top of the file.
 
 # Java code generation instructions
 
