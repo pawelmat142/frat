@@ -30,6 +30,8 @@ applyTo: '**/*.tsx,**/*.ts'
 - Use mappers/services to transform data between layers
 - Use environment variables for secrets/configuration
 - Use logging via browser console or custom logger
+- Use Material Icons for iconography (e.g. @mui/icons-material or react-icons/material)
+- The application must support both light and dark themes; all components and UI elements should be properly styled and clearly visible in both modes
 
 ## Project Naming Guidelines
 - [Project Naming Guideline](./project-naming-guideline.md)

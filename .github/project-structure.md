@@ -102,6 +102,9 @@
 
 		- styles
 			- main.scss
+			- variables.scss
+			- default.scss
+			- styles.scss
 
 ## Backend (NestJS, TypeScript)
 - backend/
@@ -171,70 +174,27 @@
 					- ImportDictionaryDto.ts
 					- ExportDictionaryDto.ts
 
-		- common/
-			- exceptions/
-				   - BusinessException.ts
-				   - ValidationException.ts
-			- guards/
-				   - RolesGuard.ts
-			- interceptors/
-				   - ResponseInterceptor.ts
+		- global
+			- exceptions
+				- BusinessException.ts
+				- ValidationException.ts
+			- guards
+				- RolesGuard.ts
+			- interceptors
+				- ResponseInterceptor.ts
 		
-		- tests/
-			- auth/
-				   - AuthController.spec.ts
-				   - AuthService.spec.ts
-			- user/
-				   - UserController.spec.ts
-				   - UserService.spec.ts
-			- employee-profile/
-				   - EmployeeProfileController.spec.ts
-				   - EmployeeProfileService.spec.ts
-			- admin/
-				   - AdminController.spec.ts
-				   - AdminService.spec.ts
-			- dictionaries/
-				   - DictionariesController.spec.ts
-				   - DictionariesService.spec.ts
+		- test
 
 ## Database (PostgreSQL)
-- Tables:
-	- users
-	- employee_profiles
-	- dictionaries
-
-- Indexes for search performance (fields, skills, certifications)
-- Full-text search indexes for advanced queries
+- db
+	- tables
+		- users
+		- employee_profiles
+		- dictionaries
+	- indexes
 
 ## Configuration & Deployment
 - docker-compose.yml (NestJS backend, React frontend, PostgreSQL)
 - docker-compose.prod.yml (production config)
-- .env.example (environment variables template)
+- .env (environment variables template)
 - .gitignore
-
-## Security Features
-- JWT-based authentication
-- Password hashing (bcrypt)
-- Role-based access control (guards)
-- Input validation and sanitization (DTOs, pipes)
-- CORS configuration
-- Rate limiting (NestJS middleware)
-- GDPR-compliant data handling
-
-## Key Domain Features Implementation
-- User Management: registration, login, profile
-- Dynamic Employee Profile: configurable fields, edit/view
-- Skills & Certifications: dropdowns from dictionaries
-- Advanced Search: multi-criteria, paginated
-- Admin Panel: field and dictionary management
-
-## API Documentation
-- Swagger/OpenAPI integration for backend API docs
-
-## Notes
-- All backend endpoints have corresponding Jest tests
-- Frontend uses TypeScript and React Testing Library
-- Dockerized for local and production deployment
-- Follows 3-tier architecture: React frontend, NestJS backend, PostgreSQL database
-- JWT tokens for stateless authentication
-- Prepared for future extensions (e.g., job marketplace)

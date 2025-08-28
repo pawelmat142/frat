@@ -37,5 +37,14 @@ applyTo: '**/*.ts'
 - Use logging via NestJS Logger
 - Use error handling middleware for global errors
 
+## Security Features
+- JWT-based authentication
+- Password hashing (bcrypt)
+- Role-based access control (guards)
+- Input validation and sanitization (DTOs, pipes)
+- CORS configuration
+- Rate limiting (NestJS middleware)
+- GDPR-compliant data handling
+
 ## Project Naming Guidelines
 - [Project Naming Guideline](./project-naming-guideline.md)
