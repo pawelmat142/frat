@@ -3,13 +3,6 @@
 This is a fullstack project using NestJS (TypeScript), React, and PostgreSQL. When there is no clear instruction or other indications then generate code in TypeScript (NestJS for backend, React for frontend).
 This application is a mock server and client for a high-altitude work platform, designed for rope access technicians, industrial climbers, wind turbine technicians, and other height work specialists, as well as companies, training providers, and equipment suppliers in the high-altitude industry.
 
-## Frontend Requirement
-The frontend must be built using React and TypeScript, with SCSS modules and Tailwind CSS (utility-first). Hot reload support (e.g. Vite or Webpack with proper configuration) is required for fast development. The interface should be responsive and user-friendly, enabling convenient interaction with the mock server. Required features:
-- User authentication (login/signup)
-- Dashboard for users to view and manage their tasks
-- Integration with the backend API to fetch and display data
-- Responsive design to support various screen sizes
-
 ## Docker Requirement
 The project must be containerized using Docker to ensure easy local development and straightforward installation on a VPS. All components (backend, frontend, database) should be runnable via Docker Compose, with clear instructions for building and starting containers. This guarantees consistent environments and simplifies deployment.
 
