@@ -1,4 +1,3 @@
-
 ## Project Description
 This is a fullstack project using NestJS (TypeScript), React, and PostgreSQL. When there is no clear instruction or other indications then generate code in TypeScript (NestJS for backend, React for frontend).
 This application is a mock server and client for a high-altitude work platform, designed for rope access technicians, industrial climbers, wind turbine technicians, and other height work specialists, as well as companies, training providers, and equipment suppliers in the high-altitude industry.

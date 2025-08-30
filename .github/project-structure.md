@@ -167,7 +167,11 @@
 			   - DictionariesModule.ts
 			   - DictionariesController.ts
 			   - DictionariesService.ts
-			   - DictionaryEntity.ts
+			   - DictionariesRepository.ts
+
+			   - model 
+					- DictionaryEntity.ts
+					- DictionaryI.ts
 
 				- dto
 					- DictionaryDto.ts
