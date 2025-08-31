@@ -1,3 +1,4 @@
+import ThemeSwitch from './controls/ThemeSwitch';
 import DesktopMenu from './DesktopMenu';
 import Logo from './Logo';
 import MobileMenu from './MobileMenu';
@@ -21,6 +22,7 @@ const Header: React.FC = () => {
                 </div>
 
                 <div className="desktop-flex">
+                    <ThemeSwitch />
                     {/* TODO logged user */}
                 </div>
 
