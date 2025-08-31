@@ -43,8 +43,8 @@ A fullstack application built with NestJS, React, and PostgreSQL, designed for r
    ```
 
 4. **Access the application**
-   - Frontend: http://localhost:3001
-   - Backend API: http://localhost:3000
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:3100
    - Database: localhost:5432
 
 ### Production Deployment
@@ -96,7 +96,7 @@ The database is automatically initialized with Docker Compose. Migration scripts
 
 ## API Documentation
 
-Once the backend is running, visit http://localhost:3000/api for Swagger documentation.
+Once the backend is running, visit http://localhost:3100/api for Swagger documentation.
 
 ## Contributing
 

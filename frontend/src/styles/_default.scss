@@ -1,0 +1,70 @@
+@use 'variables.scss' as *;
+
+/* Global custom scrollbar styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $primary-color $primary-bg;
+}
+
+/* For Webkit browsers */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: $primary-color;
+  border-radius: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: $primary-bg;
+}
+
+body {
+  background-color: $primary-bg;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  color: $primary-text;
+}
+
+ul,
+li,
+p {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+article h1,
+aside h1,
+nav h1,
+section h1 {
+  margin-block-start: initial;
+  margin-block-end: initial;
+}
+
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: bold;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.Toastify {
+  padding: 0;
+}
+
+.headlessui-portal-root {
+  z-index: 10;
+}

@@ -1,0 +1,64 @@
+@use 'variables.scss' as *;
+
+.primary-color-control {
+  transition: $transition;
+  outline-offset: -1px;
+  outline-width: 1px;
+  outline-style: solid;
+  outline-color: $secondary-text;
+
+  &::placeholder {
+    color: $gray-400;
+  }
+
+  &:focus {
+    outline-width: 2px;
+    outline-offset: -2px;
+    outline-color: $primary-color;
+  }
+}
+
+.primary-transparent-control {
+  background-color: transparent;
+  transition: $transition;
+
+  &:hover {
+    background-color: $secondary-bg;
+  }
+}
+
+.btn-primary {
+  color: #fff;
+  transition: $transition;
+  @extend .bg-primary-color;
+
+  &:hover {
+    background-color: $primary-color-active;
+  }
+}
+
+.btn-secondary {
+  color: black;
+  transition: $transition;
+  background-color: $gray-300;
+
+  &:hover {
+    background-color: $gray-400;
+  }
+}
+
+.btn-bg {
+  color: $secondary-text;
+  background-color: $primary-bg;
+  border: 1px solid $border-color;
+}
+
+
+// Multiselect overrides
+.icon_cancel.closeIcon {
+  display: none
+}
+
+.optionListContainer {
+  background-color: $primary-bg;
+}

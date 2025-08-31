@@ -18,8 +18,25 @@
 	- src
         - App.tsx
         - index.tsx
-        - index.css
 		- path.ts 
+
+		- admin
+			- views
+                - AdminPanelPage.tsx
+				- DictionaryManageer.tsx
+			- components
+                - FieldConfigPanel.tsx
+                - DictionaryManager.tsx
+			- services
+                - DictionaryAdminService.ts
+            - utils
+                - AdminUtil.ts
+                - DictionaryUtil.ts
+            - hooks
+                - useAdmin.ts
+            - model
+                - Dictionary.ts
+
 		
 		- global
 			- views
@@ -69,21 +86,6 @@
             - model
                 - User.ts
 
-		- admin
-			- views
-                - AdminPanelPage.tsx
-			- components
-                - FieldConfigPanel.tsx
-                - DictionaryManager.tsx
-			- services
-                - AdminService.ts
-                - DictionaryAdminService.ts
-            - utils
-                - AdminUtil.ts
-            - hooks
-                - useAdmin.ts
-            - model
-                - Dictionary.ts
 
 		- employee-profile
 			- views
@@ -114,6 +116,18 @@
 	- src
 		- main.ts
 		- AppModule.ts
+
+		- admin
+			- dictionaries
+				- services
+					- DictionariesService.ts
+					- DictionariesRepo.ts
+				- DictionariesModule.ts
+				- DictionariesController.ts
+
+			   - model 
+					- DictionaryEntity.ts
+					- DictionaryI.ts
 
 		- config
 			- AppConfig.ts
@@ -155,28 +169,6 @@
 				- UpdateEmployeeProfileDto.ts
 				- SearchEmployeeProfileDto.ts
 
-		- admin
-			- AdminModule.ts
-			- AdminController.ts
-			- AdminService.ts
-			- dto
-				- FieldConfigDto.ts
-				- DictionaryConfigDto.ts
-
-		- dictionaries
-			   - DictionariesModule.ts
-			   - DictionariesController.ts
-			   - DictionariesService.ts
-			   - DictionariesRepository.ts
-
-			   - model 
-					- DictionaryEntity.ts
-					- DictionaryI.ts
-
-				- dto
-					- DictionaryDto.ts
-					- ImportDictionaryDto.ts
-					- ExportDictionaryDto.ts
 
 		- global
 			- exceptions

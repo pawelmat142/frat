@@ -29,9 +29,9 @@ services:
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       NODE_ENV: production
-      PORT: 3000
+      PORT: 3100
     ports:
-      - "${BACKEND_PORT}:3000"
+      - "${BACKEND_PORT}:3100"
     depends_on:
       - db
     networks:

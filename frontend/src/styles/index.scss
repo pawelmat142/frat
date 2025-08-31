@@ -1,0 +1,9 @@
+
+@use 'variables.scss' as *;
+@use 'default' as *;
+@use 'styles' as *;
+@use 'controls' as *;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
