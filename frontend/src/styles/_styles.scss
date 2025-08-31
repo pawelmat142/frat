@@ -28,6 +28,24 @@
 }
 
 
+.admin-panel {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    width: 100%;
+    flex: 1;
+}
+
+.admin-panel-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    width: 100%;
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
 @media screen and (min-width: $desktop) {
     .header {
         nav {

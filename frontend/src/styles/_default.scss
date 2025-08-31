@@ -78,6 +78,27 @@ a {
   font-weight: 500;
 }
 
+
+
+.desktop-block,
+.desktop-flex {
+  display: none;
+}
+
+@media screen and (min-width: $desktop) {
+  .desktop-block {
+    display: block;
+  }
+  .desktop-flex {
+    display: flex;
+  }
+}
+
+
+
+
+
+
 // ripple effect 
 .ripple {
   position: relative;

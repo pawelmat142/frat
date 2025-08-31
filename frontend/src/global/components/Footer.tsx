@@ -1,4 +1,4 @@
-function Footer() {
+const Footer: React.FC = () => {
   return (
     <footer className="main-footer">
       <div className="container">

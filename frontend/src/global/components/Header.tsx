@@ -19,7 +19,10 @@ const Header: React.FC = () => {
                 <div className="mobile-menu">
                     <MobileMenu />
                 </div>
-                
+
+                <div className="desktop-flex">
+                    {/* TODO logged user */}
+                </div>
 
             </nav>
         </header>
