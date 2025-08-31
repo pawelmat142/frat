@@ -1,41 +1,18 @@
-$tag1-bg: var(--tag1-bg);
-$tag1-text: var(--tag1-text);
-$tag2-bg: var(--tag2-bg);
-$tag2-text: var(--tag2-text);
-
-// Tag theme classes
-.tag-theme-1 {
-  background-color: $tag1-bg;
-  color: $tag1-text;
-}
-.tag-theme-2 {
-  background-color: $tag2-bg;
-  color: $tag2-text;
-}
-// This file is for @use. Copied from variables.scss
+$transition: .15s ease-out all;
+$desktop: 1024px;
 
 :root {
-    --primary-color: #4f46e5;
-    --primary-color-active: #7A73EB;
+  --primary-color: #4f46e5;
+  --primary-color-active: #7A73EB;
 
-    --primary-bg: #fff;
-    --secondary-bg: #374151;
+  --primary-bg: #fff;
+  --secondary-bg: #374151;
 
-    --primary-text: #111827;
-    --secondary-text: #6b7280;
+  --primary-text: #111827;
+  --secondary-text: #6b7280;
 
-    --border-color: #e5e7eb;
-
-    /* Tag colors (dynamic, max 2 per theme) */
-    --tag1-bg: #e0e7ff;
-    --tag1-text: #3730a3;
-    --tag2-bg: #fef9c3;
-    --tag2-text: #92400e;
+  --border-color: #e5e7eb;
 }
-$tag1-bg: var(--tag1-bg);
-$tag1-text: var(--tag1-text);
-$tag2-bg: var(--tag2-bg);
-$tag2-text: var(--tag2-text);
 
 $primary-color: var(--primary-color);
 $primary-color-active: var(--primary-color-active);
@@ -62,7 +39,9 @@ $gray-900: #111827;
 $error-color: #ef4444;
 $error-color-dark: #f87171;
 
-input::placeholder, textarea::placeholder, .placeholder-secondary-text::placeholder {
+input::placeholder,
+textarea::placeholder,
+.placeholder-secondary-text::placeholder {
   color: $secondary-text !important;
   opacity: 1;
 }
@@ -70,9 +49,11 @@ input::placeholder, textarea::placeholder, .placeholder-secondary-text::placehol
 .primary-color {
   color: $primary-color;
 }
+
 .bg-primary-color {
   background-color: $primary-color;
 }
+
 .highlight {
   color: $primary-color;
 }
@@ -80,6 +61,7 @@ input::placeholder, textarea::placeholder, .placeholder-secondary-text::placehol
 .primary-color-active {
   color: $primary-color-active;
 }
+
 .bg-primary-color-active {
   background-color: $primary-color-active;
 }
@@ -87,9 +69,11 @@ input::placeholder, textarea::placeholder, .placeholder-secondary-text::placehol
 .primary-bg {
   background-color: $primary-bg;
 }
+
 .secondary-bg {
   background-color: $secondary-bg;
 }
+
 .tile-bg {
   background-color: $tile-bg;
 }
@@ -97,6 +81,7 @@ input::placeholder, textarea::placeholder, .placeholder-secondary-text::placehol
 .primary-text {
   color: $primary-text;
 }
+
 .secondary-text {
   color: $secondary-text;
 }
@@ -112,6 +97,7 @@ input::placeholder, textarea::placeholder, .placeholder-secondary-text::placehol
 .error-color {
   color: $error-color;
 }
+
 .bg-error-color {
   background-color: $error-color;
 }

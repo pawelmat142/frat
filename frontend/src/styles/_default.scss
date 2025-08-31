@@ -27,6 +27,7 @@ body {
   padding: 0;
   font-size: 16px;
   color: $primary-text;
+  letter-spacing: .01rem;
 }
 
 ul,
@@ -67,4 +68,63 @@ a {
 
 .headlessui-portal-root {
   z-index: 10;
+}
+
+
+
+// txt
+.txt-link {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+// ripple effect 
+.ripple {
+  position: relative;
+}
+
+
+@media (pointer: coarse) {
+  .ripple:active::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 220%;
+    height: 220%;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    animation: ripple-effect 0.5s linear;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+@media screen and (min-width: $desktop) {
+  .ripple::after {
+    transition: $transition;
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 120%;
+    height: 150%;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: .5rem;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: 1;
+  }
+
+  .ripple:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
