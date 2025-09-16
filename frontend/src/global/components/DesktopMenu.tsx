@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMenuContext } from '../navigation/MenuProvider';
-import { Link } from 'react-router-dom';
+import Buton from './controls/Buton';
+import { BtnModes } from '../interface/controls.interface';
 
 const DesktopMenu: React.FC = () => {
 
@@ -9,14 +10,7 @@ const DesktopMenu: React.FC = () => {
     return (
         <div className='flex gap-4'>
             {menuItems.filter(item => !item.skipHeader).map((item) => (
-                item.to ?
-                <Link key={item.label} to={item.to} className={`ripple txt-link ${item.active ? 'active' : ''}`}>
-                    {item.label}
-                </Link>
-                :
-                <button key={item.label} className={`ripple ${item.active ? 'active' : ''}`}>
-                    {item.label}
-                </button>
+                <Buton to={item.to} className={item.active ? 'active' : ''} mode={BtnModes.SECONDARY_TXT}>{item.label}</Buton>
             ))}
         </div>
     );

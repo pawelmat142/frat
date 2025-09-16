@@ -1,3 +1,6 @@
+import Buton from "../components/controls/Buton";
+import { BtnModes } from "../interface/controls.interface";
+
 const HomePage: React.FC = () => {
   return (
     <div className="page-container">
@@ -8,8 +11,8 @@ const HomePage: React.FC = () => {
             High-Altitude Work Professional Network Platform
           </p>
           <p className="mb-4">
-            Connect with rope access technicians, industrial climbers, wind turbine technicians, 
-            and other height work specialists. Find opportunities, share experiences, and grow your career 
+            Connect with rope access technicians, industrial climbers, wind turbine technicians,
+            and other height work specialists. Find opportunities, share experiences, and grow your career
             in the high-altitude industry.
           </p>
           <div className="mt-4">
@@ -20,6 +23,12 @@ const HomePage: React.FC = () => {
               Join Network
             </button>
           </div>
+
+          <Buton>Elo</Buton>
+          <Buton mode={BtnModes.SECONDARY}>Elo</Buton>
+          <Buton mode={BtnModes.PRIMARY_TXT}>Elo</Buton>
+          <Buton mode={BtnModes.SECONDARY_TXT}>Elo</Buton>
+          <Buton mode={BtnModes.WARNING}>Elo</Buton>
         </div>
       </div>
     </div>

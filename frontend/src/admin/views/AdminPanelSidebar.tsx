@@ -9,7 +9,7 @@ const AdminPanelSidebar: React.FC = () => {
     <div className="admin-panel-sidebar">
       <NavLink
         to={Path.ADMIN_DICTIONARIES}
-        className={({ isActive }) => `tile-btn txt-link${isActive ? ' active' : ''}`}
+        className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}
       >
         <HomeIcon />
         <span>Dictionaries</span>
@@ -17,7 +17,7 @@ const AdminPanelSidebar: React.FC = () => {
 
       <NavLink
         to={Path.ADMIN_TRANSLATIONS}
-        className={({ isActive }) => `tile-btn txt-link${isActive ? ' active' : ''}`}
+        className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}
       >
         <TranslateIcon />
         <span>Translations</span>

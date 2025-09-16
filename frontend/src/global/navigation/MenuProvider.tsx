@@ -34,7 +34,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         }
     ].map(item => ({
         ...item,
-        active: item.to === location.pathname
+        active: isMenuItemActive(item)
     })), [location.pathname]);
 
     const filteredMenuItems = useMemo(() =>
@@ -55,6 +55,17 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         </MenuContext.Provider>
     );
 };
+
+const isMenuItemActive = (item: MenuItem): boolean => {
+    const pathname = location.pathname
+    if (item.to === Path.HOME) {
+        return item.to === pathname
+    }
+    if (item.to) {
+        return pathname.includes(item.to)
+    }
+    return false
+}
 
 export const useMenuContext = () => {
   const context = useContext(MenuContext);
