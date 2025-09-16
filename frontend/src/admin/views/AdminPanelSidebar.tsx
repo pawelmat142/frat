@@ -1,16 +1,30 @@
+import { NavLink } from 'react-router-dom';
+import TranslateIcon from '@mui/icons-material/Translate';
+import HomeIcon from '@mui/icons-material/Home';
+import { Path } from '../../path';
+
 const AdminPanelSidebar: React.FC = () => {
 
-  return (<div className="admin-panel-sidebar">
+  return (
+    <div className="admin-panel-sidebar">
+      <NavLink
+        to={Path.ADMIN_DICTIONARIES}
+        className={({ isActive }) => `tile-btn txt-link${isActive ? ' active' : ''}`}
+      >
+        <HomeIcon />
+        <span>Dictionaries</span>
+      </NavLink>
 
-    <div className="tile-btn">
-      <span>Dictionaries</span>
+      <NavLink
+        to={Path.ADMIN_TRANSLATIONS}
+        className={({ isActive }) => `tile-btn txt-link${isActive ? ' active' : ''}`}
+      >
+        <TranslateIcon />
+        <span>Translations</span>
+      </NavLink>
     </div>
-
-    <div className="tile-btn">
-      <span>Translations</span>
-    </div>
-
-  </div>)
+  );
 }
 
 export default AdminPanelSidebar;
+

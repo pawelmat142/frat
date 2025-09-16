@@ -27,22 +27,28 @@
     border-bottom: 1px solid $border-color;
 }
 
-
 .admin-panel {
     display: grid;
     grid-template-columns: 1fr 4fr;
     width: 100%;
     flex: 1;
+    background-color: $primary-bg;
 }
 
 .admin-panel-sidebar {
+    background-color: $secondary-bg;
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: .3rem;
     width: 100%;
-    padding-top: 1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-top: .5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    border-right: 1px solid $border-color;
+
+    .tile-btn.active {
+        color: $primary-color;
+    }
 }
 
 

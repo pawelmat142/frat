@@ -5,13 +5,30 @@ $desktop: 1024px;
   --primary-color: #4f46e5;
   --primary-color-active: #7A73EB;
 
-  --primary-bg: #fff;
-  --secondary-bg: #374151;
+  --primary-bg: #fbf9fa;
+  --secondary-bg: #fff;
+  --active-bg: #fbf9fa;
+  
+  --primary-text: #364153;
+  --active-text: #4f46e5;
+  --secondary-text: #99a1af;
+  
+  --border-color: #ebe6e7;
+}
 
-  --primary-text: #111827;
-  --secondary-text: #6b7280;
+.dark {
+  --primary-color: #7A73EB;
+  --primary-color-active: #4f46e5;
 
-  --border-color: #e5e7eb;
+  --primary-bg: #101828;
+  --secondary-bg: #0000001a;
+  --active-bg: #ffffff0d;
+
+  --primary-text: #99a1af;
+  --active-text: #fff;
+  --secondary-text: rgba(107, 114, 128, 0.733);
+
+  --border-color: #ffffff1a;
 }
 
 $primary-color: var(--primary-color);
@@ -19,15 +36,13 @@ $primary-color-active: var(--primary-color-active);
 
 $primary-bg: var(--primary-bg);
 $secondary-bg: var(--secondary-bg);
-$tile-bg: var(--tile-bg);
+$active-bg: var(--active-bg);
 
 $primary-text: var(--primary-text);
+$active-text: var(--active-text);
 $secondary-text: var(--secondary-text);
 
 $border-color: var(--border-color);
-
-$tile-bg: rgba(0, 0, 0, 0.1);
-$tile-bg-active: rgba(0, 0, 0, 0.15);
 
 $gray-100: #f3f4f6;
 $gray-200: #E5E7EB;
@@ -77,8 +92,8 @@ textarea::placeholder,
   background-color: $secondary-bg;
 }
 
-.tile-bg {
-  background-color: $tile-bg;
+.active-bg {
+  background-color: $active-bg;
 }
 
 .primary-text {

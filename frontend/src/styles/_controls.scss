@@ -3,15 +3,19 @@
 .tile-btn {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  padding: 1rem 1rem;
+  gap: 1rem;
+  padding: .5rem;
   border-radius: 0.5rem;
-  background-color: $tile-bg;
   cursor: pointer;
   transition: $transition;
+
+  .MuiSvgIcon-root {
+    font-size: 1.9rem;
+  }
   
   &:hover {
-    background-color: $tile-bg-active;
+    background-color: $active-bg;
+    color: $active-text;
   }
 
 }
