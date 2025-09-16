@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
 import { Injectable, NotFoundException,  } from '@nestjs/common';
-import { DictionaryI } from '../model/DictionaryI';
+import { DictionaryI } from '@shared/DictionaryI';
 import { DictionariesRepo } from './DictionariesRepo';
 
 @Injectable()

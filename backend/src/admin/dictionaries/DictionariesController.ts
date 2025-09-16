@@ -7,7 +7,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { DictionariesService } from './services/DictionariesService';
-import { DictionaryI } from './model/DictionaryI';
+import { DictionaryI } from '@shared/DictionaryI';
 
 // TODO roles guardy
 @Controller('api/dictionaries')

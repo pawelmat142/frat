@@ -16,8 +16,8 @@ services:
 
   backend:
     build: 
-      context: ./backend
-      dockerfile: Dockerfile.dev
+      context: .
+      dockerfile: backend/Dockerfile.dev
     container_name: jobhigh_backend
     environment:
       DATABASE_HOST: db
@@ -34,13 +34,15 @@ services:
       - db
     volumes:
       - ./backend:/app
-      - /app/node_modules
+      - ./shared:/app/dist
+      - ./shared:/app/shared
+
     networks:
       - jobhigh_network
     command: npm run start:nodemon
 
   frontend:
-    build: ./frontend
+    build: ./frontendfgrfe
     container_name: jobhigh_frontend
     environment:
       REACT_APP_API_URL: http://localhost:3100/api

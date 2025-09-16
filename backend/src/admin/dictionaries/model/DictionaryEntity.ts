@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
+import { DictionaryColumn, DictionaryElement, DictionaryGroup, DictionaryI, DictionaryStatus, DictionaryStatuses } from '@shared/DictionaryI';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { DictionaryColumn, DictionaryElement, DictionaryGroup, DictionaryI, DictionaryStatus, DictionaryStatuses } from './DictionaryI';
 
 @Entity('jh_dictionaries')
 export class DictionaryEntity implements DictionaryI {

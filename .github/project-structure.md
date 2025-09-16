@@ -9,7 +9,7 @@
 
 
 ## Frontend (React, TypeScript)
-- frontend/
+- frontend
 	- package.json
 	- tsconfig.json
 	- Dockerfile
@@ -109,10 +109,11 @@
 			- styles.scss
 
 ## Backend (NestJS, TypeScript)
-- backend/
+- backend
 	- package.json
 	- tsconfig.json
-	- Dockerfile
+	- Dockerfile.dev
+	- Dockerfile.prod
 	- src
 		- main.ts
 		- AppModule.ts
@@ -181,6 +182,10 @@
 		
 		- test
 
+## Shared
+- shared
+	- interfaces
+		- DictionaryI.ts
 ## Database (PostgreSQL)
 - db
 	- tables

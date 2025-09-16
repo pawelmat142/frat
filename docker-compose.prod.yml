@@ -19,7 +19,7 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile.prod
     container_name: jobhigh_backend_prod
     environment:
@@ -37,6 +37,9 @@ services:
     networks:
       - jobhigh_network
     restart: unless-stopped
+    volumes:
+      - ./backend:/app
+      - ./shared:/shared
 
   frontend:
     build:
@@ -53,6 +56,7 @@ services:
 
 volumes:
   postgres_data:
+
 
 networks:
   jobhigh_network:

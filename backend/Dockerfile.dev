@@ -1,17 +1,16 @@
 FROM node:18-alpine
 
-WORKDIR /app
+WORKDIR /app/backend
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
-
-# Install all dependencies (including dev dependencies)
+# Kopiuj package*.json i instaluj zależności
+COPY backend/package*.json ./
 RUN npm ci && npm cache clean --force
 
-# Copy source code
-COPY . .
+# Kopiuj kod backendu
+# COPY backend /app/backend
+# Kopiuj katalog shared z root do /app/shared
+# COPY shared /app/backend/shared
 
 EXPOSE 3100
 
-# Start in development mode with watch
 CMD ["npm", "run", "start:nodemon"]

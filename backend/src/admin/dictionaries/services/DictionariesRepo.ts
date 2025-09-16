@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { DictionaryEntity } from "../model/DictionaryEntity";
-import { DictionaryI, DictionaryStatuses } from "../model/DictionaryI";
+import { DictionaryI, DictionaryStatuses } from "@shared//DictionaryI";
 
 @Injectable()
 export class DictionariesRepo {
