@@ -16,10 +16,10 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
       "@shared/*": [
-        "../shared/*"
+        "../../shared/*"
       ]
     }
   },

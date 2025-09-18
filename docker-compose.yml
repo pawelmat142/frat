@@ -33,16 +33,16 @@ services:
     depends_on:
       - db
     volumes:
-      - ./backend:/app
-      - ./shared:/app/dist
+      - ./backend:/app/backend
       - ./shared:/app/shared
+      - /app/backend/node_modules
 
     networks:
       - jobhigh_network
-    command: npm run start:nodemon
+    command: ["sh", "-c", "npm run build && node -r tsconfig-paths/register dist/backend/src/main.js"]
 
   frontend:
-    build: ./frontendfgrfe
+    build: ./frontend
     container_name: jobhigh_frontend
     environment:
       REACT_APP_API_URL: http://localhost:3100/api

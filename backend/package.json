@@ -9,12 +9,11 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node -r tsconfig-paths/register dist/main",
-    "start:nodemon": "nodemon --legacy-watch --watch src -r tsconfig-paths/register src/main.ts",
-    "start:dev:poll": "CHOKIDAR_USEPOLLING=true nest start --watch",
-
+    "start:dev": "nest start --watch -r tsconfig-paths/register",
+    "start:debug": "nest start --debug --watch -r tsconfig-paths/register",
+    "start:prod": "node -r tsconfig-paths/register dist/backend/src/main.js",
+    "start:nodemon": "nodemon --legacy-watch --watch src -r tsconfig-paths/register backend/src/main.ts",
+    "start:dev:poll": "CHOKIDAR_USEPOLLING=true nest start --watch -r tsconfig-paths/register",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -81,5 +80,7 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "main": "index.js",
+  "keywords": []
 }
