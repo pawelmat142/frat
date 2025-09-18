@@ -36,10 +36,9 @@ services:
       - ./backend:/app/backend
       - ./shared:/app/shared
       - /app/backend/node_modules
-
     networks:
       - jobhigh_network
-    command: ["sh", "-c", "npm run build && node -r tsconfig-paths/register dist/backend/src/main.js"]
+    command: ["npm", "run", "start:nodemon"]
 
   frontend:
     build: ./frontend

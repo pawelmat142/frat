@@ -36,7 +36,6 @@ async function bootstrap() {
   const port = process.env.PORT || 3100;
   await app.listen(port);
 
-  // TODO logowanie globalnie zrobić
   console.log(`Application is running on: http://localhost:${port}`);
 }
 

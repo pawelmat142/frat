@@ -1,15 +1,22 @@
 FROM node:18-alpine
 
-WORKDIR /app/backend
+WORKDIR /app
 
 # Kopiuj package*.json i instaluj zależności
-COPY backend/package*.json ./
+COPY backend/package*.json ./backend/
+WORKDIR /app/backend
 RUN npm ci && npm cache clean --force
 
+# Wróć do głównego katalogu roboczego
+WORKDIR /app
+
 # Kopiuj kod backendu
-# COPY backend /app/backend
+COPY backend ./backend
 # Kopiuj katalog shared z root do /app/shared
-# COPY shared /app/backend/shared
+COPY shared ./shared
+
+# Ustaw katalog roboczy z powrotem na backend
+WORKDIR /app/backend
 
 EXPOSE 3100
 
