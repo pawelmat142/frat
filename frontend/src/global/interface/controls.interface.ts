@@ -43,7 +43,7 @@ export interface InputInterface {
 export interface DropdownInterface {
     type: 'single' | 'multi';
     items: DropdownItem[];
-    value: string | number | Date | (string | number | Date)[];
+    value: DropdownItem | null;
     onSingleSelect?: (item: DropdownItem | null) => void;
     onMultiSelect?: (items: DropdownItem[]) => void;
     id?: string;

@@ -6,20 +6,23 @@ import React, { useState } from "react";
 
 interface ColumnForm {
   name: string;
-  type: DictionaryColumnType;
+  type: DropdownItem | null;
   required: boolean;
 }
 
 const AddDictionaryView: React.FC = () => {
+
+  const columnTypeOptions: DropdownItem[] = Object.values(DictionaryColumnTypes).map(type => ({ label: type, value: type }));
+
   const [code, setCode] = useState("");
   const [description, setDescription] = useState("");
   const [columns, setColumns] = useState<ColumnForm[]>([]);
-  const [columnForm, setColumnForm] = useState<ColumnForm>({ name: "", type: "string", required: false });
+  const [columnForm, setColumnForm] = useState<ColumnForm>({ name: "", type: columnTypeOptions[0], required: false });
 
   const handleAddColumn = () => {
     if (!columnForm.name) return;
     setColumns([...columns, columnForm]);
-    setColumnForm({ name: "", type: "string", required: false });
+    setColumnForm({ name: "", type: columnTypeOptions[0], required: false });
   };
 
   const handleRemoveColumn = (idx: number) => {
@@ -33,7 +36,6 @@ const AddDictionaryView: React.FC = () => {
   };
 
 
-  const columnTypeOptions: DropdownItem[] = Object.values(DictionaryColumnTypes).map(type => ({ label: type, value: type }));
 
   return (
     <form className="flex flex-col gap-4 p-4 border rounded shadow mt-20" onSubmit={handleSubmit}>
@@ -66,7 +68,7 @@ const AddDictionaryView: React.FC = () => {
           label="Column Type"
           required
           onSingleSelect={item => {
-            console.log(item)
+            setColumnForm({ ...columnForm, type: item });
           }}
         />
 
@@ -81,15 +83,6 @@ const AddDictionaryView: React.FC = () => {
             onChange={e => setColumnForm({ ...columnForm, name: e.target.value })}
             className="border px-2 py-1 rounded"
           />
-          <select
-            value={columnForm.type}
-            onChange={e => setColumnForm({ ...columnForm, type: e.target.value as DictionaryColumnType })}
-            className="border px-2 py-1 rounded"
-          >
-            {Object.values(DictionaryColumnTypes).map(type => (
-              <option key={type} value={type}>{type}</option>
-            ))}
-          </select>
           <label className="flex items-center gap-1">
             <input
               type="checkbox"
@@ -101,12 +94,6 @@ const AddDictionaryView: React.FC = () => {
           <button type="button" onClick={handleAddColumn} className="px-2 py-1 bg-blue-500 text-white rounded">Add</button>
         </div>
         <ul className="list-disc pl-5">
-          {columns.map((col, idx) => (
-            <li key={idx} className="flex gap-2 items-center">
-              <span>{col.name} ({col.type}) {col.required ? "*" : ""}</span>
-              <button type="button" onClick={() => handleRemoveColumn(idx)} className="text-red-500">Remove</button>
-            </li>
-          ))}
         </ul>
       </div>
       <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">Create Dictionary</button>

@@ -94,3 +94,35 @@ $btnPaddingY: 0.375rem;
 .dropdown-arrow.open {
   transform: translateY(-50%) rotate(180deg);
 }
+
+.pp-dropdown-list {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  background-color: $primary-bg;
+  border: 1px solid $border-color;
+  border-radius: .25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  max-height: 220px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dropdown-item {
+  padding: .5rem 1rem;
+  cursor: pointer;
+  background: transparent;
+  color: $primary-text;
+  transition: $transition;
+  &:hover {
+    background-color: $secondary-bg;
+  }
+  &.active {
+    color: $primary-color;
+    font-weight: bold;
+  }
+}
