@@ -19,13 +19,13 @@
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "paths": {
-      "@shared/*": ["../shared/interfaces/*"]
+      "@shared/*": ["../../shared/*"]
     }
   },
   "include": [
     "src",
-    "../shared/interfaces"
+    "../shared"
   ]
 }

@@ -1,19 +1,12 @@
-import { DictionaryI } from "@shared/DictionaryI";
 import Buton from "../../../global/components/controls/Buton";
+import { useNavigate } from "react-router-dom";
+import { Path } from "../../../path"
 
 const AdminDictionaries: React.FC = () => {
 
+    const navigate = useNavigate()
     const onAddDictionary = () => {
-        const dictionary: DictionaryI = {
-            code: 'test',
-            description: 'test',
-            version: 1,
-            columns:[],
-            elements:[],
-            groups:[],
-            status: 'ACTIVE'
-        }
-        console.log(dictionary);
+        navigate(Path.ADMIN_DICTIONARIES_ADD)
     }
 
     return (<div className="flex flex-1 flex-col gap-2 justify-center items-center">

@@ -3,7 +3,10 @@ export abstract class Path {
     public static readonly HOME = '/';
 
     public static readonly ADMIN_PANEL = '/admin-panel';
+
     public static readonly ADMIN_DICTIONARIES = `${Path.ADMIN_PANEL}/dictionaries`;
+    public static readonly ADMIN_DICTIONARIES_ADD = `${Path.ADMIN_PANEL}/dictionaries/add`;
+
     public static readonly ADMIN_TRANSLATIONS = `${Path.ADMIN_PANEL}/translations`;
 }
 
