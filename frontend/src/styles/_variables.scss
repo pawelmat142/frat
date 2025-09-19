@@ -14,6 +14,8 @@ $desktop: 1024px;
   --secondary-text: #99a1af;
   
   --border-color: #ebe6e7;
+
+  --error-color: #ef4444;
 }
 
 .dark {
@@ -29,6 +31,8 @@ $desktop: 1024px;
   --secondary-text: rgba(107, 114, 128, 0.733);
 
   --border-color: #ffffff1a;
+
+  --error-color: #f87171;
 }
 
 $primary-color: var(--primary-color);
@@ -54,8 +58,7 @@ $gray-700: #374151;
 $gray-800: #1F2937;
 $gray-900: #111827;
 
-$error-color: #ef4444;
-$error-color-dark: #f87171;
+$error-color: var(--error-color);
 
 input::placeholder,
 textarea::placeholder,

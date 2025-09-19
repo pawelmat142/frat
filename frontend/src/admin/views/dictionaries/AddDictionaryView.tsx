@@ -1,5 +1,8 @@
+import { DictionaryColumnType, DictionaryColumnTypes } from "@shared/DictionaryI";
+import Dropdown from "global/components/controls/Dropdown";
+import Input from "global/components/controls/Input";
+import { DropdownItem } from "global/interface/controls.interface";
 import React, { useState } from "react";
-import { DictionaryColumnTypes, DictionaryColumnType } from "@shared/DictionaryI";
 
 interface ColumnForm {
   name: string;
@@ -29,29 +32,44 @@ const AddDictionaryView: React.FC = () => {
     console.log({ code, description, columns });
   };
 
+
+  const columnTypeOptions: DropdownItem[] = Object.values(DictionaryColumnTypes).map(type => ({ label: type, value: type }));
+
   return (
-    <form className="flex flex-col gap-4 p-4 border rounded bg-white shadow" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-4 p-4 border rounded shadow mt-20" onSubmit={handleSubmit}>
       <h2 className="text-lg font-bold">Add Dictionary</h2>
-      <div className="flex flex-col gap-2">
-        <label>
-          Code:
-          <input
-            type="text"
-            value={code}
-            onChange={e => setCode(e.target.value)}
-            className="border px-2 py-1 rounded w-full"
-            required
-          />
-        </label>
-        <label>
-          Description:
-          <input
-            type="text"
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            className="border px-2 py-1 rounded w-full"
-          />
-        </label>
+      <div className="flex flex-col gap-3">
+
+        <Input 
+          name="code"
+          label="Code" 
+          value={code} 
+          onChange={e => setCode(e.target.value)} 
+          required 
+          fullWidth
+        />
+
+        <Input
+          name="description"
+          label="Description"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          required
+          fullWidth
+        />
+
+        <Dropdown
+          type="single"
+          items={columnTypeOptions}
+          value={columnForm.type}
+          fullWidth
+          label="Column Type"
+          required
+          onSingleSelect={item => {
+            console.log(item)
+          }}
+        />
+
       </div>
       <div className="flex flex-col gap-2">
         <h3 className="font-semibold">Columns</h3>

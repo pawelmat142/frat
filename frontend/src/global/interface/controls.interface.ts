@@ -23,3 +23,40 @@ export const BtnModes = {
 } as const
 
 export type BtnMode = typeof BtnModes[keyof typeof BtnModes];
+
+
+export interface InputInterface {
+    id?: string;
+    name: string;
+    type?: 'text' | 'number' | 'password' | 'email' | 'date';
+    label?: string;
+    fullWidth?: boolean;
+    disabled?: boolean;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    value?: string | number;
+    className?: string;
+    required?: boolean;
+    autoComplete?: string;
+    center?: boolean;
+}
+
+export interface DropdownInterface {
+    type: 'single' | 'multi';
+    items: DropdownItem[];
+    value: string | number | Date | (string | number | Date)[];
+    onSingleSelect?: (item: DropdownItem | null) => void;
+    onMultiSelect?: (items: DropdownItem[]) => void;
+    id?: string;
+    label?: string;
+    fullWidth?: boolean;
+    disabled?: boolean;
+    required?: boolean;
+    center?: boolean;
+    className?: string;
+}
+
+export interface DropdownItem {
+    label: string;
+    value: string | number | Date;
+    icon?: React.ReactNode;
+}

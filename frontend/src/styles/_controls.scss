@@ -53,5 +53,44 @@ $btnPaddingY: 0.375rem;
       color: $primary-color;
     }
   }
+}
 
+.pp-control {
+  transition: $transition;
+  background-color: $secondary-bg;
+  border-radius: .25rem;
+  border: 1px solid $border-color;
+  padding: .25rem .5rem;
+  outline: none;
+  display: flex;
+
+  &:focus {
+    outline: 2px solid $primary-color;
+  }
+
+  &:hover {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color), transparent 80%);
+  }
+
+}
+
+.pp-dropdown {
+  cursor: pointer;
+  appearance: none;
+  padding-right: 2rem;
+  position: relative;
+}
+
+.dropdown-arrow {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  transition: transform 0.2s ease;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+.dropdown-arrow.open {
+  transform: translateY(-50%) rotate(180deg);
 }
