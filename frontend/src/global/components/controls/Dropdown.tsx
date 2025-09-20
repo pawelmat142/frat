@@ -40,8 +40,6 @@ const Dropdown: React.FC<DropdownInterface> = ({
     const dropdownRef = useRef<HTMLDivElement>(null);
     const myClass = `pp-control pp-dropdown${fullWidth ? ' w-full' : ' w-fit'}${disabled ? ' opacity-50 pointer-events-none cursor-not-allowed' : ''}`;
 
-
-    console.log('value: ', value)
     useEffect(() => {
         if (!open) return;
         const handleClickOutside = (event: MouseEvent) => {

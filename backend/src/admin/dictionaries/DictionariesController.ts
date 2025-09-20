@@ -26,8 +26,8 @@ export class DictionariesController {
   }
 
   @Put()
-  put(@Body() updateDictionaryDto: DictionaryI): Promise<DictionaryI> {
-    return this.dictionariesService.put(updateDictionaryDto);
+  put(@Body() dictionaryDto: DictionaryI): Promise<DictionaryI> {
+    return this.dictionariesService.put(dictionaryDto);
   }
 
   // TODO
