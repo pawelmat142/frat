@@ -28,7 +28,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
             label: 'Home',
         },
         {
-            to: Path.ADMIN_PANEL,
+            to: Path.ADMIN_DICTIONARIES,
             label: 'Admin Panel',
             // TODO admin guard
         }

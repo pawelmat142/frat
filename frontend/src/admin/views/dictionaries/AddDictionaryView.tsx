@@ -1,11 +1,13 @@
 import { DictionaryColumnType, DictionaryColumnTypes } from "@shared/DictionaryI";
+import Buton from "global/components/controls/Buton";
 import Dropdown from "global/components/controls/Dropdown";
 import Input from "global/components/controls/Input";
-import { DropdownItem } from "global/interface/controls.interface";
+import { BtnModes, BtnSizes, DropdownItem } from "global/interface/controls.interface";
 import React, { useState } from "react";
+import AddIcon from '@mui/icons-material/Add';
 
 interface ColumnForm {
-  name: string;
+  code: string;
   type: DropdownItem | null;
   required: boolean;
 }
@@ -17,12 +19,12 @@ const AddDictionaryView: React.FC = () => {
   const [code, setCode] = useState("");
   const [description, setDescription] = useState("");
   const [columns, setColumns] = useState<ColumnForm[]>([]);
-  const [columnForm, setColumnForm] = useState<ColumnForm>({ name: "", type: columnTypeOptions[0], required: false });
+  const [columnForm, setColumnForm] = useState<ColumnForm>({ code: "", type: columnTypeOptions[0], required: false });
 
   const handleAddColumn = () => {
-    if (!columnForm.name) return;
+    if (!columnForm.code) return;
     setColumns([...columns, columnForm]);
-    setColumnForm({ name: "", type: columnTypeOptions[0], required: false });
+    setColumnForm({ code: "", type: columnTypeOptions[0], required: false });
   };
 
   const handleRemoveColumn = (idx: number) => {
@@ -42,12 +44,12 @@ const AddDictionaryView: React.FC = () => {
       <h2 className="text-lg font-bold">Add Dictionary</h2>
       <div className="flex flex-col gap-3">
 
-        <Input 
+        <Input
           name="code"
-          label="Code" 
-          value={code} 
-          onChange={e => setCode(e.target.value)} 
-          required 
+          label="Code"
+          value={code}
+          onChange={e => setCode(e.target.value)}
+          required
           fullWidth
         />
 
@@ -60,17 +62,39 @@ const AddDictionaryView: React.FC = () => {
           fullWidth
         />
 
-        <Dropdown
-          type="single"
-          items={columnTypeOptions}
-          value={columnForm.type}
-          fullWidth
-          label="Column Type"
-          required
-          onSingleSelect={item => {
-            setColumnForm({ ...columnForm, type: item });
-          }}
-        />
+
+        <div className="flex flex-col gap-3">
+
+          <Dropdown
+            type="single"
+            items={columnTypeOptions}
+            value={columnForm.type}
+            fullWidth
+            label="Column Type"
+            required
+            onSingleSelect={item => {
+              setColumnForm({ ...columnForm, type: item });
+            }}
+          />
+
+          <Input
+            name="columnCode"
+            label="Column Code"
+            value={columnForm.code}
+            onChange={e => setColumnForm({ ...columnForm, code: e.target.value })}
+            required
+            fullWidth
+          />
+
+        </div>
+
+
+        <Buton mode={BtnModes.PRIMARY_TXT} onClick={handleAddColumn} size={BtnSizes.SMALL}>
+          <AddIcon />
+          Add Column
+        </Buton>
+
+
 
       </div>
       <div className="flex flex-col gap-2">
@@ -79,8 +103,8 @@ const AddDictionaryView: React.FC = () => {
           <input
             type="text"
             placeholder="Column name"
-            value={columnForm.name}
-            onChange={e => setColumnForm({ ...columnForm, name: e.target.value })}
+            value={columnForm.code}
+            onChange={e => setColumnForm({ ...columnForm, code: e.target.value })}
             className="border px-2 py-1 rounded"
           />
           <label className="flex items-center gap-1">

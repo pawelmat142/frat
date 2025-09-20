@@ -17,7 +17,7 @@ export interface DictionaryElement {
 }
 
 export interface DictionaryColumn {
-    name: string
+    code: string
     type: DictionaryColumnType
     required: boolean
 }

@@ -15,10 +15,6 @@ $btnPaddingY: 0.375rem;
   align-items: center;
   gap: .5rem;
 
-  .MuiSvgIcon-root {
-    font-size: 1.9rem;
-  }
-
   &.primary {
     background-color: $primary-color;
     color: #fff;
@@ -51,6 +47,25 @@ $btnPaddingY: 0.375rem;
 
     &.active {
       color: $primary-color;
+    }
+  }
+
+  .MuiSvgIcon-root {
+    font-size: 1.9rem;
+  }
+
+  &.small {
+    font-size: .8rem;
+
+    .MuiSvgIcon-root {
+      font-size: 1.2rem;
+    }
+  }
+
+  &.large {
+    font-size: 1.25rem;
+    .MuiSvgIcon-root {
+      font-size: 1.5rem;
     }
   }
 }
@@ -91,6 +106,7 @@ $btnPaddingY: 0.375rem;
   display: flex;
   align-items: center;
 }
+
 .dropdown-arrow.open {
   transform: translateY(-50%) rotate(180deg);
 }
@@ -104,7 +120,7 @@ $btnPaddingY: 0.375rem;
   background-color: $primary-bg;
   border: 1px solid $border-color;
   border-radius: .25rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
   max-height: 220px;
   overflow-y: auto;
   margin: 0;
@@ -118,9 +134,11 @@ $btnPaddingY: 0.375rem;
   background: transparent;
   color: $primary-text;
   transition: $transition;
+
   &:hover {
     background-color: $secondary-bg;
   }
+
   &.active {
     color: $primary-color;
     font-weight: bold;

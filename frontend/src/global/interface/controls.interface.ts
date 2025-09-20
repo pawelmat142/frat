@@ -2,6 +2,7 @@ export interface BtnInterface {
     to?: string;
     type?: 'button' | 'submit' | 'reset';
     mode?: BtnMode;
+    size?: BtnSize;
     fullWidth?: boolean;
     children: React.ReactNode;
     className?: string;
@@ -11,6 +12,14 @@ export interface BtnInterface {
     onlyMobile?: boolean;
     onlyDesktop?: boolean;
 }
+
+export const BtnSizes = {
+    SMALL: 'small',
+    MEDIUM: 'medium',
+    LARGE: 'large',
+} as const
+
+export type BtnSize = typeof BtnSizes[keyof typeof BtnSizes];
 
 export const BtnModes = {
     PRIMARY: 'primary',

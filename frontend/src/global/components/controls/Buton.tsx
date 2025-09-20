@@ -1,10 +1,10 @@
-import { BtnInterface, BtnModes } from '../../interface/controls.interface';
+import { BtnInterface, BtnModes, BtnSizes } from '../../interface/controls.interface';
 import { Link } from 'react-router-dom';
 import { MouseEventHandler } from 'react';
 
-const Buton: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, children, fullWidth=false, className, disabled, onlyMobile, onlyDesktop, mode=BtnModes.PRIMARY }) => {
+const Buton: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, size=BtnSizes.MEDIUM, children, fullWidth=false, className, disabled, onlyMobile, onlyDesktop, mode=BtnModes.PRIMARY }) => {
     
-    let myClass = `rounded-md shadow-sm btn-font btn ${mode} ripple`;
+    let myClass = `rounded-md shadow-sm btn-font btn ${mode} ripple ${size}`;
 
     if (onlyMobile) {
         myClass += ' flex md:hidden';
