@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { DictionaryEntity } from "../model/DictionaryEntity";
-import { DictionaryI, DictionaryStatuses } from "@shared//DictionaryI";
+import { DictionaryI, DictionaryListItem, DictionaryStatuses } from "@shared//DictionaryI";
 
 @Injectable()
 export class DictionariesRepo {
@@ -12,14 +12,26 @@ export class DictionariesRepo {
         private dictionaryRepository: Repository<DictionaryEntity>,
     ) { }
 
-    public async listCodes(): Promise<string[]> {
+    public async list(): Promise<DictionaryListItem[]> {
         const rows = await this.dictionaryRepository
             .createQueryBuilder("d")
-            .select("DISTINCT d.code", "code")
-            .where("d.status = :status", { status: DictionaryStatuses.ACTIVE })
-            .getRawMany<{ code: string }>();
+            .select([
+                "d.code AS code",
+                "d.version AS version",
+                "d.status AS status",
+                "d.updatedAt AS updatedAt",
+                "d.createdAt AS createdAt"
+            ])
+            // .where("d.status = :status", { status: DictionaryStatuses.ACTIVE })
+            .getRawMany();
 
-        return rows.map(r => r.code);
+        return rows.map((r: any) => ({
+            code: r.code,
+            version: r.version,
+            status: r.status,
+            updatedAt: r.updatedAt instanceof Date ? r.updatedAt : new Date(r.updatedAt),
+            createdAt: r.createdAt instanceof Date ? r.createdAt : new Date(r.createdAt),
+        }));
     }
 
     public findOne(code: string): Promise<DictionaryI | null> {

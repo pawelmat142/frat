@@ -7,7 +7,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { DictionariesService } from './services/DictionariesService';
-import { DictionaryI } from '@shared/DictionaryI';
+import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
 
 // TODO roles guardy
 @Controller('api/dictionaries')
@@ -15,9 +15,9 @@ export class DictionariesController {
   
   constructor(private readonly dictionariesService: DictionariesService) {}
 
-  @Get('list-codes')
-  listCodes(): Promise<string[]> {
-    return this.dictionariesService.listCodes()
+  @Get('list')
+  list(): Promise<DictionaryListItem[]> {
+    return this.dictionariesService.list();
   }
 
   @Get(':code')

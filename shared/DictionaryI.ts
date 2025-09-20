@@ -8,6 +8,14 @@ export interface DictionaryI {
     groups: DictionaryGroup[]
 }
 
+export interface DictionaryListItem {
+    code: string
+    version: number
+    status: DictionaryStatus
+    updatedAt: Date
+    createdAt: Date
+}
+
 export interface DictionaryElement {
     code: string
     name: string

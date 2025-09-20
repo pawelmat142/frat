@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
 import { Injectable, NotFoundException,  } from '@nestjs/common';
-import { DictionaryI } from '@shared/DictionaryI';
+import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
 import { DictionariesRepo } from './DictionariesRepo';
 
 @Injectable()
@@ -10,8 +10,8 @@ export class DictionariesService {
     private readonly repo: DictionariesRepo,
   ) { }
 
-  public listCodes(): Promise<string[]> {
-    return this.repo.listCodes();
+  public list(): Promise<DictionaryListItem[]> {
+    return this.repo.list();
   }
 
   public async get(code: string): Promise<DictionaryI> {
@@ -29,8 +29,5 @@ export class DictionariesService {
   public async remove(code: string): Promise<void> {
     await this.repo.remove(code);
   }
-
-
-
 
 }
