@@ -20,6 +20,7 @@ export interface DictionaryColumn {
     code: string
     type: DictionaryColumnType
     required: boolean
+    description?: string
 }
 
 export interface DictionaryGroup {

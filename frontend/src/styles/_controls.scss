@@ -144,3 +144,46 @@ $btnPaddingY: 0.375rem;
     font-weight: bold;
   }
 }
+
+
+.pp-checkbox {
+  padding-left: .5rem;
+  cursor: pointer;
+  color: white;
+
+  .checkbox-input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.15em;
+    height: 1.15em;
+    border: 1px solid $primary-color;
+    border-radius: 0.25em;
+    background: $secondary-bg;
+    transition: $transition;
+    position: relative;
+    outline: none;
+    box-shadow: 0 0 0 2px transparent;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .checkbox-input:checked {
+    background: $primary-color;
+    border-color: $primary-color;
+  }
+  .checkbox-input:checked::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0.32em;
+    top: 0.15em;
+    width: 0.4em;
+    height: 0.7em;
+    border: solid $secondary-bg;
+    border-width: 0 0.18em 0.18em 0;
+    transform: rotate(45deg);
+  }
+  .checkbox-label {
+    color: $primary-text;
+    user-select: none;
+  }
+}

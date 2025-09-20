@@ -67,7 +67,7 @@ const Dropdown: React.FC<DropdownInterface> = ({
         }
     };
 
-
+// TODO aktywny element nie ma klasy active
     return (
         <div
             className={`${className || ''}${center ? ' mx-auto' : ''}`}
