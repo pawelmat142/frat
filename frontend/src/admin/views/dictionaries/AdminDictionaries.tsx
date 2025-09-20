@@ -20,6 +20,10 @@ const AdminDictionaries: React.FC = () => {
         navigate(Path.ADMIN_DICTIONARIES_ADD);
     };
 
+    const handleRowClick = (code: string) => {
+        navigate(Path.getDictionaryPath(code));
+    };
+
     return (
         <div className="flex flex-1 flex-col gap-2 items-center w-full p-5">
             <div className="w-full px-0 max-w-6xl">
@@ -45,9 +49,11 @@ const AdminDictionaries: React.FC = () => {
                                         key={idx}
                                         className={
                                             idx === 0
-                                                ? "primary-bg font-bold transition"
-                                                : "hover:active-bg transition"
+                                                ? "primary-bg font-bold transition cursor-pointer"
+                                                : "hover:active-bg transition cursor-pointer"
                                         }
+                                        onClick={() => handleRowClick(dict.code)}
+                                        style={{ userSelect: 'none' }}
                                     >
                                         <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text" + (idx === 0 ? " font-bold" : "")}>{dict.code}</td>
                                         <td className={"px-6 py-3 border-b border-color primary-text" + (idx === 0 ? " font-bold" : "")}>{dict.version}</td>

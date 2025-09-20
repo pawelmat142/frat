@@ -18,7 +18,6 @@ export interface DictionaryListItem {
 
 export interface DictionaryElement {
     code: string
-    name: string
     description: string
     active: boolean
     values: { [key: string]: any }; // key -> column code, typeof value -> DictionaryColumn.type
@@ -29,6 +28,7 @@ export interface DictionaryColumn {
     type: DictionaryColumnType
     required: boolean
     description?: string
+    defaultValue?: any;
 }
 
 export interface DictionaryGroup {

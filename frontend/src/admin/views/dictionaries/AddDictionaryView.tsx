@@ -17,6 +17,7 @@ interface ColumnForm {
   type: DropdownItem | null;
   required: boolean;
   description?: string;
+  defaultValue?: any;
 }
 
 const AddDictionaryView: React.FC = () => {
@@ -60,7 +61,8 @@ const AddDictionaryView: React.FC = () => {
         code: col.code,
         type: col.type?.value as DictionaryColumnType,
         description: col.description,
-        required: col.required
+        required: col.required,
+        defaultValue: col.required ? col.defaultValue : undefined,
       })),
       elements: [],
       groups: []
@@ -71,7 +73,7 @@ const AddDictionaryView: React.FC = () => {
       const res = await httpClient.put<DictionaryI>('/dictionaries', dictionary);
       toast.success(`Dictionary ${res.code} created successfully!`);
       navigate(Path.ADMIN_DICTIONARIES)
-      
+
     } catch (error) {
       // TODO error handling
       console.error('Error updating dictionary: ', error);
@@ -93,124 +95,142 @@ const AddDictionaryView: React.FC = () => {
     return <Loading></Loading>
   }
 
+  const allRowRequiredFiledsFilled = columns.every(col => !col.required || (columns));
+
   return (
-    <form className="flex flex-col gap-4 p-4 border rounded shadow mt-10 min-w-[500px] mb-20" onSubmit={handleSubmit}>
-      <h2 className="text-lg font-bold">Add Dictionary</h2>
-      <div className="flex flex-col gap-3">
-
-        <Input
-          name="code"
-          label="Code"
-          value={code}
-          onChange={e => setCode(e.target.value)}
-          required
-          fullWidth
-        />
-
-        <Input
-          name="description"
-          label="Description"
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-          required
-          fullWidth
-        />
-
-        {columnForm && (<div className="flex flex-col gap-3 border-t pt-3 mt-3">
-
-          <Dropdown
-            type="single"
-            items={columnTypeOptions}
-            value={columnForm.type}
-            fullWidth
-            label="Column Type"
-            required
-            onSingleSelect={item => {
-              setColumnForm({ ...columnForm, type: item });
-            }}
-          />
+    <div className="w-full px-5 py-3">
+      <Buton onClick={() => navigate(Path.ADMIN_DICTIONARIES)} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple mb-2">
+        ← Back
+      </Buton>
+      <form className="flex flex-col gap-4 p-4 border rounded shadow mt-10 max-w-xl mx-auto mb-20" onSubmit={handleSubmit}>
+        <h2 className="text-lg font-bold">Add Dictionary</h2>
+        <div className="flex flex-col gap-3">
 
           <Input
-            name="columnCode"
-            label="Column Code"
-            value={columnForm.code}
-            onChange={e => setColumnForm({ ...columnForm, code: e.target.value })}
+            name="code"
+            label="Code"
+            value={code}
+            onChange={e => setCode(e.target.value)}
             required
             fullWidth
           />
 
           <Input
-            name="columnDescription"
-            label="Column description"
-            value={columnForm.description}
-            onChange={e => setColumnForm({ ...columnForm, description: e.target.value })}
+            name="description"
+            label="Description"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            required
             fullWidth
           />
 
-          <Checkbox
-            checked={columnForm.required}
-            onChange={checked => setColumnForm({ ...columnForm, required: checked })}
-            label="Required"
-          />
+          {columnForm && (<div className="flex flex-col gap-3 border-t pt-3 mt-3">
 
-        </div>)}
+            <Dropdown
+              type="single"
+              items={columnTypeOptions}
+              value={columnForm.type}
+              fullWidth
+              label="Column Type"
+              required
+              onSingleSelect={item => {
+                setColumnForm({ ...columnForm, type: item });
+              }}
+            />
 
-        {columnForm ? (
-          <div className="flex gap-2">
-            <Buton
-              onClick={handleAddColumn}
-              size={BtnSizes.SMALL}
-              disabled={!columnForm?.code || !columnForm.type}
-            >
-              Column ready
-            </Buton>
+            <Input
+              name="columnCode"
+              label="Column Code"
+              value={columnForm.code}
+              onChange={e => setColumnForm({ ...columnForm, code: e.target.value })}
+              required
+              fullWidth
+            />
+
+            <Input
+              name="columnDescription"
+              label="Column description"
+              value={columnForm.description}
+              onChange={e => setColumnForm({ ...columnForm, description: e.target.value })}
+              fullWidth
+            />
+
+            <Checkbox
+              checked={columnForm.required}
+              onChange={checked => setColumnForm({ ...columnForm, required: checked })}
+              label="Required"
+            />
+            {columnForm.required && (
+              <Input
+                name="defaultValue"
+                label="Default value"
+                value={columnForm.defaultValue ?? ""}
+                onChange={e => setColumnForm({ ...columnForm, defaultValue: e.target.value })}
+                required
+                fullWidth
+              />
+            )}
+
+          </div>)}
+
+          {columnForm ? (
+            <div className="flex gap-2">
+              <Buton
+                onClick={handleAddColumn}
+                size={BtnSizes.SMALL}
+                disabled={!columnForm?.code || !columnForm.type}
+              >
+                Column ready
+              </Buton>
+              <Buton
+                mode={BtnModes.PRIMARY_TXT}
+                onClick={() => setColumnForm(null)}
+                size={BtnSizes.SMALL}
+              >
+                Cancel column
+              </Buton>
+
+            </div>
+
+          ) : (
             <Buton
               mode={BtnModes.PRIMARY_TXT}
-              onClick={() => setColumnForm(null)}
+              onClick={handleAddColumn}
               size={BtnSizes.SMALL}
             >
-              Cancel column
+              <AddIcon />
+              Add Column
             </Buton>
+          )}
 
-          </div>
+          {columns.length > 0 && (
+            <div className="flex flex-col gap-2 border-t pt-3">
+              <h3 className="font-semibold">Columns:</h3>
+              <ul className="list-disc pl-5">
+                {columns.map((col, idx) => (
+                  <li key={idx}>
+                    {col.code} <span className="secondary-text">({col.type?.label})</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-        ) : (
-          <Buton
-            mode={BtnModes.PRIMARY_TXT}
-            onClick={handleAddColumn}
-            size={BtnSizes.SMALL}
-          >
-            <AddIcon />
-            Add Column
-          </Buton>
-        )}
+        </div>
 
-        {columns.length > 0 && (
-          <div className="flex flex-col gap-2 border-t pt-3">
-            <h3 className="font-semibold">Columns:</h3>
-            <ul className="list-disc pl-5">
-              {columns.map((col, idx) => (
-                <li key={idx}>
-                  {col.code} <span className="secondary-text">({col.type?.label})</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <Buton
+          mode={BtnModes.PRIMARY}
+          size={BtnSizes.LARGE}
+          fullWidth={true}
+          className="mt-5"
+          type="submit"
+          disabled={!code || !description || columns.length === 0}
+        >
+          Create dictionary
+        </Buton>
+      </form>
 
-      </div>
-
-      <Buton
-        mode={BtnModes.PRIMARY}
-        size={BtnSizes.LARGE}
-        fullWidth={true}
-        className="mt-5"
-        type="submit"
-        disabled={!code || !description || columns.length === 0}
-      >
-        Create dictionary
-      </Buton>
-    </form>
+    </div>
   );
 };
 
