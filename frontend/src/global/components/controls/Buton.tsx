@@ -18,7 +18,7 @@ const Buton: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, size=B
         myClass += ` ${className}`;
     }
     if (fullWidth) {
-        myClass += ' w-full';
+        myClass += ' w-full justify-center';
     } else {
         myClass += ' w-fit';
     }

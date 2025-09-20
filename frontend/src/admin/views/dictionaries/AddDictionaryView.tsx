@@ -59,7 +59,7 @@ const AddDictionaryView: React.FC = () => {
   }
 
   return (
-    <form className="flex flex-col gap-4 p-4 border rounded shadow mt-20 min-w-[500px]" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-4 p-4 border rounded shadow mt-10 min-w-[500px] mb-20" onSubmit={handleSubmit}>
       <h2 className="text-lg font-bold">Add Dictionary</h2>
       <div className="flex flex-col gap-3">
 
@@ -138,7 +138,7 @@ const AddDictionaryView: React.FC = () => {
             size={BtnSizes.SMALL}
             disabled={!columnForm.code || !columnForm.type}
           >
-            <AddIcon />
+          <AddIcon />
             Add Column
           </Buton>
 
@@ -146,7 +146,15 @@ const AddDictionaryView: React.FC = () => {
 
       </div>
 
-      <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">Create Dictionary</button>
+      <Buton
+        mode={BtnModes.PRIMARY}
+        size={BtnSizes.LARGE}
+        fullWidth={true}
+        type="submit"
+        disabled={!code || !description || columns.length === 0}
+      >
+        Create dictionary
+      </Buton>
     </form>
   );
 };
