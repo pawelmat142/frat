@@ -7,8 +7,10 @@ import { httpClient } from "global/services/http";
 import Loading from "global/components/Loading";
 import AddIcon from '@mui/icons-material/Add';
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path";
+import { toast } from "react-toastify";
+import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
 
 // TODO ustandaryzować wersje tekstu 
 
@@ -22,14 +24,22 @@ const DictionaryView: React.FC = () => {
     const [elements, setElements] = useState<DictionaryElement[]>([]);
 
     useEffect(() => {
+        const initDictionary = async () => {
+            try {
+                setLoading(true);
+
+                const result = await DictionaryAdminService.getDictionary(code)
+                setDictionary(result);
+                setElements(result.elements || []);
+            } catch (error) {
+                // TODO handle
+                console.error("Error fetching dictionary:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
         if (!code) return;
-        setLoading(true);
-        httpClient.get<DictionaryI>(`/dictionaries/${code}`)
-            .then(dict => {
-                setDictionary(dict);
-                setElements(dict.elements || []);
-            })
-            .finally(() => setLoading(false));
+        initDictionary();
     }, [code]);
 
     if (loading) {
@@ -42,7 +52,7 @@ const DictionaryView: React.FC = () => {
 
     const handleAddElement = () => {
         if (elements.some(e => e.code === elementForm?.code)) {
-            // TODO: toast error
+            toast.error("Element with this code already exists.");
             return;
         }
         // Prepare values for columns
@@ -61,16 +71,28 @@ const DictionaryView: React.FC = () => {
         setElementForm(null);
     };
 
-    // TODO dodawanie grup
-
-
-    // Check if all required fields for the element are filled
-    const allElementRequiredFieldsFilled = dictionary.columns.every(col => {
-        if (col.required) {
-            return elementForm?.values?.[col.code] !== undefined && elementForm?.values?.[col.code] !== "";
+    const handleSave = async () => {
+        const updatedDictionary: DictionaryI = {
+            ...dictionary,
+            elements: elements
         }
-        return true;
-    });
+
+        try {
+            setLoading(true);
+            const result = await DictionaryAdminService.putDictionary(updatedDictionary);
+            setDictionary(result);
+            setElements(result.elements || []);
+            toast.success("Dictionary updated successfully.");
+        } catch (error) {
+            toast.error("Error updating dictionary.");
+            console.error("Error updating dictionary:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    // TODO dodawanie grup
 
     return (
         <div className="flex flex-col gap-6 items-center w-full px-5 py-3">
@@ -119,16 +141,25 @@ const DictionaryView: React.FC = () => {
                     </table>
                 </div>
                 {/* Add element button and form */}
-                <div className="flex flex-col items-center mb-10 mt-5">
+                <div className="">
                     {!elementForm ? (
-                        <Buton
-                            onClick={() => setElementForm({})}
-                            className="mx-auto"
-                            mode={BtnModes.PRIMARY}
-                            size={BtnSizes.LARGE}
-                        >
-                            <AddIcon /> Add Element
-                        </Buton>
+                        <div className="flex gap-4 mb-10 mt-5 justify-center">
+                            <Buton
+                                onClick={() => setElementForm({})}
+                                mode={BtnModes.PRIMARY}
+                                size={BtnSizes.LARGE}
+                            >
+                                <AddIcon /> Add Element
+                            </Buton>
+                            <Buton
+                                onClick={() => handleSave()}
+                                mode={BtnModes.SECONDARY}
+                                size={BtnSizes.LARGE}
+                            >
+                                Save changes
+                            </Buton>
+
+                        </div>
                     ) : (
                         <div className="flex flex-col gap-4 mt-4 secondary-bg w-full max-w-lg mx-auto">
                             <div className="flex flex-col gap-3">
