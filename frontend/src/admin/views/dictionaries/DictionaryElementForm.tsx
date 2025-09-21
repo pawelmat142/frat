@@ -2,7 +2,6 @@ import React from "react";
 import Input from "global/components/controls/Input";
 import Checkbox from "global/components/controls/Checkbox";
 import Buton from "global/components/controls/Buton";
-import AddIcon from '@mui/icons-material/Add';
 import { BtnModes } from "global/interface/controls.interface";
 import { DictionaryI, DictionaryElement } from "@shared/DictionaryI";
 
@@ -11,13 +10,15 @@ interface DictionaryElementFormProps {
     elementForm: Partial<DictionaryElement> | null;
     setElementForm: (form: Partial<DictionaryElement> | null) => void;
     onAddElement: () => void;
+    editMode?: boolean;
 }
 
 const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
     dictionary,
     elementForm,
     setElementForm,
-    onAddElement
+    onAddElement,
+    editMode
 }) => {
     const allElementRequiredFiledsFilled = dictionary.columns.every(col => !col.required || (elementForm?.values && elementForm.values[col.code]));
 
@@ -32,6 +33,7 @@ const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
                     onChange={e => setElementForm({ ...elementForm, code: e.target.value })}
                     required
                     fullWidth
+                    disabled={editMode}
                 />
                 <Input
                     name="elementDescription"
@@ -70,7 +72,7 @@ const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
                     mode={BtnModes.PRIMARY}
                     disabled={!elementForm?.code || !allElementRequiredFiledsFilled}
                 >
-                    <AddIcon /> Add Element
+                    {editMode ? `Update Element` : `Add Element`}
                 </Buton>
                 <Buton
                     onClick={() => setElementForm(null)}

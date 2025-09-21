@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { DictionaryI, DictionaryElement } from "@shared/DictionaryI";
+import { DictionaryI, DictionaryElement, DictionaryStatuses } from "@shared/DictionaryI";
 import Buton from "global/components/controls/Buton";
 import DictionaryElementForm from "./DictionaryElementForm";
-import { httpClient } from "global/services/http";
 import Loading from "global/components/Loading";
 import AddIcon from '@mui/icons-material/Add';
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
@@ -11,26 +10,34 @@ import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path";
 import { toast } from "react-toastify";
 import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
-
-// TODO ustandaryzować wersje tekstu 
-
+import { useConfirm } from "global/providers/ConfirmProvider";
+import IconButton from "global/components/controls/IconButon";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 const DictionaryView: React.FC = () => {
     const navigate = useNavigate();
+    const confirm = useConfirm();
+
     const { code = "" } = useParams<{ code: string }>();
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
     const [loading, setLoading] = useState(false);
     const [elementForm, setElementForm] = useState<Partial<DictionaryElement> | null>(null);
+    const [elementFormEditMode, setElementFormEditMode] = useState<boolean>(false);
     const [elements, setElements] = useState<DictionaryElement[]>([]);
+
+
+    const _setDictionary = (dict: DictionaryI) => {
+        setDictionary(dict);
+        setElements(dict.elements || []);
+    }
 
     useEffect(() => {
         const initDictionary = async () => {
             try {
                 setLoading(true);
-
                 const result = await DictionaryAdminService.getDictionary(code)
-                setDictionary(result);
-                setElements(result.elements || []);
+                _setDictionary(result);
             } catch (error) {
                 // TODO handle
                 console.error("Error fetching dictionary:", error);
@@ -51,7 +58,7 @@ const DictionaryView: React.FC = () => {
     }
 
     const handleAddElement = () => {
-        if (elements.some(e => e.code === elementForm?.code)) {
+        if (!elementFormEditMode && elements.some(e => e.code === elementForm?.code)) {
             toast.error("Element with this code already exists.");
             return;
         }
@@ -61,13 +68,29 @@ const DictionaryView: React.FC = () => {
             values[col.code] = elementForm?.values?.[col.code] ?? "";
         });
         if (!elementForm) return;
-        const newElement: DictionaryElement = {
-            code: elementForm.code ?? "",
-            description: elementForm.description || "",
-            active: elementForm.active ?? true,
-            values,
-        };
-        setElements([...elements, newElement]);
+
+        if (elementFormEditMode) {
+            setElements(elements.map(el => {
+                if (el.code === elementForm.code) {
+                    return {
+                        code: elementForm.code ?? "",
+                        description: elementForm.description || "",
+                        active: elementForm.active ?? true,
+                        values,
+                    }
+                }
+                return el
+            }))
+        } else {
+            const newElement: DictionaryElement = {
+                code: elementForm.code ?? "",
+                description: elementForm.description || "",
+                active: elementForm.active ?? true,
+                values,
+            };
+            setElements([...elements, newElement]);
+        }
+        setElementFormEditMode(false);
         setElementForm(null);
     };
 
@@ -80,8 +103,7 @@ const DictionaryView: React.FC = () => {
         try {
             setLoading(true);
             const result = await DictionaryAdminService.putDictionary(updatedDictionary);
-            setDictionary(result);
-            setElements(result.elements || []);
+            _setDictionary(result);
             toast.success("Dictionary updated successfully.");
         } catch (error) {
             toast.error("Error updating dictionary.");
@@ -91,6 +113,69 @@ const DictionaryView: React.FC = () => {
         }
     };
 
+
+    const handleDelete = async () => {
+        if (!dictionary) return;
+
+        try {
+            const confirmed = await confirm({
+                title: "Confirm Deletion",
+                message: `Are you sure you want to delete the dictionary "${dictionary.code}"? This action cannot be undone.`,
+                confirmText: "Delete",
+                cancelText: "Cancel"
+            });
+            if (!confirmed) return;
+
+            setLoading(true);
+            await DictionaryAdminService.deleteDictionary(dictionary.code);
+            toast.success("Dictionary deleted successfully.");
+            navigate(Path.ADMIN_DICTIONARIES);
+        } catch (error) {
+            // TODO handle
+            toast.error("Error deleting dictionary.");
+            console.error("Error deleting dictionary:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteElement = async (elementCode: string) => {
+        if (!dictionary) return;
+
+        try {
+            const confirmed = await confirm({
+                title: "Confirm Deletion",
+                message: `Are you sure you want to delete the element "${elementCode}"? This action cannot be undone.`,
+                confirmText: "Delete",
+                cancelText: "Cancel"
+            });
+            if (!confirmed) return;
+
+            const newElements = elements.filter(el => el.code !== elementCode);
+
+            setLoading(true);
+            const result = await DictionaryAdminService.putDictionary({
+                ...dictionary,
+                elements: newElements
+            });
+            _setDictionary(result);
+            toast.success("Element deleted successfully.");
+        } catch (error) {
+            toast.error("Error deleting element.");
+            console.error("Error deleting element:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleEditElement = (elementCode: string) => {
+        // show add element form with data populated
+        const element = elements.find(el => el.code === elementCode);
+        if (element) {
+            setElementFormEditMode(true);
+            setElementForm(element);
+        }
+    }
 
     // TODO dodawanie grup
 
@@ -118,6 +203,7 @@ const DictionaryView: React.FC = () => {
                                     <th key={col.code} className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">{col.code}</th>
                                 ))}
                                 <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Active</th>
+                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,12 +214,16 @@ const DictionaryView: React.FC = () => {
                             ) : (
                                 elements.map((el, idx) => (
                                     <tr key={el.code} className={idx === 0 ? "primary-bg font-bold transition" : "hover:active-bg transition"}>
-                                        <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text" + (idx === 0 ? " font-bold" : "")}>{el.code}</td>
-                                        <td className={"px-6 py-3 border-b border-color secondary-text" + (idx === 0 ? " font-bold" : "")}>{el.description}</td>
+                                        <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text"}>{el.code}</td>
+                                        <td className={"px-6 py-3 border-b border-color secondary-text"}>{el.description}</td>
                                         {dictionary.columns.map(col => (
                                             <td key={col.code} className="px-6 py-3 border-b border-color primary-text">{el.values[col.code] !== undefined && el.values[col.code] !== "" ? el.values[col.code] : "-"}</td>
                                         ))}
-                                        <td className={"px-6 py-3 border-b border-color" + (idx === 0 ? " font-bold" : "")}>{el.active ? <span className="primary-color font-semibold">Yes</span> : <span className="secondary-text">No</span>}</td>
+                                        <td className={"px-6 py-3 border-b border-color"}>{el.active ? <span className="primary-color font-semibold">Yes</span> : <span className="secondary-text">No</span>}</td>
+                                        <td className={"px-6 py-3 border-b border-color flex gap-1 justify-end"}>
+                                            <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditElement(el.code)} />
+                                            <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleDeleteElement(el.code)} />
+                                        </td>
                                     </tr>
                                 ))
                             )}
@@ -143,20 +233,37 @@ const DictionaryView: React.FC = () => {
                 {/* Add element button and form */}
                 <div className="">
                     {!elementForm ? (
-                        <div className="flex gap-4 mb-10 mt-5 justify-center">
+                        <div className="flex gap-2 mb-10 mt-5">
                             <Buton
                                 onClick={() => setElementForm({})}
                                 mode={BtnModes.PRIMARY}
-                                size={BtnSizes.LARGE}
                             >
-                                <AddIcon /> Add Element
+                                <AddIcon /> Add element
                             </Buton>
                             <Buton
                                 onClick={() => handleSave()}
                                 mode={BtnModes.SECONDARY}
-                                size={BtnSizes.LARGE}
                             >
                                 Save changes
+                            </Buton>
+                            <Buton
+                                onClick={() => handleDelete()}
+                                mode={BtnModes.ERROR}
+                            >
+                                Delete dictionary
+                            </Buton>
+                            <Buton
+                                onClick={() => setDictionary({
+                                    ...dictionary,
+                                    status: dictionary.status === DictionaryStatuses.ACTIVE
+                                        ? DictionaryStatuses.INACTIVE
+                                        : DictionaryStatuses.ACTIVE
+                                })}
+                                mode={BtnModes.PRIMARY_TXT}
+                            >
+                                {dictionary.status === DictionaryStatuses.ACTIVE
+                                    ? 'Deactivate'
+                                    : 'Activate'}
                             </Buton>
 
                         </div>
@@ -168,6 +275,7 @@ const DictionaryView: React.FC = () => {
                                     elementForm={elementForm}
                                     setElementForm={setElementForm}
                                     onAddElement={handleAddElement}
+                                    editMode={elementFormEditMode}
                                 />
                             </div>
                         </div>

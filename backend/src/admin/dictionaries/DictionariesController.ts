@@ -5,6 +5,7 @@ import {
   Put,
   Body,
   Param,
+  Delete,
 } from '@nestjs/common';
 import { DictionariesService } from './services/DictionariesService';
 import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
@@ -28,6 +29,11 @@ export class DictionariesController {
   @Put()
   put(@Body() dictionaryDto: DictionaryI): Promise<DictionaryI> {
     return this.dictionariesService.put(dictionaryDto);
+  }
+
+  @Delete(':code')
+  delete(@Param('code') code: string): Promise<void> {
+    return this.dictionariesService.delete(code);
   }
 
   // TODO

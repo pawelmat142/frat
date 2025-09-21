@@ -4,6 +4,7 @@ import Dropdown from "global/components/controls/Dropdown";
 import Input from "global/components/controls/Input";
 import { BtnModes, BtnSizes, DropdownItem } from "global/interface/controls.interface";
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from 'react-toastify';
 import AddIcon from '@mui/icons-material/Add';
 import Checkbox from "global/components/controls/Checkbox";
@@ -224,7 +225,7 @@ const AddDictionaryView: React.FC = () => {
           type="submit"
           disabled={!code || !description || columns.length === 0}
         >
-          Create dictionary
+          {`Create dictionary`}
         </Buton>
       </form>
 

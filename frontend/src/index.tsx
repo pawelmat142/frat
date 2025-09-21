@@ -8,6 +8,7 @@ import Footer from './global/components/Footer';
 import { ToastContainer } from 'react-toastify';
 import { MenuProvider } from './global/navigation/MenuProvider';
 import { ThemeProvider } from './global/providers/ThemeProvider';
+import { ConfirmProvider } from 'global/providers/ConfirmProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -15,6 +16,7 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    <ConfirmProvider>
       <MenuProvider>
         <ThemeProvider>
           <div className="min-h-screen flex flex-col">
@@ -39,6 +41,8 @@ root.render(
           />
         </ThemeProvider>
       </MenuProvider>
+
+    </ConfirmProvider>
 
       <ToastContainer
         position="top-right"

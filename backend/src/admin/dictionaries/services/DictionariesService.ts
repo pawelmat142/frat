@@ -26,7 +26,7 @@ export class DictionariesService {
     return this.repo.set(dto);
   }
 
-  public async remove(code: string): Promise<void> {
+  public async delete(code: string): Promise<void> {
     await this.repo.remove(code);
   }
 

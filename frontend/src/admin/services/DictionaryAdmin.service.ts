@@ -9,6 +9,9 @@ export const DictionaryAdminService = {
 
 	async putDictionary(dictionary: DictionaryI): Promise<DictionaryI> {
 		return httpClient.put<DictionaryI>(`/dictionaries`, dictionary);
-	}
+	},
 
+	async deleteDictionary(code: string): Promise<void> {
+		return httpClient.delete<void>(`/dictionaries/${code}`);
+	}
 };
