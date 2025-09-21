@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DictionaryI, DictionaryElement } from "@shared/DictionaryI";
 import Buton from "global/components/controls/Buton";
-import Input from "global/components/controls/Input";
-import Checkbox from "global/components/controls/Checkbox";
+import DictionaryElementForm from "./DictionaryElementForm";
 import { httpClient } from "global/services/http";
 import Loading from "global/components/Loading";
 import AddIcon from '@mui/icons-material/Add';
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useNavigate } from "react-router-dom"; 
 import { Path } from "../../../path";
+
+// TODO ustandaryzować wersje tekstu 
+
 
 const DictionaryView: React.FC = () => {
     const navigate = useNavigate();
@@ -61,7 +63,14 @@ const DictionaryView: React.FC = () => {
 
     // TODO dodawanie grup
 
-    const allElementRequiredFiledsFilled = dictionary.columns.every(col => !col.required || (elementForm?.values && elementForm.values[col.code]));
+
+    // Check if all required fields for the element are filled
+    const allElementRequiredFieldsFilled = dictionary.columns.every(col => {
+        if (col.required) {
+            return elementForm?.values?.[col.code] !== undefined && elementForm?.values?.[col.code] !== "";
+        }
+        return true;
+    });
 
     return (
         <div className="flex flex-col gap-6 items-center w-full px-5 py-3">
@@ -77,16 +86,16 @@ const DictionaryView: React.FC = () => {
                 {dictionary.description && (
                     <div className="mb-4 secondary-text">Description: {dictionary.description}</div>
                 )}
-                <div className="overflow-x-auto w-full rounded-lg shadow border border-color secondary-bg mb-8">
+                <div className="overflow-x-auto w-full rounded-lg shadow border border-color secondary-bg">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr>
-                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold primary-text">Code</th>
-                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold primary-text">Description</th>
+                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Code</th>
+                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Description</th>
                                 {dictionary.columns.map(col => (
-                                    <th key={col.code} className="px-6 py-3 border-b-2 border-color text-sm font-semibold primary-text">{col.code}</th>
+                                    <th key={col.code} className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">{col.code}</th>
                                 ))}
-                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold primary-text">Active</th>
+                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Active</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,7 +119,7 @@ const DictionaryView: React.FC = () => {
                     </table>
                 </div>
                 {/* Add element button and form */}
-                <div className="flex flex-col items-center mb-10">
+                <div className="flex flex-col items-center mb-10 mt-5">
                     {!elementForm ? (
                         <Buton
                             onClick={() => setElementForm({})}
@@ -121,62 +130,14 @@ const DictionaryView: React.FC = () => {
                             <AddIcon /> Add Element
                         </Buton>
                     ) : (
-                        <div className="flex flex-col gap-4 p-4 border rounded shadow mt-4 secondary-bg w-full max-w-lg mx-auto">
-                            <h3 className="text-lg font-bold mb-2">Add Element</h3>
+                        <div className="flex flex-col gap-4 mt-4 secondary-bg w-full max-w-lg mx-auto">
                             <div className="flex flex-col gap-3">
-                                <Input
-                                    name="elementCode"
-                                    label="Element Code"
-                                    value={elementForm?.code || ""}
-                                    onChange={e => setElementForm({ ...elementForm, code: e.target.value })}
-                                    required
-                                    fullWidth
+                                <DictionaryElementForm
+                                    dictionary={dictionary}
+                                    elementForm={elementForm}
+                                    setElementForm={setElementForm}
+                                    onAddElement={handleAddElement}
                                 />
-                                <Input
-                                    name="elementDescription"
-                                    label="Description"
-                                    value={elementForm?.description || ""}
-                                    onChange={e => setElementForm({ ...elementForm, description: e.target.value })}
-                                    fullWidth
-                                />
-                                <Checkbox
-                                    checked={elementForm?.active ?? true}
-                                    onChange={checked => setElementForm({ ...elementForm, active: checked })}
-                                    label="Active"
-                                />
-                                {/* Dynamic columns */}
-                                {dictionary.columns.map(col => (
-                                    <Input
-                                        key={col.code}
-                                        name={col.code}
-                                        label={col.code + " (" + col.type + ")"}
-                                        value={elementForm?.values?.[col.code] || ""}
-                                        onChange={e => setElementForm({
-                                            ...elementForm,
-                                            values: {
-                                                ...elementForm?.values,
-                                                [col.code]: e.target.value
-                                            }
-                                        })}
-                                        required={col.required}
-                                        fullWidth
-                                    />
-                                ))}
-                            </div>
-                            <div className="flex gap-2 justify-center mt-2">
-                                <Buton
-                                    onClick={handleAddElement}
-                                    mode={BtnModes.PRIMARY}
-                                    disabled={!elementForm?.code || !allElementRequiredFiledsFilled}
-                                >
-                                    <AddIcon /> Add Element
-                                </Buton>
-                                <Buton
-                                    onClick={() => setElementForm(null)}
-                                    mode={BtnModes.PRIMARY_TXT}
-                                >
-                                    Cancel
-                                </Buton>
                             </div>
                         </div>
                     )}

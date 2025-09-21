@@ -95,8 +95,6 @@ const AddDictionaryView: React.FC = () => {
     return <Loading></Loading>
   }
 
-  const allRowRequiredFiledsFilled = columns.every(col => !col.required || (columns));
-
   return (
     <div className="w-full px-5 py-3">
       <Buton onClick={() => navigate(Path.ADMIN_DICTIONARIES)} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple mb-2">

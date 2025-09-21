@@ -73,14 +73,24 @@ a {
 
 
 
-// font
+
+// FONT
 .btn-font {
   font-size: 1.1rem;
   font-weight: 500;
 }
 
 
+.h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: .04rem;
+}
 
+
+
+
+// DISPLAY OR NOT
 .desktop-block,
 .desktop-flex {
   display: none;
@@ -104,7 +114,6 @@ a {
 .ripple {
   position: relative;
 }
-
 
 @media (pointer: coarse) {
   .ripple:active::after {
