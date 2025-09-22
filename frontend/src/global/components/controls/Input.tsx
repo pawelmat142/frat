@@ -37,6 +37,15 @@ const Input: React.FC<InputInterface> = ({
         }
     };
 
+    const getValue = (): string | number | undefined => {
+        if (typeof value === 'string' && type === 'text') {
+            return value;
+        }
+        if (typeof value === 'number' && type === 'number') {
+            return value;
+        }
+    }
+    
     return (
         <div className={`${className}${center ? ' mx-auto' : ''}`}>
             <ControlLabel id={id} label={label} required={required} />
@@ -45,7 +54,7 @@ const Input: React.FC<InputInterface> = ({
                     id={id}
                     name={name || id}
                     type={type}
-                    value={value}
+                    value={getValue()}
                     onChange={handleChange}
                     className={myClass}
                     disabled={disabled}

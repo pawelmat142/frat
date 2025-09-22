@@ -12,6 +12,7 @@ import { httpClient } from "global/services/http";
 import { useNavigate } from "react-router-dom";
 import { Path } from '../../../path';
 import Loading from "global/components/Loading";
+import TypedInput from "global/components/controls/TypedInput";
 
 interface ColumnForm {
   code: string;
@@ -92,6 +93,19 @@ const AddDictionaryView: React.FC = () => {
     setColumnForm(null);
   }
 
+  // TODO
+  // kontrolka date kolumny
+  // kontrolka number kolumny
+  // kontrolka stringlist kolumny
+
+  // to samo przy edycji kolumn
+
+  // dodawanie grupy
+  // prezentacja grupy
+  // edycja grupy
+  // edycja słownika
+
+
   if (loading) {
     return <Loading></Loading>
   }
@@ -149,7 +163,7 @@ const AddDictionaryView: React.FC = () => {
             <Input
               name="columnDescription"
               label="Column description"
-              value={columnForm.description}
+              value={columnForm.description || null}
               onChange={e => setColumnForm({ ...columnForm, description: e.target.value })}
               fullWidth
             />
@@ -160,11 +174,14 @@ const AddDictionaryView: React.FC = () => {
               label="Required"
             />
             {columnForm.required && (
-              <Input
+              <TypedInput
+                valueType={columnForm.type?.value as DictionaryColumnType}
                 name="defaultValue"
                 label="Default value"
                 value={columnForm.defaultValue ?? ""}
-                onChange={e => setColumnForm({ ...columnForm, defaultValue: e.target.value })}
+                onDateChange={date => {
+                  setColumnForm({ ...columnForm, defaultValue: date })}
+                }
                 required
                 fullWidth
               />

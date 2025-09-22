@@ -1,3 +1,5 @@
+import { DictionaryColumnType } from "@shared/DictionaryI";
+
 export interface BtnInterface {
     to?: string;
     type?: 'button' | 'submit' | 'reset';
@@ -42,11 +44,13 @@ export interface InputInterface {
     fullWidth?: boolean;
     disabled?: boolean;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    value?: string | number;
+    onDateChange?: (date: Date | null) => void;
+    value: string | number | Date | null;
     className?: string;
     required?: boolean;
     autoComplete?: string;
     center?: boolean;
+    valueType?: DictionaryColumnType
 }
 
 export interface DropdownInterface {

@@ -200,7 +200,10 @@ const DictionaryView: React.FC = () => {
                                 <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Code</th>
                                 <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Description</th>
                                 {dictionary.columns.map(col => (
-                                    <th key={col.code} className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">{col.code}</th>
+                                    <th key={col.code} className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
+                                        {col.required && (<span>*</span>)}
+                                        <span>{col.code}</span>
+                                    </th>
                                 ))}
                                 <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Active</th>
                                 <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text"></th>
