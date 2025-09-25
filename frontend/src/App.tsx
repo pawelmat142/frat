@@ -33,6 +33,7 @@ const App: React.FC = () => {
                 <Route path={Path.ADMIN_PANEL} element={<AdminPanelPage />} >
                     <Route path={Path.ADMIN_DICTIONARIES} element={<AdminDictionaries />} />
                     <Route path={Path.ADMIN_DICTIONARIES_ADD} element={<AddDictionaryView />} />
+                    <Route path={Path.ADMIN_DICTIONARIES_EDIT} element={<AddDictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARY} element={<DictionaryView />} />
 
                     <Route path={Path.ADMIN_TRANSLATIONS} element={<AdminTranslations />} />

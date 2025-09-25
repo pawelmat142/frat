@@ -30,7 +30,6 @@ const DictionaryView: React.FC = () => {
 
     // TODO dodawanie grup
 
-
     const _setDictionary = (dict: DictionaryI) => {
         setDictionary(dict);
         setElements(dict.elements || []);
@@ -194,13 +193,17 @@ const DictionaryView: React.FC = () => {
         setElementForm({ values });
     }
 
+    const handleEditDictionary = () => {
+        navigate(Path.getEditDictionaryPath(dictionary.code));
+    }
+
     return (
         <div className="flex flex-col gap-6 items-center w-full px-5 py-3">
             <div className="w-full">
                 <Buton onClick={() => navigate(Path.ADMIN_DICTIONARIES)} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple">
                     ← Back
                 </Buton>
-                <div className="flex items-center gap-4 mb-4">
+                <div className="flex items-center gap-4 mb-4 mt-10">
                     <h2 className="text-xl font-bold primary-text">code: {dictionary.code}</h2>
                     <h2 className="primary-text">version: {dictionary.version}</h2>
                     <h2 className="primary-text">status: <span className="primary-color">{dictionary.status}</span> </h2>
@@ -213,15 +216,20 @@ const DictionaryView: React.FC = () => {
                         <thead>
                             <tr>
                                 <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Code</th>
-                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Description</th>
                                 {dictionary.columns.map(col => (
                                     <th key={col.code} className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
                                         {col.required && (<span>*</span>)}
                                         <span>{col.code}</span>
                                     </th>
                                 ))}
-                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Active</th>
-                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text"></th>
+                                {/* <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Description</th> */}
+                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Status</th>
+                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
+                                    <IconButton className="w-fit ml-auto"
+                                        icon={<EditIcon />}
+                                        size={BtnSizes.SMALL} mode={BtnModes.PRIMARY}
+                                        onClick={() => handleEditDictionary()} />
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -231,9 +239,8 @@ const DictionaryView: React.FC = () => {
                                 </tr>
                             ) : (
                                 elements.map((el, idx) => (
-                                    <tr key={el.code} className={idx === 0 ? "primary-bg font-bold transition" : "hover:active-bg transition"}>
+                                    <tr key={el.code}>
                                         <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text"}>{el.code}</td>
-                                        <td className={"px-6 py-3 border-b border-color secondary-text"}>{el.description}</td>
                                         {dictionary.columns.map(col => (
                                             <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
                                                 {col.type === DictionaryColumnTypes.DATE
@@ -241,10 +248,13 @@ const DictionaryView: React.FC = () => {
                                                     : (el.values[col.code] !== undefined && el.values[col.code] !== "" ? el.values[col.code] : "-")}
                                             </td>
                                         ))}
-                                        <td className={"px-6 py-3 border-b border-color"}>{el.active ? <span className="primary-color font-semibold">Yes</span> : <span className="secondary-text">No</span>}</td>
-                                        <td className={"px-6 py-3 border-b border-color flex gap-1 justify-end"}>
-                                            <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditElement(el.code)} />
-                                            <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleDeleteElement(el.code)} />
+                                        {/* <td className={"px-6 py-3 border-b border-color secondary-text"}>{el.description}</td> */}
+                                        <td className={"px-6 py-3 border-b border-color"}>{el.active ? <span className="primary-color font-semibold">ACTIVE</span> : <span className="secondary-text">INACTIVE</span>}</td>
+                                        <td className={"px-6 py-3 border-b border-color "}>
+                                            <div className="flex gap-1 justify-end">
+                                                <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditElement(el.code)} />
+                                                <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleDeleteElement(el.code)} />
+                                            </div>
                                         </td>
                                     </tr>
                                 ))

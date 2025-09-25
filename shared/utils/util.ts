@@ -1,7 +1,12 @@
-import { type } from "os";
-
 export abstract class Util {
+
+    // without time
     public static displayDate(date: Date | string): string {
+        const d = date instanceof Date ? date : new Date(date);
+        return d.toLocaleDateString();
+    }
+
+    public static displayDateWithTime(date: Date | string): string {
         const d = date instanceof Date ? date : new Date(date);
         return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
     }
