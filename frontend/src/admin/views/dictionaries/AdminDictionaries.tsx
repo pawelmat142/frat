@@ -27,7 +27,7 @@ const AdminDictionaries: React.FC = () => {
 
     return (
         <div className="flex flex-1 flex-col gap-2 items-center w-full p-5">
-            <div className="w-full px-0 max-w-6xl">
+            <div className="w-full px-0">
                 <h2 className="h2 mb-6 pl-2 primary-text">Dictionaries list:</h2>
                 <div className="overflow-x-auto w-full rounded-lg shadow border border-color secondary-bg">
                     <table className="w-full text-left border-collapse">

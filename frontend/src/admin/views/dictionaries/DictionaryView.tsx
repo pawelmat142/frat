@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { DictionaryI, DictionaryElement, DictionaryStatuses } from "@shared/DictionaryI";
+import { DictionaryI, DictionaryElement, DictionaryStatuses, DictionaryColumnTypes } from "@shared/DictionaryI";
 import Buton from "global/components/controls/Buton";
 import DictionaryElementForm from "./DictionaryElementForm";
 import Loading from "global/components/Loading";
@@ -14,6 +14,7 @@ import { useConfirm } from "global/providers/ConfirmProvider";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { Util } from "@shared/utils/util";
 
 const DictionaryView: React.FC = () => {
     const navigate = useNavigate();
@@ -25,6 +26,9 @@ const DictionaryView: React.FC = () => {
     const [elementForm, setElementForm] = useState<Partial<DictionaryElement> | null>(null);
     const [elementFormEditMode, setElementFormEditMode] = useState<boolean>(false);
     const [elements, setElements] = useState<DictionaryElement[]>([]);
+
+
+    // TODO dodawanie grup
 
 
     const _setDictionary = (dict: DictionaryI) => {
@@ -177,11 +181,22 @@ const DictionaryView: React.FC = () => {
         }
     }
 
-    // TODO dodawanie grup
+    const onAddElement = () => {
+        const values: { [key: string]: any } = {};
+        dictionary.columns.forEach(col => {
+            if (col.required) {
+                values[col.code] = col.defaultValue || "";
+            }
+        });
+        // TODO 
+        console.log('values', values);
+        console.log('dictionary', dictionary);
+        setElementForm({ values });
+    }
 
     return (
         <div className="flex flex-col gap-6 items-center w-full px-5 py-3">
-            <div className="w-full max-w-6xl">
+            <div className="w-full">
                 <Buton onClick={() => navigate(Path.ADMIN_DICTIONARIES)} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple">
                     ← Back
                 </Buton>
@@ -220,7 +235,11 @@ const DictionaryView: React.FC = () => {
                                         <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text"}>{el.code}</td>
                                         <td className={"px-6 py-3 border-b border-color secondary-text"}>{el.description}</td>
                                         {dictionary.columns.map(col => (
-                                            <td key={col.code} className="px-6 py-3 border-b border-color primary-text">{el.values[col.code] !== undefined && el.values[col.code] !== "" ? el.values[col.code] : "-"}</td>
+                                            <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
+                                                {col.type === DictionaryColumnTypes.DATE
+                                                    ? Util.displayDate(el.values[col.code])
+                                                    : (el.values[col.code] !== undefined && el.values[col.code] !== "" ? el.values[col.code] : "-")}
+                                            </td>
                                         ))}
                                         <td className={"px-6 py-3 border-b border-color"}>{el.active ? <span className="primary-color font-semibold">Yes</span> : <span className="secondary-text">No</span>}</td>
                                         <td className={"px-6 py-3 border-b border-color flex gap-1 justify-end"}>
@@ -238,7 +257,7 @@ const DictionaryView: React.FC = () => {
                     {!elementForm ? (
                         <div className="flex gap-2 mb-10 mt-5">
                             <Buton
-                                onClick={() => setElementForm({})}
+                                onClick={() => onAddElement()}
                                 mode={BtnModes.PRIMARY}
                             >
                                 <AddIcon /> Add element

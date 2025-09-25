@@ -179,6 +179,7 @@ const AddDictionaryView: React.FC = () => {
                 name="defaultValue"
                 label="Default value"
                 value={columnForm.defaultValue ?? ""}
+                onChange={e => setColumnForm({ ...columnForm, defaultValue: e.target.value })}
                 onDateChange={date => {
                   setColumnForm({ ...columnForm, defaultValue: date })}
                 }
@@ -194,7 +195,7 @@ const AddDictionaryView: React.FC = () => {
               <Buton
                 onClick={handleAddColumn}
                 size={BtnSizes.SMALL}
-                disabled={!columnForm?.code || !columnForm.type}
+                disabled={!columnForm?.code || !columnForm.type || (columnForm.required && !columnForm.defaultValue)}
               >
                 Column ready
               </Buton>
