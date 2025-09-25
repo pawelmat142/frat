@@ -29,6 +29,7 @@ export const BtnModes = {
     PRIMARY_TXT: 'primary-txt',
     SECONDARY_TXT: 'secondary-txt',
     ERROR: 'error',
+    ERROR_TXT: 'error-txt',
     WARNING: 'warning',
     SUCCESS: 'success',
 } as const

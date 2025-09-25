@@ -24,6 +24,7 @@ interface ColumnForm {
   required: boolean;
   description?: string;
   defaultValue?: any;
+  editMode?: boolean;
 }
 
 const AddDictionaryView: React.FC = () => {
@@ -73,7 +74,7 @@ const AddDictionaryView: React.FC = () => {
       setColumnForm({ code: "", type: columnTypeOptions[0], description: "", required: false });
       return
     };
-    if (columns.some(col => col.code === columnForm.code)) {
+    if (!isEditMode && columns.some(col => col.code === columnForm.code)) {
       toast.error("Column code must be unique.");
       return;
     }
@@ -138,7 +139,11 @@ const AddDictionaryView: React.FC = () => {
     try {
       setLoading(true);
       const res = await httpClient.put<DictionaryI>('/dictionaries', result)
-      toast.success(`Dictionary ${res.code} created successfully!`)
+      if (isEditMode) {
+        toast.success(`Dictionary ${res.code} updated successfully!`)
+      } else {
+        toast.success(`Dictionary ${res.code} created successfully!`)
+      }
       
       if (isEditMode) {
         navigate(Path.getDictionaryPath(res.code))
@@ -164,7 +169,7 @@ const AddDictionaryView: React.FC = () => {
   }
 
   const handleEditColumn = (col: ColumnForm) => {
-
+    setColumnForm({ ...col, editMode: true });
   }
 
   // TODO
@@ -237,6 +242,7 @@ const AddDictionaryView: React.FC = () => {
               onChange={e => setColumnForm({ ...columnForm, code: e.target.value })}
               required
               fullWidth
+              disabled={!!columnForm.editMode}
             />
 
             <Input
@@ -280,11 +286,12 @@ const AddDictionaryView: React.FC = () => {
                 Column ready
               </Buton>
               <Buton
-                mode={BtnModes.PRIMARY_TXT}
+                mode={BtnModes.ERROR_TXT}
                 onClick={() => setColumnForm(null)}
                 size={BtnSizes.SMALL}
               >
-                Cancel column
+                {/* if edit mode show cancel editing */}
+                {columnForm.editMode ? "Cancel editing" : "Cancel column"}
               </Buton>
 
             </div>
@@ -302,12 +309,13 @@ const AddDictionaryView: React.FC = () => {
 
           {columns.length > 0 && (
             <div className="flex flex-col gap-2 border-t pt-3">
-              <h3 className="font-semibold">Columns:</h3>
+              <h3 className="font-semibold mt-5">Columns:</h3>
               <ul className="list-disc pl-5">
                 {columns.map((col, idx) => (
-                  <li key={idx}>
+                  <li key={idx} className="mt-3">
                     <div className="flex justify-between align-center">
                       <div>
+                        {col.required && <span className="text-error">*</span>}
                         <span>{col.code}</span>
                         <span> </span>
                         <span className="secondary-text">({col.type?.label})</span>

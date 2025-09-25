@@ -251,7 +251,7 @@ const DictionaryView: React.FC = () => {
                                         {/* <td className={"px-6 py-3 border-b border-color secondary-text"}>{el.description}</td> */}
                                         <td className={"px-6 py-3 border-b border-color"}>{el.active ? <span className="primary-color font-semibold">ACTIVE</span> : <span className="secondary-text">INACTIVE</span>}</td>
                                         <td className={"px-6 py-3 border-b border-color "}>
-                                            <div className="flex gap-1 justify-end">
+                                            <div className="flex gap-2 justify-end">
                                                 <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditElement(el.code)} />
                                                 <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleDeleteElement(el.code)} />
                                             </div>
@@ -265,7 +265,7 @@ const DictionaryView: React.FC = () => {
                 {/* Add element button and form */}
                 <div className="">
                     {!elementForm ? (
-                        <div className="flex gap-2 mb-10 mt-5">
+                        <div className="flex gap-2 my-10">
                             <Buton
                                 onClick={() => onAddElement()}
                                 mode={BtnModes.PRIMARY}
