@@ -22,11 +22,20 @@
 
 		- admin
 			- views
-                - AdminPanelPage.tsx
-				- DictionaryManageer.tsx
-			- components
-                - FieldConfigPanel.tsx
-                - DictionaryManager.tsx
+				- dictionaries
+					- AdminDictionaries.tsx
+					- AddDictionaryView.tsx
+					- DictionaryElementForm.tsx
+					- DictionaryGroupForm.tsx
+					- DictionaryGroups.tsx
+					- DictionaryView.tsx
+
+				- translations
+					- AdminTranslations.tsx
+
+				- AdminPanelPage.tsx
+				- AdminPanelSidebar.tsx
+
 			- services
                 - DictionaryAdminService.ts
             - utils
@@ -41,18 +50,39 @@
 		- global
 			- views
                 - HomePage.tsx
+
 			- components
+				- controls
+					- Buton.tsx
+					- Checkbox.tsx
+					- ControlLabel.tsx
+					- DateInput.tsx
+					- Dropdown.tsx
+					- DropdownOptions.tsx
+					- IconButon.tsx
+					- Input.tsx
+					- ThemeSwitch.tsx
+					- TypedInput.tsx
                 - Header.tsx
                 - Footer.tsx
-                - LoadingSpinner.tsx
-                - ErrorMessage.tsx
+                - Loading.tsx
+				- DesktopMenu.tsx
+				- Logo.tsx
+				- MobileMenu.tsx
+				- MobileMock.tsx
 			- services
                 - ApiClient.ts
 	        - utils
                 - DateUtil.ts
                 - Util.ts
 			- hooks
-                - useApi.ts
+                - isMobile.ts
+			- interface
+				- controls.interface.ts
+			- providers
+				- ConfirmProvider.tsx
+				- MenuProvider.tsx
+				- ThemeProvider.tsx
 		
 		- auth
 			- views

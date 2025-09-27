@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Header from './global/components/Header';
 import Footer from './global/components/Footer';
 import { ToastContainer } from 'react-toastify';
-import { MenuProvider } from './global/navigation/MenuProvider';
+import { MenuProvider } from './global/providers/MenuProvider';
 import { ThemeProvider } from './global/providers/ThemeProvider';
 import { ConfirmProvider } from 'global/providers/ConfirmProvider';
 
