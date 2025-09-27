@@ -2,19 +2,25 @@ import Buton from "../../../global/components/controls/Buton";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path"
 import { httpClient } from "global/services/http";
+import ImportDictionaryButton from "../../../global/components/controls/SelectFileButton";
 import { useEffect, useState } from "react";
 import { DictionaryListItem } from "@shared/DictionaryI";
 import { Util } from "@shared/utils/util";
 import AddIcon from '@mui/icons-material/Add';
+import { toast } from "react-toastify";
+import Loading from "global/components/Loading";
 
 const AdminDictionaries: React.FC = () => {
     const navigate = useNavigate();
     const [dictionaries, setDictionaries] = useState<DictionaryListItem[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
+        setLoading(true);
         httpClient.get<DictionaryListItem[]>("/dictionaries/list")
             .then(setDictionaries)
-            .catch(() => setDictionaries([]));
+            .catch(() => setDictionaries([]))
+            .finally(() => setLoading(false));
     }, []);
 
     const onAddDictionary = () => {
@@ -24,6 +30,33 @@ const AdminDictionaries: React.FC = () => {
     const handleRowClick = (code: string) => {
         navigate(Path.getDictionaryPath(code));
     };
+
+    const handleImportDictionary = async (file: File) => {
+        try {
+            setLoading(true);
+            const text = await file.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                toast.error("Invalid JSON file.");
+                return;
+            }
+            await httpClient.post("/dictionaries/import", data);
+            toast.success("Dictionary imported successfully.");
+            httpClient.get<DictionaryListItem[]>("/dictionaries/list")
+                .then(setDictionaries)
+                .catch(() => setDictionaries([]));
+        } catch (err: any) {
+            toast.error("Import failed: " + (err?.message || "Unknown error"));
+        } finally {
+            setLoading(false);
+        }       
+    }
+
+    if (loading) {
+        return <Loading></Loading>
+    }
 
     return (
         <div className="flex flex-1 flex-col gap-2 items-center w-full p-5">
@@ -65,10 +98,14 @@ const AdminDictionaries: React.FC = () => {
                     </table>
                 </div>
             </div>
-            <Buton onClick={onAddDictionary} className="mt-8">
-                <AddIcon />
-                Add dictionary
-            </Buton>
+
+            <div className="flex gap-4 mt-8">
+                <Buton onClick={onAddDictionary}>
+                    <AddIcon />
+                    Add dictionary
+                </Buton>
+                <ImportDictionaryButton onFileSelected={handleImportDictionary} label="Import dictionary" />
+            </div>
         </div>
     );
 }
