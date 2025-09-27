@@ -28,6 +28,7 @@ export class TranslationService implements OnModuleInit {
         if (!this.languagesList) {
             throw new Error('Translations languages list is not initialized');
         }
+        
         if (!this.languagesList.find(l => l.code === code)) {
             console.warn(`Language ${langCode} is not supported by translations, returning default 'en'`);
             code = 'en'
