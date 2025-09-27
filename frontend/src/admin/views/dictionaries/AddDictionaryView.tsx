@@ -17,6 +17,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
 import { useConfirm } from "global/providers/ConfirmProvider";
+import { DictionaryValidators } from "@shared/utils/DictionaryValidators";
 
 interface ColumnForm {
   code: string;
@@ -79,10 +80,10 @@ const AddDictionaryView: React.FC = () => {
       return;
     }
 
-    // validate column code need to be only chars, no number, only _ allowed
-    if (!/^[A-Za-z_]+$/.test(columnForm.code)) {
-      toast.error("Invalid column code. Only letters and underscores are allowed.");
-      return;
+    const codeError = DictionaryValidators.validateCode(columnForm.code);
+    if (codeError) {
+      toast.error(codeError);
+      return
     }
 
     setColumns([...columns, columnForm]);
@@ -119,6 +120,12 @@ const AddDictionaryView: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const error = DictionaryValidators.validateCode(code);
+    if (error) {
+      toast.error(error);
+      return;
+    }
 
     const result: DictionaryI = {
       code,
@@ -173,17 +180,8 @@ const AddDictionaryView: React.FC = () => {
   }
 
   // TODO
-  // kontrolka date kolumny
   // kontrolka number kolumny
   // kontrolka stringlist kolumny
-
-  // to samo przy edycji kolumn
-
-  // dodawanie grupy
-  // prezentacja grupy
-  // edycja grupy
-  // edycja słownika
-
 
   if (loading) {
     return <Loading></Loading>

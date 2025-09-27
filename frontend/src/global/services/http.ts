@@ -24,10 +24,6 @@ export class HttpClient {
     );
   }
 
-  public test() {
-    console.log(API_URL)
-  }
-
   private handleError(error: AxiosError) {
     if (error.response) {
       const status = error.response.status;

@@ -11,6 +11,7 @@ import { Response } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DictionaryEntity } from './model/DictionaryEntity';
 import { Repository } from 'typeorm';
+import { DictionaryValidators } from '@shared/utils/DictionaryValidators';
 
 // TODO roles guardy
 @Controller('api/dictionaries')
@@ -23,7 +24,6 @@ export class DictionariesImportServiceController {
 
   @Get('export/:code')
   async exportDictionary(@Param('code') code: string, @Res() res: Response) {
-    console.log('xxx')
     const dictionary = await this.dictionaryRepository.findOne({ where: { code } });
     if (!dictionary) {
       throw new NotFoundException('Dictionary not found');
@@ -54,19 +54,36 @@ export class DictionariesImportServiceController {
       if (exists) {
         return res.status(409).json({ message: 'Dictionary with this code already exists' });
       }
-      // Check required columns for each element
-      const requiredColumns = (data.columns || []).filter((col: any) => col.required).map((col: any) => col.code);
-      const missing = (data.elements || []).some((el: any) =>
-        requiredColumns.some((col: string) => el.values?.[col] === undefined || el.values?.[col] === null || el.values?.[col] === "")
-      );
-      if (missing) {
-        return res.status(422).json({ message: 'Some elements are missing required values' });
+
+      // validateCode for dictionary code
+      const codeError = DictionaryValidators.validateCode(data.code);
+      if (codeError) {
+        return res.status(422).json({ message: codeError });
       }
+
+      // Validate structure using DictionaryValidators (cast to DictionaryI)
+      const validationFns = [
+        DictionaryValidators.validateElementCodes,
+        DictionaryValidators.validateColumnCodes,
+        DictionaryValidators.validateGroupCodes,
+        DictionaryValidators.validateColumnCodeDuplicates,
+        DictionaryValidators.validateElementCodeDuplicates,
+        DictionaryValidators.validateGroupCodeDuplicates,
+        DictionaryValidators.validateRequiredColumnsInElements,
+      ];
+      for (const fn of validationFns) {
+        const errMsg = fn(data);
+        if (errMsg) {
+          return res.status(422).json({ message: errMsg });
+        }
+      }
+
       // Insert
       const entity = this.dictionaryRepository.create(data);
       await this.dictionaryRepository.save(entity);
       return res.status(201).json({ message: 'Dictionary imported successfully' });
     } catch (err: any) {
+      console.log(err);
       return res.status(500).json({ message: err?.message || 'Server error' });
     }
   }

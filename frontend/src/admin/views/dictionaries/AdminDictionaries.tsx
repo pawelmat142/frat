@@ -15,12 +15,16 @@ const AdminDictionaries: React.FC = () => {
     const [dictionaries, setDictionaries] = useState<DictionaryListItem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
-    useEffect(() => {
+    const loadDictionaries = () => {
         setLoading(true);
         httpClient.get<DictionaryListItem[]>("/dictionaries/list")
             .then(setDictionaries)
             .catch(() => setDictionaries([]))
             .finally(() => setLoading(false));
+    }
+    
+    useEffect(() => {
+        loadDictionaries();
     }, []);
 
     const onAddDictionary = () => {
@@ -43,12 +47,11 @@ const AdminDictionaries: React.FC = () => {
                 return;
             }
             await httpClient.post("/dictionaries/import", data);
+
             toast.success("Dictionary imported successfully.");
-            httpClient.get<DictionaryListItem[]>("/dictionaries/list")
-                .then(setDictionaries)
-                .catch(() => setDictionaries([]));
+            loadDictionaries();
         } catch (err: any) {
-            toast.error("Import failed: " + (err?.message || "Unknown error"));
+            // toast.error("Import failed: " + (err?.message || "Unknown error"));
         } finally {
             setLoading(false);
         }       
