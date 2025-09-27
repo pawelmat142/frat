@@ -35,6 +35,7 @@ export interface DictionaryGroup {
     elementCodes: string[]
     code: string
     active: boolean
+    description?: string
 }
 
 export const DictionaryColumnTypes = {

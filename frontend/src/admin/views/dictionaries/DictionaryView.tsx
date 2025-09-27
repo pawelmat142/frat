@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { DictionaryI, DictionaryElement, DictionaryStatuses, DictionaryColumnTypes } from "@shared/DictionaryI";
+import { DictionaryI, DictionaryElement, DictionaryStatuses, DictionaryColumnTypes, DictionaryGroup } from "@shared/DictionaryI";
 import Buton from "global/components/controls/Buton";
 import DictionaryElementForm from "./DictionaryElementForm";
 import Loading from "global/components/Loading";
@@ -15,6 +15,7 @@ import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Util } from "@shared/utils/util";
+import DictionaryGroups from "./DictionaryGroups";
 
 const DictionaryView: React.FC = () => {
     const navigate = useNavigate();
@@ -26,9 +27,6 @@ const DictionaryView: React.FC = () => {
     const [elementForm, setElementForm] = useState<Partial<DictionaryElement> | null>(null);
     const [elementFormEditMode, setElementFormEditMode] = useState<boolean>(false);
     const [elements, setElements] = useState<DictionaryElement[]>([]);
-
-
-    // TODO dodawanie grup
 
     const _setDictionary = (dict: DictionaryI) => {
         setDictionary(dict);
@@ -116,7 +114,6 @@ const DictionaryView: React.FC = () => {
         }
     };
 
-
     const handleDelete = async () => {
         if (!dictionary) return;
 
@@ -187,9 +184,6 @@ const DictionaryView: React.FC = () => {
                 values[col.code] = col.defaultValue || "";
             }
         });
-        // TODO 
-        console.log('values', values);
-        console.log('dictionary', dictionary);
         setElementForm({ values });
     }
 
@@ -197,14 +191,28 @@ const DictionaryView: React.FC = () => {
         navigate(Path.getEditDictionaryPath(dictionary.code));
     }
 
+    const handleEditDictionaryGroup = (group: DictionaryGroup) => {
+        navigate(Path.getDictionaryGroupFormPath(dictionary.code, group.code));
+    }
+
+    const handleRemoveDictionaryGroup = async (group: DictionaryGroup) => {
+        if (!dictionary) return;
+        const updatedGroups = (dictionary.groups || []).filter(g => g.code !== group.code);
+        setDictionary({
+            ...dictionary,
+            groups: updatedGroups
+        });
+
+    }
+
     return (
-        <div className="flex flex-col gap-6 items-center w-full px-5 py-3">
+        <div className="flex flex-col gap-6 w-full px-5 pb-20 pt-10">
             <div className="w-full">
                 <Buton onClick={() => navigate(Path.ADMIN_DICTIONARIES)} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple">
                     ← Back
                 </Buton>
                 <div className="flex items-center gap-4 mb-4 mt-10">
-                    <h2 className="text-xl font-bold primary-text">code: {dictionary.code}</h2>
+                    <h2 className="text-xl font-bold primary-text">Dictionary CODE: {dictionary.code}</h2>
                     <h2 className="primary-text">version: {dictionary.version}</h2>
                     <h2 className="primary-text">status: <span className="primary-color">{dictionary.status}</span> </h2>
                 </div>
@@ -262,6 +270,8 @@ const DictionaryView: React.FC = () => {
                         </tbody>
                     </table>
                 </div>
+
+
                 {/* Add element button and form */}
                 <div className="">
                     {!elementForm ? (
@@ -298,9 +308,21 @@ const DictionaryView: React.FC = () => {
                                     : 'Activate'}
                             </Buton>
 
+                            <Buton
+                                onClick={() => navigate(Path.getDictionaryGroupFormPath(dictionary.code, 'new'))}
+                            >
+                                Add group
+                            </Buton>
+
+                            <Buton
+                                onClick={() => console.log(dictionary)}
+                            >
+                                test
+                            </Buton>
+
                         </div>
                     ) : (
-                        <div className="flex flex-col gap-4 mt-4 secondary-bg w-full max-w-lg mx-auto">
+                        <div className="flex flex-col gap-4 mt-4 secondary-bg w-full max-w-lg mx-auto mb-10">
                             <div className="flex flex-col gap-3">
                                 <DictionaryElementForm
                                     dictionary={dictionary}
@@ -313,8 +335,16 @@ const DictionaryView: React.FC = () => {
                         </div>
                     )}
                 </div>
+
+                <DictionaryGroups
+                    dictionary={dictionary}
+                    onRemoveGroup={handleRemoveDictionaryGroup}
+                    onEditGroup={handleEditDictionaryGroup}
+                />
+
             </div>
         </div>
+
     );
 };
 

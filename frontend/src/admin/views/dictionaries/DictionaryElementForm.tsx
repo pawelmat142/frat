@@ -22,20 +22,22 @@ const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
     editMode
 }) => {
     const allElementRequiredFiledsFilled = dictionary.columns.every(col => !col.required || (elementForm?.values && elementForm.values[col.code]));
-    
+
     const onElementChange = (elementCode: string, value: string | number | null) => {
-        const newElementForm = { ...elementForm, 
+        const newElementForm = {
+            ...elementForm,
             values: {
                 ...elementForm?.values,
                 [elementCode]: value
             }
-        
+
         };
         setElementForm(newElementForm);
     }
 
     const onElementChangeDate = (elementCode: string, date: Date | null) => {
-        const newElementForm = { ...elementForm, 
+        const newElementForm = {
+            ...elementForm,
             values: {
                 ...elementForm?.values,
                 [elementCode]: date
@@ -43,7 +45,7 @@ const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
         };
         setElementForm(newElementForm);
     }
-    
+
     return (
         <div className="flex flex-col gap-4 p-4 border rounded shadow w-full max-w-lg mx-auto">
             <h3 className="text-lg font-bold mb-2">Add Element</h3>

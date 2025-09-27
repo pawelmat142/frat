@@ -2,24 +2,19 @@ export abstract class Path {
 
     public static readonly HOME = '/';
 
+
+    // ADMIN PANEL
     public static readonly ADMIN_PANEL = '/admin-panel';
 
     public static readonly ADMIN_DICTIONARIES = `${Path.ADMIN_PANEL}/dictionaries`;
     public static readonly ADMIN_DICTIONARY = `${Path.ADMIN_DICTIONARIES}/:code`;
     public static readonly ADMIN_DICTIONARIES_ADD = `${Path.ADMIN_PANEL}/dictionaries/add`;
     public static readonly ADMIN_DICTIONARIES_EDIT = `${Path.ADMIN_PANEL}/dictionaries/edit/:code`;
+    public static readonly ADMIN_DICTIONARIES_GROUP = `${Path.ADMIN_PANEL}/dictionaries/:dictionaryCode/group-form/:groupCode`;
 
     public static readonly ADMIN_TRANSLATIONS = `${Path.ADMIN_PANEL}/translations`;
     
     public static getDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES}/${code}`;
-
     public static getEditDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES_EDIT.replace(':code', code)}`;
+    public static getDictionaryGroupFormPath = (dictionaryCode: string, groupCode: string) => `${Path.ADMIN_DICTIONARIES_GROUP.replace(':dictionaryCode', dictionaryCode).replace(':groupCode', groupCode)}`;
 }
-
-export const AdminRoutes = {
-    DICTIONARIES: 'dictionaries',
-    DICTIONARY: 'dictionary',
-    TRANSLATIONS: 'translations'
-} as const;
-
-export type AdminRoutes = keyof typeof AdminRoutes;

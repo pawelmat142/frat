@@ -198,7 +198,7 @@ const AddDictionaryView: React.FC = () => {
       <Buton onClick={() => goBack()} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple mb-2">
         ← Back
       </Buton>
-      <form className="flex flex-col gap-4 p-4 rounded shadow mt-10 max-w-xl mx-auto mb-20" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-4 p-4 rounded mt-10 max-w-xl mx-auto mb-20" onSubmit={handleSubmit}>
         <h2 className="text-lg font-bold">{isEditMode ? "Edit dictionary" : "Add Dictionary"}</h2>
         <div className="flex flex-col gap-3">
 
