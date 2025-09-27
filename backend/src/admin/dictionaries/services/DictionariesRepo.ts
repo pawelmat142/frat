@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { DictionaryEntity } from "../model/DictionaryEntity";
-import { DictionaryI, DictionaryListItem, DictionaryStatuses } from "@shared//DictionaryI";
+import { DictionaryI, DictionaryListItem } from "@shared//DictionaryI";
 
 @Injectable()
 export class DictionariesRepo {
@@ -49,7 +49,7 @@ export class DictionariesRepo {
         }
         return this.create(dto);
     }
-    
+
     public async remove(code: string): Promise<void> {
         const dictionary = await this.findOne(code);
         if (!dictionary) {
@@ -72,6 +72,52 @@ export class DictionariesRepo {
         dictionary.status = dto.status;
         dictionary.version++;
         return this.dictionaryRepository.save(dictionary);
+    }
+
+    /**
+     * Pobiera słownik z jedną grupą (po kodzie) i tylko elementami należącymi do tej grupy.
+     * Zwraca null jeśli nie istnieje.
+     */
+    public async getDictionaryGroup(dictionaryCode: string, groupCode: string): Promise<DictionaryI | null> {
+        const result = await this.dictionaryRepository.query(
+            `
+            SELECT
+                code,
+                description,
+                version,
+                status,
+                columns,
+                (
+                    SELECT jsonb_agg(e)
+                    FROM jsonb_array_elements(elements) AS e
+                    WHERE (e->>'code') IN (
+                        SELECT jsonb_array_elements_text(g->'elementCodes')
+                        FROM jsonb_array_elements(groups) AS g
+                        WHERE g->>'code' = $2
+                    )
+                ) AS elements,
+                (
+                    SELECT jsonb_agg(g)
+                    FROM jsonb_array_elements(groups) AS g
+                    WHERE g->>'code' = $2
+                ) AS groups
+            FROM jh_dictionaries
+            WHERE code = $1
+            `,
+            [dictionaryCode, groupCode]
+        );
+
+        if (!result[0]) return null;
+        // Upewnij się, że typy są zgodne z DictionaryI
+        return {
+            code: result[0].code,
+            description: result[0].description,
+            version: result[0].version,
+            status: result[0].status,
+            columns: result[0].columns,
+            elements: result[0].elements || [],
+            groups: result[0].groups || [],
+        };
     }
 
 }

@@ -13,8 +13,8 @@ import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
 // TODO roles guardy
 @Controller('api/dictionaries')
 export class DictionariesController {
-  
-  constructor(private readonly dictionariesService: DictionariesService) {}
+
+  constructor(private readonly dictionariesService: DictionariesService) { }
 
   @Get('list')
   list(): Promise<DictionaryListItem[]> {
@@ -35,4 +35,13 @@ export class DictionariesController {
   delete(@Param('code') code: string): Promise<void> {
     return this.dictionariesService.delete(code);
   }
+
+  @Get(':code/:groupCode')
+  getDictionaryGroup(
+    @Param('code') code: string,
+    @Param('groupCode') groupCode: string
+  ): Promise<DictionaryI | null> {
+    return this.dictionariesService.getDictionaryGroup(code, groupCode);
+  }
+
 }

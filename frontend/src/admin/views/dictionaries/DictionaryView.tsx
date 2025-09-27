@@ -227,7 +227,7 @@ const DictionaryView: React.FC = () => {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr>
-                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Code</th>
+                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">CODE</th>
                                 {dictionary.columns.map(col => (
                                     <th key={col.code} className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
                                         {col.required && (<span>*</span>)}

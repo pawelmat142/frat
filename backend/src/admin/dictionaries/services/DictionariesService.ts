@@ -26,8 +26,11 @@ export class DictionariesService {
     return this.repo.set(dto);
   }
 
-  public async delete(code: string): Promise<void> {
-    await this.repo.remove(code);
+  public delete(code: string): Promise<void> {
+    return this.repo.remove(code);
   }
 
+  public getDictionaryGroup(dictionaryCode: string, groupCode: string): Promise<DictionaryI | null> {
+    return this.repo.getDictionaryGroup(dictionaryCode, groupCode);
+  }
 }

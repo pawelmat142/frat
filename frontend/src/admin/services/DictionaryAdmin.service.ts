@@ -13,5 +13,5 @@ export const DictionaryAdminService = {
 
 	async deleteDictionary(code: string): Promise<void> {
 		return httpClient.delete<void>(`/dictionaries/${code}`);
-	}
+	},
 };

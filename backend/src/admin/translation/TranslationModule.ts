@@ -1,18 +1,21 @@
-// /** Created by Pawel Malek **/
-// import { Module } from '@nestjs/common';
-// import { TypeOrmModule } from '@nestjs/typeorm';
-// import { DictionariesController } from './DictionariesController';
-// import { DictionariesService } from './services/DictionariesService';
-// import { DictionaryEntity } from './model/DictionaryEntity';
+/** Created by Pawel Malek **/
+import { Module } from '@nestjs/common';
+import { TranslationService } from './TranslationService';
+import { DictionariesModule } from 'admin/dictionaries/DictionariesModule';
+import { TranslationController } from './TranslationController';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TranslationEntity } from './TranslationEntity';
 
-// @Module({
-//   imports: [
-//     TypeOrmModule.forFeature([
-//       DictionaryEntity,
-//     ]),
-//   ],
-//   controllers: [DictionariesController],
-//   providers: [DictionariesService],
-//   exports: [DictionariesService],
-// })
-// export class DictionariesModule {}
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([
+      TranslationEntity,
+    ]),
+
+    DictionariesModule
+  ],
+  controllers: [TranslationController],
+  providers: [TranslationService],
+  exports: [],
+})
+export class TranslationModule { }

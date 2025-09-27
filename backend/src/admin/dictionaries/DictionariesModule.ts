@@ -15,6 +15,6 @@ import { DictionariesImportServiceController } from './DictionariesImportService
   ],
   controllers: [DictionariesController, DictionariesImportServiceController],
   providers: [DictionariesService, DictionariesRepo],
-  exports: [],
+  exports: [DictionariesService],
 })
 export class DictionariesModule {}

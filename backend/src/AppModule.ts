@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfig } from './config/DatabaseConfig';
 import { DictionariesModule } from './admin/dictionaries/DictionariesModule';
+import { TranslationModule } from 'admin/translation/TranslationModule';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { DictionariesModule } from './admin/dictionaries/DictionariesModule';
 
     // ADMIN
     DictionariesModule,
+    TranslationModule
   ],
 })
 export class AppModule {}
