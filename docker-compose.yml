@@ -30,6 +30,7 @@ services:
       CHOKIDAR_USEPOLLING: "true"
     ports:
       - "3100:3100"
+      - "9229:9229"
     depends_on:
       - db
     volumes:
@@ -38,7 +39,8 @@ services:
       - /app/backend/node_modules
     networks:
       - jobhigh_network
-    command: ["npm", "run", "start:nodemon"]
+    command: ["npm", "run", "start:nodemon-debug"]
+    # command: ["npm", "run", "start:nodemon"]
 
   frontend:
     build:

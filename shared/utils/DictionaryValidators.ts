@@ -12,7 +12,7 @@ export abstract class DictionaryValidators {
 
     public static validateElementCodes(dictionary: DictionaryI): string | null {
         for (let element of dictionary.elements) {
-            const codeError = this.validateCode(element.code);
+            const codeError = DictionaryValidators.validateCode(element.code);
             if (codeError) {
                 return codeError;
             }
@@ -22,7 +22,7 @@ export abstract class DictionaryValidators {
 
     public static validateColumnCodes(dictionary: DictionaryI): string | null {
         for (let column of dictionary.columns) {
-            const codeError = this.validateCode(column.code);
+            const codeError = DictionaryValidators.validateCode(column.code);
             if (codeError) {
                 return codeError;
             }
@@ -32,7 +32,7 @@ export abstract class DictionaryValidators {
 
     public static validateGroupCodes(dictionary: DictionaryI): string | null {
         for (let group of dictionary.groups) {
-            const codeError = this.validateCode(group.code);
+            const codeError = DictionaryValidators.validateCode(group.code);
             if (codeError) {
                 return codeError;
             }
