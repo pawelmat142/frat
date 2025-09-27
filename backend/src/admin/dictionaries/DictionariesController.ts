@@ -35,15 +35,4 @@ export class DictionariesController {
   delete(@Param('code') code: string): Promise<void> {
     return this.dictionariesService.delete(code);
   }
-
-  // TODO
-  // @Get(':id/export')
-  // exportDictionary(@Param('id', ParseIntPipe) id: number) {
-  //   return this.dictionariesService.exportDictionary(id);
-  // }
-
-  // @Post('import')
-  // importDictionary(@Body() importData: any) {
-  //   return this.dictionariesService.importDictionary(importData);
-  // }
 }

@@ -5,6 +5,7 @@ import { DictionariesController } from './DictionariesController';
 import { DictionariesService } from './services/DictionariesService';
 import { DictionariesRepo } from './services/DictionariesRepo';
 import { DictionaryEntity } from './model/DictionaryEntity';
+import { DictionariesImportServiceController } from './DictionariesImportServiceController';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { DictionaryEntity } from './model/DictionaryEntity';
       DictionaryEntity,
     ]),
   ],
-  controllers: [DictionariesController],
+  controllers: [DictionariesController, DictionariesImportServiceController],
   providers: [DictionariesService, DictionariesRepo],
   exports: [],
 })

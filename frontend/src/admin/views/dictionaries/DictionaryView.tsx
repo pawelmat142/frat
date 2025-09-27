@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Util } from "@shared/utils/util";
 import DictionaryGroups from "./DictionaryGroups";
+import { DictionaryImportService } from "admin/services/DictionaryImport.service";
 
 const DictionaryView: React.FC = () => {
     const navigate = useNavigate();
@@ -202,7 +203,10 @@ const DictionaryView: React.FC = () => {
             ...dictionary,
             groups: updatedGroups
         });
+    }
 
+    const exportJson = () => {
+        DictionaryImportService.exportJson(dictionary.code);
     }
 
     return (
@@ -288,12 +292,13 @@ const DictionaryView: React.FC = () => {
                             >
                                 Save changes
                             </Buton>
+
                             <Buton
-                                onClick={() => handleDelete()}
-                                mode={BtnModes.ERROR}
+                                onClick={() => navigate(Path.getDictionaryGroupFormPath(dictionary.code, 'new'))}
                             >
-                                Delete dictionary
+                                Add group
                             </Buton>
+
                             <Buton
                                 onClick={() => setDictionary({
                                     ...dictionary,
@@ -309,15 +314,17 @@ const DictionaryView: React.FC = () => {
                             </Buton>
 
                             <Buton
-                                onClick={() => navigate(Path.getDictionaryGroupFormPath(dictionary.code, 'new'))}
+                                onClick={() => exportJson()}
+                                mode={BtnModes.PRIMARY_TXT}
                             >
-                                Add group
+                                Export JSON
                             </Buton>
 
                             <Buton
-                                onClick={() => console.log(dictionary)}
+                                onClick={() => handleDelete()}
+                                mode={BtnModes.ERROR}
                             >
-                                test
+                                Delete dictionary
                             </Buton>
 
                         </div>

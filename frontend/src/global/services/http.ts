@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { QueryClient } from '@tanstack/react-query';
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || '/api';
 
@@ -86,6 +86,11 @@ export class HttpClient {
     const res = await this.axiosInstance.delete<T>(url, config);
     return res.data;
   }
+
+  async getFile(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<Blob>> {
+    return this.axiosInstance.get<Blob>(url, { ...config, responseType: 'blob' });
+  }
+  
 }
 
 export const httpClient = new HttpClient();
