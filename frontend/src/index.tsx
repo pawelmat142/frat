@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import './global/i18n';
 import './styles/index.scss';
 import { BrowserRouter } from 'react-router-dom';
 import Header from './global/components/Header';

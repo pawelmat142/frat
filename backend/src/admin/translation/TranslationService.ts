@@ -6,6 +6,7 @@ import { DictionariesService } from "admin/dictionaries/services/DictionariesSer
 import { TranslationEntity } from "./TranslationEntity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { TranslationListDto } from "@shared/dto/TranslationListDto";
 
 @Injectable()
 export class TranslationService implements OnModuleInit {
@@ -28,7 +29,7 @@ export class TranslationService implements OnModuleInit {
         if (!this.languagesList) {
             throw new Error('Translations languages list is not initialized');
         }
-        
+
         if (!this.languagesList.find(l => l.code === code)) {
             console.warn(`Language ${langCode} is not supported by translations, returning default 'en'`);
             code = 'en'
@@ -39,5 +40,16 @@ export class TranslationService implements OnModuleInit {
             throw new NotFoundException(`Translations for language code ${code} not found in the database`);
         }
         return result;
+    }
+
+
+
+    // admin
+    getLanguagesList(): TranslationListDto[] {
+        return this.languagesList.filter(element => element.active).map(element => ({
+            code: element.code,
+            name: element.description,
+            localeCode: element.values['LOCALE_CODE']
+        }));
     }
 }

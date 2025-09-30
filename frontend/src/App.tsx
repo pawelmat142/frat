@@ -8,6 +8,7 @@ import AdminDictionaries from 'admin/views/dictionaries/AdminDictionaries';
 import AddDictionaryView from 'admin/views/dictionaries/AddDictionaryView';
 import DictionaryView from 'admin/views/dictionaries/DictionaryView';
 import DictionaryGroupForm from 'admin/views/dictionaries/DictionaryGroupForm';
+import { AdminPanelProvider } from 'admin/views/AdminPanelProvider';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -31,7 +32,7 @@ const App: React.FC = () => {
 
                 <Route path={Path.HOME} element={<PageWrapper direction={-1}><HomePage /></PageWrapper>} />
 
-                <Route path={Path.ADMIN_PANEL} element={<AdminPanelPage />} >
+                <Route path={Path.ADMIN_PANEL} element={ <AdminPanelProvider><AdminPanelPage /></AdminPanelProvider> }  >
                     <Route path={Path.ADMIN_DICTIONARY} element={<DictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES} element={<AdminDictionaries />} />
                     <Route path={Path.ADMIN_DICTIONARIES_ADD} element={<AddDictionaryView />} />

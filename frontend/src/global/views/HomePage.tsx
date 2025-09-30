@@ -1,5 +1,7 @@
+import { Trans } from "react-i18next";
 import Buton from "../components/controls/Buton";
 import { BtnModes } from "../interface/controls.interface";
+import { TranslationService } from "global/services/Translation.service";
 
 const HomePage: React.FC = () => {
   return (
@@ -25,7 +27,10 @@ const HomePage: React.FC = () => {
           </div>
 
           <Buton>Elo</Buton>
-          <Buton mode={BtnModes.SECONDARY}>Elo</Buton>
+          <Buton mode={BtnModes.SECONDARY} onClick={ async () => {
+            const translation = await TranslationService.getTranslation('pl');
+            console.log(translation);
+          }}>TEST</Buton>
           <Buton mode={BtnModes.PRIMARY_TXT}>Elo</Buton>
           <Buton mode={BtnModes.SECONDARY_TXT}>Elo</Buton>
           <Buton mode={BtnModes.WARNING}>Elo</Buton>
