@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import IconButton from "global/components/controls/IconButon";
 import EditIcon from '@mui/icons-material/Edit';
 import { TranslationI } from "@shared/interfaces/TranslationI";
+import { AdminImportService } from "admin/services/AdminImport.service";
 
 const TranslationsSection: React.FC = () => {
 
@@ -122,9 +123,9 @@ const TranslationsSection: React.FC = () => {
             {showForm && (
                 <div className="flex gap-5 mb-2 mt-5">
                     <Input name="key" label="Key" className="flex-1" fullWidth
-                    disabled={editMode}
-                    value={newKey}  
-                    onChange={(e) => setNewKey(e.target.value)} 
+                        disabled={editMode}
+                        value={newKey}
+                        onChange={(e) => setNewKey(e.target.value)}
                     />
                     <Input name="value" label="Translation" className="flex-1" value={newValue} fullWidth onChange={(e) => setNewValue(e.target.value)} />
                 </div>
@@ -141,6 +142,13 @@ const TranslationsSection: React.FC = () => {
                     :
                     <Buton onClick={onSave}>Save translations</Buton>
                 }
+
+                {selectedTranslation && (
+                    <Buton
+                        mode={BtnModes.PRIMARY_TXT}
+                        onClick={() => AdminImportService.exportTranslationJson(selectedTranslation.langCode)}
+                    >Export JSON ({selectedTranslation.langCode})</Buton>
+                )}
 
             </div>
 

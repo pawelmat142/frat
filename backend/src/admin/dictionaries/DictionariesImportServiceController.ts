@@ -12,9 +12,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DictionaryEntity } from './model/DictionaryEntity';
 import { Repository } from 'typeorm';
 import { DictionaryValidators } from '@shared/utils/DictionaryValidators';
+import { ImportUtil } from 'global/utils/ImportUtil';
 
 // TODO roles guardy
-@Controller('api/dictionaries')
+@Controller('api/import/dictionaries')
 export class DictionariesImportServiceController {
 
   constructor(
@@ -24,17 +25,13 @@ export class DictionariesImportServiceController {
 
   @Get('export/:code')
   async exportDictionary(@Param('code') code: string, @Res() res: Response) {
-    const dictionary = await this.dictionaryRepository.findOne({ where: { code } });
+    const dictionary: DictionaryEntity = await this.dictionaryRepository.findOne({ where: { code } });
     if (!dictionary) {
       throw new NotFoundException('Dictionary not found');
     }
+    delete dictionary.dictionaryId
     const json = JSON.stringify(dictionary, null, 2);
-    res.setHeader('Content-Type', 'application/json');
-    const now = new Date();
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}`;
-    res.setHeader('Content-Disposition', `attachment; filename="dictionary_${code}_${dateStr}.json"`);
-    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
+    ImportUtil.prepareExportResponse(res, `dictionary_${code}`);
     res.send(json);
   }
 
@@ -77,13 +74,11 @@ export class DictionariesImportServiceController {
           return res.status(422).json({ message: errMsg });
         }
       }
-
-      // Insert
       const entity = this.dictionaryRepository.create(data);
       await this.dictionaryRepository.save(entity);
       return res.status(201).json({ message: 'Dictionary imported successfully' });
     } catch (err: any) {
-      console.log(err);
+      // TODO logi
       return res.status(500).json({ message: err?.message || 'Server error' });
     }
   }

@@ -48,7 +48,7 @@ const AdminDictionaries: React.FC = () => {
                 toast.error("Invalid JSON file.");
                 return;
             }
-            await httpClient.post("/dictionaries/import", data)
+            await httpClient.post("/import/dictionaries/import", data)
 
             toast.success("Dictionary imported successfully.")
             loadDictionaries();

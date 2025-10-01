@@ -16,7 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Util } from "@shared/utils/util";
 import DictionaryGroups from "./DictionaryGroups";
-import { DictionaryImportService } from "admin/services/DictionaryImport.service";
+import { AdminImportService } from "admin/services/AdminImport.service";
 
 const DictionaryView: React.FC = () => {
     const navigate = useNavigate();
@@ -206,7 +206,7 @@ const DictionaryView: React.FC = () => {
     }
 
     const exportJson = () => {
-        DictionaryImportService.exportJson(dictionary.code);
+        AdminImportService.exportDictionaryJson(dictionary.code);
     }
 
     return (
