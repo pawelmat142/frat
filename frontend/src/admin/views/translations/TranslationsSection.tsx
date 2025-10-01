@@ -9,6 +9,8 @@ import IconButton from "global/components/controls/IconButon";
 import EditIcon from '@mui/icons-material/Edit';
 import { TranslationI } from "@shared/interfaces/TranslationI";
 import { AdminImportService } from "admin/services/AdminImport.service";
+import { httpClient } from "global/services/http";
+import SelectFileButton from "global/components/controls/SelectFileButton";
 
 const TranslationsSection: React.FC = () => {
 
@@ -73,6 +75,30 @@ const TranslationsSection: React.FC = () => {
         onShowForm();
     }
 
+    const handleImportTranslation = async (file: File) => {
+        try {
+            setLoading(true);
+            const text = await file.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                toast.error("Invalid JSON file.");
+                return;
+            }
+            await httpClient.post("/import/translations/import", data)
+
+            toast.success("Translations imported successfully.")
+            if (selectedTranslation?.langCode) {
+                translation.loadLanguage?.(selectedTranslation.langCode);
+            }
+        } catch (err: any) {
+            // TODO error handling
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const keys = Object.keys(defaultTranslation.data || {})
 
     return (
@@ -134,7 +160,7 @@ const TranslationsSection: React.FC = () => {
 
             <div className="flex gap-2 my-10">
                 <Buton onClick={() => onShowForm()} mode={BtnModes.PRIMARY_TXT}>
-                    {showForm ? 'Cancel' : 'Add'}
+                    {showForm ? 'Cancel' : 'Add translation'}
                 </Buton>
 
                 {showForm ?
@@ -149,6 +175,8 @@ const TranslationsSection: React.FC = () => {
                         onClick={() => AdminImportService.exportTranslationJson(selectedTranslation.langCode)}
                     >Export JSON ({selectedTranslation.langCode})</Buton>
                 )}
+
+                <SelectFileButton onFileSelected={handleImportTranslation} label="Import JSON" />
 
             </div>
 

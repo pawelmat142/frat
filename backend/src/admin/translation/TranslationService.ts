@@ -20,8 +20,17 @@ export class TranslationService implements OnModuleInit {
     private languagesList: DictionaryElement[]
 
     public async onModuleInit(): Promise<void> {
+        this.reloadLanguagesList();
+    }
+    
+    private async reloadLanguagesList(): Promise<void> {
         const translationsLangDictionary: DictionaryI = await this.dictionariesService.getDictionaryGroup(Dictionaries.LANGUAGES, 'TRANSLATIONS');
         this.languagesList = translationsLangDictionary.elements
+    }
+
+    public async isSupportedTranslationLang(langCode: string): Promise<boolean> {
+        await this.reloadLanguagesList();
+        return !!this.languagesList.find(l => l.code === langCode && l.active);
     }
 
     public async getTranslation(langCode: string): Promise<TranslationI> {
@@ -30,7 +39,7 @@ export class TranslationService implements OnModuleInit {
             throw new Error('Translations languages list is not initialized');
         }
 
-        if (!this.languagesList.find(l => l.code === code)) {
+        if (!(await this.isSupportedTranslationLang(code))) {
             console.warn(`Language ${langCode} is not supported by translations, returning default 'en'`);
             code = 'en'
         }

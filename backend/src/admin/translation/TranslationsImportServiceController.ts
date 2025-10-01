@@ -5,12 +5,15 @@ import {
   Param,
   Res,
   NotFoundException,
+  Post,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TranslationEntity } from './TranslationEntity';
 import { ImportUtil } from 'global/utils/ImportUtil';
+import { TranslationValidators } from '@shared/utils/TranslationValidators';
+import { TranslationService } from './TranslationService';
 
 // TODO roles guardy
 @Controller('api/import/translations')
@@ -19,6 +22,7 @@ export class TranslationsImportServiceController {
   constructor(
     @InjectRepository(TranslationEntity)
     private translationRepository: Repository<TranslationEntity>,
+    private readonly translationService: TranslationService
   ) { }
 
   @Get('export/:langCode')
@@ -33,54 +37,50 @@ export class TranslationsImportServiceController {
     res.send(json);
   }
 
-  // @Post('import')
-  // async importDictionary(@Res() res: Response) {
-  //   try {
-  //     if (!res.req || !res.req.body) {
-  //       return res.status(400).json({ message: 'No data provided' });
-  //     }
-  //     const data = res.req.body;
-  //     // Basic validation
-  //     if (!data.code || !Array.isArray(data.columns) || !Array.isArray(data.elements)) {
-  //       return res.status(400).json({ message: 'Missing required dictionary fields' });
-  //     }
-  //     // Check if code exists
-  //     const exists = await this.dictionaryRepository.findOne({ where: { code: data.code } });
-  //     if (exists) {
-  //       return res.status(409).json({ message: 'Dictionary with this code already exists' });
-  //     }
+  @Post('import')
+  async importDictionary(@Res() res: Response) {
+    try {
+      if (!res.req || !res.req.body) {
+        return res.status(400).json({ message: 'No data provided' });
+      }
+      const data = res.req.body;
 
-  //     // validateCode for dictionary code
-  //     const codeError = DictionaryValidators.validateCode(data.code);
-  //     if (codeError) {
-  //       return res.status(422).json({ message: codeError });
-  //     }
+      if (!(await this.translationService.isSupportedTranslationLang(data.langCode))) {
+        return res.status(422).json({ message: `Language code '${data.langCode}' is not supported.` });
+      }
 
-  //     // Validate structure using DictionaryValidators (cast to DictionaryI)
-  //     const validationFns = [
-  //       DictionaryValidators.validateElementCodes,
-  //       DictionaryValidators.validateColumnCodes,
-  //       DictionaryValidators.validateGroupCodes,
-  //       DictionaryValidators.validateColumnCodeDuplicates,
-  //       DictionaryValidators.validateElementCodeDuplicates,
-  //       DictionaryValidators.validateGroupCodeDuplicates,
-  //       DictionaryValidators.validateRequiredColumnsInElements,
-  //     ];
-  //     for (const fn of validationFns) {
-  //       const errMsg = fn(data);
-  //       if (errMsg) {
-  //         return res.status(422).json({ message: errMsg });
-  //       }
-  //     }
+      // Translation JSON validation
+      const translationValidationFns = [
+        TranslationValidators.validateLangCode,
+        TranslationValidators.validateVersion,
+        TranslationValidators.validateData,
+        TranslationValidators.validateDuplicateKeys,
+        TranslationValidators.validateKeyFormat,
+      ];
+      for (const fn of translationValidationFns) {
+        const errMsg = fn(data);
+        if (errMsg) {
+          return res.status(422).json({ message: errMsg });
+        }
+      }
 
-  //     // Insert
-  //     const entity = this.dictionaryRepository.create(data);
-  //     await this.dictionaryRepository.save(entity);
-  //     return res.status(201).json({ message: 'Dictionary imported successfully' });
-  //   } catch (err: any) {
-  //     console.log(err);
-  //     return res.status(500).json({ message: err?.message || 'Server error' });
-  //   }
-  // }
+      // Check if translation for langCode exists
+      const exists = await this.translationRepository.findOne({ where: { langCode: data.langCode } });
+      if (exists) {
+        exists.version++
+        exists.data = data.data
+        await this.translationRepository.save(exists);
+        return res.status(201).json({ message: 'Translation imported successfully - update' });
+      }
+
+      // Insert
+      const entity = this.translationRepository.create(data);
+      await this.translationRepository.save(entity);
+      return res.status(201).json({ message: 'Translation imported successfully - create' });
+    } catch (err: any) {
+      // TODO logi, error handling
+      return res.status(500).json({ message: err?.message || 'Unexpected import Translation error' });
+    }
+  }
 
 }

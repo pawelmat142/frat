@@ -2,7 +2,7 @@ import Buton from "../../../global/components/controls/Buton";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path"
 import { httpClient } from "global/services/http";
-import ImportDictionaryButton from "../../../global/components/controls/SelectFileButton";
+import SelectFileButton from "../../../global/components/controls/SelectFileButton";
 import { useEffect, useState } from "react";
 import { DictionaryListItem } from "@shared/DictionaryI";
 import { Util } from "@shared/utils/util";
@@ -109,7 +109,7 @@ const AdminDictionaries: React.FC = () => {
                     <AddIcon />
                     Add dictionary
                 </Buton>
-                <ImportDictionaryButton onFileSelected={handleImportDictionary} label="Import dictionary" />
+                <SelectFileButton onFileSelected={handleImportDictionary} label="Import dictionary" />
             </div>
         </div>
     );

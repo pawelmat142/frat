@@ -39,9 +39,15 @@ export const AdminPanelProvider: React.FC<AdminPanelProviderProps> = ({ children
     const loadLanguage = async (langCode: string) => {
         const translation = await TranslationAdminService.getTranslation(langCode);
         setSelectedLanguage(langCode);
-        const _translations = [...translations];
-        _translations.push(translation);
-        setTranslations(_translations);
+
+        const index = translations.findIndex(t => t.langCode === langCode);
+        if (index !== -1) {
+            const _translations = translations.map(t => t.langCode === langCode ? translation : t);
+            setTranslations(_translations);
+        } else {
+            translations.push(translation);
+            setTranslations(translations);
+        }
     }
 
     const updateTranslation = (translation: TranslationI) => {
