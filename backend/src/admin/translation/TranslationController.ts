@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from "@nestjs/common";
+import { Body, Controller, Get, Param, Put } from "@nestjs/common";
 import { TranslationService } from "./TranslationService";
 import { TranslationI } from "@shared/interfaces/TranslationI";
 import { TranslationListDto } from "@shared/dto/TranslationListDto";
@@ -19,6 +19,11 @@ export class TranslationController {
     @Get('admin/list')
     getLanguagesList(): TranslationListDto[] {
         return this.translationService.getLanguagesList();
+    }
+
+    @Put('admin')
+    putTranslation(@Body() dto: TranslationI): Promise<TranslationI> {
+        return this.translationService.putTranslation(dto);
     }
 
 }

@@ -35,13 +35,47 @@ export class TranslationService implements OnModuleInit {
             code = 'en'
         }
 
-        const result = await this.translationRepository.findOne({ where: { langCode: code } })
+        const result = await this._getTranslation(code);
         if (!result) {
-            throw new NotFoundException(`Translations for language code ${code} not found in the database`);
+            // TODO
+            console.error(`Translations for language code ${code} not found in the database`);
+            return {
+                langCode,
+                version: -1,
+                data: {}
+            }
         }
         return result;
     }
 
+    public async putTranslation(dto: TranslationI): Promise<TranslationI> {
+        const translation = await this._getTranslation(dto.langCode)
+        if (!translation) {
+            const newTranslation: TranslationI = {
+                langCode: dto.langCode,
+                version: 1,
+                data: dto.data
+            }
+            const saved = await this.translationRepository.save(this.translationRepository.create(newTranslation));
+            // TODO logi
+            console.log('CREATED!')
+            console.log(saved)
+            return saved;
+        }
+
+        for (let key of Object.keys(dto.data)) {
+            translation.data[key] = dto.data[key];
+        }
+        translation.version++;
+
+        // TODO logi
+        return this.translationRepository.save(translation);
+    }
+
+
+    private _getTranslation(langCode: string): Promise<TranslationI> {
+        return this.translationRepository.findOne({ where: { langCode } })
+    }
 
 
     // admin
