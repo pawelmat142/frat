@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { DictionaryEntity } from "../model/DictionaryEntity";
@@ -6,6 +6,8 @@ import { DictionaryI, DictionaryListItem } from "@shared//DictionaryI";
 
 @Injectable()
 export class DictionariesRepo {
+
+    private readonly logger = new Logger(this.constructor.name);
 
     constructor(
         @InjectRepository(DictionaryEntity)
@@ -45,8 +47,10 @@ export class DictionariesRepo {
             where: { code: dto.code },
         });
         if (existingDictionary) {
+            this.logger.log(`Updating existing dictionary with code ${dto.code}`);
             return this.update(dto)
         }
+        this.logger.log(`Creating new dictionary with code ${dto.code}`);
         return this.create(dto);
     }
 

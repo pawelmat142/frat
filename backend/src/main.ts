@@ -1,17 +1,22 @@
 /** Created by Pawel Malek **/
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './AppModule';
+import { createMyLogger } from 'config/logger';
+
+export const GlobalLogger = new Logger('GLOBAL');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
-  // Enable CORS
-  app.enableCors({
-    origin: process.env.NODE_ENV === 'production' ? false : true,
-    credentials: true,
+  const app = await NestFactory.create(AppModule, {
+    logger: createMyLogger(),
+    cors: {
+      origin: process.env.NODE_ENV === 'production' ? false : true,
+      exposedHeaders: ['Content-Disposition'],
+      credentials: true,
+    },
   });
+
 
   // Global validation pipe
   app.useGlobalPipes(
@@ -23,7 +28,6 @@ async function bootstrap() {
   );
 
   // Swagger documentation
-  // TODO po co i co to ten swagger
   const config = new DocumentBuilder()
     .setTitle('JobHigh API')
     .setDescription('High-Altitude Work Professional Network Platform API')
@@ -36,7 +40,7 @@ async function bootstrap() {
   const port = process.env.PORT || 3100;
   await app.listen(port);
 
-  console.log(`Application is running on: http://localhost:${port}`);
+  GlobalLogger.log(`Application is running on port ${port}`);
 }
 
 bootstrap();

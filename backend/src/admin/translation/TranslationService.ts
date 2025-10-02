@@ -25,7 +25,7 @@ export class TranslationService implements OnModuleInit {
     
     private async reloadLanguagesList(): Promise<void> {
         const translationsLangDictionary: DictionaryI = await this.dictionariesService.getDictionaryGroup(Dictionaries.LANGUAGES, 'TRANSLATIONS');
-        this.languagesList = translationsLangDictionary.elements
+        this.languagesList = translationsLangDictionary?.elements || []
     }
 
     public async isSupportedTranslationLang(langCode: string): Promise<boolean> {

@@ -1,10 +1,12 @@
 /** Created by Pawel Malek **/
-import { Injectable, NotFoundException,  } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, } from '@nestjs/common';
 import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
 import { DictionariesRepo } from './DictionariesRepo';
 
 @Injectable()
 export class DictionariesService {
+
+  private readonly logger = new Logger(this.constructor.name);
 
   constructor(
     private readonly repo: DictionariesRepo,
