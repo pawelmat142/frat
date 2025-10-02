@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Param, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, Put, UseInterceptors } from "@nestjs/common";
 import { TranslationService } from "./TranslationService";
 import { TranslationI } from "@shared/interfaces/TranslationI";
 import { TranslationListDto } from "@shared/dto/TranslationListDto";
+import { LogInterceptor } from "global/interceptors/LogInterceptor";
 
 // TODO roles guardy
 @Controller('api/translations')
+@UseInterceptors(LogInterceptor)
 export class TranslationController {
 
     constructor(

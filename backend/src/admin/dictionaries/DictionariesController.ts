@@ -6,12 +6,15 @@ import {
   Body,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { DictionariesService } from './services/DictionariesService';
 import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
+import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 
 // TODO roles guardy
 @Controller('api/dictionaries')
+@UseInterceptors(LogInterceptor)
 export class DictionariesController {
 
   constructor(private readonly dictionariesService: DictionariesService) { }

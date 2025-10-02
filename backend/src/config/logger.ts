@@ -31,7 +31,7 @@ export const createMyLogger = () =>
 
         new DailyRotateFile({
           dirname: '../logs',
-          filename: '%DATE%_agency.log',
+          filename: '%DATE%_FRAT.log',
           datePattern: 'YYYY-MM-DD', // Daily rotate pattern
           zippedArchive: true,
           maxSize: '20m',
@@ -39,8 +39,8 @@ export const createMyLogger = () =>
           format: winston.format.combine(
             // winston.format.timestamp(),
             customTimestamp(),
-            winston.format.printf(({ timestamp, level, message }) => {
-              return `[${timestamp}] [${level}] ${message}`;
+            winston.format.printf(({ timestamp, level, message, context }) => {
+              return `[${timestamp}] [${level}] [${context}] ${message}`;
             }),
           ),
         }),

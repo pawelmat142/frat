@@ -9,6 +9,8 @@ import { MyHttpCode } from '@shared/def/http.def';
  * HTTP Status: 460 (Custom Toast Error)
  */
 
+// TODO implementacja na frontcie
+
 export class ToastException extends HttpException {
   constructor(message: string, source?: any, details?: any) {
     super(

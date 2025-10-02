@@ -6,6 +6,7 @@ import {
   Res,
   Post,
   Logger,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,9 +15,11 @@ import { Repository } from 'typeorm';
 import { DictionaryValidators } from '@shared/utils/DictionaryValidators';
 import { ImportUtil } from 'global/utils/ImportUtil';
 import { ToastException } from 'global/exceptions/ToastException';
+import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 
 // TODO roles guardy
 @Controller('api/import/dictionaries')
+@UseInterceptors(LogInterceptor)
 export class DictionariesImportServiceController {
 
   private readonly logger = new Logger(this.constructor.name);
@@ -28,8 +31,6 @@ export class DictionariesImportServiceController {
 
   @Get('export/:code')
   async exportDictionary(@Param('code') code: string, @Res() res: Response) {
-    this.logger.log(`[START] Export dictionary ${code}`);
-
     const dictionary: DictionaryEntity = await this.dictionaryRepository.findOne({ where: { code } });
     if (!dictionary) {
       throw new ToastException(`Trying to export dictionary. Dictionary with code ${code} not found`, this);
@@ -39,12 +40,10 @@ export class DictionariesImportServiceController {
     ImportUtil.prepareExportResponse(res, `dictionary_${code}`);
 
     res.send(json);
-    this.logger.log(`[STOP] Export dictionary ${code}`);
   }
 
   @Post('import')
   async importDictionary(@Res() res: Response) {
-    this.logger.log('[START] Import dictionary');
     try {
       if (!res.req || !res.req.body) {
         throw new ToastException('No data provided', this);
@@ -90,9 +89,6 @@ export class DictionariesImportServiceController {
 
     } catch (err: any) {
       throw new ToastException(`Import error: ${err?.message || err}`, this);
-      
-    } finally {
-      this.logger.log('[STOP] Import dictionary');
     }
   }
 

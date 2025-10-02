@@ -8,6 +8,7 @@ import { HttpException } from '@nestjs/common';
  */
 import { Logger } from '@nestjs/common';
 import { MyHttpCode } from '@shared/def/http.def';
+// TODO implementacja na frontcie
 
 export class SWWException extends HttpException {
   constructor(message: string = 'Something went wrong', source?: any, details?: any) {

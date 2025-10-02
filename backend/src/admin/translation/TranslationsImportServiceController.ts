@@ -6,6 +6,7 @@ import {
   Res,
   NotFoundException,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,9 +15,11 @@ import { TranslationEntity } from './TranslationEntity';
 import { ImportUtil } from 'global/utils/ImportUtil';
 import { TranslationValidators } from '@shared/utils/TranslationValidators';
 import { TranslationService } from './TranslationService';
+import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 
 // TODO roles guardy
 @Controller('api/import/translations')
+@UseInterceptors(LogInterceptor)
 export class TranslationsImportServiceController {
 
   constructor(
