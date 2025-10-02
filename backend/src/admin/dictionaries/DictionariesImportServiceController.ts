@@ -13,6 +13,7 @@ import { DictionaryEntity } from './model/DictionaryEntity';
 import { Repository } from 'typeorm';
 import { DictionaryValidators } from '@shared/utils/DictionaryValidators';
 import { ImportUtil } from 'global/utils/ImportUtil';
+import { ToastException } from 'global/exceptions/ToastException';
 
 // TODO roles guardy
 @Controller('api/import/dictionaries')
@@ -31,9 +32,7 @@ export class DictionariesImportServiceController {
 
     const dictionary: DictionaryEntity = await this.dictionaryRepository.findOne({ where: { code } });
     if (!dictionary) {
-      const message = `Dictionary ${code} not found`;
-      this.logger.error(message);
-      return res.status(400).json({ message });
+      throw new ToastException(`Trying to export dictionary. Dictionary with code ${code} not found`, this);
     }
     delete dictionary.dictionaryId
     const json = JSON.stringify(dictionary, null, 2);
@@ -48,30 +47,23 @@ export class DictionariesImportServiceController {
     this.logger.log('[START] Import dictionary');
     try {
       if (!res.req || !res.req.body) {
-        const message = 'No data provided';
-        this.logger.warn(message);
-        return res.status(400).json({ message });
+        throw new ToastException('No data provided', this);
       }
       const data = res.req.body;
       // Basic validation
       if (!data.code || !Array.isArray(data.columns) || !Array.isArray(data.elements)) {
-        const message = 'Missing required dictionary fields';
-        this.logger.warn(message);
-        return res.status(400).json({ message });
+        throw new ToastException('Missing required dictionary fields', this);
       }
       // Check if code exists
       const exists = await this.dictionaryRepository.findOne({ where: { code: data.code } });
       if (exists) {
-        const message = 'Dictionary with this code already exists';
-        this.logger.warn(message);
-        return res.status(409).json({ message });
+        throw new ToastException('Dictionary with this code already exists', this);
       }
 
       // validateCode for dictionary code
       const codeError = DictionaryValidators.validateCode(data.code);
       if (codeError) {
-        this.logger.warn(`Validation error: ${codeError}`);
-        return res.status(422).json({ message: codeError });
+        throw new ToastException(`Validation error: ${codeError}`, this);
       }
 
       // Validate structure using DictionaryValidators (cast to DictionaryI)
@@ -87,8 +79,7 @@ export class DictionariesImportServiceController {
       for (const fn of validationFns) {
         const errMsg = fn(data);
         if (errMsg) {
-          this.logger.warn(`Validation error: ${errMsg}`);
-          return res.status(422).json({ message: errMsg });
+          throw new ToastException(`Validation error: ${errMsg}`, this);
         }
       }
       const entity = this.dictionaryRepository.create(data);
@@ -98,8 +89,8 @@ export class DictionariesImportServiceController {
       return res.status(201).end();
 
     } catch (err: any) {
-      this.logger.error(`Import error: ${err?.message || err}`);
-      return res.status(500).json({ message: err?.message || 'Server error' });
+      throw new ToastException(`Import error: ${err?.message || err}`, this);
+      
     } finally {
       this.logger.log('[STOP] Import dictionary');
     }

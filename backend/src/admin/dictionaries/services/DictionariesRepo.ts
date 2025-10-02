@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { DictionaryEntity } from "../model/DictionaryEntity";
 import { DictionaryI, DictionaryListItem } from "@shared//DictionaryI";
+import { ToastException } from "global/exceptions/ToastException";
 
 @Injectable()
 export class DictionariesRepo {
@@ -46,25 +47,27 @@ export class DictionariesRepo {
         const existingDictionary = await this.dictionaryRepository.exists({
             where: { code: dto.code },
         });
+
         if (existingDictionary) {
-            this.logger.log(`Updating existing dictionary with code ${dto.code}`);
             return this.update(dto)
         }
-        this.logger.log(`Creating new dictionary with code ${dto.code}`);
         return this.create(dto);
     }
 
     public async remove(code: string): Promise<void> {
         const dictionary = await this.findOne(code);
         if (!dictionary) {
-            throw new NotFoundException(`Dictionary with code ${code} not found`)
+            throw new ToastException(`Trying to delete dictionary. Dictionary with code ${code} not found`, this);
         }
         await this.dictionaryRepository.remove(dictionary as DictionaryEntity);
+        this.logger.log(`Deleted dictionary with code ${code}`);
     }
 
-    private create(dto: DictionaryI): Promise<DictionaryEntity> {
+    private async create(dto: DictionaryI): Promise<DictionaryEntity> {
         const dictionary = this.dictionaryRepository.create(dto);
-        return this.dictionaryRepository.save(dictionary);
+        const result = await this.dictionaryRepository.save(dictionary);
+        this.logger.log(`Created new dictionary with code ${dto.code}`);
+        return result;
     }
 
     private async update(dto: DictionaryI): Promise<DictionaryEntity> {
@@ -75,7 +78,9 @@ export class DictionariesRepo {
         dictionary.groups = dto.groups;
         dictionary.status = dto.status;
         dictionary.version++;
-        return this.dictionaryRepository.save(dictionary);
+        const result = await this.dictionaryRepository.save(dictionary);
+        this.logger.log(`Updated dictionary with code ${dto.code}`);
+        return result;
     }
 
     /**
@@ -111,7 +116,10 @@ export class DictionariesRepo {
             [dictionaryCode, groupCode]
         );
 
-        if (!result[0]) return null;
+        if (!result[0]) {
+            this.logger.warn(`Dictionary ${dictionaryCode} with group ${groupCode} not found`);
+            return null
+        };
         // Upewnij się, że typy są zgodne z DictionaryI
         return {
             code: result[0].code,
