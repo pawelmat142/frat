@@ -1,4 +1,3 @@
-import { Trans } from "react-i18next";
 import Buton from "../components/controls/Buton";
 import { BtnModes } from "../interface/controls.interface";
 import { TranslationService } from "global/services/Translation.service";

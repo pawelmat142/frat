@@ -17,6 +17,7 @@ import { ImportUtil } from 'global/utils/ImportUtil';
 import { ToastException } from 'global/exceptions/ToastException';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { PopupException } from 'global/exceptions/PopupException';
+import { SWWException } from 'global/exceptions/SWWException';
 
 // TODO roles guardy
 @Controller('api/import/dictionaries')
@@ -91,7 +92,8 @@ export class DictionariesImportServiceController {
     } catch (err: any) {
       // TODO 
       // throw new ToastException(err?.message || 'Unexpected import error', this);
-      throw new PopupException(err?.message || 'Unexpected import error', this);
+      // throw new PopupException(err?.message || 'Unexpected import error', this);
+      throw new SWWException(err?.message || 'Unexpected import error', this);
     }
   }
 

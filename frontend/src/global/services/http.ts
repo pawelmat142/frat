@@ -4,13 +4,11 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { MyHttpCode } from '@shared/def/http.def';
 import { PopupHandler } from 'global/providers/PopupProvider';
 import { BtnModes } from 'global/interface/controls.interface';
+import { Path } from '../../path';
 
 const API_URL = process.env.REACT_APP_API_URL || '/api';
 
-// TODO dorobić popup exception, redirect exception,
-
 export const queryClient = new QueryClient();
-
 
 export class HttpClient {
   private axiosInstance = axios.create({
@@ -32,60 +30,6 @@ export class HttpClient {
         return Promise.reject(error);
       }
     );
-  }
-
-  private handleSWW(error: AxiosError) {
-    // TODO redirect to /error page
-    console.error(error)
-    toast.error(`[${error.response?.status}] Something went wrong.`);
-  }
-
-  private async handlePopupException(error: AxiosError) {
-    if (!this.popupHandler) return;
-    const confirmed = await this.popupHandler({
-
-      // TODO translate
-      title: 'Wystąpił błąd',
-      message: this.getMsg(error),
-      buttons: [
-        { text: 'Zostań na tej stronie', mode: BtnModes.ERROR_TXT },
-        { text: 'Wróć na stronę główną', mode: BtnModes.PRIMARY, action: () => true },
-      ]
-    });
-    if (confirmed) {
-      window.location.href = '/';
-    }
-  }
-
-  private getMsg(error: AxiosError): string {
-    return error.response?.data && typeof (error.response.data as any).message === 'string'
-      ? (error.response.data as any).message
-      : error.message;
-  }
-  
-  private handleError(error: AxiosError) {
-    if (error.response) {
-      const status = error.response.status;
-      switch (status) {
-        case MyHttpCode.TOAST_ERROR: //460
-          toast.error(this.getMsg(error));
-          break;
-        case MyHttpCode.TOAST_WARNING: //461
-          toast.warning(this.getMsg(error));
-          break;
-        case MyHttpCode.SWW: //599
-          this.handleSWW(error);
-          break;
-        case MyHttpCode.POPUP_ERROR: //462
-          this.handlePopupException(error);
-          break;
-        default:
-          this.handleSWW(error);
-      }
-      // TODO: show popup/modal for critical errors if needed
-    } else {
-      toast.error('Network error');
-    }
   }
 
   async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
@@ -111,7 +55,73 @@ export class HttpClient {
   async getFile(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<Blob>> {
     return this.axiosInstance.get<Blob>(url, { ...config, responseType: 'blob' });
   }
-  
+
+  getAndClearErrorMsg() {
+    const msg = localStorage.getItem('lastErrorMsg') || 'Error not found';
+    localStorage.removeItem('lastErrorMsg')
+    return msg;
+  }
+
+  private storeErrorMsg(msg: string) {
+    localStorage.setItem('lastErrorMsg', msg)
+  }
+
+  private handleSWW(error: AxiosError) {
+    console.error(error);
+    const msg = this.getErrorMsg(error);
+    this.storeErrorMsg(msg);
+    window.location.replace(Path.ERROR_PAGE);
+  }
+
+  private async handlePopupException(error: AxiosError) {
+    if (!this.popupHandler) return;
+    const confirmed = await this.popupHandler({
+
+      // TODO translate
+      title: 'Wystąpił błąd',
+      message: this.getErrorMsg(error),
+      buttons: [
+        { text: 'Zostań na tej stronie', mode: BtnModes.ERROR_TXT },
+        { text: 'Wróć na stronę główną', mode: BtnModes.PRIMARY, action: () => true },
+      ]
+    });
+    if (confirmed) {
+      window.location.href = '/';
+    }
+  }
+
+  private getErrorMsg(error: AxiosError): string {
+    return error.response?.data && typeof (error.response.data as any).message === 'string'
+      ? (error.response.data as any).message
+      : error.message;
+  }
+
+  private handleError(error: AxiosError) {
+    if (error.response) {
+      const status = error.response.status;
+      switch (status) {
+        case MyHttpCode.TOAST_ERROR: //460
+          toast.error(this.getErrorMsg(error));
+          break;
+        case MyHttpCode.TOAST_WARNING: //461
+          toast.warning(this.getErrorMsg(error));
+          break;
+        case MyHttpCode.SWW: //599
+          this.handleSWW(error);
+          break;
+        case MyHttpCode.POPUP_ERROR: //462
+          this.handlePopupException(error);
+          break;
+        default:
+          this.handleSWW(error);
+      }
+    } else {
+      toast.error('Network error');
+    }
+  }
+
+
+
 }
 
 export const httpClient = new HttpClient();
