@@ -1,7 +1,8 @@
 /** Created by Pawel Malek **/
-import { Injectable, Logger, NotFoundException, } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
 import { DictionariesRepo } from './DictionariesRepo';
+import { SWWException } from 'global/exceptions/SWWException';
 
 @Injectable()
 export class DictionariesService {
@@ -19,7 +20,7 @@ export class DictionariesService {
   public async get(code: string): Promise<DictionaryI> {
     const dictionary = await this.repo.findOne(code);
     if (!dictionary) {
-      throw new NotFoundException(`Dictionary ${code} not found`);
+      throw new SWWException(`Dictionary ${code} not found`, this);
     }
     return dictionary;
   }

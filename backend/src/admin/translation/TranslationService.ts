@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { Dictionaries } from "@shared/def/dictionary.def";
 import { DictionaryElement, DictionaryI } from "@shared/DictionaryI";
 import { TranslationI } from "@shared/interfaces/TranslationI";
@@ -7,9 +7,12 @@ import { TranslationEntity } from "./TranslationEntity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { TranslationListDto } from "@shared/dto/TranslationListDto";
+import { ToastException } from "global/exceptions/ToastException";
 
 @Injectable()
 export class TranslationService implements OnModuleInit {
+    
+  private readonly logger = new Logger(this.constructor.name);
 
     constructor(
         private readonly dictionariesService: DictionariesService,
@@ -36,18 +39,17 @@ export class TranslationService implements OnModuleInit {
     public async getTranslation(langCode: string): Promise<TranslationI> {
         let code = langCode
         if (!this.languagesList) {
-            throw new Error('Translations languages list is not initialized');
+            throw new ToastException('Translations languages list is not initialized', this);
         }
 
         if (!(await this.isSupportedTranslationLang(code))) {
-            console.warn(`Language ${langCode} is not supported by translations, returning default 'en'`);
+            this.logger.warn(`Language ${langCode} is not supported by translations, returning default 'en'`);
             code = 'en'
         }
 
         const result = await this._getTranslation(code);
         if (!result) {
-            // TODO
-            console.error(`Translations for language code ${code} not found in the database`);
+            this.logger.warn(`Translations for language code ${code} not found in the database`);
             return {
                 langCode,
                 version: -1,
@@ -66,9 +68,7 @@ export class TranslationService implements OnModuleInit {
                 data: dto.data
             }
             const saved = await this.translationRepository.save(this.translationRepository.create(newTranslation));
-            // TODO logi
-            console.log('CREATED!')
-            console.log(saved)
+            this.logger.log(`Created new translation for language ${saved.langCode}`);
             return saved;
         }
 
@@ -77,8 +77,9 @@ export class TranslationService implements OnModuleInit {
         }
         translation.version++;
 
-        // TODO logi
-        return this.translationRepository.save(translation);
+        const result = await this.translationRepository.save(translation);
+        this.logger.log(`Updated translation for language ${result.langCode} to version ${result.version}`);
+        return result;
     }
 
 

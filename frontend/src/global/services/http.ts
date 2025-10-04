@@ -26,7 +26,11 @@ export class HttpClient {
     this.axiosInstance.interceptors.response.use(
       response => response,
       error => {
-        this.handleError(error);
+        if (error.response?.data instanceof Blob) {
+          this.handleFileError(error);
+        } else {
+          this.handleError(error);
+        }
         return Promise.reject(error);
       }
     );
@@ -120,7 +124,25 @@ export class HttpClient {
     }
   }
 
-
+  private handleFileError(error: any) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const response = JSON.parse(reader.result as string);
+      const axiosError: AxiosError = {
+        ...error,
+        message: response.message,
+        name: error.name,
+        config: error.config,
+        code: error.code,
+        request: error.request,
+        response: error.response,
+        isAxiosError: true,
+        toJSON: () => ({})
+      };
+      this.handleError(axiosError);
+    };
+    reader.readAsText(error.response.data);
+  }
 
 }
 

@@ -12,7 +12,7 @@ import { MyHttpCode } from '@shared/def/http.def';
 // TODO implementacja na frontcie
 
 export class ToastException extends HttpException {
-  constructor(message: string, source?: any, details?: any) {
+  constructor(message: string, source: any, details?: any) {
     super(
       {
         type: 'toast_error',
@@ -22,10 +22,9 @@ export class ToastException extends HttpException {
       },
       MyHttpCode.TOAST_ERROR,
     );
-    if (source) {
-      const className = source.constructor?.name || typeof source;
-      const logger = new Logger(className);
-      logger.error(`${message}`, details ? JSON.stringify(details) : undefined);
-    }
+
+    const sourceClassName = source?.constructor?.name || typeof source || 'UNKNOWN';
+    const logger = new Logger(sourceClassName);
+    logger.error(`${message}`, details ? JSON.stringify(details) : undefined);
   }
 }

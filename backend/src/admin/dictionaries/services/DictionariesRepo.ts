@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 import { DictionaryEntity } from "../model/DictionaryEntity";
 import { DictionaryI, DictionaryListItem } from "@shared//DictionaryI";
 import { ToastException } from "global/exceptions/ToastException";
+import { ToastWarningException } from "global/exceptions/ToastWarningException";
 
 @Injectable()
 export class DictionariesRepo {
@@ -117,8 +118,7 @@ export class DictionariesRepo {
         );
 
         if (!result[0]) {
-            this.logger.warn(`Dictionary ${dictionaryCode} with group ${groupCode} not found`);
-            return null
+            throw new ToastWarningException(`Dictionary ${dictionaryCode} with group ${groupCode} not found`, this);
         };
         // Upewnij się, że typy są zgodne z DictionaryI
         return {

@@ -38,7 +38,7 @@ const TranslationsSection: React.FC = () => {
         try {
             setLoading(true);
             translation.saveTranslation?.(selectedTranslation!);
-        } finally {
+        } catch (e) {} finally {
             setLoading(false);
         }
     }
@@ -92,12 +92,22 @@ const TranslationsSection: React.FC = () => {
             if (selectedTranslation?.langCode) {
                 translation.loadLanguage?.(selectedTranslation.langCode);
             }
-        } catch (err: any) {
-            // TODO error handling
-        } finally {
+        } catch (e) {}
+        finally {
             setLoading(false);
         }
     }
+
+    const handleExportTranslation = async () => {
+        if (!selectedTranslation) return;
+        try {
+            setLoading(true);
+            await AdminImportService.exportTranslationJson(selectedTranslation?.langCode);
+        } catch (e) {} finally {
+            setLoading(false);
+        }
+    }
+
 
     const keys = Object.keys(defaultTranslation.data || {})
 
@@ -172,7 +182,7 @@ const TranslationsSection: React.FC = () => {
                 {selectedTranslation && (
                     <Buton
                         mode={BtnModes.PRIMARY_TXT}
-                        onClick={() => AdminImportService.exportTranslationJson(selectedTranslation.langCode)}
+                        onClick={handleExportTranslation}
                     >Export JSON ({selectedTranslation.langCode})</Buton>
                 )}
 

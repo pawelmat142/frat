@@ -53,7 +53,6 @@ const AdminDictionaries: React.FC = () => {
             toast.success("Dictionary imported successfully.")
             loadDictionaries();
         } catch (err: any) {
-            // TODO error handling
         } finally {
             setLoading(false);
         }       

@@ -69,7 +69,6 @@ const DictionaryGroupForm: React.FC = () => {
             await DictionaryAdminService.putDictionary(updatedDictionary);
             navigate(Path.getDictionaryPath(dictionary.code));
         } catch (error) {
-            // TODO: error handling
         } finally {
             setLoading(false);
         }

@@ -31,7 +31,7 @@ const AdminTranslations: React.FC = () => {
         try {
             setLoading(true);
             translation?.loadLanguage?.(item.code);
-        } finally{
+        } catch (e) {} finally {
             setLoading(false);
         }
     }

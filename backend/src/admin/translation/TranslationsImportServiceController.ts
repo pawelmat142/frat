@@ -7,6 +7,7 @@ import {
   NotFoundException,
   Post,
   UseInterceptors,
+  Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,11 +17,14 @@ import { ImportUtil } from 'global/utils/ImportUtil';
 import { TranslationValidators } from '@shared/utils/TranslationValidators';
 import { TranslationService } from './TranslationService';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
+import { ToastException } from 'global/exceptions/ToastException';
 
 // TODO roles guardy
 @Controller('api/import/translations')
 @UseInterceptors(LogInterceptor)
 export class TranslationsImportServiceController {
+
+  private readonly logger = new Logger(this.constructor.name);
 
   constructor(
     @InjectRepository(TranslationEntity)
@@ -32,7 +36,7 @@ export class TranslationsImportServiceController {
   async exportDictionary(@Param('langCode') langCode: string, @Res() res: Response) {
     const translation: TranslationEntity = await this.translationRepository.findOne({ where: { langCode } });
     if (!translation) {
-      throw new NotFoundException('TranslationI not found');
+      throw new ToastException('Translation not found', this);
     }
     delete translation.translationId
     const json = JSON.stringify(translation, null, 2);
@@ -44,12 +48,12 @@ export class TranslationsImportServiceController {
   async importDictionary(@Res() res: Response) {
     try {
       if (!res.req || !res.req.body) {
-        return res.status(400).json({ message: 'No data provided' });
+        throw new Error('No data provided');
       }
       const data = res.req.body;
 
       if (!(await this.translationService.isSupportedTranslationLang(data.langCode))) {
-        return res.status(422).json({ message: `Language code '${data.langCode}' is not supported.` });
+        throw new Error(`Language code '${data.langCode}' is not supported.`);
       }
 
       // Translation JSON validation
@@ -63,7 +67,7 @@ export class TranslationsImportServiceController {
       for (const fn of translationValidationFns) {
         const errMsg = fn(data);
         if (errMsg) {
-          return res.status(422).json({ message: errMsg });
+          throw new Error(errMsg);
         }
       }
 
@@ -73,16 +77,16 @@ export class TranslationsImportServiceController {
         exists.version++
         exists.data = data.data
         await this.translationRepository.save(exists);
-        return res.status(201).json({ message: 'Translation imported successfully - update' });
+        throw new Error('Translation already exists');
       }
 
       // Insert
       const entity = this.translationRepository.create(data);
       await this.translationRepository.save(entity);
-      return res.status(201).json({ message: 'Translation imported successfully - create' });
+      this.logger.log(`Imported translation for language ${data.langCode}`);
+      return res.status(201).end();
     } catch (err: any) {
-      // TODO logi, error handling
-      return res.status(500).json({ message: err?.message || 'Unexpected import Translation error' });
+      throw new ToastException(err?.message || 'Unexpected import error', this);
     }
   }
 

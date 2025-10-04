@@ -158,10 +158,7 @@ const AddDictionaryView: React.FC = () => {
         navigate(Path.ADMIN_DICTIONARIES)
       }
 
-    } catch (error) {
-      // TODO error handling
-      console.error('Error updating dictionary: ', error);
-    }
+    } catch (e) {}
     finally {
       resetForm();
       setLoading(false);

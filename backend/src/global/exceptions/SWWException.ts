@@ -11,7 +11,7 @@ import { MyHttpCode } from '@shared/def/http.def';
 // TODO implementacja na frontcie
 
 export class SWWException extends HttpException {
-  constructor(message: string = 'Something went wrong', source?: any, details?: any) {
+  constructor(message: string = 'Something went wrong', source: any, details?: any) {
     super(
       {
         type: 'system_error',
@@ -21,10 +21,9 @@ export class SWWException extends HttpException {
       },
       MyHttpCode.SWW,
     );
-    if (source) {
-      const className = source.constructor?.name || typeof source;
-      const logger = new Logger(className);
-      logger.error(`${message}`, details ? JSON.stringify(details) : undefined);
-    }
+
+    const sourceClassName = source?.constructor?.name || typeof source || 'UNKNOWN';
+    const logger = new Logger(sourceClassName);
+    logger.error(`${message}`, details ? JSON.stringify(details) : undefined);
   }
 }

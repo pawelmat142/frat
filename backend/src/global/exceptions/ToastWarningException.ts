@@ -21,10 +21,9 @@ export class ToastWarningException extends HttpException {
       },
       MyHttpCode.TOAST_WARNING,
     );
-    if (source) {
-      const className = source.constructor?.name || typeof source;
-      const logger = new Logger(className);
-      logger.warn(`${message}`, details ? JSON.stringify(details) : undefined);
-    }
+
+    const sourceClassName = source?.constructor?.name || typeof source || 'UNKNOWN';
+    const logger = new Logger(sourceClassName);
+    logger.warn(`${message}`, details ? JSON.stringify(details) : undefined);
   }
 }

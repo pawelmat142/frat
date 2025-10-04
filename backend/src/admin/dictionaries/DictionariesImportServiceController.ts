@@ -90,10 +90,7 @@ export class DictionariesImportServiceController {
       return res.status(201).end();
 
     } catch (err: any) {
-      // TODO 
-      // throw new ToastException(err?.message || 'Unexpected import error', this);
-      // throw new PopupException(err?.message || 'Unexpected import error', this);
-      throw new SWWException(err?.message || 'Unexpected import error', this);
+      throw new ToastException(err?.message || 'Unexpected import error', this);
     }
   }
 

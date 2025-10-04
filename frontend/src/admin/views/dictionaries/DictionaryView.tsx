@@ -40,9 +40,7 @@ const DictionaryView: React.FC = () => {
                 setLoading(true);
                 const result = await DictionaryAdminService.getDictionary(code)
                 _setDictionary(result);
-            } catch (error) {
-                // TODO handle
-                console.error("Error fetching dictionary:", error);
+            } catch (e) {
             } finally {
                 setLoading(false);
             }
@@ -107,9 +105,7 @@ const DictionaryView: React.FC = () => {
             const result = await DictionaryAdminService.putDictionary(updatedDictionary);
             _setDictionary(result);
             toast.success("Dictionary updated successfully.");
-        } catch (error) {
-            toast.error("Error updating dictionary.");
-            console.error("Error updating dictionary:", error);
+        } catch (e) {
         } finally {
             setLoading(false);
         }
@@ -131,10 +127,7 @@ const DictionaryView: React.FC = () => {
             await DictionaryAdminService.deleteDictionary(dictionary.code);
             toast.success("Dictionary deleted successfully.");
             navigate(Path.ADMIN_DICTIONARIES);
-        } catch (error) {
-            // TODO handle
-            toast.error("Error deleting dictionary.");
-            console.error("Error deleting dictionary:", error);
+        } catch (e) {
         } finally {
             setLoading(false);
         }
@@ -161,9 +154,7 @@ const DictionaryView: React.FC = () => {
             });
             _setDictionary(result);
             toast.success("Element deleted successfully.");
-        } catch (error) {
-            toast.error("Error deleting element.");
-            console.error("Error deleting element:", error);
+        } catch (e) {
         } finally {
             setLoading(false);
         }
