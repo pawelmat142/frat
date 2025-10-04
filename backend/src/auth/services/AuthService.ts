@@ -6,6 +6,7 @@ import { ToastException } from 'global/exceptions/ToastException';
 import { FirebaseConfig } from '../../config/FirebaseConfig';
 import { UserRecord } from 'firebase-admin/auth';
 import { PopupException } from 'global/exceptions/PopupException';
+import { EmailService } from 'email/EmailService';
 
 // TODO 
 // czy moge z przegladarki pobrac jakis unikalny klucz/id/numer charakterystyczny dla urzadzenia?
@@ -14,7 +15,10 @@ export class AuthService {
 
   private readonly logger = new Logger(this.constructor.name);
 
-  constructor(private readonly firebaseConfig: FirebaseConfig) {}
+  constructor(
+    private readonly firebaseConfig: FirebaseConfig,
+    private readonly emailService: EmailService,
+  ) { }
 
   private get firebaseAuth() {
     return this.firebaseConfig.admin.auth();
@@ -34,11 +38,23 @@ export class AuthService {
       });
 
       this.logger.log('Firebase user created', JSON.stringify(userRecord, null, 2));
+      
+      // Generate email verification link
+      try {
+        const verificationLink = await this.firebaseAuth.generateEmailVerificationLink(dto.email);
+        await this.emailService.sendVerificationEmail(dto.email, verificationLink);
+      } catch (emailError: any) {
+        this.logger.error(emailError);
+        throw new Error();
+      }
+      
+      this.logger.log('Verification email sent to user');
 
       return {
         success: true,
         message: 'validation.success',
       };
+
     } catch (err: any) {
       const firebaseErrorCode = err?.errorInfo?.code;
       if (firebaseErrorCode) {

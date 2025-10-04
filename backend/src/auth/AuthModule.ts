@@ -3,21 +3,18 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './services/AuthService';
 import { AuthController } from './AuthController';
 import { FirebaseConfig } from 'config/FirebaseConfig';
+import { EmailModule } from 'email/EmailModule';
 
 @Module({
   imports: [
-    // TypeOrmModule.forFeature([
-    //   DictionaryEntity,
-    // ]),
+    EmailModule,
   ],
   controllers: [
     AuthController
-    // DictionariesController, DictionariesImportServiceController
   ],
   providers: [
     AuthService,
     FirebaseConfig
-    // DictionariesService, DictionariesRepo
   ],
   exports: [
   ],

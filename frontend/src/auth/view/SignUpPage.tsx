@@ -21,10 +21,10 @@ const SignUpPage: React.FC = () => {
 
     // Developer autofill button
     const handleDevFill = () => {
-        setEmail("devuser@example.com");
-        setRepeatEmail("devuser@example.com");
-        setPassword("DevPassword123!");
-        setRepeatPassword("DevPassword123!");
+        setEmail("pawelmat142@t.pl");
+        setRepeatEmail("pawelmat142@t.pl");
+        setPassword("pawelmat142");
+        setRepeatPassword("pawelmat142");
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
