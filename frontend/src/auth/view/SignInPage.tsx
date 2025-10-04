@@ -9,13 +9,14 @@ import { toast } from "react-toastify";
 import { AuthService } from "auth/services/AuthService";
 import { Utils } from "global/utils";
 import { useNavigate } from "react-router-dom";
+import { Path } from "./../../path";
+import Loading from "global/components/Loading";
+import GoogleIcon from '@mui/icons-material/Google';
 
-const SignUpPage: React.FC = () => {
+const SignInPage: React.FC = () => {
     const { t } = useTranslation();
     const [email, setEmail] = useState("");
-    const [repeatEmail, setRepeatEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [repeatPassword, setRepeatPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -25,9 +26,7 @@ const SignUpPage: React.FC = () => {
     // Developer autofill button
     const handleDevFill = () => {
         setEmail("pawelmat142@t.pl");
-        setRepeatEmail("pawelmat142@t.pl");
         setPassword("pawelmat142");
-        setRepeatPassword("pawelmat142");
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -35,14 +34,12 @@ const SignUpPage: React.FC = () => {
 
         try {
             setLoading(true);
-            const result = await AuthService.registerForm({
+            const response = await AuthService.loginForm({
                 email,
-                password,
-                confirmEmail: repeatEmail,
-                confirmPassword: repeatPassword
+                password
             })
-            console.log('Registration result:', result);
-            toast.success(t("signup.success"));
+            console.log('Sign in result:', response);
+            toast.success(t("signin.success"));
         }
 
         catch (e: any) { } finally {
@@ -50,11 +47,29 @@ const SignUpPage: React.FC = () => {
         }
     };
 
+    const handleGoogleSignIn = async () => {
+        try {
+            setLoading(true);
+            const response = await AuthService.loginWithGoogle();
+            console.log('Google sign in result:', response);
+            toast.success(t("signin.success"));
+        }
+        catch (e: any) { } finally {
+            setLoading(false);
+        }
+    }
+
+    if (loading) {
+        return (
+            <Loading></Loading>
+        )
+    }
+
     return (
         <div className="w-full px-5 py-3 relative">
             <form className="flex flex-col gap-4 px-4 py-6 rounded mt-5 md:mt-20 max-w-xl mx-auto mb-20 border border-color" onSubmit={handleSubmit}>
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold">{t("signup.title")}</h2>
+                    <h2 className="text-lg font-bold">{t("signin.title")}</h2>
 
                     {isDevMode && (
                         <Buton onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
@@ -65,7 +80,7 @@ const SignUpPage: React.FC = () => {
                 <div className="flex flex-col gap-3">
                     <Input
                         name="email"
-                        label={t("signup.email")}
+                        label={t("signin.email")}
                         type="email"
                         value={email}
                         onChange={e => setEmail(e.target.value)}
@@ -73,29 +88,11 @@ const SignUpPage: React.FC = () => {
                         fullWidth
                     />
                     <Input
-                        name="repeatEmail"
-                        label={t("signup.repeatEmail")}
-                        type="email"
-                        value={repeatEmail}
-                        onChange={e => setRepeatEmail(e.target.value)}
-                        required
-                        fullWidth
-                    />
-                    <Input
                         name="password"
-                        label={t("signup.password")}
+                        label={t("signin.password")}
                         type="password"
                         value={password}
                         onChange={e => setPassword(e.target.value)}
-                        required
-                        fullWidth
-                    />
-                    <Input
-                        name="repeatPassword"
-                        label={t("signup.repeatPassword")}
-                        type="password"
-                        value={repeatPassword}
-                        onChange={e => setRepeatPassword(e.target.value)}
                         required
                         fullWidth
                     />
@@ -108,20 +105,31 @@ const SignUpPage: React.FC = () => {
                         fullWidth={true}
                         className="mt-5"
                         type="submit"
-                        disabled={loading || !email || !repeatEmail || !password || !repeatPassword}
+                        disabled={loading || !email || !password}
                     >
-                        {loading ? t("signup.registering") : t("signup.submit")}
+                        {loading ? t("signin.signingIn") : t("signin.submit")}
                     </Buton>
 
                     <Buton
                         mode={BtnModes.PRIMARY_TXT}
                         fullWidth={true}
                         className="mt-5"
-                        onClick={() => {
-                            navigate(-1);
+                        onClick={() => { 
+                            navigate(Path.SIGN_UP);
                         }}
                     >
-                        {t("common.back")}
+                        {t("signin.signUpForm")}
+                    </Buton>
+
+                    <Buton
+                        mode={BtnModes.SECONDARY}
+                        size={BtnSizes.LARGE}
+                        fullWidth={true}
+                        className="mt-5"
+                        onClick={handleGoogleSignIn}
+                    >
+                        <GoogleIcon fontSize="medium" style={{ marginRight: 8 }} />
+                        {t("signin.googleProvider")}
                     </Buton>
                 </div>
             </form>
@@ -129,4 +137,4 @@ const SignUpPage: React.FC = () => {
     );
 };
 
-export default SignUpPage;
+export default SignInPage;

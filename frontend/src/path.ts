@@ -2,7 +2,9 @@ export abstract class Path {
 
     public static readonly HOME = '/';
 
+    public static readonly SIGN_IN = '/sign-in';
     public static readonly SIGN_UP = '/sign-up';
+    
     public static readonly ERROR_PAGE = '/error';
 
     // ADMIN PANEL

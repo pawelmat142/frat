@@ -15,6 +15,7 @@ import { httpClient } from 'global/services/http';
 import ErrorPage from 'global/views/ErrorPage';
 import SignUpPage from 'auth/view/SignUpPage';
 import AdminUsers from 'admin/views/users/AdminUsers';
+import SignInPage from 'auth/view/SignInPage';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -44,7 +45,9 @@ const App: React.FC = () => {
             <Routes location={location} key={location.pathname}>
                 
                 <Route path={Path.HOME} element={<PageWrapper direction={-1}><HomePage /></PageWrapper>} />
-                <Route path={Path.SIGN_UP} element={<SignUpPage />} />
+                
+                <Route path={Path.SIGN_IN} element={<PageWrapper direction={1}><SignInPage /></PageWrapper>} />
+                <Route path={Path.SIGN_UP} element={<PageWrapper direction={1}><SignUpPage /></PageWrapper>} />
 
                 <Route path={Path.ERROR_PAGE} element={<ErrorPage />} />
                

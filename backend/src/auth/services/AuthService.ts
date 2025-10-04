@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { RegisterFormDto, RegisterFormResponse } from '@shared/dto/AuthDto';
+import { LoginFormDto, LoginFormResponse, RegisterFormDto, RegisterFormResponse } from '@shared/dto/AuthDto';
 import { AuthValidators } from '@shared/validators/AuthValidator';
 import { ToastException } from 'global/exceptions/ToastException';
 import { FirebaseConfig } from './FirebaseConfig';
@@ -55,6 +55,10 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
   private async deleteFirebaseUser(uid: string): Promise<void> {
     await this.firebaseAuth.deleteUser(uid);
     this.logger.log(`Firebase user with UID: ${uid} deleted successfully`);
+  }
+
+  public async loginForm(dto: LoginFormDto): Promise<LoginFormResponse> {
+    throw new ToastException('Method not implemented.', this);
   }
 
   public async registerForm(dto: RegisterFormDto): Promise<RegisterFormResponse> {
