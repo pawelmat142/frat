@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UserRoles } from "@shared/interfaces/UserI";
+import { UserI, UserRoles } from "@shared/interfaces/UserI";
 import { Repository } from "typeorm";
 import { UserEntity } from "user/model/UserEntity";
 import { CreateUser } from "user/model/UserInterface";
@@ -21,6 +21,7 @@ export class UserRepo {
             roles: [UserRoles.USER],
             displayName: createUser.displayName,
             email: createUser.email,
+            provider: createUser.provider,
             photoURL: createUser.photoURL,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -30,6 +31,20 @@ export class UserRepo {
         return saved;
     }
 
-
-
+    // admin panel purpose
+    public listUsers(): Promise<UserI[]> {
+        return this.userRepository.find({
+            select: {
+                uid: true,
+                version: true,
+                status: true,
+                roles: true,
+                displayName: true,
+                email: true,
+                provider: true,
+                verified: true,
+                photoURL: true,
+            }
+        });
+    }
 }

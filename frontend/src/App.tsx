@@ -14,6 +14,7 @@ import { usePopup } from 'global/providers/PopupProvider';
 import { httpClient } from 'global/services/http';
 import ErrorPage from 'global/views/ErrorPage';
 import SignUpPage from 'auth/view/SignUpPage';
+import AdminUsers from 'admin/views/users/AdminUsers';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -53,7 +54,9 @@ const App: React.FC = () => {
                     <Route path={Path.ADMIN_DICTIONARIES_ADD} element={<AddDictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES_EDIT} element={<AddDictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES_GROUP} element={<DictionaryGroupForm />} />
+                    
                     <Route path={Path.ADMIN_TRANSLATIONS} element={<AdminTranslations />} />
+                    <Route path={Path.ADMIN_USERS} element={<AdminUsers />} />
                 </Route>
             </Routes>
         </AnimatePresence>

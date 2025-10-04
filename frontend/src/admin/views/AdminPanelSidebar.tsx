@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import TranslateIcon from '@mui/icons-material/Translate';
 import HomeIcon from '@mui/icons-material/Home';
+import PeopleIcon from '@mui/icons-material/People';
 import { Path } from '../../path';
 
 const AdminPanelSidebar: React.FC = () => {
@@ -21,6 +22,14 @@ const AdminPanelSidebar: React.FC = () => {
       >
         <TranslateIcon />
         <span>Translations</span>
+      </NavLink>
+
+      <NavLink
+        to={Path.ADMIN_USERS}
+        className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
+      >
+        <PeopleIcon />
+        <span>Users</span>
       </NavLink>
     </div>
   );

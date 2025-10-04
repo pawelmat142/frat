@@ -15,6 +15,7 @@ export abstract class Path {
     public static readonly ADMIN_DICTIONARIES_GROUP = `${Path.ADMIN_PANEL}/dictionaries/:dictionaryCode/group-form/:groupCode`;
 
     public static readonly ADMIN_TRANSLATIONS = `${Path.ADMIN_PANEL}/translations`;
+    public static readonly ADMIN_USERS = `${Path.ADMIN_PANEL}/users`;
     
     public static getDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES}/${code}`;
     public static getEditDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES_EDIT.replace(':code', code)}`;

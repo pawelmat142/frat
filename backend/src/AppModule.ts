@@ -7,6 +7,7 @@ import { DictionariesModule } from './admin/dictionaries/DictionariesModule';
 import { TranslationModule } from 'admin/translation/TranslationModule';
 import { AuthModule } from 'auth/AuthModule';
 import { GlobalController } from 'global/GlobalController';
+import { UsersAdminModule } from 'admin/users/UsersAdminModule';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { GlobalController } from 'global/GlobalController';
     // ADMIN
     DictionariesModule,
     TranslationModule,
+    UsersAdminModule,
 
     // AUTH
     AuthModule,

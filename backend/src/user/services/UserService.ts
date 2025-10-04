@@ -3,6 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserRepo } from './UserRepo';
 import { UserEntity } from 'user/model/UserEntity';
 import { CreateUser } from 'user/model/UserInterface';
+import { UserI } from '@shared/interfaces/UserI';
 
 
 @Injectable()
@@ -16,5 +17,9 @@ export class UserService {
 
     public create(createUser: CreateUser): Promise<UserEntity> {
         return this.userRepo.create(createUser);
+    }
+
+    public listUsers(): Promise<UserI[]> {
+        return this.userRepo.listUsers();
     }
 }
