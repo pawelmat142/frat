@@ -3,6 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
 import { DictionariesRepo } from './DictionariesRepo';
 import { SWWException } from 'global/exceptions/SWWException';
+import { ToastWarningException } from 'global/exceptions/ToastWarningException';
 
 @Injectable()
 export class DictionariesService {
@@ -33,7 +34,15 @@ export class DictionariesService {
     return this.repo.remove(code);
   }
 
-  public getDictionaryGroup(dictionaryCode: string, groupCode: string): Promise<DictionaryI | null> {
+  public getDictionaryGroupIfExists(dictionaryCode: string, groupCode: string): Promise<DictionaryI | null> {
     return this.repo.getDictionaryGroup(dictionaryCode, groupCode);
+  }
+
+  public getDictionaryGroup(dictionaryCode: string, groupCode: string): Promise<DictionaryI> {
+    const result = this.repo.getDictionaryGroup(dictionaryCode, groupCode);
+    if (!result) {
+      throw new ToastWarningException(`Dictionary ${dictionaryCode} with group ${groupCode} not found`, this);
+    }
+    return result;
   }
 }

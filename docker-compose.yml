@@ -19,15 +19,8 @@ services:
       context: .
       dockerfile: backend/Dockerfile.dev
     container_name: jobhigh_backend
-    environment:
-      DATABASE_HOST: db
-      DATABASE_PORT: 5432
-      DATABASE_NAME: jobhigh_db
-      DATABASE_USER: jobhigh_user
-      DATABASE_PASSWORD: jobhigh_pass
-      NODE_ENV: development
-      PORT: 3100
-      CHOKIDAR_USEPOLLING: "true"
+    env_file:
+      - .env
     ports:
       - "3100:3100"
       - "9229:9229"

@@ -118,7 +118,7 @@ export class DictionariesRepo {
         );
 
         if (!result[0]) {
-            throw new ToastWarningException(`Dictionary ${dictionaryCode} with group ${groupCode} not found`, this);
+            return null
         };
         // Upewnij się, że typy są zgodne z DictionaryI
         return {

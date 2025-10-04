@@ -32,8 +32,41 @@ const TranslationsSection: React.FC = () => {
     const selectedTranslation: TranslationI | undefined = translation.translations.find(t => t.langCode === translation.selectedLanguage);
     const defaultTranslation: TranslationI | undefined = translation.translations.find(t => t.langCode === 'en');
 
+    const handleImportTranslation = async (file: File) => {
+        try {
+            setLoading(true);
+            const text = await file.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                toast.error("Invalid JSON file.");
+                return;
+            }
+
+            await TranslationAdminService.import(data);
+
+            TranslationService.clearCache();
+
+            toast.success("Translations imported successfully.")
+            if (selectedTranslation?.langCode) {
+                translation.loadLanguage?.(selectedTranslation.langCode);
+            }
+        } catch (e) { }
+        finally {
+            setLoading(false);
+        }
+    }
+
     if (!defaultTranslation) {
-        return <div className="error-color mt-10 text-center">Default language (en) translation not found. Please ensure it exists.</div>
+        return (
+            <div className="error-color mt-10 text-center">
+                Default language (en) translation not found. Please ensure it exists.<br />
+                <div className="flex justify-center mt-4">
+                    <SelectFileButton onFileSelected={handleImportTranslation} label="Import JSON" />
+                </div>
+            </div>
+        );
     }
 
     const onSave = async () => {
@@ -41,7 +74,7 @@ const TranslationsSection: React.FC = () => {
             setLoading(true);
             await translation.saveTranslation?.(selectedTranslation!);
             toast.success('Translations saved successfully.');
-        } catch (e) {} finally {
+        } catch (e) { } finally {
             setLoading(false);
         }
     }
@@ -80,38 +113,12 @@ const TranslationsSection: React.FC = () => {
         onShowForm();
     }
 
-    const handleImportTranslation = async (file: File) => {
-        try {
-            setLoading(true);
-            const text = await file.text();
-            let data;
-            try {
-                data = JSON.parse(text);
-            } catch (e) {
-                toast.error("Invalid JSON file.");
-                return;
-            }
-
-            await TranslationAdminService.import(data);
-
-            TranslationService.clearCache();
-
-            toast.success("Translations imported successfully.")
-            if (selectedTranslation?.langCode) {
-                translation.loadLanguage?.(selectedTranslation.langCode);
-            }
-        } catch (e) {}
-        finally {
-            setLoading(false);
-        }
-    }
-
     const handleExportTranslation = async () => {
         if (!selectedTranslation) return;
         try {
             setLoading(true);
             await AdminImportService.exportTranslationJson(selectedTranslation?.langCode);
-        } catch (e) {} finally {
+        } catch (e) { } finally {
             setLoading(false);
         }
     }

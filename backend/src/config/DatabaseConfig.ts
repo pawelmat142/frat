@@ -9,7 +9,7 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    return {
+    const result: TypeOrmModuleOptions = {
       type: 'postgres',
       host: this.configService.get('DATABASE_HOST', 'localhost'),
       port: this.configService.get('DATABASE_PORT', 5432),
@@ -20,5 +20,6 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       synchronize: this.configService.get('NODE_ENV') === 'development',
       logging: this.configService.get('NODE_ENV') === 'development',
     };
+    return result;
   }
 }

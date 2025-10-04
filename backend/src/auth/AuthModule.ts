@@ -2,6 +2,7 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './services/AuthService';
 import { AuthController } from './AuthController';
+import { FirebaseConfig } from 'config/FirebaseConfig';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { AuthController } from './AuthController';
     // DictionariesController, DictionariesImportServiceController
   ],
   providers: [
-    AuthService
+    AuthService,
+    FirebaseConfig
     // DictionariesService, DictionariesRepo
   ],
   exports: [
