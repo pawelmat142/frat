@@ -15,5 +15,5 @@ export class TranslationEntity implements TranslationI {
   version: number;
 
   @Column({ name: 'data', type: 'jsonb' })
-  data: { [key: string]: string };
+  data: { [key: string]: any };
 }

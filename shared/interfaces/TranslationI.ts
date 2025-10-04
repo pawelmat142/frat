@@ -4,5 +4,5 @@ export interface TranslationI {
 
     version: number;
 
-    data: { [key: string]: string };
+    data: { [ key:string ]: any };
 }

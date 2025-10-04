@@ -11,6 +11,8 @@ import { TranslationI } from "@shared/interfaces/TranslationI";
 import { AdminImportService } from "admin/services/AdminImport.service";
 import { httpClient } from "global/services/http";
 import SelectFileButton from "global/components/controls/SelectFileButton";
+import { Util } from "@shared/utils/util";
+import { ObjUtil } from "@shared/utils/ObjUtil";
 
 const TranslationsSection: React.FC = () => {
 
@@ -19,7 +21,7 @@ const TranslationsSection: React.FC = () => {
 
     const [showForm, setShowForm] = useState(false);
 
-    const [newKey, setNewKey] = useState('');
+    const [newPath, setNewPath] = useState('');
     const [newValue, setNewValue] = useState('');
     const [editMode, setEditMode] = useState(false);
 
@@ -33,6 +35,9 @@ const TranslationsSection: React.FC = () => {
     if (!defaultTranslation) {
         return <div className="error-color mt-10 text-center">Default language (en) translation not found. Please ensure it exists.</div>
     }
+
+    // TODO remove
+    console.log(translation.translations)
 
     const onSave = () => {
         try {
@@ -53,23 +58,39 @@ const TranslationsSection: React.FC = () => {
 
         if (showForm) {
             setShowForm(false);
-            setNewKey('');
+            setNewPath('');
             setNewValue('');
         } else {
             setEditMode(!!key);
             setShowForm(true);
-            setNewKey(key || '');
+            setNewPath(key || '');
             setNewValue(key ? selectedTranslation?.data[key] ?? '' : '');
         }
     }
 
     const onAddTranslation = () => {
         if (selectedTranslation) {
-            if (!editMode && Object.keys(selectedTranslation.data).includes(newKey)) {
+            if (!editMode && Object.keys(selectedTranslation.data).includes(newPath)) {
                 toast.error('This key already exists in the translation.');
                 return;
             }
-            selectedTranslation.data[newKey] = newValue;
+
+            // jesli newKey ma kropki w sobie to rozbij to na czesci i zagniezdz w obiekcie
+            if (newPath.includes('.')) {
+                const keys = newPath.split('.');
+                let current = selectedTranslation.data;
+                keys.forEach((k, i) => {
+                    if (!current[k]) {
+                        current[k] = {};
+                    }
+                    if (i === keys.length - 1) {
+                        current[k] = newValue;
+                    }
+                    current = current[k];
+                });
+            } else {
+                selectedTranslation.data[newPath] = newValue;
+            }
             translation.updateTranslation?.(selectedTranslation);
         }
         onShowForm();
@@ -108,8 +129,7 @@ const TranslationsSection: React.FC = () => {
         }
     }
 
-
-    const keys = Object.keys(defaultTranslation.data || {})
+    const keys = selectedTranslation ? ObjUtil.getPathsFromNestedJsonKeys(selectedTranslation.data) : [];
 
     return (
         <>
@@ -132,8 +152,8 @@ const TranslationsSection: React.FC = () => {
                             </tr>
                         ) : (
                             keys?.map((key, idx) => {
-                                const value = selectedTranslation?.data[key];
-                                const defaultValue = defaultTranslation.data[key];
+                                const value = ObjUtil.getValueFromNestedJsonByPath(selectedTranslation?.data, key);
+                                const defaultValue = ObjUtil.getValueFromNestedJsonByPath(defaultTranslation.data, key);
                                 return (
                                     <tr
                                         key={idx}
@@ -160,8 +180,8 @@ const TranslationsSection: React.FC = () => {
                 <div className="flex gap-5 mb-2 mt-5">
                     <Input name="key" label="Key" className="flex-1" fullWidth
                         disabled={editMode}
-                        value={newKey}
-                        onChange={(e) => setNewKey(e.target.value)}
+                        value={newPath}
+                        onChange={(e) => setNewPath(e.target.value)}
                     />
                     <Input name="value" label="Translation" className="flex-1" value={newValue} fullWidth onChange={(e) => setNewValue(e.target.value)} />
                 </div>
@@ -174,7 +194,7 @@ const TranslationsSection: React.FC = () => {
                 </Buton>
 
                 {showForm ?
-                    <Buton onClick={onAddTranslation} disabled={!newKey || !newValue}>Ready</Buton>
+                    <Buton onClick={onAddTranslation} disabled={!newPath || !newValue}>Ready</Buton>
                     :
                     <Buton onClick={onSave}>Save translations</Buton>
                 }

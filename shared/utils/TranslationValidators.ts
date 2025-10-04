@@ -1,4 +1,5 @@
 import { TranslationI } from '../interfaces/TranslationI';
+import { ObjUtil } from './ObjUtil';
 
 export abstract class TranslationValidators {
 	/** Checks if langCode is a non-empty string and matches ISO 639-1 format */
@@ -20,21 +21,22 @@ export abstract class TranslationValidators {
 		return null;
 	}
 
-	/** Checks if data is a non-empty object with string keys and string values */
+	/** Checks if data is a non-empty object with string keys and string values (supports nested objects) */
 	static validateData(translation: TranslationI): string | null {
 		if (!translation.data || typeof translation.data !== 'object') {
 			return 'Translation data must be an object.';
 		}
-		const keys = Object.keys(translation.data);
-		if (keys.length === 0) {
+		const paths = ObjUtil.getPathsFromNestedJsonKeys(translation.data);
+		if (paths.length === 0) {
 			return 'Translation data must not be empty.';
 		}
-		for (const key of keys) {
-			if (typeof key !== 'string' || key.trim() === '') {
+		for (const path of paths) {
+			if (typeof path !== 'string' || path.trim() === '') {
 				return 'All translation keys must be non-empty strings.';
 			}
-			if (typeof translation.data[key] !== 'string') {
-				return `Value for key '${key}' must be a string.`;
+			const value = ObjUtil.getValueFromNestedJsonByPath(translation.data, path);
+			if (typeof value !== 'string') {
+				return `Value for key '${path}' must be a string.`;
 			}
 		}
 		return null;

@@ -76,8 +76,9 @@ export class TranslationsImportServiceController {
       if (exists) {
         exists.version++
         exists.data = data.data
-        await this.translationRepository.save(exists);
-        throw new Error('Translation already exists');
+        const result = await this.translationRepository.save(exists);
+        this.logger.log(`Updated translation for language ${result.langCode} to version ${result.version}`);
+        return res.status(201).end();
       }
 
       // Insert
