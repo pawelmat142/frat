@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { UserI } from "@shared/interfaces/UserI";
 import { UserService } from "user/services/UserService";
 
@@ -11,7 +11,11 @@ export class UsersAdminService {
         private readonly userService: UserService
     ) { }
 
-    listUsers(): Promise<UserI[]> {
-        return this.userService.listUsers();
+    public listUsers(): Promise<UserI[]> {
+        return this.userService.listUsers()
+    }
+
+    public deleteUser(uid: string): Promise<void> { 
+        return this.userService.deleteUser(uid)
     }
 }

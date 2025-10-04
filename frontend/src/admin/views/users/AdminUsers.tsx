@@ -6,6 +6,7 @@ import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useConfirm } from "global/providers/PopupProvider";
+import { toast } from "react-toastify";
 
 const AdminUsers: React.FC = () => {
 
@@ -48,8 +49,15 @@ const AdminUsers: React.FC = () => {
             message: "Are you sure you want to remove this user?",
         });
         if (!confirmed) return; 
-        // TODO
-        console.log('Remove user: ', user);
+
+        try {
+            setLoading(true);
+            await UsersAdminService.deleteUser(user.uid);
+            await _initUsers();
+            toast.success('User removed');
+        } catch (e) {} finally {
+            setLoading(false);
+        }
     }
 
     return (

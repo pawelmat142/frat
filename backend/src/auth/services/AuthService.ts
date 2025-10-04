@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { RegisterFormDto, RegisterFormResponse } from '@shared/dto/AuthDto';
 import { AuthValidators } from '@shared/validators/AuthValidator';
 import { ToastException } from 'global/exceptions/ToastException';
@@ -10,13 +10,16 @@ import { EmailService } from 'email/EmailService';
 import { UserService } from 'user/services/UserService';
 import { Util } from '@shared/utils/util';
 import { UserProviders } from '@shared/interfaces/UserI';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 // TODO 
 // czy moge z przegladarki pobrac jakis unikalny klucz/id/numer charakterystyczny dla urzadzenia?
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit, OnModuleDestroy {
 
   private readonly logger = new Logger(this.constructor.name);
+
+  private readonly subscription = new Subscription();
 
   constructor(
     private readonly firebaseConfig: FirebaseConfig,
@@ -26,6 +29,32 @@ export class AuthService {
 
   private get firebaseAuth() {
     return this.firebaseConfig.admin.auth();
+  }
+
+  private startSubscription() {
+    this.subscription.add(
+      this.userService.userDeletedEvent.subscribe(async (user) => {
+        try {
+          await this.deleteFirebaseUser(user.uid);
+          this.logger.log(`Firebase user with UID: ${user.uid} deleted successfully`);
+        } catch (error) {
+          this.logger.error(`Error deleting Firebase user with UID: ${user.uid}`, error);
+        }
+      })
+    );
+  }
+
+  onModuleInit() {
+    this.startSubscription();
+  }
+
+  onModuleDestroy() {
+    this.subscription.unsubscribe();
+  }
+  
+  private async deleteFirebaseUser(uid: string): Promise<void> {
+    await this.firebaseAuth.deleteUser(uid);
+    this.logger.log(`Firebase user with UID: ${uid} deleted successfully`);
   }
 
   public async registerForm(dto: RegisterFormDto): Promise<RegisterFormResponse> {
@@ -43,7 +72,7 @@ export class AuthService {
 
       this.logger.log('Firebase user created', JSON.stringify(userRecord, null, 2))
 
-      await this.sendVerificationEmail(dto)
+      await this.sendVerificationEmail(dto, userRecord.uid);
 
       await this.createUserEntity(userRecord, dto)
 
@@ -64,19 +93,17 @@ export class AuthService {
     }
   }
 
-  private async sendVerificationEmail(dto: RegisterFormDto): Promise<void> {
+  private async sendVerificationEmail(dto: RegisterFormDto, uid: string): Promise<void> {
     // Generate email verification link
     try {
       const verificationLink = await this.firebaseAuth.generateEmailVerificationLink(dto.email);
       await this.emailService.sendVerificationEmail(dto.email, verificationLink);
+      this.logger.log('Verification email sent to user');
     } catch (emailError: any) {
       this.logger.error('Error sending verification email', emailError);
-
-      // TODO delete firebase user 
-      throw new Error();
+      await this.deleteFirebaseUser(uid);
     }
-
-    this.logger.log('Verification email sent to user');
+    
   }
 
   private async createUserEntity(userRecord: UserRecord, dto: RegisterFormDto): Promise<void> {
@@ -89,9 +116,7 @@ export class AuthService {
       });
     } catch (error) {
       this.logger.error('Error creating user entity', error);
-
-      // TODO delete firebase user
-      throw new Error();
+      await this.deleteFirebaseUser(userRecord.uid);
     }
   }
 

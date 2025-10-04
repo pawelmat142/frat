@@ -31,6 +31,14 @@ export class UserRepo {
         return saved;
     }
 
+    public getUserByUid(uid: string): Promise<UserEntity | null> {
+        return this.userRepository.findOneBy({ uid });
+    }
+
+    public deleteEntity(user: UserEntity): Promise<UserEntity> {
+        return this.userRepository.remove(user);
+    }
+
     // admin panel purpose
     public listUsers(): Promise<UserI[]> {
         return this.userRepository.find({
