@@ -13,6 +13,7 @@ import { AdminPanelProvider } from 'admin/views/AdminPanelProvider';
 import { usePopup } from 'global/providers/PopupProvider';
 import { httpClient } from 'global/services/http';
 import ErrorPage from 'global/views/ErrorPage';
+import SignUpPage from 'auth/view/SignUpPage';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -42,7 +43,8 @@ const App: React.FC = () => {
             <Routes location={location} key={location.pathname}>
                 
                 <Route path={Path.HOME} element={<PageWrapper direction={-1}><HomePage /></PageWrapper>} />
-                
+                <Route path={Path.SIGN_UP} element={<SignUpPage />} />
+
                 <Route path={Path.ERROR_PAGE} element={<ErrorPage />} />
                
                 <Route path={Path.ADMIN_PANEL} element={ <AdminPanelProvider><AdminPanelPage /></AdminPanelProvider> }  >

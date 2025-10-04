@@ -31,6 +31,11 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
             to: Path.ADMIN_DICTIONARIES,
             label: 'header.admin',
             // TODO admin guard
+        },
+        {
+            to: Path.SIGN_UP,
+            label: 'header.signUp',
+            // TODO admin guard
         }
     ].map(item => ({
         ...item,
