@@ -12,7 +12,7 @@ import { Response } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DictionaryEntity } from './model/DictionaryEntity';
 import { Repository } from 'typeorm';
-import { DictionaryValidators } from '@shared/utils/DictionaryValidators';
+import { DictionaryValidators } from '@shared/validators/DictionaryValidators';
 import { ImportUtil } from 'global/utils/ImportUtil';
 import { ToastException } from 'global/exceptions/ToastException';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';

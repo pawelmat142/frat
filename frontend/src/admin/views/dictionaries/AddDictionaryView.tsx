@@ -15,7 +15,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
 import { useConfirm } from "global/providers/PopupProvider";
-import { DictionaryValidators } from "@shared/utils/DictionaryValidators";
+import { DictionaryValidators } from "@shared/validators/DictionaryValidators";
 import { DictionaryColumnTypes, DictionaryI, DictionaryElement, DictionaryStatuses, DictionaryColumnType } from "@shared/interfaces/DictionaryI";
 
 interface ColumnForm {

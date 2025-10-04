@@ -13,7 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TranslationEntity } from './TranslationEntity';
 import { ImportUtil } from 'global/utils/ImportUtil';
-import { TranslationValidators } from '@shared/utils/TranslationValidators';
+import { TranslationValidators } from '@shared/validators/TranslationValidators';
 import { TranslationService } from './TranslationService';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { ToastException } from 'global/exceptions/ToastException';

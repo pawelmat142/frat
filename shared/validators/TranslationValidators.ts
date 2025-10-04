@@ -1,5 +1,5 @@
 import { TranslationI } from '../interfaces/TranslationI';
-import { ObjUtil } from './ObjUtil';
+import { ObjUtil } from '../utils/ObjUtil';
 
 export abstract class TranslationValidators {
 	/** Checks if langCode is a non-empty string and matches ISO 639-1 format */
