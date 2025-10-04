@@ -1,4 +1,3 @@
-import { DictionaryColumnType, DictionaryColumnTypes, DictionaryElement, DictionaryI, DictionaryStatuses } from "@shared/DictionaryI";
 import Buton from "global/components/controls/Buton";
 import Dropdown from "global/components/controls/Dropdown";
 import Input from "global/components/controls/Input";
@@ -17,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
 import { useConfirm } from "global/providers/PopupProvider";
 import { DictionaryValidators } from "@shared/utils/DictionaryValidators";
+import { DictionaryColumnTypes, DictionaryI, DictionaryElement, DictionaryStatuses, DictionaryColumnType } from "@shared/interfaces/DictionaryI";
 
 interface ColumnForm {
   code: string;

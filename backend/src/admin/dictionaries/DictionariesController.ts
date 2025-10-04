@@ -9,8 +9,8 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { DictionariesService } from './services/DictionariesService';
-import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
+import { DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
 
 // TODO roles guardy
 @Controller('api/admin/dictionaries')

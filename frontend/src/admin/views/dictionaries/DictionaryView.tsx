@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { DictionaryI, DictionaryElement, DictionaryStatuses, DictionaryColumnTypes, DictionaryGroup } from "@shared/DictionaryI";
 import Buton from "global/components/controls/Buton";
 import DictionaryElementForm from "./DictionaryElementForm";
 import Loading from "global/components/Loading";
@@ -17,6 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Util } from "@shared/utils/util";
 import DictionaryGroups from "./DictionaryGroups";
 import { AdminImportService } from "admin/services/AdminImport.service";
+import { DictionaryI, DictionaryElement, DictionaryGroup, DictionaryColumnTypes, DictionaryStatuses } from "@shared/interfaces/DictionaryI";
 
 const DictionaryView: React.FC = () => {
     const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { DictionaryColumnType } from "@shared/DictionaryI";
+import { DictionaryColumnType } from "@shared/interfaces/DictionaryI";
 
 export interface BtnInterface {
     to?: string;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { DictionaryI } from "@shared/DictionaryI";
 import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
 import Input from "global/components/controls/Input";
 import Buton from "global/components/controls/Buton";
@@ -9,6 +8,7 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { Path } from "../../../path";
 import Loading from "global/components/Loading";
 import { toast } from "react-toastify";
+import { DictionaryI } from "@shared/interfaces/DictionaryI";
 
 const DictionaryGroupForm: React.FC = () => {
     const pathInput = useParams<{ groupCode: string, dictionaryCode: string }>();

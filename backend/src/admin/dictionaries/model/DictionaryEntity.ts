@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { DictionaryColumn, DictionaryElement, DictionaryGroup, DictionaryI, DictionaryStatus, DictionaryStatuses } from '@shared/DictionaryI';
+import { DictionaryColumn, DictionaryElement, DictionaryGroup, DictionaryI, DictionaryStatus, DictionaryStatuses } from '@shared/interfaces/DictionaryI';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('jh_dictionaries')

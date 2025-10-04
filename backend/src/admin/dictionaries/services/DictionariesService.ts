@@ -1,9 +1,9 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger } from '@nestjs/common';
-import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
 import { DictionariesRepo } from './DictionariesRepo';
 import { SWWException } from 'global/exceptions/SWWException';
 import { ToastWarningException } from 'global/exceptions/ToastWarningException';
+import { DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
 
 @Injectable()
 export class DictionariesService {

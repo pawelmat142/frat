@@ -1,11 +1,11 @@
 import React from "react";
-import { DictionaryI, DictionaryColumnTypes, DictionaryGroup } from "@shared/DictionaryI";
 import { Util } from "@shared/utils/util";
 import IconButton from "global/components/controls/IconButon";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useConfirm } from "global/providers/PopupProvider";
+import { DictionaryColumnTypes, DictionaryGroup, DictionaryI } from "@shared/interfaces/DictionaryI";
 
 interface DictionaryGroupsProps {
     dictionary: DictionaryI;

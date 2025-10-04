@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path"
 import SelectFileButton from "../../../global/components/controls/SelectFileButton";
 import { useEffect, useState } from "react";
-import { DictionaryListItem } from "@shared/DictionaryI";
 import { Util } from "@shared/utils/util";
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
 import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
+import { DictionaryListItem } from "@shared/interfaces/DictionaryI";
 
 const AdminDictionaries: React.FC = () => {
     const navigate = useNavigate();

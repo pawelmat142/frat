@@ -1,8 +1,8 @@
-import { DictionaryColumnTypes } from '@shared/DictionaryI';
 import { InputInterface } from '../../interface/controls.interface';
 import Input from './Input';
 import DateInput from './DateInput';
 import { Util } from '@shared/utils/util';
+import { DictionaryColumnTypes } from '@shared/interfaces/DictionaryI';
 
 const TypedInput: React.FC<InputInterface> = (param) => {
     // Przekazujemy wszystkie propsy do Input

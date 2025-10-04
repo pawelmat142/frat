@@ -1,6 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { Dictionaries } from "@shared/def/dictionary.def";
-import { DictionaryElement, DictionaryI } from "@shared/DictionaryI";
 import { TranslationI } from "@shared/interfaces/TranslationI";
 import { DictionariesService } from "admin/dictionaries/services/DictionariesService";
 import { TranslationEntity } from "./TranslationEntity";
@@ -8,6 +7,7 @@ import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { TranslationListDto } from "@shared/dto/TranslationListDto";
 import { ToastException } from "global/exceptions/ToastException";
+import { DictionaryElement, DictionaryI } from "@shared/interfaces/DictionaryI";
 
 @Injectable()
 export class TranslationService implements OnModuleInit {

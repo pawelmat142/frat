@@ -1,4 +1,4 @@
-import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
+import { DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
 import { httpClient } from 'global/services/http';
 
 export const DictionaryAdminService = {

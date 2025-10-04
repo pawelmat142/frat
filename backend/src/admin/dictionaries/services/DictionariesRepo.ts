@@ -2,9 +2,8 @@ import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { DictionaryEntity } from "../model/DictionaryEntity";
-import { DictionaryI, DictionaryListItem } from "@shared//DictionaryI";
 import { ToastException } from "global/exceptions/ToastException";
-import { ToastWarningException } from "global/exceptions/ToastWarningException";
+import { DictionaryListItem, DictionaryI } from "@shared/interfaces/DictionaryI";
 
 @Injectable()
 export class DictionariesRepo {

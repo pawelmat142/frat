@@ -3,8 +3,8 @@ import Input from "global/components/controls/Input";
 import Checkbox from "global/components/controls/Checkbox";
 import Buton from "global/components/controls/Buton";
 import { BtnModes } from "global/interface/controls.interface";
-import { DictionaryI, DictionaryElement } from "@shared/DictionaryI";
 import TypedInput from "global/components/controls/TypedInput";
+import { DictionaryI, DictionaryElement } from "@shared/interfaces/DictionaryI";
 
 interface DictionaryElementFormProps {
     dictionary: DictionaryI;
