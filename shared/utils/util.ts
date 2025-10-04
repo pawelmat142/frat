@@ -22,4 +22,8 @@ export abstract class Util {
         }
         return value instanceof Date ? value : null;
     }
+
+    public static trimEmail(email: string): string {
+        return email.split('@')[0];
+    }
 }
