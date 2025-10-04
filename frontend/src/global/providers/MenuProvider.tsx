@@ -25,11 +25,11 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const allMenuItems: MenuItem[] = useMemo(() => [
         {
             to: Path.HOME,
-            label: 'Home',
+            label: 'header.home',
         },
         {
             to: Path.ADMIN_DICTIONARIES,
-            label: 'Admin Panel',
+            label: 'header.admin',
             // TODO admin guard
         }
     ].map(item => ({

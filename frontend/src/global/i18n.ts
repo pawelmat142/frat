@@ -8,10 +8,13 @@ class CustomBackend {
   init() {}
   read(language: string, namespace: string, callback: (err: any, data: any) => void) {
     TranslationService.getTranslation(language)
-      .then((data) => {
-        callback(null, data);
+      .then((response) => {
+        console.log('Loaded translations:', response);
+        // i18next expects the translation object, not the whole response
+        callback(null, response.data);
       })
       .catch((err) => {
+        console.error('Translation load error:', err);
         callback(err, null);
       });
   }
@@ -21,7 +24,8 @@ i18n
   .use(initReactI18next)
   .use(new CustomBackend() as any)
   .init({
-    lng: 'pl', // domyślny język
+    // TODO znajdz w przegladarce
+    lng: 'en', // domyślny język
     fallbackLng: 'en',  
     ns: ['translation'],
     defaultNS: 'translation',

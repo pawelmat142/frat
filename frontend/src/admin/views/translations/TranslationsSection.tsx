@@ -11,7 +11,6 @@ import { TranslationI } from "@shared/interfaces/TranslationI";
 import { AdminImportService } from "admin/services/AdminImport.service";
 import { httpClient } from "global/services/http";
 import SelectFileButton from "global/components/controls/SelectFileButton";
-import { Util } from "@shared/utils/util";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 
 const TranslationsSection: React.FC = () => {
@@ -36,13 +35,11 @@ const TranslationsSection: React.FC = () => {
         return <div className="error-color mt-10 text-center">Default language (en) translation not found. Please ensure it exists.</div>
     }
 
-    // TODO remove
-    console.log(translation.translations)
-
-    const onSave = () => {
+    const onSave = async () => {
         try {
             setLoading(true);
-            translation.saveTranslation?.(selectedTranslation!);
+            await translation.saveTranslation?.(selectedTranslation!);
+            toast.success('Translations saved successfully.');
         } catch (e) {} finally {
             setLoading(false);
         }
@@ -76,21 +73,7 @@ const TranslationsSection: React.FC = () => {
             }
 
             // jesli newKey ma kropki w sobie to rozbij to na czesci i zagniezdz w obiekcie
-            if (newPath.includes('.')) {
-                const keys = newPath.split('.');
-                let current = selectedTranslation.data;
-                keys.forEach((k, i) => {
-                    if (!current[k]) {
-                        current[k] = {};
-                    }
-                    if (i === keys.length - 1) {
-                        current[k] = newValue;
-                    }
-                    current = current[k];
-                });
-            } else {
-                selectedTranslation.data[newPath] = newValue;
-            }
+            ObjUtil.setValueInNestedJsonByPath(selectedTranslation.data, newPath, newValue);
             translation.updateTranslation?.(selectedTranslation);
         }
         onShowForm();
