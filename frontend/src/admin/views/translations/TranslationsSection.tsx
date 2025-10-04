@@ -12,6 +12,7 @@ import { AdminImportService } from "admin/services/AdminImport.service";
 import { httpClient } from "global/services/http";
 import SelectFileButton from "global/components/controls/SelectFileButton";
 import { ObjUtil } from "@shared/utils/ObjUtil";
+import { TranslationService } from "global/services/Translation.service";
 
 const TranslationsSection: React.FC = () => {
 
@@ -91,6 +92,8 @@ const TranslationsSection: React.FC = () => {
                 return;
             }
             await httpClient.post("/import/translations/import", data)
+
+            TranslationService.clearCache();
 
             toast.success("Translations imported successfully.")
             if (selectedTranslation?.langCode) {

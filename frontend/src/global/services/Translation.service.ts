@@ -53,6 +53,10 @@ function setCachedTranslation(langCode: string, data: TranslationI) {
     saveCache(cache);
 }
 
+function clearCache() {
+    localStorage.removeItem(CACHE_KEY);
+}
+
 export const TranslationService = {
     // TODO niech nie beda zwracane pola ktorych nie ma w interface
     async getTranslation(langCode: string): Promise<TranslationI> {
@@ -63,5 +67,9 @@ export const TranslationService = {
         const response = await httpClient.get<TranslationI>(`/translations/${langCode}`);
         setCachedTranslation(langCode, response);
         return response;
+    },
+    
+    clearCache() {
+        clearCache();
     }
 };
