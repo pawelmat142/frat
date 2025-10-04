@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfig } from './config/DatabaseConfig';
 import { DictionariesModule } from './admin/dictionaries/DictionariesModule';
 import { TranslationModule } from 'admin/translation/TranslationModule';
+import { AuthModule } from 'auth/AuthModule';
 
 @Module({
   imports: [
@@ -17,7 +18,10 @@ import { TranslationModule } from 'admin/translation/TranslationModule';
 
     // ADMIN
     DictionariesModule,
-    TranslationModule
+    TranslationModule,
+
+    // AUTH
+    AuthModule,
   ],
 })
 export class AppModule {}

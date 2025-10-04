@@ -38,12 +38,10 @@ const Input: React.FC<InputInterface> = ({
     };
 
     const getValue = (): string | number | undefined => {
-        if (typeof value === 'string' && type === 'text') {
+        if (typeof value === 'string' || typeof value === 'number') {
             return value;
         }
-        if (typeof value === 'number' && type === 'number') {
-            return value;
-        }
+        return undefined;
     }
     
     return (
