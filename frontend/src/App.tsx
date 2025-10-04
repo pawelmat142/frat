@@ -13,9 +13,9 @@ import { AdminPanelProvider } from 'admin/views/AdminPanelProvider';
 import { usePopup } from 'global/providers/PopupProvider';
 import { httpClient } from 'global/services/http';
 import ErrorPage from 'global/views/ErrorPage';
-import SignUpPage from 'auth/view/SignUpPage';
+import SignUpPage from 'auth/views/SignUpPage';
 import AdminUsers from 'admin/views/users/AdminUsers';
-import SignInPage from 'auth/view/SignInPage';
+import SignInPage from 'auth/views/SignInPage';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div

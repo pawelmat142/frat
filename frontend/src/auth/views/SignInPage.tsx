@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { AuthService } from "auth/services/AuthService";
 import { Utils } from "global/utils";
 import { useNavigate } from "react-router-dom";
-import { Path } from "./../../path";
+import { Path } from "../../path";
 import Loading from "global/components/Loading";
 import GoogleIcon from '@mui/icons-material/Google';
 
@@ -128,7 +128,7 @@ const SignInPage: React.FC = () => {
                         className="mt-5"
                         onClick={handleGoogleSignIn}
                     >
-                        <GoogleIcon fontSize="medium" style={{ marginRight: 8 }} />
+                        <GoogleIcon/>
                         {t("signin.googleProvider")}
                     </Buton>
                 </div>
