@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { RegisterFormDto, RegisterFormResponse } from '@shared/dto/AuthDto';
 import { AuthValidators } from '@shared/validators/AuthValidator';
 import { ToastException } from 'global/exceptions/ToastException';
-import { FirebaseConfig } from '../../config/FirebaseConfig';
+import { FirebaseConfig } from './FirebaseConfig';
 import { UserRecord } from 'firebase-admin/auth';
 import { PopupException } from 'global/exceptions/PopupException';
 import { EmailService } from 'email/EmailService';
@@ -63,7 +63,6 @@ export class AuthService {
         }
         this.logger.error(err);
       }
-      // TODO obsluga email zajety itp
       throw new ToastException('validation.firebaseError', this);
     }
   }

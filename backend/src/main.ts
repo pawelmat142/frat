@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './AppModule';
-import { createMyLogger } from 'config/logger';
+import { createMyLogger } from 'global/Logger';
 
 export const GlobalLogger = new Logger('GLOBAL');
 

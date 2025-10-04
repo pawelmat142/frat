@@ -47,6 +47,8 @@ export class EmailConfig {
       this.logger.error(
         `Missing EmailJS configuration: ${missing.join(', ')}. Email sending will be disabled.`,
       );
+    } else {
+        this.logger.log('EmailJS configuration loaded successfully.');
     }
   }
 
