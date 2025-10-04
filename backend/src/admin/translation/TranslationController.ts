@@ -5,7 +5,7 @@ import { TranslationListDto } from "@shared/dto/TranslationListDto";
 import { LogInterceptor } from "global/interceptors/LogInterceptor";
 
 // TODO roles guardy
-@Controller('api/translations')
+@Controller('api/admin/translations')
 @UseInterceptors(LogInterceptor)
 export class TranslationController {
 

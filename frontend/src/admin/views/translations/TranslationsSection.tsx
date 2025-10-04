@@ -9,10 +9,10 @@ import IconButton from "global/components/controls/IconButon";
 import EditIcon from '@mui/icons-material/Edit';
 import { TranslationI } from "@shared/interfaces/TranslationI";
 import { AdminImportService } from "admin/services/AdminImport.service";
-import { httpClient } from "global/services/http";
 import SelectFileButton from "global/components/controls/SelectFileButton";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { TranslationService } from "global/services/Translation.service";
+import { TranslationAdminService } from "admin/services/TranslationAdmin.service";
 
 const TranslationsSection: React.FC = () => {
 
@@ -91,7 +91,8 @@ const TranslationsSection: React.FC = () => {
                 toast.error("Invalid JSON file.");
                 return;
             }
-            await httpClient.post("/import/translations/import", data)
+
+            await TranslationAdminService.import(data);
 
             TranslationService.clearCache();
 

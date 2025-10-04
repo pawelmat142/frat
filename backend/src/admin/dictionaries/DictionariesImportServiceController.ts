@@ -16,11 +16,9 @@ import { DictionaryValidators } from '@shared/utils/DictionaryValidators';
 import { ImportUtil } from 'global/utils/ImportUtil';
 import { ToastException } from 'global/exceptions/ToastException';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
-import { PopupException } from 'global/exceptions/PopupException';
-import { SWWException } from 'global/exceptions/SWWException';
 
 // TODO roles guardy
-@Controller('api/import/dictionaries')
+@Controller('api/admin/import/dictionaries')
 @UseInterceptors(LogInterceptor)
 export class DictionariesImportServiceController {
 

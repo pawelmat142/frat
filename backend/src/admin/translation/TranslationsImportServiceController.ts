@@ -4,7 +4,6 @@ import {
   Get,
   Param,
   Res,
-  NotFoundException,
   Post,
   UseInterceptors,
   Logger,
@@ -20,7 +19,7 @@ import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { ToastException } from 'global/exceptions/ToastException';
 
 // TODO roles guardy
-@Controller('api/import/translations')
+@Controller('api/admin/import/translations')
 @UseInterceptors(LogInterceptor)
 export class TranslationsImportServiceController {
 

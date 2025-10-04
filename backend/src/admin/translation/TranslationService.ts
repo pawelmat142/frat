@@ -36,7 +36,7 @@ export class TranslationService implements OnModuleInit {
         return !!this.languagesList.find(l => l.code === langCode && l.active);
     }
 
-    public async getTranslation(langCode: string): Promise<TranslationI> {
+    public async getSupportedTranslation(langCode: string): Promise<TranslationI> {
         let code = langCode
         if (!this.languagesList) {
             throw new ToastException('Translations languages list is not initialized', this);
@@ -47,7 +47,7 @@ export class TranslationService implements OnModuleInit {
             code = 'en'
         }
 
-        const result = await this._getTranslation(code);
+        const result = await this.getTranslation(code);
         if (!result) {
             this.logger.warn(`Translations for language code ${code} not found in the database`);
             return {
@@ -59,8 +59,13 @@ export class TranslationService implements OnModuleInit {
         return result;
     }
 
+
+    public getTranslation(langCode: string): Promise<TranslationI> {
+        return this.translationRepository.findOne({ where: { langCode } })
+    }
+
     public async putTranslation(dto: TranslationI): Promise<TranslationI> {
-        const translation = await this._getTranslation(dto.langCode)
+        const translation = await this.getTranslation(dto.langCode)
         if (!translation) {
             const newTranslation: TranslationI = {
                 langCode: dto.langCode,
@@ -83,9 +88,7 @@ export class TranslationService implements OnModuleInit {
     }
 
 
-    private _getTranslation(langCode: string): Promise<TranslationI> {
-        return this.translationRepository.findOne({ where: { langCode } })
-    }
+
 
 
     // admin

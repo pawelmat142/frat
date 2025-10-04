@@ -7,7 +7,6 @@ import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import AddIcon from '@mui/icons-material/Add';
 import Checkbox from "global/components/controls/Checkbox";
-import { httpClient } from "global/services/http";
 import { useNavigate, useParams } from "react-router-dom";
 import { Path } from '../../../path';
 import Loading from "global/components/Loading";
@@ -145,7 +144,9 @@ const AddDictionaryView: React.FC = () => {
 
     try {
       setLoading(true);
-      const res = await httpClient.put<DictionaryI>('/dictionaries', result)
+
+      const res = await DictionaryAdminService.putDictionary(result);
+
       if (isEditMode) {
         toast.success(`Dictionary ${res.code} updated successfully!`)
       } else {

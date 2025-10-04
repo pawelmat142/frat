@@ -6,6 +6,7 @@ import { TranslationController } from './TranslationController';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TranslationEntity } from './TranslationEntity';
 import { TranslationsImportServiceController } from './TranslationsImportServiceController';
+import { TranslationPublicService } from './TranslationPublicService';
 
 @Module({
   imports: [
@@ -15,8 +16,16 @@ import { TranslationsImportServiceController } from './TranslationsImportService
 
     DictionariesModule
   ],
-  controllers: [TranslationController, TranslationsImportServiceController],
-  providers: [TranslationService],
-  exports: [],
+  controllers: [
+    TranslationController,
+    TranslationsImportServiceController
+  ],
+  providers: [
+    TranslationService, 
+    TranslationPublicService
+  ],
+  exports: [
+    TranslationPublicService
+  ],
 })
 export class TranslationModule { }

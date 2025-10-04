@@ -1,7 +1,6 @@
 import Buton from "../../../global/components/controls/Buton";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path"
-import { httpClient } from "global/services/http";
 import SelectFileButton from "../../../global/components/controls/SelectFileButton";
 import { useEffect, useState } from "react";
 import { DictionaryListItem } from "@shared/DictionaryI";
@@ -9,6 +8,7 @@ import { Util } from "@shared/utils/util";
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
+import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
 
 const AdminDictionaries: React.FC = () => {
     const navigate = useNavigate();
@@ -17,7 +17,7 @@ const AdminDictionaries: React.FC = () => {
 
     const loadDictionaries = () => {
         setLoading(true);
-        httpClient.get<DictionaryListItem[]>("/dictionaries/list")
+        DictionaryAdminService.getDictionariesList()
             .then(setDictionaries)
             .catch(() => setDictionaries([]))
             .finally(() => setLoading(false));
@@ -48,7 +48,8 @@ const AdminDictionaries: React.FC = () => {
                 toast.error("Invalid JSON file.");
                 return;
             }
-            await httpClient.post("/import/dictionaries/import", data)
+
+            await DictionaryAdminService.import(data);
 
             toast.success("Dictionary imported successfully.")
             loadDictionaries();

@@ -64,7 +64,7 @@ export const TranslationService = {
         if (cached) {
             return Promise.resolve(cached);
         }
-        const response = await httpClient.get<TranslationI>(`/translations/${langCode}`);
+        const response = await httpClient.get<TranslationI>(`/get-translations/${langCode}`);
         setCachedTranslation(langCode, response);
         return response;
     },

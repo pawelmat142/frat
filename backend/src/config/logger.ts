@@ -40,7 +40,10 @@ export const createMyLogger = () =>
             // winston.format.timestamp(),
             customTimestamp(),
             winston.format.printf(({ timestamp, level, message, context }) => {
-              return `[${timestamp}] [${level}] [${context}] ${message}`;
+              if (context) {
+                return `[${timestamp}] [${level}] [${context}] ${message}`;
+              }
+              return `[${timestamp}] [${level}] ${message}`;
             }),
           ),
         }),

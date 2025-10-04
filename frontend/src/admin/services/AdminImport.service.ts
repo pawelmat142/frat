@@ -3,13 +3,13 @@ import { httpClient } from "global/services/http";
 export const AdminImportService = {
 
 	exportDictionaryJson(code: string): Promise<void> {
-		const url = `/import/dictionaries/export/${code}`
+		const url = `/admin/import/dictionaries/export/${code}`
 		let defaultFilename = `dictionary_${code}.json`;
 		return this.exportJson(url, defaultFilename);
 	},
 
 	exportTranslationJson(langCode: string): Promise<void> {
-		const url = `/import/translations/export/${langCode}`
+		const url = `/admin/import/translations/export/${langCode}`
 		let defaultFilename = `translation_${langCode}.json`;
 		return this.exportJson(url, defaultFilename);
 	},

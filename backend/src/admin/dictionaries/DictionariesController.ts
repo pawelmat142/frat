@@ -13,7 +13,7 @@ import { DictionaryI, DictionaryListItem } from '@shared/DictionaryI';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 
 // TODO roles guardy
-@Controller('api/dictionaries')
+@Controller('api/admin/dictionaries')
 @UseInterceptors(LogInterceptor)
 export class DictionariesController {
 
