@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Path } from './path';
@@ -9,6 +10,8 @@ import AddDictionaryView from 'admin/views/dictionaries/AddDictionaryView';
 import DictionaryView from 'admin/views/dictionaries/DictionaryView';
 import DictionaryGroupForm from 'admin/views/dictionaries/DictionaryGroupForm';
 import { AdminPanelProvider } from 'admin/views/AdminPanelProvider';
+import { useConfirm } from 'global/providers/ConfirmProvider';
+import { httpClient } from 'global/services/http';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -22,26 +25,29 @@ const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = 
     </motion.div>
 );
 
-const App: React.FC = () => {
 
+const App: React.FC = () => {
     const location = useLocation();
     const direction = location.state?.direction === 'back' ? -1 : 1;
+    
+    const confirm = useConfirm();
+    // Inject popup handler into httpClient
+    React.useEffect(() => {
+        httpClient.setPopupHandler(confirm);
+    }, [confirm]);
+
     return (
         <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
-
                 <Route path={Path.HOME} element={<PageWrapper direction={-1}><HomePage /></PageWrapper>} />
-
                 <Route path={Path.ADMIN_PANEL} element={ <AdminPanelProvider><AdminPanelPage /></AdminPanelProvider> }  >
                     <Route path={Path.ADMIN_DICTIONARY} element={<DictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES} element={<AdminDictionaries />} />
                     <Route path={Path.ADMIN_DICTIONARIES_ADD} element={<AddDictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES_EDIT} element={<AddDictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES_GROUP} element={<DictionaryGroupForm />} />
-
                     <Route path={Path.ADMIN_TRANSLATIONS} element={<AdminTranslations />} />
                 </Route>
-
             </Routes>
         </AnimatePresence>
     );

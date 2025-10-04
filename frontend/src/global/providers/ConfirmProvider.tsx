@@ -85,7 +85,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ open, options, onClose })
         className={`primary-bg rounded-lg shadow-lg p-6 min-w-[300px] transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
       >
         {options.title && <h2 className="text-lg font-semibold mb-2">{options.title}</h2>}
-        <div className="mb-4">{options.message}</div>
+        <div className="mb-10">{options.message}</div>
         <div className="flex justify-end gap-2">
           <Buton className="px-4 py-2 rounded"
             fullWidth={false}

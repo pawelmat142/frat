@@ -1,6 +1,8 @@
 import { toast } from 'react-toastify';
 import { QueryClient } from '@tanstack/react-query';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { MyHttpCode } from '@shared/def/http.def';
+// Removed useConfirm import; handler will be injected from component
 
 const API_URL = process.env.REACT_APP_API_URL || '/api';
 
@@ -8,11 +10,20 @@ const API_URL = process.env.REACT_APP_API_URL || '/api';
 
 export const queryClient = new QueryClient();
 
+
+export type PopupHandler = (options: { title: string; message: string; confirmText: string; cancelText: string }) => Promise<boolean>;
+
 export class HttpClient {
   private axiosInstance = axios.create({
     baseURL: API_URL,
     withCredentials: true,
   });
+
+  private popupHandler?: PopupHandler;
+
+  setPopupHandler(handler: PopupHandler) {
+    this.popupHandler = handler;
+  }
 
   constructor() {
     this.axiosInstance.interceptors.response.use(
@@ -24,38 +35,50 @@ export class HttpClient {
     );
   }
 
+  private handleSWW(error: AxiosError) {
+    // TODO redirect to /error page
+    console.error(error)
+    toast.error(`[${error.response?.status}] Something went wrong.`);
+  }
+
+  private async handlePopupException(error: AxiosError) {
+    if (!this.popupHandler) return;
+    const confirmed = await this.popupHandler({
+      title: 'Error',
+      message: this.getMsg(error),
+      // TODO translate
+      confirmText: 'Wróć na stronę główną',
+      cancelText: 'Zostań na tej stronie',
+    });
+    if (confirmed) {
+      window.location.href = '/';
+    }
+  }
+
+  private getMsg(error: AxiosError): string {
+    return error.response?.data && typeof (error.response.data as any).message === 'string'
+      ? (error.response.data as any).message
+      : error.message;
+  }
+  
   private handleError(error: AxiosError) {
     if (error.response) {
       const status = error.response.status;
-      const msg =
-        error.response.data && typeof (error.response.data as any).message === 'string'
-          ? (error.response.data as any).message
-          : error.message;
-      // Custom error handling for NestJS codes
       switch (status) {
-        case 400:
-          toast.error(msg || 'Bad request');
+        case MyHttpCode.TOAST_ERROR: //460
+          toast.error(this.getMsg(error));
           break;
-        case 401:
-          toast.error('Unauthorized');
+        case MyHttpCode.TOAST_WARNING: //461
+          toast.warning(this.getMsg(error));
           break;
-        case 403:
-          toast.error('Forbidden');
+        case MyHttpCode.SWW: //599
+          this.handleSWW(error);
           break;
-        case 404:
-          toast.error('Not found');
-          break;
-        case 409:
-          toast.error(msg || 'Conflict');
-          break;
-        case 422:
-          toast.error(msg || 'Validation error');
-          break;
-        case 500:
-          toast.error('Server error');
+        case MyHttpCode.POPUP_ERROR: //462
+          this.handlePopupException(error);
           break;
         default:
-          toast.error(msg || 'Unknown error');
+          this.handleSWW(error);
       }
       // TODO: show popup/modal for critical errors if needed
     } else {

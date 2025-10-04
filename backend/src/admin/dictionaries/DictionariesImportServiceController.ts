@@ -16,6 +16,7 @@ import { DictionaryValidators } from '@shared/utils/DictionaryValidators';
 import { ImportUtil } from 'global/utils/ImportUtil';
 import { ToastException } from 'global/exceptions/ToastException';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
+import { PopupException } from 'global/exceptions/PopupException';
 
 // TODO roles guardy
 @Controller('api/import/dictionaries')
@@ -46,23 +47,23 @@ export class DictionariesImportServiceController {
   async importDictionary(@Res() res: Response) {
     try {
       if (!res.req || !res.req.body) {
-        throw new ToastException('No data provided', this);
+        throw new Error('No data provided');
       }
       const data = res.req.body;
       // Basic validation
       if (!data.code || !Array.isArray(data.columns) || !Array.isArray(data.elements)) {
-        throw new ToastException('Missing required dictionary fields', this);
+        throw new Error('Missing required dictionary fields');
       }
       // Check if code exists
       const exists = await this.dictionaryRepository.findOne({ where: { code: data.code } });
       if (exists) {
-        throw new ToastException('Dictionary with this code already exists', this);
+        throw new Error('Dictionary with this code already exists');
       }
 
       // validateCode for dictionary code
       const codeError = DictionaryValidators.validateCode(data.code);
       if (codeError) {
-        throw new ToastException(`Validation error: ${codeError}`, this);
+        throw new Error(`Validation error: ${codeError}`);
       }
 
       // Validate structure using DictionaryValidators (cast to DictionaryI)
@@ -78,7 +79,7 @@ export class DictionariesImportServiceController {
       for (const fn of validationFns) {
         const errMsg = fn(data);
         if (errMsg) {
-          throw new ToastException(`Validation error: ${errMsg}`, this);
+          throw new Error(`Validation error: ${errMsg}`);
         }
       }
       const entity = this.dictionaryRepository.create(data);
@@ -88,7 +89,9 @@ export class DictionariesImportServiceController {
       return res.status(201).end();
 
     } catch (err: any) {
-      throw new ToastException(`Import error: ${err?.message || err}`, this);
+      // TODO 
+      // throw new ToastException(err?.message || 'Unexpected import error', this);
+      throw new PopupException(err?.message || 'Unexpected import error', this);
     }
   }
 

@@ -29,3 +29,4 @@ The project must be containerized using Docker to ensure easy local development 
 - Use ./instructions/nestjsinstructions.md when generating backend NestJS code.
 - Use ./instructions/reactjsinstructions.md when generating frontend React code.
 - Use ./project-structure.md when generating new files.
+- Do not remove my comments if its not related to the changes.

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, OnModuleInit } from "@nestjs/common";
+import { Injectable, OnModuleInit } from "@nestjs/common";
 import { Dictionaries } from "@shared/def/dictionary.def";
 import { DictionaryElement, DictionaryI } from "@shared/DictionaryI";
 import { TranslationI } from "@shared/interfaces/TranslationI";
