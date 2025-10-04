@@ -2,7 +2,8 @@ import { toast } from 'react-toastify';
 import { QueryClient } from '@tanstack/react-query';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { MyHttpCode } from '@shared/def/http.def';
-// Removed useConfirm import; handler will be injected from component
+import { PopupHandler } from 'global/providers/PopupProvider';
+import { BtnModes } from 'global/interface/controls.interface';
 
 const API_URL = process.env.REACT_APP_API_URL || '/api';
 
@@ -10,8 +11,6 @@ const API_URL = process.env.REACT_APP_API_URL || '/api';
 
 export const queryClient = new QueryClient();
 
-
-export type PopupHandler = (options: { title: string; message: string; confirmText: string; cancelText: string }) => Promise<boolean>;
 
 export class HttpClient {
   private axiosInstance = axios.create({
@@ -44,11 +43,14 @@ export class HttpClient {
   private async handlePopupException(error: AxiosError) {
     if (!this.popupHandler) return;
     const confirmed = await this.popupHandler({
-      title: 'Error',
-      message: this.getMsg(error),
+
       // TODO translate
-      confirmText: 'Wróć na stronę główną',
-      cancelText: 'Zostań na tej stronie',
+      title: 'Wystąpił błąd',
+      message: this.getMsg(error),
+      buttons: [
+        { text: 'Zostań na tej stronie', mode: BtnModes.ERROR_TXT },
+        { text: 'Wróć na stronę główną', mode: BtnModes.PRIMARY, action: () => true },
+      ]
     });
     if (confirmed) {
       window.location.href = '/';

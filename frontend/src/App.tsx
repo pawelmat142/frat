@@ -10,7 +10,7 @@ import AddDictionaryView from 'admin/views/dictionaries/AddDictionaryView';
 import DictionaryView from 'admin/views/dictionaries/DictionaryView';
 import DictionaryGroupForm from 'admin/views/dictionaries/DictionaryGroupForm';
 import { AdminPanelProvider } from 'admin/views/AdminPanelProvider';
-import { useConfirm } from 'global/providers/ConfirmProvider';
+import { usePopup } from 'global/providers/PopupProvider';
 import { httpClient } from 'global/services/http';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
@@ -29,12 +29,12 @@ const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = 
 const App: React.FC = () => {
     const location = useLocation();
     const direction = location.state?.direction === 'back' ? -1 : 1;
-    
-    const confirm = useConfirm();
+
+    const popup = usePopup();
     // Inject popup handler into httpClient
     React.useEffect(() => {
-        httpClient.setPopupHandler(confirm);
-    }, [confirm]);
+        httpClient.setPopupHandler(popup);
+    }, [popup]);
 
     return (
         <AnimatePresence mode="wait">

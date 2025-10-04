@@ -5,7 +5,7 @@ import IconButton from "global/components/controls/IconButon";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useConfirm } from "global/providers/ConfirmProvider";
+import { useConfirm } from "global/providers/PopupProvider";
 
 interface DictionaryGroupsProps {
     dictionary: DictionaryI;

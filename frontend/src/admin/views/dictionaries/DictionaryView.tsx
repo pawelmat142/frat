@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path";
 import { toast } from "react-toastify";
 import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
-import { useConfirm } from "global/providers/ConfirmProvider";
+import { useConfirm } from "global/providers/PopupProvider";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';

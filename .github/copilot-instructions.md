@@ -11,7 +11,7 @@ The project must be containerized using Docker to ensure easy local development 
 - Only implement changes explicitly requested. Do not change files when there are no actual modifications needed.
 
 ## Project Naming Guidelines
-- [Project Naming Guideline](./project-naming-guideline.md)
+- [Project Naming Guideline](./instructions/project-naming-guideline.md)
 
 ## General guidelines for writing code
 - Backend uses NestJS (TypeScript), frontend uses React (TypeScript), database is PostgreSQL.
