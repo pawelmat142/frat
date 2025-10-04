@@ -22,21 +22,33 @@ class CustomBackend {
 
 i18n
   .use(initReactI18next)
-  .use(new CustomBackend() as any)
-  .init({
-    // TODO znajdz w przegladarce
-    lng: 'en', // domyślny język
-    fallbackLng: 'en',  
-    ns: ['translation'],
-    defaultNS: 'translation',
-    interpolation: {
-      escapeValue: false,
-    },
-    react: {
-      useSuspense: false,
-    },
-    backend: {},
-    load: 'languageOnly',
-  });
+  .use(new CustomBackend() as any);
+
+// Detect browser language and normalize to two-letter code
+function getTwoLetterLanguage(lang: string): string {
+  if (!lang) return 'en';
+  return lang.split('-')[0].toLowerCase();
+}
+
+const browserLanguageRaw = navigator.language || navigator.languages?.[0] || 'en';
+
+const browserLanguage = getTwoLetterLanguage(browserLanguageRaw);
+
+console.log('Detected browser language:', browserLanguageRaw, '| Two-letter:', browserLanguage);
+
+i18n.init({
+  lng: browserLanguage, // domyślny język z przeglądarki
+  fallbackLng: 'en',  
+  ns: ['translation'],
+  defaultNS: 'translation',
+  interpolation: {
+    escapeValue: false,
+  },
+  react: {
+    useSuspense: false,
+  },
+  backend: {},
+  load: 'languageOnly',
+});
 
 export default i18n;
