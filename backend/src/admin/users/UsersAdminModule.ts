@@ -3,10 +3,12 @@ import { Module } from '@nestjs/common';
 import { UsersAdminController } from './UsersAdminController';
 import { UsersAdminService } from './UsersAdminService';
 import { UserModule } from 'user/UserModule';
+import { AuthModule } from 'auth/AuthModule';
 
 @Module({
   imports: [
-    UserModule
+    UserModule,
+    AuthModule
   ],
   controllers: [
     UsersAdminController

@@ -38,32 +38,6 @@ export class UserService {
         return this.userRepo.findUserByEmail(email);
     }
 
-    public async getOrCreateUserEntity(decodedToken: DecodedIdToken): Promise<UserI | null> {
-        const existingUser = await this.userRepo.getUserByUid(decodedToken.uid);
-
-        if (existingUser) {
-            if (existingUser.status === UserStatuses.ACTIVE) {
-                return existingUser;
-            }
-            this.logger.warn(`User with uid ${decodedToken.uid} is not active. Cannot create or return user.`);
-            return null
-        }
-
-        const provider = UserUtil.findProvider(decodedToken);
-        if (!provider) {
-            this.logger.warn(`Cannot determine provider from decoded token for uid ${decodedToken.uid}`);
-        }
-
-        const newUser = await this.create({
-            uid: decodedToken.uid,
-            displayName: decodedToken.name || Util.trimEmail(decodedToken.email),
-            email: decodedToken.email,
-            provider: provider,
-            photoURL: decodedToken.picture,
-        });
-        return newUser;
-    }
-
     public getActiveUserByUid(uid: string): Promise<UserEntity> {
         return this.userRepo.getActiveUserByUid(uid);
     }

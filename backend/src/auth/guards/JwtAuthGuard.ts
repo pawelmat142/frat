@@ -1,17 +1,15 @@
 /** Created by Pawel Malek **/
 import { CanActivate, ExecutionContext, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { FirebaseConfig } from '../services/FirebaseConfig';
 import { DecodedIdToken } from 'firebase-admin/auth';
-import { UserService } from 'user/services/UserService';
 import { UserI } from '@shared/interfaces/UserI';
+import { ExportedAuthService } from 'auth/services/ExportedAuthService';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   private readonly logger = new Logger(this.constructor.name);
 
   constructor(
-    private readonly firebaseConfig: FirebaseConfig,
-    private readonly userService: UserService,
+    private readonly exportedAuthService: ExportedAuthService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -24,13 +22,10 @@ export class JwtAuthGuard implements CanActivate {
 
     try {
       // Weryfikacja tokena Firebase
-      const decodedToken: DecodedIdToken = await this.firebaseConfig
-        .admin
-        .auth()
-        .verifyIdToken(token);
+      const decodedToken: DecodedIdToken = await this.exportedAuthService.verifyIdToken(token);
 
       // Pobierz pełne dane usera z bazy (zawiera role, displayName, etc.)
-      const user: UserI = await this.userService.getOrCreateUserEntity(decodedToken);
+      const user: UserI = await this.exportedAuthService.getOrCreateUserEntity(decodedToken);
 
       if (!user) {
         throw new UnauthorizedException('User not found in database');

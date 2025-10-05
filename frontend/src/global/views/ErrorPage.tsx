@@ -33,9 +33,7 @@ const ErrorPage: React.FC = () => {
 
 
     // TODO report error feature
-
     // TODO translate
-
     return (
         <div className="w-full px-5 py-3 flex flex-col items-center justify-center min-h-[60vh]">
             <div className="flex flex-col gap-4 p-6 border rounded shadow max-w-lg w-full bg-secondary-bg">

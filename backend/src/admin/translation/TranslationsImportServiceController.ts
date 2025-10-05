@@ -7,6 +7,7 @@ import {
   Post,
   UseInterceptors,
   Logger,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,10 +18,15 @@ import { TranslationValidators } from '@shared/validators/TranslationValidators'
 import { TranslationService } from './TranslationService';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { ToastException } from 'global/exceptions/ToastException';
+import { UserRoles } from '@shared/interfaces/UserI';
+import { Roles } from 'auth/decorators/RolesDecorator';
+import { RolesGuard } from 'auth/guards/RolesGuard';
+import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
 
-// TODO roles guardy
 @Controller('api/admin/import/translations')
 @UseInterceptors(LogInterceptor)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
 export class TranslationsImportServiceController {
 
   private readonly logger = new Logger(this.constructor.name);

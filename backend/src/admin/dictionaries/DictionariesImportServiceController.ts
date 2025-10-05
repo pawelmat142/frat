@@ -7,6 +7,7 @@ import {
   Post,
   Logger,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,10 +17,15 @@ import { DictionaryValidators } from '@shared/validators/DictionaryValidators';
 import { ImportUtil } from 'global/utils/ImportUtil';
 import { ToastException } from 'global/exceptions/ToastException';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
+import { RolesGuard } from 'auth/guards/RolesGuard';
+import { UserRoles } from '@shared/interfaces/UserI';
+import { Roles } from 'auth/decorators/RolesDecorator';
+import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
 
-// TODO roles guardy
 @Controller('api/admin/import/dictionaries')
 @UseInterceptors(LogInterceptor)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
 export class DictionariesImportServiceController {
 
   private readonly logger = new Logger(this.constructor.name);

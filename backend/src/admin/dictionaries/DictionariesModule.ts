@@ -6,15 +6,26 @@ import { DictionariesService } from './services/DictionariesService';
 import { DictionariesRepo } from './services/DictionariesRepo';
 import { DictionaryEntity } from './model/DictionaryEntity';
 import { DictionariesImportServiceController } from './DictionariesImportServiceController';
+import { AuthModule } from 'auth/AuthModule';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       DictionaryEntity,
     ]),
+
+    AuthModule
   ],
-  controllers: [DictionariesController, DictionariesImportServiceController],
-  providers: [DictionariesService, DictionariesRepo],
-  exports: [DictionariesService],
+  controllers: [
+    DictionariesController, 
+    DictionariesImportServiceController
+  ],
+  providers: [
+    DictionariesService, 
+    DictionariesRepo
+  ],
+  exports: [
+    DictionariesService
+  ],
 })
 export class DictionariesModule {}

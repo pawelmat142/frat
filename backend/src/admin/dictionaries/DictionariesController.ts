@@ -7,14 +7,20 @@ import {
   Param,
   Delete,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { DictionariesService } from './services/DictionariesService';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
+import { RolesGuard } from 'auth/guards/RolesGuard';
+import { UserRoles } from '@shared/interfaces/UserI';
+import { Roles } from 'auth/decorators/RolesDecorator';
+import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
 
-// TODO roles guardy
 @Controller('api/admin/dictionaries')
 @UseInterceptors(LogInterceptor)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
 export class DictionariesController {
 
   constructor(private readonly dictionariesService: DictionariesService) { }

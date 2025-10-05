@@ -26,8 +26,13 @@ export class AuthController {
   @Get('login')
   @UseGuards(JwtAuthGuard)
   login(@CurrentUser() user: UserI): UserI {
-    console.log('user in login endpoint', user);
     return user;
+  }
+  
+  @Get('send-verification-email')
+  @UseGuards(JwtAuthGuard)
+  sendVerificationEmail(@CurrentUser() user: UserI): Promise<void> {
+    return this.authService.sendVerificationEmail(user.email, user.uid);
   }
 
   @Post('register-form')
@@ -36,13 +41,8 @@ export class AuthController {
     return this.authService.registerForm(dto);
   }
 
-  @Get('send-verification-email')
-  @UseGuards(JwtAuthGuard)
-  sendVerificationEmail(@CurrentUser() user: UserI): Promise<void> {
-    return this.authService.sendVerificationEmail(user.email, user.uid);
-  }
-
   @Get('send-password-reset-email/:email')
+  @Public()
   sendPasswordResetEmail(@Param('email') email: string): Promise<void> {
     return this.authService.sendPasswordResetEmail(email);
   }

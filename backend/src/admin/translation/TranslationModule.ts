@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TranslationEntity } from './TranslationEntity';
 import { TranslationsImportServiceController } from './TranslationsImportServiceController';
 import { TranslationPublicService } from './TranslationPublicService';
+import { AuthModule } from 'auth/AuthModule';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { TranslationPublicService } from './TranslationPublicService';
       TranslationEntity,
     ]),
 
-    DictionariesModule
+    DictionariesModule,
+    AuthModule
   ],
   controllers: [
     TranslationController,
