@@ -1,3 +1,5 @@
+import { UserProvider } from "./../interfaces/UserI";
+
 export interface RegisterFormDto {
   email: string;
   confirmEmail: string;
@@ -19,4 +21,9 @@ export interface LoginFormResponse {
   success: boolean;
   message: string;
   token?: string;
+}
+
+
+export interface GoogleLoginDto {
+  idToken: string;
 }

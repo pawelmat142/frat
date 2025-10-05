@@ -23,6 +23,14 @@ export class UserService {
         return this._userDeletedEvent$.asObservable()
     }
 
+    public async existsByUid(uid: string): Promise<boolean> {
+        return this.userRepo.existsByUid(uid);
+    }
+
+    public getUserByUid(uid: string): Promise<UserEntity> {
+        return this.userRepo.getUserByUid(uid);
+    }
+
     public create(createUser: CreateUser): Promise<UserEntity> {
         return this.userRepo.create(createUser);
     }

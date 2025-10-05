@@ -38,7 +38,6 @@ const SignInPage: React.FC = () => {
                 email,
                 password
             })
-            console.log('Sign in result:', response);
             toast.success(t("signin.success"));
         }
 
@@ -114,7 +113,7 @@ const SignInPage: React.FC = () => {
                         mode={BtnModes.PRIMARY_TXT}
                         fullWidth={true}
                         className="mt-5"
-                        onClick={() => { 
+                        onClick={() => {
                             navigate(Path.SIGN_UP);
                         }}
                     >
@@ -128,7 +127,7 @@ const SignInPage: React.FC = () => {
                         className="mt-5"
                         onClick={handleGoogleSignIn}
                     >
-                        <GoogleIcon/>
+                        <GoogleIcon />
                         {t("signin.googleProvider")}
                     </Buton>
                 </div>

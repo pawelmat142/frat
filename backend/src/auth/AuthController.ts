@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { AuthService } from './services/AuthService';
-import { LoginFormDto, LoginFormResponse, RegisterFormDto, RegisterFormResponse } from '@shared/dto/AuthDto';
+import { GoogleLoginDto, LoginFormDto, LoginFormResponse, RegisterFormDto, RegisterFormResponse } from '@shared/dto/AuthDto';
 
 // TODO roles guardy
 @Controller('api/auth')
@@ -26,4 +26,8 @@ export class AuthController {
     return this.authService.loginForm(dto);
   } 
 
+  @Post('login-google')
+  async loginWithGoogle(@Body() dto: GoogleLoginDto) {
+    return this.authService.loginWithGoogle(dto.idToken);
+  }
 }

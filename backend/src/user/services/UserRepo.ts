@@ -35,6 +35,10 @@ export class UserRepo {
         return this.userRepository.findOneBy({ uid });
     }
 
+    public existsByUid(uid: string): Promise<boolean> {
+        return this.userRepository.exists({ where: { uid } });
+    }
+
     public deleteEntity(user: UserEntity): Promise<UserEntity> {
         return this.userRepository.remove(user);
     }
