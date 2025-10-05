@@ -7,11 +7,6 @@ export interface RegisterFormDto {
   confirmPassword: string;
 }
 
-export interface RegisterFormResponse {
-  success: boolean;
-  message: string;
-}
-
 export interface LoginFormDto {
   email: string;
   password: string;

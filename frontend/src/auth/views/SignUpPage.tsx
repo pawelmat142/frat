@@ -8,6 +8,8 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { AuthService } from "auth/services/AuthService";
 import { Utils } from "global/utils";
 import { useNavigate } from "react-router-dom";
+import { usePopup } from "global/providers/PopupProvider";
+import { Path } from "./../../path";
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
@@ -18,6 +20,7 @@ const SignUpPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
+    const popup = usePopup();
 
     const isDevMode = Utils.isDevMode();
 
@@ -34,15 +37,20 @@ const SignUpPage: React.FC = () => {
 
         try {
             setLoading(true);
-            const result = await AuthService.registerForm({
+            await AuthService.registerForm({
                 email,
                 password,
                 confirmEmail: repeatEmail,
                 confirmPassword: repeatPassword
             })
 
-            // TODO popup, informacja o potwierdz email + przekierowanie do sign in
-            console.log('Registration result:', result);
+            await popup({
+                title: t("signup.successTitle"),
+                message: t("signup.successMessage"),
+                buttons: [{ text: t("common.ok") }] 
+            })
+
+            navigate(Path.SIGN_IN);
         }
 
         catch (e: any) { } finally {

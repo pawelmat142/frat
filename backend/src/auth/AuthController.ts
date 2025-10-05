@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { AuthService } from './services/AuthService';
-import { RegisterFormDto, RegisterFormResponse } from '@shared/dto/AuthDto';
+import { RegisterFormDto } from '@shared/dto/AuthDto';
 import { JwtAuthGuard } from './guards/JwtAuthGuard';
 import { CurrentUser } from './decorators/CurrentUserDecorator';
 import { UserI } from '@shared/interfaces/UserI';
@@ -31,8 +31,14 @@ export class AuthController {
 
   @Post('register-form')
   @Public()
-  registerForm(@Body() dto: RegisterFormDto): Promise<RegisterFormResponse> {
+  registerForm(@Body() dto: RegisterFormDto): Promise<void> {
     return this.authService.registerForm(dto);
+  }
+
+  @Get('send-verification-email')
+  @UseGuards(JwtAuthGuard)
+  sendVerificationEmail(@CurrentUser() user: UserI): Promise<void> {
+    return this.authService.sendVerificationEmail(user.email, user.uid);
   }
 
   // EXAMPLE PROTECTED ENDPOINT

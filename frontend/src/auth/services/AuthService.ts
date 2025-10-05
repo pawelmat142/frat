@@ -8,8 +8,10 @@ import {
 	User as FirebaseUser,
 } from "firebase/auth";
 import { toast } from "react-toastify";
+import { t } from "global/i18n";
 import { FirebaseAuth } from "./FirebaseAuth";
 import { UserI } from "@shared/interfaces/UserI";
+import { AuthValidators } from "@shared/validators/AuthValidator";
 
 export const AuthService = {
 
@@ -71,26 +73,15 @@ export const AuthService = {
 		}
 	},
 
-	handleFireAuthError(error: any) {
-		console.error('Login error:', error);
-		const errorCode = error.code;
+	sendVerificationEmail(): Promise<void> {
+		return httpClient.get('/auth/send-verification-email');
+	},
 
-		// Obsługa błędów Firebase
-		switch (errorCode) {
-			case 'auth/invalid-credential':
-			case 'auth/wrong-password':
-			case 'auth/user-not-found':
-				toast.error('Invalid email or password');
-				throw new Error('Invalid email or password');
-			case 'auth/too-many-requests':
-				toast.error('Too many attempts. Try again later.');
-				throw new Error('Too many attempts');
-			case 'auth/user-disabled':
-				toast.error('Account disabled');
-				throw new Error('Account disabled');
-			default:
-				toast.error('Login failed. Please try again.');
-				throw new Error('Login failed');
+	handleFireAuthError(error: any) {
+		const msg = AuthValidators.handleFireAuthError(error);
+		if (msg) {
+			console.error(error);
+			toast.error(String(t(msg)));
 		}
 	},
 

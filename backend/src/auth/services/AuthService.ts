@@ -1,17 +1,18 @@
 
 /** Created by Pawel Malek **/
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { LoginFormDto, LoginFormResponse, RegisterFormDto, RegisterFormResponse } from '@shared/dto/AuthDto';
+import { LoginFormDto, LoginFormResponse, RegisterFormDto } from '@shared/dto/AuthDto';
 import { AuthValidators } from '@shared/validators/AuthValidator';
 import { ToastException } from 'global/exceptions/ToastException';
 import { FirebaseConfig } from './FirebaseConfig';
-import { DecodedIdToken, UserRecord } from 'firebase-admin/auth';
+import { UserRecord } from 'firebase-admin/auth';
 import { PopupException } from 'global/exceptions/PopupException';
 import { EmailService } from 'email/EmailService';
 import { UserService } from 'user/services/UserService';
 import { Util } from '@shared/utils/util';
 import { UserProviders } from '@shared/interfaces/UserI';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { SWWException } from 'global/exceptions/SWWException';
 
 // TODO 
 // czy moge z przegladarki pobrac jakis unikalny klucz/id/numer charakterystyczny dla urzadzenia?
@@ -44,7 +45,7 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     throw new ToastException('Method not implemented.', this);
   }
 
-  public async registerForm(dto: RegisterFormDto): Promise<RegisterFormResponse> {
+  public async registerForm(dto: RegisterFormDto): Promise<void> {
     const validationErrorKey = AuthValidators.validateRegisterForm(dto);
     if (validationErrorKey) {
       throw new ToastException(validationErrorKey, this);
@@ -58,24 +59,19 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
 
       this.logger.log('Firebase user created', JSON.stringify(userRecord, null, 2))
 
-      await this.sendVerificationEmail(dto, userRecord.uid);
+      await this.sendVerificationEmail(dto.email, userRecord.uid);
 
       await this.createUserEntityByRegisterForm(userRecord, dto)
 
-      return {
-        success: true,
-        message: 'validation.success',
-      };
-
     } catch (err: any) {
-      const firebaseErrorCode = err?.errorInfo?.code;
-      if (firebaseErrorCode) {
-        if (firebaseErrorCode === 'auth/email-already-exists') {
-          throw new PopupException(`validation.firebaseError.emailInUse`, this)
+      try {
+        const msg = AuthValidators.handleFireAuthError(err);
+        if (msg) {
+          throw new PopupException(msg, this)
         }
-        this.logger.error(err);
+      } catch (error) {
+        throw new SWWException(error, this);
       }
-      throw new ToastException('validation.firebaseError', this);
     }
   }
 
@@ -93,11 +89,11 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  private async sendVerificationEmail(dto: RegisterFormDto, uid: string): Promise<void> {
+  public async sendVerificationEmail(email: string, uid: string): Promise<void> {
     // Generate email verification link
     try {
-      const verificationLink = await this.firebaseAuth.generateEmailVerificationLink(dto.email);
-      await this.emailService.sendVerificationEmail(dto.email, verificationLink);
+      const verificationLink = await this.firebaseAuth.generateEmailVerificationLink(email);
+      await this.emailService.sendVerificationEmail(email, verificationLink);
       this.logger.log('Verification email sent to user');
     } catch (emailError: any) {
       this.logger.error('Error sending verification email', emailError);
