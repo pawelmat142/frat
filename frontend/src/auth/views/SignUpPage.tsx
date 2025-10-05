@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import Input from "global/components/controls/Input";
 import Buton from "global/components/controls/Buton";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
-import { toast } from "react-toastify";
 import { AuthService } from "auth/services/AuthService";
 import { Utils } from "global/utils";
 import { useNavigate } from "react-router-dom";
@@ -41,8 +40,9 @@ const SignUpPage: React.FC = () => {
                 confirmEmail: repeatEmail,
                 confirmPassword: repeatPassword
             })
+
+            // TODO popup, informacja o potwierdz email + przekierowanie do sign in
             console.log('Registration result:', result);
-            toast.success(t("signup.success"));
         }
 
         catch (e: any) { } finally {

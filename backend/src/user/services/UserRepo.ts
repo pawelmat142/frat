@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UserI, UserRoles } from "@shared/interfaces/UserI";
+import { UserI, UserRoles, UserStatuses } from "@shared/interfaces/UserI";
 import { Repository } from "typeorm";
 import { UserEntity } from "user/model/UserEntity";
 import { CreateUser } from "user/model/UserInterface";
@@ -27,8 +27,12 @@ export class UserRepo {
             updatedAt: new Date(),
         });
         const saved = await this.userRepository.save(entity);
-        this.logger.log(`Created new user: ${saved.userId} / ${saved.email}`);
+        this.logger.log(`Created new user: ${saved.userId} / ${saved.email}, provider: ${saved.provider}`);
         return saved;
+    }
+
+    public getActiveUserByUid(uid: string): Promise<UserEntity | null> {
+        return this.userRepository.findOneBy({ uid, status: UserStatuses.ACTIVE });
     }
 
     public getUserByUid(uid: string): Promise<UserEntity | null> {

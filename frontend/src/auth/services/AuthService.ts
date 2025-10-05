@@ -1,76 +1,106 @@
-import { LoginFormDto, LoginFormResponse, RegisterFormDto } from "@shared/dto/AuthDto";
+import { LoginFormDto, RegisterFormDto } from "@shared/dto/AuthDto";
 import { httpClient } from "global/services/http";
-import { initializeApp, getApps } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, UserCredential } from "firebase/auth";
+import {
+	GoogleAuthProvider,
+	signInWithPopup,
+	signInWithEmailAndPassword,
+	onAuthStateChanged,
+	User as FirebaseUser,
+} from "firebase/auth";
 import { toast } from "react-toastify";
-
-let firebaseInitialized = false;
-let authInstance: ReturnType<typeof getAuth> | null = null;
-
-
-function getFirebaseConfig(): FirebaseConfig | null {
-	const apiKey = process.env.REACT_APP_FIREBASE_API_KEY;
-	const authDomain = process.env.REACT_APP_FIREBASE_AUTH_DOMAIN;
-	const projectId = process.env.REACT_APP_FIREBASE_PROJECT_ID;
-	const appId = process.env.REACT_APP_FIREBASE_APP_ID;
-	if (!apiKey || !authDomain || !projectId || !appId) {
-		toast.error("Firebase configuration is incomplete. Please set the environment variables.");
-		return null;
-	}
-	return {
-		apiKey,
-		authDomain,
-		projectId,
-		appId,
-	};
-}
-
-async function ensureFirebaseInitialized(): Promise<ReturnType<typeof getAuth>> {
-	if (!firebaseInitialized) {
-		const config = getFirebaseConfig();
-		if (config) {
-			if (getApps().length === 0) {
-				initializeApp(config);
-			}
-			authInstance = getAuth();
-			firebaseInitialized = true;
-		}
-	}
-	return authInstance!;
-}
-
-export interface FirebaseConfig {
-	apiKey: string;
-	authDomain: string;
-	projectId: string;
-	appId: string;
-}
+import { FirebaseAuth } from "./FirebaseAuth";
+import { UserI } from "@shared/interfaces/UserI";
 
 export const AuthService = {
-	async registerForm(data: RegisterFormDto): Promise<any> {
+
+	/**
+	 * Pobnranie stanu usera po zalogowaniu
+	*/
+	login(): Promise<UserI> {
+		return httpClient.get("/auth/login");
+	},
+
+	/**
+	 * Wylogowanie użytkownika
+	 */
+	logout(): Promise<void> {
+		// TRIGGERS AUTH_HOOK
+		return FirebaseAuth.getAuth().signOut()
+	},
+
+	/**
+	 * Rejestracja przez backend - Firebase User zostanie utworzony tam
+	 */
+	registerForm(data: RegisterFormDto): Promise<any> {
 		return httpClient.post("/auth/register-form", data);
 	},
 
-	async loginForm(dto: LoginFormDto): Promise<LoginFormResponse> {
-		return httpClient.post("/auth/login-form", dto);
+	/**
+	 * Logowanie email/hasło przez Firebase Auth
+	 */
+	async loginForm(dto: LoginFormDto): Promise<void> {
+		const auth = FirebaseAuth.getAuth();
+
+		try {
+			// Logowanie przez Firebase - token zostanie automatycznie wygenerowany
+			await signInWithEmailAndPassword(
+				auth,
+				dto.email,
+				dto.password
+			);
+			// TRIGGERS AUTH_HOOK
+
+		} catch (error: any) {
+			this.handleFireAuthError(error);
+		}
 	},
 
-	async loginWithGoogle() {
-
-		// TODO obsluzyc do konca, loading, bledy itd
-		const auth = await ensureFirebaseInitialized();
-		console.log('Firebase Auth:', auth);
-
+	/**
+	 * Logowanie przez Google
+	 */
+	async loginWithGoogle(): Promise<void> {
+		const auth = FirebaseAuth.getAuth();
 		const provider = new GoogleAuthProvider();
-		console.log('Google Auth Provider:', provider);
 
-		const userCredential: UserCredential = await signInWithPopup(auth, provider);
-		console.log('Sign-in result:', userCredential);
+		try {
+			await signInWithPopup(auth, provider);
+			// TRIGGERS AUTH_HOOK
 
-		const idToken = await userCredential.user.getIdToken();
-		console.log('ID Token:', idToken);
+		} catch (error: any) {
+			this.handleFireAuthError(error);
+		}
+	},
 
-		const response = await httpClient.post("/auth/login-google", { idToken });
-		console.log('Backend response:', response);
-	}
+	handleFireAuthError(error: any) {
+		console.error('Login error:', error);
+		const errorCode = error.code;
+
+		// Obsługa błędów Firebase
+		switch (errorCode) {
+			case 'auth/invalid-credential':
+			case 'auth/wrong-password':
+			case 'auth/user-not-found':
+				toast.error('Invalid email or password');
+				throw new Error('Invalid email or password');
+			case 'auth/too-many-requests':
+				toast.error('Too many attempts. Try again later.');
+				throw new Error('Too many attempts');
+			case 'auth/user-disabled':
+				toast.error('Account disabled');
+				throw new Error('Account disabled');
+			default:
+				toast.error('Login failed. Please try again.');
+				throw new Error('Login failed');
+		}
+	},
+
+	/**
+	 * Listener na zmiany stanu autoryzacji
+	 * Użycie w komponencie/providzie do śledzenia stanu użytkownika
+	 */
+	onAuthStateChanged(callback: (user: FirebaseUser | null) => void) {
+		const auth = FirebaseAuth.getAuth();
+		return onAuthStateChanged(auth, callback);
+	},
+
 };

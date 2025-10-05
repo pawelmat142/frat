@@ -10,6 +10,7 @@ import { ToastContainer } from 'react-toastify';
 import { MenuProvider } from './global/providers/MenuProvider';
 import { ThemeProvider } from './global/providers/ThemeProvider';
 import { PopupProvider } from 'global/providers/PopupProvider';
+import { AuthProvider } from 'auth/AuthProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -18,30 +19,32 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
     <PopupProvider>
-      <MenuProvider>
-        <ThemeProvider>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1 flex flex-col items-center w-full overflow-x-hidden">
-              <App />
-            </main>
-            <Footer />
-            {/* TODO <CookieBanner /> */}
-          </div>
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-        </ThemeProvider>
-      </MenuProvider>
+      <AuthProvider>
+        <MenuProvider>
+          <ThemeProvider>
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <main className="flex-1 flex flex-col items-center w-full overflow-x-hidden">
+                <App />
+              </main>
+              <Footer />
+              {/* TODO <CookieBanner /> */}
+            </div>
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
+          </ThemeProvider>
+        </MenuProvider>
+      </AuthProvider>
 
     </PopupProvider>
 

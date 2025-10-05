@@ -1,6 +1,6 @@
 
 /** Created by Pawel Malek **/
-import { ForbiddenException, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { LoginFormDto, LoginFormResponse, RegisterFormDto, RegisterFormResponse } from '@shared/dto/AuthDto';
 import { AuthValidators } from '@shared/validators/AuthValidator';
 import { ToastException } from 'global/exceptions/ToastException';
@@ -10,7 +10,7 @@ import { PopupException } from 'global/exceptions/PopupException';
 import { EmailService } from 'email/EmailService';
 import { UserService } from 'user/services/UserService';
 import { Util } from '@shared/utils/util';
-import { JwtPayload, UserI, UserProviders } from '@shared/interfaces/UserI';
+import { UserProviders } from '@shared/interfaces/UserI';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 // TODO 
@@ -60,7 +60,7 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
 
       await this.sendVerificationEmail(dto, userRecord.uid);
 
-      await this.createUserEntity(userRecord, dto)
+      await this.createUserEntityByRegisterForm(userRecord, dto)
 
       return {
         success: true,
@@ -79,7 +79,7 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  private async createUserEntity(userRecord: UserRecord, dto: RegisterFormDto): Promise<void> {
+  private async createUserEntityByRegisterForm(userRecord: UserRecord, dto: RegisterFormDto): Promise<void> {
     try {
       await this.userService.create({
         uid: userRecord.uid,
@@ -93,48 +93,6 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  public async loginWithGoogle(idToken: string) {
-    try {
-      // TODO jwt
-      const decodedToken = await this.verifyIdToken(idToken)
-      console.log('Decoded Token:', decodedToken);
-
-      const user: UserI = await this.createUserEntityWithProviderIfNotExists(decodedToken)
-
-      const token = await this.createJwtForUser(user)
-      console.log('Generated JWT:', token)
-
-      throw new ToastException('Method not fully implemented.', this)
-    } catch (err) {
-      this.logger.error('Google login error', err)
-      throw new ToastException('validation.firebaseError', this)
-    }
-  }
-
-  private async createUserEntityWithProviderIfNotExists(decodedToken: DecodedIdToken): Promise<UserI> {
-    const user = await this.userService.getUserByUid(decodedToken.uid)
-    if (user) {
-      return user
-    }
-    const newUser = await this.userService.create({
-      uid: decodedToken.uid,
-      displayName: decodedToken.name || Util.trimEmail(decodedToken.email),
-      email: decodedToken.email,
-      provider: UserProviders.GOOGLE,
-      photoURL: decodedToken.picture,
-    });
-    return newUser;
-  }
-
-  private verifyIdToken(idToken: string): Promise<DecodedIdToken | null> {
-    try {
-      return this.firebaseAuth.verifyIdToken(idToken);
-    } catch (error) {
-      this.logger.error('Error verifying ID token', error);
-      throw new ForbiddenException('Invalid ID token');
-    }
-  }
-
   private async sendVerificationEmail(dto: RegisterFormDto, uid: string): Promise<void> {
     // Generate email verification link
     try {
@@ -145,18 +103,6 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
       this.logger.error('Error sending verification email', emailError);
       await this.deleteFirebaseUser(uid);
     }
-  }
-
-  // JWT generation stub (replace with real implementation)
-  private async createJwtForUser(user: UserI): Promise<JwtPayload> {
-    // TODO: Use nestjs/jwt or jsonwebtoken for real JWT
-    return {
-      uid: user.uid,
-      displayName: user.displayName,
-      roles: user.roles,
-      iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour expiration
-    };
   }
 
   private startSubscription() {

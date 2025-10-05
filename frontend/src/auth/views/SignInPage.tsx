@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import Input from "global/components/controls/Input";
 import Buton from "global/components/controls/Buton";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
-import { toast } from "react-toastify";
 import { AuthService } from "auth/services/AuthService";
 import { Utils } from "global/utils";
 import { useNavigate } from "react-router-dom";
@@ -31,16 +30,13 @@ const SignInPage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         try {
             setLoading(true);
-            const response = await AuthService.loginForm({
+            await AuthService.loginForm({
                 email,
                 password
             })
-            toast.success(t("signin.success"));
         }
-
         catch (e: any) { } finally {
             setLoading(false);
         }
@@ -49,9 +45,7 @@ const SignInPage: React.FC = () => {
     const handleGoogleSignIn = async () => {
         try {
             setLoading(true);
-            const response = await AuthService.loginWithGoogle();
-            console.log('Google sign in result:', response);
-            toast.success(t("signin.success"));
+            await AuthService.loginWithGoogle();
         }
         catch (e: any) { } finally {
             setLoading(false);

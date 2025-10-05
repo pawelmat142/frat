@@ -10,14 +10,6 @@ export interface UserI {
     photoURL?: string
 }
 
-export interface JwtPayload {
-    uid: string;
-    displayName: string
-    roles: UserRole[];
-    iat?: number;
-    exp?: number;
-}
-
 export const UserRoles = {
     SUPERADMIN: 'SUPERADMIN',
     ADMIN: 'ADMIN',

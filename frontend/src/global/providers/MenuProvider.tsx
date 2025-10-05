@@ -2,6 +2,7 @@ import React, { createContext, useContext, useMemo, ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { MenuItem, Payload } from '../interfaces';
 import { Path } from '../../path';
+import { useAuthContext } from 'auth/AuthProvider';
 
 interface MenuContextType {
     allMenuItems: MenuItem[];
@@ -20,6 +21,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     user
 }) => {
     const location = useLocation();
+    const { userI, isAuthenticated } = useAuthContext();
 
     // Dodajemy właściwość active na podstawie location.pathname
     const allMenuItems: MenuItem[] = useMemo(() => [
@@ -32,14 +34,20 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
             label: 'header.admin',
             // TODO admin guard
         },
-        {
-            to: Path.SIGN_IN,
-            label: 'signin.title'   
-        }
+        isAuthenticated ?
+            {
+                to: Path.getProfilePath(userI!.uid),
+                label: 'header.profile',
+            } :
+            {
+                to: Path.SIGN_IN,
+                label: 'signin.title'
+            }
     ].map(item => ({
         ...item,
         active: isMenuItemActive(item)
-    })), [location.pathname]);
+    })), [location.pathname, isAuthenticated]);
+
 
     const filteredMenuItems = useMemo(() =>
         allMenuItems.filter(item =>
@@ -72,11 +80,11 @@ const isMenuItemActive = (item: MenuItem): boolean => {
 }
 
 export const useMenuContext = () => {
-  const context = useContext(MenuContext);
-  if (!context) {
-    throw new Error('useMenuContext must be used within NavigationProvider');
-  }
-  return context;
+    const context = useContext(MenuContext);
+    if (!context) {
+        throw new Error('useMenuContext must be used within NavigationProvider');
+    }
+    return context;
 };
 
 const hasPermission = (item: MenuItem, user?: Payload): boolean => {

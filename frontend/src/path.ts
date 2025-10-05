@@ -4,6 +4,8 @@ export abstract class Path {
 
     public static readonly SIGN_IN = '/sign-in';
     public static readonly SIGN_UP = '/sign-up';
+
+    public static readonly PROFILE = '/profile/:uid';
     
     public static readonly ERROR_PAGE = '/error';
 
@@ -22,4 +24,5 @@ export abstract class Path {
     public static getDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES}/${code}`;
     public static getEditDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES_EDIT.replace(':code', code)}`;
     public static getDictionaryGroupFormPath = (dictionaryCode: string, groupCode: string) => `${Path.ADMIN_DICTIONARIES_GROUP.replace(':dictionaryCode', dictionaryCode).replace(':groupCode', groupCode)}`;
+    public static getProfilePath = (uid: string) => `${Path.PROFILE.replace(':uid', uid)}`;
 }

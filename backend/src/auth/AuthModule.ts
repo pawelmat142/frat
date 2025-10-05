@@ -5,6 +5,8 @@ import { AuthController } from './AuthController';
 import { EmailModule } from 'email/EmailModule';
 import { FirebaseConfig } from './services/FirebaseConfig';
 import { UserModule } from 'user/UserModule';
+import { JwtAuthGuard } from './guards/JwtAuthGuard';
+import { RolesGuard } from './guards/RolesGuard';
 
 @Module({
   imports: [
@@ -16,9 +18,11 @@ import { UserModule } from 'user/UserModule';
   ],
   providers: [
     AuthService,
-    FirebaseConfig
+    FirebaseConfig,
+    JwtAuthGuard,
+    RolesGuard,
   ],
   exports: [
-  ],
+  ],  
 })
 export class AuthModule {}

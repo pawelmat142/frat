@@ -5,24 +5,51 @@ import { MyHttpCode } from '@shared/def/http.def';
 import { PopupHandler } from 'global/providers/PopupProvider';
 import { BtnModes } from 'global/interface/controls.interface';
 import { Path } from '../../path';
+import { FirebaseAuth } from 'auth/services/FirebaseAuth';
 
 const API_URL = process.env.REACT_APP_API_URL || '/api';
 
 export const queryClient = new QueryClient();
 
 export class HttpClient {
+
   private axiosInstance = axios.create({
     baseURL: API_URL,
     withCredentials: true,
   });
 
   private popupHandler?: PopupHandler;
+  private navigate?: (path: string, options?: { replace?: boolean }) => void;
 
   setPopupHandler(handler: PopupHandler) {
     this.popupHandler = handler;
   }
 
+  setNavigate(navigate: (path: string, options?: { replace?: boolean }) => void) {
+    this.navigate = navigate;
+  }
+
   constructor() {
+    // Request interceptor - automatycznie dodaj token do każdego requesta
+    this.axiosInstance.interceptors.request.use(
+      async (config) => {
+
+        // Custom flag to skip auth header
+        if (config.skipAuth) {
+          return config;
+        }
+
+        const token = await FirebaseAuth.getCurrentIdToken();
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    // Response interceptor - obsługa błędów
     this.axiosInstance.interceptors.response.use(
       response => response,
       error => {
@@ -74,7 +101,11 @@ export class HttpClient {
     console.error(error);
     const msg = this.getErrorMsg(error);
     this.storeErrorMsg(msg);
-    window.location.replace(Path.ERROR_PAGE);
+    if (this.navigate) {
+      this.navigate(Path.ERROR_PAGE, { replace: true });
+    } else {
+      window.location.replace(Path.ERROR_PAGE);
+    }
   }
 
   private async handlePopupException(error: AxiosError) {
@@ -115,6 +146,11 @@ export class HttpClient {
           break;
         case MyHttpCode.POPUP_ERROR: //462
           this.handlePopupException(error);
+          break;
+
+        case 401: // Unauthorized
+          FirebaseAuth.getAuth().signOut();
+          toast.info('Session expired, please log in again');
           break;
         default:
           this.handleSWW(error);
