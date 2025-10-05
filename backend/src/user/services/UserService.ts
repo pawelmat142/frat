@@ -3,12 +3,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserRepo } from './UserRepo';
 import { UserEntity } from 'user/model/UserEntity';
 import { CreateUser } from 'user/model/UserInterface';
-import { UserI, UserStatuses } from '@shared/interfaces/UserI';
+import { UserI, UserRole, UserRoles } from '@shared/interfaces/UserI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { Subject } from 'rxjs';
-import { DecodedIdToken } from 'firebase-admin/auth';
-import { Util } from '@shared/utils/util';
-import { UserUtil } from 'user/UserUtil';
 
 
 @Injectable()
@@ -61,5 +58,23 @@ export class UserService {
         }
         this.logger.log(`Deleted user: ${user.userId} / ${deleted.email}`);
         this._userDeletedEvent$.next(deleted);
+    }
+
+    public async assignRoleForUser(uid: string, role: UserRole): Promise<UserI> {
+        if (!Object.values(UserRoles).includes(role)) {
+            throw new ToastException(`Invalid role ${role}`, this)
+        }
+        const user = await this.userRepo.getUserByUid(uid);
+        if (!user) {
+            throw new ToastException('User not found', this);
+        }
+        if (user.roles.includes(role)) {
+            throw new ToastException('User already has this role', this);
+        }
+        user.roles.push(role)
+        const result = await this.userRepo.updateEntity(user);
+
+        this.logger.log(`Assigned role '${role}' to user: ${user.userId} / ${user.email}`);
+        return result;
     }
 }

@@ -1,6 +1,6 @@
-import { Controller, Delete, Get, Param, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Controller, Delete, Get, Param, Put, UseGuards, UseInterceptors } from "@nestjs/common";
 import { LogInterceptor } from "global/interceptors/LogInterceptor";
-import { UserI, UserRoles } from "@shared/interfaces/UserI";
+import { UserI, UserRole, UserRoles } from "@shared/interfaces/UserI";
 import { UsersAdminService } from "./UsersAdminService";
 import { RolesGuard } from "auth/guards/RolesGuard";
 import { Roles } from "auth/decorators/RolesDecorator";
@@ -25,6 +25,14 @@ export class UsersAdminController {
     @Roles(UserRoles.SUPERADMIN)
     deleteUser(@Param('uid') uid: string): Promise<void> {
         return this.usersAdminService.deleteUser(uid);
+    }
+
+    @Put(':uid/assign-role/:role')
+    assignRoleForUser(
+        @Param('uid') uid: string,
+        @Param('role') role: UserRole
+    ): Promise<UserI> {
+        return this.usersAdminService.assignRoleForUser(uid, role)
     }
 
 }

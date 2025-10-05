@@ -7,11 +7,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
+import SelectedUser from "./SelectedUser";
 
 const AdminUsers: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState<UserI[]>([]);
+    const [selectedUser, setSelectedUser] = useState<UserI | null>(null);
 
     const confirm = useConfirm();
 
@@ -39,8 +41,7 @@ const AdminUsers: React.FC = () => {
     }
 
     const onSelectUser = (user: UserI) => {
-        // TODO
-        console.log('Selected user: ', user);
+        setSelectedUser(user)
     }
 
     const handleRemoveUser = async (user: UserI) => {
@@ -48,15 +49,27 @@ const AdminUsers: React.FC = () => {
             title: "Remove User",
             message: "Are you sure you want to remove this user?",
         });
-        if (!confirmed) return; 
+        if (!confirmed) return;
 
         try {
             setLoading(true);
             await UsersAdminService.deleteUser(user.uid);
             await _initUsers();
             toast.success('User removed');
-        } catch (e) {} finally {
+        } catch (e) { } finally {
             setLoading(false);
+        }
+    }
+
+    const handleRefresh = async (user?: UserI) => {
+        if (user) {
+            const newUsers = users.map(u => {
+                if (u.uid === user.uid) {
+                    return user
+                }
+                return u
+            })
+            setUsers(newUsers)
         }
     }
 
@@ -89,11 +102,11 @@ const AdminUsers: React.FC = () => {
                                 </tr>
                             ) : (
                                 users.map((user, idx) => {
-                                    const isActive = user.status === UserStatuses.ACTIVE;
+                                    const isSelected = selectedUser?.uid === user.uid;
                                     return (
                                         <tr
                                             key={idx}
-                                            className={`hover-bg transition cursor-pointer${isActive ? ' active' : ''}`}
+                                            className={`hover-bg transition cursor-pointer${isSelected ? ' active' : ''}`}
                                             style={{ userSelect: 'none' }}
                                             onClick={() => onSelectUser(user)}
                                         >
@@ -119,6 +132,8 @@ const AdminUsers: React.FC = () => {
                     </table>
 
                 </div>
+
+                <SelectedUser user={selectedUser} onRefresh={handleRefresh} />
 
             </div>
         </div>

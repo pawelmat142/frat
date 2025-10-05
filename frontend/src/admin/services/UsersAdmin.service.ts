@@ -1,4 +1,4 @@
-import { UserI } from '@shared/interfaces/UserI';
+import { UserI, UserRole } from '@shared/interfaces/UserI';
 import { httpClient } from 'global/services/http';
 
 export const UsersAdminService = {
@@ -9,5 +9,9 @@ export const UsersAdminService = {
 
 	deleteUser(uid: string): Promise<void> {
 		return httpClient.delete<void>(`/admin/users/delete-user/${uid}`);
+	},
+
+	assignRoleForUser(uid: string, role: UserRole): Promise<UserI> {
+		return httpClient.put<UserI>(`/admin/users/${uid}/assign-role/${role}`);
 	}
 };

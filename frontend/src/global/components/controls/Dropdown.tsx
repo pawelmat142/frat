@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { DropdownInterface, DropdownItem } from '../../interface/controls.interface';
+import { DropdownInterface, DropdownItem, DropdownValue } from '../../interface/controls.interface';
 import ControlLabel from './ControlLabel';
 import DropdownOptions from './DropdownOptions';
 
@@ -14,7 +14,7 @@ const ArrowIcon: React.FC<{ open: boolean }> = ({ open }) => (
     </span>
 );
 
-const Dropdown: React.FC<DropdownInterface> = ({
+const Dropdown = <T extends DropdownValue = DropdownValue>({
     type = 'single',
     items,
     value,
@@ -27,7 +27,7 @@ const Dropdown: React.FC<DropdownInterface> = ({
     required = false,
     center = false,
     className = ''
-}) => {
+}: DropdownInterface<T>) => {
 
     if (type === 'multi' && !onMultiSelect) {
         throw new Error("onMultiSelect prop is required for multi-select dropdowns");
@@ -55,7 +55,7 @@ const Dropdown: React.FC<DropdownInterface> = ({
 
 
 
-    const handleSingleSelect = (item: DropdownItem | null) => {
+    const handleSingleSelect = (item: DropdownItem<T> | null) => {
         if (type === 'single' && onSingleSelect) {
             if (item?.value === value?.value) {
                 onSingleSelect(null);

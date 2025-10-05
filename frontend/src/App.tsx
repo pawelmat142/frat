@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Path } from './path';
 import AdminPanelPage from './admin/views/AdminPanelPage';
@@ -37,10 +37,14 @@ const App: React.FC = () => {
     const direction = location.state?.direction === 'back' ? -1 : 1;
 
     const popup = usePopup();
-    // Inject popup handler into httpClient
+    const navigate = useNavigate()
+    
     React.useEffect(() => {
         httpClient.setPopupHandler(popup);
     }, [popup]);
+    React.useEffect(() => {
+        httpClient.setNavigate(navigate);
+    }, [navigate]);
 
     return (
         <AnimatePresence mode="wait">

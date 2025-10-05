@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { UserI } from "@shared/interfaces/UserI";
+import { UserI, UserRole } from "@shared/interfaces/UserI";
 import { UserService } from "user/services/UserService";
 
 @Injectable()
@@ -17,5 +17,9 @@ export class UsersAdminService {
 
     public deleteUser(uid: string): Promise<void> { 
         return this.userService.deleteUser(uid)
+    }
+
+    public assignRoleForUser(uid: string, role: UserRole): Promise<UserI> {
+        return this.userService.assignRoleForUser(uid, role)
     }
 }

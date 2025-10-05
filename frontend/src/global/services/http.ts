@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import { t } from 'global/i18n';
 import { QueryClient } from '@tanstack/react-query';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { MyHttpCode } from '@shared/def/http.def';
@@ -43,7 +44,7 @@ export class HttpClient {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
-        
+
         return config;
       },
       (error) => Promise.reject(error)
@@ -150,13 +151,16 @@ export class HttpClient {
 
         case 401: // Unauthorized
           FirebaseAuth.getAuth().signOut();
-          toast.info('Session expired, please log in again');
+          toast.warn(String(t('authError.sessionExpired')));
+          if (this.navigate) {
+            this.navigate(Path.SIGN_IN);
+          }
           break;
         default:
           this.handleSWW(error);
       }
     } else {
-      toast.error('Network error');
+      toast.error(String(t('common.networkError')));
     }
   }
 

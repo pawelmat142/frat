@@ -1,12 +1,15 @@
 /** Created by Pawel Malek **/
-import { CanActivate, ExecutionContext, Injectable, ForbiddenException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, ForbiddenException, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { UserRole } from '@shared/interfaces/UserI';
+import { AuthValidators } from '@shared/validators/AuthValidator';
 import { ROLES_KEY } from 'auth/decorators/RolesDecorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(private reflector: Reflector) { }
+
+  private readonly logger = new Logger(this.constructor.name)
 
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(ROLES_KEY, [
@@ -19,19 +22,24 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    const { user } = context.switchToHttp().getRequest();
-    
+    const { user, url } = context.switchToHttp().getRequest();
+
     if (!user) {
-      throw new ForbiddenException('User not authenticated');
+      this.throwForbidden('User not authenticated', url);
     }
 
     // Sprawdź czy user ma przynajmniej jedną z wymaganych ról
-    const hasRole = requiredRoles.some((role) => user.roles?.includes(role));
-    
+    const hasRole = AuthValidators.hasPermission(requiredRoles, user);
+
     if (!hasRole) {
-      throw new ForbiddenException('Insufficient permissions');
+      this.throwForbidden('Insufficient permissions', url);
     }
 
     return true;
+  }
+
+  throwForbidden(msg: string, url: string) {
+    this.logger.warn(`[${url}] ${msg}`);
+    throw new ForbiddenException(msg);
   }
 }

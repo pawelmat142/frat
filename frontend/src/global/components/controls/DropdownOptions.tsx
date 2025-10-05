@@ -1,17 +1,18 @@
-import React from 'react';
-import { DropdownInterface } from '../../interface/controls.interface';
+import { DropdownItem, DropdownValue } from '../../interface/controls.interface';
 
-interface DropdownOptionsProps {
-    items: DropdownInterface['items'];
-    value: DropdownInterface['value'];
-    onSingleSelect?: DropdownInterface['onSingleSelect'];
-    onMultiSelect?: DropdownInterface['onMultiSelect'];
+
+interface DropdownOptionsProps<T extends DropdownValue = DropdownValue> {
+    items: DropdownItem<T>[];
+    value: DropdownItem<T> | null;
+    onSingleSelect?: (item: DropdownItem<T> | null) => void;
+    onMultiSelect?: (items: DropdownItem<T>[]) => void;
     open: boolean;
     disabled?: boolean;
-    type?: DropdownInterface['type'];
+    type?: 'single' | 'multi';
 }
 
-const DropdownOptions: React.FC<DropdownOptionsProps> = ({
+
+const DropdownOptions = <T extends DropdownValue = DropdownValue>({
     items,
     value,
     onSingleSelect,
@@ -19,8 +20,8 @@ const DropdownOptions: React.FC<DropdownOptionsProps> = ({
     open,
     disabled = false,
     type = 'single',
-}) => {
-    const handleSelect = (item: typeof items[0]) => {
+}: DropdownOptionsProps<T>) => {
+    const handleSelect = (item: DropdownItem<T>) => {
         if (disabled) return;
         if (type === 'single' && onSingleSelect) {
             onSingleSelect(item);
@@ -30,13 +31,11 @@ const DropdownOptions: React.FC<DropdownOptionsProps> = ({
     if (!open) return null;
 
     return (
-        <ul
-            className="pp-dropdown-list"
-        >
+        <ul className="pp-dropdown-list">
             {items.map(item => (
                 <li
                     key={String(item.value)}
-                    className={`dropdown-item${String(item.value) === String(value) ? ' active' : ''}`}
+                    className={`dropdown-item${String(item.value) === String(value?.value) ? ' active' : ''}`}
                     onClick={() => handleSelect(item)}
                     tabIndex={0}
                     onKeyDown={e => {

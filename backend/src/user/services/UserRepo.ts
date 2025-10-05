@@ -51,6 +51,11 @@ export class UserRepo {
         return this.userRepository.remove(user);
     }
 
+    public updateEntity(user: UserEntity): Promise<UserEntity> {
+        user.version++
+        return this.userRepository.save(user)
+    }
+
     // admin panel purpose
     public listUsers(): Promise<UserI[]> {
         return this.userRepository.find({

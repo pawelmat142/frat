@@ -1,0 +1,3 @@
+
+### assignRoleForUser
+PUT http://localhost:3100/api/admin/users/KVRxhWUQWVad0k0fh6PXGFd3Z623/assign-role/xxx

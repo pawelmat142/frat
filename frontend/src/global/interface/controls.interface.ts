@@ -54,12 +54,12 @@ export interface InputInterface {
     valueType?: DictionaryColumnType
 }
 
-export interface DropdownInterface {
-    type: 'single' | 'multi';
-    items: DropdownItem[];
-    value: DropdownItem | null;
-    onSingleSelect?: (item: DropdownItem | null) => void;
-    onMultiSelect?: (items: DropdownItem[]) => void;
+export interface DropdownInterface<T extends DropdownValue = DropdownValue> {
+    type?: 'single' | 'multi';
+    items: DropdownItem<T>[];
+    value: DropdownItem<T> | null;
+    onSingleSelect?: (item: DropdownItem<T> | null) => void;
+    onMultiSelect?: (items: DropdownItem<T>[]) => void;
     id?: string;
     label?: string;
     fullWidth?: boolean;
@@ -69,8 +69,10 @@ export interface DropdownInterface {
     className?: string;
 }
 
-export interface DropdownItem {
+export type DropdownValue = string | number | Date;
+
+export interface DropdownItem<T extends DropdownValue = DropdownValue> {
     label: string;
-    value: string | number | Date;
+    value: T;
     icon?: React.ReactNode;
 }
