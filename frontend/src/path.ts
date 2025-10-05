@@ -4,6 +4,7 @@ export abstract class Path {
 
     public static readonly SIGN_IN = '/sign-in';
     public static readonly SIGN_UP = '/sign-up';
+    public static readonly FORGOT_PASSWORD = '/forgot-password';
 
     public static readonly PROFILE = '/profile/:uid';
     

@@ -3,6 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { EmailConfig } from './EmailConfig';
 import axios from 'axios';
 import { Util } from '@shared/utils/util';
+import { ToastException } from 'global/exceptions/ToastException';
 
 export interface SendEmailParams {
     to_email: string;
@@ -38,7 +39,7 @@ export class EmailService {
         const response = await axios.post(this.EMAILJS_API_URL, payload, {
             headers: {
                 'Content-Type': 'application/json',
-            },  
+            },
         });
 
         if (response.status === 200) {
@@ -52,11 +53,9 @@ export class EmailService {
         email: string,
         verificationLink: string,
     ): Promise<boolean> {
-        const replyToEmail = process.env.EMAILJS_REPLY_TO_EMAIL;
-        console.log('Reply-To Email:', replyToEmail);
         return this.sendEmail({
             to_email: email,
-            email: replyToEmail,
+            email: this.replyToEmail,
             name: 'FRAT Support',
             time: Util.displayDateWithTime(new Date()),
             subject: 'Email Verification',
@@ -65,18 +64,26 @@ export class EmailService {
         });
     }
 
-    // TODO
     async sendPasswordResetEmail(
         email: string,
         resetLink: string,
     ): Promise<boolean> {
         return this.sendEmail({
-            name: email,
             to_email: email,
-            email: email,
-            subject: 'Password Reset',
-            message: `Reset your password by clicking the link: ${resetLink}`,
-            reset_link: resetLink,
+            email: this.replyToEmail,
+            name: 'FRAT Support',
+            time: Util.displayDateWithTime(new Date()),
+            subject: 'Password reset',
+            message: `Please reset your password by clicking the link:`,
+            verification_link: resetLink,
         });
+    }
+
+    private get replyToEmail(): string {
+        const replyToEmail = process.env.EMAILJS_REPLY_TO_EMAIL;
+        if (!replyToEmail) {
+            throw new ToastException('ReplyToEmail not found', this)
+        }
+        return replyToEmail
     }
 }

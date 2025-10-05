@@ -39,6 +39,10 @@ export class UserRepo {
         return this.userRepository.findOneBy({ uid });
     }
 
+    public findUserByEmail(email: string): Promise<UserEntity | null> {
+        return this.userRepository.findOneBy({ email });
+    }
+
     public existsByUid(uid: string): Promise<boolean> {
         return this.userRepository.exists({ where: { uid } });
     }

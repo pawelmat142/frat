@@ -127,6 +127,28 @@ const TranslationsSection: React.FC = () => {
 
     return (
         <>
+            <div className="flex gap-2 mb-10 mt-20">
+                <Buton onClick={() => onShowForm()} mode={BtnModes.PRIMARY_TXT}>
+                    {showForm ? 'Cancel' : 'Add translation'}
+                </Buton>
+
+                {showForm ?
+                    <Buton onClick={onAddTranslation} disabled={!newPath || !newValue}>Ready</Buton>
+                    :
+                    <Buton onClick={onSave}>Save translations</Buton>
+                }
+
+                {selectedTranslation && (
+                    <Buton
+                        mode={BtnModes.PRIMARY_TXT}
+                        onClick={handleExportTranslation}
+                    >Export JSON ({selectedTranslation.langCode})</Buton>
+                )}
+
+                <SelectFileButton onFileSelected={handleImportTranslation} label="Import JSON" />
+
+            </div>
+
             <h2 className="font-mono font-bold mb-2 mt-10">Selected language: {translation?.selectedLanguage}</h2>
 
             {selectedTranslation && (<div className="overflow-x-auto w-full rounded-lg shadow border border-color secondary-bg">
@@ -182,27 +204,7 @@ const TranslationsSection: React.FC = () => {
             )
             }
 
-            <div className="flex gap-2 my-10">
-                <Buton onClick={() => onShowForm()} mode={BtnModes.PRIMARY_TXT}>
-                    {showForm ? 'Cancel' : 'Add translation'}
-                </Buton>
 
-                {showForm ?
-                    <Buton onClick={onAddTranslation} disabled={!newPath || !newValue}>Ready</Buton>
-                    :
-                    <Buton onClick={onSave}>Save translations</Buton>
-                }
-
-                {selectedTranslation && (
-                    <Buton
-                        mode={BtnModes.PRIMARY_TXT}
-                        onClick={handleExportTranslation}
-                    >Export JSON ({selectedTranslation.langCode})</Buton>
-                )}
-
-                <SelectFileButton onFileSelected={handleImportTranslation} label="Import JSON" />
-
-            </div>
 
         </>
     )

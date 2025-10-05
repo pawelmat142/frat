@@ -34,6 +34,10 @@ export class UserService {
         return this.userRepo.getUserByUid(uid);
     }
 
+    public findUserByEmail(email: string): Promise<UserEntity | null> {
+        return this.userRepo.findUserByEmail(email);
+    }
+
     public async getOrCreateUserEntity(decodedToken: DecodedIdToken): Promise<UserI | null> {
         const existingUser = await this.userRepo.getUserByUid(decodedToken.uid);
 

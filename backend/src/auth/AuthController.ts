@@ -6,6 +6,7 @@ import {
   Post,
   Get,
   Body,
+  Param,
 } from '@nestjs/common';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { AuthService } from './services/AuthService';
@@ -39,6 +40,11 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   sendVerificationEmail(@CurrentUser() user: UserI): Promise<void> {
     return this.authService.sendVerificationEmail(user.email, user.uid);
+  }
+
+  @Get('send-password-reset-email/:email')
+  sendPasswordResetEmail(@Param('email') email: string): Promise<void> {
+    return this.authService.sendPasswordResetEmail(email);
   }
 
   // EXAMPLE PROTECTED ENDPOINT

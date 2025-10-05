@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Path } from "../../path";
 import Loading from "global/components/Loading";
 import GoogleIcon from '@mui/icons-material/Google';
+import Email from '@mui/icons-material/Email';
 
 const SignInPage: React.FC = () => {
     const { t } = useTranslation();
@@ -93,6 +94,17 @@ const SignInPage: React.FC = () => {
 
                 <div className="buttons">
                     <Buton
+                        mode={BtnModes.SECONDARY_TXT}
+                        size={BtnSizes.SMALL}
+                        className="ml-auto mb-10"
+                        onClick={() => {
+                            navigate(Path.FORGOT_PASSWORD);
+                        }}
+                    >
+                        {t("signin.forgotPassword")}
+                    </Buton>
+
+                    <Buton
                         mode={BtnModes.PRIMARY}
                         size={BtnSizes.LARGE}
                         fullWidth={true}
@@ -101,17 +113,6 @@ const SignInPage: React.FC = () => {
                         disabled={loading || !email || !password}
                     >
                         {loading ? t("signin.signingIn") : t("signin.submit")}
-                    </Buton>
-
-                    <Buton
-                        mode={BtnModes.PRIMARY_TXT}
-                        fullWidth={true}
-                        className="mt-5"
-                        onClick={() => {
-                            navigate(Path.SIGN_UP);
-                        }}
-                    >
-                        {t("signin.signUpForm")}
                     </Buton>
 
                     <Buton
@@ -124,6 +125,19 @@ const SignInPage: React.FC = () => {
                         <GoogleIcon />
                         {t("signin.googleProvider")}
                     </Buton>
+
+                    <Buton
+                        mode={BtnModes.PRIMARY_TXT}
+                        fullWidth={true}
+                        className="mt-5"
+                        onClick={() => {
+                            navigate(Path.SIGN_UP);
+                        }}
+                    >
+                        <Email />
+                        {t("signin.signUpForm")}
+                    </Buton>
+
                 </div>
             </form>
         </div>

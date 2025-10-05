@@ -101,6 +101,22 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
+  public async sendPasswordResetEmail(email: string): Promise<void> {
+    const user = await this.userService.findUserByEmail(email);
+
+    if (user?.provider !== UserProviders.EMAIL) {
+      throw new ToastException('authError.passwordResetNotAvailable', this);
+    }
+    try {
+      const verificationLink = await this.firebaseAuth.generatePasswordResetLink(user.email);
+      await this.emailService.sendPasswordResetEmail(user.email, verificationLink);
+      this.logger.log('Password reset email sent to user');
+    } catch (error) {
+      this.logger.error(error);
+      throw new ToastException('authError.passwordResetNotError', this);
+    }
+  }
+
   private startSubscription() {
     this.subscription.add(
       this.userService.userDeletedEvent.subscribe(async (user) => {

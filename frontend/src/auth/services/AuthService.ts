@@ -77,6 +77,10 @@ export const AuthService = {
 		return httpClient.get('/auth/send-verification-email');
 	},
 
+	sendPasswordResetEmail(email: string): Promise<void> {
+		return httpClient.get(`/auth/send-password-reset-email/${email}`)
+	},
+
 	handleFireAuthError(error: any) {
 		const msg = AuthValidators.handleFireAuthError(error);
 		if (msg) {

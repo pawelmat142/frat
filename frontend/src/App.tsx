@@ -17,6 +17,7 @@ import SignUpPage from 'auth/views/SignUpPage';
 import AdminUsers from 'admin/views/users/AdminUsers';
 import SignInPage from 'auth/views/SignInPage';
 import ProfilePage from 'user/views/ProfilePage';
+import ForgotPassword from 'auth/views/ForgotPassword';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -51,6 +52,7 @@ const App: React.FC = () => {
 
                 <Route path={Path.SIGN_IN} element={<PageWrapper direction={1}><SignInPage /></PageWrapper>} />
                 <Route path={Path.SIGN_UP} element={<PageWrapper direction={1}><SignUpPage /></PageWrapper>} />
+                <Route path={Path.FORGOT_PASSWORD} element={<PageWrapper direction={1}><ForgotPassword /></PageWrapper>} />
 
                 <Route path={Path.ERROR_PAGE} element={<ErrorPage />} />
                
