@@ -8,8 +8,6 @@ import { MyHttpCode } from '@shared/def/http.def';
  * Shows yellow toast with warning message on frontend
  * HTTP Status: 461 (Custom Toast Warning)
  */
-// TODO implementacja na frontcie
-
 export class ToastWarningException extends HttpException {
   constructor(message: string, source?: any, details?: any) {
     super(

@@ -23,7 +23,7 @@ const AdminDictionaries: React.FC = () => {
             .finally(() => setLoading(false));
     }
     
-    // TODO po edycji kolumny dodaje sie nowa zamiast edytowac stara
+    // TODO BUG po edycji kolumny dodaje sie nowa zamiast edytowac stara
 
     useEffect(() => {
         loadDictionaries();

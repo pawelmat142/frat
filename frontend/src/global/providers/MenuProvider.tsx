@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useMemo, ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
-import { MenuItem, Payload } from '../interfaces';
+import { MenuItem } from '../interfaces';
 import { Path } from '../../path';
 import { useAuthContext } from 'auth/AuthProvider';
+import { UserI } from '@shared/interfaces/UserI';
+import { AuthValidators } from '@shared/validators/AuthValidator';
 
 interface MenuContextType {
     allMenuItems: MenuItem[];
@@ -13,12 +15,10 @@ const MenuContext = createContext<MenuContextType | undefined>(undefined)
 
 interface NavigationProviderProps {
     children: ReactNode;
-    user?: Payload;
 }
 
 export const MenuProvider: React.FC<NavigationProviderProps> = ({
     children,
-    user
 }) => {
     const location = useLocation();
     const { userI, isAuthenticated } = useAuthContext();
@@ -51,9 +51,9 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
 
     const filteredMenuItems = useMemo(() =>
         allMenuItems.filter(item =>
-            !item.rolesGuard || hasPermission(item, user)
+            !item.rolesGuard || hasPermission(item, userI)
         ),
-        [allMenuItems, user]
+        [allMenuItems, userI]
     );
 
     const value: MenuContextType = {
@@ -87,9 +87,6 @@ export const useMenuContext = () => {
     return context;
 };
 
-const hasPermission = (item: MenuItem, user?: Payload): boolean => {
-    if (!item.rolesGuard) {
-        return true;
-    }
-    return item.rolesGuard.some(role => user?.roles.includes(role));
+const hasPermission = (item: MenuItem, user?: UserI | null): boolean => {
+    return AuthValidators.hasPermission(item.rolesGuard, user)
 };
