@@ -1,14 +1,16 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { DropdownInterface, DropdownItem, DropdownValue } from '../../interface/controls.interface';
+import { DropdownItem, DropdownValue, MultiDropdownProps } from '../../interface/controls.interface';
 import ControlLabel from './ControlLabel';
 import DropdownOptions from './DropdownOptions';
 import ArrowIcon from './ArrowIcon';
+import { on } from 'events';
 
-const Dropdown = <T extends DropdownValue = DropdownValue>({
+
+
+const MultiDropdown = <T extends DropdownValue = DropdownValue>({
     items,
-    value,
-    onSelect: onSingleSelect,
+    values,
+    onSelect,
     id,
     label,
     fullWidth = false,
@@ -16,11 +18,7 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
     required = false,
     center = false,
     className = ''
-}: DropdownInterface<T>) => {
-
-    if (!onSingleSelect) {
-        throw new Error("onSingleSelect prop is required for single-select dropdowns");
-    }
+}: MultiDropdownProps<T>) => {
 
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -39,13 +37,8 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [open]);
 
-    const handleSingleSelect = (item: DropdownItem<T> | null) => {
-        if (item?.value === value?.value) {
-            onSingleSelect(null);
-        } else {
-            onSingleSelect(item);
-        }
-        setOpen(false);
+    const handleMultiSelect = (items: DropdownItem<T>[]) => {
+        onSelect(items);
     };
 
     return (
@@ -60,28 +53,35 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
                 tabIndex={disabled ? -1 : 0}
                 aria-disabled={disabled}
                 aria-expanded={open}
-                onClick={() => !disabled && setOpen((prev) => !prev)}
+                onClick={() => {
+                    if (disabled) return;
+                    if (!open) setOpen(true);
+                }}
                 onKeyDown={e => {
                     if (disabled) return;
-                    if (e.key === 'Enter' || e.key === ' ') setOpen((prev) => !prev);
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        if (!open) setOpen(true);
+                    }
                     if (e.key === 'Escape') setOpen(false);
                 }}
             >
                 <span className="dropdown-selected">
-                    {value?.label || <span className="secondary-text">select...</span>}
+                    {Array.isArray(values) && values.length > 0
+                        ? values.map(v => v.label).join(', ')
+                        : <span className="secondary-text">select...</span>}
                 </span>
                 <ArrowIcon open={open} />
                 <DropdownOptions
                     items={items}
-                    value={value ?? null}
-                    onSingleSelect={handleSingleSelect}
+                    value={values ?? []}
+                    onMultiSelect={handleMultiSelect}
                     open={open}
                     disabled={disabled}
-                    type="single"
+                    type="multi"
                 />
             </div>
         </div>
     );
 };
 
-export default Dropdown;
+export default MultiDropdown;

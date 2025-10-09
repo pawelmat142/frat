@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { UserI, UserRole, UserRoles } from "@shared/interfaces/UserI";
 import Buton from "global/components/controls/Buton";
 import { BtnModes, DropdownItem } from "global/interface/controls.interface";
-import Dropdown from "global/components/controls/Dropdown";
 import { UsersAdminService } from "admin/services/UsersAdmin.service";
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
+import MultiDropdown from "global/components/controls/MultiDropdown";
 
 interface SelectedUserProps {
     user: UserI | null;
@@ -80,14 +80,12 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
             {assignRoleForm && (<>
 
                 <div className="flex gap-5 items-center my-5">
-                    <Dropdown
+                    <MultiDropdown<UserRole>
                         fullWidth
-                        type='multi'
                         className="w-1/3"
                         items={items}
-                        // value={assignRolesValue}
                         values={assignRolesValue}
-                        onMultiSelect={setAssignRolesValue}
+                        onSelect={setAssignRolesValue}
                     />
                     {assignRoleForm && !!assignRolesValue.length && (
                         <Buton

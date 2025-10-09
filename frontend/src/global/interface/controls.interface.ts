@@ -55,12 +55,22 @@ export interface InputInterface {
 }
 
 export interface DropdownInterface<T extends DropdownValue = DropdownValue> {
-    type?: 'single' | 'multi';
     items: DropdownItem<T>[];
-    value?: DropdownItem<T> | null;
-    values?: DropdownItem<T>[];
-    onSingleSelect?: (item: DropdownItem<T> | null) => void;
-    onMultiSelect?: (items: DropdownItem<T>[]) => void;
+    value: DropdownItem<T> | null;
+    onSelect: (item: DropdownItem<T> | null) => void;
+    id?: string;
+    label?: string;
+    fullWidth?: boolean;
+    disabled?: boolean;
+    required?: boolean;
+    center?: boolean;
+    className?: string;
+}
+
+export interface MultiDropdownProps<T extends DropdownValue = DropdownValue> {
+    items: DropdownItem<T>[];
+    values: DropdownItem<T>[];
+    onSelect: (items: DropdownItem<T>[]) => void;
     id?: string;
     label?: string;
     fullWidth?: boolean;

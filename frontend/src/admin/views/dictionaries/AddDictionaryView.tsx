@@ -220,13 +220,12 @@ const AddDictionaryView: React.FC = () => {
           {columnForm && (<div className="flex flex-col gap-3 border-t pt-3 mt-3">
 
             <Dropdown
-              type="single"
               items={columnTypeOptions}
               value={columnForm.type}
               fullWidth
               label="Column Type"
               required
-              onSingleSelect={item => {
+              onSelect={item => {
                 setColumnForm({ ...columnForm, type: item });
               }}
             />
