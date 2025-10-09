@@ -11,7 +11,7 @@ export const UsersAdminService = {
 		return httpClient.delete<void>(`/admin/users/delete-user/${uid}`);
 	},
 
-	assignRoleForUser(uid: string, role: UserRole): Promise<UserI> {
-		return httpClient.put<UserI>(`/admin/users/${uid}/assign-role/${role}`);
+	assignRoleForUser(uid: string, roles: UserRole[]): Promise<UserI> {
+		return httpClient.put<UserI>(`/admin/users/${uid}/assign-roles`, { roles });
 	}
 };

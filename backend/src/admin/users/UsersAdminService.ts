@@ -19,7 +19,7 @@ export class UsersAdminService {
         return this.userService.deleteUser(uid)
     }
 
-    public assignRoleForUser(uid: string, role: UserRole): Promise<UserI> {
-        return this.userService.assignRoleForUser(uid, role)
+    public assignRolesForUser(uid: string, roles: UserRole[]): Promise<UserI> {
+        return this.userService.assignRolesForUser(uid, roles)
     }
 }

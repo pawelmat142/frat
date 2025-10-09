@@ -57,7 +57,8 @@ export interface InputInterface {
 export interface DropdownInterface<T extends DropdownValue = DropdownValue> {
     type?: 'single' | 'multi';
     items: DropdownItem<T>[];
-    value: DropdownItem<T> | null;
+    value?: DropdownItem<T> | null;
+    values?: DropdownItem<T>[];
     onSingleSelect?: (item: DropdownItem<T> | null) => void;
     onMultiSelect?: (items: DropdownItem<T>[]) => void;
     id?: string;

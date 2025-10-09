@@ -60,21 +60,23 @@ export class UserService {
         this._userDeletedEvent$.next(deleted);
     }
 
-    public async assignRoleForUser(uid: string, role: UserRole): Promise<UserI> {
-        if (!Object.values(UserRoles).includes(role)) {
-            throw new ToastException(`Invalid role ${role}`, this)
+    public async assignRolesForUser(uid: string, roles: UserRole[]): Promise<UserI> {
+        if (!roles?.length) {
+            throw new ToastException('Missing roles', this)
+        }
+        for (const role of roles) {
+            if (!Object.values(UserRoles).includes(role)) {
+                throw new ToastException(`Invalid role ${role}`, this)
+            }
         }
         const user = await this.userRepo.getUserByUid(uid);
         if (!user) {
             throw new ToastException('User not found', this);
         }
-        if (user.roles.includes(role)) {
-            throw new ToastException('User already has this role', this);
-        }
-        user.roles.push(role)
-        const result = await this.userRepo.updateEntity(user);
+        user.roles = roles;
 
-        this.logger.log(`Assigned role '${role}' to user: ${user.userId} / ${user.email}`);
+        const result = await this.userRepo.updateEntity(user);
+        this.logger.log(`Assigned roles '${roles.join(', ')}' to user: ${user.userId} / ${user.email}`);
         return result;
     }
 }

@@ -18,6 +18,7 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
     type = 'single',
     items,
     value,
+    values,
     onSingleSelect,
     onMultiSelect,
     id,
@@ -47,11 +48,11 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
                 if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                     setOpen(false);
                 }
-            })
+            });
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [open]);
+    }, [open, type]);
 
 
 
@@ -62,6 +63,13 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
             } else {
                 onSingleSelect(item);
             }
+            setOpen(false);
+        }
+    };
+
+    const handleMultiSelect = (items: DropdownItem<T>[]) => {
+        if (type === 'multi' && onMultiSelect) {
+            onMultiSelect(items);
         }
     };
 
@@ -78,26 +86,46 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
                 tabIndex={disabled ? -1 : 0}
                 aria-disabled={disabled}
                 aria-expanded={open}
-                onClick={() => !disabled && setOpen((prev) => !prev)}
+                onClick={() => {
+                    if (disabled) return;
+                    // Only toggle open/close on click for single-select
+                    if (type === 'single') setOpen((prev) => !prev);
+                    if (type === 'multi' && !open) setOpen(true); // open on first click, but don't close on item click
+                }}
                 onKeyDown={e => {
                     if (disabled) return;
-                    if (e.key === 'Enter' || e.key === ' ') setOpen((prev) => !prev);
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        if (type === 'single') setOpen((prev) => !prev);
+                        if (type === 'multi' && !open) setOpen(true);
+                    }
                     if (e.key === 'Escape') setOpen(false);
                 }}
             >
                 <span className="dropdown-selected">
-                    {value?.label || <span className="secondary-text">select...</span>}
+                    {type === 'multi' && Array.isArray(values) && values.length > 0
+                        ? values.map(v => v.label).join(', ')
+                        : value?.label || <span className="secondary-text">select...</span>}
                 </span>
                 <ArrowIcon open={open} />
-                <DropdownOptions
-                    items={items}
-                    value={value}
-                    onSingleSelect={handleSingleSelect}
-                    onMultiSelect={onMultiSelect}
-                    open={open}
-                    disabled={disabled}
-                    type={type}
-                />
+                {type === 'multi' ? (
+                    <DropdownOptions
+                        items={items}
+                        value={values ?? []}
+                        onMultiSelect={handleMultiSelect}
+                        open={open}
+                        disabled={disabled}
+                        type="multi"
+                    />
+                ) : (
+                    <DropdownOptions
+                        items={items}
+                        value={value ?? null}
+                        onSingleSelect={handleSingleSelect}
+                        open={open}
+                        disabled={disabled}
+                        type="single"
+                    />
+                )}
             </div>
         </div>
     );

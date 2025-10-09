@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UserI, UserRole, UserRoles } from "@shared/interfaces/UserI";
 import Buton from "global/components/controls/Buton";
 import { BtnModes, DropdownItem } from "global/interface/controls.interface";
@@ -14,11 +14,20 @@ interface SelectedUserProps {
 
 const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
 
-    /* TODO refaktor na assign roles i multiselect */
-
     const [assignRoleForm, setAssignRoleForm] = useState(false)
-    const [assignRoleValue, setAssignRoleValue] = useState<DropdownItem<UserRole> | null>(null)
+    const [assignRolesValue, setAssignRolesValue] = useState<DropdownItem<UserRole>[]>([])
     const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        // user changes
+        setAssignRoleForm(false)
+        setAssignRolesValue(user?.roles.map(role => ({
+            label: role,
+            value: role
+        })) || [])
+
+    }, [user])
+
 
     const assignRole = () => {
         setAssignRoleForm(true)
@@ -29,7 +38,7 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
             toast.warning('Missing user')
             return
         }
-        if (!assignRoleValue) {
+        if (!assignRolesValue?.length) {
             toast.warning('Missing role')
             return
         }
@@ -37,8 +46,10 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
         try {
             setLoading(true)
             setAssignRoleForm(false)
-            const result = await UsersAdminService.assignRoleForUser(user?.uid, assignRoleValue.value)
-            toast.success(`Assigned role '${assignRoleValue.label}' to user: ${user.uid}`);
+
+            const result = await UsersAdminService.assignRoleForUser(user?.uid, assignRolesValue.map(role => role.value))
+            
+            toast.success(`Assigned roles '${assignRolesValue.map(role => role.label).join(', ')}' to user: ${user.displayName}`);
             if (onRefresh) {
                 onRefresh(result)
             }
@@ -57,7 +68,6 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
     }
 
     const items: DropdownItem<UserRole>[] = Object.values(UserRoles)
-        .filter(role => !user.roles.includes(role))
         .map(role => ({
             label: role,
             value: role
@@ -72,12 +82,14 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
                 <div className="flex gap-5 items-center my-5">
                     <Dropdown
                         fullWidth
-                        className="w-52"
+                        type='multi'
+                        className="w-1/3"
                         items={items}
-                        value={assignRoleValue}
-                        onSingleSelect={setAssignRoleValue}
+                        // value={assignRolesValue}
+                        values={assignRolesValue}
+                        onMultiSelect={setAssignRolesValue}
                     />
-                    {assignRoleForm && !!assignRoleValue && (
+                    {assignRoleForm && !!assignRolesValue.length && (
                         <Buton
                             onClick={saveAssignRole} 
                         >Save</Buton>
@@ -91,7 +103,7 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
             </>)}
 
             <div className="flex gap-2 ">
-                {!assignRoleForm && (<Buton onClick={assignRole} mode={BtnModes.PRIMARY}>Assign role</Buton>)}
+                {!assignRoleForm && (<Buton onClick={assignRole} mode={BtnModes.PRIMARY}>Set roles</Buton>)}
             </div>
         </div>
     );
