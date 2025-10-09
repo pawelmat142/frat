@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DropdownInterface, DropdownItem, DropdownValue } from '../../interface/controls.interface';
 import ControlLabel from './ControlLabel';
-import DropdownOptions from './DropdownOptions';
 import ArrowIcon from './ArrowIcon';
 
 const Dropdown = <T extends DropdownValue = DropdownValue>({
@@ -39,13 +38,18 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [open]);
 
-    const handleSingleSelect = (item: DropdownItem<T> | null) => {
+    const handleSelect = (item: DropdownItem<T>) => {
+        if (disabled) return;
         if (item?.value === value?.value) {
             onSingleSelect(null);
         } else {
             onSingleSelect(item);
         }
         setOpen(false);
+    };
+
+    const isActive = (item: DropdownItem<T>) => {
+        return String(item.value) === String(value?.value);
     };
 
     return (
@@ -71,14 +75,23 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
                     {value?.label || <span className="secondary-text">select...</span>}
                 </span>
                 <ArrowIcon open={open} />
-                <DropdownOptions
-                    items={items}
-                    value={value ?? null}
-                    onSingleSelect={handleSingleSelect}
-                    open={open}
-                    disabled={disabled}
-                    type="single"
-                />
+                {open && (
+                    <ul className="pp-dropdown-list">
+                        {items.map(item => (
+                            <li
+                                key={String(item.value)}
+                                className={`dropdown-item${isActive(item) ? ' active' : ''}`}
+                                onClick={() => handleSelect(item)}
+                                tabIndex={0}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter' || e.key === ' ') handleSelect(item);
+                                }}
+                            >
+                                {item.label}
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </div>
     );

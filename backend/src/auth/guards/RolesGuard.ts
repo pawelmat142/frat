@@ -17,7 +17,6 @@ export class RolesGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    // Jeśli nie ma wymaganych ról, przepuść request
     if (!requiredRoles) {
       return true;
     }
