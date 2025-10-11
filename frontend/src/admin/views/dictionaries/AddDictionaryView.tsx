@@ -1,7 +1,6 @@
 import Buton from "global/components/controls/Buton";
-import Dropdown from "global/components/controls/Dropdown";
+import Selector from "global/components/controls/Selector";
 import Input from "global/components/controls/Input";
-import { BtnModes, BtnSizes, DropdownItem } from "global/interface/controls.interface";
 import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import AddIcon from '@mui/icons-material/Add';
@@ -17,10 +16,11 @@ import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
 import { useConfirm } from "global/providers/PopupProvider";
 import { DictionaryValidators } from "@shared/validators/DictionaryValidators";
 import { DictionaryColumnTypes, DictionaryI, DictionaryElement, DictionaryStatuses, DictionaryColumnType } from "@shared/interfaces/DictionaryI";
+import { BtnModes, BtnSizes, SelectorItem } from "global/interface/controls.interface";
 
 interface ColumnForm {
   code: string;
-  type: DropdownItem | null;
+  type: SelectorItem<DictionaryColumnType> | null;
   required: boolean;
   description?: string;
   defaultValue?: any;
@@ -29,7 +29,7 @@ interface ColumnForm {
 
 const AddDictionaryView: React.FC = () => {
 
-  const columnTypeOptions: DropdownItem[] = Object.values(DictionaryColumnTypes).map(type => ({ label: type, value: type }));
+  const columnTypeOptions: SelectorItem<DictionaryColumnType>[] = Object.values(DictionaryColumnTypes).map(type => ({ label: type, value: type }));
 
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
@@ -219,7 +219,7 @@ const AddDictionaryView: React.FC = () => {
 
           {columnForm && (<div className="flex flex-col gap-3 border-t pt-3 mt-3">
 
-            <Dropdown
+            <Selector
               items={columnTypeOptions}
               value={columnForm.type}
               fullWidth

@@ -1,6 +1,4 @@
-import Buton from "../components/controls/Buton";
-import { BtnModes } from "../interface/controls.interface";
-import { TranslationService } from "global/services/Translation.service";
+import DictionarySelector from "global/components/controls/DictionarySelector";
 
 const HomePage: React.FC = () => {
   return (
@@ -25,14 +23,15 @@ const HomePage: React.FC = () => {
             </button>
           </div>
 
-          <Buton>Elo</Buton>
-          <Buton mode={BtnModes.SECONDARY} onClick={ async () => {
-            const translation = await TranslationService.getTranslation('pl');
-            console.log(translation);
-          }}>TEST</Buton>
-          <Buton mode={BtnModes.PRIMARY_TXT}>Elo</Buton>
-          <Buton mode={BtnModes.SECONDARY_TXT}>Elo</Buton>
-          <Buton mode={BtnModes.WARNING}>Elo</Buton>
+          <DictionarySelector
+            fullWidth
+            code="LANGUAGES"
+            groupCode="TRANSLATIONS"
+            label="Select Language"
+            onSelect={(item) => console.log('Selected item:', item)}
+            onSelectMulti={() => {}}
+          />
+
         </div>
       </div>
     </div>

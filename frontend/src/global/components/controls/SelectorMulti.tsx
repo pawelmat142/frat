@@ -1,13 +1,13 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { DropdownInterface, DropdownItem, DropdownValue } from '../../interface/controls.interface';
 import ControlLabel from './ControlLabel';
 import ArrowIcon from './ArrowIcon';
+import { useTranslation } from 'react-i18next';
+import { SelectorValue, SelectorMultiProps, SelectorItem } from 'global/interface/controls.interface';
 
-const Dropdown = <T extends DropdownValue = DropdownValue>({
+const SelectorMulti = <T extends SelectorValue = SelectorValue>({
     items,
-    value,
-    onSelect: onSingleSelect,
+    values,
+    onSelect,
     id,
     label,
     fullWidth = false,
@@ -15,16 +15,14 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
     required = false,
     center = false,
     className = ''
-}: DropdownInterface<T>) => {
-
-    if (!onSingleSelect) {
-        throw new Error("onSingleSelect prop is required for single-select dropdowns");
-    }
+}: SelectorMultiProps<T>) => {
 
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const myClass = `pp-control pp-dropdown${fullWidth ? ' w-full' : ' w-fit'}${disabled ? ' opacity-50 pointer-events-none cursor-not-allowed' : ''}`;
 
+    const { t } = useTranslation()
+    
     useEffect(() => {
         if (!open) return;
         const handleClickOutside = (event: MouseEvent) => {
@@ -38,18 +36,21 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [open]);
 
-    const handleSelect = (item: DropdownItem<T>) => {
+    const handleSelect = (item: SelectorItem<T>) => {
         if (disabled) return;
-        if (item?.value === value?.value) {
-            onSingleSelect(null);
+        const currentValues = values ?? [];
+        const exists = currentValues.some((v: SelectorItem<T>) => String(v.value) === String(item.value));
+        let newValues: SelectorItem<T>[];
+        if (exists) {
+            newValues = currentValues.filter((v: SelectorItem<T>) => String(v.value) !== String(item.value));
         } else {
-            onSingleSelect(item);
+            newValues = [...currentValues, item];
         }
-        setOpen(false);
+        onSelect(newValues);
     };
 
-    const isActive = (item: DropdownItem<T>) => {
-        return String(item.value) === String(value?.value);
+    const isActive = (item: SelectorItem<T>) => {
+        return (values ?? []).some((v: SelectorItem<T>) => String(v.value) === String(item.value));
     };
 
     return (
@@ -64,15 +65,22 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
                 tabIndex={disabled ? -1 : 0}
                 aria-disabled={disabled}
                 aria-expanded={open}
-                onClick={() => !disabled && setOpen((prev) => !prev)}
+                onClick={() => {
+                    if (disabled) return;
+                    if (!open) setOpen(true);
+                }}
                 onKeyDown={e => {
                     if (disabled) return;
-                    if (e.key === 'Enter' || e.key === ' ') setOpen((prev) => !prev);
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        if (!open) setOpen(true);
+                    }
                     if (e.key === 'Escape') setOpen(false);
                 }}
             >
                 <span className="dropdown-selected">
-                    {value?.label || <span className="secondary-text">select...</span>}
+                    {Array.isArray(values) && values.length > 0
+                        ? values.map(v => v.label).join(', ')
+                        : <span className="secondary-text">select...</span>}
                 </span>
                 <ArrowIcon open={open} />
                 {open && (
@@ -87,9 +95,26 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
                                     if (e.key === 'Enter' || e.key === ' ') handleSelect(item);
                                 }}
                             >
+                                <input
+                                    type="checkbox"
+                                    checked={isActive(item)}
+                                    readOnly
+                                    tabIndex={-1}
+                                    style={{ marginRight: 8 }}
+                                />
                                 {item.label}
                             </li>
                         ))}
+                        <li
+                            className="dropdown-item dropdown-close"
+                            onClick={() => setOpen(false)}
+                            tabIndex={0}
+                            onKeyDown={e => {
+                                if (e.key === 'Enter' || e.key === ' ') setOpen(false);
+                            }}
+                        >
+                            {t('common.close')}
+                        </li>
                     </ul>
                 )}
             </div>
@@ -97,4 +122,4 @@ const Dropdown = <T extends DropdownValue = DropdownValue>({
     );
 };
 
-export default Dropdown;
+export default SelectorMulti;

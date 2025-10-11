@@ -54,10 +54,10 @@ export interface InputInterface {
     valueType?: DictionaryColumnType
 }
 
-export interface DropdownInterface<T extends DropdownValue = DropdownValue> {
-    items: DropdownItem<T>[];
-    value: DropdownItem<T> | null;
-    onSelect: (item: DropdownItem<T> | null) => void;
+export interface SelectorInterface<T extends SelectorValue = SelectorValue> {
+    items: SelectorItem<T>[];
+    value: SelectorItem<T> | null;
+    onSelect: (item: SelectorItem<T> | null) => void;
     id?: string;
     label?: string;
     fullWidth?: boolean;
@@ -67,10 +67,10 @@ export interface DropdownInterface<T extends DropdownValue = DropdownValue> {
     className?: string;
 }
 
-export interface MultiDropdownProps<T extends DropdownValue = DropdownValue> {
-    items: DropdownItem<T>[];
-    values: DropdownItem<T>[];
-    onSelect: (items: DropdownItem<T>[]) => void;
+export interface SelectorMultiProps<T extends SelectorValue = SelectorValue> {
+    items: SelectorItem<T>[];
+    values: SelectorItem<T>[];
+    onSelect: (items: SelectorItem<T>[]) => void;
     id?: string;
     label?: string;
     fullWidth?: boolean;
@@ -80,9 +80,27 @@ export interface MultiDropdownProps<T extends DropdownValue = DropdownValue> {
     className?: string;
 }
 
-export type DropdownValue = string | number | Date;
+export interface DictionarySelectorInterface<T extends SelectorValue = SelectorValue> {
+    type?: 'single' | 'multi';
+    code: string;
+    groupCode?: string;
 
-export interface DropdownItem<T extends DropdownValue = DropdownValue> {
+    value?: SelectorItem<T> | SelectorItem<T>[] | null;
+    onSelect?: (item: SelectorItem<T> | null) => void;
+    onSelectMulti?: (items: SelectorItem<T>[]) => void;
+
+    id?: string;
+    label?: string;
+    fullWidth?: boolean;
+    disabled?: boolean;
+    required?: boolean;
+    center?: boolean;
+    className?: string;
+}
+
+export type SelectorValue = string | number | Date;
+
+export interface SelectorItem<T extends SelectorValue = SelectorValue> {
     label: string;
     value: T;
     icon?: React.ReactNode;

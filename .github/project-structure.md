@@ -57,8 +57,9 @@
 					- Checkbox.tsx
 					- ControlLabel.tsx
 					- DateInput.tsx
-					- Dropdown.tsx
-					- DropdownOptions.tsx
+					- Selector.tsx
+					- SelectorMulti.tsx
+					- SelectorOptions.tsx
 					- IconButon.tsx
 					- Input.tsx
 					- ThemeSwitch.tsx

@@ -7,6 +7,7 @@ import { DictionariesRepo } from './services/DictionariesRepo';
 import { DictionaryEntity } from './model/DictionaryEntity';
 import { DictionariesImportServiceController } from './DictionariesImportServiceController';
 import { AuthModule } from 'auth/AuthModule';
+import { DictionariesPublicService } from './services/DictionariesPublicService';
 
 @Module({
   imports: [
@@ -18,14 +19,16 @@ import { AuthModule } from 'auth/AuthModule';
   ],
   controllers: [
     DictionariesController, 
-    DictionariesImportServiceController
+    DictionariesImportServiceController,
   ],
   providers: [
     DictionariesService, 
-    DictionariesRepo
+    DictionariesRepo,
+    DictionariesPublicService
   ],
   exports: [
-    DictionariesService
+    DictionariesService,
+    DictionariesPublicService
   ],
 })
 export class DictionariesModule {}

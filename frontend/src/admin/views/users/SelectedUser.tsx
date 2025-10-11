@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { UserI, UserRole, UserRoles } from "@shared/interfaces/UserI";
 import Buton from "global/components/controls/Buton";
-import { BtnModes, DropdownItem } from "global/interface/controls.interface";
+import { BtnModes, SelectorItem,  } from "global/interface/controls.interface";
 import { UsersAdminService } from "admin/services/UsersAdmin.service";
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
-import MultiDropdown from "global/components/controls/MultiDropdown";
+import MultiDropdown from "global/components/controls/SelectorMulti";
 
 interface SelectedUserProps {
     user: UserI | null;
@@ -15,7 +15,7 @@ interface SelectedUserProps {
 const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
 
     const [assignRoleForm, setAssignRoleForm] = useState(false)
-    const [assignRolesValue, setAssignRolesValue] = useState<DropdownItem<UserRole>[]>([])
+    const [assignRolesValue, setAssignRolesValue] = useState<SelectorItem<UserRole>[]>([])
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -67,7 +67,7 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
         return null;
     }
 
-    const items: DropdownItem<UserRole>[] = Object.values(UserRoles)
+    const items: SelectorItem<UserRole>[] = Object.values(UserRoles)
         .map(role => ({
             label: role,
             value: role
