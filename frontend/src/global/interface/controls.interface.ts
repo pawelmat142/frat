@@ -85,7 +85,7 @@ export interface DictionarySelectorInterface<T extends SelectorValue = SelectorV
     code: string;
     groupCode?: string;
 
-    value?: SelectorItem<T> | SelectorItem<T>[] | null;
+    valueInput?: string;
     onSelect?: (item: SelectorItem<T> | null) => void;
     onSelectMulti?: (items: SelectorItem<T>[]) => void;
 

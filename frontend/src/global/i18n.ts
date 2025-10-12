@@ -34,8 +34,6 @@ const browserLanguageRaw = navigator.language || navigator.languages?.[0] || 'en
 
 const browserLanguage = getTwoLetterLanguage(browserLanguageRaw);
 
-console.log('Detected browser language:', browserLanguageRaw, '| Two-letter:', browserLanguage);
-
 i18n.init({
   lng: browserLanguage, // domyślny język z przeglądarki
   fallbackLng: 'en',  

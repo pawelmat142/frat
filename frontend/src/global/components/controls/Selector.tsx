@@ -41,11 +41,14 @@ const Selector = <T extends SelectorValue = SelectorValue>({
     const handleSelect = (item: SelectorItem<T>) => {
         if (disabled) return;
         if (item?.value === value?.value) {
-            onSingleSelect(null);
+            if (!required) {
+                setOpen(false);
+                onSingleSelect(null);
+            }
         } else {
+            setOpen(false);
             onSingleSelect(item);
         }
-        setOpen(false);
     };
 
     const isActive = (item: SelectorItem<T>) => {
@@ -64,10 +67,10 @@ const Selector = <T extends SelectorValue = SelectorValue>({
                 tabIndex={disabled ? -1 : 0}
                 aria-disabled={disabled}
                 aria-expanded={open}
-                onClick={() => !disabled && setOpen((prev) => !prev)}
+                onClick={() => !disabled && setOpen(!open)}
                 onKeyDown={e => {
                     if (disabled) return;
-                    if (e.key === 'Enter' || e.key === ' ') setOpen((prev) => !prev);
+                    if (e.key === 'Enter' || e.key === ' ') setOpen(!open);
                     if (e.key === 'Escape') setOpen(false);
                 }}
             >

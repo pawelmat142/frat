@@ -1,4 +1,5 @@
 import DictionarySelector from "global/components/controls/DictionarySelector";
+import LangSelector from "global/components/controls/LangSelector";
 
 const HomePage: React.FC = () => {
   return (
@@ -14,23 +15,8 @@ const HomePage: React.FC = () => {
             and other height work specialists. Find opportunities, share experiences, and grow your career
             in the high-altitude industry.
           </p>
-          <div className="mt-4">
-            <button className="btn btn-primary" style={{ marginRight: '1rem' }}>
-              Find Work
-            </button>
-            <button className="btn btn-secondary">
-              Join Network
-            </button>
-          </div>
 
-          <DictionarySelector
-            fullWidth
-            code="LANGUAGES"
-            groupCode="TRANSLATIONS"
-            label="Select Language"
-            onSelect={(item) => console.log('Selected item:', item)}
-            onSelectMulti={() => {}}
-          />
+          <LangSelector />
 
         </div>
       </div>

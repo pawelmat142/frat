@@ -1,10 +1,11 @@
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { SelectorValue, DictionarySelectorInterface, SelectorItem } from 'global/interface/controls.interface';
 import { DictionaryI } from '@shared/interfaces/DictionaryI';
 import { DictionaryService } from 'global/services/DictionaryService';
 import Loading from '../Loading';
 import Selector from './Selector';
+import { useTranslation } from 'react-i18next';
 
 const DictionarySelector = <T extends SelectorValue = SelectorValue>({
     onSelect,
@@ -18,26 +19,25 @@ const DictionarySelector = <T extends SelectorValue = SelectorValue>({
     code,
     groupCode,
     type = 'single',
-    value,
+    valueInput,
     onSelectMulti
 }: DictionarySelectorInterface<T>) => {
 
-    if (type === 'single' && Array.isArray(value)) {
+    if (type === 'single' && Array.isArray(valueInput)) {
         throw new Error("For single select, value must not be an array");
     }
-    if (type === 'multi' && !Array.isArray(value)) {
+    if (type === 'multi' && !Array.isArray(valueInput)) {
         throw new Error("For multi select, value must be an array");
     }
 
-    // TODO remove?
-    const dropdownRef = useRef<HTMLDivElement>(null);
     const [loading, setLoading] = useState(false);
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         const initDictionary = async () => {
             setLoading(true);
-            console.log('init')
             const res = await DictionaryService.getDictionary(code, groupCode);
             setDictionary(res);
             setLoading(false);
@@ -50,7 +50,7 @@ const DictionarySelector = <T extends SelectorValue = SelectorValue>({
     }
 
     if (!dictionary) {
-        return <div>Dictionary not found</div>;
+        return <div>{t('validation.dictionaryNotFound')}</div>;
     }
 
     const handleSelect = (item: SelectorItem<string> | null): void => {
@@ -65,10 +65,7 @@ const DictionarySelector = <T extends SelectorValue = SelectorValue>({
     }));
 
     if (type === 'single') {
-        if (Array.isArray(value)) {
-            throw new Error("For single select, value must not be an array");
-        }
-        const selectedItem: SelectorItem<string> | null = items.find(item => item.value === value?.value) || null;
+        const selectedItem: SelectorItem<string> | null = items.find(item => item.value === valueInput) || null;
 
         return <Selector<string>
             items={items}
@@ -86,18 +83,6 @@ const DictionarySelector = <T extends SelectorValue = SelectorValue>({
     }
 
     return null;
-
-
-    // const handleSelect = (item: SelectorItem<T>) => {
-    //     if (disabled) return;
-    //     if (item?.value === value?.value) {
-    //         onSingleSelect(null);
-    //     } else {
-    //         onSingleSelect(item);
-    //     }
-    //     setOpen(false);
-    // };
-
 
 };
 
