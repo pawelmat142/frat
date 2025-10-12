@@ -74,10 +74,13 @@ const Selector = <T extends SelectorValue = SelectorValue>({
                     if (e.key === 'Escape') setOpen(false);
                 }}
             >
-                <span className="dropdown-selected">
+                <span className="dropdown-selected flex items-center gap-2">
+                    {value?.src && <span><img className="pp-dropdown-icon" src={value?.src} alt={value?.label} /></span>}
                     {value?.label || <span className="secondary-text">select...</span>}
                 </span>
+
                 <ArrowIcon open={open} />
+
                 {open && (
                     <ul className="pp-dropdown-list">
                         {items.map(item => (
@@ -90,7 +93,10 @@ const Selector = <T extends SelectorValue = SelectorValue>({
                                     if (e.key === 'Enter' || e.key === ' ') handleSelect(item);
                                 }}
                             >
-                                {item.label}
+                                <span className='flex items-center gap-2'>
+                                    {item.src && <img className="pp-dropdown-icon" src={item.src} alt={item.label} />}
+                                    <span>{item.label}</span>
+                                </span>
                             </li>
                         ))}
                     </ul>

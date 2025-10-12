@@ -104,4 +104,5 @@ export interface SelectorItem<T extends SelectorValue = SelectorValue> {
     label: string;
     value: T;
     icon?: React.ReactNode;
+    src?: string;
 }

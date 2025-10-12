@@ -61,12 +61,14 @@ const DictionarySelector = <T extends SelectorValue = SelectorValue>({
 
     const items: SelectorItem<string>[] = dictionary.elements.map(element => ({
         label: element.code,
-        value: String(element.code)
+        value: String(element.code),
+        src: element.values.SRC,
     }));
 
     if (type === 'single') {
         const selectedItem: SelectorItem<string> | null = items.find(item => item.value === valueInput) || null;
 
+        console.log({ selectedItem });
         return <Selector<string>
             items={items}
             id={id}
