@@ -4,6 +4,7 @@ import { BtnModes } from "global/interface/controls.interface";
 import { useNavigate } from "react-router-dom";
 import { httpClient } from "global/services/http";
 import { Path } from "./../../path";
+import { useTranslation } from "react-i18next";
 
 
 const ErrorPage: React.FC = () => {
@@ -11,6 +12,7 @@ const ErrorPage: React.FC = () => {
     const [msg, setMsg] = React.useState<string>("");
     const hasReadMsg = React.useRef(false);
 
+    const { t } = useTranslation();
     // Ensures the error message is read and cleared only once
     React.useEffect(() => {
         if (!hasReadMsg.current) {
@@ -33,14 +35,14 @@ const ErrorPage: React.FC = () => {
 
 
     // TODO report error feature
-    // TODO translate
+
     return (
         <div className="w-full px-5 py-3 flex flex-col items-center justify-center min-h-[60vh]">
             <div className="flex flex-col gap-4 p-6 border rounded shadow max-w-lg w-full bg-secondary-bg">
-                <h2 className="text-2xl font-bold error-color mb-2">Something went wrong!</h2>
+                <h2 className="text-2xl font-bold error-color mb-2">{t("validation.view.title")}</h2>
                 <div className="text-base primary-text mb-4">{msg}</div>
                 <div className="flex gap-2 justify-center mt-2">
-                    <Buton mode={BtnModes.PRIMARY} onClick={() => navigate(Path.HOME)}>Wróć na stronę główną</Buton>
+                    <Buton mode={BtnModes.PRIMARY} onClick={() => navigate(Path.HOME)}>{t("validation.view.goHome")}</Buton>
                 </div>
             </div>
         </div>

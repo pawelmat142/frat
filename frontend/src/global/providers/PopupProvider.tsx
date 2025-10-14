@@ -1,6 +1,7 @@
 import Buton from 'global/components/controls/Buton';
 import { BtnMode, BtnModes } from 'global/interface/controls.interface';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface PopupContextType {
   confirm: (options: ConfirmOptions) => Promise<boolean>;
@@ -99,6 +100,8 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
   const [show, setShow] = React.useState(false)
   const [closing, setClosing] = React.useState(false)
 
+  const { t } = useTranslation();
+  
   React.useEffect(() => {
     if (open) {
       setVisible(true);
@@ -138,13 +141,13 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
       <div
         className={`primary-bg rounded-lg shadow-lg p-6 min-w-[300px] transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
       >
-        {config?.title && <h2 className="text-lg font-semibold mb-5">{config.title}</h2>}
-        <div className="mb-6">{config?.message}</div>
+        {config?.title && <h2 className="text-lg font-semibold mb-5">{t(config.title)}</h2>}
+        <div className="mb-6">{t(config?.message)}</div>
         <div className="flex justify-end gap-2">
 
           {config?.buttons.map((btn, idx) => (
             <Buton key={idx} mode={btn.mode} onClick={() => btnAction(btn)}>
-              {btn.text}
+              {t(btn.text)}
             </Buton>
           ))}
 

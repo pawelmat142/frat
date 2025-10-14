@@ -113,12 +113,11 @@ export class HttpClient {
     if (!this.popupHandler) return;
     const confirmed = await this.popupHandler({
 
-      // TODO translate
-      title: 'Wystąpił błąd',
+      title: 'validation.popup.title',
       message: this.getErrorMsg(error),
       buttons: [
-        { text: 'Zostań na tej stronie', mode: BtnModes.ERROR_TXT },
-        { text: 'Wróć na stronę główną', mode: BtnModes.PRIMARY, action: () => true },
+        { text: 'validation.popup.stay', mode: BtnModes.ERROR_TXT },
+        { text: 'validation.popup.goHome', mode: BtnModes.PRIMARY, action: () => true },
       ]
     });
     if (confirmed) {

@@ -23,7 +23,6 @@ const Header: React.FC = () => {
 
                 <div className="desktop-flex">
                     <ThemeSwitch />
-                    {/* TODO logged user */}
                 </div>
 
             </nav>

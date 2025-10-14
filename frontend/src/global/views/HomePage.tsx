@@ -1,4 +1,4 @@
-import DictionarySelector from "global/components/controls/DictionarySelector";
+import Buton from "global/components/controls/Buton";
 import LangSelector from "global/components/controls/LangSelector";
 
 const HomePage: React.FC = () => {
@@ -17,6 +17,7 @@ const HomePage: React.FC = () => {
           </p>
 
           <LangSelector />
+          <Buton className="mt-4" onClick={() => {}}>Test</Buton>
 
         </div>
       </div>
