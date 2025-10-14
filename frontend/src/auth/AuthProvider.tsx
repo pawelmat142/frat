@@ -26,7 +26,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
  * Hook do dostępu do kontekstu autoryzacji
  * Użycie: const { user, loading, isAuthenticated } = useAuthContext();
  */
-export const useAuthContext = () => {
+export const useAuthContext = (): AuthContextType => {
 	const context = useContext(AuthContext);
 	if (context === undefined) {
 		throw new Error('useAuthContext must be used within AuthProvider');

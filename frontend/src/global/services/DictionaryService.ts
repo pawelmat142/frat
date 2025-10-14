@@ -64,7 +64,6 @@ function clearCache() {
 
 export const DictionaryService = {
 
-    // TODO groups support
     async getDictionary(dictionaryCode: string, groupCode?: string): Promise<DictionaryI> {
         const key = prepareKey(dictionaryCode, groupCode);
         const cached = getCachedDictionary(key);

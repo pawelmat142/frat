@@ -2,13 +2,16 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuthContext } from 'auth/AuthProvider';
 import { Path } from './../path';
+import Loading from 'global/components/Loading';
+import { UserRole } from '@shared/interfaces/UserI';
+import { Util } from '@shared/utils/util';
 
 interface ProtectedRouteProps {
 	children: React.ReactNode;
 	redirectTo?: string;
+	roles?: UserRole[];
 }
 
-// TODO uzycia potestowac i zaimplementowac
 /**
  * Komponent zabezpieczający route - wymaga autoryzacji
  * Użycie:
@@ -18,15 +21,16 @@ interface ProtectedRouteProps {
  */
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
 	children, 
-	redirectTo = Path.SIGN_IN 
+	redirectTo = Path.SIGN_IN,
+	roles
 }) => {
-	const { isAuthenticated, loading } = useAuthContext();
+	const { isAuthenticated, loading, userI } = useAuthContext();
 
 	if (loading) {
-		return <div>Loading...</div>; // Możesz użyć własnego loadera
+		return <Loading />;
 	}
 
-	if (!isAuthenticated) {
+	if (!isAuthenticated || !Util.hasPermission(roles, userI)) {
 		return <Navigate to={redirectTo} replace />;
 	}
 

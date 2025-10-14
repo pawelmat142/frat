@@ -1,3 +1,5 @@
+import { UserI, UserRole } from "@shared/interfaces/UserI";
+
 export abstract class Util {
 
     // without time
@@ -25,5 +27,15 @@ export abstract class Util {
 
     public static trimEmail(email: string): string {
         return email.split('@')[0];
+    }
+
+    public static hasPermission(allowedRoles?: UserRole[], userI?: UserI | null): boolean {
+        if (!allowedRoles) {
+            return true
+        }
+        if (!userI) {
+            return false
+        }
+        return userI.roles.some(role => allowedRoles.includes(role));
     }
 }

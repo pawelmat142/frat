@@ -3,8 +3,9 @@ import { useLocation } from 'react-router-dom';
 import { MenuItem } from '../interfaces';
 import { Path } from '../../path';
 import { useAuthContext } from 'auth/AuthProvider';
-import { UserI } from '@shared/interfaces/UserI';
+import { UserI, UserRoles } from '@shared/interfaces/UserI';
 import { AuthValidators } from '@shared/validators/AuthValidator';
+import { Util } from '@shared/utils/util';
 
 interface MenuContextType {
     allMenuItems: MenuItem[];
@@ -32,12 +33,13 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         {
             to: Path.ADMIN_DICTIONARIES,
             label: 'header.admin',
-            // TODO admin guard
+            rolesGuard: [UserRoles.ADMIN, UserRoles.SUPERADMIN],
         },
         isAuthenticated ?
             {
                 to: Path.getProfilePath(userI!.uid),
                 label: 'header.profile',
+                authGuard: true
             } :
             {
                 to: Path.SIGN_IN,
@@ -45,14 +47,14 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
             }
     ].map(item => ({
         ...item,
-        active: isMenuItemActive(item)
+        active: isMenuItemActive(item),
     })), [location.pathname, isAuthenticated]);
 
 
-    const filteredMenuItems = useMemo(() =>
-        allMenuItems.filter(item =>
-            !item.rolesGuard || hasPermission(item, userI)
-        ),
+    const filteredMenuItems = useMemo(
+        () => allMenuItems
+            .filter(item => !item.authGuard || isAuthenticated)
+            .filter(item => Util.hasPermission(item.rolesGuard, userI)),
         [allMenuItems, userI]
     );
 
@@ -88,5 +90,5 @@ export const useMenuContext = () => {
 };
 
 const hasPermission = (item: MenuItem, user?: UserI | null): boolean => {
-    return AuthValidators.hasPermission(item.rolesGuard, user)
+    return Util.hasPermission(item.rolesGuard, user)
 };

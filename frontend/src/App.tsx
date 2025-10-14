@@ -18,6 +18,8 @@ import AdminUsers from 'admin/views/users/AdminUsers';
 import SignInPage from 'auth/views/SignInPage';
 import ProfilePage from 'user/views/ProfilePage';
 import ForgotPassword from 'auth/views/ForgotPassword';
+import { ProtectedRoute } from 'auth/ProtectedRoute';
+import { UserRoles } from '@shared/interfaces/UserI';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -52,7 +54,7 @@ const App: React.FC = () => {
                 
                 <Route path={Path.HOME} element={<PageWrapper direction={-1}><HomePage /></PageWrapper>} />
 
-                <Route path={Path.PROFILE} element={<PageWrapper direction={1}><ProfilePage /></PageWrapper>} />
+                <Route path={Path.PROFILE} element={<PageWrapper direction={1}><ProtectedRoute><ProfilePage /></ProtectedRoute></PageWrapper>} />
 
                 <Route path={Path.SIGN_IN} element={<PageWrapper direction={1}><SignInPage /></PageWrapper>} />
                 <Route path={Path.SIGN_UP} element={<PageWrapper direction={1}><SignUpPage /></PageWrapper>} />
@@ -60,7 +62,13 @@ const App: React.FC = () => {
 
                 <Route path={Path.ERROR_PAGE} element={<ErrorPage />} />
                
-                <Route path={Path.ADMIN_PANEL} element={ <AdminPanelProvider><AdminPanelPage /></AdminPanelProvider> }  >
+                <Route path={Path.ADMIN_PANEL} element={
+                    <AdminPanelProvider>
+                        <ProtectedRoute roles={[UserRoles.ADMIN, UserRoles.SUPERADMIN]}>
+                            <AdminPanelPage />
+                        </ProtectedRoute>
+                    </AdminPanelProvider>
+                 }  >
                     <Route path={Path.ADMIN_DICTIONARY} element={<DictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES} element={<AdminDictionaries />} />
                     <Route path={Path.ADMIN_DICTIONARIES_ADD} element={<AddDictionaryView />} />

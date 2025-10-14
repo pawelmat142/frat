@@ -1,6 +1,5 @@
 
 import { RegisterFormDto } from "@shared/dto/AuthDto";
-import { UserI, UserRole } from "@shared/interfaces/UserI";
 
 export abstract class AuthValidators {
     public static validateRegisterForm(dto: RegisterFormDto): string | null {
@@ -34,12 +33,5 @@ export abstract class AuthValidators {
             default:
                 throw new Error(error);
         }
-    }
-
-    public static hasPermission(rolesGuard?: UserRole[], user?: UserI | null): boolean {
-        if (!rolesGuard) {
-            return true;
-        }
-        return rolesGuard.some((role: UserRole) => user?.roles.includes(role));
     }
 }

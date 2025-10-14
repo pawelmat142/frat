@@ -68,7 +68,6 @@ const DictionarySelector = <T extends SelectorValue = SelectorValue>({
     if (type === 'single') {
         const selectedItem: SelectorItem<string> | null = items.find(item => item.value === valueInput) || null;
 
-        console.log({ selectedItem });
         return <Selector<string>
             items={items}
             id={id}
