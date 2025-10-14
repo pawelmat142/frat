@@ -43,7 +43,7 @@ export class DictionariesRepo {
         });
     }
 
-    public async set(dto: DictionaryI): Promise<DictionaryEntity> {
+    public async put(dto: DictionaryI): Promise<DictionaryEntity> {
         const existingDictionary = await this.dictionaryRepository.exists({
             where: { code: dto.code },
         });

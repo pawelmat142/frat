@@ -2,6 +2,32 @@ import { DictionaryI } from "@shared/interfaces/DictionaryI";
 
 export abstract class DictionaryValidators {
 
+    public static fullValidation(dictionary: DictionaryI): void {
+
+        // validateCode for dictionary code
+        const codeError = DictionaryValidators.validateCode(dictionary.code);
+        if (codeError) {
+            throw new Error(`Validation error: ${codeError}`);
+        }
+
+        // Validate structure using DictionaryValidators (cast to DictionaryI)
+        const validationFns = [
+            DictionaryValidators.validateElementCodes,
+            DictionaryValidators.validateColumnCodes,
+            DictionaryValidators.validateGroupCodes,
+            DictionaryValidators.validateColumnCodeDuplicates,
+            DictionaryValidators.validateElementCodeDuplicates,
+            DictionaryValidators.validateGroupCodeDuplicates,
+            DictionaryValidators.validateRequiredColumnsInElements,
+        ];
+        for (const fn of validationFns) {
+            const errMsg = fn(dictionary);
+            if (errMsg) {
+                throw new Error(`Validation error: ${errMsg}`);
+            }
+        }
+    }
+
     public static validateCode(code: string): string | null {
         const codeRegex = /^[A-Za-z_]+$/;
         if (!codeRegex.test(code)) {

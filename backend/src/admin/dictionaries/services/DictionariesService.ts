@@ -4,6 +4,8 @@ import { DictionariesRepo } from './DictionariesRepo';
 import { SWWException } from 'global/exceptions/SWWException';
 import { ToastWarningException } from 'global/exceptions/ToastWarningException';
 import { DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
+import { DictionaryValidators } from '@shared/validators/DictionaryValidators';
+import { ToastException } from 'global/exceptions/ToastException';
 
 @Injectable()
 export class DictionariesService {
@@ -27,7 +29,12 @@ export class DictionariesService {
   }
 
   public put(dto: DictionaryI): Promise<DictionaryI> {
-    return this.repo.set(dto);
+    try {
+      DictionaryValidators.fullValidation(dto);
+    } catch (err: any) {
+      throw new ToastException(err.message, this);
+    }
+    return this.repo.put(dto);
   }
 
   public delete(code: string): Promise<void> {

@@ -74,7 +74,7 @@ const AddDictionaryView: React.FC = () => {
       setColumnForm({ code: "", type: columnTypeOptions[0], description: "", required: false });
       return
     };
-    if (!isEditMode && columns.some(col => col.code === columnForm.code)) {
+    if (!columnForm?.editMode && columns.some(col => col.code === columnForm.code)) {
       toast.error("Column code must be unique.");
       return;
     }
@@ -85,6 +85,11 @@ const AddDictionaryView: React.FC = () => {
       return
     }
 
+    if (columnForm.editMode) {
+      setColumns(columns.map(col => col.code === columnForm.code ? columnForm : col));
+      setColumnForm(null);
+      return;
+    }
     setColumns([...columns, columnForm]);
     setColumnForm(null);
   };
@@ -146,20 +151,23 @@ const AddDictionaryView: React.FC = () => {
       setLoading(true);
 
       const res = await DictionaryAdminService.putDictionary(result);
+      if (!res) {
+        return
+      }
 
       if (isEditMode) {
         toast.success(`Dictionary ${res.code} updated successfully!`)
       } else {
         toast.success(`Dictionary ${res.code} created successfully!`)
       }
-      
+
       if (isEditMode) {
         navigate(Path.getDictionaryPath(res.code))
       } else {
         navigate(Path.ADMIN_DICTIONARIES)
       }
 
-    } catch (e) {}
+    } catch (e) { }
     finally {
       resetForm();
       setLoading(false);
@@ -167,19 +175,17 @@ const AddDictionaryView: React.FC = () => {
   }
 
   const resetForm = () => {
-    setCode("");
-    setDescription("");
-    setColumns([]);
+    if (!isEditMode) {
+      setCode("");
+      setDescription("");
+      // setColumns([]);
+    }
     setColumnForm(null);
   }
 
   const handleEditColumn = (col: ColumnForm) => {
     setColumnForm({ ...col, editMode: true });
   }
-
-  // TODO
-  // kontrolka number kolumny
-  // kontrolka stringlist kolumny
 
   if (loading) {
     return <Loading></Loading>
@@ -226,7 +232,7 @@ const AddDictionaryView: React.FC = () => {
               label="Column Type"
               required
               onSelect={item => {
-                setColumnForm({ ...columnForm, type: item });
+                setColumnForm({ ...columnForm, type: item })
               }}
             />
 
@@ -259,11 +265,13 @@ const AddDictionaryView: React.FC = () => {
                 name="defaultValue"
                 label="Default value"
                 value={columnForm.defaultValue ?? ""}
-                onChange={e => setColumnForm({ ...columnForm, defaultValue: e.target.value })}
+                onChange={e => {
+                  console.log(e.target.value);
+                  console.log(typeof e.target.value);
+                  setColumnForm({ ...columnForm, defaultValue: e.target.value })}}
                 onDateChange={date => {
                   setColumnForm({ ...columnForm, defaultValue: date })
-                }
-                }
+                }}
                 required
                 fullWidth
               />

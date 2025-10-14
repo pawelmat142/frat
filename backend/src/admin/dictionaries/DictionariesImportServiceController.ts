@@ -21,6 +21,7 @@ import { RolesGuard } from 'auth/guards/RolesGuard';
 import { UserRoles } from '@shared/interfaces/UserI';
 import { Roles } from 'auth/decorators/RolesDecorator';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
+import { DictionaryI } from '@shared/interfaces/DictionaryI';
 
 @Controller('api/admin/import/dictionaries')
 @UseInterceptors(LogInterceptor)
@@ -54,43 +55,23 @@ export class DictionariesImportServiceController {
       if (!res.req || !res.req.body) {
         throw new Error('No data provided');
       }
-      const data = res.req.body;
+      const dictionary: DictionaryI = res.req.body;
       // Basic validation
-      if (!data.code || !Array.isArray(data.columns) || !Array.isArray(data.elements)) {
+      if (!dictionary.code || !Array.isArray(dictionary.columns) || !Array.isArray(dictionary.elements)) {
         throw new Error('Missing required dictionary fields');
       }
       // Check if code exists
-      const exists = await this.dictionaryRepository.findOne({ where: { code: data.code } });
+      const exists = await this.dictionaryRepository.findOne({ where: { code: dictionary.code } });
       if (exists) {
         throw new Error('Dictionary with this code already exists');
       }
 
-      // validateCode for dictionary code
-      const codeError = DictionaryValidators.validateCode(data.code);
-      if (codeError) {
-        throw new Error(`Validation error: ${codeError}`);
-      }
+     DictionaryValidators.fullValidation(dictionary);
 
-      // Validate structure using DictionaryValidators (cast to DictionaryI)
-      const validationFns = [
-        DictionaryValidators.validateElementCodes,
-        DictionaryValidators.validateColumnCodes,
-        DictionaryValidators.validateGroupCodes,
-        DictionaryValidators.validateColumnCodeDuplicates,
-        DictionaryValidators.validateElementCodeDuplicates,
-        DictionaryValidators.validateGroupCodeDuplicates,
-        DictionaryValidators.validateRequiredColumnsInElements,
-      ];
-      for (const fn of validationFns) {
-        const errMsg = fn(data);
-        if (errMsg) {
-          throw new Error(`Validation error: ${errMsg}`);
-        }
-      }
-      const entity = this.dictionaryRepository.create(data);
+      const entity = this.dictionaryRepository.create(dictionary);
       await this.dictionaryRepository.save(entity);
 
-      this.logger.log(`Dictionary ${data.code} imported successfully`);
+      this.logger.log(`Dictionary ${dictionary.code} imported successfully`);
       return res.status(201).end();
 
     } catch (err: any) {
