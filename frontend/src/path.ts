@@ -7,6 +7,7 @@ export abstract class Path {
     public static readonly FORGOT_PASSWORD = '/forgot-password';
 
     public static readonly PROFILE = '/profile/:uid';
+    public static readonly EMPLOYEE_PROFILE_FORM = '/employee-profile-form';
     
     public static readonly ERROR_PAGE = '/error';
 

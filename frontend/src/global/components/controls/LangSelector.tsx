@@ -15,14 +15,14 @@ const LangSelector = () => {
     };
 
     return (
-        <DictionarySelector<string>
+    <DictionarySelector
             fullWidth
             valueInput={langCode}
             code="LANGUAGES"
             groupCode="TRANSLATIONS"
             required
             label={i18n.t('common.language')}
-            onSelect={(item) => setLang(item?.value)}
+            onSelect={(item) => setLang(item ? String(item.value) : undefined)}
         />
     );
 };

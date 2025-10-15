@@ -232,7 +232,7 @@ const AddDictionaryView: React.FC = () => {
               label="Column Type"
               required
               onSelect={item => {
-                setColumnForm({ ...columnForm, type: item })
+                setColumnForm({ ...columnForm, type: item as SelectorItem<DictionaryColumnType> | null })
               }}
             />
 

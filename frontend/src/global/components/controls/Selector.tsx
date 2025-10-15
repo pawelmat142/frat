@@ -1,21 +1,24 @@
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, forwardRef } from 'react';
 import ControlLabel from './ControlLabel';
 import ArrowIcon from './ArrowIcon';
 import { SelectorValue, SelectorInterface, SelectorItem } from 'global/interface/controls.interface';
 
-const Selector = <T extends SelectorValue = SelectorValue>({
-    items,
-    value,
-    onSelect: onSingleSelect,
-    id,
-    label,
-    fullWidth = false,
-    disabled = false,
-    required = false,
-    center = false,
-    className = ''
-}: SelectorInterface<T>) => {
+const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
+    {
+        items,
+        value,
+        onSelect: onSingleSelect,
+        id,
+        label,
+        fullWidth = false,
+        disabled = false,
+        required = false,
+        center = false,
+        className = ''
+    }: SelectorInterface<T>,
+    ref: React.Ref<HTMLDivElement>
+) => {
 
     if (!onSingleSelect) {
         throw new Error("onSingleSelect prop is required for single-select dropdowns");
@@ -59,7 +62,7 @@ const Selector = <T extends SelectorValue = SelectorValue>({
         <div
             className={`${className || ''}${center ? ' mx-auto' : ''}`}
             style={{ position: 'relative' }}
-            ref={dropdownRef}
+            ref={ref || dropdownRef}
         >
             <ControlLabel id={id} label={label} required={required} />
             <div
@@ -104,6 +107,8 @@ const Selector = <T extends SelectorValue = SelectorValue>({
             </div>
         </div>
     );
-};
+});
+
+Selector.displayName = 'Selector';
 
 export default Selector;

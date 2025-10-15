@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Loading from "global/components/Loading";
 import { UserI } from "@shared/interfaces/UserI";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserPublicService } from "user/services/UserPublicService";
 import { useAuthContext } from "auth/AuthProvider";
 import Buton from "global/components/controls/Buton";
 import { AuthService } from "auth/services/AuthService";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { Path } from "./../../path";
 
 const ProfilePage: React.FC = () => {
 
@@ -16,6 +17,7 @@ const ProfilePage: React.FC = () => {
     const { uid } = useParams<{ uid?: string }>();
     const [_loading, _setLoading] = useState(false);
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const initUser = async () => {
@@ -41,7 +43,7 @@ const ProfilePage: React.FC = () => {
         try {
             await AuthService.sendVerificationEmail();
             toast.success(t('signup.verificationEmailSent'));
-        } catch (error) {} finally {
+        } catch (error) { } finally {
             _setLoading(false);
         }
     }
@@ -83,9 +85,17 @@ const ProfilePage: React.FC = () => {
                     )}
                 </div>
 
-                <Buton className="mx-auto" onClick={() => {
-                    AuthService.logout()
-                }}>Logout</Buton>
+                <div className="flex gap-5 mt-10">
+                    <Buton onClick={() => {
+                        AuthService.logout()
+                    }}>Logout</Buton>
+
+                    <Buton onClick={() => {
+                        navigate(Path.EMPLOYEE_PROFILE_FORM)
+                    }}>{t('employeeProfile.create')}</Buton>
+
+                </div>
+
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 import { SelectorValue, DictionarySelectorInterface, SelectorItem } from 'global/interface/controls.interface';
 import { DictionaryI } from '@shared/interfaces/DictionaryI';
 import { DictionaryService } from 'global/services/DictionaryService';
@@ -7,21 +7,24 @@ import Loading from '../Loading';
 import Selector from './Selector';
 import { useTranslation } from 'react-i18next';
 
-const DictionarySelector = <T extends SelectorValue = SelectorValue>({
-    onSelect,
-    id,
-    label,
-    fullWidth = false,
-    disabled = false,
-    required = false,
-    center = false,
-    className = '',
-    code,
-    groupCode,
-    type = 'single',
-    valueInput,
-    onSelectMulti
-}: DictionarySelectorInterface<T>) => {
+const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
+    {
+        onSelect,
+        id,
+        label,
+        fullWidth = false,
+        disabled = false,
+        required = false,
+        center = false,
+        className = '',
+        code,
+        groupCode,
+        type = 'single',
+        valueInput,
+        onSelectMulti
+    }: DictionarySelectorInterface<T>,
+    ref: React.Ref<any>
+) => {
 
     if (type === 'single' && Array.isArray(valueInput)) {
         throw new Error("For single select, value must not be an array");
@@ -53,7 +56,7 @@ const DictionarySelector = <T extends SelectorValue = SelectorValue>({
         return <div>{t('validation.dictionaryNotFound')}</div>;
     }
 
-    const handleSelect = (item: SelectorItem<string> | null): void => {
+    const handleSelect = (item: SelectorItem<SelectorValue> | null): void => {
         if (onSelect) {
             onSelect(item as SelectorItem<T> | null);
         }
@@ -68,7 +71,8 @@ const DictionarySelector = <T extends SelectorValue = SelectorValue>({
     if (type === 'single') {
         const selectedItem: SelectorItem<string> | null = items.find(item => item.value === valueInput) || null;
 
-        return <Selector<string>
+    return <Selector
+            ref={ref}
             items={items}
             id={id}
             label={label}
@@ -80,11 +84,12 @@ const DictionarySelector = <T extends SelectorValue = SelectorValue>({
             value={selectedItem}
             onSelect={handleSelect}
         />;
-
     }
 
     return null;
 
-};
+});
+
+DictionarySelector.displayName = 'DictionarySelector';
 
 export default DictionarySelector;
