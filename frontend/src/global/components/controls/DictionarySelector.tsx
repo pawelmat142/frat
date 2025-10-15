@@ -7,6 +7,10 @@ import Loading from '../Loading';
 import Selector from './Selector';
 import { useTranslation } from 'react-i18next';
 
+interface DictionarySelectorProps<T extends SelectorValue = SelectorValue> extends DictionarySelectorInterface<T> {
+    disabledValues?: string[];
+}
+
 const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
         onSelect,
@@ -21,8 +25,9 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         groupCode,
         type = 'single',
         valueInput,
-        onSelectMulti
-    }: DictionarySelectorInterface<T>,
+        onSelectMulti,
+        disabledValues = []
+    }: DictionarySelectorProps<T>,
     ref: React.Ref<any>
 ) => {
 
@@ -62,10 +67,11 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         }
     }
 
-    const items: SelectorItem<string>[] = dictionary.elements.map(element => ({
+    const items: SelectorItem<string & { disabled?: boolean }>[] = dictionary.elements.map(element => ({
         label: element.code,
         value: String(element.code),
         src: element.values.SRC,
+        disabled: disabledValues.includes(String(element.code)),
     }));
 
     if (type === 'single') {

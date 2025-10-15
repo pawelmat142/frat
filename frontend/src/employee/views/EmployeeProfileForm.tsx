@@ -2,13 +2,14 @@ import Buton from "global/components/controls/Buton";
 import DictionarySelector from "global/components/controls/DictionarySelector";
 import Input from "global/components/controls/Input";
 import { useForm, Controller } from "react-hook-form";
-import { BtnModes, BtnSizes, SelectorItem } from "global/interface/controls.interface";
 import { useTranslation } from "react-i18next";
+
+import CommunicationLanguagesSection from "../components/CommunicationLanguagesSection";
 
 interface EmployeeProfileFormValues {
     firstName: string;
     lastName: string;
-    communicationLanguage: SelectorItem<string> | null;
+    communicationLanguages: string[];
     residenceCountry: string;
 }
 
@@ -16,11 +17,11 @@ const EmployeeProfileForm: React.FC = () => {
 
     const { t } = useTranslation();
 
-    const { control, handleSubmit, watch } = useForm<EmployeeProfileFormValues>({
+    const { control, handleSubmit, watch, setValue } = useForm<EmployeeProfileFormValues>({
         defaultValues: {
             firstName: "",
             lastName: "",
-            communicationLanguage: null,
+            communicationLanguages: [""],
             residenceCountry: ""
         },
     });
@@ -29,11 +30,11 @@ const EmployeeProfileForm: React.FC = () => {
 
     const firstName = watch("firstName");
     const lastName = watch("lastName");
-    const communicationLanguage = watch("communicationLanguage");
+    const communicationLanguages = watch("communicationLanguages");
 
     // console.log(firstName);
     // console.log(lastName);
-    console.log(communicationLanguage);
+    console.log(communicationLanguages);
 
     return (
         <div className="w-full px-5 py-3 relative">
@@ -56,30 +57,34 @@ const EmployeeProfileForm: React.FC = () => {
                         control={control}
                         render={({ field }) => <Input {...field} label={t("employeeProfile.form.lastName")} fullWidth required />}
                     />
-                    <Controller
-                        name="communicationLanguage"
+
+                    <CommunicationLanguagesSection
                         control={control}
+                        setValue={setValue}
+                        watch={watch}
+                    />
+
+                    <div className="flex items-center justify-between mb-4 mt-5">
+                        <h3 className="text-lg">{t("employeeProfile.form.address")}</h3>
+                    </div>
+
+                    <Controller
+                        name="residenceCountry"
+                        control={control}
+                        rules={{ required: true, validate: v => !!v }}
                         render={({ field }) => (
                             <DictionarySelector
-                                valueInput={field.value?.value ?? ""}
-                                onSelect={item => field.onChange(item)}
-                                label={t("employeeProfile.form.communicationLanguage")}
+                                className="w-full"
+                                valueInput={field.value ?? ""}
+                                onSelect={item => field.onChange(item ? String(item.value) : "")}
+                                label={t("employeeProfile.form.residenceCountry")}
                                 code="LANGUAGES"
+                                groupCode="COMMUNICATION"
                                 fullWidth
                                 required
                             />
                         )}
                     />
-                    <Buton
-                        mode={BtnModes.SECONDARY_TXT}
-                        size={BtnSizes.SMALL}
-                        className="ml-auto"
-                        onClick={() => {
-                            // TODO add communication language
-                        }}
-                    >
-                        {t("employeeProfile.form.addLanguage")}
-                    </Buton>
 
                 </div>
 

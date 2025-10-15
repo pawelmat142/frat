@@ -86,15 +86,17 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
 
                 {open && (
                     <ul className="pp-dropdown-list">
-                        {items.map(item => (
+                        {(items as Array<SelectorItem<T> & { disabled?: boolean }> ).map(item => (
                             <li
                                 key={String(item.value)}
-                                className={`dropdown-item${isActive(item) ? ' active' : ''}`}
-                                onClick={() => handleSelect(item)}
-                                tabIndex={0}
+                                className={`dropdown-item${isActive(item) ? ' active' : ''}${item.disabled ? ' disabled' : ''}`}
+                                onClick={() => !item.disabled && handleSelect(item)}
+                                tabIndex={item.disabled ? -1 : 0}
+                                aria-disabled={item.disabled}
                                 onKeyDown={e => {
-                                    if (e.key === 'Enter' || e.key === ' ') handleSelect(item);
+                                    if (!item.disabled && (e.key === 'Enter' || e.key === ' ')) handleSelect(item);
                                 }}
+                                style={item.disabled ? { opacity: 0.5, pointerEvents: 'none' } : {}}
                             >
                                 <span className='flex items-center gap-2'>
                                     {item.src && <img className="pp-dropdown-icon" src={item.src} alt={item.label} />}
