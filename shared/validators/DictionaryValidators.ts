@@ -94,6 +94,9 @@ export abstract class DictionaryValidators {
     }
 
     public static validateRequiredColumnsInElements(dictionary: DictionaryI): string | null {
+        if (!dictionary.elements?.length) {
+            return null;
+        }
         const requiredColumns = dictionary.columns.filter(col => col.required).map(col => col.code);
         const missingColumns = requiredColumns.filter(col => !dictionary.elements.some(el => col in el.values));
         if (missingColumns.length > 0) {

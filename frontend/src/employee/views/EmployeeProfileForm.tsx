@@ -8,7 +8,6 @@ import React from "react";
 
 import CommunicationLanguagesSection from "../components/CommunicationLanguagesSection";
 import EmployeeLocationSection from "../components/EmployeeLocationSection";
-import { TabSwitcherOption } from "../components/TabSwitcher";
 import { EmployeeProfileLocationOptions } from "@shared/def/employee-profile.def";
 import { EmployeeProfileFormValues } from "../interface";
 
@@ -23,9 +22,13 @@ const EmployeeProfileForm: React.FC = () => {
             lastName: "",
             communicationLanguages: [""],
             residenceCountry: "",
+
+            skills: [],
+            certificates: [],
+
             locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
 
-            locationCountries: [""],
+            locationCountries: [],
             locationDistancePosition: undefined,
             locationDistanceRadius: NaN,
         },
@@ -35,23 +38,6 @@ const EmployeeProfileForm: React.FC = () => {
 
     const formValues = watch();
     console.log(formValues)
-
-    // Tab state, sync with locationOption
-    const tabOptions: TabSwitcherOption[] = [
-        {
-            label: t("employeeProfile.form.locationOption.ALL_EUROPE.tab"),
-            code: EmployeeProfileLocationOptions.ALL_EUROPE,
-        },
-        {
-            label: t("employeeProfile.form.locationOption.SELECTED_COUNTRIES.tab"),
-            code: EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE,
-        },
-        {
-            label: t("employeeProfile.form.locationOption.DISTANCE.tab"),
-            code: EmployeeProfileLocationOptions.DISTANCE,
-        },
-    ];
-    const locationOption = watch("locationOption");
 
     return (
         <div className="w-full px-5 py-3 relative">
@@ -92,6 +78,45 @@ const EmployeeProfileForm: React.FC = () => {
                             />
                         )}
                     />
+
+
+{/* TODO nie działa */}
+                    <Controller
+                        name="skills"
+                        control={control}
+                        rules={{ required: true, validate: v => !!v }}
+                        render={({ field }) => (
+                            <DictionarySelector
+                                type="multi"
+                                className="w-full"
+                                valueInput={field.value}
+                                onSelectMulti={item => field.onChange(item)}
+                                label={t("employeeProfile.form.skills")}
+                                code="SKILLS"
+                                fullWidth
+                                required
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="certificates"
+                        control={control}
+                        rules={{ required: true, validate: v => !!v }}
+                        render={({ field }) => (
+                            <DictionarySelector
+                                type="multi"
+                                className="w-full"
+                                valueInput={field.value}
+                                onSelectMulti={item => field.onChange(item)}
+                                label={t("employeeProfile.form.certificates")}
+                                code="CERTIFICATES"
+                                fullWidth
+                                required
+                            />
+                        )}
+                    />
+
 
                     <CommunicationLanguagesSection
                         control={control}

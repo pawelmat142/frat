@@ -6,6 +6,9 @@ export interface EmployeeProfileFormValues {
     communicationLanguages: string[];
     residenceCountry: string;
 
+    skills?: string[];
+    certificates?: string[];
+
     locationOption: EmployeeProfileLocationOption;
 
     // IF SELECTED_COUNTRIES_EUROPE
