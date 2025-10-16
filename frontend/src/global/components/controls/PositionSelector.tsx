@@ -30,6 +30,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
 
     const [showMap, setShowMap] = useState(false);
     const [selectedPosition, setSelectedPosition] = useState<Position | null>(value || null);
+    const [initialPosition, setInitialPosition] = useState<Position | null>(value || null);
     const mapRef = useRef<HTMLDivElement>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<google.maps.Map | null>(null);
@@ -37,8 +38,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
 
     const { t } = useTranslation();
 
-    console.log('value')
-    console.log(value)
+    const initialZoom = 7
 
     let myClass = `pp-position-selector ${className}`;
     if (fullWidth) {
@@ -83,28 +83,68 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         }
     }, [showMap]);
 
-    const initializeMap = () => {
+
+
+    // Pobierz domyślne współrzędne z ip-api.com
+    const getDefaultCoords = async (): Promise<{ lat: number; lng: number }> => {
+        try {
+            const res = await fetch('https://ip-api.com/json/');
+            const data = await res.json();
+            if (data && typeof data.lat === 'number' && typeof data.lon === 'number') {
+                return { lat: data.lat, lng: data.lon };
+            }
+        } catch (e) {}
+        // fallback Warszawa
+        return { lat: 52.2297, lng: 21.0122 };
+    };
+
+    const initializeMap = async () => {
         if (!mapRef.current) return;
 
-        const initialPosition = selectedPosition || { lat: 52.2297, lng: 21.0122 }; // Warsaw default
+        // Jeśli już wybrano pozycję, użyj jej
+        if (selectedPosition) {
+            createMap(selectedPosition);
+            return;
+        }
 
+        // Spróbuj pobrać lokalizację z urządzenia
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const coords = {
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude,
+                    };
+                    createMap(coords);
+                },
+                async () => {
+                    // Jeśli nie uda się pobrać, pobierz z API
+                    const coords = await getDefaultCoords();
+                    createMap(coords);
+                },
+                { timeout: 3000 }
+            );
+        } else {
+            const coords = await getDefaultCoords();
+            createMap(coords);
+        }
+    };
+
+    // Tworzy mapę i marker
+    const createMap = (initialPosition: { lat: number; lng: number }) => {
+        if (!mapRef.current) return;
         const map = new google.maps.Map(mapRef.current, {
             center: initialPosition,
-            zoom: 13,
+            zoom: initialZoom,
         });
-
         mapInstanceRef.current = map;
-
-        // Add marker
         const marker = new google.maps.Marker({
             position: initialPosition,
             map: map,
             draggable: true,
         });
-
         markerRef.current = marker;
-
-        // Handle map click
+        setInitialPosition(initialPosition)
         map.addListener('click', (e: google.maps.MapMouseEvent) => {
             if (e.latLng) {
                 const position = {
@@ -115,8 +155,6 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                 marker.setPosition(e.latLng);
             }
         });
-
-        // Handle marker drag
         marker.addListener('dragend', () => {
             const position = marker.getPosition();
             if (position) {
@@ -173,6 +211,14 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         setSelectedPosition(null);
     };
 
+    const handleConfirm = () => {
+        if (onChange) {
+            onChange(selectedPosition || initialPosition);
+        }
+        setShowMap(false);
+        setSelectedPosition(null);
+    }
+
     const displayValue = selectedPosition
         ? selectedPosition.address || `${selectedPosition.lat.toFixed(6)}, ${selectedPosition.lng.toFixed(6)}`
         : '';
@@ -201,7 +247,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                             <Button onClick={handleClear} mode={BtnModes.ERROR_TXT}>
                                 {t('common.clear')}
                             </Button>
-                            <Button onClick={() => setShowMap(false)}>
+                            <Button onClick={handleConfirm}>
                                 {t('common.confirm')}
                             </Button>
                         </div>
