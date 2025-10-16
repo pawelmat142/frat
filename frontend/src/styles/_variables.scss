@@ -10,6 +10,7 @@ $desktop: 1024px;
   --active-bg: #fbf9fa;
   
   --primary-text: #364153;
+  --primary-text-active: #000;
   --active-text: #4f46e5;
   --secondary-text: #99a1af;
   
@@ -21,13 +22,14 @@ $desktop: 1024px;
 .dark {
   --primary-color: #7A73EB;
   --primary-color-active: #4f46e5;
-
+  
   --primary-bg: #101828;
   --secondary-bg: #0000001a;
   --active-bg: #ffffff0d;
-
+  
   --primary-text: #99a1af;
-  --active-text: #fff;
+  --primary-text-active: #fff;
+  --active-text: #7A73EB;
   --secondary-text: rgba(107, 114, 128, 0.733);
 
   --border-color: #ffffff1a;
@@ -43,6 +45,7 @@ $secondary-bg: var(--secondary-bg);
 $active-bg: var(--active-bg);
 
 $primary-text: var(--primary-text);
+$primary-text-active: var(--primary-text-active);
 $active-text: var(--active-text);
 $secondary-text: var(--secondary-text);
 

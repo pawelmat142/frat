@@ -344,3 +344,21 @@ $btnPaddingY: 0.375rem;
     display: none;
   }
 }
+
+
+
+.tab-switcher-option {
+  box-sizing: content-box;
+  color: $primary-text;
+  border-bottom: 2px solid transparent;
+
+  &:hover {
+    color: $primary-text-active;
+    border-bottom: 2px solid $primary-text;
+  }
+  &.active {
+    color: $primary-color;
+    border-bottom: 2px solid $primary-color;
+  }
+
+}

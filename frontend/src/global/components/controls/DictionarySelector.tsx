@@ -5,6 +5,7 @@ import { DictionaryI } from '@shared/interfaces/DictionaryI';
 import { DictionaryService } from 'global/services/DictionaryService';
 import Loading from '../Loading';
 import Selector from './Selector';
+import SelectorMulti from './SelectorMulti';
 import { useTranslation } from 'react-i18next';
 
 interface DictionarySelectorProps<T extends SelectorValue = SelectorValue> extends DictionarySelectorInterface<T> {
@@ -76,8 +77,7 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
 
     if (type === 'single') {
         const selectedItem: SelectorItem<string> | null = items.find(item => item.value === valueInput) || null;
-
-    return <Selector
+        return <Selector
             ref={ref}
             items={items}
             id={id}
@@ -89,6 +89,26 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             className={className}
             value={selectedItem}
             onSelect={handleSelect}
+        />;
+    }
+
+    if (type === 'multi') {
+        // valueInput is array of selected values
+        const selectedItems: SelectorItem<T>[] = Array.isArray(valueInput)
+            ? items.filter(item => valueInput.includes(item.value)) as SelectorItem<T>[]
+            : [];
+        const handleSelectMulti = onSelectMulti ?? (() => {});
+        return <SelectorMulti
+            items={items as SelectorItem<T>[]}
+            values={selectedItems}
+            onSelect={handleSelectMulti}
+            id={id}
+            label={label}
+            fullWidth={fullWidth}
+            disabled={disabled}
+            required={required}
+            center={center}
+            className={className}
         />;
     }
 

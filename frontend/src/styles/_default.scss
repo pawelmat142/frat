@@ -4,7 +4,7 @@
 * {
   scrollbar-width: thin;
   scrollbar-color: $primary-color $primary-bg;
-  border-color: $border-color!important;
+  border-color: $border-color;
 }
 
 /* For Webkit browsers */
@@ -80,6 +80,9 @@ a {
   font-weight: 500;
 }
 
+.small-font {
+  font-size: .8rem;
+}
 
 .h2 {
   font-size: 1.25rem;
