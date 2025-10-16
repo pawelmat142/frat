@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import DictionaryElementForm from "./DictionaryElementForm";
 import Loading from "global/components/Loading";
 import AddIcon from '@mui/icons-material/Add';
@@ -203,9 +203,9 @@ const DictionaryView: React.FC = () => {
     return (
         <div className="flex flex-col gap-6 w-full px-5 pb-20 pt-10">
             <div className="w-full">
-                <Buton onClick={() => navigate(Path.ADMIN_DICTIONARIES)} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple">
+                <Button onClick={() => navigate(Path.ADMIN_DICTIONARIES)} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple">
                     ← Back
-                </Buton>
+                </Button>
                 <div className="flex items-center gap-4 mb-4 mt-10">
                     <h2 className="text-xl font-bold primary-text">Dictionary CODE: {dictionary.code}</h2>
                     <h2 className="primary-text">version: {dictionary.version}</h2>
@@ -271,26 +271,26 @@ const DictionaryView: React.FC = () => {
                 <div className="">
                     {!elementForm ? (
                         <div className="flex gap-2 my-10">
-                            <Buton
+                            <Button
                                 onClick={() => onAddElement()}
                                 mode={BtnModes.PRIMARY}
                             >
                                 <AddIcon /> Add element
-                            </Buton>
-                            <Buton
+                            </Button>
+                            <Button
                                 onClick={() => handleSave()}
                                 mode={BtnModes.SECONDARY}
                             >
                                 Save changes
-                            </Buton>
+                            </Button>
 
-                            <Buton
+                            <Button
                                 onClick={() => navigate(Path.getDictionaryGroupFormPath(dictionary.code, 'new'))}
                             >
                                 Add group
-                            </Buton>
+                            </Button>
 
-                            <Buton
+                            <Button
                                 onClick={() => setDictionary({
                                     ...dictionary,
                                     status: dictionary.status === DictionaryStatuses.ACTIVE
@@ -302,21 +302,21 @@ const DictionaryView: React.FC = () => {
                                 {dictionary.status === DictionaryStatuses.ACTIVE
                                     ? 'Deactivate'
                                     : 'Activate'}
-                            </Buton>
+                            </Button>
 
-                            <Buton
+                            <Button
                                 onClick={() => exportJson()}
                                 mode={BtnModes.PRIMARY_TXT}
                             >
                                 Export JSON
-                            </Buton>
+                            </Button>
 
-                            <Buton
+                            <Button
                                 onClick={() => handleDelete()}
                                 mode={BtnModes.ERROR}
                             >
                                 Delete dictionary
-                            </Buton>
+                            </Button>
 
                         </div>
                     ) : (

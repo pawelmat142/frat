@@ -2,7 +2,7 @@ import { BtnInterface, BtnModes, BtnSizes } from '../../interface/controls.inter
 import { Link } from 'react-router-dom';
 import { MouseEventHandler } from 'react';
 
-const Buton: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, size=BtnSizes.MEDIUM, children, fullWidth=false, className, disabled, onlyMobile, onlyDesktop, mode=BtnModes.PRIMARY }) => {
+const Button: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, size=BtnSizes.MEDIUM, children, fullWidth=false, className, disabled, onlyMobile, onlyDesktop, mode=BtnModes.PRIMARY }) => {
     
     let myClass = `rounded-md shadow-sm btn-font btn ${mode} ripple ${size}`;
 
@@ -62,4 +62,4 @@ const Buton: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, size=B
     
 };
 
-export default Buton;
+export default Button;

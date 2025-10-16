@@ -1,4 +1,4 @@
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import Selector from "global/components/controls/Selector";
 import Input from "global/components/controls/Input";
 import React, { useState, useEffect } from "react";
@@ -197,9 +197,9 @@ const AddDictionaryView: React.FC = () => {
 
   return (
     <div className="w-full px-5 py-3">
-      <Buton onClick={() => goBack()} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple mb-2">
+      <Button onClick={() => goBack()} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple mb-2">
         ← Back
-      </Buton>
+      </Button>
       <form className="flex flex-col gap-4 p-4 rounded mt-10 max-w-xl mx-auto mb-20" onSubmit={handleSubmit}>
         <h2 className="text-lg font-bold">{isEditMode ? "Edit dictionary" : "Add Dictionary"}</h2>
         <div className="flex flex-col gap-3">
@@ -281,33 +281,33 @@ const AddDictionaryView: React.FC = () => {
 
           {columnForm ? (
             <div className="flex gap-2">
-              <Buton
+              <Button
                 onClick={handleAddColumn}
                 size={BtnSizes.SMALL}
                 disabled={!columnForm?.code || !columnForm.type || (columnForm.required && !columnForm.defaultValue)}
               >
                 Column ready
-              </Buton>
-              <Buton
+              </Button>
+              <Button
                 mode={BtnModes.ERROR_TXT}
                 onClick={() => setColumnForm(null)}
                 size={BtnSizes.SMALL}
               >
                 {/* if edit mode show cancel editing */}
                 {columnForm.editMode ? "Cancel editing" : "Cancel column"}
-              </Buton>
+              </Button>
 
             </div>
 
           ) : (
-            <Buton
+            <Button
               mode={BtnModes.PRIMARY_TXT}
               onClick={handleAddColumn}
               size={BtnSizes.SMALL}
             >
               <AddIcon />
               Add Column
-            </Buton>
+            </Button>
           )}
 
           {columns.length > 0 && (
@@ -339,7 +339,7 @@ const AddDictionaryView: React.FC = () => {
 
         </div>
 
-        <Buton
+        <Button
           mode={BtnModes.PRIMARY}
           size={BtnSizes.LARGE}
           fullWidth={true}
@@ -348,7 +348,7 @@ const AddDictionaryView: React.FC = () => {
           disabled={!code || !description || columns.length === 0 || !!columnForm}
         >
           {isEditMode ? "Update dictionary" : "Create dictionary"}
-        </Buton>
+        </Button>
       </form>
 
     </div>

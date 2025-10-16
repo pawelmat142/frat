@@ -1,7 +1,7 @@
 import Loading from "global/components/Loading";
 import { useState } from "react";
 import { userAdminPanelContext } from "../AdminPanelProvider";
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import Input from "global/components/controls/Input";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { toast } from "react-toastify";
@@ -128,21 +128,21 @@ const TranslationsSection: React.FC = () => {
     return (
         <>
             <div className="flex gap-2 mb-10 mt-20">
-                <Buton onClick={() => onShowForm()} mode={BtnModes.PRIMARY_TXT}>
+                <Button onClick={() => onShowForm()} mode={BtnModes.PRIMARY_TXT}>
                     {showForm ? 'Cancel' : 'Add translation'}
-                </Buton>
+                </Button>
 
                 {showForm ?
-                    <Buton onClick={onAddTranslation} disabled={!newPath || !newValue}>Ready</Buton>
+                    <Button onClick={onAddTranslation} disabled={!newPath || !newValue}>Ready</Button>
                     :
-                    <Buton onClick={onSave}>Save translations</Buton>
+                    <Button onClick={onSave}>Save translations</Button>
                 }
 
                 {selectedTranslation && (
-                    <Buton
+                    <Button
                         mode={BtnModes.PRIMARY_TXT}
                         onClick={handleExportTranslation}
-                    >Export JSON ({selectedTranslation.langCode})</Buton>
+                    >Export JSON ({selectedTranslation.langCode})</Button>
                 )}
 
                 <SelectFileButton onFileSelected={handleImportTranslation} label="Import JSON" />

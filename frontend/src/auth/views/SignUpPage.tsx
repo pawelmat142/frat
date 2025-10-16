@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Input from "global/components/controls/Input";
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { AuthService } from "auth/services/AuthService";
 import { Utils } from "global/utils";
@@ -65,9 +65,9 @@ const SignUpPage: React.FC = () => {
                     <h2 className="text-lg font-bold">{t("signup.title")}</h2>
 
                     {isDevMode && (
-                        <Buton onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
+                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
                             DEV FILL
-                        </Buton>)}
+                        </Button>)}
 
                 </div>
                 <div className="flex flex-col gap-3">
@@ -110,7 +110,7 @@ const SignUpPage: React.FC = () => {
                 </div>
 
                 <div className="buttons">
-                    <Buton
+                    <Button
                         mode={BtnModes.PRIMARY}
                         size={BtnSizes.LARGE}
                         fullWidth={true}
@@ -119,9 +119,9 @@ const SignUpPage: React.FC = () => {
                         disabled={loading || !email || !repeatEmail || !password || !repeatPassword}
                     >
                         {loading ? t("signup.registering") : t("signup.submit")}
-                    </Buton>
+                    </Button>
 
-                    <Buton
+                    <Button
                         mode={BtnModes.PRIMARY_TXT}
                         fullWidth={true}
                         className="mt-5"
@@ -130,7 +130,7 @@ const SignUpPage: React.FC = () => {
                         }}
                     >
                         {t("common.back")}
-                    </Buton>
+                    </Button>
                 </div>
             </form>
         </div>

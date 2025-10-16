@@ -1,4 +1,4 @@
-import Buton from "../../../global/components/controls/Buton";
+import Button from "../../../global/components/controls/Button";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path"
 import SelectFileButton from "../../../global/components/controls/SelectFileButton";
@@ -103,10 +103,10 @@ const AdminDictionaries: React.FC = () => {
             </div>
 
             <div className="flex gap-4 mt-8">
-                <Buton onClick={onAddDictionary}>
+                <Button onClick={onAddDictionary}>
                     <AddIcon />
                     Add dictionary
-                </Buton>
+                </Button>
                 <SelectFileButton onFileSelected={handleImportDictionary} label="Import dictionary" />
             </div>
         </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
 import { useNavigate } from "react-router-dom";
 import { httpClient } from "global/services/http";
@@ -42,7 +42,7 @@ const ErrorPage: React.FC = () => {
                 <h2 className="text-2xl font-bold error-color mb-2">{t("validation.view.title")}</h2>
                 <div className="text-base primary-text mb-4">{msg}</div>
                 <div className="flex gap-2 justify-center mt-2">
-                    <Buton mode={BtnModes.PRIMARY} onClick={() => navigate(Path.HOME)}>{t("validation.view.goHome")}</Buton>
+                    <Button mode={BtnModes.PRIMARY} onClick={() => navigate(Path.HOME)}>{t("validation.view.goHome")}</Button>
                 </div>
             </div>
         </div>

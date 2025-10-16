@@ -1,4 +1,4 @@
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import DictionarySelector from "global/components/controls/DictionarySelector";
 import Input from "global/components/controls/Input";
 
@@ -9,6 +9,7 @@ import React from "react";
 import CommunicationLanguagesSection from "../components/CommunicationLanguagesSection";
 import TabSwitcher, { TabSwitcherOption } from "../components/TabSwitcher";
 import { EmployeeProfileLocationOption, EmployeeProfileLocationOptions } from "@shared/def/employee-profile.def";
+import PositionSelector from "global/components/controls/PositionSelector";
 
 interface EmployeeProfileFormValues {
     firstName: string;
@@ -17,7 +18,12 @@ interface EmployeeProfileFormValues {
     residenceCountry: string;
 
     locationOption: EmployeeProfileLocationOption;
-    locationCountries: string[];
+    locationCountries?: string[];
+    locationDistance?: {
+        latitude: number;
+        longitude: number;
+        distanceKm: number;
+    }
 }
 
 
@@ -156,6 +162,25 @@ const EmployeeProfileForm: React.FC = () => {
                                     <div className="mb-5 text-center">
                                         {t("employeeProfile.form.locationOption.DISTANCE.msg")}
                                     </div>
+
+                                    <Controller
+                                        name="locationDistance"
+                                        control={control}
+                                        rules={{ required: true, validate: v => !!v }}
+                                        render={({ field }) => (
+                                            <PositionSelector
+                                                name="locationDistance"
+                                                className="w-full"
+                                                value={{
+                                                    lat: 0,
+                                                    lng: 0 
+                                                }}
+                                                onChange={field.onChange}
+                                                apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+                                            />
+                                        )}
+                                    />
+
                                 </div>
                             )}
                         </div>
@@ -165,7 +190,7 @@ const EmployeeProfileForm: React.FC = () => {
 
 
                 <div className="flex flex-col gap-5 mt-10">
-                    <Buton type='submit'>{t('common.submit')}</Buton>
+                    <Button type='submit'>{t('common.submit')}</Button>
                 </div>
             </form>
         </div>

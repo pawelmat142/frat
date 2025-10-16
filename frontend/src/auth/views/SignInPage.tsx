@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Input from "global/components/controls/Input";
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { AuthService } from "auth/services/AuthService";
 import { Utils } from "global/utils";
@@ -66,9 +66,9 @@ const SignInPage: React.FC = () => {
                     <h2 className="text-lg font-bold">{t("signin.title")}</h2>
 
                     {isDevMode && (
-                        <Buton onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
+                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
                             DEV FILL
-                        </Buton>)}
+                        </Button>)}
 
                 </div>
                 <div className="flex flex-col gap-3">
@@ -93,7 +93,7 @@ const SignInPage: React.FC = () => {
                 </div>
 
                 <div className="buttons">
-                    <Buton
+                    <Button
                         mode={BtnModes.SECONDARY_TXT}
                         size={BtnSizes.SMALL}
                         className="ml-auto mb-10"
@@ -102,9 +102,9 @@ const SignInPage: React.FC = () => {
                         }}
                     >
                         {t("signin.forgotPassword")}
-                    </Buton>
+                    </Button>
 
-                    <Buton
+                    <Button
                         mode={BtnModes.PRIMARY}
                         size={BtnSizes.LARGE}
                         fullWidth={true}
@@ -113,9 +113,9 @@ const SignInPage: React.FC = () => {
                         disabled={loading || !email || !password}
                     >
                         {loading ? t("signin.signingIn") : t("signin.submit")}
-                    </Buton>
+                    </Button>
 
-                    <Buton
+                    <Button
                         mode={BtnModes.SECONDARY}
                         size={BtnSizes.LARGE}
                         fullWidth={true}
@@ -124,9 +124,9 @@ const SignInPage: React.FC = () => {
                     >
                         <GoogleIcon />
                         {t("signin.googleProvider")}
-                    </Buton>
+                    </Button>
 
-                    <Buton
+                    <Button
                         mode={BtnModes.PRIMARY_TXT}
                         fullWidth={true}
                         className="mt-5"
@@ -136,7 +136,7 @@ const SignInPage: React.FC = () => {
                     >
                         <Email />
                         {t("signin.signUpForm")}
-                    </Buton>
+                    </Button>
 
                 </div>
             </form>

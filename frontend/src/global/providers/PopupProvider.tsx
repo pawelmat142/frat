@@ -1,4 +1,4 @@
-import Buton from 'global/components/controls/Buton';
+import Button from 'global/components/controls/Button';
 import { BtnMode, BtnModes } from 'global/interface/controls.interface';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -146,9 +146,9 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
         <div className="flex justify-end gap-2">
 
           {config?.buttons.map((btn, idx) => (
-            <Buton key={idx} mode={btn.mode} onClick={() => btnAction(btn)}>
+            <Button key={idx} mode={btn.mode} onClick={() => btnAction(btn)}>
               {t(btn.text)}
-            </Buton>
+            </Button>
           ))}
 
         </div>

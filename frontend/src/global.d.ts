@@ -7,3 +7,10 @@ declare module 'axios' {
 	}
 }
 declare module '*.scss';
+
+// Google Maps API types
+declare global {
+	interface Window {
+		google: typeof google;
+	}
+}

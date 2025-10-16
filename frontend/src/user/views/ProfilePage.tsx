@@ -4,7 +4,7 @@ import { UserI } from "@shared/interfaces/UserI";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserPublicService } from "user/services/UserPublicService";
 import { useAuthContext } from "auth/AuthProvider";
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import { AuthService } from "auth/services/AuthService";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -53,10 +53,10 @@ const ProfilePage: React.FC = () => {
         <div className="mb-6 p-4 rounded border border-red-400 bg-red-50 text-red-700 text-center flex flex-col items-center">
             <div className="font-bold mb-2">Email Verification Required</div>
             <div className="mb-2">You need to verify your email address to access all features.</div>
-            <Buton
+            <Button
                 className="mx-auto"
                 onClick={sendVerificationEmail}
-            >Resend verification email</Buton>
+            >Resend verification email</Button>
         </div>
     ) : null;
 
@@ -86,13 +86,13 @@ const ProfilePage: React.FC = () => {
                 </div>
 
                 <div className="flex gap-5 mt-10">
-                    <Buton onClick={() => {
+                    <Button onClick={() => {
                         AuthService.logout()
-                    }}>Logout</Buton>
+                    }}>Logout</Button>
 
-                    <Buton onClick={() => {
+                    <Button onClick={() => {
                         navigate(Path.EMPLOYEE_PROFILE_FORM)
-                    }}>{t('employeeProfile.create')}</Buton>
+                    }}>{t('employeeProfile.create')}</Button>
 
                 </div>
 

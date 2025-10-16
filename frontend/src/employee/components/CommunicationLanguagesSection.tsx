@@ -2,7 +2,7 @@ import { Controller, UseFormSetValue, UseFormWatch, Control } from "react-hook-f
 import DictionarySelector from "global/components/controls/DictionarySelector";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -56,7 +56,7 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
           )}
         </div>
       ))}
-      <Buton
+      <Button
         mode={BtnModes.PRIMARY_TXT}
         size={BtnSizes.SMALL}
         className="ml-auto"
@@ -65,7 +65,7 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
         }}
       >
         {t("employeeProfile.form.addLanguage")}
-      </Buton>
+      </Button>
     </>
   );
 };

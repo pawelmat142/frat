@@ -1,7 +1,7 @@
 import React from "react";
 import Input from "global/components/controls/Input";
 import Checkbox from "global/components/controls/Checkbox";
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
 import TypedInput from "global/components/controls/TypedInput";
 import { DictionaryI, DictionaryElement } from "@shared/interfaces/DictionaryI";
@@ -87,19 +87,19 @@ const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
                 ))}
             </div>
             <div className="flex gap-2 justify-center mt-2">
-                <Buton
+                <Button
                     onClick={onAddElement}
                     mode={BtnModes.PRIMARY}
                     disabled={!elementForm?.code || !allElementRequiredFiledsFilled}
                 >
                     {editMode ? `Update Element` : `Add Element`}
-                </Buton>
-                <Buton
+                </Button>
+                <Button
                     onClick={() => setElementForm(null)}
                     mode={BtnModes.PRIMARY_TXT}
                 >
                     Cancel
-                </Buton>
+                </Button>
             </div>
         </div>
     );

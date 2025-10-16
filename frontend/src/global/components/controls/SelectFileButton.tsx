@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import Buton from './Buton';
+import Button from './Button';
 import { BtnModes } from 'global/interface/controls.interface';
 
 interface SelectFileButtonProps {
@@ -35,9 +35,9 @@ const SelectFileButton: React.FC<SelectFileButtonProps> = ({ onFileSelected, dis
         onChange={handleFileChange}
         disabled={disabled}
       />
-      <Buton onClick={handleClick} mode={BtnModes.PRIMARY_TXT} disabled={disabled}>
+      <Button onClick={handleClick} mode={BtnModes.PRIMARY_TXT} disabled={disabled}>
         {label}
-      </Buton>
+      </Button>
     </>
   );
 };

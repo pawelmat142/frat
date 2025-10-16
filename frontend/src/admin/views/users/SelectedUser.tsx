@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { UserI, UserRole, UserRoles } from "@shared/interfaces/UserI";
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import { BtnModes, SelectorItem,  } from "global/interface/controls.interface";
 import { UsersAdminService } from "admin/services/UsersAdmin.service";
 import { toast } from "react-toastify";
@@ -88,12 +88,12 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
                         onSelect={setAssignRolesValue}
                     />
                     {assignRoleForm && !!assignRolesValue.length && (
-                        <Buton
+                        <Button
                             onClick={saveAssignRole} 
-                        >Save</Buton>
+                        >Save</Button>
                     )}
                     {assignRoleForm && (
-                        <Buton onClick={() => setAssignRoleForm(false)} mode={BtnModes.PRIMARY_TXT}>Cancel</Buton>
+                        <Button onClick={() => setAssignRoleForm(false)} mode={BtnModes.PRIMARY_TXT}>Cancel</Button>
                     )}
 
                 </div>
@@ -101,7 +101,7 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
             </>)}
 
             <div className="flex gap-2 ">
-                {!assignRoleForm && (<Buton onClick={assignRole} mode={BtnModes.PRIMARY}>Set roles</Buton>)}
+                {!assignRoleForm && (<Button onClick={assignRole} mode={BtnModes.PRIMARY}>Set roles</Button>)}
             </div>
         </div>
     );

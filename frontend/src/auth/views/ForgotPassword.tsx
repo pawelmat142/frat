@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Input from "global/components/controls/Input";
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useNavigate } from "react-router-dom";
 import Loading from "global/components/Loading";
@@ -44,7 +44,7 @@ const ForgotPassword: React.FC = () => {
                         required
                         fullWidth
                     />
-                    <Buton
+                    <Button
                         mode={BtnModes.PRIMARY}
                         size={BtnSizes.LARGE}
                         fullWidth={true}
@@ -53,16 +53,16 @@ const ForgotPassword: React.FC = () => {
                         disabled={!email}
                     >
                         {t("signin.sendResetLink", "Send reset link")}
-                    </Buton>
+                    </Button>
                 </>
-                <Buton
+                <Button
                     mode={BtnModes.PRIMARY_TXT}
                     fullWidth={true}
                     className="mt-5"
                     onClick={() => navigate(-1)}
                 >
                     {t("common.back")}
-                </Buton>
+                </Button>
             </form>
         </div>
     );

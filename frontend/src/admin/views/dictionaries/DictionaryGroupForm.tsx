@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
 import Input from "global/components/controls/Input";
-import Buton from "global/components/controls/Buton";
+import Button from "global/components/controls/Button";
 import Checkbox from "global/components/controls/Checkbox";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { Path } from "../../../path";
@@ -102,9 +102,9 @@ const DictionaryGroupForm: React.FC = () => {
 
     return (
         <div className="w-full px-5 py-3">
-            <Buton onClick={() => navigate(Path.getDictionaryPath(dictionary.code))} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
+            <Button onClick={() => navigate(Path.getDictionaryPath(dictionary.code))} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
                 ← Back
-            </Buton>
+            </Button>
             <form className="flex flex-col gap-4 p-4 rounded mt-10 max-w-xl mx-auto mb-20" onSubmit={handleSubmit}>
                 <h2 className="text-lg font-bold mb-4">
                     {editMode ? `Edit group ${groupCode} in Dictionary: ${dictionary.code}` : `Add Group to Dictionary: ${dictionary.code}`}
@@ -145,14 +145,14 @@ const DictionaryGroupForm: React.FC = () => {
                         ))
                     )}
                 </div>
-                <Buton
+                <Button
                     mode={BtnModes.PRIMARY}
                     type="submit"
                     disabled={!groupCode || selectedElements.length === 0}
                     className="mt-4"
                 >
                     {editMode ? 'Save group' : 'Add Group'}
-                </Buton>
+                </Button>
             </form>
         </div>
     );
