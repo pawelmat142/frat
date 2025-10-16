@@ -30,12 +30,15 @@ function getTwoLetterLanguage(lang: string): string {
   return lang.split('-')[0].toLowerCase();
 }
 
-const browserLanguageRaw = navigator.language || navigator.languages?.[0] || 'en';
 
-const browserLanguage = getTwoLetterLanguage(browserLanguageRaw);
+// Get language from localStorage or browser
+const localStorageLang = typeof window !== 'undefined' ? localStorage.getItem('lang') : null;
+const browserLanguage = navigator.language || navigator.languages?.[0] || 'en';
+
+const initialLanguage = localStorageLang || getTwoLetterLanguage(browserLanguage);
 
 i18n.init({
-  lng: browserLanguage, // domyślny język z przeglądarki
+  lng: initialLanguage, // domyślny język z localStorage lub przeglądarki
   fallbackLng: 'en',  
   ns: ['translation'],
   defaultNS: 'translation',
@@ -47,6 +50,13 @@ i18n.init({
   },
   backend: {},
   load: 'languageOnly',
+});
+
+// Save language to localStorage on change
+i18n.on('languageChanged', (lng) => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('lang', lng);
+  }
 });
 
 export default i18n;
