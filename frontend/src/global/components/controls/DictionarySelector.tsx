@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 interface DictionarySelectorProps<T extends SelectorValue = SelectorValue> extends DictionarySelectorInterface<T> {
     disabledValues?: string[];
+    elementLabelTranslationKey?: string
 }
 
 const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
@@ -27,7 +28,8 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         type = 'single',
         valueInput,
         onSelectMulti,
-        disabledValues = []
+        disabledValues = [],
+        elementLabelTranslationKey = 'TRANSLATION_KEY'
     }: DictionarySelectorProps<T>,
     ref: React.Ref<any>
 ) => {
@@ -68,12 +70,16 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         }
     }
 
-    const items: SelectorItem<string & { disabled?: boolean }>[] = dictionary.elements.map(element => ({
-        label: element.code,
-        value: String(element.code),
-        src: element.values.SRC,
-        disabled: disabledValues.includes(String(element.code)),
-    }));
+    const items: SelectorItem<string & { disabled?: boolean }>[] = dictionary.elements.map(element => {
+        const translatedLabel = t(element.values[elementLabelTranslationKey]);
+        const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
+        return {
+            label: capitalizedLabel,
+            value: String(element.code),
+            src: element.values.SRC,
+            disabled: disabledValues.includes(String(element.code)),
+        };
+    });
 
     if (type === 'single') {
         const selectedItem: SelectorItem<string> | null = items.find(item => item.value === valueInput) || null;

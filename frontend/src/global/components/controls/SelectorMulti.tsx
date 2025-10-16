@@ -22,7 +22,7 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
     const myClass = `pp-control pp-dropdown${fullWidth ? ' w-full' : ' w-fit'}${disabled ? ' opacity-50 pointer-events-none cursor-not-allowed' : ''}`;
 
     const { t } = useTranslation()
-    
+
     useEffect(() => {
         if (!open) return;
         const handleClickOutside = (event: MouseEvent) => {
@@ -95,14 +95,21 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
                                     if (e.key === 'Enter' || e.key === ' ') handleSelect(item);
                                 }}
                             >
-                                <input
-                                    type="checkbox"
-                                    checked={isActive(item)}
-                                    readOnly
-                                    tabIndex={-1}
-                                    style={{ marginRight: 8 }}
-                                />
-                                {item.label}
+                                <span className='flex items-center gap-2'>
+
+                                    <input
+                                        type="checkbox"
+                                        checked={isActive(item)}
+                                        readOnly
+                                        tabIndex={-1}
+                                        style={{ marginRight: 8 }}
+                                    />
+
+                                    {item.src && <img className="pp-dropdown-icon" src={item.src} alt={item.label} />}
+                                    <span>{item.label}</span>
+                                </span>
+
+
                             </li>
                         ))}
                         <li
@@ -113,7 +120,9 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
                                 if (e.key === 'Enter' || e.key === ' ') setOpen(false);
                             }}
                         >
-                            {t('common.close')}
+                            <span>
+                                {t('common.close')}
+                            </span>
                         </li>
                     </ul>
                 )}

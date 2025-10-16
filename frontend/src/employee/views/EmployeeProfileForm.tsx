@@ -93,6 +93,7 @@ const EmployeeProfileForm: React.FC = () => {
                                 label={t("employeeProfile.form.residenceCountry")}
                                 code="LANGUAGES"
                                 groupCode="COMMUNICATION"
+                                elementLabelTranslationKey="COUNTRY_TRANSLATION_KEY"
                                 fullWidth
                                 required
                             />
@@ -117,15 +118,15 @@ const EmployeeProfileForm: React.FC = () => {
 
                     {/* Tab message depending on selected option */}
                     <div className="w-full flex mt-4">
-                        <div className="text-center primary-text w-full">
+                        <div className="primary-text w-full">
                             {locationOption === EmployeeProfileLocationOptions.ALL_EUROPE && (
-                                <div>
+                                <div className="text-center">
                                     {t("employeeProfile.form.locationOption.ALL_EUROPE.msg")}
                                 </div>
                             )}
                             {locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE && (
                                 <div className="w-full">
-                                    <div className="mb-5">
+                                    <div className="mb-5 text-center">
                                         {t("employeeProfile.form.locationOption.SELECTED_COUNTRIES.msg")}
                                     </div>
 
@@ -141,6 +142,7 @@ const EmployeeProfileForm: React.FC = () => {
                                                 onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
                                                 label={t("employeeProfile.form.locationCountries")}
                                                 code="LANGUAGES"
+                                                elementLabelTranslationKey="COUNTRY_TRANSLATION_KEY"
                                                 fullWidth
                                                 required
                                             />
@@ -151,7 +153,7 @@ const EmployeeProfileForm: React.FC = () => {
                             )}
                             {locationOption === EmployeeProfileLocationOptions.DISTANCE && (
                                 <div>
-                                    <div className="mb-5">
+                                    <div className="mb-5 text-center">
                                         {t("employeeProfile.form.locationOption.DISTANCE.msg")}
                                     </div>
                                 </div>
