@@ -5,3 +5,10 @@ export const EmployeeProfileLocationOptions = {
 } as const;
 
 export type EmployeeProfileLocationOption = typeof EmployeeProfileLocationOptions[keyof typeof EmployeeProfileLocationOptions];
+
+
+export interface Position {
+    lat: number;
+    lng: number;
+    address?: string;
+}

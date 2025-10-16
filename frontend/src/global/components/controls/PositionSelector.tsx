@@ -1,18 +1,15 @@
-import React, { useState, useRef, useEffect, forwardRef } from 'react';
-import { InputInterface } from '../../interface/controls.interface';
+import { useState, useRef, useEffect, forwardRef } from 'react';
+import { BtnModes, InputInterface } from '../../interface/controls.interface';
 import ControlLabel from './ControlLabel';
 import PushPinIcon from '@mui/icons-material/PushPin';
+import { useTranslation } from 'react-i18next';
+import Button from './Button';
+import { Position } from '@shared/def/employee-profile.def';
 
-interface Position {
-    lat: number;
-    lng: number;
-    address?: string;
-}
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: Position | null;
     onChange?: (position: Position | null) => void;
-    apiKey?: string;
 }
 
 const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
@@ -27,14 +24,21 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         name,
         center,
         onChange,
-        apiKey
     }, ref) => {
+
+    const apiKey = "" //TODO
 
     const [showMap, setShowMap] = useState(false);
     const [selectedPosition, setSelectedPosition] = useState<Position | null>(value || null);
     const mapRef = useRef<HTMLDivElement>(null);
+    const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<google.maps.Map | null>(null);
     const markerRef = useRef<google.maps.Marker | null>(null);
+
+    const { t } = useTranslation();
+
+    console.log('value')
+    console.log(value)
 
     let myClass = `pp-position-selector ${className}`;
     if (fullWidth) {
@@ -47,16 +51,14 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
     }
 
     useEffect(() => {
-        if (value) {
-            setSelectedPosition(value);
-        }
+        setSelectedPosition(value || null);
     }, [value]);
 
     useEffect(() => {
         if (!showMap) return;
 
         const handleClickOutside = (event: MouseEvent) => {
-            if (mapRef.current && !mapRef.current.contains(event.target as Node)) {
+            if (mapContainerRef?.current && !mapContainerRef?.current?.contains(event.target as Node)) {
                 setShowMap(false);
             }
         };
@@ -68,7 +70,6 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
     useEffect(() => {
         if (!showMap || !mapRef.current) return;
 
-        // TODO api key
         // Load Google Maps script if not already loaded
         if (!window.google) {
             const script = document.createElement('script');
@@ -160,14 +161,16 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
     };
 
     const handleInputClick = () => {
+        if (showMap) return;
         if (!disabled) setShowMap(true);
     };
 
     const handleClear = () => {
-        setSelectedPosition(null);
         if (onChange) {
             onChange(null);
         }
+        setShowMap(false);
+        setSelectedPosition(null);
     };
 
     const displayValue = selectedPosition
@@ -177,85 +180,30 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
     return (
         <div className={`${myClass}${center ? ' mx-auto' : ''}`}>
             <ControlLabel id={id} label={label} required={required} />
-            <div className="pp-control pp-position-selector-row" style={{ position: 'relative' }}>
+            <div className="pp-control pp-position-selector" onClick={handleInputClick}>
                 <input
                     ref={ref}
                     id={id}
                     name={name || id}
                     type="text"
                     value={displayValue}
-                    onClick={handleInputClick}
                     className='pr-10'
                     disabled={disabled}
                     required={required}
-                    readOnly
-                    placeholder="Click to select location..."
                 />
-                <span
-                    className={`pp-position-selector-icon MuiSvgIcon-root${disabled ? ' disabled' : ''}`}
-                    onClick={handleInputClick}
-                    style={{
-                        position: 'absolute',
-                        right: '10px',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        cursor: disabled ? 'not-allowed' : 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}
-                >
+                <span className={`pp-position-selector-icon MuiSvgIcon-root${disabled ? ' disabled' : ''}`}>
                     <PushPinIcon fontSize="medium" />
                 </span>
                 {showMap && (
-                    <div
-                        className="pp-position-selector-map"
-                        style={{
-                            position: 'absolute',
-                            top: '100%',
-                            left: 0,
-                            zIndex: 1000,
-                            backgroundColor: 'white',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            padding: '10px',
-                            boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-                            marginTop: '5px',
-                        }}
-                    >
-                        <div
-                            ref={mapRef}
-                            style={{
-                                width: '400px',
-                                height: '400px',
-                                borderRadius: '4px',
-                            }}
-                        />
-                        <div style={{ marginTop: '10px', display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                            <button
-                                onClick={handleClear}
-                                style={{
-                                    padding: '5px 15px',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                    backgroundColor: 'white',
-                                }}
-                            >
-                                Clear
-                            </button>
-                            <button
-                                onClick={() => setShowMap(false)}
-                                style={{
-                                    padding: '5px 15px',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                    backgroundColor: '#007bff',
-                                    color: 'white',
-                                }}
-                            >
-                                Confirm
-                            </button>
+                    <div className="pp-position-selector-map" ref={mapContainerRef}>
+                        <div className='pp-position-selector-map-content' ref={mapRef} />
+                        <div className='flex gap-5 mt-5'>
+                            <Button onClick={handleClear} mode={BtnModes.ERROR_TXT}>
+                                {t('common.clear')}
+                            </Button>
+                            <Button onClick={() => setShowMap(false)}>
+                                {t('common.confirm')}
+                            </Button>
                         </div>
                     </div>
                 )}

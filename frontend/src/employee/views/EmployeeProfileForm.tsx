@@ -8,7 +8,7 @@ import React from "react";
 
 import CommunicationLanguagesSection from "../components/CommunicationLanguagesSection";
 import TabSwitcher, { TabSwitcherOption } from "../components/TabSwitcher";
-import { EmployeeProfileLocationOption, EmployeeProfileLocationOptions } from "@shared/def/employee-profile.def";
+import { EmployeeProfileLocationOption, EmployeeProfileLocationOptions, Position } from "@shared/def/employee-profile.def";
 import PositionSelector from "global/components/controls/PositionSelector";
 
 interface EmployeeProfileFormValues {
@@ -18,13 +18,15 @@ interface EmployeeProfileFormValues {
     residenceCountry: string;
 
     locationOption: EmployeeProfileLocationOption;
+
+    // IF SELECTED_COUNTRIES_EUROPE
     locationCountries?: string[];
-    locationDistance?: {
-        latitude: number;
-        longitude: number;
-        distanceKm: number;
-    }
+    // IF DISTANCE
+    locationDistance?: Position;
+    radius?: number; // [km]
 }
+
+// TODO validation msgs
 
 
 const EmployeeProfileForm: React.FC = () => {
@@ -39,14 +41,15 @@ const EmployeeProfileForm: React.FC = () => {
             residenceCountry: "",
             locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
 
-            locationCountries: [""]
+            locationCountries: [""],
+            locationDistance: undefined,
+            radius: NaN,
         },
     });
 
     const onSubmit = (data: any) => console.log(data);
 
     const formValues = watch();
-
     console.log(formValues)
 
     // Tab state, sync with locationOption
@@ -126,13 +129,13 @@ const EmployeeProfileForm: React.FC = () => {
                     <div className="w-full flex mt-4">
                         <div className="primary-text w-full">
                             {locationOption === EmployeeProfileLocationOptions.ALL_EUROPE && (
-                                <div className="text-center">
+                                <div className="text-center mb-10">
                                     {t("employeeProfile.form.locationOption.ALL_EUROPE.msg")}
                                 </div>
                             )}
                             {locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE && (
                                 <div className="w-full">
-                                    <div className="mb-5 text-center">
+                                    <div className="mb-10 text-center">
                                         {t("employeeProfile.form.locationOption.SELECTED_COUNTRIES.msg")}
                                     </div>
 
@@ -158,8 +161,8 @@ const EmployeeProfileForm: React.FC = () => {
                                 </div>
                             )}
                             {locationOption === EmployeeProfileLocationOptions.DISTANCE && (
-                                <div>
-                                    <div className="mb-5 text-center">
+                                <div className="flex flex-col gap-3">
+                                    <div className="mb-10 text-center">
                                         {t("employeeProfile.form.locationOption.DISTANCE.msg")}
                                     </div>
 
@@ -169,14 +172,30 @@ const EmployeeProfileForm: React.FC = () => {
                                         rules={{ required: true, validate: v => !!v }}
                                         render={({ field }) => (
                                             <PositionSelector
+                                                label={t("employeeProfile.form.location")}
                                                 name="locationDistance"
                                                 className="w-full"
-                                                value={{
-                                                    lat: 0,
-                                                    lng: 0 
+                                                value={field.value}
+                                                required
+                                                onChange={(x) => {
+                                                    console.log(x)
+                                                    field.onChange(x);
                                                 }}
-                                                onChange={field.onChange}
-                                                apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+                                            />
+                                        )}
+                                    />
+
+                                    <Controller
+                                        name="radius"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Input
+                                                type="number"
+                                                {...field}
+                                                value={field.value ?? null}
+                                                label={t("employeeProfile.form.radius")}
+                                                fullWidth
+                                                required
                                             />
                                         )}
                                     />
