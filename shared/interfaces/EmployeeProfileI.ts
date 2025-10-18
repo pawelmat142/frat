@@ -11,18 +11,18 @@ export interface EmployeeProfileI {
     // form data
     firstName: string;
     lastName: string;
-    communicationLanguages: string[];
     residenceCountry: string;
 
     skills?: string[];
     certificates?: string[];
 
+    communicationLanguages: string[];
+
     locationOption: EmployeeProfileLocationOption;
-
     locationCountries?: string[];
-
     point?: Point
     pointRadius?: number; // [km]
+    address?: string; // derived field for distance location option
 }
 
 export const EmployeeProfileStatuses = {

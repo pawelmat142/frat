@@ -11,6 +11,7 @@ import { MenuProvider } from './global/providers/MenuProvider';
 import { ThemeProvider } from './global/providers/ThemeProvider';
 import { PopupProvider } from 'global/providers/PopupProvider';
 import { AuthProvider } from 'auth/AuthProvider';
+import { UserProvider } from 'user/UserProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -20,30 +21,32 @@ root.render(
     <BrowserRouter>
     <PopupProvider>
       <AuthProvider>
-        <MenuProvider>
-          <ThemeProvider>
-            <div className="min-h-screen flex flex-col">
-              <Header />
-              <main className="flex-1 flex flex-col items-center w-full overflow-x-hidden">
-                <App />
-              </main>
-              <Footer />
-              {/* TODO <CookieBanner /> */}
-            </div>
-            <ToastContainer
-              position="top-right"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-            />
-          </ThemeProvider>
-        </MenuProvider>
+        <UserProvider>
+          <MenuProvider>
+            <ThemeProvider>
+              <div className="min-h-screen flex flex-col">
+                <Header />
+                <main className="flex-1 flex flex-col items-center w-full overflow-x-hidden">
+                  <App />
+                </main>
+                <Footer />
+                {/* TODO <CookieBanner /> */}
+              </div>
+              <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
+            </ThemeProvider>
+          </MenuProvider>
+        </UserProvider>
       </AuthProvider>
 
     </PopupProvider>

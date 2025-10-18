@@ -32,4 +32,29 @@ export abstract class ObjUtil {
             obj[path] = value;
         }
     }
+
+    public static numberArrayChanged(arrOne: number[], arrTwo: number[]): boolean {
+        if (arrOne.length !== arrTwo.length) {
+            return true;
+        }
+        for (let i = 0; i < arrOne.length; i++) {
+            if (arrOne[i] !== arrTwo[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
+    public static arrayChanged(arrOne: string[], arrTwo: string[]): boolean {
+        if (arrOne.length !== arrTwo.length) {
+            return true;
+        }
+        for (let i = 0; i < arrOne.length; i++) {
+            if (arrOne[i] !== arrTwo[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -1,8 +1,7 @@
 import Button from "global/components/controls/Button";
 import DictionarySelector from "global/components/controls/DictionarySelector";
 import Input from "global/components/controls/Input";
-
-import { useForm, Controller, set } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import React from "react";
 
@@ -16,33 +15,57 @@ import { EmployeeProfileService } from "employee/services/EmployeeProfileService
 import Loading from "global/components/Loading";
 import { Utils } from "global/utils";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
+import { useUserContext } from "user/UserProvider";
+import { useNavigate } from "react-router-dom";
 
 const EmployeeProfileFormView: React.FC = () => {
+
     const { t } = useTranslation();
     const required = FormValidator.required(t);
-
     const [loading, setLoading] = React.useState<boolean>(false);
-
+    const { employeeProfile, initEmployeeProfile } = useUserContext();
+    const navigate = useNavigate();
     const isDevMode = Utils.isDevMode();
 
-    const { control, handleSubmit, watch, setValue, formState } = useForm<EmployeeProfileForm>({
+    const { control, handleSubmit, watch, setValue, reset, formState } = useForm<EmployeeProfileForm>({
         defaultValues: {
             firstName: "",
             lastName: "",
             residenceCountry: "",
-
             skills: [],
             certificates: [],
-
             communicationLanguages: [""],
-
             locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
-
             locationCountries: [],
             locationDistancePosition: undefined,
             locationDistanceRadius: NaN,
         },
     });
+
+    React.useEffect(() => {
+        if (employeeProfile) {
+            let locationDistancePosition: any = undefined;
+            if (employeeProfile.point && Array.isArray(employeeProfile.point.coordinates)) {
+                locationDistancePosition = {
+                    lat: employeeProfile.point.coordinates[1],
+                    lng: employeeProfile.point.coordinates[0],
+                    address: employeeProfile.address
+                };
+            }
+            reset({
+                firstName: employeeProfile.firstName || "",
+                lastName: employeeProfile.lastName || "",
+                residenceCountry: employeeProfile.residenceCountry || "",
+                skills: employeeProfile.skills || [],
+                certificates: employeeProfile.certificates || [],
+                communicationLanguages: employeeProfile.communicationLanguages || [""] ,
+                locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.ALL_EUROPE,
+                locationCountries: employeeProfile.locationCountries || [],
+                locationDistancePosition,
+                locationDistanceRadius: employeeProfile.pointRadius ?? NaN,
+            });
+        }
+    }, [employeeProfile, reset]);
 
     const handleDevFill = () => {
         setValue("firstName", "Pawel");
@@ -55,13 +78,17 @@ const EmployeeProfileFormView: React.FC = () => {
 
     const onSubmit = async (form: EmployeeProfileForm) => {
 
+        if (employeeProfile) {
+            await updateEmployeeProfile(form);
+            return;
+        }
+
         try {
             setLoading(true);
             const result = await EmployeeProfileService.createEmployeeProfile(form);
-            // TODO
-            console.log("Employee profile created:", result);
-
+            initEmployeeProfile()
             toast.success(t("employeeProfile.form.submitSuccess"));
+            navigate(-1)
         } catch (error) {
             console.error("Error creating employee profile:", error);
         } finally {
@@ -69,8 +96,21 @@ const EmployeeProfileFormView: React.FC = () => {
         }
     };
 
-    // TODO date periods 
+    const updateEmployeeProfile = async (form: EmployeeProfileForm) => {
+        try {
+            setLoading(true);
+            const result = await EmployeeProfileService.updateEmployeeProfile(form);
+            initEmployeeProfile()
+            toast.success(t("employeeProfile.form.submitSuccess"));
+            navigate(-1)
+        } catch (error) {
+            console.error("Error updating employee profile:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
+    // TODO date periods 
     // TODO
     const formValues = watch();
     console.log(formValues)
@@ -196,7 +236,9 @@ const EmployeeProfileFormView: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col gap-5 mt-10">
-                    <Button type='submit'>{t('common.submit')}</Button>
+                    <Button type='submit'>
+                        {employeeProfile ? t('common.save') : t('common.submit')}
+                    </Button>
                 </div>
             </form>
         </div>

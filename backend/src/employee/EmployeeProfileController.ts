@@ -2,7 +2,9 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
+  Put,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -20,6 +22,14 @@ export class EmployeeProfileController {
 
   constructor(private readonly employeeProfileService: EmployeeProfileService) { }
 
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  getEmployeeProfile(
+    @CurrentUser() user: UserI,
+  ): Promise<EmployeeProfileI> {
+    return this.employeeProfileService.getEmployeeProfile(user);
+  }
+
   @Post()
   @UseGuards(JwtAuthGuard)
   createEmployeeProfile(
@@ -27,6 +37,15 @@ export class EmployeeProfileController {
     @Body() form: EmployeeProfileForm
   ): Promise<EmployeeProfileI> {
     return this.employeeProfileService.createEmployeeProfile(user, form);
+  }
+
+  @Put()
+  @UseGuards(JwtAuthGuard)
+  updateEmployeeProfile(
+    @CurrentUser() user: UserI,
+    @Body() form: EmployeeProfileForm
+  ): Promise<EmployeeProfileI> {
+    return this.employeeProfileService.updateEmployeeProfile(user, form);
   }
   
 }

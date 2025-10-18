@@ -1,28 +1,28 @@
 import { EmployeeProfileLocationOption } from "@shared/interfaces/EmployeeProfileI";
 
 export interface EmployeeProfileForm {
-    firstName: string;
-    lastName: string;
-    communicationLanguages: string[];
-    residenceCountry: string;
+  firstName: string;
+  lastName: string;
+  communicationLanguages: string[];
+  residenceCountry: string;
 
-    skills?: string[];
-    certificates?: string[];
+  skills?: string[];
+  certificates?: string[];
 
-    locationOption: EmployeeProfileLocationOption;
+  locationOption: EmployeeProfileLocationOption;
 
-    // IF SELECTED_COUNTRIES_EUROPE
-    locationCountries?: string[];
-    // IF DISTANCE
-    locationDistancePosition?: Position;
-    locationDistanceRadius?: number; // [km]
+  // IF SELECTED_COUNTRIES_EUROPE
+  locationCountries?: string[];
+  // IF DISTANCE
+  locationDistancePosition?: Position;
+  locationDistanceRadius?: number; // [km]
 }
 
 
 export interface Position {
-    lat: number;
-    lng: number;
-    address?: string;
+  lat: number;
+  lng: number;
+  address?: string;
 }
 
 export interface Point {

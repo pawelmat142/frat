@@ -13,6 +13,8 @@ interface DictionarySelectorProps<T extends SelectorValue = SelectorValue> exten
     elementLabelTranslationKey?: string
 }
 // TODO wpisywanie zawerza liste wyboru
+// TODO checkbox w multi poprawic stylowanie
+// TODO ikonke w position selector poprawic
 const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
         onSelect,

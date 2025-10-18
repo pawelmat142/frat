@@ -64,9 +64,6 @@ export const useAuth = () => {
             }
 
             if (newFirebaseUser) {
-                
-
-
                 navigate(Path.getProfilePath(newFirebaseUser.uid), { replace: true });
                 toast.success(t('signin.success'));
             } else {

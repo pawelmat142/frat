@@ -62,6 +62,9 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Column({ name: 'point_radius', type: 'int', nullable: true })
   pointRadius?: number;
 
+  @Column({ name: 'address', type: 'text', nullable: true })
+  address?: string;
+
 
 
   // AUDIT FIELDS
@@ -70,4 +73,7 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
 
   @Column({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @Column({ name: 'version', type: 'int', default: 1, onUpdate: 'version + 1' })
+  version: number;
 }

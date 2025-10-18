@@ -9,10 +9,12 @@ import { AuthService } from "auth/services/AuthService";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { Path } from "./../../path";
+import { useUserContext } from "user/UserProvider";
 
 const ProfilePage: React.FC = () => {
 
     const { userI, loading, firebaseUser } = useAuthContext();
+    const { employeeProfile } = useUserContext();
     const [user, setUser] = useState<UserI | null>(null);
     const { uid } = useParams<{ uid?: string }>();
     const [_loading, _setLoading] = useState(false);
@@ -20,6 +22,7 @@ const ProfilePage: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+
         const initUser = async () => {
             if (uid) {
                 if (uid === userI?.uid) {
@@ -68,7 +71,7 @@ const ProfilePage: React.FC = () => {
         <div className="flex flex-col gap-6 w-full px-5 pb-20 pt-10 max-w-xl mx-auto">
             {emailNotVerifiedWarning}
             <h2 className="text-2xl font-bold mb-6 primary-text">Profile</h2>
-            <div className="rounded-lg shadow border border-color p-6 bg-white">
+            <div className="rounded-lg shadow border border-color p-6">
                 <div className="flex flex-col gap-3">
                     <div><span className="font-semibold">UID:</span> {user.uid}</div>
                     <div><span className="font-semibold">Display Name:</span> {user.displayName}</div>
@@ -85,15 +88,37 @@ const ProfilePage: React.FC = () => {
                     )}
                 </div>
 
+
+                {/* Employee Profile Section */}
+                {employeeProfile && (
+                    <div className="mt-10">
+                        <h3 className="mb-4 h2">{t('employeeProfile.title')}</h3>
+                        <div className="flex flex-col gap-2">
+                            <div><span>{t('employeeProfile.form.firstName')}:</span> {employeeProfile.firstName}</div>
+                            <div><span>{t('employeeProfile.form.lastName')}:</span> {employeeProfile.lastName}</div>
+                            <div><span>{t('employeeProfile.form.residenceCountry')}:</span> {employeeProfile.residenceCountry}</div>
+                            <div><span>{t('employeeProfile.form.skills')}:</span> {employeeProfile.skills?.join(', ')}</div>
+                            <div><span>{t('employeeProfile.form.certificates')}:</span> {employeeProfile.certificates?.join(', ')}</div>
+                            <div><span>{t('employeeProfile.form.communicationLanguages')}:</span> {employeeProfile.communicationLanguages?.join(', ')}</div>
+                            {/* Add more fields as needed */}
+                        </div>
+                    </div>
+                )}
+
                 <div className="flex gap-5 mt-10">
                     <Button onClick={() => {
                         AuthService.logout()
                     }}>Logout</Button>
 
-                    <Button onClick={() => {
-                        navigate(Path.EMPLOYEE_PROFILE_FORM)
-                    }}>{t('employeeProfile.create')}</Button>
-
+                    {employeeProfile ? (
+                        <Button onClick={() => {
+                            navigate(Path.EMPLOYEE_PROFILE_FORM)
+                        }}>{t('employeeProfile.edit')}</Button>
+                    ) : (
+                        <Button onClick={() => {
+                            navigate(Path.EMPLOYEE_PROFILE_FORM)
+                        }}>{t('employeeProfile.create')}</Button>
+                    )}
                 </div>
 
             </div>
