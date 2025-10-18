@@ -1,3 +1,5 @@
+import { EmployeeProfileLocationOption } from "@shared/interfaces/EmployeeProfileI";
+
 export interface EmployeeProfileForm {
     firstName: string;
     lastName: string;
@@ -16,17 +18,14 @@ export interface EmployeeProfileForm {
     locationDistanceRadius?: number; // [km]
 }
 
-export const EmployeeProfileLocationOptions = {
-    ALL_EUROPE: 'ALL_EUROPE',
-    SELECTED_COUNTRIES_EUROPE: 'SELECTED_COUNTRIES_EUROPE',
-    DISTANCE: 'DISTANCE',
-} as const;
-
-export type EmployeeProfileLocationOption = typeof EmployeeProfileLocationOptions[keyof typeof EmployeeProfileLocationOptions];
-
 
 export interface Position {
     lat: number;
     lng: number;
     address?: string;
+}
+
+export interface Point {
+  type: 'Point';
+  coordinates: [number, number]; // [lng, lat]
 }

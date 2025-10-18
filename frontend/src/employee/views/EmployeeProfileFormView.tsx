@@ -8,8 +8,9 @@ import React from "react";
 
 import CommunicationLanguagesSection from "../components/CommunicationLanguagesSection";
 import EmployeeLocationSection from "../components/EmployeeLocationSection";
-import { EmployeeProfileForm, EmployeeProfileLocationOptions } from "@shared/def/employee-profile.def";
+import { EmployeeProfileForm } from "@shared/def/employee-profile.def";
 import { FormValidator } from "global/FormValidator";
+import { EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
 
 const EmployeeProfileFormView: React.FC = () => {
     const { t } = useTranslation();
