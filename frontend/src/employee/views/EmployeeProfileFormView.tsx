@@ -2,7 +2,7 @@ import Button from "global/components/controls/Button";
 import DictionarySelector from "global/components/controls/DictionarySelector";
 import Input from "global/components/controls/Input";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, set } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import React from "react";
 
@@ -11,17 +11,26 @@ import EmployeeLocationSection from "../components/EmployeeLocationSection";
 import { EmployeeProfileForm } from "@shared/def/employee-profile.def";
 import { FormValidator } from "global/FormValidator";
 import { EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
+import { toast } from "react-toastify";
+import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
+import Loading from "global/components/Loading";
+import { Utils } from "global/utils";
+import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 
 const EmployeeProfileFormView: React.FC = () => {
     const { t } = useTranslation();
     const required = FormValidator.required(t);
+
+    const [loading, setLoading] = React.useState<boolean>(false);
+
+    const isDevMode = Utils.isDevMode();
 
     const { control, handleSubmit, watch, setValue, formState } = useForm<EmployeeProfileForm>({
         defaultValues: {
             firstName: "",
             lastName: "",
             residenceCountry: "",
-            
+
             skills: [],
             certificates: [],
 
@@ -35,14 +44,40 @@ const EmployeeProfileFormView: React.FC = () => {
         },
     });
 
-    const onSubmit = (data: any) => console.log(data);
+    const handleDevFill = () => {
+        setValue("firstName", "Pawel");
+        setValue("lastName", "Mat");
+        setValue("residenceCountry", "pl");
+        setValue("skills", ["ONE", "TWO"]);
+        setValue("certificates", ["ONE"]);
+        setValue("communicationLanguages", ["en", "pl"]);
+    };
+
+    const onSubmit = async (form: EmployeeProfileForm) => {
+
+        try {
+            setLoading(true);
+            const result = await EmployeeProfileService.createEmployeeProfile(form);
+            // TODO
+            console.log("Employee profile created:", result);
+
+            toast.success(t("employeeProfile.form.submitSuccess"));
+        } catch (error) {
+            console.error("Error creating employee profile:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // TODO date periods 
-    
+
     // TODO
     const formValues = watch();
     console.log(formValues)
 
+    if (loading) {
+        return <Loading></Loading>
+    }
 
     return (
         <div className="w-full px-5 py-3 relative">
@@ -54,6 +89,11 @@ const EmployeeProfileFormView: React.FC = () => {
 
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold">{t("employeeProfile.form.title")}</h2>
+
+                    {isDevMode && (
+                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
+                            DEV FILL
+                        </Button>)}
                 </div>
 
                 <div className="flex flex-col gap-3">

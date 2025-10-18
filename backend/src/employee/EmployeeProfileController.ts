@@ -2,7 +2,7 @@
 import {
   Body,
   Controller,
-  Put,
+  Post,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -20,7 +20,7 @@ export class EmployeeProfileController {
 
   constructor(private readonly employeeProfileService: EmployeeProfileService) { }
 
-  @Put()
+  @Post()
   @UseGuards(JwtAuthGuard)
   createEmployeeProfile(
     @CurrentUser() user: UserI,

@@ -11,6 +11,7 @@ export abstract class UserUtil {
                 return UserProviders.GOOGLE
             }
        }
-       return null
+
+       return UserProviders.EMAIL
     }
 }

@@ -3,7 +3,7 @@ import { UserI } from "@shared/interfaces/UserI";
 
 export const UserPublicService = {
 
-	async fetchUser(uid: string): Promise<UserI> {
+	fetchUser(uid: string): Promise<UserI> {
 		return httpClient.get(`/user/${uid}`, { skipAuth: true });
 	},
 
