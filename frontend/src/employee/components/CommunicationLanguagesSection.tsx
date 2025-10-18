@@ -7,13 +7,13 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileFormValues } from "employee/interface";
+import { EmployeeProfileForm } from "@shared/def/employee-profile.def";
 
 interface Props {
   control: Control<any>;
   setValue: UseFormSetValue<any>;
   watch: UseFormWatch<any>;
-  formState?: FormState<EmployeeProfileFormValues>;
+  formState?: FormState<EmployeeProfileForm>;
 }
 
 const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, watch, formState }) => {

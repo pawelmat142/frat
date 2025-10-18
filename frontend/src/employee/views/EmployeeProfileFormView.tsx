@@ -8,24 +8,23 @@ import React from "react";
 
 import CommunicationLanguagesSection from "../components/CommunicationLanguagesSection";
 import EmployeeLocationSection from "../components/EmployeeLocationSection";
-import { EmployeeProfileLocationOptions } from "@shared/def/employee-profile.def";
-import { EmployeeProfileFormValues } from "../interface";
+import { EmployeeProfileForm, EmployeeProfileLocationOptions } from "@shared/def/employee-profile.def";
 import { FormValidator } from "global/FormValidator";
 
-// TODO form validation msgs
-const EmployeeProfileForm: React.FC = () => {
+const EmployeeProfileFormView: React.FC = () => {
     const { t } = useTranslation();
     const required = FormValidator.required(t);
 
-    const { control, handleSubmit, watch, setValue, formState } = useForm<EmployeeProfileFormValues>({
+    const { control, handleSubmit, watch, setValue, formState } = useForm<EmployeeProfileForm>({
         defaultValues: {
             firstName: "",
             lastName: "",
-            communicationLanguages: [""],
             residenceCountry: "",
-
+            
             skills: [],
             certificates: [],
+
+            communicationLanguages: [""],
 
             locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
 
@@ -37,6 +36,8 @@ const EmployeeProfileForm: React.FC = () => {
 
     const onSubmit = (data: any) => console.log(data);
 
+    // TODO date periods 
+    
     // TODO
     const formValues = watch();
     console.log(formValues)
@@ -137,7 +138,6 @@ const EmployeeProfileForm: React.FC = () => {
                         }
                     />
 
-
                     <CommunicationLanguagesSection
                         control={control}
                         setValue={setValue}
@@ -162,4 +162,4 @@ const EmployeeProfileForm: React.FC = () => {
     );
 }
 
-export default EmployeeProfileForm;
+export default EmployeeProfileFormView;

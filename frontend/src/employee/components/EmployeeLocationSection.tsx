@@ -4,16 +4,15 @@ import TabSwitcher, { TabSwitcherOption } from "./TabSwitcher";
 import DictionarySelector from "global/components/controls/DictionarySelector";
 import PositionSelector from "global/components/controls/PositionSelector";
 import Input from "global/components/controls/Input";
-import { EmployeeProfileLocationOption, EmployeeProfileLocationOptions } from "@shared/def/employee-profile.def";
-import { EmployeeProfileFormValues } from "../interface";
+import { EmployeeProfileForm, EmployeeProfileLocationOption, EmployeeProfileLocationOptions } from "@shared/def/employee-profile.def";
 import React from "react";
 import { FormValidator } from "global/FormValidator";
 
 interface Props {
-    control: Control<EmployeeProfileFormValues>;
-    setValue: UseFormSetValue<EmployeeProfileFormValues>;
-    watch: UseFormWatch<EmployeeProfileFormValues>;
-    formState?: FormState<EmployeeProfileFormValues>;
+    control: Control<EmployeeProfileForm>;
+    setValue: UseFormSetValue<EmployeeProfileForm>;
+    watch: UseFormWatch<EmployeeProfileForm>;
+    formState?: FormState<EmployeeProfileForm>;
 }
 
 const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch, formState }) => {

@@ -6,6 +6,8 @@ import TranslationsSection from "./TranslationsSection";
 
 const AdminTranslations: React.FC = () => {
 
+    // TODO paginacja, limit, search input
+
     const [loading, setLoading] = useState(false);
     const { translation } = userAdminPanelContext();
 

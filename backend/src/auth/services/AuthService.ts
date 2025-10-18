@@ -14,8 +14,6 @@ import { UserProviders } from '@shared/interfaces/UserI';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SWWException } from 'global/exceptions/SWWException';
 
-// TODO 
-// czy moge z przegladarki pobrac jakis unikalny klucz/id/numer charakterystyczny dla urzadzenia?
 @Injectable()
 export class AuthService implements OnModuleInit, OnModuleDestroy {
 

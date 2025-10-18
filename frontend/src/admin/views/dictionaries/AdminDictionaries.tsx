@@ -11,6 +11,10 @@ import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
 import { DictionaryListItem } from "@shared/interfaces/DictionaryI";
 
 const AdminDictionaries: React.FC = () => {
+
+    // TODO przy dodawaniu grup - dodac zaznacz wszystkie opcje
+    // TODO automatyczne dodanie translacji przy dodawaniu/edycji/imporcie slownika
+    
     const navigate = useNavigate();
     const [dictionaries, setDictionaries] = useState<DictionaryListItem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);

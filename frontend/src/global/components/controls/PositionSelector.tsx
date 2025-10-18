@@ -238,6 +238,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                     className='pr-10'
                     disabled={disabled}
                     required={required}
+                    readOnly
                 />
                 <span className={`pp-position-selector-icon MuiSvgIcon-root${disabled ? ' disabled' : ''}`}>
                     <PushPinIcon fontSize="medium" />
