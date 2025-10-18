@@ -5,6 +5,7 @@ import ControlLabel from './ControlLabel';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import FormError from './FormError';
 
 interface DateInputProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: Date | null;
@@ -22,7 +23,8 @@ const DateInput: React.FC<DateInputProps> = ({
     autoComplete,
     name,
     center,
-    onChange
+    onChange,
+    error
 }) => {
     const [showPicker, setShowPicker] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -35,6 +37,9 @@ const DateInput: React.FC<DateInputProps> = ({
     }
     if (disabled) {
         myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+    }
+    if (error) {
+        myClass += ' pp-control-error';   
     }
 
     const handleInputClick = () => {
@@ -82,6 +87,8 @@ const DateInput: React.FC<DateInputProps> = ({
                     </div>
                 )}
             </div>
+
+            <FormError error={error} />
         </div>
     );
 };

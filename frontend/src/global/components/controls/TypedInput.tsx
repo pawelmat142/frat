@@ -5,7 +5,6 @@ import { Util } from '@shared/utils/util';
 import { DictionaryColumnTypes } from '@shared/interfaces/DictionaryI';
 
 const TypedInput: React.FC<InputInterface> = (param) => {
-    // Przekazujemy wszystkie propsy do Input
 
     if (param.valueType === DictionaryColumnTypes.DATE) {
         return <DateInput 
@@ -20,8 +19,9 @@ const TypedInput: React.FC<InputInterface> = (param) => {
             disabled={param.disabled}
             autoComplete={param.autoComplete}
             center={param.center}
-        />;
-    }
+            error={param.error}
+            />;
+        }
     if (param.valueType === DictionaryColumnTypes.NUMBER) {
         return (
             <Input
@@ -37,8 +37,9 @@ const TypedInput: React.FC<InputInterface> = (param) => {
                 autoComplete={param.autoComplete}
                 name={param.name}
                 center={param.center}
-            />
-        );
+                error={param.error}
+                />
+            );
     }
     if (param.valueType === DictionaryColumnTypes.STRING) {
         return (
@@ -55,6 +56,7 @@ const TypedInput: React.FC<InputInterface> = (param) => {
                 autoComplete={param.autoComplete}
                 name={param.name}
                 center={param.center}
+                error={param.error}
             />
         );
     }

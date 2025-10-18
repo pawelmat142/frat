@@ -1,4 +1,4 @@
-import { Controller, UseFormSetValue, UseFormWatch, Control } from "react-hook-form";
+import { Controller, UseFormSetValue, UseFormWatch, Control, FormState } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import TabSwitcher, { TabSwitcherOption } from "./TabSwitcher";
 import DictionarySelector from "global/components/controls/DictionarySelector";
@@ -7,17 +7,21 @@ import Input from "global/components/controls/Input";
 import { EmployeeProfileLocationOption, EmployeeProfileLocationOptions } from "@shared/def/employee-profile.def";
 import { EmployeeProfileFormValues } from "../interface";
 import React from "react";
+import { FormValidator } from "global/FormValidator";
 
 interface Props {
     control: Control<EmployeeProfileFormValues>;
     setValue: UseFormSetValue<EmployeeProfileFormValues>;
     watch: UseFormWatch<EmployeeProfileFormValues>;
+    formState?: FormState<EmployeeProfileFormValues>;
 }
 
-const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch }) => {
-    const { t } = useTranslation();
+const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch, formState }) => {
     const locationOption = watch("locationOption");
-    const locationDistancePosition = watch("locationDistancePosition");
+
+    const { t } = useTranslation();
+
+    const required = FormValidator.required(t);
 
     const tabOptions: TabSwitcherOption[] = [
         {
@@ -61,7 +65,7 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch }) 
                             <Controller
                                 name="locationCountries"
                                 control={control}
-                                rules={{ required: true, validate: v => !!v }}
+                                rules={required}
                                 render={({ field }) => (
                                     <DictionarySelector
                                         type="multi"
@@ -73,6 +77,7 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch }) 
                                         elementLabelTranslationKey="COUNTRY_TRANSLATION_KEY"
                                         fullWidth
                                         required
+                                        error={formState?.errors.locationCountries}
                                     />
                                 )}
                             />
@@ -86,7 +91,7 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch }) 
                             <Controller
                                 name="locationDistancePosition"
                                 control={control}
-                                rules={{ required: true, validate: v => !!v }}
+                                rules={required}
                                 render={({ field }) => (
                                     <PositionSelector
                                         label={t("employeeProfile.form.location")}
@@ -95,11 +100,13 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch }) 
                                         value={field.value}
                                         required
                                         onChange={field.onChange}
+                                        error={formState?.errors.locationDistancePosition}
                                     />
                                 )}
                             />
                             <Controller
                                 name="locationDistanceRadius"
+                                rules={required}
                                 control={control}
                                 render={({ field }) => (
                                     <Input
@@ -109,6 +116,7 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch }) 
                                         label={t("employeeProfile.form.radius")}
                                         fullWidth
                                         required
+                                        error={formState?.errors.locationDistanceRadius}
                                     />
                                 )}
                             />

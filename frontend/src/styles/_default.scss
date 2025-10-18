@@ -76,21 +76,19 @@ a {
 
 // FONT
 .btn-font {
-  font-size: 1.1rem;
+  font-size: $btnFont;
   font-weight: 500;
 }
 
 .small-font {
-  font-size: .8rem;
+  font-size: $smallFont;
 }
 
 .h2 {
-  font-size: 1.25rem;
+  font-size: $lFont;
   font-weight: 700;
   letter-spacing: .04rem;
 }
-
-
 
 
 // DISPLAY OR NOT

@@ -51,7 +51,8 @@ export interface InputInterface {
     required?: boolean;
     autoComplete?: string;
     center?: boolean;
-    valueType?: DictionaryColumnType
+    valueType?: DictionaryColumnType,
+    error?: { message?: string } | null
 }
 
 export interface SelectorInterface<T extends SelectorValue = SelectorValue> {
@@ -65,6 +66,7 @@ export interface SelectorInterface<T extends SelectorValue = SelectorValue> {
     required?: boolean;
     center?: boolean;
     className?: string;
+    error?: { message?: string } | null
 }
 
 export interface SelectorMultiProps<T extends SelectorValue = SelectorValue> {
@@ -78,17 +80,18 @@ export interface SelectorMultiProps<T extends SelectorValue = SelectorValue> {
     required?: boolean;
     center?: boolean;
     className?: string;
+    error?: { message?: string } | null
 }
 
 export interface DictionarySelectorInterface<T extends SelectorValue = SelectorValue> {
     type?: 'single' | 'multi';
     code: string;
     groupCode?: string;
-
+    
     valueInput?: string | string[];
     onSelect?: (item: SelectorItem<T> | null) => void;
     onSelectMulti?: (items: SelectorItem<T>[]) => void;
-
+    
     id?: string;
     label?: string;
     fullWidth?: boolean;
@@ -96,6 +99,7 @@ export interface DictionarySelectorInterface<T extends SelectorValue = SelectorV
     required?: boolean;
     center?: boolean;
     className?: string;
+    error?: { message?: string } | null
 }
 
 export type SelectorValue = string | number | Date;

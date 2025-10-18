@@ -3,6 +3,7 @@ import ControlLabel from './ControlLabel';
 import ArrowIcon from './ArrowIcon';
 import { useTranslation } from 'react-i18next';
 import { SelectorValue, SelectorMultiProps, SelectorItem } from 'global/interface/controls.interface';
+import FormError from './FormError';
 
 const SelectorMulti = <T extends SelectorValue = SelectorValue>({
     items,
@@ -14,12 +15,17 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
     disabled = false,
     required = false,
     center = false,
-    className = ''
+    className = '',
+    error
 }: SelectorMultiProps<T>) => {
 
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const myClass = `pp-control pp-dropdown${fullWidth ? ' w-full' : ' w-fit'}${disabled ? ' opacity-50 pointer-events-none cursor-not-allowed' : ''}`;
+    let myClass = `pp-control pp-dropdown${fullWidth ? ' w-full' : ' w-fit'}${disabled ? ' opacity-50 pointer-events-none cursor-not-allowed' : ''}`;
+
+    if (error) {
+        myClass += ' pp-control-error';
+    }
 
     const { t } = useTranslation()
 
@@ -60,6 +66,7 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
             ref={dropdownRef}
         >
             <ControlLabel id={id} label={label} required={required} />
+
             <div
                 className={myClass}
                 tabIndex={disabled ? -1 : 0}
@@ -127,6 +134,9 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
                     </ul>
                 )}
             </div>
+
+            <FormError error={error}></FormError>
+            
         </div>
     );
 };

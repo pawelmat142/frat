@@ -5,6 +5,7 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import { useTranslation } from 'react-i18next';
 import Button from './Button';
 import { Position } from '@shared/def/employee-profile.def';
+import FormError from './FormError';
 
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
@@ -24,6 +25,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         name,
         center,
         onChange,
+        error
     }, ref) => {
 
     const apiKey = "" //TODO
@@ -226,7 +228,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
     return (
         <div className={`${myClass}${center ? ' mx-auto' : ''}`}>
             <ControlLabel id={id} label={label} required={required} />
-            <div className="pp-control pp-position-selector" onClick={handleInputClick}>
+            <div className={`pp-control${error ? ' pp-control-error' : ''}`} onClick={handleInputClick}>
                 <input
                     ref={ref}
                     id={id}
@@ -254,6 +256,9 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                     </div>
                 )}
             </div>
+
+            <FormError error={error} />
+            
         </div>
     );
 });

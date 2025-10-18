@@ -92,22 +92,22 @@ $btnPaddingY: 0.375rem;
   }
 
   .MuiSvgIcon-root {
-    font-size: 1.9rem;
+    font-size: $xxxlFont;
   }
 
   &.small {
-    font-size: .8rem;
+    font-size: $smallFont;
 
     .MuiSvgIcon-root {
-      font-size: 1.2rem;
+      font-size: $lFont;
     }
   }
 
   &.large {
-    font-size: 1.25rem;
+    font-size: $lFont;
 
     .MuiSvgIcon-root {
-      font-size: 1.5rem;
+      font-size: $xlFont;
     }
   }
 }
@@ -129,6 +129,13 @@ $btnPaddingY: 0.375rem;
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color), transparent 80%);
   }
 
+}
+
+.pp-control-error {
+  border-color: $error-color;
+  &:focus {
+    outline: 2px solid $error-color;
+  }
 }
 
 .pp-dropdown {
@@ -409,4 +416,11 @@ $btnPaddingY: 0.375rem;
     border-bottom: 2px solid $primary-color;
   }
 
+}
+
+
+.form-control-error-msg {
+  color: $error-color;
+  margin-left: 1rem;
+  font-size: $smallFont;
 }

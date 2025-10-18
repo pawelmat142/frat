@@ -29,7 +29,8 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         valueInput,
         onSelectMulti,
         disabledValues = [],
-        elementLabelTranslationKey = 'TRANSLATION_KEY'
+        elementLabelTranslationKey = 'TRANSLATION_KEY',
+        error
     }: DictionarySelectorProps<T>,
     ref: React.Ref<any>
 ) => {
@@ -95,6 +96,7 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             className={className}
             value={selectedItem}
             onSelect={handleSelect}
+            error={error}
         />;
     }
 
@@ -115,6 +117,7 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             required={required}
             center={center}
             className={className}
+            error={error}
         />;
     }
 

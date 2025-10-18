@@ -1,6 +1,7 @@
 import { ChangeEventHandler, forwardRef } from 'react';
 import { InputInterface } from '../../interface/controls.interface';
 import ControlLabel from './ControlLabel';
+import FormError from './FormError';
 
 const Input = forwardRef<HTMLInputElement, InputInterface>(
     ({
@@ -15,7 +16,8 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
         required,
         autoComplete,
         name,
-        center
+        center,
+        error
     }, ref) => {
 
     let myClass = `pp-control pp-input`;
@@ -27,6 +29,9 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
     }
     if (disabled) {
         myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+    }
+    if (error) {
+        myClass += ' pp-control-error';   
     }
 
     const handleChange: ChangeEventHandler<HTMLInputElement> = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +55,9 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
     
         return (
             <div className={`${className}${center ? ' mx-auto' : ''}`}>
+
                 <ControlLabel id={id} label={label} required={required} />
+                
                 <div>
                     <input
                         ref={ref}
@@ -65,6 +72,8 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
                         autoComplete={autoComplete}
                     />
                 </div>
+
+                <FormError error={error} />
             </div>
         );
 
