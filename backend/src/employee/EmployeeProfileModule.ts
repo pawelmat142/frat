@@ -6,6 +6,8 @@ import { EmployeeProfileRepo } from './services/EmployeeProfileRepo';
 import { EmployeeProfileService } from './services/EmployeeProfileService';
 import { EmployeeProfileController } from './EmployeeProfileController';
 import { AuthModule } from 'auth/AuthModule';
+import { DictionariesModule } from 'admin/dictionaries/DictionariesModule';
+import { GeoPointService } from './services/GeoPointService';
 
 @Module({
     imports: [
@@ -13,11 +15,13 @@ import { AuthModule } from 'auth/AuthModule';
             EmployeeProfileEntity,
         ]),
 
-        AuthModule
+        AuthModule,
+        DictionariesModule,
     ],
     providers: [
         EmployeeProfileRepo,
-        EmployeeProfileService
+        EmployeeProfileService,
+        GeoPointService
     ],
     controllers: [
         EmployeeProfileController

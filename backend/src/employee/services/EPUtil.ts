@@ -51,13 +51,7 @@ export abstract class EPUtil {
     private static fillLocationDataDistance(profile: EmployeeProfileI, form: EmployeeProfileForm): void {
         profile.point = PointUtil.toGeoPoint(form.locationDistancePosition!);
         profile.pointRadius = form.locationDistanceRadius;
-        profile.locationCountries = EPUtil.findCountriesFromPosition(form);
         profile.address = form.locationDistancePosition.address;
-    }
-
-        // TODO implement
-    private static findCountriesFromPosition(form: EmployeeProfileForm): string[] {
-        return []
     }
 
     public static validateProfile(profile: EmployeeProfileI): void {
