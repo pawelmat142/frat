@@ -27,6 +27,9 @@ const TranslationsSection: React.FC = () => {
     const [newPath, setNewPath] = useState('');
     const [newValue, setNewValue] = useState('');
     const [editMode, setEditMode] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchText, setSearchText] = useState('');
+    const itemsPerPage = 15;
     const confirm = useConfirm()
 
     if (!translation?.selectedLanguage || !translation?.translations) {
@@ -90,7 +93,6 @@ const TranslationsSection: React.FC = () => {
     const isDefaultLangSelected = selectedTranslation?.langCode === defaultTranslation.langCode;
 
     const onShowForm = (key?: string) => { // if key is provided, we are editing
-
         if (showForm) {
             setShowForm(false);
             setNewPath('');
@@ -143,6 +145,32 @@ const TranslationsSection: React.FC = () => {
 
     const keys = selectedTranslation ? ObjUtil.getPathsFromNestedJsonKeys(selectedTranslation.data) : [];
 
+    // Filter keys based on search text (search in both key and translation value)
+    const filteredKeys = keys.filter(key => {
+        if (!searchText) return true;
+        const value = ObjUtil.getValueFromNestedJsonByPath(selectedTranslation?.data, key);
+        const lowerSearch = searchText.toLowerCase();
+        return key.toLowerCase().includes(lowerSearch) || 
+               (typeof value === 'string' && value.toLowerCase().includes(lowerSearch));
+    });
+
+    // Pagination
+    const totalPages = Math.ceil(filteredKeys.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedKeys = filteredKeys.slice(startIndex, endIndex);
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    };
+
+    // Reset to page 1 when search text changes
+    React.useEffect(() => {
+        setCurrentPage(1);
+    }, [searchText]);
+
     return (
         <>
             <div className="flex gap-2 mb-10 mt-20">
@@ -169,6 +197,40 @@ const TranslationsSection: React.FC = () => {
 
             <h2 className="font-mono font-bold mb-2 mt-10">Selected language: {translation?.selectedLanguage}</h2>
 
+            {/* Search input and Pagination in one row */}
+            <div className="flex gap-4 mb-4 items-center">
+                <div className="flex-[1]">
+                    <Input 
+                        name="search" 
+                        label="Search translations" 
+                        fullWidth
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                    />
+                </div>
+                {totalPages > 1 && (
+                    <div className="flex-[2] flex justify-end items-center gap-4">
+                        <Button 
+                            mode={BtnModes.PRIMARY_TXT} 
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </Button>
+                        <span className="secondary-text whitespace-nowrap">
+                            Page {currentPage} of {totalPages} ({filteredKeys.length} {searchText ? 'filtered' : 'total'} items)
+                        </span>
+                        <Button 
+                            mode={BtnModes.PRIMARY_TXT} 
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            Next
+                        </Button>
+                    </div>
+                )}
+            </div>
+
             {/* Formularz dodawania nowego tłumaczenia nad tabelą */}
             {showForm && !editMode && (
                 <div className="flex gap-5 mb-2 mt-2 px-6 py-3 items-center">
@@ -194,12 +256,14 @@ const TranslationsSection: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {keys.length === 0 ? (
+                        {filteredKeys.length === 0 ? (
                             <tr>
-                                <td colSpan={3} className="px-6 py-6 secondary-text text-center">No translations found.</td>
+                                <td colSpan={3} className="px-6 py-6 secondary-text text-center">
+                                    {searchText ? 'No translations found matching your search.' : 'No translations found.'}
+                                </td>
                             </tr>
                         ) : (
-                            keys?.map((key, idx) => {
+                            paginatedKeys?.map((key, idx) => {
                                 const value = ObjUtil.getValueFromNestedJsonByPath(selectedTranslation?.data, key);
                                 const defaultValue = ObjUtil.getValueFromNestedJsonByPath(defaultTranslation.data, key);
                                 const isEditing = showForm && newPath === key;
