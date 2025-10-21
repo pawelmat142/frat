@@ -178,16 +178,31 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
                             ))
                         )}
                         <li
-                            className="dropdown-item dropdown-close"
-                            onClick={() => setOpen(false)}
+                            className="dropdown-item dropdown-item-additional"
                             tabIndex={0}
-                            onKeyDown={e => {
-                                if (e.key === 'Enter' || e.key === ' ') setOpen(false);
-                            }}
                         >
-                            <span>
+                            <button
+                                type="button"
+                                className="pp-btn px-3 py-1"
+                                onClick={() => setOpen(false)}
+                                tabIndex={0}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter' || e.key === ' ') setOpen(false);
+                                }}
+                            >
                                 {t('common.close')}
-                            </span>
+                            </button>
+                            <button
+                                type="button"
+                                className="pp-btn px-3 py-1"
+                                onClick={() => onSelect([])}
+                                tabIndex={0}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter' || e.key === ' ') onSelect([]);
+                                }}
+                            >
+                                {t('common.clear')}
+                            </button>
                         </li>
                     </ul>
                 )}

@@ -186,7 +186,7 @@ $btnPaddingY: 0.375rem;
 .dropdown-item {
   padding: .5rem 1rem;
   cursor: pointer;
-  background: transparent;
+  background-color: transparent;
   color: $primary-text;
   transition: $transition;
 
@@ -197,6 +197,27 @@ $btnPaddingY: 0.375rem;
   &.active {
     color: $primary-color;
     font-weight: bold;
+  }
+
+  &.dropdown-item-additional {
+    display: flex;
+    justify-items: center;
+    text-align: center;
+    font-weight: bold;
+    padding: 0;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    button {
+      width: 100%;
+      padding: .5rem 1rem;
+      transition: $transition;
+      &:hover {
+        background-color: $secondary-bg;
+      }
+    }
   }
 }
 
