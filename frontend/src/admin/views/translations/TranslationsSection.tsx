@@ -8,12 +8,14 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { toast } from "react-toastify";
 import IconButton from "global/components/controls/IconButon";
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { TranslationI } from "@shared/interfaces/TranslationI";
 import { AdminImportService } from "admin/services/AdminImport.service";
 import SelectFileButton from "global/components/controls/SelectFileButton";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { TranslationService } from "global/services/Translation.service";
 import { TranslationAdminService } from "admin/services/TranslationAdmin.service";
+import { useConfirm } from 'global/providers/PopupProvider';
 
 const TranslationsSection: React.FC = () => {
 
@@ -25,6 +27,7 @@ const TranslationsSection: React.FC = () => {
     const [newPath, setNewPath] = useState('');
     const [newValue, setNewValue] = useState('');
     const [editMode, setEditMode] = useState(false);
+    const confirm = useConfirm()
 
     if (!translation?.selectedLanguage || !translation?.translations) {
         return null
@@ -97,6 +100,20 @@ const TranslationsSection: React.FC = () => {
             setShowForm(true);
             setNewPath(key || '');
             setNewValue(key ? selectedTranslation?.data[key] ?? '' : '');
+        }
+    }
+
+    const removeTranslation = async (key: string) => {
+        const confirmed = confirm({
+            title: 'Confirm Deletion',
+            message: `Are you sure you want to delete the translation for key "${key}"? This action cannot be undone.`,
+            confirmText: 'Delete',
+            cancelText: 'Cancel',
+        });
+        if (!confirmed) return;
+        if (selectedTranslation) {
+            delete selectedTranslation.data[key];
+            translation.updateTranslation?.(selectedTranslation);
         }
     }
 
@@ -195,6 +212,7 @@ const TranslationsSection: React.FC = () => {
                                             <td className="px-6 py-3 border-b border-color primary-text">
                                                 <div className="flex gap-2 justify-end">
                                                     <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => onShowForm(key)} />
+                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => removeTranslation(key)} />
                                                 </div>
                                             </td>
                                         </tr>
