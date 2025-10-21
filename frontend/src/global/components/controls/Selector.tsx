@@ -27,11 +27,27 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
     }
 
     const [open, setOpen] = useState(false);
+    const [openUpward, setOpenUpward] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const listRef = useRef<HTMLUListElement>(null);
     let myClass = `pp-control pp-dropdown${fullWidth ? ' w-full' : ' w-fit'}${disabled ? ' opacity-50 pointer-events-none cursor-not-allowed' : ''}`;
     if (error) {
         myClass += ' pp-control-error';
     }
+
+    // Calculate if dropdown should open upward
+    useEffect(() => {
+        if (!open || !dropdownRef.current || !listRef.current) return;
+        
+        const dropdownRect = dropdownRef.current.getBoundingClientRect();
+        const listHeight = listRef.current.offsetHeight;
+        const viewportHeight = window.innerHeight;
+        const spaceBelow = viewportHeight - dropdownRect.bottom;
+        const spaceAbove = dropdownRect.top;
+
+        // Open upward if not enough space below and more space above
+        setOpenUpward(spaceBelow < listHeight && spaceAbove > spaceBelow);
+    }, [open]);
 
     useEffect(() => {
         if (!open) return;
@@ -91,7 +107,10 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
                 <ArrowIcon open={open} />
 
                 {open && (
-                    <ul className="pp-dropdown-list">
+                    <ul 
+                        ref={listRef}
+                        className={`pp-dropdown-list${openUpward ? ' pp-dropdown-upward' : ''}`}
+                    >
                         {(items as Array<SelectorItem<T> & { disabled?: boolean }> ).map(item => (
                             <li
                                 key={String(item.value)}

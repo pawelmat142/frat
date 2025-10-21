@@ -13,7 +13,6 @@ interface DictionarySelectorProps<T extends SelectorValue = SelectorValue> exten
     elementLabelTranslationKey?: string
 }
 // TODO wpisywanie zawerza liste wyboru
-// TODO rozwijanie do gory jesli malo miejsca na ekranie
 const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
         onSelect,
