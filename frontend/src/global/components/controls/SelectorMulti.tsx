@@ -4,6 +4,7 @@ import ArrowIcon from './ArrowIcon';
 import { useTranslation } from 'react-i18next';
 import { SelectorValue, SelectorMultiProps, SelectorItem } from 'global/interface/controls.interface';
 import FormError from './FormError';
+import Checkbox from './Checkbox';
 
 const SelectorMulti = <T extends SelectorValue = SelectorValue>({
     items,
@@ -102,18 +103,14 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
                                     if (e.key === 'Enter' || e.key === ' ') handleSelect(item);
                                 }}
                             >
-                                <span className='flex items-center gap-2'>
-
-                                    <input
-                                        type="checkbox"
+                                <span className='flex items-center'>
+                                    <Checkbox
                                         checked={isActive(item)}
-                                        readOnly
-                                        tabIndex={-1}
-                                        style={{ marginRight: 8 }}
+                                        onChange={() => handleSelect(item)}
+                                        disabled={disabled}
                                     />
-
-                                    {item.src && <img className="pp-dropdown-icon" src={item.src} alt={item.label} />}
-                                    <span>{item.label}</span>
+                                    {item.src && <img className="pp-dropdown-icon pl-4" src={item.src} alt={item.label} />}
+                                    <span className='pl-2'>{item.label}</span>
                                 </span>
 
 
