@@ -1,3 +1,4 @@
+import React from 'react';
 import Loading from "global/components/Loading";
 import { useState } from "react";
 import { userAdminPanelContext } from "../AdminPanelProvider";
@@ -151,6 +152,20 @@ const TranslationsSection: React.FC = () => {
 
             <h2 className="font-mono font-bold mb-2 mt-10">Selected language: {translation?.selectedLanguage}</h2>
 
+            {/* Formularz dodawania nowego tłumaczenia nad tabelą */}
+            {showForm && !editMode && (
+                <div className="flex gap-5 mb-2 mt-2 px-6 py-3 items-center">
+                    <Input name="key" label="Key" className="flex-1" fullWidth
+                        disabled={editMode}
+                        value={newPath}
+                        onChange={(e) => setNewPath(e.target.value)}
+                    />
+                    <Input name="value" label="Translation" className="flex-1" value={newValue} fullWidth onChange={(e) => setNewValue(e.target.value)} />
+                    <Button onClick={onAddTranslation} disabled={!newPath || !newValue} className='h-fit'>Ready</Button>
+                    <Button mode={BtnModes.PRIMARY_TXT} onClick={() => onShowForm()} className='h-fit'>Cancel</Button>
+                </div>
+            )}
+
             {selectedTranslation && (<div className="overflow-x-auto w-full rounded-lg shadow border border-color secondary-bg">
                 <table className="w-full text-left border-collapse">
                     <thead>
@@ -170,20 +185,36 @@ const TranslationsSection: React.FC = () => {
                             keys?.map((key, idx) => {
                                 const value = ObjUtil.getValueFromNestedJsonByPath(selectedTranslation?.data, key);
                                 const defaultValue = ObjUtil.getValueFromNestedJsonByPath(defaultTranslation.data, key);
+                                const isEditing = showForm && newPath === key;
                                 return (
-                                    <tr
-                                        key={idx}
-                                        className="transition"
-                                    >
-                                        <td className="px-6 py-3 border-b border-color font-mono text-base primary-text">{key}</td>
-                                        {!isDefaultLangSelected && <th className="px-6 py-3 border-b border-color font-mono text-base primary-text">{defaultValue}</th>}
-                                        <td className="px-6 py-3 border-b border-color primary-text">{value || '-'}</td>
-                                        <td className="px-6 py-3 border-b border-color primary-text">
-                                            <div className="flex gap-2 justify-end">
-                                                <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => onShowForm(key)} />
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <React.Fragment key={idx}>
+                                        <tr className="transition">
+                                            <td className="px-6 py-3 border-b border-color font-mono text-base primary-text">{key}</td>
+                                            {!isDefaultLangSelected && <th className="px-6 py-3 border-b border-color font-mono text-base primary-text">{defaultValue}</th>}
+                                            <td className="px-6 py-3 border-b border-color primary-text">{value || '-'}</td>
+                                            <td className="px-6 py-3 border-b border-color primary-text">
+                                                <div className="flex gap-2 justify-end">
+                                                    <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => onShowForm(key)} />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {isEditing && (
+                                            <tr>
+                                                <td colSpan={isDefaultLangSelected ? 3 : 4}>
+                                                    <div className="flex gap-5 mb-2 mt-2 px-6 py-3 items-center">
+                                                        <Input name="key" label="Key" className="flex-1" fullWidth
+                                                            disabled={editMode}
+                                                            value={newPath}
+                                                            onChange={(e) => setNewPath(e.target.value)}
+                                                        />
+                                                        <Input name="value" label="Translation" className="flex-1" value={newValue} fullWidth onChange={(e) => setNewValue(e.target.value)} />
+                                                        <Button onClick={onAddTranslation} disabled={!newPath || !newValue}>Ready</Button>
+                                                        <Button mode={BtnModes.PRIMARY_TXT} onClick={() => onShowForm()}>Cancel</Button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
                                 );
                             })
                         )}
@@ -191,20 +222,6 @@ const TranslationsSection: React.FC = () => {
                 </table>
 
             </div>)}
-
-            {showForm && (
-                <div className="flex gap-5 mb-2 mt-5">
-                    <Input name="key" label="Key" className="flex-1" fullWidth
-                        disabled={editMode}
-                        value={newPath}
-                        onChange={(e) => setNewPath(e.target.value)}
-                    />
-                    <Input name="value" label="Translation" className="flex-1" value={newValue} fullWidth onChange={(e) => setNewValue(e.target.value)} />
-                </div>
-            )
-            }
-
-
 
         </>
     )

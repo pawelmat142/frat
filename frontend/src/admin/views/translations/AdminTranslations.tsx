@@ -7,8 +7,6 @@ import TranslationsSection from "./TranslationsSection";
 const AdminTranslations: React.FC = () => {
 
     // TODO paginacja, limit, search input
-    
-    // TODO edycja translacji niech jest w kafli jakoś dodana, na dole listy jest zbyt daleko
 
     const [loading, setLoading] = useState(false);
     const { translation } = userAdminPanelContext();
