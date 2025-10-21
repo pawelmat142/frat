@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { SelectorValue, SelectorMultiProps, SelectorItem } from 'global/interface/controls.interface';
 import FormError from './FormError';
 import Checkbox from './Checkbox';
+import { Utils } from 'global/utils';
+import Input from './Input';
 
 const SelectorMulti = <T extends SelectorValue = SelectorValue>({
     items,
@@ -17,13 +19,16 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
     required = false,
     center = false,
     className = '',
-    error
+    error,
+    enableSearchText = true
 }: SelectorMultiProps<T>) => {
 
     const [open, setOpen] = useState(false);
     const [openUpward, setOpenUpward] = useState(false);
+    const [searchText, setSearchText] = useState('');
     const dropdownRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
+    const searchInputRef = useRef<HTMLInputElement>(null);
     let myClass = `pp-control pp-dropdown${fullWidth ? ' w-full' : ' w-fit'}${disabled ? ' opacity-50 pointer-events-none cursor-not-allowed' : ''}`;
 
     if (error) {
@@ -45,6 +50,20 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
         // Open upward if not enough space below and more space above
         setOpenUpward(spaceBelow < listHeight && spaceAbove > spaceBelow);
     }, [open])
+
+    // Focus search input when dropdown opens
+    useEffect(() => {
+        if (open && enableSearchText && searchInputRef.current) {
+            searchInputRef.current.focus();
+        }
+    }, [open, enableSearchText]);
+
+    // Reset search text when dropdown closes
+    useEffect(() => {
+        if (!open) {
+            setSearchText('');
+        }
+    }, [open]);
 
     useEffect(() => {
         if (!open) return;
@@ -75,6 +94,11 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
     const isActive = (item: SelectorItem<T>) => {
         return (values ?? []).some((v: SelectorItem<T>) => String(v.value) === String(item.value));
     };
+
+    // Filter items based on search text, ignoring diacritics
+    const filteredItems = enableSearchText
+        ? items.filter(item => Utils.normalize(item.label).includes(Utils.normalize(searchText)))
+        : items;
 
     return (
         <div
@@ -112,28 +136,47 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
                         ref={listRef}
                         className={`pp-dropdown-list${openUpward ? ' pp-dropdown-upward' : ''}`}
                     >
-                        {items.map(item => (
-                            <li
-                                key={String(item.value)}
-                                className={`dropdown-item${isActive(item) ? ' active' : ''}`}
-                                onClick={() => handleSelect(item)}
-                                tabIndex={0}
-                                onKeyDown={e => {
-                                    if (e.key === 'Enter' || e.key === ' ') handleSelect(item);
-                                }}
-                            >
-                                <span className='flex items-center'>
-                                    <Checkbox
-                                        checked={isActive(item)}
-                                        onChange={() => handleSelect(item)}
-                                        disabled={disabled}
-                                    />
-                                    {item.src && <img className="pp-dropdown-icon pl-4" src={item.src} alt={item.label} />}
-                                    <span className='pl-2'>{item.label}</span>
-                                </span>
-
+                        {enableSearchText && (
+                            <li className="dropdown-item" style={{ padding: '8px', background: 'var(--bg-secondary)' }}>
+                                <Input
+                                    ref={searchInputRef}
+                                    type="text"
+                                    fullWidth={true}
+                                    value={searchText}
+                                    onChange={(e) => setSearchText(e.target.value)}
+                                    id="search-input"
+                                    name="search-input"
+                                />
                             </li>
-                        ))}
+                        )}
+                        {filteredItems.length === 0 ? (
+                            <li className="dropdown-item disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
+                                No results found
+                            </li>
+                        ) : (
+                            filteredItems.map(item => (
+                                <li
+                                    key={String(item.value)}
+                                    className={`dropdown-item${isActive(item) ? ' active' : ''}`}
+                                    onClick={() => handleSelect(item)}
+                                    tabIndex={0}
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter' || e.key === ' ') handleSelect(item);
+                                    }}
+                                >
+                                    <span className='flex items-center'>
+                                        <Checkbox
+                                            checked={isActive(item)}
+                                            onChange={() => handleSelect(item)}
+                                            disabled={disabled}
+                                        />
+                                        {item.src && <img className="pp-dropdown-icon pl-4" src={item.src} alt={item.label} />}
+                                        <span className='pl-2'>{item.label}</span>
+                                    </span>
+
+                                </li>
+                            ))
+                        )}
                         <li
                             className="dropdown-item dropdown-close"
                             onClick={() => setOpen(false)}

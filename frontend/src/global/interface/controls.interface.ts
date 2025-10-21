@@ -67,6 +67,7 @@ export interface SelectorInterface<T extends SelectorValue = SelectorValue> {
     center?: boolean;
     className?: string;
     error?: { message?: string } | null
+    enableSearchText?: boolean
 }
 
 export interface SelectorMultiProps<T extends SelectorValue = SelectorValue> {
@@ -81,6 +82,7 @@ export interface SelectorMultiProps<T extends SelectorValue = SelectorValue> {
     center?: boolean;
     className?: string;
     error?: { message?: string } | null
+    enableSearchText?: boolean
 }
 
 export interface DictionarySelectorInterface<T extends SelectorValue = SelectorValue> {
@@ -100,6 +102,7 @@ export interface DictionarySelectorInterface<T extends SelectorValue = SelectorV
     center?: boolean;
     className?: string;
     error?: { message?: string } | null
+    enableSearchText?: boolean
 }
 
 export type SelectorValue = string | number | Date;

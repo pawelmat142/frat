@@ -12,7 +12,6 @@ interface DictionarySelectorProps<T extends SelectorValue = SelectorValue> exten
     disabledValues?: string[];
     elementLabelTranslationKey?: string
 }
-// TODO wpisywanie zawerza liste wyboru
 const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
         onSelect,
@@ -30,7 +29,8 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         onSelectMulti,
         disabledValues = [],
         elementLabelTranslationKey = 'TRANSLATION_KEY',
-        error
+        error,
+        enableSearchText = true
     }: DictionarySelectorProps<T>,
     ref: React.Ref<any>
 ) => {
@@ -97,6 +97,7 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             value={selectedItem}
             onSelect={handleSelect}
             error={error}
+            enableSearchText={enableSearchText}
         />;
     }
 
@@ -124,7 +125,5 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     return null;
 
 });
-
-DictionarySelector.displayName = 'DictionarySelector';
 
 export default DictionarySelector;
