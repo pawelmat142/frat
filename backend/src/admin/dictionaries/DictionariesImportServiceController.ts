@@ -66,9 +66,8 @@ export class DictionariesImportServiceController {
         throw new Error('Dictionary with this code already exists');
       }
 
-     DictionaryValidators.fullValidation(dictionary);
-
-      const entity = this.dictionaryRepository.create(dictionary);
+      DictionaryValidators.fullValidation(dictionary)
+      const entity = this.dictionaryRepository.create(dictionary)
       await this.dictionaryRepository.save(entity);
 
       this.logger.log(`Dictionary ${dictionary.code} imported successfully`);

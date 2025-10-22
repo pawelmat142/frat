@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { Dictionaries } from "@shared/def/dictionary.def";
-import { TranslationI } from "@shared/interfaces/TranslationI";
+import { TranslationData, TranslationDataWithPaths, TranslationI } from "@shared/interfaces/TranslationI";
 import { DictionariesService } from "admin/dictionaries/services/DictionariesService";
 import { TranslationEntity } from "./TranslationEntity";
 import { Repository } from "typeorm";
@@ -8,6 +8,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { TranslationListDto } from "@shared/dto/TranslationListDto";
 import { ToastException } from "global/exceptions/ToastException";
 import { DictionaryElement, DictionaryI } from "@shared/interfaces/DictionaryI";
+import { ObjUtil } from "@shared/utils/ObjUtil";
 
 @Injectable()
 export class TranslationService implements OnModuleInit {
@@ -18,9 +19,15 @@ export class TranslationService implements OnModuleInit {
         private readonly dictionariesService: DictionariesService,
         @InjectRepository(TranslationEntity)
         private translationRepository: Repository<TranslationEntity>,
-    ) { }
+    ) {
+        this.dictionariesService.addTranslationItems$.subscribe((data: TranslationData) => {
+            this.addTranslationItems(data);
+        });
+    }
 
     private languagesList: DictionaryElement[]
+
+    private readonly DEFAULT_LANG_CODE = 'en';
 
     public async onModuleInit(): Promise<void> {
         this.reloadLanguagesList();
@@ -59,7 +66,6 @@ export class TranslationService implements OnModuleInit {
         return result;
     }
 
-
     public getTranslation(langCode: string): Promise<TranslationI> {
         return this.translationRepository.findOne({ where: { langCode } })
     }
@@ -87,8 +93,17 @@ export class TranslationService implements OnModuleInit {
         return result;
     }
 
-
-
+    public async addTranslationItems(data: TranslationData): Promise<void> {
+        const dataWithPaths: TranslationDataWithPaths = ObjUtil.transformNestedJsonToFlatPaths(data);
+        const translation = await this.getTranslation(this.DEFAULT_LANG_CODE);
+        if (!translation) {
+            throw new ToastException(`Translation for language ${data.langCode} not found`, this);
+        }
+        for (const [path, value] of Object.entries(dataWithPaths)) {
+            ObjUtil.setValueInNestedJsonByPath(translation.data, path, value);
+        }
+        await this.translationRepository.save(translation);
+    }
 
 
     // admin

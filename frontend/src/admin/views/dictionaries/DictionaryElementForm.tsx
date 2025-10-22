@@ -77,7 +77,7 @@ const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
                         valueType={col.type}
                         key={col.code}
                         name={col.code}
-                        label={col.code + " (" + col.type + ")"}
+                        label={`${col.code} (${col.type})${col.translatable ? ' [translatable]' : ''}`}
                         value={elementForm?.values?.[col.code] || ""}
                         onChange={e => onElementChange(col.code, e.target.value)}
                         onDateChange={date => onElementChangeDate(col.code, date)}

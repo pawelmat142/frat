@@ -4,5 +4,8 @@ export interface TranslationI {
 
     version: number;
 
-    data: { [ key:string ]: any };
+    data: TranslationData;
 }
+
+export type TranslationData = { [ key: string ]: any };
+export type TranslationDataWithPaths = { [ key: string ]: string };

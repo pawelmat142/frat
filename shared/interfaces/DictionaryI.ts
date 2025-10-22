@@ -29,6 +29,7 @@ export interface DictionaryColumn {
     required: boolean
     description?: string
     defaultValue?: any;
+    translatable: boolean;
 }
 
 export interface DictionaryGroup {

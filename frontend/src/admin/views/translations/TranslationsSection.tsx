@@ -18,23 +18,24 @@ import { TranslationAdminService } from "admin/services/TranslationAdmin.service
 import { useConfirm } from 'global/providers/PopupProvider';
 
 const TranslationsSection: React.FC = () => {
-
     const [loading, setLoading] = useState(false);
-    const { translation } = userAdminPanelContext();
-
     const [showForm, setShowForm] = useState(false);
-
     const [newPath, setNewPath] = useState('');
     const [newValue, setNewValue] = useState('');
     const [editMode, setEditMode] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchText, setSearchText] = useState('');
+    const confirm = useConfirm();
+    const { translation } = userAdminPanelContext();
+    
     const itemsPerPage = 15;
-    const confirm = useConfirm()
 
     if (!translation?.selectedLanguage || !translation?.translations) {
         return null
     }
+
+    // TODO kiedy "Save translations" drugi raz to w values zapisuja sie klucze!!!!
+    // TODO obsługa translatable columns w selectorach!!!
 
     const selectedTranslation: TranslationI | undefined = translation.translations.find(t => t.langCode === translation.selectedLanguage);
     const defaultTranslation: TranslationI | undefined = translation.translations.find(t => t.langCode === 'en');
@@ -86,10 +87,6 @@ const TranslationsSection: React.FC = () => {
         }
     }
 
-    if (loading) {
-        return <Loading />;
-    }
-
     const isDefaultLangSelected = selectedTranslation?.langCode === defaultTranslation.langCode;
 
     const onShowForm = (key?: string) => { // if key is provided, we are editing
@@ -105,8 +102,9 @@ const TranslationsSection: React.FC = () => {
         }
     }
 
+ 
     const removeTranslation = async (key: string) => {
-        const confirmed = confirm({
+        const confirmed = await confirm({
             title: 'Confirm Deletion',
             message: `Are you sure you want to delete the translation for key "${key}"? This action cannot be undone.`,
             confirmText: 'Delete',
@@ -114,7 +112,7 @@ const TranslationsSection: React.FC = () => {
         });
         if (!confirmed) return;
         if (selectedTranslation) {
-            delete selectedTranslation.data[key];
+            ObjUtil.deleteValueFromNestedJsonByPath(selectedTranslation.data, key);
             translation.updateTranslation?.(selectedTranslation);
         }
     }
@@ -166,10 +164,14 @@ const TranslationsSection: React.FC = () => {
         }
     };
 
-    // Reset to page 1 when search text changes
     React.useEffect(() => {
         setCurrentPage(1);
     }, [searchText]);
+
+    // All early returns after ALL hooks (including useEffect)
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <>

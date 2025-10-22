@@ -28,7 +28,7 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         valueInput,
         onSelectMulti,
         disabledValues = [],
-        elementLabelTranslationKey = 'TRANSLATION_KEY',
+        elementLabelTranslationKey = 'NAME',
         error,
         enableSearchText = true
     }: DictionarySelectorProps<T>,
@@ -72,7 +72,8 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     }
 
     const items: SelectorItem<string & { disabled?: boolean }>[] = dictionary.elements.map(element => {
-        const translatedLabel = t(element.values[elementLabelTranslationKey]);
+        const translationKey = `dictionary.${dictionary.code}.${elementLabelTranslationKey}.${element.code}`;
+        const translatedLabel = t(translationKey);
         const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
         return {
             label: capitalizedLabel,

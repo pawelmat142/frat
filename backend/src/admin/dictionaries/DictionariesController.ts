@@ -31,7 +31,7 @@ export class DictionariesController {
   }
 
   @Get(':code')
-  findOne(@Param('code') code: string): Promise<DictionaryI> {
+  get(@Param('code') code: string): Promise<DictionaryI> {
     return this.dictionariesService.get(code)
   }
 

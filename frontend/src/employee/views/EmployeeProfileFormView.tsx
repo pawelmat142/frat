@@ -175,7 +175,7 @@ const EmployeeProfileFormView: React.FC = () => {
                             label={t("employeeProfile.form.residenceCountry")}
                             code="LANGUAGES"
                             groupCode="COMMUNICATION"
-                            elementLabelTranslationKey="COUNTRY_TRANSLATION_KEY"
+                            elementLabelTranslationKey="COUNTRY_NAME"
                             fullWidth
                             required
                             error={formState.errors.residenceCountry}

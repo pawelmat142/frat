@@ -22,6 +22,7 @@ const LangSelector = () => {
             groupCode="TRANSLATIONS"
             required
             label={i18n.t('common.language')}
+            enableSearchText={false}
             onSelect={(item) => setLang(item ? String(item.value) : undefined)}
         />
     );

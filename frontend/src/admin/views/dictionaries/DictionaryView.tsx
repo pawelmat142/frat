@@ -17,6 +17,7 @@ import { Util } from "@shared/utils/util";
 import DictionaryGroups from "./DictionaryGroups";
 import { AdminImportService } from "admin/services/AdminImport.service";
 import { DictionaryI, DictionaryElement, DictionaryGroup, DictionaryColumnTypes, DictionaryStatuses } from "@shared/interfaces/DictionaryI";
+import { useTranslation } from "react-i18next";
 
 const DictionaryView: React.FC = () => {
     const navigate = useNavigate();
@@ -28,6 +29,7 @@ const DictionaryView: React.FC = () => {
     const [elementForm, setElementForm] = useState<Partial<DictionaryElement> | null>(null);
     const [elementFormEditMode, setElementFormEditMode] = useState<boolean>(false);
     const [elements, setElements] = useState<DictionaryElement[]>([]);
+    const { t } = useTranslation()
 
     const _setDictionary = (dict: DictionaryI) => {
         setDictionary(dict);
@@ -38,7 +40,7 @@ const DictionaryView: React.FC = () => {
         const initDictionary = async () => {
             try {
                 setLoading(true);
-                const result = await DictionaryAdminService.getDictionary(code)
+                const result = await DictionaryAdminService.getDictionary(code, t)
                 _setDictionary(result);
             } catch (e) {
             } finally {
@@ -102,7 +104,7 @@ const DictionaryView: React.FC = () => {
 
         try {
             setLoading(true);
-            const result = await DictionaryAdminService.putDictionary(updatedDictionary);
+            const result = await DictionaryAdminService.putDictionary(updatedDictionary, t);
             _setDictionary(result);
             toast.success("Dictionary updated successfully.");
         } catch (e) {
@@ -143,7 +145,9 @@ const DictionaryView: React.FC = () => {
                 confirmText: "Delete",
                 cancelText: "Cancel"
             });
-            if (!confirmed) return;
+            if (!confirmed) {
+                return;
+            }
 
             const newElements = elements.filter(el => el.code !== elementCode);
 
@@ -151,7 +155,7 @@ const DictionaryView: React.FC = () => {
             const result = await DictionaryAdminService.putDictionary({
                 ...dictionary,
                 elements: newElements
-            });
+            }, t);
             _setDictionary(result);
             toast.success("Element deleted successfully.");
         } catch (e) {

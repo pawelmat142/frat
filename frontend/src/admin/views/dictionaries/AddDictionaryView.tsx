@@ -17,11 +17,13 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { DictionaryValidators } from "@shared/validators/DictionaryValidators";
 import { DictionaryColumnTypes, DictionaryI, DictionaryElement, DictionaryStatuses, DictionaryColumnType } from "@shared/interfaces/DictionaryI";
 import { BtnModes, BtnSizes, SelectorItem } from "global/interface/controls.interface";
+import { useTranslation } from "react-i18next";
 
 interface ColumnForm {
   code: string;
   type: SelectorItem<DictionaryColumnType> | null;
   required: boolean;
+  translatable: boolean;
   description?: string;
   defaultValue?: any;
   editMode?: boolean;
@@ -38,6 +40,8 @@ const AddDictionaryView: React.FC = () => {
   const [columnForm, setColumnForm] = useState<ColumnForm | null>(null);
   const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
 
+  const { t } = useTranslation();
+
   const { code: editCode } = useParams<{ code?: string }>();
   const isEditMode = window.location.pathname.includes("/edit/") && !!editCode;
 
@@ -46,7 +50,7 @@ const AddDictionaryView: React.FC = () => {
   useEffect(() => {
     if (isEditMode && editCode) {
       setLoading(true);
-      DictionaryAdminService.getDictionary(editCode)
+      DictionaryAdminService.getDictionary(editCode, t)
         .then(dict => {
           setDictionary(dict);
           setCode(dict.code);
@@ -56,7 +60,8 @@ const AddDictionaryView: React.FC = () => {
             type: { label: col.type, value: col.type },
             required: col.required,
             description: col.description,
-            defaultValue: col.defaultValue
+            defaultValue: col.defaultValue,
+            translatable: col.translatable || false
           })));
         })
         .catch(err => {
@@ -71,7 +76,7 @@ const AddDictionaryView: React.FC = () => {
 
   const handleAddColumn = () => {
     if (!columnForm?.code) {
-      setColumnForm({ code: "", type: columnTypeOptions[0], description: "", required: false });
+      setColumnForm({ code: "", type: columnTypeOptions[0], description: "", required: false, translatable: false });
       return
     };
     if (!columnForm?.editMode && columns.some(col => col.code === columnForm.code)) {
@@ -142,6 +147,7 @@ const AddDictionaryView: React.FC = () => {
         description: col.description,
         required: col.required,
         defaultValue: col.required ? col.defaultValue : undefined,
+        translatable: col.translatable || false
       })),
       elements: getElements(),
       groups: dictionary?.groups || []
@@ -150,7 +156,7 @@ const AddDictionaryView: React.FC = () => {
     try {
       setLoading(true);
 
-      const res = await DictionaryAdminService.putDictionary(result);
+      const res = await DictionaryAdminService.putDictionary(result, t);
       if (!res) {
         return
       }
@@ -249,33 +255,47 @@ const AddDictionaryView: React.FC = () => {
             <Input
               name="columnDescription"
               label="Column description"
-              value={columnForm.description || null}
+              value={columnForm.description ?? ''}
               onChange={e => setColumnForm({ ...columnForm, description: e.target.value })}
               fullWidth
             />
 
-            <Checkbox
-              checked={columnForm.required}
-              onChange={checked => setColumnForm({ ...columnForm, required: checked })}
-              label="Required"
-            />
-            {columnForm.required && (
-              <TypedInput
-                valueType={columnForm.type?.value as DictionaryColumnType}
-                name="defaultValue"
-                label="Default value"
-                value={columnForm.defaultValue ?? ""}
-                onChange={e => {
-                  console.log(e.target.value);
-                  console.log(typeof e.target.value);
-                  setColumnForm({ ...columnForm, defaultValue: e.target.value })}}
-                onDateChange={date => {
-                  setColumnForm({ ...columnForm, defaultValue: date })
-                }}
-                required
-                fullWidth
+            <div className="mb-5">
+              <Checkbox
+                checked={columnForm.translatable}
+                onChange={checked => setColumnForm({ ...columnForm, translatable: checked })}
+                label="Translatable"
+                className="mb-3"
               />
-            )}
+              {columnForm.translatable && (
+                <div>"Translation key and default value will be added automaticaly with key dictionary./dictionaryCode/./columnCode/./elementCode/"</div>
+              )}
+            </div>
+
+            <div className="mb-5">
+              <Checkbox
+                checked={columnForm.required}
+                onChange={checked => setColumnForm({ ...columnForm, required: checked })}
+                label="Required"
+                className="mb-3"
+              />
+              {columnForm.required && (
+                <TypedInput
+                  valueType={columnForm.type?.value as DictionaryColumnType}
+                  name="defaultValue"
+                  label="Default value"
+                  value={columnForm.defaultValue ?? ''}
+                  onChange={e => {
+                    setColumnForm({ ...columnForm, defaultValue: e.target.value })
+                  }}
+                  onDateChange={date => {
+                    setColumnForm({ ...columnForm, defaultValue: date })
+                  }}
+                  required
+                  fullWidth
+                />
+              )}
+            </div>
 
           </div>)}
 

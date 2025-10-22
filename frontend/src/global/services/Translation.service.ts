@@ -27,6 +27,7 @@ function saveCache(cache: TranslationCache) {
     try {
         localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
     } catch (e) {
+        console.warn('Failed to save translation cache');
         // localStorage may be unavailable
     }
 }

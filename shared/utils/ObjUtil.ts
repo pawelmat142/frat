@@ -1,3 +1,5 @@
+import { TranslationData, TranslationDataWithPaths } from '../interfaces/TranslationI';
+
 export abstract class ObjUtil {
 
     public static getPathsFromNestedJsonKeys(obj: any, prefix = ''): string[] {
@@ -15,22 +17,49 @@ export abstract class ObjUtil {
         return path.split('.').reduce((o, k) => (o || {})[k], obj);
     }
 
+    public static deleteValueFromNestedJsonByPath(obj: any, path: string): void {
+        const keys = path.split('.');
+        let current = obj;
+        keys.forEach((k, i) => {
+            if (i === keys.length - 1) {
+                delete current[k];
+            } else {
+                current = current[k];
+            }
+        });
+    }
+
     public static setValueInNestedJsonByPath(obj: any, path: string, value: string): void {
         if (path.includes('.')) {
             const keys = path.split('.');
             let current = obj;
             keys.forEach((k, i) => {
-                if (!current[k]) {
-                    current[k] = {};
-                }
-                if (i === keys.length - 1) {
+                // If not last key, ensure current[k] is an object
+                if (i < keys.length - 1) {
+                    if (typeof current[k] !== 'object' || current[k] === null) {
+                        current[k] = {};
+                    }
+                    current = current[k];
+                } else {
                     current[k] = value;
                 }
-                current = current[k];
             });
         } else {
             obj[path] = value;
         }
+    }
+
+    public static transformNestedJsonToFlatPaths(obj: TranslationData, prefix = ''): TranslationDataWithPaths {
+        return Object.keys(obj).reduce((acc, key) => {
+            const value = obj[key];
+            const newKey = prefix ? `${prefix}.${key}` : key;
+            if (typeof value === 'object' && value !== null) {
+                Object.assign(acc, ObjUtil.transformNestedJsonToFlatPaths(value, newKey));
+            } else {
+                acc[newKey] = value;
+            }
+            return acc;
+        }, {} as { [key: string]: any });
     }
 
     public static numberArrayChanged(arrOne: number[], arrTwo: number[]): boolean {

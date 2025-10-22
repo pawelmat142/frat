@@ -9,6 +9,7 @@ import { Path } from "../../../path";
 import Loading from "global/components/Loading";
 import { toast } from "react-toastify";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
+import { useTranslation } from "react-i18next";
 
 const DictionaryGroupForm: React.FC = () => {
     const pathInput = useParams<{ groupCode: string, dictionaryCode: string }>();
@@ -23,11 +24,12 @@ const DictionaryGroupForm: React.FC = () => {
     const [groupDescription, setGroupDescription] = useState("");
     const [selectedElements, setSelectedElements] = useState<string[]>([]);
     const [active, setActive] = useState(true);
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!dictionaryCode) return;
         setLoading(true);
-        DictionaryAdminService.getDictionary(dictionaryCode)
+        DictionaryAdminService.getDictionary(dictionaryCode, t)
             .then(dict => {
                 setDictionary(dict);
                 if (editMode && dict.groups) {
@@ -66,7 +68,7 @@ const DictionaryGroupForm: React.FC = () => {
         const updatedDictionary = getDictionaryToSave();
         setLoading(true);
         try {
-            await DictionaryAdminService.putDictionary(updatedDictionary);
+            await DictionaryAdminService.putDictionary(updatedDictionary, t);
             navigate(Path.getDictionaryPath(dictionary.code));
         } catch (error) {
         } finally {
