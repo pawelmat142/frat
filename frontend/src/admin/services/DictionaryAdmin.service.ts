@@ -1,5 +1,7 @@
 import { DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
+import i18n from 'global/i18n';
 import { httpClient } from 'global/services/http';
+import { TranslationService } from 'global/services/Translation.service';
 
 export const DictionaryAdminService = {
 
@@ -12,7 +14,14 @@ export const DictionaryAdminService = {
 	},
 
 	async putDictionary(dictionary: DictionaryI, translate?: any): Promise<DictionaryI> {
-		const result = await httpClient.put<DictionaryI>(`/admin/dictionaries`, dictionary);
+		const langCode = i18n.language;
+		const result = await httpClient.put<DictionaryI>(`/admin/dictionaries/${langCode}`, dictionary);
+
+		const anyTranslatableColumn = dictionary.columns.find(c => c.translatable);
+		if (anyTranslatableColumn) {
+			TranslationService.clearCache();
+		}
+		
 		if (translate) {
 			this.translateTranslateableColumns(result, translate);
 		}

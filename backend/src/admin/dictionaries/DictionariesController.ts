@@ -35,9 +35,9 @@ export class DictionariesController {
     return this.dictionariesService.get(code)
   }
 
-  @Put()
-  put(@Body() dictionaryDto: DictionaryI): Promise<DictionaryI> {
-    return this.dictionariesService.put(dictionaryDto);
+  @Put(':langCode')
+  put(@Param('langCode') langCode: string, @Body() dictionaryDto: DictionaryI): Promise<DictionaryI> {
+    return this.dictionariesService.put(dictionaryDto, langCode);
   }
 
   @Delete(':code')

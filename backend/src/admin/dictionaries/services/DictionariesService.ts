@@ -7,7 +7,7 @@ import { DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI'
 import { DictionaryValidators } from '@shared/validators/DictionaryValidators';
 import { ToastException } from 'global/exceptions/ToastException';
 import { ObjUtil } from '@shared/utils/ObjUtil';
-import { TranslationData } from '@shared/interfaces/TranslationI';
+import { TranslationData, TranslationI } from '@shared/interfaces/TranslationI';
 import { Subject } from 'rxjs';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class DictionariesService {
 
   private readonly logger = new Logger(this.constructor.name);
 
-  public addTranslationItems$ = new Subject<TranslationData>();
+  public addTranslationItems$ = new Subject<TranslationI>();
 
   constructor(
     private readonly repo: DictionariesRepo,
@@ -33,10 +33,10 @@ export class DictionariesService {
     return dictionary;
   }
 
-  public async put(dto: DictionaryI): Promise<DictionaryI> {
+  public async put(dto: DictionaryI, langCode?: string): Promise<DictionaryI> {
     try {
       DictionaryValidators.fullValidation(dto);
-      this.setTranslationsForTranslatableColumns(dto);
+      this.setTranslationsForTranslatableColumns(dto, langCode || 'en');
       return this.repo.put(dto);
     } catch (err: any) {
       throw new ToastException(err.message, this);
@@ -59,7 +59,7 @@ export class DictionariesService {
     return result;
   }
 
-  public setTranslationsForTranslatableColumns(dictionary: DictionaryI): void {
+  public setTranslationsForTranslatableColumns(dictionary: DictionaryI, langCode: string): void {
     const translatableColumns = dictionary.columns.filter(c => c.translatable).map(c => c.code);
 
     let data: TranslationData = {};
@@ -77,7 +77,7 @@ export class DictionariesService {
     }
     if (Object.keys(data).length) {
       this.logger.log(`Emitting translation items for dictionary ${dictionary.code}`);
-      this.addTranslationItems$.next(data);
+      this.addTranslationItems$.next({data, langCode} as TranslationI);
     }
   }
 }

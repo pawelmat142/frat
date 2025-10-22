@@ -20,8 +20,8 @@ export class TranslationService implements OnModuleInit {
         @InjectRepository(TranslationEntity)
         private translationRepository: Repository<TranslationEntity>,
     ) {
-        this.dictionariesService.addTranslationItems$.subscribe((data: TranslationData) => {
-            this.addTranslationItems(data);
+        this.dictionariesService.addTranslationItems$.subscribe((translation: TranslationI) => {
+            this.addTranslationItems(translation);
         });
     }
 
@@ -93,11 +93,11 @@ export class TranslationService implements OnModuleInit {
         return result;
     }
 
-    public async addTranslationItems(data: TranslationData): Promise<void> {
-        const dataWithPaths: TranslationDataWithPaths = ObjUtil.transformNestedJsonToFlatPaths(data);
-        const translation = await this.getTranslation(this.DEFAULT_LANG_CODE);
+    public async addTranslationItems(translationInput: TranslationI): Promise<void> {
+        const dataWithPaths: TranslationDataWithPaths = ObjUtil.transformNestedJsonToFlatPaths(translationInput.data);
+        const translation = await this.getTranslation(translationInput.langCode);
         if (!translation) {
-            throw new ToastException(`Translation for language ${data.langCode} not found`, this);
+            throw new ToastException(`Translation for language ${translationInput.langCode} not found`, this);
         }
         for (const [path, value] of Object.entries(dataWithPaths)) {
             ObjUtil.setValueInNestedJsonByPath(translation.data, path, value);

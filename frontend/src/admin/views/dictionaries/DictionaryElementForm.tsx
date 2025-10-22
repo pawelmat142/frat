@@ -11,6 +11,7 @@ interface DictionaryElementFormProps {
     elementForm: Partial<DictionaryElement> | null;
     setElementForm: (form: Partial<DictionaryElement> | null) => void;
     onAddElement: () => void;
+    onCancel: () => void;
     editMode?: boolean;
 }
 
@@ -19,6 +20,7 @@ const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
     elementForm,
     setElementForm,
     onAddElement,
+    onCancel,
     editMode
 }) => {
     const allElementRequiredFiledsFilled = dictionary.columns.every(col => !col.required || (elementForm?.values && elementForm.values[col.code]));
@@ -48,7 +50,7 @@ const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
 
     return (
         <div className="flex flex-col gap-4 p-4 border rounded shadow w-full max-w-lg mx-auto">
-            <h3 className="text-lg font-bold mb-2">Add Element</h3>
+            <h3 className="text-lg font-bold mb-2">{editMode ? `Update Element` : `Add Element`}</h3>
             <div className="flex flex-col gap-3">
                 <Input
                     name="elementCode"
@@ -95,7 +97,7 @@ const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
                     {editMode ? `Update Element` : `Add Element`}
                 </Button>
                 <Button
-                    onClick={() => setElementForm(null)}
+                    onClick={() => onCancel()}
                     mode={BtnModes.PRIMARY_TXT}
                 >
                     Cancel

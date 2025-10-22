@@ -74,7 +74,7 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch, fo
                                         onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
                                         label={t("employeeProfile.form.locationCountries")}
                                         code="LANGUAGES"
-                                        elementLabelTranslationKey="COUNTRY_TRANSLATION_KEY"
+                                        elementLabelTranslationKey="COUNTRY_NAME"
                                         fullWidth
                                         required
                                         error={formState?.errors.locationCountries}

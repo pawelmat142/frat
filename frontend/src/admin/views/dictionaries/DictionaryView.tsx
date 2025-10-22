@@ -246,24 +246,43 @@ const DictionaryView: React.FC = () => {
                                 </tr>
                             ) : (
                                 elements.map((el, idx) => (
-                                    <tr key={el.code}>
-                                        <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text"}>{el.code}</td>
-                                        {dictionary.columns.map(col => (
-                                            <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
-                                                {col.type === DictionaryColumnTypes.DATE
-                                                    ? Util.displayDate(el.values[col.code])
-                                                    : (el.values[col.code] !== undefined && el.values[col.code] !== "" ? el.values[col.code] : "-")}
+                                    <React.Fragment key={el.code}>
+                                        <tr>
+                                            <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text"}>{el.code}</td>
+                                            {dictionary.columns.map(col => (
+                                                <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
+                                                    {col.type === DictionaryColumnTypes.DATE
+                                                        ? Util.displayDate(el.values[col.code])
+                                                        : (el.values[col.code] !== undefined && el.values[col.code] !== "" ? el.values[col.code] : "-")}
+                                                </td>
+                                            ))}
+                                            {/* <td className={"px-6 py-3 border-b border-color secondary-text"}>{el.description}</td> */}
+                                            <td className={"px-6 py-3 border-b border-color"}>{el.active ? <span className="primary-color font-semibold">ACTIVE</span> : <span className="secondary-text">INACTIVE</span>}</td>
+                                            <td className={"px-6 py-3 border-b border-color "}>
+                                                <div className="flex gap-2 justify-end">
+                                                    <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditElement(el.code)} />
+                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleDeleteElement(el.code)} />
+                                                </div>
                                             </td>
-                                        ))}
-                                        {/* <td className={"px-6 py-3 border-b border-color secondary-text"}>{el.description}</td> */}
-                                        <td className={"px-6 py-3 border-b border-color"}>{el.active ? <span className="primary-color font-semibold">ACTIVE</span> : <span className="secondary-text">INACTIVE</span>}</td>
-                                        <td className={"px-6 py-3 border-b border-color "}>
-                                            <div className="flex gap-2 justify-end">
-                                                <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditElement(el.code)} />
-                                                <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleDeleteElement(el.code)} />
-                                            </div>
-                                        </td>
-                                    </tr>
+                                        </tr>
+                                        {elementFormEditMode && elementForm?.code === el.code && (
+                                            <tr>
+                                                <td colSpan={3 + dictionary.columns.length + 1} className="px-6 py-6 text-center">
+                                                    <DictionaryElementForm
+                                                        dictionary={dictionary}
+                                                        elementForm={elementForm}
+                                                        setElementForm={setElementForm}
+                                                        onAddElement={handleAddElement}
+                                                        editMode={true}
+                                                        onCancel={() => {
+                                                            setElementForm(null)
+                                                            setElementFormEditMode(false);
+                                                        }}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
                                 ))
                             )}
                         </tbody>
@@ -273,7 +292,20 @@ const DictionaryView: React.FC = () => {
 
                 {/* Add element button and form */}
                 <div className="">
-                    {!elementForm ? (
+                    {elementForm ? (
+                        !elementFormEditMode ?
+                            (<div className="flex flex-col gap-4 mt-4 secondary-bg w-full max-w-lg mx-auto mb-10">
+                                <div className="flex flex-col gap-3">
+                                    <DictionaryElementForm
+                                        dictionary={dictionary}
+                                        elementForm={elementForm}
+                                        setElementForm={setElementForm}
+                                        onAddElement={handleAddElement}
+                                        onCancel={() => setElementForm(null)}
+                                    />
+                                </div>
+                            </div>) : null
+                    ) : (
                         <div className="flex gap-2 my-10">
                             <Button
                                 onClick={() => onAddElement()}
@@ -322,18 +354,6 @@ const DictionaryView: React.FC = () => {
                                 Delete dictionary
                             </Button>
 
-                        </div>
-                    ) : (
-                        <div className="flex flex-col gap-4 mt-4 secondary-bg w-full max-w-lg mx-auto mb-10">
-                            <div className="flex flex-col gap-3">
-                                <DictionaryElementForm
-                                    dictionary={dictionary}
-                                    elementForm={elementForm}
-                                    setElementForm={setElementForm}
-                                    onAddElement={handleAddElement}
-                                    editMode={elementFormEditMode}
-                                />
-                            </div>
                         </div>
                     )}
                 </div>

@@ -34,9 +34,6 @@ const TranslationsSection: React.FC = () => {
         return null
     }
 
-    // TODO kiedy "Save translations" drugi raz to w values zapisuja sie klucze!!!!
-    // TODO obsługa translatable columns w selectorach!!!
-
     const selectedTranslation: TranslationI | undefined = translation.translations.find(t => t.langCode === translation.selectedLanguage);
     const defaultTranslation: TranslationI | undefined = translation.translations.find(t => t.langCode === 'en');
 
