@@ -59,7 +59,6 @@ function clearCache() {
 }
 
 export const TranslationService = {
-    // TODO niech nie beda zwracane pola ktorych nie ma w interface
     async getTranslation(langCode: string): Promise<TranslationI> {
         const cached = getCachedTranslation(langCode);
         if (cached) {

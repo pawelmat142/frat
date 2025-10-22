@@ -22,7 +22,6 @@ export class AuthController {
 
   constructor(private readonly authService: AuthService) { }
   
-  // TODO nie zwracaj pol jakich nie ma w interface UserI
   @Get('login')
   @UseGuards(JwtAuthGuard)
   login(@CurrentUser() user: UserI): UserI {
@@ -46,18 +45,5 @@ export class AuthController {
   sendPasswordResetEmail(@Param('email') email: string): Promise<void> {
     return this.authService.sendPasswordResetEmail(email);
   }
-
-  // EXAMPLE PROTECTED ENDPOINT
-  
-    // @Get('admin-only')
-    // @UseGuards(JwtAuthGuard, RolesGuard)
-    // @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
-    // adminOnly(@CurrentUser() user: UserI) {
-    //   return {
-    //     message: 'This endpoint is for admins only',
-    //     user: user.displayName,
-    //     roles: user.roles,
-    //   };
-    // }
 
 }

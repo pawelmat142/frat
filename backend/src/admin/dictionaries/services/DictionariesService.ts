@@ -68,7 +68,6 @@ export class DictionariesService {
       for (const element of dictionary.elements) {
         const value = element.values[columnCode];
         if (value) {
-          console.log(value)
           const path = `dictionary.${dictionary.code}.${columnCode}.${element.code}`;
           ObjUtil.setValueInNestedJsonByPath(data, path, value);
           element.values[columnCode] = path

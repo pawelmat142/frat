@@ -12,7 +12,6 @@ import { DictionaryListItem } from "@shared/interfaces/DictionaryI";
 
 const AdminDictionaries: React.FC = () => {
 
-    // TODO przy dodawaniu grup - dodac zaznacz wszystkie opcje
     // TODO paginacja jak w translacjach
     
     const navigate = useNavigate();

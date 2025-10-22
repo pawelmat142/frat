@@ -5,6 +5,8 @@ import { UsersAdminService } from "./UsersAdminService";
 import { RolesGuard } from "auth/guards/RolesGuard";
 import { Roles } from "auth/decorators/RolesDecorator";
 import { JwtAuthGuard } from "auth/guards/JwtAuthGuard";
+import { Serialize } from "global/decorators/Serialize";
+import { UserEntity } from "user/model/UserEntity";
 
 @Controller('api/admin/users')
 @UseInterceptors(LogInterceptor)
@@ -17,6 +19,7 @@ export class UsersAdminController {
     ) {}
     
     @Get('list-users')
+    @Serialize(UserEntity)
     listUsers(): Promise<UserI[]> {
         return this.usersAdminService.listUsers();
     }
@@ -28,6 +31,7 @@ export class UsersAdminController {
     }
 
     @Put(':uid/assign-roles')
+    @Serialize(UserEntity)
     assignRolesForUser(
         @Param('uid') uid: string,
         @Body() dto: { roles: UserRole[] }

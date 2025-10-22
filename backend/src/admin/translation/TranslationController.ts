@@ -7,6 +7,8 @@ import { UserRoles } from "@shared/interfaces/UserI";
 import { Roles } from "auth/decorators/RolesDecorator";
 import { RolesGuard } from "auth/guards/RolesGuard";
 import { JwtAuthGuard } from "auth/guards/JwtAuthGuard";
+import { Serialize } from "global/decorators/Serialize";
+import { TranslationEntity } from "admin/dictionaries/model/TranslationEntity";
 
 @Controller('api/admin/translations')
 @UseInterceptors(LogInterceptor)
@@ -17,20 +19,22 @@ export class TranslationController {
     constructor(
         private readonly translationService: TranslationService
     ) {}
-    
+
     @Get(':langCode')
+    @Serialize(TranslationEntity)
     getTranslation(@Param('langCode') langCode: string): Promise<TranslationI> {
-        return this.translationService.getTranslation(langCode);
+        return this.translationService.getTranslation(langCode)
     }
 
     @Get('admin/list')
     getLanguagesList(): TranslationListDto[] {
-        return this.translationService.getLanguagesList();
+        return this.translationService.getLanguagesList()
     }
 
     @Put('admin')
+    @Serialize(TranslationEntity)
     putTranslation(@Body() dto: TranslationI): Promise<TranslationI> {
-        return this.translationService.putTranslation(dto);
+        return this.translationService.putTranslation(dto)
     }
 
 }

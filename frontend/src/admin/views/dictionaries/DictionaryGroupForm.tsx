@@ -102,6 +102,8 @@ const DictionaryGroupForm: React.FC = () => {
         };
     }
 
+    const allSelected = selectedElements.length === dictionary.elements.length;
+
     return (
         <div className="w-full px-5 py-3">
             <Button onClick={() => navigate(Path.getDictionaryPath(dictionary.code))} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
@@ -137,14 +139,24 @@ const DictionaryGroupForm: React.FC = () => {
                     {dictionary.elements.length === 0 ? (
                         <div className="secondary-text">No elements available.</div>
                     ) : (
-                        dictionary.elements.map(el => (
-                            <Checkbox
-                                key={el.code}
-                                checked={selectedElements.includes(el.code)}
-                                onChange={() => handleElementToggle(el.code)}
-                                label={el.code}
-                            />
-                        ))
+                        <>
+                            <Button 
+                                mode={BtnModes.SECONDARY}
+                                size={BtnSizes.SMALL}
+                                onClick={() => {setSelectedElements(allSelected ? [] : dictionary.elements.map(el => el.code))}}
+                                className="my-3"
+                            >
+                                {allSelected ? 'Unselect all' : 'Select all'}
+                            </Button>
+                            {dictionary.elements.map(el => (
+                                <Checkbox
+                                    key={el.code}
+                                    checked={selectedElements.includes(el.code)}
+                                    onChange={() => handleElementToggle(el.code)}
+                                    label={el.code}
+                                />
+                            ))}
+                        </>
                     )}
                 </div>
                 <Button

@@ -2,7 +2,7 @@ import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { Dictionaries } from "@shared/def/dictionary.def";
 import { TranslationData, TranslationDataWithPaths, TranslationI } from "@shared/interfaces/TranslationI";
 import { DictionariesService } from "admin/dictionaries/services/DictionariesService";
-import { TranslationEntity } from "./TranslationEntity";
+import { TranslationEntity } from "../dictionaries/model/TranslationEntity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { TranslationListDto } from "@shared/dto/TranslationListDto";

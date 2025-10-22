@@ -1,6 +1,7 @@
 /** Created by Pawel Malek **/
 import { Point } from '@shared/def/employee-profile.def';
 import { EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus } from '@shared/interfaces/EmployeeProfileI';
+import { Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('jh_employee_profiles')
@@ -10,24 +11,31 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   employeeProfileId: number;
 
   @Column({ name: 'uid', unique: true })
+  @Expose()
   uid: string;
-
+  
   @Column({ name: 'status' })
+  @Expose()
   status: EmployeeProfileStatus;
-
+  
   @Column({ name: 'display_name' })
+  @Expose()
   displayName: string;
-
+  
   @Column({ name: 'email', unique: true })
+  @Expose()
   email: string;
   
   @Column({ name: 'first_name' })
+  @Expose()
   firstName: string;
-
+  
   @Column({ name: 'last_name' })
+  @Expose()
   lastName: string;
-
+  
   @Column({ name: 'residence_country' })
+  @Expose()
   residenceCountry: string;
 
 

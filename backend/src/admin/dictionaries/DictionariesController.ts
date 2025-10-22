@@ -16,6 +16,8 @@ import { RolesGuard } from 'auth/guards/RolesGuard';
 import { UserRoles } from '@shared/interfaces/UserI';
 import { Roles } from 'auth/decorators/RolesDecorator';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
+import { Serialize } from 'global/decorators/Serialize';
+import { DictionaryEntity } from './model/DictionaryEntity';
 
 @Controller('api/admin/dictionaries')
 @UseInterceptors(LogInterceptor)
@@ -31,21 +33,24 @@ export class DictionariesController {
   }
 
   @Get(':code')
+  @Serialize(DictionaryEntity)
   get(@Param('code') code: string): Promise<DictionaryI> {
     return this.dictionariesService.get(code)
   }
-
+  
   @Put(':langCode')
+  @Serialize(DictionaryEntity)
   put(@Param('langCode') langCode: string, @Body() dictionaryDto: DictionaryI): Promise<DictionaryI> {
     return this.dictionariesService.put(dictionaryDto, langCode);
   }
-
+  
   @Delete(':code')
   delete(@Param('code') code: string): Promise<void> {
     return this.dictionariesService.delete(code);
   }
-
+  
   @Get(':code/:groupCode')
+  @Serialize(DictionaryEntity)
   getDictionaryGroup(
     @Param('code') code: string,
     @Param('groupCode') groupCode: string
