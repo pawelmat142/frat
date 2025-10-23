@@ -58,6 +58,17 @@
         "missingRoles": "Brak ról",
         "invalidRole": "Nieprawidłowa rola"
       }
+      ,
+      "report": {
+        "title": "Co możemy zrobić lepiej?",
+        "feedbackLabel": "Twoja opinia",
+        "contactLabel": "Email - jeśli chcesz otrzymać odpowiedź",
+        "send": "Wyślij",
+        "sending": "Wysyłanie...",
+        "thankYouTitle": "Dziękujemy za Twoją opinię!",
+        "thankYouMsg": "Doceniamy Twój głos i wykorzystamy go, aby ulepszyć naszą platformę.",
+        "errorRequired": "Wpisz swoją opinię."
+      }
     },
     "dictionary": {
       "SKILLS": {

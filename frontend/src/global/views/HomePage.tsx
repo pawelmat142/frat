@@ -1,4 +1,6 @@
+
 import LangSelector from "global/components/controls/LangSelector";
+import ReportForm from "global/components/ReportForm";
 
 const HomePage: React.FC = () => {
   return (
@@ -14,10 +16,9 @@ const HomePage: React.FC = () => {
             and other height work specialists. Find opportunities, share experiences, and grow your career
             in the high-altitude industry.
           </p>
-
           <LangSelector />
-
         </div>
+        <ReportForm />
       </div>
     </div>
   );

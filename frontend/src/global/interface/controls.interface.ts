@@ -44,7 +44,7 @@ export interface InputInterface {
     label?: string;
     fullWidth?: boolean;
     disabled?: boolean;
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     onDateChange?: (date: Date | null) => void;
     value: string | number | Date | null;
     className?: string;
@@ -53,6 +53,7 @@ export interface InputInterface {
     center?: boolean;
     valueType?: DictionaryColumnType,
     error?: { message?: string } | null
+    rows?: number; // for textarea
 }
 
 export interface SelectorInterface<T extends SelectorValue = SelectorValue> {
