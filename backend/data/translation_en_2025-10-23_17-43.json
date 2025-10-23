@@ -1,0 +1,218 @@
+{
+  "langCode": "en",
+  "version": 35,
+  "data": {
+    "common": {
+      "ok": "OK",
+      "back": "Back",
+      "edit": "Edit",
+      "close": "Close",
+      "cancel": "Cancel",
+      "submit": "Submit",
+      "language": "Language",
+      "networkError": "Network error"
+    },
+    "header": {
+      "home": "Home",
+      "admin": "Admin panel",
+      "signUp": "Sign Up",
+      "profile": "Profile"
+    },
+    "signin": {
+      "email": "Email",
+      "title": "Sign In",
+      "submit": "Sign In",
+      "signout": "Signed out!",
+      "success": "Successfully signed in!",
+      "password": "Password",
+      "signingIn": "Signing in...",
+      "signUpForm": "Sign Up by Email form",
+      "forgotPassword": "Forgot Password?",
+      "googleProvider": "Sign In with Google",
+      "forgotPasswordSuccess": "If the email exists, a reset link has been sent."
+    },
+    "signup": {
+      "email": "Email",
+      "title": "Sign Up",
+      "submit": "Sign Up",
+      "password": "Password",
+      "registering": "Registering...",
+      "repeatEmail": "Repeat Email",
+      "successTitle": "Registration Successful",
+      "errorRequired": "All fields are required.",
+      "repeatPassword": "Repeat Password",
+      "successMessage": "Please check your email to verify your account.",
+      "errorEmailMatch": "Emails do not match.",
+      "errorPasswordMatch": "Passwords do not match.",
+      "verificationEmailSent": "Verification email sent. Please check your inbox."
+    },
+    "authError": {
+      "userDisabled": "Account disabled",
+      "userNotFound": "Invalid email or password",
+      "wrongPassword": "Invalid email or password",
+      "sessionExpired": "Session expired, please log in again.",
+      "tooManyRequests": "Too many attempts. Try again later.",
+      "invalidCredential": "Invalid email or password",
+      "passwordResetNotError": "Error sending password reset email.",
+      "passwordResetNotAvailable": "Password reset is not available for this account."
+    },
+    "dictionary": {
+      "SKILLS": {
+        "NAME": {
+          "ONE": "ONE",
+          "SIX": "SIX",
+          "TWO": "TWO",
+          "FIVE": "FIVE",
+          "FOUR": "FOUR",
+          "SEVEN": "SEVEN",
+          "THREE": "THREE"
+        }
+      },
+      "LANGUAGES": {
+        "NAME": {
+          "bg": "Bulgarian",
+          "cs": "Czech",
+          "da": "Danish",
+          "de": "German",
+          "el": "Greek",
+          "en": "English",
+          "es": "Spanish",
+          "et": "Estonian",
+          "fi": "Finnish",
+          "fr": "French",
+          "hr": "Croatian",
+          "hu": "Hungarian",
+          "it": "Italian",
+          "lt": "Lithuanian",
+          "lv": "Latvian",
+          "nl": "Dutch",
+          "no": "Norwegian",
+          "pl": "Polish",
+          "pt": "Portuguese",
+          "ro": "Romanian",
+          "sk": "Slovak",
+          "sl": "Slovenian",
+          "sv": "Swedish"
+        },
+        "COUNTRY_NAME": {
+          "bg": "Bulgaria",
+          "cs": "Czech Republic",
+          "da": "Denmark",
+          "de": "Germany",
+          "el": "Greece",
+          "en": "United Kingdom",
+          "es": "Spain",
+          "et": "Estonia",
+          "fi": "Finland",
+          "fr": "France",
+          "hr": "Croatia",
+          "hu": "Hungary",
+          "it": "Italy",
+          "lt": "Lithuania",
+          "lv": "Latvia",
+          "nl": "Netherlands",
+          "no": "Norway",
+          "pl": "Poland",
+          "pt": "Portugal",
+          "ro": "Romania",
+          "sk": "Slovakia",
+          "sl": "Slovenia",
+          "sv": "Sweden"
+        }
+      },
+      "CERTIFICATES": {
+        "NAME": {
+          "ONE": "ONE",
+          "SIX": "SIX",
+          "TWO": "TWO",
+          "FIVE": "FIVE",
+          "FOUR": "FOUR",
+          "SEVEN": "SEVEN",
+          "THREE": "THREE"
+        }
+      }
+    },
+    "validation": {
+      "form": {
+        "required": "This field is required."
+      },
+      "view": {
+        "title": "Something went wrong!",
+        "goHome": "Go back to the home page"
+      },
+      "popup": {
+        "stay": "Stay on this page",
+        "title": "An error occurred",
+        "goHome": "Go back to the home page"
+      },
+      "success": "Registration successful!",
+      "required": "All fields are required.",
+      "emailMatch": "Email and confirm email must match.",
+      "firebaseError": "Registration failed. Please try again later.",
+      "passwordMatch": "Password and confirm password must match.",
+      "dictionaryNotFound": "Dictionary not found"
+    },
+    "user": {
+      "error": {
+        "notFound": "User not found",
+        "cannotDelete": "Cannot delete user",
+        "missingRoles": "Missing roles",
+        "invalidRole": "Invalid role"
+      }
+    },
+    "employeeProfile": {
+      "edit": "Edit employee profile",
+      "exists": "Employee profile already exists for this user",
+      "noChanges": "No changes detected in the employee profile",
+      "notFound": "Employee profile not found for update",
+      "error": {
+        "dataRequired": "Employee profile data is required",
+        "uidRequired": "Employee profile uid is required",
+        "statusRequired": "Employee profile status is required",
+        "emailRequired": "User email is required to create employee profile",
+        "firstNameRequired": "Employee profile first name is required",
+        "lastNameRequired": "Employee profile last name is required",
+        "residenceCountryRequired": "Employee profile residence country is required",
+        "communicationLanguagesRequired": "At least one communication language is required",
+        "locationOptionRequired": "Employee profile location option is required",
+        "locationPositionRequired": "Location position is required for distance location option",
+        "locationRadiusRequired": "Location radius is required for distance location option",
+        "locationCountryRequired": "At least one location country is required for selected countries location option",
+        "locationCountriesMustNotBeSpecified": "Location countries must not be specified for all Europe location option"
+      },
+      "form": {
+        "title": "Employee Profile Form",
+        "radius": "Radius",
+        "skills": "Skills",
+        "address": "Address",
+        "lastName": "Last name",
+        "location": "Location",
+        "firstName": "First name",
+        "addLanguage": "Add language",
+        "jobLocation": "Where you want to work?",
+        "certificates": "Certificates",
+        "locationOption": {
+          "DISTANCE": {
+            "msg": "Choose a location and the maximum distance from which you want to receive offers.",
+            "tab": "Distance"
+          },
+          "ALL_EUROPE": {
+            "msg": "You will receive offers from all over Europe.",
+            "tab": "Europe"
+          },
+          "SELECTED_COUNTRIES": {
+            "msg": "Choose the countries from which you want to receive offers.",
+            "tab": "Selected countries"
+          }
+        },
+        "residenceCountry": "Country of residence",
+        "locationCountries": "Location countries",
+        "communicationLanguage": "Communication language",
+        "communicationLanguages": "Communication languages"
+      },
+      "title": "Employee Profile",
+      "create": "Create an employee profile",
+      "submitSuccess": "Employee profile saved successfully."
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "code": "SKILLS",
+  "description": "test purposes",
+  "version": 3,
+  "status": "INACTIVE",
+  "elements": [
+    {
+      "code": "ONE",
+      "active": true,
+      "values": {
+        "NAME": "ONE"
+      },
+      "description": ""
+    },
+    {
+      "code": "TWO",
+      "active": true,
+      "values": {
+        "NAME": "TWO"
+      },
+      "description": ""
+    },
+    {
+      "code": "THREE",
+      "active": true,
+      "values": {
+        "NAME": "THREE"
+      },
+      "description": ""
+    },
+    {
+      "code": "FOUR",
+      "active": true,
+      "values": {
+        "NAME": "FOUR"
+      },
+      "description": ""
+    },
+    {
+      "code": "FIVE",
+      "active": true,
+      "values": {
+        "NAME": "FIVE"
+      },
+      "description": ""
+    },
+    {
+      "code": "SIX",
+      "active": true,
+      "values": {
+        "NAME": "SIX"
+      },
+      "description": ""
+    },
+    {
+      "code": "SEVEN",
+      "active": true,
+      "values": {
+        "NAME": "SEVEN"
+      },
+      "description": ""
+    }
+  ],
+  "columns": [
+    {
+      "code": "NAME",
+      "type": "string",
+      "required": true,
+      "description": "translationKey",
+      "defaultValue": "dictionary.SKILLS.def",
+      "translatable": true
+    }
+  ],
+  "groups": [],
+  "createdAt": "2025-10-16T11:56:45.779Z",
+  "updatedAt": "2025-10-22T15:10:59.615Z"
+}

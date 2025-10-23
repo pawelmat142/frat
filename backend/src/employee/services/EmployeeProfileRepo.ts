@@ -31,7 +31,7 @@ export class EmployeeProfileRepo {
     public async update(newProfile: EmployeeProfileI): Promise<EmployeeProfileEntity> {
         const profile = await this.findByUid(newProfile.uid);
         if (!profile) {
-            throw new ToastException("Employee profile not found for update", this);
+            throw new ToastException("employeeProfile.notFound", this);
         }
 
         let updatedFlag = false
@@ -102,8 +102,7 @@ export class EmployeeProfileRepo {
         }
 
         if (!updatedFlag) {
-            // TODO translation
-            throw new ToastException("No changes detected in the employee profile", this);
+            throw new ToastException("employeeProfile.noChanges", this);
         }
 
         const saved = await this.employeeProfileRepository.save(profile);

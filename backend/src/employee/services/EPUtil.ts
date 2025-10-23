@@ -56,28 +56,28 @@ export abstract class EPUtil {
 
     public static validateProfile(profile: EmployeeProfileI): void {
         if (!profile) {
-            throw new ToastException("Employee profile data is required", this);
+            throw new ToastException('employeeProfile.error.dataRequired', this);
         }
         if (!profile.uid) {
-            throw new ToastException("Employee profile uid is required", this);
+            throw new ToastException('employeeProfile.error.uidRequired', this);
         }
         if (!profile.status) {
-            throw new ToastException("Employee profile status is required", this);
+            throw new ToastException('employeeProfile.error.statusRequired', this);
         }
         if (!profile?.email) {
-            throw new ToastException("User email is required to create employee profile", this);
+            throw new ToastException('employeeProfile.error.emailRequired', this);
         }
         if (!profile?.firstName) {
-            throw new ToastException("Employee profile first name is required", this);
+            throw new ToastException('employeeProfile.error.firstNameRequired', this);
         }
         if (!profile?.lastName) {
-            throw new ToastException("Employee profile last name is required", this);
+            throw new ToastException('employeeProfile.error.lastNameRequired', this);
         }
         if (!profile?.residenceCountry) {
-            throw new ToastException("Employee profile residence country is required", this);
+            throw new ToastException('employeeProfile.error.residenceCountryRequired', this);
         }
         if (!profile?.communicationLanguages.length) {
-            throw new ToastException("At least one communication language is required", this);
+            throw new ToastException('employeeProfile.error.communicationLanguagesRequired', this);
         }
         EPUtil.validateLocationData(profile);
     }
@@ -85,24 +85,24 @@ export abstract class EPUtil {
 
     private static validateLocationData(profile: EmployeeProfileI): void {
         if (!profile.locationOption) {
-            throw new ToastException("Employee profile location option is required", this);
+            throw new ToastException('employeeProfile.error.locationOptionRequired', this);
         }
         if (profile.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
             if (!profile.point) {
-                throw new ToastException("Location position is required for distance location option", this);
+                throw new ToastException('employeeProfile.error.locationPositionRequired', this);
             }
             if (!profile.pointRadius || isNaN(profile.pointRadius) || profile.pointRadius <= 0) {
-                throw new ToastException("Location radius is required for distance location option", this);
+                throw new ToastException('employeeProfile.error.locationRadiusRequired', this);
             }
         }
         if (profile.locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE) {
             if (!profile.locationCountries?.length) {
-                throw new ToastException("At least one location country is required for selected countries location option", this);
+                throw new ToastException('employeeProfile.error.locationCountryRequired', this);
             }
         }
         if (profile.locationOption === EmployeeProfileLocationOptions.ALL_EUROPE) {
             if (profile.locationCountries?.length) {
-                throw new ToastException("Location countries must not be specified for all Europe location option", this);
+                throw new ToastException('employeeProfile.error.locationCountriesMustNotBeSpecified', this);
             }
         }
     }

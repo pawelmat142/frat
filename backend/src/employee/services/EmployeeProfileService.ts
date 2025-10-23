@@ -26,8 +26,7 @@ export class EmployeeProfileService {
     public async createEmployeeProfile(user: UserI, form: EmployeeProfileForm): Promise<EmployeeProfileEntity> {
         const exists = await this.employeeProfileRepo.findByUid(user.uid);
         if (exists) {
-            // TODO translation
-            throw new ToastException("Employee profile already exists for this user", this);
+            throw new ToastException('employeeProfile.exists', this);
         }
 
         const profile = await this.prepareProfile(user, form);

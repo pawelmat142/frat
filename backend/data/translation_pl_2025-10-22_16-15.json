@@ -1,0 +1,218 @@
+{
+  "langCode": "pl",
+  "version": 6,
+  "data": {
+    "common": {
+      "ok": "OK",
+      "back": "Wstecz",
+      "edit": "Edytuj",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "submit": "Zatwierdź",
+      "language": "Język",
+      "networkError": "Błąd sieci"
+    },
+    "header": {
+      "home": "Strona główna",
+      "admin": "Panel admina",
+      "signUp": "Rejestracja",
+      "profile": "Profil"
+    },
+    "signin": {
+      "email": "Email",
+      "title": "Logowanie",
+      "submit": "Zaloguj się",
+      "signout": "Wylogowano!",
+      "success": "Zalogowano pomyślnie!",
+      "password": "Hasło",
+      "signingIn": "Logowanie...",
+      "signUpForm": "Formularz rejestracji przez email",
+      "forgotPassword": "Nie pamiętasz hasła?",
+      "googleProvider": "Zaloguj przez Google",
+      "forgotPasswordSuccess": "Jeśli email istnieje, wysłano link do resetu hasła."
+    },
+    "signup": {
+      "email": "Email",
+      "title": "Rejestracja",
+      "submit": "Zarejestruj się",
+      "password": "Hasło",
+      "registering": "Rejestracja...",
+      "repeatEmail": "Powtórz email",
+      "successTitle": "Rejestracja zakończona sukcesem",
+      "errorRequired": "Wszystkie pola są wymagane.",
+      "repeatPassword": "Powtórz hasło",
+      "successMessage": "Sprawdź swój email, aby zweryfikować konto.",
+      "errorEmailMatch": "Emaile się nie zgadzają.",
+      "errorPasswordMatch": "Hasła się nie zgadzają.",
+      "verificationEmailSent": "Email weryfikacyjny został wysłany. Sprawdź swoją skrzynkę."
+    },
+    "user": {
+      "error": {
+        "notFound": "Nie znaleziono użytkownika",
+        "cannotDelete": "Nie można usunąć użytkownika",
+        "missingRoles": "Brak ról",
+        "invalidRole": "Nieprawidłowa rola"
+      }
+    },
+    "dictionary": {
+      "SKILLS": {
+        "NAME": {
+          "ONE": "ONE",
+          "SIX": "SIX",
+          "TWO": "TWO",
+          "FIVE": "FIVE",
+          "FOUR": "FOUR",
+          "SEVEN": "SEVEN",
+          "THREE": "THREE"
+        }
+      },
+      "LANGUAGES": {
+        "NAME": {
+          "bg": "bułgarski",
+          "cs": "czeski",
+          "da": "duński",
+          "de": "niemiecki",
+          "el": "grecki",
+          "en": "angielski",
+          "es": "hiszpański",
+          "et": "estoński",
+          "fi": "fiński",
+          "fr": "francuski",
+          "hr": "chorwacki",
+          "hu": "węgierski",
+          "it": "włoski",
+          "lt": "litewski",
+          "lv": "łotewski",
+          "nl": "holenderski",
+          "no": "norweski",
+          "pl": "polski",
+          "pt": "portugalski",
+          "ro": "rumuński",
+          "sk": "słowacki",
+          "sl": "słoweński",
+          "sv": "szwedzki"
+        },
+        "COUNTRY_NAME": {
+          "bg": "Bułgaria",
+          "cs": "Czechy",
+          "da": "Dania",
+          "de": "Niemcy",
+          "el": "Grecja",
+          "en": "Wielka Brytania",
+          "es": "Hiszpania",
+          "et": "Estonia",
+          "fi": "Finlandia",
+          "fr": "Francja",
+          "hr": "Chorwacja",
+          "hu": "Węgry",
+          "it": "Włochy",
+          "lt": "Litwa",
+          "lv": "Łotwa",
+          "nl": "Holandia",
+          "no": "Norwegia",
+          "pl": "Polska",
+          "pt": "Portugalia",
+          "ro": "Rumunia",
+          "sk": "Słowacja",
+          "sl": "Słowenia",
+          "sv": "Szwecja"
+        }
+      },
+      "CERTIFICATES": {
+        "NAME": {
+          "ONE": "ONE",
+          "SIX": "SIX",
+          "TWO": "TWO",
+          "FIVE": "FIVE",
+          "FOUR": "FOUR",
+          "SEVEN": "SEVEN",
+          "THREE": "THREE"
+        }
+      }
+    },
+    "validation": {
+      "form": {
+        "required": "To pole jest wymagane."
+      },
+      "view": {
+        "title": "Coś poszło nie tak!",
+        "goHome": "Wróć na stronę główną"
+      },
+      "popup": {
+        "stay": "Zostań na tej stronie",
+        "title": "Wystąpił błąd",
+        "goHome": "Wróć na stronę główną"
+      },
+      "success": "Rejestracja zakończona sukcesem!",
+      "required": "Wszystkie pola są wymagane.",
+      "emailMatch": "Email i powtórzony email muszą się zgadzać.",
+      "firebaseError": "Rejestracja nie powiodła się. Spróbuj ponownie później.",
+      "passwordMatch": "Hasło i powtórone hasło muszą się zgadzać.",
+      "dictionaryNotFound": "Nie znaleziono słownika"
+    },
+    "employeeProfile": {
+      "edit": "Edytuj profil pracownika",
+      "exists": "Profil pracownika już istnieje dla tego użytkownika",
+      "noChanges": "Brak wykrytych zmian w profilu pracownika",
+      "notFound": "Nie znaleziono profilu pracownika do aktualizacji",
+      "error": {
+        "dataRequired": "Dane profilu pracownika są wymagane",
+        "uidRequired": "UID profilu pracownika jest wymagany",
+        "statusRequired": "Status profilu pracownika jest wymagany",
+        "emailRequired": "Email użytkownika jest wymagany do utworzenia profilu pracownika",
+        "firstNameRequired": "Imię profilu pracownika jest wymagane",
+        "lastNameRequired": "Nazwisko profilu pracownika jest wymagane",
+        "residenceCountryRequired": "Kraj zamieszkania profilu pracownika jest wymagany",
+        "communicationLanguagesRequired": "Wymagany jest co najmniej jeden język komunikacji",
+        "locationOptionRequired": "Opcja lokalizacji profilu pracownika jest wymagana",
+        "locationPositionRequired": "Pozycja lokalizacji jest wymagana dla opcji lokalizacji na odległość",
+        "locationRadiusRequired": "Promień lokalizacji jest wymagany dla opcji lokalizacji na odległość",
+        "locationCountryRequired": "Wymagany jest co najmniej jeden kraj lokalizacji dla wybranych krajów",
+        "locationCountriesMustNotBeSpecified": "Kraje lokalizacji nie mogą być określone dla opcji cała Europa"
+      },
+      "form": {
+        "title": "Formularz profilu pracownika",
+        "radius": "Promień",
+        "skills": "Umiejętności",
+        "address": "Adres",
+        "lastName": "Nazwisko",
+        "location": "Lokalizacja",
+        "firstName": "Imię",
+        "addLanguage": "Dodaj język",
+        "jobLocation": "Gdzie chcesz pracować?",
+        "certificates": "Certyfikaty",
+        "locationOption": {
+          "DISTANCE": {
+            "msg": "Wybierz lokalizację i maksymalną odległość, z której chcesz otrzymywać oferty.",
+            "tab": "Odległość"
+          },
+          "ALL_EUROPE": {
+            "msg": "Będą trafiać do Ciebie oferty z całej Europy.",
+            "tab": "Europa"
+          },
+          "SELECTED_COUNTRIES": {
+            "msg": "Wybierz kraje, z których chcesz otrzymywać oferty.",
+            "tab": "Wybrane kraje"
+          }
+        },
+        "residenceCountry": "Kraj zamieszkania",
+        "locationCountries": "Kraje lokalizacji",
+        "communicationLanguage": "Język komunikacji",
+        "communicationLanguages": "Języki komunikacji"
+      },
+      "title": "Profil pracownika",
+      "create": "Utwórz profil pracownika",
+      "submitSuccess": "Profil pracownika zapisany pomyślnie."
+    }
+  },
+  "authError": {
+    "userDisabled": "Konto zablokowane",
+    "userNotFound": "Nieprawidłowy email lub hasło",
+    "wrongPassword": "Nieprawidłowy email lub hasło",
+    "sessionExpired": "Sesja wygasła, zaloguj się ponownie.",
+    "tooManyRequests": "Zbyt wiele prób. Spróbuj ponownie później.",
+    "invalidCredential": "Nieprawidłowy email lub hasło",
+    "passwordResetNotError": "Błąd podczas wysyłania emaila do resetu hasła.",
+    "passwordResetNotAvailable": "Reset hasła nie jest dostępny dla tego konta."
+  }
+}

@@ -50,11 +50,11 @@ export class UserService {
     public async deleteUser(uid: string): Promise<void> {
         const user = await this.userRepo.getUserByUid(uid);
         if (!user) {
-            throw new ToastException('User not found', this);
+            throw new ToastException('user.error.notFound', this);
         }
         const deleted = await this.userRepo.deleteEntity(user);
         if (!deleted) {
-            throw new ToastException('Cannot delete user', this);
+            throw new ToastException('user.error.cannotDelete', this);
         }
         this.logger.log(`Deleted user: ${user.userId} / ${deleted.email}`);
         this._userDeletedEvent$.next(deleted);
@@ -62,16 +62,16 @@ export class UserService {
 
     public async assignRolesForUser(uid: string, roles: UserRole[]): Promise<UserI> {
         if (!roles?.length) {
-            throw new ToastException('Missing roles', this)
+            throw new ToastException('user.error.missingRoles', this)
         }
         for (const role of roles) {
             if (!Object.values(UserRoles).includes(role)) {
-                throw new ToastException(`Invalid role ${role}`, this)
+                throw new ToastException('user.error.invalidRole', this)
             }
         }
         const user = await this.userRepo.getUserByUid(uid);
         if (!user) {
-            throw new ToastException('User not found', this);
+            throw new ToastException('user.error.notFound', this);
         }
         user.roles = roles;
 

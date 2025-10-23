@@ -39,10 +39,6 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     this.subscription.unsubscribe();
   }
 
-  public async loginForm(dto: LoginFormDto): Promise<LoginFormResponse> {
-    throw new ToastException('Method not implemented.', this);
-  }
-
   public async registerForm(dto: RegisterFormDto): Promise<void> {
     const validationErrorKey = AuthValidators.validateRegisterForm(dto);
     if (validationErrorKey) {

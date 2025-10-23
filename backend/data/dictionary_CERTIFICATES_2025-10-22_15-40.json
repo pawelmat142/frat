@@ -1,0 +1,77 @@
+{
+  "code": "CERTIFICATES",
+  "description": "test purposes",
+  "version": 4,
+  "status": "INACTIVE",
+  "elements": [
+    {
+      "code": "ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ONE"
+      },
+      "description": ""
+    },
+    {
+      "code": "TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.TWO"
+      },
+      "description": ""
+    },
+    {
+      "code": "THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.THREE"
+      },
+      "description": ""
+    },
+    {
+      "code": "FOUR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.FOUR"
+      },
+      "description": ""
+    },
+    {
+      "code": "FIVE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.FIVE"
+      },
+      "description": ""
+    },
+    {
+      "code": "SIX",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SIX"
+      },
+      "description": ""
+    },
+    {
+      "code": "SEVEN",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SEVEN"
+      },
+      "description": ""
+    }
+  ],
+  "columns": [
+    {
+      "code": "NAME",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "defaultValue": "dictionary.CERTIFICATES.",
+      "translatable": true
+    }
+  ],
+  "groups": [],
+  "createdAt": "2025-10-16T11:56:45.779Z",
+  "updatedAt": "2025-10-22T15:40:02.993Z"
+}
