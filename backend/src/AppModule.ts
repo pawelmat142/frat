@@ -9,6 +9,7 @@ import { AuthModule } from 'auth/AuthModule';
 import { GlobalController } from 'global/GlobalController';
 import { UsersAdminModule } from 'admin/users/UsersAdminModule';
 import { EmployeeProfileModule } from 'employee/EmployeeProfileModule';
+import { FeedbackModule } from 'feedback/FeedbackModule';
 
 @Module({
   imports: [
@@ -28,6 +29,8 @@ import { EmployeeProfileModule } from 'employee/EmployeeProfileModule';
     AuthModule,
 
     EmployeeProfileModule,
+
+    FeedbackModule
   ],
   controllers: [
     GlobalController

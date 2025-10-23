@@ -4,6 +4,7 @@ import Input from './controls/Input';
 import Button from './controls/Button';
 import { BtnModes, BtnSizes } from '../interface/controls.interface';
 import { useTranslation } from 'react-i18next';
+import { FeedbackService } from 'global/services/FeedbackService';
 
 const ReportForm: React.FC = () => {
   const [message, setMessage] = useState('');
@@ -20,12 +21,19 @@ const ReportForm: React.FC = () => {
       setError(t('report.errorRequired'));
       return;
     }
-    setLoading(true);
-    // TODO: send to backend or email
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-    }, 1000);
+
+    try {
+        setLoading(true);
+        await FeedbackService.createFeedback({
+            message: message.trim(),
+            contactEmail: contact.trim(),
+        });
+        setSubmitted(true);
+    } catch (error) {
+        setError(t('report.errorSubmitting'));
+    } finally {
+        setLoading(false);
+    }
   };
 
   if (submitted) {
