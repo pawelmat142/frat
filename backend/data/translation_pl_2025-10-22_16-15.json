@@ -12,6 +12,11 @@
       "language": "Język",
       "networkError": "Błąd sieci"
     },
+    "cookies": {
+      "title": "Informacja o plikach cookie",
+      "description": "Używamy niezbędnych plików cookie, aby zapewnić prawidłowe działanie strony. Te pliki umożliwiają podstawowe funkcje, takie jak nawigacja, uwierzytelnianie i bezpieczeństwo.",
+      "accept": "Akceptuję"
+    },
     "header": {
       "home": "Strona główna",
       "admin": "Panel admina",

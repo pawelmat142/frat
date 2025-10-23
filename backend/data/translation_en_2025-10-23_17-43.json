@@ -12,6 +12,11 @@
       "language": "Language",
       "networkError": "Network error"
     },
+    "cookies": {
+      "title": "Cookie Notice",
+      "description": "We use necessary cookies to ensure the website functions properly. These cookies enable basic features like page navigation, authentication, and security.",
+      "accept": "Accept"
+    },
     "header": {
       "home": "Home",
       "admin": "Admin panel",

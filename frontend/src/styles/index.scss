@@ -3,6 +3,7 @@
 @use 'default' as *;
 @use 'styles' as *;
 @use 'controls' as *;
+@use 'cookie-banner' as *;
 
 @tailwind base;
 @tailwind components;
