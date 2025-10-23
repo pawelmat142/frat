@@ -111,7 +111,8 @@ const EmployeeProfileFormView: React.FC = () => {
     }
 
     // TODO date periods 
-    // TODO
+    
+    // TODO remove
     const formValues = watch();
     console.log(formValues)
 
