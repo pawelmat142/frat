@@ -21,6 +21,7 @@ import ForgotPassword from 'auth/views/ForgotPassword';
 import { ProtectedRoute } from 'auth/ProtectedRoute';
 import { UserRoles } from '@shared/interfaces/UserI';
 import EmployeeProfileFormView from 'employee/views/EmployeeProfileFormView';
+import AdminFeedbacks from 'admin/views/feedback/AdminFeedbacks';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -79,6 +80,7 @@ const App: React.FC = () => {
                     
                     <Route path={Path.ADMIN_TRANSLATIONS} element={<AdminTranslations />} />
                     <Route path={Path.ADMIN_USERS} element={<AdminUsers />} />
+                    <Route path={Path.ADMIN_FEEDBACKS} element={<AdminFeedbacks />} />
                 </Route>
             </Routes>
         </AnimatePresence>
