@@ -58,17 +58,26 @@
         "missingRoles": "Brak ról",
         "invalidRole": "Nieprawidłowa rola"
       }
-      ,
-      "report": {
-        "title": "Co możemy zrobić lepiej?",
-        "feedbackLabel": "Twoja opinia",
-        "contactLabel": "Email - jeśli chcesz otrzymać odpowiedź",
-        "send": "Wyślij",
-        "sending": "Wysyłanie...",
-        "thankYouTitle": "Dziękujemy za Twoją opinię!",
-        "thankYouMsg": "Doceniamy Twój głos i wykorzystamy go, aby ulepszyć naszą platformę.",
-        "errorRequired": "Wpisz swoją opinię."
-      }
+    },
+    "authError": {
+      "userDisabled": "Konto zablokowane",
+      "userNotFound": "Nieprawidłowy email lub hasło",
+      "wrongPassword": "Nieprawidłowy email lub hasło",
+      "sessionExpired": "Sesja wygasła, zaloguj się ponownie.",
+      "tooManyRequests": "Zbyt wiele prób. Spróbuj ponownie później.",
+      "invalidCredential": "Nieprawidłowy email lub hasło",
+      "passwordResetNotError": "Błąd podczas wysyłania emaila do resetu hasła.",
+      "passwordResetNotAvailable": "Reset hasła nie jest dostępny dla tego konta."
+    },
+    "report": {
+      "title": "Co możemy zrobić lepiej?",
+      "feedbackLabel": "Twoja opinia",
+      "contactLabel": "Email - jeśli chcesz otrzymać odpowiedź",
+      "send": "Wyślij",
+      "sending": "Wysyłanie...",
+      "thankYouTitle": "Dziękujemy za Twoją opinię!",
+      "thankYouMsg": "Doceniamy Twój głos i wykorzystamy go, aby ulepszyć naszą platformę.",
+      "errorRequired": "Wpisz swoją opinię."
     },
     "dictionary": {
       "SKILLS": {
@@ -152,7 +161,8 @@
       },
       "view": {
         "title": "Coś poszło nie tak!",
-        "goHome": "Wróć na stronę główną"
+        "goHome": "Wróć na stronę główną",
+        "reportTitle": "Pomóż nam poprawić się, zgłaszając problem"
       },
       "popup": {
         "stay": "Zostań na tej stronie",
@@ -220,15 +230,5 @@
       "create": "Utwórz profil pracownika",
       "submitSuccess": "Profil pracownika zapisany pomyślnie."
     }
-  },
-  "authError": {
-    "userDisabled": "Konto zablokowane",
-    "userNotFound": "Nieprawidłowy email lub hasło",
-    "wrongPassword": "Nieprawidłowy email lub hasło",
-    "sessionExpired": "Sesja wygasła, zaloguj się ponownie.",
-    "tooManyRequests": "Zbyt wiele prób. Spróbuj ponownie później.",
-    "invalidCredential": "Nieprawidłowy email lub hasło",
-    "passwordResetNotError": "Błąd podczas wysyłania emaila do resetu hasła.",
-    "passwordResetNotAvailable": "Reset hasła nie jest dostępny dla tego konta."
   }
 }

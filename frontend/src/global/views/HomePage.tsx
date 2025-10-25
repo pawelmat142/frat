@@ -1,6 +1,8 @@
 
+import Button from "global/components/controls/Button";
 import LangSelector from "global/components/controls/LangSelector";
 import ReportForm from "global/components/ReportForm";
+import { httpClient } from "global/services/http";
 
 const HomePage: React.FC = () => {
   return (
@@ -16,6 +18,13 @@ const HomePage: React.FC = () => {
             and other height work specialists. Find opportunities, share experiences, and grow your career
             in the high-altitude industry.
           </p>
+
+          <div className="my-5">
+            <Button onClick={async () => {
+              await httpClient.get('/test-sww');
+            }}>Test Sww</Button>
+          </div>
+
           <LangSelector />
         </div>
         <ReportForm />

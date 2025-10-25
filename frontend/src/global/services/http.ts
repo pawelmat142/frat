@@ -56,32 +56,34 @@ export class HttpClient {
       error => {
         if (error.response?.data instanceof Blob) {
           this.handleFileError(error);
+          return Promise.resolve(null)
         } else {
           this.handleError(error);
         }
-        return Promise.reject(error);
+        return Promise.resolve()
+        // return Promise.reject(error);
       }
     );
   }
 
   async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
     const res = await this.axiosInstance.get<T>(url, config);
-    return res.data;
+    return res?.data;
   }
 
   async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
     const res = await this.axiosInstance.post<T>(url, data, config);
-    return res.data;
+    return res?.data;
   }
 
   async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
     const res = await this.axiosInstance.put<T>(url, data, config);
-    return res.data;
+    return res?.data;
   }
 
   async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
     const res = await this.axiosInstance.delete<T>(url, config);
-    return res.data;
+    return res?.data;
   }
 
   async getFile(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<Blob>> {
@@ -163,7 +165,7 @@ export class HttpClient {
     }
   }
 
-  private handleFileError(error: any) {
+  private handleFileError(error: any): boolean {
     const reader = new FileReader();
     reader.onload = () => {
       const response = JSON.parse(reader.result as string);
@@ -181,6 +183,7 @@ export class HttpClient {
       this.handleError(axiosError);
     };
     reader.readAsText(error.response.data);
+    return true;
   }
 
 }

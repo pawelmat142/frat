@@ -58,18 +58,18 @@
       "sessionExpired": "Session expired, please log in again.",
       "tooManyRequests": "Too many attempts. Try again later.",
       "invalidCredential": "Invalid email or password",
-      "report": {
-        "title": "What can we do better?",
-        "feedbackLabel": "Your feedback",
-        "contactLabel": "Email - if you want a response",
-        "send": "Send",
-        "sending": "Sending...",
-        "thankYouTitle": "Thank you for your feedback!",
-        "thankYouMsg": "We appreciate your input and will use it to improve our platform.",
-        "errorRequired": "Please enter your feedback."
-      },
       "passwordResetNotError": "Error sending password reset email.",
       "passwordResetNotAvailable": "Password reset is not available for this account."
+    },
+    "report": {
+      "title": "What can we do better?",
+      "feedbackLabel": "Your feedback",
+      "contactLabel": "Email - if you want a response",
+      "send": "Send",
+      "sending": "Sending...",
+      "thankYouTitle": "Thank you for your feedback!",
+      "thankYouMsg": "We appreciate your input and will use it to improve our platform.",
+      "errorRequired": "Please enter your feedback."
     },
     "dictionary": {
       "SKILLS": {
@@ -153,7 +153,8 @@
       },
       "view": {
         "title": "Something went wrong!",
-        "goHome": "Go back to the home page"
+        "goHome": "Go back to the home page",
+        "reportTitle": "Help us improve by reporting the issue"
       },
       "popup": {
         "stay": "Stay on this page",

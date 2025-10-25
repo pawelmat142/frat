@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { httpClient } from "global/services/http";
 import { Path } from "./../../path";
 import { useTranslation } from "react-i18next";
-
+import ReportForm from "global/components/ReportForm";
 
 const ErrorPage: React.FC = () => {
 
@@ -34,8 +34,6 @@ const ErrorPage: React.FC = () => {
     }, [navigate]);
 
 
-    // TODO report error feature
-
     return (
         <div className="w-full px-5 py-3 flex flex-col items-center justify-center min-h-[60vh]">
             <div className="flex flex-col gap-4 p-6 border rounded shadow max-w-lg w-full bg-secondary-bg">
@@ -45,6 +43,8 @@ const ErrorPage: React.FC = () => {
                     <Button mode={BtnModes.PRIMARY} onClick={() => navigate(Path.HOME)}>{t("validation.view.goHome")}</Button>
                 </div>
             </div>
+
+            <ReportForm title={t("validation.view.reportTitle")} />
         </div>
     );
 };

@@ -7,6 +7,7 @@ import { DictionariesPublicService } from "admin/dictionaries/services/Dictionar
 import { Serialize } from "./decorators/Serialize";
 import { TranslationEntity } from "admin/dictionaries/model/TranslationEntity";
 import { DictionaryEntity } from "admin/dictionaries/model/DictionaryEntity";
+import { SWWException } from "./exceptions/SWWException";
 
 @Controller('api')
 @UseInterceptors(LogInterceptor)
@@ -38,6 +39,11 @@ export class GlobalController {
         @Param('groupCode') groupCode?: string
     ): Promise<DictionaryI> {
         return this.dictionariesPublicService.getDictionary(code, groupCode);
+    }
+
+    @Get('/test-sww')
+    testSww() {
+        throw new SWWException(`Test SWW Exception`, this);
     }
 
 }

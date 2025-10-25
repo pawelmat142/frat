@@ -6,7 +6,11 @@ import { BtnModes, BtnSizes } from '../interface/controls.interface';
 import { useTranslation } from 'react-i18next';
 import { FeedbackService } from 'global/services/FeedbackService';
 
-const ReportForm: React.FC = () => {
+interface ReportFormProps {
+  title?: string;
+}
+
+const ReportForm: React.FC<ReportFormProps> = ({ title }) => {
   const [message, setMessage] = useState('');
   const [contact, setContact] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -46,8 +50,8 @@ const ReportForm: React.FC = () => {
   }
 
   return (
-    <form className="flex flex-col gap-4 card p-6 my-8 max-w-xl mx-auto" onSubmit={handleSubmit}>
-      <h2 className="text-lg font-bold mb-2">{t('report.title')}</h2>
+  <form className="flex flex-col gap-4 mt-10 mb-8 w-full md:max-w-xl mx-auto" onSubmit={handleSubmit}>
+      <h2 className="text-lg font-bold mb-2">{title ?? t('report.title')}</h2>
       <Textarea
         name="message"
         label={t('report.feedbackLabel')}
