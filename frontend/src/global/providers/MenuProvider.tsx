@@ -6,6 +6,7 @@ import { useAuthContext } from 'auth/AuthProvider';
 import { UserI, UserRoles } from '@shared/interfaces/UserI';
 import { AuthValidators } from '@shared/validators/AuthValidator';
 import { Util } from '@shared/utils/util';
+import { skip } from 'node:test';
 
 interface MenuContextType {
     allMenuItems: MenuItem[];
@@ -33,6 +34,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         {
             to: Path.ADMIN_DICTIONARIES,
             label: 'header.admin',
+            skipMobileMenu: true,
             rolesGuard: [UserRoles.ADMIN, UserRoles.SUPERADMIN],
         },
         isAuthenticated ?
