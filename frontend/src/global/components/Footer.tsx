@@ -3,7 +3,7 @@ const Footer: React.FC = () => {
     <footer className="footer">
       <div className="container">
 
-        <div className="footer-container">
+        <div className="footer-container px-4">
           <p>2025 FRAT - High-Altitude Work Professional Network Platform</p>
 
           <div className="flex items-end gap-2">

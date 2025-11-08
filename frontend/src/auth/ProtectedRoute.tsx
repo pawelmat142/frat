@@ -24,13 +24,13 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 	redirectTo = Path.SIGN_IN,
 	roles
 }) => {
-	const { isAuthenticated, loading, userI } = useAuthContext();
+	const { isAuthenticated, loading, me } = useAuthContext();
 
 	if (loading) {
 		return <Loading />;
 	}
 
-	if (!isAuthenticated || !Util.hasPermission(roles, userI)) {
+	if (!isAuthenticated || !Util.hasPermission(roles, me)) {
 		return <Navigate to={redirectTo} replace />;
 	}
 

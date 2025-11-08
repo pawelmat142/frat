@@ -196,6 +196,9 @@
         "locationCountryRequired": "At least one location country is required for selected countries location option",
         "locationCountriesMustNotBeSpecified": "Location countries must not be specified for all Europe location option"
       },
+      "search": {
+        "label": "Search for employees"
+      },
       "form": {
         "title": "Employee Profile Form",
         "radius": "Radius",

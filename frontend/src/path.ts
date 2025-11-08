@@ -8,6 +8,8 @@ export abstract class Path {
 
     public static readonly PROFILE = '/profile/:uid';
     public static readonly EMPLOYEE_PROFILE_FORM = '/employee-profile-form';
+
+    public static readonly EMPLOYEE_SEARCH = '/employee-search';
     
     public static readonly ERROR_PAGE = '/error';
 

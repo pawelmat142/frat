@@ -17,12 +17,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const [employeeProfile, setEmployeeProfile] = React.useState<EmployeeProfileI | null>(null);
 	const [loading, setLoading] = React.useState(false);
 
-	const { userI } = useAuthContext();
+	const { me } = useAuthContext();
 
 	const initEmployeeProfile = async () => {
 		try {
 			setLoading(true);
-			console.log("Fetching employee profile in UserProvider for user:", userI);
+			console.log("Fetching employee profile in UserProvider for user:", me);
 			const profile = await EmployeeProfileService.getEmployeeProfile();
 			if (profile) {
 				setEmployeeProfile(profile);
@@ -37,17 +37,17 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}
 
 	const cleanEmployeeProfile = () => {
-		console.log("Cleaning employee profile in UserProvider for user:", userI);
+		console.log("Cleaning employee profile in UserProvider for user:", me);
 		setEmployeeProfile(null);
 	}
 
 	React.useEffect(() => {
-		if (userI) {
+		if (me) {
 			initEmployeeProfile();
 		} else {
 			cleanEmployeeProfile();
 		}
-	}, [userI]);
+	}, [me]);
 
 	return (
 		<UserContext.Provider value={{

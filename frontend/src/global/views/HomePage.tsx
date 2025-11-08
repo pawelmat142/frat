@@ -3,8 +3,13 @@ import Button from "global/components/controls/Button";
 import LangSelector from "global/components/controls/LangSelector";
 import ReportForm from "global/components/ReportForm";
 import { httpClient } from "global/services/http";
+import { useNavigate } from "react-router-dom";
+import { Path } from "../../path"
+import { useTranslation } from "react-i18next";
 
 const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   return (
     <div className="page-container">
       <div className="container">
@@ -19,10 +24,14 @@ const HomePage: React.FC = () => {
             in the high-altitude industry.
           </p>
 
-          <div className="my-5">
+          <div className="flex my-5">
             <Button onClick={async () => {
               await httpClient.get('/test-sww');
             }}>Test Sww</Button>
+
+            <Button onClick={() => {
+              navigate(Path.EMPLOYEE_SEARCH);
+            }}>{t("employeeProfile.search.label")}</Button>
           </div>
 
           <LangSelector />

@@ -23,7 +23,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     children,
 }) => {
     const location = useLocation();
-    const { userI, isAuthenticated } = useAuthContext();
+    const { me, isAuthenticated } = useAuthContext();
 
     // Dodajemy właściwość active na podstawie location.pathname
     const allMenuItems: MenuItem[] = useMemo(() => [
@@ -39,7 +39,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         },
         isAuthenticated ?
             {
-                to: Path.getProfilePath(userI!.uid),
+                to: Path.getProfilePath(me!.uid),
                 label: 'header.profile',
                 authGuard: true
             } :
@@ -56,8 +56,8 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const filteredMenuItems = useMemo(
         () => allMenuItems
             .filter(item => !item.authGuard || isAuthenticated)
-            .filter(item => Util.hasPermission(item.rolesGuard, userI)),
-        [allMenuItems, userI]
+            .filter(item => Util.hasPermission(item.rolesGuard, me)),
+        [allMenuItems, me]
     );
 
     const value: MenuContextType = {

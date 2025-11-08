@@ -5,7 +5,7 @@ import { UserI } from '@shared/interfaces/UserI';
 
 interface AuthContextType {
 	firebaseUser: FirebaseUser | null;
-    userI: UserI | null;
+    me: UserI | null;
 	loading: boolean;
 	isAuthenticated: boolean;
 }

@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
  */
 export const useAuth = () => {
 	const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
-	const [userI, setUserI] = useState<UserI | null>(null);
+	const [me, setMe] = useState<UserI | null>(null);
 	const [loading, setLoading] = useState(true);
     const firstLoadRef = useRef(true);
 
@@ -38,16 +38,16 @@ export const useAuth = () => {
             
             if (!newFirebaseUser) {
                 setFirebaseUser(null)
-                setUserI(null)
+                setMe(null)
             }
-            else if (newFirebaseUser?.uid && !userI) {
+            else if (newFirebaseUser?.uid && !me) {
                 setLoading(true);
                 const newUser = await AuthService.login()
                 if (newUser) {
-                    setUserI(newUser)
+                    setMe(newUser)
                     setFirebaseUser(newFirebaseUser)
                 } else {
-                    setUserI(null)
+                    setMe(null)
                     setFirebaseUser(null)
                 }
             } 
@@ -78,7 +78,7 @@ export const useAuth = () => {
 	return {
 		firebaseUser,
 		loading,
-        userI,
-		isAuthenticated: !!firebaseUser && !!userI,
+        me,
+		isAuthenticated: !!firebaseUser && !!me,
 	};
 };

@@ -22,6 +22,7 @@ import { ProtectedRoute } from 'auth/ProtectedRoute';
 import { UserRoles } from '@shared/interfaces/UserI';
 import EmployeeProfileFormView from 'employee/views/EmployeeProfileFormView';
 import AdminFeedbacks from 'admin/views/feedback/AdminFeedbacks';
+import EmployeeSearchView from 'employee/views/search/EmployeeSearchView';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -58,6 +59,8 @@ const App: React.FC = () => {
 
                 <Route path={Path.PROFILE} element={<PageWrapper direction={1}><ProtectedRoute><ProfilePage /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.EMPLOYEE_PROFILE_FORM} element={<PageWrapper direction={1}><ProtectedRoute><EmployeeProfileFormView /></ProtectedRoute></PageWrapper>} />
+
+                <Route path={Path.EMPLOYEE_SEARCH} element={<PageWrapper direction={1}><ProtectedRoute><EmployeeSearchView /></ProtectedRoute></PageWrapper>} />
 
                 <Route path={Path.SIGN_IN} element={<PageWrapper direction={1}><SignInPage /></PageWrapper>} />
                 <Route path={Path.SIGN_UP} element={<PageWrapper direction={1}><SignUpPage /></PageWrapper>} />

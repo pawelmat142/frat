@@ -18,6 +18,13 @@ export interface EmployeeProfileForm {
   locationDistanceRadius?: number; // [km]
 }
 
+export interface EmployeeProfileSearchForm {
+  freeText?: string;
+  communicationLanguages?: string[];
+  skills?: string[];
+  certificates?: string[];
+}
+
 
 export interface Position {
   lat: number;

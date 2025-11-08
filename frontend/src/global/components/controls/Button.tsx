@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { MouseEventHandler } from 'react';
 
 const Button: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, size=BtnSizes.MEDIUM, children, fullWidth=false, className, disabled, onlyMobile, onlyDesktop, mode=BtnModes.PRIMARY }) => {
-    
-    let myClass = `rounded-md shadow-sm btn-font btn ${mode} ripple ${size}`;
+
+    let myClass = `rounded-md flex justify-center shadow-sm btn-font btn ${mode} ripple ${size}`;
 
     if (onlyMobile) {
         myClass += ' flex md:hidden';

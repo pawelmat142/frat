@@ -13,7 +13,7 @@ import { useUserContext } from "user/UserProvider";
 
 const ProfilePage: React.FC = () => {
 
-    const { userI, loading, firebaseUser } = useAuthContext();
+    const { me, loading, firebaseUser } = useAuthContext();
     const { employeeProfile } = useUserContext();
     const [user, setUser] = useState<UserI | null>(null);
     const { uid } = useParams<{ uid?: string }>();
@@ -25,8 +25,8 @@ const ProfilePage: React.FC = () => {
 
         const initUser = async () => {
             if (uid) {
-                if (uid === userI?.uid) {
-                    setUser(userI);
+                if (uid === me?.uid) {
+                    setUser(me);
                 } else {
                     const _user = await UserPublicService.fetchUser(uid);
                     setUser(_user);

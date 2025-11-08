@@ -14,6 +14,7 @@ export const UserRoles = {
     SUPERADMIN: 'SUPERADMIN',
     ADMIN: 'ADMIN',
     USER: 'USER',
+    EMPLOYER: 'EMPLOYER',
 } as const;
 
 export type UserRole = typeof UserRoles[keyof typeof UserRoles];
