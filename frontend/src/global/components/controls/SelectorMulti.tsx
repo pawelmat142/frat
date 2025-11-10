@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import ControlLabel from './ControlLabel';
 import ArrowIcon from './ArrowIcon';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ import Checkbox from './Checkbox';
 import { Utils } from 'global/utils';
 import Input from './Input';
 
-const SelectorMulti = <T extends SelectorValue = SelectorValue>({
+function SelectorMulti<T extends SelectorValue = SelectorValue>({
     items,
     values,
     onSelect,
@@ -20,8 +20,9 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
     center = false,
     className = '',
     error,
-    enableSearchText = true
-}: SelectorMultiProps<T>) => {
+    enableSearchText = true,
+    displayElementsAsChips = false,
+}: SelectorMultiProps<T>) {
 
     const [open, setOpen] = useState(false);
     const [openUpward, setOpenUpward] = useState(false);
@@ -84,12 +85,18 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
         const exists = currentValues.some((v: SelectorItem<T>) => String(v.value) === String(item.value));
         let newValues: SelectorItem<T>[];
         if (exists) {
-            newValues = currentValues.filter((v: SelectorItem<T>) => String(v.value) !== String(item.value));
+            newValues = removeItem(item)
         } else {
             newValues = [...currentValues, item];
         }
         onSelect(newValues);
     };
+
+    const removeItem = (item: SelectorItem<T>): SelectorItem<T>[] => {
+        if (disabled) return [];
+        const currentValues = values ?? [];
+        return currentValues.filter((v: SelectorItem<T>) => String(v.value) !== String(item.value));
+    }
 
     const isActive = (item: SelectorItem<T>) => {
         return (values ?? []).some((v: SelectorItem<T>) => String(v.value) === String(item.value));
@@ -97,7 +104,7 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
 
     // Filter items based on search text, ignoring diacritics
     const filteredItems = enableSearchText
-        ? items.filter(item => Utils.normalize(item.label).includes(Utils.normalize(searchText)))
+        ? items.filter(i => Utils.normalize(i.label).includes(Utils.normalize(searchText)))
         : items;
 
     return (
@@ -126,9 +133,23 @@ const SelectorMulti = <T extends SelectorValue = SelectorValue>({
                 }}
             >
                 <span className="dropdown-selected">
-                    {Array.isArray(values) && values.length > 0
-                        ? values.map(v => v.label).join(', ')
-                        : <span className="secondary-text">select...</span>}
+
+                    {displayElementsAsChips ? (
+                        <div className="chip-container">
+                            {Array.isArray(values) && values.length > 0
+                                ? values.map(v => (
+                                    <div key={String(v.value)} className="chip">
+                                        {v.label}
+                                    </div>
+                                ))
+                                : <span className="secondary-text">select...</span>}
+                        </div>
+                    ) : (
+                        Array.isArray(values) && values.length > 0
+                            ? values.map(v => v.label).join(', ')
+                            : <span className="secondary-text">select...</span>
+                    )}
+                    
                 </span>
                 <ArrowIcon open={open} />
                 {open && (

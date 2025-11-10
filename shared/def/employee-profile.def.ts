@@ -23,6 +23,7 @@ export interface EmployeeProfileSearchForm {
   communicationLanguages?: string[];
   skills?: string[];
   certificates?: string[];
+  locationCountry?: string | null;
 }
 
 

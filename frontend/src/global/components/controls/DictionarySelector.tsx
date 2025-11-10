@@ -120,6 +120,7 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             center={center}
             className={className}
             error={error}
+            displayElementsAsChips={true}
         />;
     }
 

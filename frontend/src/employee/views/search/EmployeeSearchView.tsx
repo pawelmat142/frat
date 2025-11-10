@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import Search from '@mui/icons-material/Search'
+import Input from "global/components/controls/Input";
 
 const EmployeeSearchView: React.FC = () => {
 
@@ -14,9 +15,11 @@ const EmployeeSearchView: React.FC = () => {
     const { me } = useAuthContext()
     const { control, handleSubmit, watch, setValue, reset, formState } = useForm<EmployeeProfileSearchForm>({
         defaultValues: {
+            freeText: '',
             skills: [],
             certificates: [],
             communicationLanguages: [],
+            locationCountry: null
         }
     })
 
@@ -45,6 +48,21 @@ const EmployeeSearchView: React.FC = () => {
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold">{t("employeeProfile.search.label")}</h2>
                 </div>
+
+                <Controller
+                    name="freeText"
+                    control={control}
+                    rules={required}
+                    render={({ field }) => <Input
+                        {...field}
+                        value={field.value ?? ''}
+                        label={t("employeeProfile.form.freeText")}
+                        fullWidth
+                        required
+                        error={formState.errors.freeText}
+                    />
+                    }
+                />
 
                 {/* free text search */}
                 <h3 className="text-lg">Filtry</h3>
@@ -103,6 +121,25 @@ const EmployeeSearchView: React.FC = () => {
                         }
                     />
 
+                </div>
+
+                <div className="flex gap-4 items-center">
+                    <Controller
+                        name="locationCountry"
+                        control={control}
+                        render={({ field }) => <DictionarySelector
+                            className="w-full"
+                            valueInput={field.value ?? ''}
+                            onSelect={item => field.onChange(item ? String(item.value) : "")}
+                            label={t("employeeProfile.form.locationCountry")}
+                            code="LANGUAGES"
+                            groupCode="COMMUNICATION"
+                            fullWidth
+                            required
+                            error={formState.errors.locationCountry}
+                        />
+                        }
+                    />
                 </div>
 
                 <Button type="submit" className="min-w-40 pr-5 mt-5 mx-auto">
