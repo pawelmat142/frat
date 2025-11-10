@@ -24,6 +24,7 @@ export interface EmployeeProfileSearchForm {
   skills?: string[];
   certificates?: string[];
   locationCountry?: string | null;
+  locationPosition?: Position;
 }
 
 

@@ -6,11 +6,13 @@ import { useTranslation } from 'react-i18next';
 import Button from './Button';
 import { Position } from '@shared/def/employee-profile.def';
 import FormError from './FormError';
+import { toast } from 'react-toastify';
 
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: Position | null;
     onChange?: (position: Position | null) => void;
+    initializePositionByCountryCode?: string;
 }
 
 const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
@@ -25,7 +27,8 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         name,
         center,
         onChange,
-        error
+        error,
+        initializePositionByCountryCode
     }, ref) => {
 
     const apiKey = "" //TODO
@@ -109,6 +112,44 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
             return;
         }
 
+        if (initializePositionByCountryCode) {
+            initMapByCountryCode();
+            return;
+        }
+
+        initMapByLocation()
+
+    };
+
+    const initMapByCountryCode = async () => {
+        try {
+            // Use REST Countries API to get capital and lat/lng
+            const countryCode = initializePositionByCountryCode!.toUpperCase();
+            const res = await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+                const country = data[0];
+                // Prefer capital coordinates if available
+                if (country.capitalInfo && country.capitalInfo.latlng && country.capitalInfo.latlng.length === 2) {
+                    const [lat, lng] = country.capitalInfo.latlng;
+                    createMap({ lat, lng });
+                    return;
+                }
+                // Fallback to country latlng
+                if (country.latlng && country.latlng.length === 2) {
+                    const [lat, lng] = country.latlng;
+                    createMap({ lat, lng });
+                    return;
+                }
+            }
+        } catch (e) {
+            // ignore and fallback
+            toast.error("Could not initialize map by country code");
+        }
+        initMapByLocation()
+    }
+
+    const initMapByLocation = async () => {
         // Spróbuj pobrać lokalizację z urządzenia
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -130,7 +171,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
             const coords = await getDefaultCoords();
             createMap(coords);
         }
-    };
+    }
 
     // Tworzy mapę i marker
     const createMap = (initialPosition: { lat: number; lng: number }) => {

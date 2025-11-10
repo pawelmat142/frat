@@ -8,6 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import Search from '@mui/icons-material/Search'
 import Input from "global/components/controls/Input";
+import PositionSelector from "global/components/controls/PositionSelector";
 
 const EmployeeSearchView: React.FC = () => {
 
@@ -24,6 +25,7 @@ const EmployeeSearchView: React.FC = () => {
     })
 
     const [loading, setLoading] = useState(false);
+    const [locationCountryCode, setLocationCountryCode] = useState<string | null>(null);
     const required = FormValidator.required(t);
 
     const onSubmit = async (form: EmployeeProfileSearchForm) => {
@@ -58,7 +60,6 @@ const EmployeeSearchView: React.FC = () => {
                         value={field.value ?? ''}
                         label={t("employeeProfile.form.freeText")}
                         fullWidth
-                        required
                         error={formState.errors.freeText}
                     />
                     }
@@ -80,7 +81,6 @@ const EmployeeSearchView: React.FC = () => {
                             label={t("employeeProfile.form.skills")}
                             code="SKILLS"
                             fullWidth
-                            required
                             error={formState.errors.skills}
                         />
                         }
@@ -97,7 +97,6 @@ const EmployeeSearchView: React.FC = () => {
                             label={t("employeeProfile.form.certificates")}
                             code="CERTIFICATES"
                             fullWidth
-                            required
                             error={formState.errors.certificates}
                         />
                         }
@@ -115,7 +114,6 @@ const EmployeeSearchView: React.FC = () => {
                             code="LANGUAGES"
                             groupCode="COMMUNICATION"
                             fullWidth
-                            required
                             error={formState.errors.communicationLanguages}
                         />
                         }
@@ -130,15 +128,37 @@ const EmployeeSearchView: React.FC = () => {
                         render={({ field }) => <DictionarySelector
                             className="w-full"
                             valueInput={field.value ?? ''}
-                            onSelect={item => field.onChange(item ? String(item.value) : "")}
+                            onSelect={(item, element) => {
+                                const countryCode = element ? String(element?.values.COUNTRY_CODE) : null;
+                                setLocationCountryCode(countryCode);
+                                field.onChange(item ? String(item.value) : "")
+                            }}
                             label={t("employeeProfile.form.locationCountry")}
                             code="LANGUAGES"
                             groupCode="COMMUNICATION"
+                            elementLabelTranslationKey="COUNTRY_NAME"
                             fullWidth
-                            required
                             error={formState.errors.locationCountry}
                         />
                         }
+                    />
+
+                    <Controller
+                        name="locationPosition"
+                        control={control}
+                        rules={required}
+                        render={({ field }) => (
+                            <PositionSelector
+                                label={t("employeeProfile.form.location")}
+                                name="locationPosition"
+                                className="w-full"
+                                value={field.value}
+                                disabled={!locationCountryCode}
+                                onChange={field.onChange}
+                                error={formState?.errors.locationPosition}
+                                initializePositionByCountryCode={locationCountryCode || undefined}
+                            />
+                        )}
                     />
                 </div>
 

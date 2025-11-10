@@ -1,4 +1,4 @@
-import { DictionaryColumnType } from "@shared/interfaces/DictionaryI";
+import { DictionaryColumnType, DictionaryElement } from "@shared/interfaces/DictionaryI";
 
 export interface BtnInterface {
     to?: string;
@@ -94,7 +94,7 @@ export interface DictionarySelectorInterface<T extends SelectorValue = SelectorV
     groupCode?: string;
     
     valueInput?: string | string[];
-    onSelect?: (item: SelectorItem<T> | null) => void;
+    onSelect?: (item: SelectorItem<T> | null, dictionaryElement?: DictionaryElement) => void;
     onSelectMulti?: (items: SelectorItem<T>[]) => void;
     
     id?: string;
