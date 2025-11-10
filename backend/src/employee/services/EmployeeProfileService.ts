@@ -1,13 +1,13 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
-import { EmployeeProfileForm } from '@shared/def/employee-profile.def';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmployeeProfileI, EmployeeProfileLocationOptions, EmployeeProfileStatus, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileForm, EmployeeProfileLocationOptions, EmployeeProfileStatus, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { EPUtil } from './EPUtil';
 import { GeoPointService } from './GeoPointService';
+import { EmployeeProfileParams } from 'employee/model/interface';
 
 @Injectable()
 export class EmployeeProfileService {
@@ -18,6 +18,10 @@ export class EmployeeProfileService {
         private readonly employeeProfileRepo: EmployeeProfileRepo,
         private readonly geoPointService: GeoPointService,
     ) { }
+
+    public listProfiles(): Promise<EmployeeProfileEntity[]> {
+        return this.employeeProfileRepo.findAll();
+    }
 
     public getEmployeeProfile(user: UserI): Promise<EmployeeProfileEntity | null> {
         return this.employeeProfileRepo.findByUid(user.uid);
@@ -40,9 +44,9 @@ export class EmployeeProfileService {
         return this.employeeProfileRepo.update(profile);
     }
 
-    private async prepareProfile(user: UserI, form: EmployeeProfileForm): Promise<EmployeeProfileI> {
+    private async prepareProfile(user: UserI, form: EmployeeProfileForm): Promise<EmployeeProfileParams> {
         const status = this.getProfileStatus(user, form);
-        let profile: EmployeeProfileI = EPUtil.buildEmployeeProfileFromForm(user, form, status)
+        let profile: EmployeeProfileParams = EPUtil.buildEmployeeProfileFromForm(user, form, status)
 
         if (profile.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
             profile.locationCountries = await this.geoPointService.getCountriesInRadius(

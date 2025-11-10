@@ -7,9 +7,8 @@ import React from "react";
 
 import CommunicationLanguagesSection from "../components/CommunicationLanguagesSection";
 import EmployeeLocationSection from "../components/EmployeeLocationSection";
-import { EmployeeProfileForm } from "@shared/def/employee-profile.def";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileForm, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
 import { toast } from "react-toastify";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import Loading from "global/components/Loading";

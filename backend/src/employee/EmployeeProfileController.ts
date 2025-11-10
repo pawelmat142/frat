@@ -10,15 +10,16 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
-import { UserI } from '@shared/interfaces/UserI';
+import { UserI, UserRoles } from '@shared/interfaces/UserI';
 import { EmployeeProfileService } from './services/EmployeeProfileService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
-import { EmployeeProfileI } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileForm, EmployeeProfileI, EmployeeProfileSearchForm } from '@shared/interfaces/EmployeeProfileI';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
-import { EmployeeProfileForm, EmployeeProfileSearchForm } from '@shared/def/employee-profile.def';
 import { Serialize } from 'global/decorators/Serialize';
 import { EmployeeProfileEntity } from './model/EmployeeProfileEntity';
 import { SearchEmployeeProfileService } from './services/SearchEmployeeProfileService';
+import { RolesGuard } from 'auth/guards/RolesGuard';
+import { Roles } from 'auth/decorators/RolesDecorator';
 
 @Controller('api/employee-profile')
 @UseInterceptors(LogInterceptor)
@@ -66,5 +67,16 @@ export class EmployeeProfileController {
     @Query() query: EmployeeProfileSearchForm
   ): Promise<EmployeeProfileI[]> {
     return this.searchEmployeeProfileService.searchEmployeeProfiles(user, query);
+  }
+
+  
+  
+  // ADMIN MANAGEMENT ACTIONS
+  @Get("/admin/list")
+  @Serialize(EmployeeProfileEntity)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
+  listProfiles(): Promise<EmployeeProfileI[]> {
+    return this.employeeProfileService.listProfiles();
   }
 }

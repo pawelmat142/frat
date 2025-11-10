@@ -1,6 +1,5 @@
 /** Created by Pawel Malek **/
-import { Point } from '@shared/def/employee-profile.def';
-import { EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus, Point } from '@shared/interfaces/EmployeeProfileI';
 import { Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -8,6 +7,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 export class EmployeeProfileEntity implements EmployeeProfileI {
 
   @PrimaryGeneratedColumn({ name: 'employee_profile_id' })
+  @Expose()
   employeeProfileId: number;
 
   @Column({ name: 'uid', unique: true })
@@ -76,6 +76,7 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
 
 
   // AUDIT FIELDS
+  @Expose()
   @Column({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

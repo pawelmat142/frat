@@ -1,3 +1,5 @@
+import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
+
 export interface CountryFeature {
     type: 'Feature';
     properties: {
@@ -11,3 +13,5 @@ export interface CountryFeature {
         coordinates: any;
     };
 }
+
+export type EmployeeProfileParams = Partial<EmployeeProfileI>;

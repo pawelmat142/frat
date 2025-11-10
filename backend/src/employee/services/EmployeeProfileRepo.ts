@@ -1,9 +1,8 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { EmployeeProfileForm } from "@shared/def/employee-profile.def";
-import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
+import { EmployeeProfileParams } from "employee/model/interface";
 import { ToastException } from "global/exceptions/ToastException";
 import { FindManyOptions, Repository, SelectQueryBuilder } from "typeorm";
 
@@ -17,18 +16,22 @@ export class EmployeeProfileRepo {
         private employeeProfileRepository: Repository<EmployeeProfileEntity>,
     ) { }
 
+    public findAll(options?: FindManyOptions<EmployeeProfileEntity>): Promise<EmployeeProfileEntity[]> {
+        return this.employeeProfileRepository.find(options);
+    }
+
     public findByUid(uid: string): Promise<EmployeeProfileEntity | null> {
         return this.employeeProfileRepository.findOne({ where: { uid } });
     }
 
-    public async create(newProfile: EmployeeProfileI): Promise<EmployeeProfileEntity> {
+    public async create(newProfile: EmployeeProfileParams): Promise<EmployeeProfileEntity> {
         const entity = this.employeeProfileRepository.create(newProfile)
         const saved = await this.employeeProfileRepository.save(entity);
         this.logger.log(`Created Employee Profile: ${saved.employeeProfileId}`);
         return saved;
     }
 
-    public async update(newProfile: EmployeeProfileI): Promise<EmployeeProfileEntity> {
+    public async update(newProfile: EmployeeProfileParams): Promise<EmployeeProfileEntity> {
         const profile = await this.findByUid(newProfile.uid);
         if (!profile) {
             throw new ToastException("employeeProfile.notFound", this);

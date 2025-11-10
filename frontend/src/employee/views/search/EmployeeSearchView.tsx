@@ -1,4 +1,3 @@
-import { EmployeeProfileSearchForm } from "@shared/def/employee-profile.def";
 import { useAuthContext } from "auth/AuthProvider";
 import Button from "global/components/controls/Button";
 import DictionarySelector from "global/components/controls/DictionarySelector";
@@ -10,6 +9,7 @@ import Search from '@mui/icons-material/Search'
 import Input from "global/components/controls/Input";
 import PositionSelector from "global/components/controls/PositionSelector";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
+import { EmployeeProfileSearchForm } from "@shared/interfaces/EmployeeProfileI";
 
 const EmployeeSearchView: React.FC = () => {
 

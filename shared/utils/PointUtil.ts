@@ -1,4 +1,4 @@
-import { Point, Position } from "@shared/def/employee-profile.def";
+import { Point, Position } from "@shared/interfaces/EmployeeProfileI";
 
 export abstract class PointUtil {
 

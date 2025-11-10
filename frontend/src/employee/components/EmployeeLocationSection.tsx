@@ -4,10 +4,9 @@ import TabSwitcher, { TabSwitcherOption } from "./TabSwitcher";
 import DictionarySelector from "global/components/controls/DictionarySelector";
 import PositionSelector from "global/components/controls/PositionSelector";
 import Input from "global/components/controls/Input";
-import { EmployeeProfileForm } from "@shared/def/employee-profile.def";
 import React from "react";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileLocationOptions, EmployeeProfileLocationOption } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileLocationOptions, EmployeeProfileLocationOption, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
 
 interface Props {
     control: Control<EmployeeProfileForm>;

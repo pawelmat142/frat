@@ -23,6 +23,7 @@ import { UserRoles } from '@shared/interfaces/UserI';
 import EmployeeProfileFormView from 'employee/views/EmployeeProfileFormView';
 import AdminFeedbacks from 'admin/views/feedback/AdminFeedbacks';
 import EmployeeSearchView from 'employee/views/search/EmployeeSearchView';
+import AdminEmployeeProfiles from 'admin/views/employee_profiles/AdminEmployeeProfiles';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -84,6 +85,7 @@ const App: React.FC = () => {
                     <Route path={Path.ADMIN_TRANSLATIONS} element={<AdminTranslations />} />
                     <Route path={Path.ADMIN_USERS} element={<AdminUsers />} />
                     <Route path={Path.ADMIN_FEEDBACKS} element={<AdminFeedbacks />} />
+                    <Route path={Path.ADMIN_EMPLOYEE_PROFILES} element={<AdminEmployeeProfiles />} />
                 </Route>
             </Routes>
         </AnimatePresence>

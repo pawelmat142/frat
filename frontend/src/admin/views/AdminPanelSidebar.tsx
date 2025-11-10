@@ -3,6 +3,7 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import MessageIcon from '@mui/icons-material/Message';
+import BadgeIcon from '@mui/icons-material/Badge';
 import { Path } from '../../path';
 
 const AdminPanelSidebar: React.FC = () => {
@@ -39,6 +40,14 @@ const AdminPanelSidebar: React.FC = () => {
       >
           <MessageIcon />
         <span>Feedbacks</span>
+      </NavLink>
+
+      <NavLink
+        to={Path.ADMIN_EMPLOYEE_PROFILES}
+        className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
+      >
+          <BadgeIcon />
+        <span>Employee Profiles</span>
       </NavLink>
     </div>
   );

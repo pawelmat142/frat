@@ -1,13 +1,14 @@
-import { EmployeeProfileForm } from "@shared/def/employee-profile.def";
-import { EmployeeProfileI, EmployeeProfileLocationOptions, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileForm, EmployeeProfileI, EmployeeProfileLocationOptions, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
 import { UserI } from "@shared/interfaces/UserI";
 import { PointUtil } from "@shared/utils/PointUtil";
+import { EmployeeProfileParams } from "employee/model/interface";
 import { ToastException } from "global/exceptions/ToastException";
 
 export abstract class EPUtil {
 
-    public static buildEmployeeProfileFromForm(user: UserI, form: EmployeeProfileForm, status: EmployeeProfileStatus): EmployeeProfileI {
-        let profile: EmployeeProfileI = {
+    public static buildEmployeeProfileFromForm(user: UserI, form: EmployeeProfileForm, status: EmployeeProfileStatus): EmployeeProfileParams {
+        let profile: EmployeeProfileParams = {
+            employeeProfileId: 0,
             uid: user.uid,
             status: status,
             displayName: user.displayName,
@@ -28,7 +29,7 @@ export abstract class EPUtil {
         return profile;
     }
 
-    private static fillLocationData(profile: EmployeeProfileI, form: EmployeeProfileForm): void {
+    private static fillLocationData(profile: EmployeeProfileParams, form: EmployeeProfileForm): void {
         if (form.locationOption === EmployeeProfileLocationOptions.ALL_EUROPE) {
             profile.locationCountries = []
             EPUtil.cleanLocationDataDistance(profile);
@@ -42,19 +43,19 @@ export abstract class EPUtil {
         }
     }
 
-    private static cleanLocationDataDistance(profile: EmployeeProfileI): void {
+    private static cleanLocationDataDistance(profile: Partial<EmployeeProfileI>): void {
         delete profile.point;
         delete profile.pointRadius;
         delete profile.address;
     }
 
-    private static fillLocationDataDistance(profile: EmployeeProfileI, form: EmployeeProfileForm): void {
+    private static fillLocationDataDistance(profile: Partial<EmployeeProfileI>, form: EmployeeProfileForm): void {
         profile.point = PointUtil.toGeoPoint(form.locationDistancePosition!);
         profile.pointRadius = form.locationDistanceRadius;
         profile.address = form.locationDistancePosition.address;
     }
 
-    public static validateProfile(profile: EmployeeProfileI): void {
+    public static validateProfile(profile: EmployeeProfileParams): void {
         if (!profile) {
             throw new ToastException('employeeProfile.error.dataRequired', this);
         }
@@ -83,7 +84,7 @@ export abstract class EPUtil {
     }
 
 
-    private static validateLocationData(profile: EmployeeProfileI): void {
+    private static validateLocationData(profile: Partial<EmployeeProfileI>): void {
         if (!profile.locationOption) {
             throw new ToastException('employeeProfile.error.locationOptionRequired', this);
         }

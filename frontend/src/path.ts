@@ -25,6 +25,7 @@ export abstract class Path {
     public static readonly ADMIN_TRANSLATIONS = `${Path.ADMIN_PANEL}/translations`;
     public static readonly ADMIN_USERS = `${Path.ADMIN_PANEL}/users`;
     public static readonly ADMIN_FEEDBACKS = `${Path.ADMIN_PANEL}/feedbacks`;
+    public static readonly ADMIN_EMPLOYEE_PROFILES = `${Path.ADMIN_PANEL}/employee-profiles`;
     
     public static getDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES}/${code}`;
     public static getEditDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES_EDIT.replace(':code', code)}`;

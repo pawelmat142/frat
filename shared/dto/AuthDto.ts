@@ -1,5 +1,3 @@
-import { UserProvider } from "./../interfaces/UserI";
-
 export interface RegisterFormDto {
   email: string;
   confirmEmail: string;

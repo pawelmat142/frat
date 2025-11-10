@@ -4,9 +4,9 @@ import ControlLabel from './ControlLabel';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import { useTranslation } from 'react-i18next';
 import Button from './Button';
-import { Position } from '@shared/def/employee-profile.def';
 import FormError from './FormError';
 import { toast } from 'react-toastify';
+import { Position } from '@shared/interfaces/EmployeeProfileI';
 
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {

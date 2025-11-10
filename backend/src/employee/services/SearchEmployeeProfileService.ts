@@ -2,8 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmployeeProfileI } from '@shared/interfaces/EmployeeProfileI';
-import { EmployeeProfileSearchForm } from '@shared/def/employee-profile.def';
+import { EmployeeProfileI, EmployeeProfileSearchForm, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
 
 @Injectable()
 export class SearchEmployeeProfileService {
@@ -14,6 +13,7 @@ export class SearchEmployeeProfileService {
         private readonly employeeProfileRepo: EmployeeProfileRepo,
     ) { }
 
+    // TODO admin app profiles management, impotrt, export
     // TODO implement search logic
     // 2. free text filters, - display name, last name, first name, mail
     // 3. location filters,
@@ -28,6 +28,8 @@ export class SearchEmployeeProfileService {
         const queryBuilder = this.employeeProfileRepo.getQueryBuilder()
 
         let hasFilter = false;
+
+        queryBuilder.where('profile.status = :status', { status: EmployeeProfileStatuses.ACTIVE });
         
         if (query.communicationLanguages?.length) {
             queryBuilder.andWhere('profile.communication_languages && :languages', { languages: query.communicationLanguages });

@@ -7,7 +7,7 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileForm } from "@shared/def/employee-profile.def";
+import { EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
 
 interface Props {
   control: Control<any>;
