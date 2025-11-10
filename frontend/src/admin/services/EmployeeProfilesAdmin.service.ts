@@ -13,5 +13,13 @@ export const EmployeeProfilesAdminService = {
 
 	activation(id: number, status: EmployeeProfileStatus): Promise<EmployeeProfileI> {
 		return httpClient.put<EmployeeProfileI>(`/employee-profile/admin/${id}/activation/${status}`);
+	},
+
+	deleteAllProfiles(): Promise<void> {
+		return httpClient.delete<void>(`/employee-profile/admin`);
+	},
+
+	initialLoad(): Promise<EmployeeProfileI[]> {
+		return httpClient.post<EmployeeProfileI[]>(`/employee-profile/admin/initial-load`);
 	}
 };

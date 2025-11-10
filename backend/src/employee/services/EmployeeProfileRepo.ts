@@ -1,11 +1,12 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileI, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
 import { EmployeeProfileParams } from "employee/model/interface";
 import { ToastException } from "global/exceptions/ToastException";
 import { FindManyOptions, Repository, SelectQueryBuilder } from "typeorm";
+import { EmoployeeProfilesInitialData } from "./EmployeeProfilesInitialData";
 
 @Injectable()
 export class EmployeeProfileRepo {
@@ -55,6 +56,16 @@ export class EmployeeProfileRepo {
         }
         await this.employeeProfileRepository.remove(profile);
         this.logger.log(`Deleted EmployeeProfile id=${id}`);
+    }
+
+    public async deleteAllProfiles(): Promise<void> {
+        await this.employeeProfileRepository.clear();
+        this.logger.log('All employee profiles deleted');
+    }
+
+    public async initialLoad(): Promise<void> {
+        const profiles = EmoployeeProfilesInitialData
+        await this.employeeProfileRepository.save(profiles);
     }
 
     public async update(newProfile: EmployeeProfileParams): Promise<EmployeeProfileEntity> {
@@ -141,5 +152,10 @@ export class EmployeeProfileRepo {
 
     public getQueryBuilder(): SelectQueryBuilder<EmployeeProfileEntity> {
         return this.employeeProfileRepository.createQueryBuilder('profile');
+    }
+
+    public async deleteAll(): Promise<void> {
+        await this.employeeProfileRepository.clear();
+        this.logger.log('All employee profiles deleted');
     }
 }

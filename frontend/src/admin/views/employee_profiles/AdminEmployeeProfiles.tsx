@@ -10,12 +10,10 @@ import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdmin.service";
 import SelectedProfile from "./SelectedProfile";
 import { userAdminPanelContext } from "../AdminPanelProvider";
+import Button from "global/components/controls/Button";
 
 const AdminEmployeeProfiles: React.FC = () => {
 
-    // TODO import
-    // TODO export
-    // TODO clean all
     // TODO paginacja profili - admin panel
 
     const [loading, setLoading] = useState(false);
@@ -61,7 +59,35 @@ const AdminEmployeeProfiles: React.FC = () => {
         setSelectedEmployeeProfile(profile)
     }
 
-    // TODO
+    const handleCleanAll = async () => {
+        const confirmed = await confirm({
+            title: "Are you sure?",
+            message: "Are you sure you want to export all employee profiles? This action cannot be undone.",
+        })
+        if (!confirmed) return; 
+        try {
+            setLoading(true);
+            await EmployeeProfilesAdminService.deleteAllProfiles();
+            await _initEmployeeProfiles();
+            toast.success('All employee profiles have been deleted.');
+        } catch (e) { } finally {
+            setLoading(false);
+        }
+    }
+
+    const handleInitialLoad = async () => {
+        try {
+            setLoading(true);
+            await EmployeeProfilesAdminService.initialLoad();
+            await _initEmployeeProfiles();
+        } catch (e) { 
+            console.error(e);
+            toast.error('Failed to perform initial load of employee profiles.');
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const handleProfileAction = async (profile: EmployeeProfileI) => {
         const confirmed = await confirm({
             title: "Are you sure?",
@@ -84,6 +110,22 @@ const AdminEmployeeProfiles: React.FC = () => {
             <div className="w-full px-0">
 
                 <h2 className="h2 mb-6 pl-2 primary-text">Employee profiles</h2>
+
+                <div className="flex gap-2 mb-10 mt-5">
+
+                    {!!employeeProfiles?.profiles?.length && (
+                        <Button
+                            mode={BtnModes.PRIMARY_TXT}
+                            onClick={handleCleanAll}
+                        >Clean all</Button>
+                    )}
+
+                    <Button
+                        mode={BtnModes.PRIMARY_TXT}
+                        onClick={handleInitialLoad}
+                    >Initial Load</Button>
+
+                </div>
 
                 <h2 className="font-mono font-bold mb-2 mt-10">List of employee profiles:</h2>
 

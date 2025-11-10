@@ -31,6 +31,20 @@ export class EmployeeProfileService {
         return this.employeeProfileRepo.delete(id);
     }
 
+    public deleteAllProfiles(): Promise<void> {
+        return this.employeeProfileRepo.deleteAllProfiles();
+    }
+
+    public async initialLoad(): Promise<void> {
+        try {
+            return await this.employeeProfileRepo.initialLoad();
+        } catch (e) {
+            console.error(e)
+            // TODO translation
+            throw new ToastException('employeeProfile.initialLoadFailed', this);
+        }
+    }
+
     public getEmployeeProfile(user: UserI): Promise<EmployeeProfileEntity | null> {
         return this.employeeProfileRepo.findByUid(user.uid);
     }

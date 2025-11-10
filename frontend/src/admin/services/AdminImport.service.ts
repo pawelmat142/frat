@@ -14,6 +14,12 @@ export const AdminImportService = {
 		return this.exportJson(url, defaultFilename);
 	},
 
+	exportEmployeeProfilesJson(): Promise<void> {
+		const url = `/admin/import/employee-profiles/export`
+		let defaultFilename = `employee_profiles.json`;
+		return this.exportJson(url, defaultFilename);
+	},
+
 	async exportJson(url: string, defaultFilename: string): Promise<void> {
 		const response = await httpClient.getFile(url);
 		let filename = defaultFilename

@@ -102,4 +102,20 @@ export class EmployeeProfileController {
   ): Promise<void> {
     return this.employeeProfileService.deleteProfile(Number(id));
   }
+  
+  @Delete("/admin") 
+  @Serialize(EmployeeProfileEntity)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
+  deleteAllProfiles(): Promise<void> {
+    return this.employeeProfileService.deleteAllProfiles();
+  }
+  
+  @Post("/admin/initial-load") 
+  @Serialize(EmployeeProfileEntity)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
+  initialLoad(): Promise<void> {
+    return this.employeeProfileService.initialLoad();
+  }
 }
