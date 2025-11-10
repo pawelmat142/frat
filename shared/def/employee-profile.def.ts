@@ -20,9 +20,11 @@ export interface EmployeeProfileForm {
 
 export interface EmployeeProfileSearchForm {
   freeText?: string;
+
   communicationLanguages?: string[];
   skills?: string[];
   certificates?: string[];
+  
   locationCountry?: string | null;
   locationPosition?: Position;
 }

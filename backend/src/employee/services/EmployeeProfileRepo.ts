@@ -5,7 +5,7 @@ import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
 import { ToastException } from "global/exceptions/ToastException";
-import { Repository } from "typeorm";
+import { FindManyOptions, Repository, SelectQueryBuilder } from "typeorm";
 
 @Injectable()
 export class EmployeeProfileRepo {
@@ -108,5 +108,9 @@ export class EmployeeProfileRepo {
         const saved = await this.employeeProfileRepository.save(profile);
         this.logger.log(`Updated Employee Profile: ${saved.employeeProfileId}, uid: ${saved.uid}, version: ${saved.version}`);
         return saved;
+    }
+
+    public getQueryBuilder(): SelectQueryBuilder<EmployeeProfileEntity> {
+        return this.employeeProfileRepository.createQueryBuilder('profile');
     }
 }

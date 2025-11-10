@@ -11,10 +11,10 @@ export class SearchEmployeeProfileService {
     private readonly logger = new Logger(this.constructor.name);
 
     constructor(
+        private readonly employeeProfileRepo: EmployeeProfileRepo,
     ) { }
 
     // TODO implement search logic
-    // 1. dictionary filters,
     // 2. free text filters, - display name, last name, first name, mail
     // 3. location filters,
     // sort / waga
@@ -22,10 +22,32 @@ export class SearchEmployeeProfileService {
     // TODO add date ranges filter
     // 1. front
     // 2. backend 
+    // TODO sensowne indexy na searach
 
     async searchEmployeeProfiles(user: UserI, query: EmployeeProfileSearchForm): Promise<EmployeeProfileI[]> {
-        console.log(user)
-        console.log(query)
-        return []
+        const queryBuilder = this.employeeProfileRepo.getQueryBuilder()
+
+        let hasFilter = false;
+        
+        if (query.communicationLanguages?.length) {
+            queryBuilder.andWhere('profile.communication_languages && :languages', { languages: query.communicationLanguages });
+            hasFilter = true;
+        }
+        if (query.certificates?.length) {
+            queryBuilder.andWhere('profile.certificates && :certificates', { certificates: query.certificates });
+            hasFilter = true;
+        }
+        if (query.skills?.length) {
+            queryBuilder.andWhere('profile.skills && :skills', { skills: query.skills });
+            hasFilter = true;
+        }
+
+        // If no filters, return empty array (or all results if desired)
+        if (!hasFilter) {
+            return [];
+        }
+
+        const results = await queryBuilder.getMany();
+        return results;
     }
 }
