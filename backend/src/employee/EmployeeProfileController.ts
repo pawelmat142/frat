@@ -2,7 +2,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Put,
   Query,
@@ -13,7 +15,7 @@ import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { UserI, UserRoles } from '@shared/interfaces/UserI';
 import { EmployeeProfileService } from './services/EmployeeProfileService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
-import { EmployeeProfileForm, EmployeeProfileI, EmployeeProfileSearchForm } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileForm, EmployeeProfileI, EmployeeProfileSearchForm, EmployeeProfileStatus } from '@shared/interfaces/EmployeeProfileI';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
 import { Serialize } from 'global/decorators/Serialize';
 import { EmployeeProfileEntity } from './model/EmployeeProfileEntity';
@@ -78,5 +80,26 @@ export class EmployeeProfileController {
   @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
   listProfiles(): Promise<EmployeeProfileI[]> {
     return this.employeeProfileService.listProfiles();
+  }
+  
+  @Put("/admin/:id/activation/:status") 
+  @Serialize(EmployeeProfileEntity)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
+  activation(
+    @Param('id') id: string,
+    @Param('status') status: EmployeeProfileStatus
+  ): Promise<EmployeeProfileI> {
+    return this.employeeProfileService.activation(Number(id), status);
+  }
+  
+  @Delete("/admin/:id") 
+  @Serialize(EmployeeProfileEntity)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
+  deleteProfile(
+    @Param('id') id: string,
+  ): Promise<void> {
+    return this.employeeProfileService.deleteProfile(Number(id));
   }
 }

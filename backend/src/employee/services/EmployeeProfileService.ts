@@ -23,6 +23,14 @@ export class EmployeeProfileService {
         return this.employeeProfileRepo.findAll();
     }
 
+    public activation(id: number, status: EmployeeProfileStatus): Promise<EmployeeProfileEntity> {
+        return this.employeeProfileRepo.activation(id, status);
+    }
+
+    public deleteProfile(id: number): Promise<void> {
+        return this.employeeProfileRepo.delete(id);
+    }
+
     public getEmployeeProfile(user: UserI): Promise<EmployeeProfileEntity | null> {
         return this.employeeProfileRepo.findByUid(user.uid);
     }
@@ -66,7 +74,7 @@ export class EmployeeProfileService {
 
     private getProfileStatus(user: UserI, form: EmployeeProfileForm): EmployeeProfileStatus {
         // TODO
-        return EmployeeProfileStatuses.INACTIVE
+        return EmployeeProfileStatuses.ACTIVE;
     }
 
 }

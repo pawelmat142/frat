@@ -1,5 +1,5 @@
 import Loading from "global/components/Loading";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
@@ -8,33 +8,50 @@ import { toast } from "react-toastify";
 import { Util } from "@shared/utils/util";
 import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdmin.service";
+import SelectedProfile from "./SelectedProfile";
+import { userAdminPanelContext } from "../AdminPanelProvider";
 
 const AdminEmployeeProfiles: React.FC = () => {
 
+    // TODO import
+    // TODO export
+    // TODO clean all
+    // TODO paginacja profili - admin panel
+
     const [loading, setLoading] = useState(false);
-    const [employeeProfiles, setEmployeeProfiles] = useState<EmployeeProfileI[]>([]);
     const [selectedEmployeeProfile, setSelectedEmployeeProfile] = useState<EmployeeProfileI | null>(null);
+
+    const { employeeProfiles } = userAdminPanelContext();
 
     const confirm = useConfirm();
 
     const _initEmployeeProfiles = async () => {
         try {
             setLoading(true);
-            const _employeeProfiles = await EmployeeProfilesAdminService.listProfiles();
-            if (_employeeProfiles) {
-                setEmployeeProfiles(_employeeProfiles);
-            } else {
-                setEmployeeProfiles([]);
-            }
+            await employeeProfiles?.initProfiles();
+            setSelectedEmployeeProfile(null);
         }
         finally {
             setLoading(false);
         }
     }
 
+
     useEffect(() => {
         _initEmployeeProfiles();
     }, []);
+
+    // Escape key handler to clear selected profile
+    const handleEscape = useCallback((e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+            setSelectedEmployeeProfile(null);
+        }
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleEscape);
+        return () => window.removeEventListener('keydown', handleEscape);
+    }, [handleEscape]);
 
     if (loading) {
         return <Loading />;
@@ -47,30 +64,18 @@ const AdminEmployeeProfiles: React.FC = () => {
     // TODO
     const handleProfileAction = async (profile: EmployeeProfileI) => {
         const confirmed = await confirm({
-            title: "TODO",
-            message: "todo...",
+            title: "Are you sure?",
+            message: "Are you sure you want to delete this employee profile? This action cannot be undone.",
         });
         if (!confirmed) return;
 
         try {
             setLoading(true);
-            // await UsersAdminService.deleteUser(user.uid);
+            await EmployeeProfilesAdminService.deleteProfile(profile.employeeProfileId);
             await _initEmployeeProfiles();
             toast.success('todo...');
         } catch (e) { } finally {
             setLoading(false);
-        }
-    }
-
-    const handleRefresh = async (profile: EmployeeProfileI) => {
-        if (profile) {
-            const newProfiles = employeeProfiles.map(p => {
-                if (p.employeeProfileId === profile.employeeProfileId) {
-                    return profile
-                }
-                return p
-            })
-            setEmployeeProfiles(newProfiles)
         }
     }
 
@@ -95,12 +100,12 @@ const AdminEmployeeProfiles: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {employeeProfiles.length === 0 ? (
+                            {employeeProfiles?.profiles?.length === 0 ? (
                                 <tr>
                                     <td colSpan={3} className="px-6 py-6 secondary-text text-center">No employee profiles found.</td>
                                 </tr>
                             ) : (
-                                employeeProfiles.map((profile, idx) => {
+                                employeeProfiles?.profiles?.map((profile, idx) => {
                                     const isSelected = selectedEmployeeProfile?.employeeProfileId === profile.employeeProfileId;
                                     return (
                                         <tr
@@ -129,7 +134,7 @@ const AdminEmployeeProfiles: React.FC = () => {
 
                 </div>
 
-                {/* <SelectedUser user={selectedUser} onRefresh={handleRefresh} /> */}
+                <SelectedProfile profile={selectedEmployeeProfile} />
 
             </div>
         </div>

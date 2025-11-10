@@ -1,5 +1,6 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
 import { EmployeeProfileParams } from "employee/model/interface";
@@ -29,6 +30,31 @@ export class EmployeeProfileRepo {
         const saved = await this.employeeProfileRepository.save(entity);
         this.logger.log(`Created Employee Profile: ${saved.employeeProfileId}`);
         return saved;
+    }
+
+    public async activation(id: number, status: EmployeeProfileStatus): Promise<EmployeeProfileEntity> {
+        const profile = await this.employeeProfileRepository.findOne({ where: { employeeProfileId: id } });
+        if (!profile) {
+            throw new NotFoundException("employeeProfile.notFound");
+        }
+        if (profile.status === status) {
+            // TODO trasnlation
+            throw new ToastException("employeeProfile.alreadyInStatus", this);
+        }
+
+        this.logger.log(`Activating EmployeeProfile id=${id}: status from ${profile.status} to ${status}`);
+        profile.status = status;
+        const saved = await this.employeeProfileRepository.save(profile);
+        return saved;
+    }
+
+    public async delete(id: number): Promise<void> {
+        const profile = await this.employeeProfileRepository.findOne({ where: { employeeProfileId: id } });
+        if (!profile) {
+            throw new NotFoundException("employeeProfile.notFound");
+        }
+        await this.employeeProfileRepository.remove(profile);
+        this.logger.log(`Deleted EmployeeProfile id=${id}`);
     }
 
     public async update(newProfile: EmployeeProfileParams): Promise<EmployeeProfileEntity> {

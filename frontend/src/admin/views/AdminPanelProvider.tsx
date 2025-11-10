@@ -3,6 +3,8 @@ import { useState } from "react";
 import { TranslationListDto } from "@shared/dto/TranslationListDto";
 import { TranslationAdminService } from "admin/services/TranslationAdmin.service";
 import { TranslationI } from "@shared/interfaces/TranslationI";
+import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdmin.service";
 
 export interface AdminPanelTranslations {
     translations?: TranslationI[];
@@ -13,8 +15,15 @@ export interface AdminPanelTranslations {
     saveTranslation?: (translation: TranslationI) => Promise<void>; // save to db and update context state
     loadLanguage?: (langCode: string) => Promise<void>; // fetch translation and update context state
 }
+
+export interface AdminPanelEmployeeProfiles {
+    profiles?: EmployeeProfileI[]
+    initProfiles: () => Promise<void>;
+}
+
 interface AdminPanelContextType {
     translation?: AdminPanelTranslations
+    employeeProfiles?: AdminPanelEmployeeProfiles
 }
 
 const AdminPanelContext = createContext<AdminPanelContextType | undefined>(undefined)
@@ -27,6 +36,8 @@ export const AdminPanelProvider: React.FC<AdminPanelProviderProps> = ({ children
     const [languages, setLanguages] = useState<TranslationListDto[]>([]);
     const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>(undefined);
     const [translations, setTranslations] = useState<TranslationI[]>([]);
+
+    const [employeeProfiles, setEmployeeProfiles] = useState<EmployeeProfileI[]>([])
 
     const initTranslations = async () => {
         const langs = await TranslationAdminService.getLanguagesList();
@@ -69,7 +80,17 @@ export const AdminPanelProvider: React.FC<AdminPanelProviderProps> = ({ children
             updateTranslation: updateTranslation,
             saveTranslation: saveTranslation,
             loadLanguage: loadLanguage
-        }
+        },
+    };
+
+    const initProfiles = async () => {
+        const profiles = await EmployeeProfilesAdminService.listProfiles();
+        setEmployeeProfiles(profiles);
+    }
+
+    value.employeeProfiles = { 
+        profiles: employeeProfiles,
+        initProfiles: initProfiles
     };
 
     return (
