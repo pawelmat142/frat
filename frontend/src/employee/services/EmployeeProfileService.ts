@@ -1,5 +1,5 @@
 import { httpClient } from "global/services/http";
-import { EmployeeProfileForm } from "@shared/def/employee-profile.def";
+import { EmployeeProfileForm, EmployeeProfileSearchForm } from "@shared/def/employee-profile.def";
 import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 
 export const EmployeeProfileService = {
@@ -15,5 +15,10 @@ export const EmployeeProfileService = {
 	updateEmployeeProfile(form: EmployeeProfileForm): Promise<EmployeeProfileI> {
 		return httpClient.put<EmployeeProfileI>(`/employee-profile`, form);
 	},
+
+
+	searchEmployeeProfiles(params: EmployeeProfileSearchForm): Promise<EmployeeProfileI[]> {
+		return httpClient.get<EmployeeProfileI[]>(`/employee-profile/search`, { params });
+	}
 
 };

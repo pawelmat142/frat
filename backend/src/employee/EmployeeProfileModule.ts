@@ -8,6 +8,7 @@ import { EmployeeProfileController } from './EmployeeProfileController';
 import { AuthModule } from 'auth/AuthModule';
 import { DictionariesModule } from 'admin/dictionaries/DictionariesModule';
 import { GeoPointService } from './services/GeoPointService';
+import { SearchEmployeeProfileService } from './services/SearchEmployeeProfileService';
 
 @Module({
     imports: [
@@ -21,6 +22,7 @@ import { GeoPointService } from './services/GeoPointService';
     providers: [
         EmployeeProfileRepo,
         EmployeeProfileService,
+        SearchEmployeeProfileService,
         GeoPointService
     ],
     controllers: [

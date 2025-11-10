@@ -5,6 +5,7 @@ import {
   Get,
   Post,
   Put,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -14,15 +15,19 @@ import { EmployeeProfileService } from './services/EmployeeProfileService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
 import { EmployeeProfileI } from '@shared/interfaces/EmployeeProfileI';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
-import { EmployeeProfileForm } from '@shared/def/employee-profile.def';
+import { EmployeeProfileForm, EmployeeProfileSearchForm } from '@shared/def/employee-profile.def';
 import { Serialize } from 'global/decorators/Serialize';
 import { EmployeeProfileEntity } from './model/EmployeeProfileEntity';
+import { SearchEmployeeProfileService } from './services/SearchEmployeeProfileService';
 
 @Controller('api/employee-profile')
 @UseInterceptors(LogInterceptor)
 export class EmployeeProfileController {
 
-  constructor(private readonly employeeProfileService: EmployeeProfileService) { }
+  constructor(
+    private readonly employeeProfileService: EmployeeProfileService,
+    private readonly searchEmployeeProfileService: SearchEmployeeProfileService
+  ) { }
 
   @Get()
   @UseGuards(JwtAuthGuard)
@@ -52,5 +57,14 @@ export class EmployeeProfileController {
   ): Promise<EmployeeProfileI> {
     return this.employeeProfileService.updateEmployeeProfile(user, form);
   }
-  
+
+
+  @Get("/search")
+  @Serialize(EmployeeProfileEntity)
+  searchEmployeeProfiles(
+    @CurrentUser() user: UserI,
+    @Query() query: EmployeeProfileSearchForm
+  ): Promise<EmployeeProfileI[]> {
+    return this.searchEmployeeProfileService.searchEmployeeProfiles(user, query);
+  }
 }

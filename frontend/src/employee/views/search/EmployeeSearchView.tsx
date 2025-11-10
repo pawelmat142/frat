@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import Search from '@mui/icons-material/Search'
 import Input from "global/components/controls/Input";
 import PositionSelector from "global/components/controls/PositionSelector";
+import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 
 const EmployeeSearchView: React.FC = () => {
 
@@ -26,12 +27,14 @@ const EmployeeSearchView: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
     const [locationCountryCode, setLocationCountryCode] = useState<string | null>(null);
-    const required = FormValidator.required(t);
 
     const onSubmit = async (form: EmployeeProfileSearchForm) => {
         try {
+            // TODO
             setLoading(true);
             console.log(form)
+            const result = await EmployeeProfileService.searchEmployeeProfiles(form)
+            console.log(result)
         } catch (error) {
             console.error("Error creating employee profile:", error);
         } finally {
@@ -54,7 +57,6 @@ const EmployeeSearchView: React.FC = () => {
                 <Controller
                     name="freeText"
                     control={control}
-                    rules={required}
                     render={({ field }) => <Input
                         {...field}
                         value={field.value ?? ''}
@@ -146,7 +148,6 @@ const EmployeeSearchView: React.FC = () => {
                     <Controller
                         name="locationPosition"
                         control={control}
-                        rules={required}
                         render={({ field }) => (
                             <PositionSelector
                                 label={t("employeeProfile.form.location")}
