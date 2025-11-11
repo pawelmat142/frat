@@ -13,11 +13,10 @@ export class SearchEmployeeProfileService {
         private readonly employeeProfileRepo: EmployeeProfileRepo,
     ) { }
 
-    // TODO admin app profiles management, impotrt, export
     // TODO implement search logic
-    // 2. free text filters, - display name, last name, first name, mail
     // 3. location filters,
     // sort / waga
+    
     // TODO presentation
     // TODO add date ranges filter
     // 1. front
@@ -43,6 +42,22 @@ export class SearchEmployeeProfileService {
             queryBuilder.andWhere('profile.skills && :skills', { skills: query.skills });
             hasFilter = true;
         }
+
+        // Free text fuzzy search
+        if (query.freeText && query.freeText.trim().length > 1) {
+            const freeText = `%${query.freeText.trim().toLowerCase()}%`;
+            queryBuilder.andWhere(`(
+                LOWER(profile.display_name) ILIKE :freeText OR
+                LOWER(profile.email) ILIKE :freeText OR
+                LOWER(profile.first_name) ILIKE :freeText OR
+                LOWER(profile.last_name) ILIKE :freeText OR
+                array_to_string(profile.skills, ',') ILIKE :freeText OR
+                array_to_string(profile.certificates, ',') ILIKE :freeText
+            )`, { freeText });
+            hasFilter = true;
+        }
+
+        console.log(query)
 
         // If no filters, return empty array (or all results if desired)
         if (!hasFilter) {

@@ -73,6 +73,36 @@
     }
 }
 
+
+
+.tile {
+    width: 100%;
+    background-color: $secondary-bg;
+    border-radius: .25rem;
+    padding: 1rem;
+    box-shadow: $box-shadow;
+    margin-bottom: .5rem;
+}
+
+.tile-content-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    &.top {
+
+    }
+    &.mid {
+        margin-top: .2rem;
+
+    }
+    &.bottom {
+        margin-top: .6rem;
+    }
+
+}
+
 @media screen and (min-width: $desktop) {
     .header {
         nav {
