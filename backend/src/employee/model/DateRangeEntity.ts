@@ -1,16 +1,16 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { EmployeeProfileEntity } from "./EmployeeProfileEntity";
+import { DateRangeI } from "@shared/interfaces/EmployeeProfileI";
 
 /**
  * Encja dla pojedynczego zakresu dostępności pracownika
  */
 @Entity('jh_employee_profile_availability_date_ranges')
-export class DateRangeEntity {
+export class DateRangeEntity implements DateRangeI {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-
-  @ManyToOne(() => EmployeeProfileEntity, profile => profile.dateRanges, { onDelete: 'CASCADE' })
+  @ManyToOne(() => EmployeeProfileEntity, profile => profile.availabilityDateRanges, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'employee_profile_id' })
   employeeProfile: EmployeeProfileEntity;
 

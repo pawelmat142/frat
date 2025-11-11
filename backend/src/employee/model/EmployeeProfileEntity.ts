@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus, Point } from '@shared/interfaces/EmployeeProfileI';
+import { DateRangeI, EmployeeProfileAvailabilityOption, EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus, Point } from '@shared/interfaces/EmployeeProfileI';
 import { Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { DateRangeEntity } from './DateRangeEntity';
@@ -80,14 +80,14 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   // AVAILABILITY DATES
   @Expose()
   @Column({ name: 'availability_option' })
-  availabilityOption: EmployeeProfileLocationOption;
+  availabilityOption: EmployeeProfileAvailabilityOption;
 
   @OneToMany(
     () => DateRangeEntity,
     (range) => range.employeeProfile,
     { cascade: true, eager: true }
   )
-  dateRanges?: DateRangeEntity[];
+  availabilityDateRanges?: DateRangeI[];
 
 
 

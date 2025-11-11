@@ -2,13 +2,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
-import { DateRangeEntity } from 'employee/model/DateRangeEntity';
 import { UserI } from '@shared/interfaces/UserI';
 import { EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileLocationOptions, EmployeeProfileStatus, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { EPUtil } from './EPUtil';
 import { GeoPointService } from './GeoPointService';
-import { DateRangeUtil } from 'employee/utils/DateRangeUtil';
 import { DeepPartial } from 'typeorm';
 
 @Injectable()
@@ -88,6 +86,8 @@ export class EmployeeProfileService {
             communicationLanguages: form.communicationLanguages || [],
 
             locationOption: form.locationOption,
+
+            availabilityOption: form.availabilityOption,
         };
 
         await this.fillLocationData(result, form);
@@ -99,13 +99,9 @@ export class EmployeeProfileService {
 
     private fillAvailabilityData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileForm): void {
         if (result.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES) {
-            result.dateRanges = form.availabilityDateRanges.map(range => {
-                const entity = new DateRangeEntity();
-                entity.dateRange = DateRangeUtil.formatDateRangeForDb(range);
-                return entity;
-            });
+            result.availabilityDateRanges = form.availabilityDateRanges
         } else {
-            delete result.dateRanges
+            delete result.availabilityDateRanges
         }
     }
 

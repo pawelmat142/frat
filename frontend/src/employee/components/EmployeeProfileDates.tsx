@@ -3,8 +3,9 @@ import { useTranslation } from "react-i18next";
 import TabSwitcher, { TabSwitcherOption } from "./TabSwitcher";
 import React, { useEffect } from "react";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileForm, EmployeeProfileAvailabilityOptions, EmployeeProfileAvailabilityOption } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileForm, EmployeeProfileAvailabilityOptions, EmployeeProfileAvailabilityOption, DateRange } from "@shared/interfaces/EmployeeProfileI";
 import DateRangeInput from "global/components/controls/DateRangeInput";
+import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 
 interface Props {
     control: Control<EmployeeProfileForm>;
@@ -17,17 +18,24 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
     const availabilityOption = watch("availabilityOption");
     const availabilityDateRanges = watch("availabilityDateRanges") || [];
 
-    const getDefaultDateRange = () => ({
-        start: new Date().toISOString(),
-        end: new Date().toISOString(),
-    });
+    const getDefaultDateRange = (): DateRange => {
+        const end = new Date();
+        end.setDate(end.getDate() + 7);
+        return {
+            start: new Date(),
+            end,
+        }
+    }
 
     useEffect(() => {
         if (
             availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES &&
             (!availabilityDateRanges || availabilityDateRanges.length === 0)
         ) {
-            setValue("availabilityDateRanges", [getDefaultDateRange()]);
+            const ranges = DateRangeUtil.fromDateRange(getDefaultDateRange())
+            if (ranges) {
+                setValue("availabilityDateRanges", [ranges]);
+            }
         }
     }, [availabilityOption]);
 
@@ -45,6 +53,8 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
             code: EmployeeProfileAvailabilityOptions.DATE_RANGES,
         },
     ];
+
+    console.log('availabilityDateRanges', availabilityDateRanges);
 
 
     return (
@@ -79,8 +89,8 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
                                     rules={required}
                                     render={({ field }) => (
                                         <DateRangeInput
-                                            value={field.value || getDefaultDateRange()}
-                                            onChange={(dateRange) => field.onChange(dateRange || null)}
+                                            value={DateRangeUtil.toDateRange(field.value) || getDefaultDateRange()}
+                                            onChange={(dateRange) => field.onChange(DateRangeUtil.fromDateRange(dateRange) || null)}
                                             name={field.name}
                                         />
                                     )}

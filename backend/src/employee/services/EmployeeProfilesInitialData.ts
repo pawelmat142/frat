@@ -32,7 +32,7 @@ export const EmoployeeProfilesInitialData: DeepPartial<EmployeeProfileEntity>[] 
         createdAt: getRandomizedCreatedAt(0),
         skills: ['ONE', 'TWO'],
         certificates: ['THREE', 'FOUR'],
-        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
     },
     {
         uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
@@ -50,7 +50,7 @@ export const EmoployeeProfilesInitialData: DeepPartial<EmployeeProfileEntity>[] 
         createdAt: getRandomizedCreatedAt(1),
         skills: ['THREE', 'FOUR'],
         certificates: ['ONE', 'TWO'],
-        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
     },
     {
         uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
@@ -66,7 +66,7 @@ export const EmoployeeProfilesInitialData: DeepPartial<EmployeeProfileEntity>[] 
         createdAt: getRandomizedCreatedAt(2),
         skills: ['FIVE', 'SIX'],
         certificates: ['FIVE', 'SIX'],
-        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
     },
     {
         uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
@@ -82,7 +82,7 @@ export const EmoployeeProfilesInitialData: DeepPartial<EmployeeProfileEntity>[] 
         createdAt: getRandomizedCreatedAt(3),
         skills: ['SEVEN', 'ONE'],
         certificates: ['SEVEN', 'ONE'],
-        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
     },
     {
         uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
@@ -100,7 +100,7 @@ export const EmoployeeProfilesInitialData: DeepPartial<EmployeeProfileEntity>[] 
         createdAt: getRandomizedCreatedAt(4),
         skills: ['TWO', 'THREE'],
         certificates: ['TWO', 'THREE'],
-        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
     },
     {
         uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
@@ -116,7 +116,7 @@ export const EmoployeeProfilesInitialData: DeepPartial<EmployeeProfileEntity>[] 
         createdAt: getRandomizedCreatedAt(5),
         skills: ['FOUR', 'FIVE'],
         certificates: ['FOUR', 'FIVE'],
-        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
     },
     {
         uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
@@ -132,7 +132,7 @@ export const EmoployeeProfilesInitialData: DeepPartial<EmployeeProfileEntity>[] 
         createdAt: getRandomizedCreatedAt(6),
         skills: ['SIX', 'SEVEN'],
         certificates: ['SIX', 'SEVEN'],
-        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
     },
     {
         uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
@@ -150,7 +150,7 @@ export const EmoployeeProfilesInitialData: DeepPartial<EmployeeProfileEntity>[] 
         createdAt: getRandomizedCreatedAt(7),
         skills: ['ONE', 'FIVE'],
         certificates: ['ONE', 'FIVE'],
-        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
     },
     {
         uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
@@ -166,6 +166,6 @@ export const EmoployeeProfilesInitialData: DeepPartial<EmployeeProfileEntity>[] 
         createdAt: getRandomizedCreatedAt(8),
         skills: ['THREE', 'SEVEN'],
         certificates: ['THREE', 'SEVEN'],
-        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
     },
 ]

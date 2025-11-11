@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
 import { ToastException } from "global/exceptions/ToastException";
@@ -22,8 +22,9 @@ export class EmployeeProfileRepo {
         return this.employeeProfileRepository.find(options);
     }
 
-    public findByUid(uid: string): Promise<EmployeeProfileEntity | null> {
-        return this.employeeProfileRepository.findOne({ where: { uid } });
+    public async findByUid(uid: string): Promise<EmployeeProfileEntity | null> {
+        const result = await this.employeeProfileRepository.findOne({ where: { uid } });
+        return result;
     }
 
     public async create(newProfile: DeepPartial<EmployeeProfileEntity>): Promise<EmployeeProfileEntity> {
@@ -65,6 +66,7 @@ export class EmployeeProfileRepo {
         await manager.query('DELETE FROM jh_employee_profiles');
         this.logger.log('All employee profiles and related date ranges deleted');
     }
+
 
     public async initialLoad(): Promise<void> {
         const profiles = EmoployeeProfilesInitialData
@@ -148,6 +150,39 @@ export class EmployeeProfileRepo {
             updatedFlag = true;
         }
 
+        if (profile.availabilityOption !== newProfile.availabilityOption) {
+            this.logger.log(`Updating EmployeeProfile availabilityOption from ${profile.availabilityOption} to ${newProfile.availabilityOption}`);
+            profile.availabilityOption = newProfile.availabilityOption;
+            if (newProfile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME) {
+                await this.removeRelatedDateRanges(profile.employeeProfileId);
+                profile.availabilityDateRanges = [];
+            }
+            updatedFlag = true;
+        }
+
+        if (this.dateRangesChanged(newProfile, profile)) {
+            this.logger.log(`Updating EmployeeProfile availabilityDateRanges`);
+            // Normalize DeepPartial<DateRangeEntity>[] into DateRangeEntity[] to satisfy typing.
+            const incomingRanges = (newProfile.availabilityDateRanges || []);
+            const normalizedRanges: DateRangeEntity[] = [];
+            for (const r of incomingRanges) {
+                // ensure required field is present
+                if (!r.dateRange) {
+                    throw new ToastException("employeeProfile.invalidDateRange", this);
+                }
+                const dr = new DateRangeEntity();
+                // preserve id when provided
+                if ((r as any).id !== undefined) {
+                    dr.id = (r as any).id;
+                }
+                dr.dateRange = r.dateRange as string;
+                normalizedRanges.push(dr);
+            }
+            profile.availabilityDateRanges = normalizedRanges;
+            updatedFlag = true;
+        }
+
+
         if (!updatedFlag) {
             throw new ToastException("employeeProfile.noChanges", this);
         }
@@ -155,6 +190,28 @@ export class EmployeeProfileRepo {
         const saved = await this.employeeProfileRepository.save(profile);
         this.logger.log(`Updated Employee Profile: ${saved.employeeProfileId}, uid: ${saved.uid}, version: ${saved.version}`);
         return saved;
+    }
+
+    private dateRangesChanged(newProfile: DeepPartial<EmployeeProfileEntity>, profile: EmployeeProfileEntity): boolean {
+        const newRanges = (newProfile.availabilityDateRanges || []);
+        const oldRanges = (profile.availabilityDateRanges || []);
+        if (newRanges.length !== oldRanges.length) return true;
+        for (let i = 0; i < newRanges.length; i++) {
+            const newRange = newRanges[i];
+            const oldRange = oldRanges[i];
+            if (newRange.dateRange !== oldRange.dateRange) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private async removeRelatedDateRanges(profileId: number): Promise<void> {
+        const manager = this.employeeProfileRepository.manager;
+        await manager.query(
+            'DELETE FROM jh_employee_profile_availability_date_ranges WHERE employee_profile_id = $1',
+            [profileId]
+        );
     }
 
     public getQueryBuilder(): SelectQueryBuilder<EmployeeProfileEntity> {

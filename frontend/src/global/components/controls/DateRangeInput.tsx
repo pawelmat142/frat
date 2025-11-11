@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { DateRange as DateRangeType } from '@shared/interfaces/EmployeeProfileI';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ControlLabel from './ControlLabel';
 import FormError from './FormError';
+import { DateRange } from '@shared/interfaces/EmployeeProfileI';
 
 interface DateRangeProps {
-    value?: DateRangeType;
-    onChange?: (range: DateRangeType | null) => void;
+    value?: DateRange;
+    onChange?: (range: DateRange | null) => void;
     label?: string;
     required?: boolean;
     error?: string;
@@ -32,21 +32,29 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     const handleStartChange = (date: Date | null) => {
         setStartDate(date);
         if (onChange) {
-            onChange(date && endDate ? { start: date.toISOString(), end: endDate ? endDate.toISOString() : '' } : null);
+            onChange(date && endDate ? { start: date, end: endDate } : null);
         }
     };
 
     const handleEndChange = (date: Date | null) => {
         setEndDate(date);
         if (onChange) {
-            onChange(startDate && date ? { start: startDate.toISOString(), end: date.toISOString() } : null);
+            onChange(startDate && date ? { start: startDate, end: date } : null);
         }
     };
 
+    let myClass = `pp-date-input ${className} cursor-pointer`;
+    if (disabled) {
+        myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+    }
+    if (error) {
+        myClass += ' pp-control-error';
+    }
+
     return (
-        <div className={`pp-date-range-input ${className}`}>
+        <div className={myClass}>
             <ControlLabel label={label} required={required} />
-            <div className="flex gap-2 items-center">
+            <div className="pp-control pp-date-input-row gap-2">
                 <DatePicker
                     selected={startDate}
                     onChange={handleStartChange}
@@ -57,7 +65,8 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                     placeholderText="Start"
                     className="w-32"
                     name={name ? `${name}_start` : undefined}
-                />
+                    dateFormat={"dd-MM-yyyy"}
+                    />
                 <span className="mx-2">-</span>
                 <DatePicker
                     selected={endDate}
@@ -70,6 +79,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                     placeholderText="Koniec"
                     className="w-32"
                     name={name ? `${name}_end` : undefined}
+                    dateFormat={"dd-MM-yyyy"}
                 />
             </div>
             <FormError error={error ? { message: error } : undefined} />

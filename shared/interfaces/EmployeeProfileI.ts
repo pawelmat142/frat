@@ -1,47 +1,48 @@
 export interface EmployeeProfileI {
 
-    employeeProfileId: number;
+  employeeProfileId: number;
 
-    // user data
-    uid: string;
-    status: EmployeeProfileStatus;
-    displayName: string;
-    email: string;
+  // user data
+  uid: string;
+  status: EmployeeProfileStatus;
+  displayName: string;
+  email: string;
 
-    // form data
-    firstName: string;
-    lastName: string;
-    residenceCountry: string;
+  // form data
+  firstName: string;
+  lastName: string;
+  residenceCountry: string;
 
-    skills?: string[];
-    certificates?: string[];
+  skills?: string[];
+  certificates?: string[];
 
-    communicationLanguages: string[];
+  communicationLanguages: string[];
 
-    locationOption: EmployeeProfileLocationOption;
-    locationCountries?: string[];
-    point?: Point
-    pointRadius?: number; // [km]
-    address?: string; // derived field for distance location option
+  locationOption: EmployeeProfileLocationOption;
+  locationCountries?: string[];
+  point?: Point
+  pointRadius?: number; // [km]
+  address?: string; // derived field for distance location option
 
-    // availability dates
-    availabilityOption: EmployeeProfileAvailabilityOption;
-    availabilityDateRanges?: DateRange[];
+  // availability dates
+  availabilityOption: EmployeeProfileAvailabilityOption;
+  availabilityDateRanges?: DateRangeI[];
 
-    createdAt: Date;
+
+  createdAt: Date;
 }
 
 export const EmployeeProfileStatuses = {
-    ACTIVE: 'ACTIVE',
-    INACTIVE: 'INACTIVE'
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
 } as const;
 export type EmployeeProfileStatus = typeof EmployeeProfileStatuses[keyof typeof EmployeeProfileStatuses];
 
 
 export const EmployeeProfileLocationOptions = {
-    ALL_EUROPE: 'ALL_EUROPE',
-    SELECTED_COUNTRIES_EUROPE: 'SELECTED_COUNTRIES_EUROPE',
-    DISTANCE: 'DISTANCE',
+  ALL_EUROPE: 'ALL_EUROPE',
+  SELECTED_COUNTRIES_EUROPE: 'SELECTED_COUNTRIES_EUROPE',
+  DISTANCE: 'DISTANCE',
 } as const;
 export type EmployeeProfileLocationOption = typeof EmployeeProfileLocationOptions[keyof typeof EmployeeProfileLocationOptions];
 
@@ -49,7 +50,7 @@ export type EmployeeProfileLocationOption = typeof EmployeeProfileLocationOption
 export const EmployeeProfileAvailabilityOptions = {
   ANYTIME: 'ANYTIME',
   DATE_RANGES: 'DATE_RANGES',
-}
+} as const;
 export type EmployeeProfileAvailabilityOption = typeof EmployeeProfileAvailabilityOptions[keyof typeof EmployeeProfileAvailabilityOptions];
 
 export interface EmployeeProfileForm {
@@ -71,12 +72,7 @@ export interface EmployeeProfileForm {
 
   // AVAILABILITY DATES
   availabilityOption: EmployeeProfileAvailabilityOption;
-  availabilityDateRanges?: DateRange[];
-}
-
-export interface DateRange {
-  start: string; // ISO date string
-  end: string;   // ISO date string
+  availabilityDateRanges?: DateRangeI[];
 }
 
 export interface EmployeeProfileSearchForm {
@@ -85,7 +81,7 @@ export interface EmployeeProfileSearchForm {
   communicationLanguages?: string[];
   skills?: string[];
   certificates?: string[];
-  
+
   locationCountry?: string | null;
   locationPosition?: Position;
 
@@ -107,4 +103,14 @@ export interface Position {
 export interface Point {
   type: 'Point';
   coordinates: [number, number]; // [lng, lat]
+}
+
+export interface DateRangeI {
+  id?: number;
+  dateRange: string;
+}
+
+export interface DateRange {
+  start: Date
+  end: Date
 }
