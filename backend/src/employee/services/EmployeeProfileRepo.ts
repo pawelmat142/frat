@@ -1,12 +1,12 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { EmployeeProfileI, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
-import { EmployeeProfileParams } from "employee/model/interface";
 import { ToastException } from "global/exceptions/ToastException";
-import { FindManyOptions, Repository, SelectQueryBuilder } from "typeorm";
+import { DeepPartial, FindManyOptions, Repository, SelectQueryBuilder } from "typeorm";
 import { EmoployeeProfilesInitialData } from "./EmployeeProfilesInitialData";
+import { DateRangeEntity } from "employee/model/DateRangeEntity";
 
 @Injectable()
 export class EmployeeProfileRepo {
@@ -26,7 +26,7 @@ export class EmployeeProfileRepo {
         return this.employeeProfileRepository.findOne({ where: { uid } });
     }
 
-    public async create(newProfile: EmployeeProfileParams): Promise<EmployeeProfileEntity> {
+    public async create(newProfile: DeepPartial<EmployeeProfileEntity>): Promise<EmployeeProfileEntity> {
         const entity = this.employeeProfileRepository.create(newProfile)
         const saved = await this.employeeProfileRepository.save(entity);
         this.logger.log(`Created Employee Profile: ${saved.employeeProfileId}`);
@@ -59,8 +59,11 @@ export class EmployeeProfileRepo {
     }
 
     public async deleteAllProfiles(): Promise<void> {
-        await this.employeeProfileRepository.clear();
-        this.logger.log('All employee profiles deleted');
+        // Use raw SQL DELETE to avoid empty criteria error and respect FK constraints
+        const manager = this.employeeProfileRepository.manager;
+        await manager.query('DELETE FROM jh_employee_profile_availability_date_ranges');
+        await manager.query('DELETE FROM jh_employee_profiles');
+        this.logger.log('All employee profiles and related date ranges deleted');
     }
 
     public async initialLoad(): Promise<void> {
@@ -68,7 +71,7 @@ export class EmployeeProfileRepo {
         await this.employeeProfileRepository.save(profiles);
     }
 
-    public async update(newProfile: EmployeeProfileParams): Promise<EmployeeProfileEntity> {
+    public async update(newProfile: DeepPartial<EmployeeProfileEntity>): Promise<EmployeeProfileEntity> {
         const profile = await this.findByUid(newProfile.uid);
         if (!profile) {
             throw new ToastException("employeeProfile.notFound", this);
@@ -132,7 +135,11 @@ export class EmployeeProfileRepo {
 
         if (ObjUtil.numberArrayChanged(profile.point?.coordinates || [], newProfile.point?.coordinates || [])) {
             this.logger.log(`Updating EmployeeProfile point from ${JSON.stringify(profile.point)} to ${JSON.stringify(newProfile.point)}`);
-            profile.point = newProfile.point;
+            const normalizedPoint = {
+                type: 'Point' as const,
+                coordinates: (newProfile.point?.coordinates || profile.point?.coordinates || []) as [number, number],
+            };
+            profile.point = normalizedPoint;
             updatedFlag = true;
         }
         if (profile.pointRadius !== newProfile.pointRadius) {

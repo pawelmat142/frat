@@ -79,7 +79,7 @@ const DateInput: React.FC<DateInputProps> = ({
                 {showPicker && (
                     <div className="pp-date-input-picker left">
                         <DatePicker
-                            selected={value}
+                            selected={new Date()}
                             onChange={handleDateChange}
                             inline
                             disabled={disabled}

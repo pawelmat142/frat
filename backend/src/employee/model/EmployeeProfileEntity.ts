@@ -1,7 +1,9 @@
 /** Created by Pawel Malek **/
 import { EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus, Point } from '@shared/interfaces/EmployeeProfileI';
 import { Expose } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { DateRangeEntity } from './DateRangeEntity';
+
 
 @Entity('jh_employee_profiles')
 export class EmployeeProfileEntity implements EmployeeProfileI {
@@ -10,7 +12,7 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Expose()
   employeeProfileId: number;
 
-  @Column({ name: 'uid', unique: true })
+  @Column({ name: 'uid' })
   @Expose()
   uid: string;
   
@@ -72,6 +74,20 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
 
   @Column({ name: 'address', type: 'text', nullable: true })
   address?: string;
+
+
+
+  // AVAILABILITY DATES
+  @Expose()
+  @Column({ name: 'availability_option' })
+  availabilityOption: EmployeeProfileLocationOption;
+
+  @OneToMany(
+    () => DateRangeEntity,
+    (range) => range.employeeProfile,
+    { cascade: true, eager: true }
+  )
+  dateRanges?: DateRangeEntity[];
 
 
 

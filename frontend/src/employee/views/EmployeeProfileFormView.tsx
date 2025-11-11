@@ -8,7 +8,7 @@ import React from "react";
 import CommunicationLanguagesSection from "../components/CommunicationLanguagesSection";
 import EmployeeLocationSection from "../components/EmployeeLocationSection";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileForm, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
 import { toast } from "react-toastify";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import Loading from "global/components/Loading";
@@ -16,6 +16,7 @@ import { Utils } from "global/utils";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
 import { useNavigate } from "react-router-dom";
+import EmployeeProfileDates from "employee/components/EmployeeProfileDates";
 
 const EmployeeProfileFormView: React.FC = () => {
 
@@ -38,6 +39,9 @@ const EmployeeProfileFormView: React.FC = () => {
             locationCountries: [],
             locationDistancePosition: undefined,
             locationDistanceRadius: NaN,
+
+            availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
+            availabilityDateRanges: []
         },
     });
 
@@ -57,11 +61,13 @@ const EmployeeProfileFormView: React.FC = () => {
                 residenceCountry: employeeProfile.residenceCountry || "",
                 skills: employeeProfile.skills || [],
                 certificates: employeeProfile.certificates || [],
-                communicationLanguages: employeeProfile.communicationLanguages || [""] ,
+                communicationLanguages: employeeProfile.communicationLanguages || [""],
                 locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.ALL_EUROPE,
                 locationCountries: employeeProfile.locationCountries || [],
                 locationDistancePosition,
                 locationDistanceRadius: employeeProfile.pointRadius ?? NaN,
+                availabilityOption: employeeProfile.availabilityOption || EmployeeProfileAvailabilityOptions.ANYTIME,
+                availabilityDateRanges: employeeProfile.availabilityDateRanges || []
             });
         }
     }, [employeeProfile, reset]);
@@ -110,7 +116,7 @@ const EmployeeProfileFormView: React.FC = () => {
     }
 
     // TODO date periods 
-    
+
     // TODO remove
     const formValues = watch();
     console.log(formValues)
@@ -232,6 +238,14 @@ const EmployeeProfileFormView: React.FC = () => {
                         watch={watch}
                         formState={formState}
                     />
+
+                    <EmployeeProfileDates
+                        control={control}
+                        setValue={setValue}
+                        watch={watch}
+                        formState={formState}
+                    />
+
 
                 </div>
 

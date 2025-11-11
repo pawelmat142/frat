@@ -9,11 +9,13 @@ import { AuthModule } from 'auth/AuthModule';
 import { DictionariesModule } from 'admin/dictionaries/DictionariesModule';
 import { GeoPointService } from './services/GeoPointService';
 import { SearchEmployeeProfileService } from './services/SearchEmployeeProfileService';
+import { DateRangeEntity } from './model/DateRangeEntity';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
             EmployeeProfileEntity,
+            DateRangeEntity
         ]),
 
         AuthModule,

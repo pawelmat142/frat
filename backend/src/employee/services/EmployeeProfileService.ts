@@ -2,12 +2,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
+import { DateRangeEntity } from 'employee/model/DateRangeEntity';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmployeeProfileForm, EmployeeProfileLocationOptions, EmployeeProfileStatus, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileLocationOptions, EmployeeProfileStatus, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { EPUtil } from './EPUtil';
 import { GeoPointService } from './GeoPointService';
-import { EmployeeProfileParams } from 'employee/model/interface';
+import { DateRangeUtil } from 'employee/utils/DateRangeUtil';
+import { DeepPartial } from 'typeorm';
 
 @Injectable()
 export class EmployeeProfileService {
@@ -60,31 +62,68 @@ export class EmployeeProfileService {
         return result;
     }
 
+
     public async updateEmployeeProfile(user: UserI, form: EmployeeProfileForm): Promise<EmployeeProfileEntity> {
         const profile = await this.prepareProfile(user, form);
 
         return this.employeeProfileRepo.update(profile);
     }
 
-    private async prepareProfile(user: UserI, form: EmployeeProfileForm): Promise<EmployeeProfileParams> {
+    private async prepareProfile(user: UserI, form: EmployeeProfileForm): Promise<DeepPartial<EmployeeProfileEntity>> {
         const status = this.getProfileStatus(user, form);
-        let profile: EmployeeProfileParams = EPUtil.buildEmployeeProfileFromForm(user, form, status)
 
-        if (profile.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
-            profile.locationCountries = await this.geoPointService.getCountriesInRadius(
+        const result: DeepPartial<EmployeeProfileEntity> = {
+            employeeProfileId: 0,
+            uid: user.uid,
+            status: status,
+            displayName: user.displayName,
+            email: user.email,
+
+            firstName: form.firstName,
+            lastName: form.lastName,
+            residenceCountry: form.residenceCountry,
+
+            skills: form.skills || [],
+            certificates: form.certificates || [],
+            communicationLanguages: form.communicationLanguages || [],
+
+            locationOption: form.locationOption,
+        };
+
+        await this.fillLocationData(result, form);
+        this.fillAvailabilityData(result, form);
+
+        EPUtil.validateProfile(result);
+        return result;
+    }
+
+    private fillAvailabilityData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileForm): void {
+        if (result.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES) {
+            result.dateRanges = form.availabilityDateRanges.map(range => {
+                const entity = new DateRangeEntity();
+                entity.dateRange = DateRangeUtil.formatDateRangeForDb(range);
+                return entity;
+            });
+        } else {
+            delete result.dateRanges
+        }
+    }
+
+    private async fillLocationData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileForm): Promise<void> {
+        EPUtil.fillLocationData(result, form)
+
+        if (result.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
+            result.locationCountries = await this.geoPointService.getCountriesInRadius(
                 form.locationDistancePosition!.lat,
                 form.locationDistancePosition!.lng,
                 form.locationDistanceRadius || 0
             );
         } else {
-            delete profile.point;
-            delete profile.pointRadius;
-            delete profile.address;
+            delete result.point;
+            delete result.pointRadius;
+            delete result.address;
         }
-        EPUtil.validateProfile(profile);
-        return profile;
     }
-
 
     private getProfileStatus(user: UserI, form: EmployeeProfileForm): EmployeeProfileStatus {
         // TODO

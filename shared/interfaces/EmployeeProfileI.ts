@@ -24,6 +24,10 @@ export interface EmployeeProfileI {
     pointRadius?: number; // [km]
     address?: string; // derived field for distance location option
 
+    // availability dates
+    availabilityOption: EmployeeProfileAvailabilityOption;
+    availabilityDateRanges?: DateRange[];
+
     createdAt: Date;
 }
 
@@ -41,6 +45,13 @@ export const EmployeeProfileLocationOptions = {
 } as const;
 export type EmployeeProfileLocationOption = typeof EmployeeProfileLocationOptions[keyof typeof EmployeeProfileLocationOptions];
 
+
+export const EmployeeProfileAvailabilityOptions = {
+  ANYTIME: 'ANYTIME',
+  DATE_RANGES: 'DATE_RANGES',
+}
+export type EmployeeProfileAvailabilityOption = typeof EmployeeProfileAvailabilityOptions[keyof typeof EmployeeProfileAvailabilityOptions];
+
 export interface EmployeeProfileForm {
   firstName: string;
   lastName: string;
@@ -50,13 +61,22 @@ export interface EmployeeProfileForm {
   skills?: string[];
   certificates?: string[];
 
+  // LOCATION
   locationOption: EmployeeProfileLocationOption;
-
-  // IF SELECTED_COUNTRIES_EUROPE
+  // if SELECTED_COUNTRIES_EUROPE
   locationCountries?: string[];
-  // IF DISTANCE
+  // if DISTANCE
   locationDistancePosition?: Position;
   locationDistanceRadius?: number; // [km]
+
+  // AVAILABILITY DATES
+  availabilityOption: EmployeeProfileAvailabilityOption;
+  availabilityDateRanges?: DateRange[];
+}
+
+export interface DateRange {
+  start: string; // ISO date string
+  end: string;   // ISO date string
 }
 
 export interface EmployeeProfileSearchForm {

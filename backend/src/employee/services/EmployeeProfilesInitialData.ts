@@ -1,8 +1,25 @@
-import { EmployeeProfileI, EmployeeProfileLocationOptions, EmployeeProfileStatuses } from "@shared/interfaces/EmployeeProfileI";
-    
-export const EmoployeeProfilesInitialData: EmployeeProfileI[] = [
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileLocationOptions, EmployeeProfileStatuses } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
+import { DeepPartial } from "typeorm";
+
+// Algorytm: rozrzucenie dat po pierwszych 7 dniach kolejnych 24 miesięcy od dziś
+function getRandomizedCreatedAt(idx: number): Date {
+    const now = new Date();
+    const baseMonth = now.getMonth();
+    const baseYear = now.getFullYear();
+    // Rozłóż po 24 miesiącach, po kolei, z losowym dniem 1-7
+    const monthOffset = idx % 24;
+    const year = baseYear + Math.floor((baseMonth + monthOffset) / 12);
+    const month = (baseMonth + monthOffset) % 12;
+    const day = 1 + Math.floor(Math.random() * 7); // 1-7
+    return new Date(year, month, day, 8, 0, 0, 0); // 8:00 rano
+}
+
+// TODO sprawdzic uzupelnianie sie pol od distance i selected country
+
+export const EmoployeeProfilesInitialData: DeepPartial<EmployeeProfileEntity>[] = [
     {
-        uid: 'user1',
+        uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
         displayName: 'John Doe',
         email: 'john.doe@example.com',
         firstName: 'John',
@@ -12,12 +29,13 @@ export const EmoployeeProfilesInitialData: EmployeeProfileI[] = [
         locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
         status: EmployeeProfileStatuses.ACTIVE,
         employeeProfileId: 0,
-        createdAt: new Date(),
+        createdAt: getRandomizedCreatedAt(0),
         skills: ['ONE', 'TWO'],
         certificates: ['THREE', 'FOUR'],
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
     },
     {
-        uid: 'user2',
+        uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
         displayName: 'Anna Schmidt',
         email: 'anna.schmidt@example.com',
         firstName: 'Anna',
@@ -25,14 +43,17 @@ export const EmoployeeProfilesInitialData: EmployeeProfileI[] = [
         residenceCountry: 'pl',
         communicationLanguages: ['pl', 'en'],
         locationOption: EmployeeProfileLocationOptions.DISTANCE,
+        point: { type: 'Point', coordinates: [21.0122, 52.2297] }, // Warsaw
+        pointRadius: 150,
         status: EmployeeProfileStatuses.ACTIVE,
         employeeProfileId: 1,
-        createdAt: new Date(),
+        createdAt: getRandomizedCreatedAt(1),
         skills: ['THREE', 'FOUR'],
         certificates: ['ONE', 'TWO'],
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
     },
     {
-        uid: 'user3',
+        uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
         displayName: 'Pierre Martin',
         email: 'pierre.martin@example.com',
         firstName: 'Pierre',
@@ -42,12 +63,13 @@ export const EmoployeeProfilesInitialData: EmployeeProfileI[] = [
         locationOption: EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE,
         status: EmployeeProfileStatuses.ACTIVE,
         employeeProfileId: 2,
-        createdAt: new Date(),
+        createdAt: getRandomizedCreatedAt(2),
         skills: ['FIVE', 'SIX'],
         certificates: ['FIVE', 'SIX'],
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
     },
     {
-        uid: 'user4',
+        uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
         displayName: 'Maria Rossi',
         email: 'maria.rossi@example.com',
         firstName: 'Maria',
@@ -57,12 +79,13 @@ export const EmoployeeProfilesInitialData: EmployeeProfileI[] = [
         locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
         status: EmployeeProfileStatuses.ACTIVE,
         employeeProfileId: 3,
-        createdAt: new Date(),
+        createdAt: getRandomizedCreatedAt(3),
         skills: ['SEVEN', 'ONE'],
         certificates: ['SEVEN', 'ONE'],
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
     },
     {
-        uid: 'user5',
+        uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
         displayName: 'Sofia Nowak',
         email: 'sofia.nowak@example.com',
         firstName: 'Sofia',
@@ -70,14 +93,17 @@ export const EmoployeeProfilesInitialData: EmployeeProfileI[] = [
         residenceCountry: 'pl',
         communicationLanguages: ['pl', 'de'],
         locationOption: EmployeeProfileLocationOptions.DISTANCE,
+        point: { type: 'Point', coordinates: [19.945, 50.0647] }, // Krakow
+        pointRadius: 100,
         status: EmployeeProfileStatuses.ACTIVE,
         employeeProfileId: 4,
-        createdAt: new Date(),
+        createdAt: getRandomizedCreatedAt(4),
         skills: ['TWO', 'THREE'],
         certificates: ['TWO', 'THREE'],
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
     },
     {
-        uid: 'user6',
+        uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
         displayName: 'Lucas Müller',
         email: 'lucas.mueller@example.com',
         firstName: 'Lucas',
@@ -87,12 +113,13 @@ export const EmoployeeProfilesInitialData: EmployeeProfileI[] = [
         locationOption: EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE,
         status: EmployeeProfileStatuses.ACTIVE,
         employeeProfileId: 5,
-        createdAt: new Date(),
+        createdAt: getRandomizedCreatedAt(5),
         skills: ['FOUR', 'FIVE'],
         certificates: ['FOUR', 'FIVE'],
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
     },
     {
-        uid: 'user7',
+        uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
         displayName: 'Elena García',
         email: 'elena.garcia@example.com',
         firstName: 'Elena',
@@ -102,12 +129,13 @@ export const EmoployeeProfilesInitialData: EmployeeProfileI[] = [
         locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
         status: EmployeeProfileStatuses.ACTIVE,
         employeeProfileId: 6,
-        createdAt: new Date(),
+        createdAt: getRandomizedCreatedAt(6),
         skills: ['SIX', 'SEVEN'],
         certificates: ['SIX', 'SEVEN'],
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
     },
     {
-        uid: 'user8',
+        uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
         displayName: 'Marek Novak',
         email: 'marek.novak@example.com',
         firstName: 'Marek',
@@ -115,14 +143,17 @@ export const EmoployeeProfilesInitialData: EmployeeProfileI[] = [
         residenceCountry: 'cz',
         communicationLanguages: ['cs', 'en'],
         locationOption: EmployeeProfileLocationOptions.DISTANCE,
+        point: { type: 'Point', coordinates: [14.4378, 50.0755] }, // Prague
+        pointRadius: 120,
         status: EmployeeProfileStatuses.ACTIVE,
         employeeProfileId: 7,
-        createdAt: new Date(),
+        createdAt: getRandomizedCreatedAt(7),
         skills: ['ONE', 'FIVE'],
         certificates: ['ONE', 'FIVE'],
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
     },
     {
-        uid: 'user9',
+        uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
         displayName: 'Katarzyna Zielinska',
         email: 'katarzyna.zielinska@example.com',
         firstName: 'Katarzyna',
@@ -132,8 +163,9 @@ export const EmoployeeProfilesInitialData: EmployeeProfileI[] = [
         locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
         status: EmployeeProfileStatuses.ACTIVE,
         employeeProfileId: 8,
-        createdAt: new Date(),
+        createdAt: getRandomizedCreatedAt(8),
         skills: ['THREE', 'SEVEN'],
         certificates: ['THREE', 'SEVEN'],
+        availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME as EmployeeProfileLocationOption,
     },
 ]
