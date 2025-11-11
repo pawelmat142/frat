@@ -17,7 +17,6 @@ export class SearchEmployeeProfileService {
     // 3. location filters,
     // sort / waga
     
-    // TODO presentation
     // TODO add date ranges filter
     // 1. front
     // 2. backend 

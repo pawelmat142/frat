@@ -1,7 +1,6 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI"
 import { Util } from "@shared/utils/util";
-import { useState } from "react";
 
 interface Props {
     employeeProfile: EmployeeProfileI,
@@ -9,8 +8,6 @@ interface Props {
 }
 
 const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDictionary }) => {
-
-    const [loading, setLoading] = useState(false);
 
     const srcs = new Set<string>();
     const residenceFlagSrc = languagesDictionary.elements.find(el => el.values.COUNTRY_CODE === employeeProfile.residenceCountry)?.values.SRC;

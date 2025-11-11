@@ -1,8 +1,8 @@
 import { useAuthContext } from "auth/AuthProvider";
 import Button from "global/components/controls/Button";
 import DictionarySelector from "global/components/controls/DictionarySelector";
-import { useEffect, useState } from "react";
-import { Controller, set, useForm } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import Search from '@mui/icons-material/Search'
 import Input from "global/components/controls/Input";
@@ -12,6 +12,7 @@ import { EmployeeProfileI, EmployeeProfileSearchForm } from "@shared/interfaces/
 import EmployeeProfileTile from "employee/components/EmployeeProfileTile";
 import { DictionaryService } from "global/services/DictionaryService";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
+import Loading from "global/components/Loading";
 
 const EmployeeSearchView: React.FC = () => {
 
@@ -26,30 +27,80 @@ const EmployeeSearchView: React.FC = () => {
             communicationLanguages: [],
             locationCountry: null
         }
-    })
+    });
+
+    // Debounced freeText state
+    const [freeTextInput, setFreeTextInput] = useState('');
+    // For aborting previous search requests
+    const abortControllerRef = useRef<AbortController | null>(null);
+
+    // Debounce effect: update RHF value after 500ms
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setValue('freeText', freeTextInput, { shouldValidate: true });
+        }, 500);
+        return () => clearTimeout(handler);
+    }, [freeTextInput, setValue]);
 
     const [loading, setLoading] = useState(false);
     const [locationCountryCode, setLocationCountryCode] = useState<string | null>(null);
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null);
     const [employeeProfiles, setEmployeeProfiles] = useState<EmployeeProfileI[]>([]);
+    const formValues = watch();
+    const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         const initDictionary = async () => {
             setLoading(true);
             const dictionary = await DictionaryService.getDictionary('LANGUAGES');
             setLanguagesDictionary(dictionary);
+            setLoading(false);
         }
         initDictionary();
     }, []);
 
-    const onSubmit = async (form: EmployeeProfileSearchForm) => {
+    useEffect(() => {
+        // If only freeText changed, debounce; else, search natychmiast
+        if (debounceTimer.current) clearTimeout(debounceTimer.current);
+
+        // If freeText changed, debounce search
+        debounceTimer.current = setTimeout(() => {
+            doSearch();
+        }, 500);
+
+        // If any other field than freeText changed, search natychmiast
+        // (But since freeText is debounced, this covers all cases)
+        return () => {
+            if (debounceTimer.current) clearTimeout(debounceTimer.current);
+        };
+    }, [
+        formValues.skills,
+        formValues.certificates,
+        formValues.communicationLanguages,
+        formValues.locationCountry,
+        formValues.locationPosition,
+        freeTextInput
+    ]);
+
+    // Główna funkcja search z obsługą abortowania poprzednich requestów
+    const doSearch = async () => {
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+        }
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
         try {
-            // TODO
             setLoading(true);
-            const result = await EmployeeProfileService.searchEmployeeProfiles(form)
+            const result = await EmployeeProfileService.searchEmployeeProfiles(
+                { ...formValues, freeText: freeTextInput },
+            );
             setEmployeeProfiles(result);
-        } catch (error) {
-            console.error("Error creating employee profile:", error);
+        } catch (error: any) {
+            if (error.name === 'AbortError') {
+                // Request anulowany, nie loguj
+            } else {
+                console.error("Error creating employee profile:", error);
+            }
         } finally {
             setLoading(false);
         }
@@ -60,7 +111,7 @@ const EmployeeSearchView: React.FC = () => {
 
             <div className="max-w-4xl mx-auto">
                 <form
-                    onSubmit={handleSubmit(onSubmit)}
+                    onSubmit={e => { e.preventDefault(); }}
                     noValidate
                     className="flex flex-col gap-4 px-4 py-6 rounded mt-5 md:mt-20  mb-20 border border-color">
 
@@ -72,14 +123,16 @@ const EmployeeSearchView: React.FC = () => {
                     <Controller
                         name="freeText"
                         control={control}
-                        render={({ field }) => <Input
-                            {...field}
-                            value={field.value ?? ''}
-                            label={t("employeeProfile.form.freeText")}
-                            fullWidth
-                            error={formState.errors.freeText}
-                        />
-                        }
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                value={freeTextInput}
+                                onChange={e => setFreeTextInput(e.target.value)}
+                                label={t("employeeProfile.form.freeText")}
+                                fullWidth
+                                error={formState.errors.freeText}
+                            />
+                        )}
                     />
 
                     {/* free text search */}
@@ -190,6 +243,11 @@ const EmployeeSearchView: React.FC = () => {
                         <EmployeeProfileTile key={profile.employeeProfileId} employeeProfile={profile} languagesDictionary={languagesDictionary} />
                     ))}
                 </div>
+
+                {loading && (<div>
+                    <Loading></Loading>
+                </div>)}
+                <div></div>
             </div>
 
         </div>
