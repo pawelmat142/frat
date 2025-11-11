@@ -68,6 +68,14 @@ export interface EmployeeProfileSearchForm {
   
   locationCountry?: string | null;
   locationPosition?: Position;
+
+  skip: number;
+  limit: number;
+}
+
+export interface EmployeeProfileSearchResponse {
+  profiles: EmployeeProfileI[];
+  count: number;
 }
 
 export interface Position {

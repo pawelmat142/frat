@@ -13,11 +13,14 @@ import EmployeeProfileTile from "employee/components/EmployeeProfileTile";
 import { DictionaryService } from "global/services/DictionaryService";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import Loading from "global/components/Loading";
+import { BtnModes } from "global/interface/controls.interface";
 
 const EmployeeSearchView: React.FC = () => {
 
     const { t } = useTranslation();
     const { me } = useAuthContext()
+
+    const itemsPerPage = 5;
 
     const { control, handleSubmit, watch, setValue, reset, formState } = useForm<EmployeeProfileSearchForm>({
         defaultValues: {
@@ -25,7 +28,9 @@ const EmployeeSearchView: React.FC = () => {
             skills: [],
             certificates: [],
             communicationLanguages: [],
-            locationCountry: null
+            locationCountry: null,
+            skip: 0,
+            limit: itemsPerPage,
         }
     });
 
@@ -40,13 +45,17 @@ const EmployeeSearchView: React.FC = () => {
             setValue('freeText', freeTextInput, { shouldValidate: true });
         }, 500);
         return () => clearTimeout(handler);
-    }, [freeTextInput, setValue]);
+    }, [freeTextInput]);
 
     const [loading, setLoading] = useState(false);
     const [locationCountryCode, setLocationCountryCode] = useState<string | null>(null);
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null);
     const [employeeProfiles, setEmployeeProfiles] = useState<EmployeeProfileI[]>([]);
-    const formValues = watch();
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [count, setCount] = useState(0);
+    const totalPages = Math.ceil(count / itemsPerPage);
+
     const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
@@ -58,6 +67,8 @@ const EmployeeSearchView: React.FC = () => {
         }
         initDictionary();
     }, []);
+
+    const formValues = watch();
 
     useEffect(() => {
         // If only freeText changed, debounce; else, search natychmiast
@@ -82,8 +93,18 @@ const EmployeeSearchView: React.FC = () => {
         freeTextInput
     ]);
 
+    const handlePageChange = (newPage: number) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+            setValue('skip', (newPage - 1) * itemsPerPage);
+            doSearch();
+        }
+    };
+
     // Główna funkcja search z obsługą abortowania poprzednich requestów
+
     const doSearch = async () => {
+        const formValues = watch()
         if (abortControllerRef.current) {
             abortControllerRef.current.abort();
         }
@@ -91,10 +112,9 @@ const EmployeeSearchView: React.FC = () => {
         abortControllerRef.current = controller;
         try {
             setLoading(true);
-            const result = await EmployeeProfileService.searchEmployeeProfiles(
-                { ...formValues, freeText: freeTextInput },
-            );
-            setEmployeeProfiles(result);
+            const result = await EmployeeProfileService.searchEmployeeProfiles(formValues)
+            setEmployeeProfiles(result.profiles);
+            setCount(result.count);
         } catch (error: any) {
             if (error.name === 'AbortError') {
                 // Request anulowany, nie loguj
@@ -244,9 +264,29 @@ const EmployeeSearchView: React.FC = () => {
                     ))}
                 </div>
 
-                {loading && (<div>
+                {loading ? (<div>
                     <Loading></Loading>
-                </div>)}
+                </div>) : (
+                    <div className="flex-[2] flex justify-center items-center gap-4 mt-5 mb-10">
+                        <Button
+                            mode={BtnModes.PRIMARY_TXT}
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </Button>
+                        <span className="secondary-text whitespace-nowrap">
+                            Page {currentPage} of {totalPages} ({count} items)
+                        </span>
+                        <Button
+                            mode={BtnModes.PRIMARY_TXT}
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            Next
+                        </Button>
+                    </div>
+                )}
                 <div></div>
             </div>
 

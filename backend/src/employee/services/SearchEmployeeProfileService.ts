@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmployeeProfileI, EmployeeProfileSearchForm, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileI, EmployeeProfileSearchForm, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
 
 @Injectable()
 export class SearchEmployeeProfileService {
@@ -22,23 +22,34 @@ export class SearchEmployeeProfileService {
     // 2. backend 
     // TODO sensowne indexy na searach
 
-    async searchEmployeeProfiles(user: UserI, query: EmployeeProfileSearchForm): Promise<EmployeeProfileI[]> {
+    async searchEmployeeProfiles(user: UserI, query: EmployeeProfileSearchForm): Promise<EmployeeProfileSearchResponse> {
         const queryBuilder = this.employeeProfileRepo.getQueryBuilder()
+
+        // --- Fix: parse arrays from query string if needed ---
+        const parseArray = (val: any): string[] | undefined => {
+            if (Array.isArray(val)) return val;
+            if (typeof val === 'string' && val.length > 0) return val.split(',');
+            return undefined;
+        };
+
+        const skills = parseArray(query.skills);
+        const certificates = parseArray(query.certificates);
+        const communicationLanguages = parseArray(query.communicationLanguages);
 
         let hasFilter = false;
 
         queryBuilder.where('profile.status = :status', { status: EmployeeProfileStatuses.ACTIVE });
-        
-        if (query.communicationLanguages?.length) {
-            queryBuilder.andWhere('profile.communication_languages && :languages', { languages: query.communicationLanguages });
+
+        if (communicationLanguages?.length) {
+            queryBuilder.andWhere('profile.communication_languages && :languages', { languages: communicationLanguages });
             hasFilter = true;
         }
-        if (query.certificates?.length) {
-            queryBuilder.andWhere('profile.certificates && :certificates', { certificates: query.certificates });
+        if (certificates?.length) {
+            queryBuilder.andWhere('profile.certificates && :certificates', { certificates });
             hasFilter = true;
         }
-        if (query.skills?.length) {
-            queryBuilder.andWhere('profile.skills && :skills', { skills: query.skills });
+        if (skills?.length) {
+            queryBuilder.andWhere('profile.skills && :skills', { skills });
             hasFilter = true;
         }
 
@@ -56,14 +67,22 @@ export class SearchEmployeeProfileService {
             hasFilter = true;
         }
 
-        console.log(query)
+        const count = await queryBuilder.getCount();
 
-        // If no filters, return empty array (or all results if desired)
-        if (!hasFilter) {
-            return [];
+        console.log('Count of profiles matching filters:', count);
+
+        // Obsługa paginacji
+        if (query.skip) {
+            queryBuilder.skip(query.skip);
         }
-
+        if (query.limit) {
+            queryBuilder.take(query.limit);
+        }
+        
         const results = await queryBuilder.getMany();
-        return results;
+        return {
+            profiles: results,
+            count
+        };
     }
 }
