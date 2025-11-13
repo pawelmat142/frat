@@ -14,9 +14,19 @@ import { DictionaryService } from "global/services/DictionaryService";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import Loading from "global/components/Loading";
 import { BtnModes } from "global/interface/controls.interface";
+import DateRangeInput from "global/components/controls/DateRangeInput";
 
 const EmployeeSearchView: React.FC = () => {
 
+
+    // TODO szukanie po datach
+    // TODO szukanie po samym start
+    // TODO szukanie po start + end
+    // TODO date testowe dodać do profili
+    // TODO potestować troche
+    // TODO domyslne sortowanie po dacie rozpoczecia
+    // TODO opcje sortowania na widoku
+    // TODO implementacja sortowanie w backendzie
     const { t } = useTranslation();
     const { me } = useAuthContext()
 
@@ -73,12 +83,10 @@ const EmployeeSearchView: React.FC = () => {
     useEffect(() => {
         // If only freeText changed, debounce; else, search natychmiast
         if (debounceTimer.current) clearTimeout(debounceTimer.current);
-
         // If freeText changed, debounce search
         debounceTimer.current = setTimeout(() => {
             doSearch();
         }, 500);
-
         // If any other field than freeText changed, search natychmiast
         // (But since freeText is debounced, this covers all cases)
         return () => {
@@ -90,7 +98,8 @@ const EmployeeSearchView: React.FC = () => {
         formValues.communicationLanguages,
         formValues.locationCountry,
         formValues.locationPosition,
-        freeTextInput
+        freeTextInput,
+        formValues.dateRange,
     ]);
 
     const handlePageChange = (newPage: number) => {
@@ -105,6 +114,7 @@ const EmployeeSearchView: React.FC = () => {
 
     const doSearch = async () => {
         const formValues = watch()
+        console.log(formValues)
         if (abortControllerRef.current) {
             abortControllerRef.current.abort();
         }
@@ -246,6 +256,26 @@ const EmployeeSearchView: React.FC = () => {
                                     onChange={field.onChange}
                                     error={formState?.errors.locationPosition}
                                     initializePositionByCountryCode={locationCountryCode || undefined}
+                                />
+                            )}
+                        />
+
+                    </div>
+
+                    <div className="flex gap-4 items-center">
+                        <Controller
+                            name="dateRange"
+                            control={control}
+                            render={({ field }) => (
+                                <DateRangeInput
+                                    label="TODO date range"
+                                    name="dateRange"
+                                    className="w-full"
+                                    value={field.value}
+                                    onChange={(r) => {
+                                        console.log('Selected date range:', r);
+                                        field.onChange(r)}}
+                                    error={formState?.errors.dateRange?.message}
                                 />
                             )}
                         />

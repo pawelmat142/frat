@@ -26,20 +26,20 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     name,
     className = '',
 }) => {
-    const [startDate, setStartDate] = useState<Date | null>(value ? new Date(value.start) : null);
-    const [endDate, setEndDate] = useState<Date | null>(value ? new Date(value.end) : null);
+    const [startDate, setStartDate] = useState<Date | null>(value?.start ? new Date(value.start) : null);
+    const [endDate, setEndDate] = useState<Date | null>(value?.end ? new Date(value.end) : null);
 
     const handleStartChange = (date: Date | null) => {
         setStartDate(date);
         if (onChange) {
-            onChange(date && endDate ? { start: date, end: endDate } : null);
+            onChange({ start: date, end: endDate });
         }
     };
 
     const handleEndChange = (date: Date | null) => {
         setEndDate(date);
         if (onChange) {
-            onChange(startDate && date ? { start: startDate, end: date } : null);
+            onChange({ start: startDate, end: date });
         }
     };
 

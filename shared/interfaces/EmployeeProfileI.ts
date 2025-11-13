@@ -85,6 +85,8 @@ export interface EmployeeProfileSearchForm {
   locationCountry?: string | null;
   locationPosition?: Position;
 
+  dateRange?: { start?: Date, end?: Date };
+
   skip: number;
   limit: number;
 }
@@ -111,7 +113,7 @@ export interface DateRangeI {
 }
 
 export interface DateRange {
-  start: Date
-  end: Date
+  start?: Date | null
+  end?: Date | null
   id?: number
 }

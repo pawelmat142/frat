@@ -18,7 +18,6 @@ export class SearchEmployeeProfileService {
     // sort / waga
     
     // TODO add date ranges filter
-    // 1. front
     // 2. backend 
     // TODO sensowne indexy na searach
 
