@@ -72,7 +72,7 @@ export interface EmployeeProfileForm {
 
   // AVAILABILITY DATES
   availabilityOption: EmployeeProfileAvailabilityOption;
-  availabilityDateRanges?: DateRangeI[];
+  availabilityDateRanges?: DateRange[];
 }
 
 export interface EmployeeProfileSearchForm {
@@ -106,11 +106,12 @@ export interface Point {
 }
 
 export interface DateRangeI {
-  id?: number;
+  id: number;
   dateRange: string;
 }
 
 export interface DateRange {
   start: Date
   end: Date
+  id?: number
 }

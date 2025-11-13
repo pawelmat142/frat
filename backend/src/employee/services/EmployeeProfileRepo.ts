@@ -24,7 +24,16 @@ export class EmployeeProfileRepo {
 
     public async findByUid(uid: string): Promise<EmployeeProfileEntity | null> {
         const result = await this.employeeProfileRepository.findOne({ where: { uid } });
+        if (result?.availabilityDateRanges) {
+            this.sortRanges([result]);
+        }
         return result;
+    }
+
+    private sortRanges(profiles: EmployeeProfileEntity[]): void {
+        profiles.forEach(profile => {
+            profile.availabilityDateRanges.sort((a, b) => a.id - b.id);
+        });
     }
 
     public async create(newProfile: DeepPartial<EmployeeProfileEntity>): Promise<EmployeeProfileEntity> {
@@ -176,6 +185,8 @@ export class EmployeeProfileRepo {
                     dr.id = (r as any).id;
                 }
                 dr.dateRange = r.dateRange as string;
+                // set tables relation
+                dr.employeeProfile = { employeeProfileId: profile.employeeProfileId } as EmployeeProfileEntity;
                 normalizedRanges.push(dr);
             }
             profile.availabilityDateRanges = normalizedRanges;

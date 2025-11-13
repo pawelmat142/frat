@@ -8,7 +8,7 @@ import React from "react";
 import CommunicationLanguagesSection from "../components/CommunicationLanguagesSection";
 import EmployeeLocationSection from "../components/EmployeeLocationSection";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
 import { toast } from "react-toastify";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import Loading from "global/components/Loading";
@@ -17,6 +17,7 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
 import { useNavigate } from "react-router-dom";
 import EmployeeProfileDates from "employee/components/EmployeeProfileDates";
+import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 
 const EmployeeProfileFormView: React.FC = () => {
 
@@ -55,6 +56,10 @@ const EmployeeProfileFormView: React.FC = () => {
                     address: employeeProfile.address
                 };
             }
+            const availabilityDateRanges: DateRange[] = (employeeProfile.availabilityDateRanges || [])
+                .map(r => DateRangeUtil.toDateRange(r))
+                .filter((r): r is DateRange => r != null);
+
             reset({
                 firstName: employeeProfile.firstName || "",
                 lastName: employeeProfile.lastName || "",
@@ -67,7 +72,7 @@ const EmployeeProfileFormView: React.FC = () => {
                 locationDistancePosition,
                 locationDistanceRadius: employeeProfile.pointRadius ?? NaN,
                 availabilityOption: employeeProfile.availabilityOption || EmployeeProfileAvailabilityOptions.ANYTIME,
-                availabilityDateRanges: employeeProfile.availabilityDateRanges || []
+                availabilityDateRanges: availabilityDateRanges
             });
         }
     }, [employeeProfile, reset]);
@@ -82,7 +87,7 @@ const EmployeeProfileFormView: React.FC = () => {
     };
 
     const onSubmit = async (form: EmployeeProfileForm) => {
-
+        console.log(form)
         if (employeeProfile) {
             await updateEmployeeProfile(form);
             return;
@@ -115,12 +120,6 @@ const EmployeeProfileFormView: React.FC = () => {
         }
     }
 
-    // TODO date periods 
-
-    // TODO remove
-    const formValues = watch();
-    console.log(formValues)
-
     if (loading) {
         return <Loading></Loading>
     }
@@ -129,7 +128,10 @@ const EmployeeProfileFormView: React.FC = () => {
         <div className="w-full px-5 py-3 relative">
 
             <form
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit, errors => {
+                    console.log("Form errors", errors);
+                    toast.error("error")//todo translation
+                })}
                 noValidate
                 className="flex flex-col gap-4 px-4 py-6 rounded mt-5 md:mt-20 max-w-xl mx-auto mb-20 border border-color">
 
@@ -245,7 +247,6 @@ const EmployeeProfileFormView: React.FC = () => {
                         watch={watch}
                         formState={formState}
                     />
-
 
                 </div>
 

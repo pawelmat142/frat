@@ -42,7 +42,7 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
 
 
   
-  
+  // DICTIONARY FIELDS
   @Column({ name: 'skills', type: 'text', array: true })
   skills: string[];
   
@@ -54,13 +54,13 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   communicationLanguages: string[];
 
 
+  // LOCATION FIELDS
   @Column({ name: 'location_option' })
   locationOption: EmployeeProfileLocationOption;
 
   @Column({ name: 'location_countries', type: 'text', array: true, nullable: true })
   locationCountries?: string[];
 
-  
   @Column({
     type: 'geography',
     spatialFeatureType: 'Point',
@@ -81,7 +81,8 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Expose()
   @Column({ name: 'availability_option' })
   availabilityOption: EmployeeProfileAvailabilityOption;
-
+  
+  @Expose()
   @OneToMany(
     () => DateRangeEntity,
     (range) => range.employeeProfile,

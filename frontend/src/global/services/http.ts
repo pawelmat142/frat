@@ -56,12 +56,11 @@ export class HttpClient {
       error => {
         if (error.response?.data instanceof Blob) {
           this.handleFileError(error);
-          return Promise.resolve(null)
+          return Promise.reject(error); // zawsze propaguj błąd po handleFileError
         } else {
           this.handleError(error);
+          return Promise.reject(error); // jeśli handleError nie zwrócił nic, propaguj oryginalny błąd
         }
-        return Promise.resolve()
-        // return Promise.reject(error);
       }
     );
   }
@@ -146,18 +145,18 @@ export class HttpClient {
         case MyHttpCode.SWW: //599
           this.handleSWW(error);
           break;
-        case MyHttpCode.POPUP_ERROR: //462
+          case MyHttpCode.POPUP_ERROR: //462
           this.handlePopupException(error);
           break;
 
-        case 401: // Unauthorized
+          case 401: // Unauthorized
           FirebaseAuth.getAuth().signOut();
           toast.warn(String(t('authError.sessionExpired')));
           if (this.navigate) {
             this.navigate(Path.SIGN_IN);
           }
           break;
-        default:
+          default:
           this.handleSWW(error);
       }
     } else {

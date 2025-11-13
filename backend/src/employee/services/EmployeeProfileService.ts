@@ -8,6 +8,7 @@ import { ToastException } from 'global/exceptions/ToastException';
 import { EPUtil } from './EPUtil';
 import { GeoPointService } from './GeoPointService';
 import { DeepPartial } from 'typeorm';
+import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 
 @Injectable()
 export class EmployeeProfileService {
@@ -60,10 +61,8 @@ export class EmployeeProfileService {
         return result;
     }
 
-
     public async updateEmployeeProfile(user: UserI, form: EmployeeProfileForm): Promise<EmployeeProfileEntity> {
         const profile = await this.prepareProfile(user, form);
-
         return this.employeeProfileRepo.update(profile);
     }
 
@@ -99,7 +98,7 @@ export class EmployeeProfileService {
 
     private fillAvailabilityData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileForm): void {
         if (result.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES) {
-            result.availabilityDateRanges = form.availabilityDateRanges
+            result.availabilityDateRanges = form.availabilityDateRanges.map(dateRange => DateRangeUtil.fromDateRange([], dateRange));
         } else {
             delete result.availabilityDateRanges
         }
