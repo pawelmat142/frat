@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmployeeProfileAvailabilityOptions, EmployeeProfileLocationOptions, EmployeeProfileSearchForm, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileSearchForm, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { SelectQueryBuilder } from 'typeorm';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
@@ -74,6 +74,17 @@ export class SearchEmployeeProfileService {
         const count = await queryBuilder.getCount();
 
         console.log('Count of profiles matching filters:', count);
+
+        // Sortowanie: najpierw profile z datami (rosnąco po najwcześniejszej dacie), potem bez dat
+        // Używamy subquery do obliczenia najwcześniejszej daty
+        queryBuilder
+            .addSelect((subQuery) => {
+                return subQuery
+                    .select('MIN(lower(dr.date_range))', 'earliest')
+                    .from('jh_employee_profile_availability_date_ranges', 'dr')
+                    .where('dr.employee_profile_id = profile.employee_profile_id');
+            }, 'earliest_date')
+            .orderBy('earliest_date', 'ASC', 'NULLS LAST');
 
         // Obsługa paginacji
         if (query.skip) {
