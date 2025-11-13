@@ -18,10 +18,11 @@ import DateRangeInput from "global/components/controls/DateRangeInput";
 
 const EmployeeSearchView: React.FC = () => {
 
-    // TODO szukanie po samym start
     // TODO domyslne sortowanie po dacie rozpoczecia
     // TODO opcje sortowania na widoku
     // TODO implementacja sortowanie w backendzie
+
+    
     // TODO http://localhost:3000/admin-panel/employee-profiles - dodać kolumny z datami /opcjami dostępności
     // TODO prezentacja employee profile - card? + daty
     // TODO prezentacja zakresów dat

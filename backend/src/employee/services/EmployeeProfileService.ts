@@ -99,6 +99,14 @@ export class EmployeeProfileService {
     private fillAvailabilityData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileForm): void {
         if (result.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES) {
             result.availabilityDateRanges = form.availabilityDateRanges.map(dateRange => DateRangeUtil.fromDateRange([], dateRange));
+        } if (result.availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE) {
+            const rangeInput = form.availabilityDateRanges[0];
+            if (!rangeInput) {
+                // TODO translation
+                throw new ToastException("Missing start date!", this);
+            }
+            result.availabilityDateRanges = [DateRangeUtil.fromDateRange([], rangeInput)];
+
         } else {
             delete result.availabilityDateRanges
         }

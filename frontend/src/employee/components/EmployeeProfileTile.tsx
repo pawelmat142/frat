@@ -1,7 +1,7 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { EmployeeProfileAvailabilityOptions, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI"
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
-import { Util } from "@shared/utils/util";
+import { isOneOf, Util } from "@shared/utils/util";
 
 interface Props {
     employeeProfile: EmployeeProfileI,
@@ -69,7 +69,10 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
 
                     <div className="">
                         {employeeProfile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font">Available anytime</span>}
-                        {employeeProfile.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES && <span className="small-font">Available on from {getAvailableFromDate()}</span>}
+                        {isOneOf([
+                            EmployeeProfileAvailabilityOptions.DATE_RANGES, 
+                            EmployeeProfileAvailabilityOptions.FROM_DATE
+                            ], employeeProfile.availabilityOption) && <span className="small-font">Available on from {getAvailableFromDate()}</span>}
                     </div>
                 </div>
 

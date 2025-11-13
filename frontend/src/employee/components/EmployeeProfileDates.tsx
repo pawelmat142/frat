@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
+import DateInput from "global/components/controls/DateInput";
 
 interface Props {
     control: Control<EmployeeProfileForm>;
@@ -28,17 +29,31 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
         return {
             start: new Date(),
             end,
+            id: DateRangeUtil.newId(availabilityDateRanges)
         }
     }
 
     useEffect(() => {
         if (
             availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES &&
-            (!availabilityDateRanges?.length)
+            (!availabilityDateRanges?.length)   
         ) {
             const ranges = getDefaultDateRange()
             if (ranges) {
                 setValue("availabilityDateRanges", [ranges]);
+            }
+        }
+        if (availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE) {
+            if (availabilityDateRanges.length) {
+                setValue("availabilityDateRanges", [{ 
+                    start: availabilityDateRanges[0]?.start || new Date(),
+                    id: availabilityDateRanges[0]?.id || DateRangeUtil.newId(availabilityDateRanges)
+                 }]);
+            } else {
+                setValue("availabilityDateRanges", [{ 
+                    start: new Date(),
+                    id: DateRangeUtil.newId(availabilityDateRanges)
+                 }]);
             }
         }
     }, [availabilityOption]);
@@ -73,9 +88,14 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
     const required = FormValidator.required(t);
 
     const tabOptions: TabSwitcherOption[] = [
+        // TODO translations
         {
             label: "Od zaraz",
             code: EmployeeProfileAvailabilityOptions.ANYTIME,
+        },
+        {
+            label: "Od dnia",
+            code: EmployeeProfileAvailabilityOptions.FROM_DATE,
         },
         {
             label: "Wybrane terminy",
@@ -83,12 +103,8 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
         },
     ];
 
-    console.log('availabilityDateRanges', availabilityDateRanges);
-
     const removeDateRange = (id?: number) => {
         const ranges = availabilityDateRanges?.filter((r, i) => r && r.id !== id);
-        console.log('ranges');
-        console.log(ranges);
         setValue("availabilityDateRanges", (ranges || []).filter(Boolean));
     }
 
@@ -111,6 +127,35 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
                     {availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && (
                         <div className="text-center mb-10">
                             Szukam pracy od zaraz
+                        </div>
+                    )}
+                    {availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE && (
+                        <div className="text-center mb-10">
+                            Szukam pracy od dnia:
+
+                            <Controller
+                                name={`availabilityDateRanges.0` as const}
+                                control={control}
+                                rules={required}
+                                render={({ field }) => {
+                                    // Extract string message for this specific range error (RHF stores errors by index/key)
+                                    const fieldError = (formState?.errors?.availabilityDateRanges as any)?.[0];
+                                    const errorMessage = fieldError?.message as string | undefined;
+                                    return (
+                                        <DateInput
+                                            className="w-full mt-5"
+                                            value={ field.value?.start || new Date() }
+                                            onChange={(date) => {
+                                                if (date) {
+                                                    field.onChange({ ...field.value, start: date })
+                                                }
+                                            }}
+                                            name={field.name}
+                                            error={errorMessage? { message: errorMessage } : undefined}
+                                        />
+                                    )
+                                }}
+                            />
                         </div>
                     )}
                     {availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES && (

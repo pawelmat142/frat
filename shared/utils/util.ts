@@ -38,4 +38,10 @@ export abstract class Util {
         }
         return userI.roles.some(role => allowedRoles.includes(role));
     }
+
+    
+}
+
+export const isOneOf = (list: any[], item: any): boolean => {
+    return list.includes(item);
 }

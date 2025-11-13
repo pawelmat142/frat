@@ -49,6 +49,7 @@ export type EmployeeProfileLocationOption = typeof EmployeeProfileLocationOption
 
 export const EmployeeProfileAvailabilityOptions = {
   ANYTIME: 'ANYTIME',
+  FROM_DATE: 'FROM_DATE',
   DATE_RANGES: 'DATE_RANGES',
 } as const;
 export type EmployeeProfileAvailabilityOption = typeof EmployeeProfileAvailabilityOptions[keyof typeof EmployeeProfileAvailabilityOptions];

@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmployeeProfileSearchForm, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileLocationOptions, EmployeeProfileSearchForm, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { SelectQueryBuilder } from 'typeorm';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
@@ -94,13 +94,31 @@ export class SearchEmployeeProfileService {
         // Date range filter - use already joined ranges
         if (query.dateRange?.start && query.dateRange?.end) {
             queryBuilder.andWhere(`(
-                profile.availability_option = 'ANYTIME'
+                profile.availability_option = '${EmployeeProfileAvailabilityOptions.ANYTIME}'
                 OR ranges.date_range @> daterange(:startDate, :endDate, '[]')
+                OR (
+                    profile.availability_option = '${EmployeeProfileAvailabilityOptions.FROM_DATE}'
+                    AND lower(ranges.date_range) <= :startDate::date
+                )
             )`, {
                 startDate: DateRangeUtil.displayLocalDate(query.dateRange.start),
                 endDate: DateRangeUtil.displayLocalDate(query.dateRange.end)
             });
             hasFilter = true;
+        } else if (query.dateRange?.start) {
+            // znajdz profile, gdzie start miesci sie w którymś z przedziałów tego profilu 
+            queryBuilder.andWhere(`(
+                profile.availability_option = '${EmployeeProfileAvailabilityOptions.ANYTIME}'
+                OR ranges.date_range @> :startDate::date
+                OR (
+                    profile.availability_option = '${EmployeeProfileAvailabilityOptions.FROM_DATE}'
+                    AND lower(ranges.date_range) <= :startDate::date
+                )
+            )`, {
+                startDate: DateRangeUtil.displayLocalDate(query.dateRange.start)
+            });
+            hasFilter = true;
         }
+
     }
 }
