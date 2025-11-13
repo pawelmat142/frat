@@ -158,3 +158,19 @@ $padding: 1rem;
 $padding2x: 2rem;
 $padding4x: 4rem;
 $paddingSmall: .5rem;
+
+.small-font {
+  font-size: $smallFont;
+}
+
+.btn-font {
+  font-size: $btnFont;
+}
+
+.l-font {
+  font-size: $lFont;
+}
+
+.xl-font {
+  font-size: $xlFont;
+}

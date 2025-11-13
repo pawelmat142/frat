@@ -5,8 +5,8 @@ import { ObjUtil } from "@shared/utils/ObjUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
 import { ToastException } from "global/exceptions/ToastException";
 import { DeepPartial, FindManyOptions, Repository, SelectQueryBuilder } from "typeorm";
-import { EmoployeeProfilesInitialData } from "./EmployeeProfilesInitialData";
 import { DateRangeEntity } from "employee/model/DateRangeEntity";
+import { EmployeeProfilesInitialData } from "./EmployeeProfilesInitialData";
 
 @Injectable()
 export class EmployeeProfileRepo {
@@ -78,7 +78,7 @@ export class EmployeeProfileRepo {
 
 
     public async initialLoad(): Promise<void> {
-        const profiles = EmoployeeProfilesInitialData
+        const profiles = EmployeeProfilesInitialData()
         await this.employeeProfileRepository.save(profiles);
     }
 

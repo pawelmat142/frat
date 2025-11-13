@@ -18,13 +18,13 @@ import DateRangeInput from "global/components/controls/DateRangeInput";
 
 const EmployeeSearchView: React.FC = () => {
 
-
     // TODO szukanie po samym start
-    // TODO date testowe dodać do profili
-    // TODO potestować szukanie profilu z kilkoma zakresami
     // TODO domyslne sortowanie po dacie rozpoczecia
     // TODO opcje sortowania na widoku
     // TODO implementacja sortowanie w backendzie
+    // TODO http://localhost:3000/admin-panel/employee-profiles - dodać kolumny z datami /opcjami dostępności
+    // TODO prezentacja employee profile - card? + daty
+    // TODO prezentacja zakresów dat
     const { t } = useTranslation();
     const { me } = useAuthContext()
 
@@ -271,7 +271,6 @@ const EmployeeSearchView: React.FC = () => {
                                     className="w-full"
                                     value={field.value}
                                     onChange={(r) => {
-                                        console.log('Selected date range:', r);
                                         field.onChange(r)}}
                                     error={formState?.errors.dateRange?.message}
                                 />

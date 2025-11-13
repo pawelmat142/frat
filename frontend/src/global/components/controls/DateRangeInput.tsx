@@ -5,6 +5,7 @@ import ControlLabel from './ControlLabel';
 import FormError from './FormError';
 import { DateRange } from '@shared/interfaces/EmployeeProfileI';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
+import { DateUtil } from '@shared/utils/DateUtil';
 
 interface DateRangeProps {
     value?: DateRange;
@@ -31,12 +32,27 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     const [endDate, setEndDate] = useState<Date | null>(value?.end || null);
 
     const handleStartChange = (_date: Date | null) => {
-        const date = _date ? DateRangeUtil.newLocalDate(_date) : null;
+        const date = _date ? DateRangeUtil.newLocalDate(_date) : null
+        if (!date) {
+            return
+        }
         setStartDate(date);
         if (onChange) {
-            onChange({ start: date, end: endDate });
+            onChange({ start: date, end: getEndDate(date, endDate) });
         }
     };
+
+    const getEndDate = (startDate: Date, prevEndDate: Date | null): Date | null => {
+        if (!prevEndDate) {
+            return prevEndDate
+        }
+        if (DateUtil.isBefore(prevEndDate, startDate)) {
+            const result = new Date(startDate);
+            result.setDate(result.getDate() + 7);
+            return result;
+        }
+        return prevEndDate;
+    }
     
     const handleEndChange = (_date: Date | null) => {
         const date = _date ? DateRangeUtil.newLocalDate(_date) : null;

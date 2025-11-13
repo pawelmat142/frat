@@ -24,6 +24,7 @@ export class SearchEmployeeProfileService {
 
     async searchEmployeeProfiles(user: UserI, query: EmployeeProfileSearchForm): Promise<EmployeeProfileSearchResponse> {
         const queryBuilder = this.employeeProfileRepo.getQueryBuilder()
+            .leftJoinAndSelect('profile.availabilityDateRanges', 'ranges');
 
         // --- Fix: parse arrays from query string if needed ---
         const parseArray = (val: any): string[] | undefined => {
@@ -90,18 +91,15 @@ export class SearchEmployeeProfileService {
     }
 
     private addDateRangeFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, query: EmployeeProfileSearchForm, hasFilter: boolean) {
-        // Date range filter - JOIN with date_ranges table if needed
+        // Date range filter - use already joined ranges
         if (query.dateRange?.start && query.dateRange?.end) {
-            // LEFT JOIN to include profiles with ANYTIME availability
-            queryBuilder
-                .leftJoin('profile.availabilityDateRanges', 'dateRange')
-                .andWhere(`(
-                    profile.availability_option = 'ANYTIME'
-                    OR dateRange.date_range @> daterange(:startDate, :endDate, '[]')
-                )`, {
-                    startDate: DateRangeUtil.displayLocalDate(query.dateRange.start),
-                    endDate: DateRangeUtil.displayLocalDate(query.dateRange.end)
-                });
+            queryBuilder.andWhere(`(
+                profile.availability_option = 'ANYTIME'
+                OR ranges.date_range @> daterange(:startDate, :endDate, '[]')
+            )`, {
+                startDate: DateRangeUtil.displayLocalDate(query.dateRange.start),
+                endDate: DateRangeUtil.displayLocalDate(query.dateRange.end)
+            });
             hasFilter = true;
         }
     }

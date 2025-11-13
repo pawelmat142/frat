@@ -1,5 +1,6 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
-import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI"
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI"
+import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { Util } from "@shared/utils/util";
 
 interface Props {
@@ -37,6 +38,11 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
 
     const name = prepareName();
 
+    const getAvailableFromDate = (): string => {
+        const range = DateRangeUtil.toDateRange(employeeProfile.availabilityDateRanges![0]);
+        const from = Util.displayDate(range!.start!);
+        return from;
+    }
     return (
         <div className="tile">
 
@@ -58,8 +64,13 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
 
                 </div>
 
-                <div className="tile-content-row mid">
+                <div className="tile-content-row mid items-center">
                     <div className="">{employeeProfile.email}</div>
+
+                    <div className="">
+                        {employeeProfile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font">Available anytime</span>}
+                        {employeeProfile.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES && <span className="small-font">Available on from {getAvailableFromDate()}</span>}
+                    </div>
                 </div>
 
                 <div className="tile-content-row bottom">
