@@ -21,9 +21,14 @@ const EmployeeSearchView: React.FC = () => {
     // TODO opcje sortowania na widoku
     // TODO implementacja sortowanie w backendzie
 
+    // TODO szukanie po krajach, lokacji/odległości
+    // TODO sort / waga
+    // TODO sensowne indexy na searach
+
     // TODO http://localhost:3000/admin-panel/employee-profiles - dodać kolumny z datami /opcjami dostępności
     // TODO prezentacja employee profile - card? + daty
     // TODO prezentacja zakresów dat
+
     const { t } = useTranslation();
     const { me } = useAuthContext()
 

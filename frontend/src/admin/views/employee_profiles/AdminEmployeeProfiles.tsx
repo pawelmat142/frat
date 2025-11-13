@@ -6,11 +6,12 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
 import { Util } from "@shared/utils/util";
-import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdmin.service";
 import SelectedProfile from "./SelectedProfile";
 import { userAdminPanelContext } from "../AdminPanelProvider";
 import Button from "global/components/controls/Button";
+import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 
 const AdminEmployeeProfiles: React.FC = () => {
 
@@ -19,7 +20,8 @@ const AdminEmployeeProfiles: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [selectedEmployeeProfile, setSelectedEmployeeProfile] = useState<EmployeeProfileI | null>(null);
 
-    const { employeeProfiles } = userAdminPanelContext();
+    const adminPanelCtx = userAdminPanelContext();
+    const employeeProfiles = adminPanelCtx?.employeeProfiles;
 
     const confirm = useConfirm();
 
@@ -64,7 +66,7 @@ const AdminEmployeeProfiles: React.FC = () => {
             title: "Are you sure?",
             message: "Are you sure you want to export all employee profiles? This action cannot be undone.",
         })
-        if (!confirmed) return; 
+        if (!confirmed) return;
         try {
             setLoading(true);
             await EmployeeProfilesAdminService.deleteAllProfiles();
@@ -80,7 +82,7 @@ const AdminEmployeeProfiles: React.FC = () => {
             setLoading(true);
             await EmployeeProfilesAdminService.initialLoad();
             await _initEmployeeProfiles();
-        } catch (e) { 
+        } catch (e) {
             console.error(e);
             toast.error('Failed to perform initial load of employee profiles.');
         } finally {
@@ -103,6 +105,19 @@ const AdminEmployeeProfiles: React.FC = () => {
         } catch (e) { } finally {
             setLoading(false);
         }
+    }
+
+    const getStartDate = (profile: EmployeeProfileI): string => {
+        const rangeI = profile.availabilityDateRanges?.[0];
+        if (!rangeI) {
+            return ''
+        }
+
+        const range = DateRangeUtil.toDateRange(rangeI);
+        if (!range?.start) {
+            return '';
+        }
+        return Util.displayDate(range.start)
     }
 
     return (
@@ -137,6 +152,7 @@ const AdminEmployeeProfiles: React.FC = () => {
                                 <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">status</th>
                                 <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">display name</th>
                                 <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">locationOption</th>
+                                <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">availabilityFrom</th>
                                 <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">createdAt</th>
                                 <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text"></th>
                             </tr>
@@ -160,6 +176,10 @@ const AdminEmployeeProfiles: React.FC = () => {
                                             <td className="px-6 py-3 border-b border-color primary-text">{profile.status}</td>
                                             <td className="px-6 py-3 border-b border-color primary-text">{profile.displayName}</td>
                                             <td className="px-6 py-3 border-b border-color primary-text">{profile.locationOption}</td>
+                                            <td className="px-6 py-3 border-b border-color primary-text">{profile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME
+                                                ? EmployeeProfileAvailabilityOptions.ANYTIME
+                                                : getStartDate(profile)}
+                                            </td>
                                             <td className="px-6 py-3 border-b border-color primary-text">{Util.displayDate(profile.createdAt)}</td>
 
                                             <td className="px-6 py-3 border-b border-color primary-text">

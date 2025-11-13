@@ -5,6 +5,7 @@ import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdm
 import { userAdminPanelContext } from "../AdminPanelProvider";
 import Loading from "global/components/Loading";
 import { BtnModes } from "global/interface/controls.interface";
+import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 
 interface SelectedProfileProps {
   profile: EmployeeProfileI | null;
@@ -13,10 +14,11 @@ interface SelectedProfileProps {
 const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileProps) => {
   const { profile } = props;
 
-  const { employeeProfiles } = userAdminPanelContext();
+  const adminPanelCtx = userAdminPanelContext();
+  const employeeProfiles = adminPanelCtx?.employeeProfiles;
 
   const [localProfile, setLocalProfile] = useState<EmployeeProfileI | null>(profile);
-  const [ loading, setLoading ] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLocalProfile(profile);
@@ -44,6 +46,17 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
     }
   };
 
+  const getActvationButton = () => {
+    return (
+      <Button
+        onClick={handleActivation}
+        mode={BtnModes.PRIMARY_TXT}
+      >
+        {isActive ? 'Deactivate' : 'Activate'}
+      </Button>
+    )
+  }
+
   if (loading) {
     return <Loading></Loading>
   }
@@ -52,12 +65,7 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
     <div className="w-full max-w-3xl mx-auto mt-10 mb-10 border border-color rounded-lg secondary-bg shadow p-5">
       <div className="flex justify-between items-center mb-6">
         <h3 className="h2 pl-2 primary-text">Employee Profile #{localProfile.employeeProfileId}</h3>
-        <Button
-          onClick={handleActivation}
-          mode={BtnModes.PRIMARY_TXT}
-        >
-          {isActive ? 'Deactivate' : 'Activate'}
-        </Button>
+        {!!adminPanelCtx && getActvationButton()}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-6 pb-6">
         <div className="flex flex-col gap-2">
@@ -76,9 +84,29 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
           <div><span className="font-semibold secondary-text">Location Option:</span> <span className="primary-text">{localProfile.locationOption}</span></div>
           <div><span className="font-semibold secondary-text">Location Countries:</span> <span className="primary-text">{localProfile.locationCountries?.join(", ") || '-'}</span></div>
           <div><span className="font-semibold secondary-text">Address:</span> <span className="primary-text">{localProfile.address || '-'}</span></div>
-          <div><span className="font-semibold secondary-text">Point Radius:</span> <span className="primary-text">{localProfile.pointRadius ?? '-'}</span></div>
+          <div><span className="font-semibold secondary-text">Point Radius:</span> <span className="primary-text">{localProfile.pointRadius ?? '-'} km</span></div>
+          <div><span className="font-semibold secondary-text">Availability Option:</span> <span className="primary-text">{localProfile.availabilityOption}</span></div>
         </div>
       </div>
+
+      {localProfile.availabilityDateRanges && localProfile.availabilityDateRanges.length > 0 && (
+        <div className="px-6 pb-4 mt-4">
+          <div className="font-semibold secondary-text mb-2">Availability Date Ranges:</div>
+          <div className="flex flex-col gap-2">
+            {localProfile.availabilityDateRanges.map((range) => {
+              const parsed = DateRangeUtil.toDateRange(range);
+              return (
+                <div key={range.id} className="primary-text text-sm">
+                  • {parsed?.start ? DateRangeUtil.displayLocalDate(parsed.start) : '-'}
+                  {' → '}
+                  {parsed?.end ? DateRangeUtil.displayLocalDate(parsed.end) : 'open-ended'}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       <div className="px-6 pb-4 mt-2 text-xs secondary-text">Created: {localProfile.createdAt ? new Date(localProfile.createdAt).toLocaleString() : '-'}</div>
     </div>
   );

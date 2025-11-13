@@ -102,8 +102,5 @@ export const AdminPanelProvider: React.FC<AdminPanelProviderProps> = ({ children
 
 export const userAdminPanelContext = () => {
     const context = useContext(AdminPanelContext);
-    if (!context) {
-        throw new Error('userAdminPanelContext must be used within AdminPanelProvider');
-    }
     return context;
 }

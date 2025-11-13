@@ -16,11 +16,7 @@ export class SearchEmployeeProfileService {
         private readonly employeeProfileRepo: EmployeeProfileRepo,
     ) { }
 
-    // TODO implement search logic
-    // 3. location filters,
-    // sort / waga
-    
-    // TODO sensowne indexy na searach
+
 
     async searchEmployeeProfiles(user: UserI, query: EmployeeProfileSearchForm): Promise<EmployeeProfileSearchResponse> {
         const queryBuilder = this.employeeProfileRepo.getQueryBuilder()

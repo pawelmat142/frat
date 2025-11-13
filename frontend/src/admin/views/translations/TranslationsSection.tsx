@@ -26,7 +26,8 @@ const TranslationsSection: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchText, setSearchText] = useState('');
     const confirm = useConfirm();
-    const { translation } = userAdminPanelContext();
+    const ctx = userAdminPanelContext();
+    const translation = ctx?.translation;
     
     const itemsPerPage = 15;
 

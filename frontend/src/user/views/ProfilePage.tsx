@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { Path } from "./../../path";
 import { useUserContext } from "user/UserProvider";
+import SelectedProfile from "admin/views/employee_profiles/SelectedProfile";
 
 const ProfilePage: React.FC = () => {
 
@@ -68,7 +69,7 @@ const ProfilePage: React.FC = () => {
     }
 
     return (
-        <div className="flex flex-col gap-6 w-full px-5 pb-20 pt-10 max-w-xl mx-auto">
+        <div className="flex flex-col gap-6 w-full px-5 pb-20 pt-10 max-w-4xl mx-auto">
             {emailNotVerifiedWarning}
             <h2 className="text-2xl font-bold mb-6 primary-text">Profile</h2>
             <div className="rounded-lg shadow border border-color p-6">
@@ -88,22 +89,7 @@ const ProfilePage: React.FC = () => {
                     )}
                 </div>
 
-
-                {/* Employee Profile Section */}
-                {employeeProfile && (
-                    <div className="mt-10">
-                        <h3 className="mb-4 h2">{t('employeeProfile.title')}</h3>
-                        <div className="flex flex-col gap-2">
-                            <div><span>{t('employeeProfile.form.firstName')}:</span> {employeeProfile.firstName}</div>
-                            <div><span>{t('employeeProfile.form.lastName')}:</span> {employeeProfile.lastName}</div>
-                            <div><span>{t('employeeProfile.form.residenceCountry')}:</span> {employeeProfile.residenceCountry}</div>
-                            <div><span>{t('employeeProfile.form.skills')}:</span> {employeeProfile.skills?.join(', ')}</div>
-                            <div><span>{t('employeeProfile.form.certificates')}:</span> {employeeProfile.certificates?.join(', ')}</div>
-                            <div><span>{t('employeeProfile.form.communicationLanguages')}:</span> {employeeProfile.communicationLanguages?.join(', ')}</div>
-                            {/* Add more fields as needed */}
-                        </div>
-                    </div>
-                )}
+                <SelectedProfile profile={employeeProfile} />
 
                 <div className="flex gap-5 mt-10">
                     <Button onClick={() => {

@@ -7,7 +7,7 @@ import TranslationsSection from "./TranslationsSection";
 const AdminTranslations: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
-    const { translation } = userAdminPanelContext();
+    const translation = userAdminPanelContext()?.translation;
 
     const _initTranslations = async () => {
         try {
