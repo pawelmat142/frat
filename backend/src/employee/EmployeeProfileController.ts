@@ -22,6 +22,7 @@ import { EmployeeProfileEntity } from './model/EmployeeProfileEntity';
 import { SearchEmployeeProfileService } from './services/SearchEmployeeProfileService';
 import { RolesGuard } from 'auth/guards/RolesGuard';
 import { Roles } from 'auth/decorators/RolesDecorator';
+import { Public } from 'auth/decorators/PublicDecorator';
 
 @Controller('api/employee-profile')
 @UseInterceptors(LogInterceptor)
@@ -40,7 +41,16 @@ export class EmployeeProfileController {
   ): Promise<EmployeeProfileI> {
     return this.employeeProfileService.getEmployeeProfile(user);
   }
-  
+
+  @Get("/:displayName")
+  @Serialize(EmployeeProfileEntity)
+  @Public()
+  getEmployeeProfileByDisplayName(
+    @Param('displayName') displayName: string
+  ): Promise<EmployeeProfileI> {
+    return this.employeeProfileService.getEmployeeProfileByDisplayName(displayName);
+  }
+
   @Post()
   @UseGuards(JwtAuthGuard)
   @Serialize(EmployeeProfileEntity)
@@ -62,7 +72,7 @@ export class EmployeeProfileController {
   }
 
 
-  @Get("/search")
+  @Get("/search/list")
   @Serialize(EmployeeProfileEntity)
   searchEmployeeProfiles(
     @CurrentUser() user: UserI,
@@ -71,8 +81,10 @@ export class EmployeeProfileController {
     return this.searchEmployeeProfileService.searchEmployeeProfiles(user, query);
   }
 
-  
-  
+
+
+
+
   // ADMIN MANAGEMENT ACTIONS
   @Get("/admin/list")
   @Serialize(EmployeeProfileEntity)
@@ -81,8 +93,8 @@ export class EmployeeProfileController {
   listProfiles(): Promise<EmployeeProfileI[]> {
     return this.employeeProfileService.listProfiles();
   }
-  
-  @Put("/admin/:id/activation/:status") 
+
+  @Put("/admin/:id/activation/:status")
   @Serialize(EmployeeProfileEntity)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
@@ -92,8 +104,8 @@ export class EmployeeProfileController {
   ): Promise<EmployeeProfileI> {
     return this.employeeProfileService.activation(Number(id), status);
   }
-  
-  @Delete("/admin/:id") 
+
+  @Delete("/admin/:id")
   @Serialize(EmployeeProfileEntity)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
@@ -102,16 +114,16 @@ export class EmployeeProfileController {
   ): Promise<void> {
     return this.employeeProfileService.deleteProfile(Number(id));
   }
-  
-  @Delete("/admin") 
+
+  @Delete("/admin")
   @Serialize(EmployeeProfileEntity)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
   deleteAllProfiles(): Promise<void> {
     return this.employeeProfileService.deleteAllProfiles();
   }
-  
-  @Post("/admin/initial-load") 
+
+  @Post("/admin/initial-load")
   @Serialize(EmployeeProfileEntity)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)

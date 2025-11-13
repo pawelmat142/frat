@@ -2,6 +2,8 @@ import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { EmployeeProfileAvailabilityOptions, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI"
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { isOneOf, Util } from "@shared/utils/util";
+import { Path } from "../../path";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
     employeeProfile: EmployeeProfileI,
@@ -10,6 +12,8 @@ interface Props {
 
 const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDictionary }) => {
 
+    const navigate = useNavigate();
+    
     const srcs = new Set<string>();
     const residenceFlagSrc = languagesDictionary.elements.find(el => el.values.COUNTRY_CODE === employeeProfile.residenceCountry)?.values.SRC;
     if (residenceFlagSrc) {
@@ -43,8 +47,14 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
         const from = Util.displayDate(range!.start!);
         return from;
     }
+
+    const goToProfileView = (profile: EmployeeProfileI) => {
+        navigate(Path.getEmployeeProfilePath(profile.displayName!));
+    }
+
+
     return (
-        <div className="tile">
+        <div className="tile clickable" onClick={() => goToProfileView(employeeProfile)}>
 
             <div className="tile-avatar">
 

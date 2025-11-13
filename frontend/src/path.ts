@@ -8,6 +8,7 @@ export abstract class Path {
 
     public static readonly PROFILE = '/profile/:uid';
     public static readonly EMPLOYEE_PROFILE_FORM = '/employee-profile-form';
+    public static readonly EMPLOYEE_PROFILE = '/employee-profile/:displayName';
 
     public static readonly EMPLOYEE_SEARCH = '/employee-search';
     
@@ -31,5 +32,5 @@ export abstract class Path {
     public static getEditDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES_EDIT.replace(':code', code)}`;
     public static getDictionaryGroupFormPath = (dictionaryCode: string, groupCode: string) => `${Path.ADMIN_DICTIONARIES_GROUP.replace(':dictionaryCode', dictionaryCode).replace(':groupCode', groupCode)}`;
     public static getProfilePath = (uid: string) => `${Path.PROFILE.replace(':uid', uid)}`;
-
+    public static getEmployeeProfilePath = (displayName: string) => `${Path.EMPLOYEE_PROFILE.replace(':displayName', displayName)}`;
 }

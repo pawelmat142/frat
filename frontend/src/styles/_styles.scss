@@ -82,6 +82,15 @@
     padding: 1rem;
     box-shadow: $box-shadow;
     margin-bottom: .5rem;
+
+    &.clickable {
+        cursor: pointer;
+        transition: $transition;
+
+        &:hover {
+            background-color: $active-bg;
+        }
+    }
 }
 
 .tile-content-row {

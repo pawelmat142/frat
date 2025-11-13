@@ -30,6 +30,18 @@ export class EmployeeProfileRepo {
         return result;
     }
 
+    public async findByDisplayName(displayName: string): Promise<EmployeeProfileEntity | null> {
+        const result = await this.employeeProfileRepository.findOne({ where: { displayName } });
+        if (!result) {
+            // TODO translation
+            throw new ToastException("Nie znaleziono", this);
+        }
+        if (result?.availabilityDateRanges) {
+            this.sortRanges([result]);
+        }
+        return result;
+    }
+
     private sortRanges(profiles: EmployeeProfileEntity[]): void {
         profiles.forEach(profile => {
             profile.availabilityDateRanges.sort((a, b) => a.id - b.id);

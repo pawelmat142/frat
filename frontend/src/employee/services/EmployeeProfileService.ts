@@ -7,6 +7,10 @@ export const EmployeeProfileService = {
 		return httpClient.get<EmployeeProfileI>(`/employee-profile`);
 	},
 
+	getEmployeeProfileByDisplayName(displayName: string): Promise<EmployeeProfileI | null> {
+		return httpClient.get<EmployeeProfileI>(`/employee-profile/${displayName}`);
+	},
+
 	createEmployeeProfile(form: EmployeeProfileForm): Promise<EmployeeProfileI> {
 		return httpClient.post<EmployeeProfileI>(`/employee-profile`, form);
 	},
@@ -16,7 +20,7 @@ export const EmployeeProfileService = {
 	},
 
 	searchEmployeeProfiles(params: EmployeeProfileSearchForm): Promise<EmployeeProfileSearchResponse> {
-		return httpClient.get<EmployeeProfileSearchResponse>(`/employee-profile/search`, { params });
+		return httpClient.get<EmployeeProfileSearchResponse>(`/employee-profile/search/list`, { params });
 	},
 
 };

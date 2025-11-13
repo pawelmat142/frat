@@ -18,6 +18,7 @@ import { DictionaryValidators } from "@shared/validators/DictionaryValidators";
 import { DictionaryColumnTypes, DictionaryI, DictionaryElement, DictionaryStatuses, DictionaryColumnType } from "@shared/interfaces/DictionaryI";
 import { BtnModes, BtnSizes, SelectorItem } from "global/interface/controls.interface";
 import { useTranslation } from "react-i18next";
+import BackBtn from "global/components/controls/BackBtn";
 
 interface ColumnForm {
   code: string;
@@ -197,15 +198,10 @@ const AddDictionaryView: React.FC = () => {
     return <Loading></Loading>
   }
 
-  const goBack = () => {
-    navigate(-1)
-  }
 
   return (
     <div className="w-full px-5 py-3">
-      <Button onClick={() => goBack()} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple mb-2">
-        ← Back
-      </Button>
+      <BackBtn />
       <form className="flex flex-col gap-4 p-4 rounded mt-10 max-w-xl mx-auto mb-20" onSubmit={handleSubmit}>
         <h2 className="text-lg font-bold">{isEditMode ? "Edit dictionary" : "Add Dictionary"}</h2>
         <div className="flex flex-col gap-3">

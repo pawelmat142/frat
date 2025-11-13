@@ -50,6 +50,10 @@ export class EmployeeProfileService {
         return this.employeeProfileRepo.findByUid(user.uid);
     }
 
+    public getEmployeeProfileByDisplayName(displayName: string): Promise<EmployeeProfileEntity | null> {
+        return this.employeeProfileRepo.findByDisplayName(displayName);
+    }
+
     public async createEmployeeProfile(user: UserI, form: EmployeeProfileForm): Promise<EmployeeProfileEntity> {
         const exists = await this.employeeProfileRepo.findByUid(user.uid);
         if (exists) {
