@@ -2,7 +2,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmployeeProfileI, EmployeeProfileSearchForm, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileSearchForm, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
+import { SelectQueryBuilder } from 'typeorm';
+import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
 
 @Injectable()
 export class SearchEmployeeProfileService {
@@ -17,8 +20,6 @@ export class SearchEmployeeProfileService {
     // 3. location filters,
     // sort / waga
     
-    // TODO add date ranges filter
-    // 2. backend 
     // TODO sensowne indexy na searach
 
     async searchEmployeeProfiles(user: UserI, query: EmployeeProfileSearchForm): Promise<EmployeeProfileSearchResponse> {
@@ -37,7 +38,10 @@ export class SearchEmployeeProfileService {
 
         let hasFilter = false;
 
+        // Base condition - only ACTIVE profiles
         queryBuilder.where('profile.status = :status', { status: EmployeeProfileStatuses.ACTIVE });
+
+        this.addDateRangeFilter(queryBuilder, query, hasFilter);
 
         if (communicationLanguages?.length) {
             queryBuilder.andWhere('profile.communication_languages && :languages', { languages: communicationLanguages });
@@ -83,5 +87,22 @@ export class SearchEmployeeProfileService {
             profiles: results,
             count
         };
+    }
+
+    private addDateRangeFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, query: EmployeeProfileSearchForm, hasFilter: boolean) {
+        // Date range filter - JOIN with date_ranges table if needed
+        if (query.dateRange?.start && query.dateRange?.end) {
+            // LEFT JOIN to include profiles with ANYTIME availability
+            queryBuilder
+                .leftJoin('profile.availabilityDateRanges', 'dateRange')
+                .andWhere(`(
+                    profile.availability_option = 'ANYTIME'
+                    OR dateRange.date_range @> daterange(:startDate, :endDate, '[]')
+                )`, {
+                    startDate: DateRangeUtil.displayLocalDate(query.dateRange.start),
+                    endDate: DateRangeUtil.displayLocalDate(query.dateRange.end)
+                });
+            hasFilter = true;
+        }
     }
 }

@@ -2,7 +2,10 @@ import { DateRange, DateRangeI } from "@shared/interfaces/EmployeeProfileI";
 
 export abstract class DateRangeUtil {
 
-    public static formatDateRangeForDb(dateRange: { start: string, end: string }): string {
+    public static formatDateRangeForDb(dateRange: { start: string, end?: string }): string {
+        if (!dateRange.end) {
+            return `[${dateRange.start},)`; // Open-ended range (no upper bound)
+        }
         return `[${dateRange.start},${dateRange.end}]`;
     }
 
@@ -41,20 +44,20 @@ export abstract class DateRangeUtil {
     }
 
     public static fromDateRange = (ranges: DateRangeI[], dateRange?: DateRange | null): DateRangeI | null => {
-        if (!dateRange) {
+        if (!dateRange?.start) {
             return null;
         }
         return {
             id: dateRange?.id || this.newId(ranges),
             dateRange: this.formatDateRangeForDb({
                 start: DateRangeUtil.displayLocalDate(dateRange.start),
-                end: DateRangeUtil.displayLocalDate(dateRange.end),
+                end: dateRange.end ? DateRangeUtil.displayLocalDate(dateRange.end) : undefined,
             }),
         }
     }
 
     public static displayLocalDate = (date: Date): string => {
-        return new Date(date).toISOString().split('T')[0];
+        return DateRangeUtil.newLocalDate(date).toISOString().split('T')[0];
     }
 
     public static newId = (dateRanges: (DateRangeI | DateRange)[]): number => {
@@ -67,7 +70,7 @@ export abstract class DateRangeUtil {
         return maxId + 1;
     }
 
-    public static newLocalDate = (input?: Date): Date => {
+    public static newLocalDate = (input?: Date | null): Date => {
         const date = input ? new Date(input) : new Date();
         // Construct a date at 00:00:00 UTC (not local time)
         return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));

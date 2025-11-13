@@ -4,6 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ControlLabel from './ControlLabel';
 import FormError from './FormError';
 import { DateRange } from '@shared/interfaces/EmployeeProfileI';
+import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 
 interface DateRangeProps {
     value?: DateRange;
@@ -26,17 +27,19 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     name,
     className = '',
 }) => {
-    const [startDate, setStartDate] = useState<Date | null>(value?.start ? new Date(value.start) : null);
-    const [endDate, setEndDate] = useState<Date | null>(value?.end ? new Date(value.end) : null);
+    const [startDate, setStartDate] = useState<Date | null>(value?.start || null);
+    const [endDate, setEndDate] = useState<Date | null>(value?.end || null);
 
-    const handleStartChange = (date: Date | null) => {
+    const handleStartChange = (_date: Date | null) => {
+        const date = _date ? DateRangeUtil.newLocalDate(_date) : null;
         setStartDate(date);
         if (onChange) {
             onChange({ start: date, end: endDate });
         }
     };
-
-    const handleEndChange = (date: Date | null) => {
+    
+    const handleEndChange = (_date: Date | null) => {
+        const date = _date ? DateRangeUtil.newLocalDate(_date) : null;
         setEndDate(date);
         if (onChange) {
             onChange({ start: startDate, end: date });
