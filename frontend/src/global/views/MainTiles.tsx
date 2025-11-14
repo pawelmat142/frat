@@ -6,6 +6,11 @@ import { useUserContext } from 'user/UserProvider';
 import { useAuthContext } from 'auth/AuthProvider';
 import { AuthService } from 'auth/services/AuthService';
 import { useTheme } from "../providers/ThemeProvider";
+import { SelectorItem } from '../interface/controls.interface';
+import { useBottomSheet } from 'global/providers/BottomSheetProvider';
+import { useTranslation } from 'react-i18next';
+import LangSelectTile from 'global/components/tiles/LangSelectTile';
+import ThemeSelectTile from 'global/components/tiles/ThemeSelectTile';
 
 const MainTiles: React.FC = () => {
 
@@ -13,12 +18,13 @@ const MainTiles: React.FC = () => {
 
     {/* todo translations */ }
 
-    const navigate = useNavigate();
+    // TODO desktop version 
+    // TODO zamykanie bottom sheeta nawigacja
 
+    const navigate = useNavigate();
+    const { t } = useTranslation();
     const { me } = useAuthContext()
     const { employeeProfile } = useUserContext();
-    const { theme, toggleTheme } = useTheme();
-    const isDarkMode = theme === "dark";
 
     return (
         <div>
@@ -75,22 +81,9 @@ const MainTiles: React.FC = () => {
                     {/* TODO settings view */}
                 </div>)}
 
-                <div className="sec-tile-wrapper">
-                    <div className="square-tile">
-                        <FaLanguage size={iconSize} />
-                    </div>
-                    <div className="sec-tile-label">Język</div>
-                    {/* TODO MODAL?  */}
-                </div>
+                <LangSelectTile iconSize={iconSize} />
 
-                <div className="sec-tile-wrapper" onClick={() => {toggleTheme()}}>
-                    <div className="square-tile">
-                        {isDarkMode
-                            ? <FaSun size={iconSize} />
-                            : <FaMoon size={iconSize} />}
-                    </div>
-                    <div className="sec-tile-label">Motyw</div>
-                </div>
+                <ThemeSelectTile iconSize={iconSize}></ThemeSelectTile>
 
                 {!!me && (<div className="sec-tile-wrapper" onClick={() => AuthService.logout()}>
                     <div className="square-tile">
@@ -100,6 +93,7 @@ const MainTiles: React.FC = () => {
                 </div>)}
 
             </div>
+
         </div>
 
     );

@@ -116,4 +116,5 @@ export interface SelectorItem<T extends SelectorValue = SelectorValue> {
     value: T;
     icon?: React.ReactNode;
     src?: string;
+    onClick?: () => void;
 }
