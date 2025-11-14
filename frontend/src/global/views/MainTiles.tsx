@@ -1,13 +1,10 @@
-import { FaSearch, FaBriefcase, FaUserPlus, FaUser, FaPlus, FaCog, FaLanguage, FaMoon, FaSun, FaListUl, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaSearch, FaBriefcase, FaUserPlus, FaUser, FaPlus, FaCog, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../path"
 import { toast } from 'react-toastify';
 import { useUserContext } from 'user/UserProvider';
 import { useAuthContext } from 'auth/AuthProvider';
 import { AuthService } from 'auth/services/AuthService';
-import { useTheme } from "../providers/ThemeProvider";
-import { SelectorItem } from '../interface/controls.interface';
-import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import { useTranslation } from 'react-i18next';
 import LangSelectTile from 'global/components/tiles/LangSelectTile';
 import ThemeSelectTile from 'global/components/tiles/ThemeSelectTile';

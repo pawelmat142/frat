@@ -204,3 +204,28 @@
         text-align: center;
     }
 }
+
+
+// FORMS
+.form-view {
+    padding: 1.5rem;
+    width: 100%;
+    max-width: $tablet;
+}
+
+
+.tiles-center-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .3rem;
+    width: 7rem;
+  }
+}

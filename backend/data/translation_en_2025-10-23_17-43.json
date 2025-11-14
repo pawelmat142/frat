@@ -31,7 +31,6 @@
       "success": "Successfully signed in!",
       "password": "Password",
       "signingIn": "Signing in...",
-      "signUpForm": "Sign Up by Email form",
       "forgotPassword": "Forgot Password?",
       "googleProvider": "Sign In with Google",
       "forgotPasswordSuccess": "If the email exists, a reset link has been sent."

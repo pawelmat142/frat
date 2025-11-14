@@ -10,8 +10,9 @@ import { Utils } from "global/utils";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../path";
 import Loading from "global/components/Loading";
-import GoogleIcon from '@mui/icons-material/Google';
-import Email from '@mui/icons-material/Email';
+import Logo from "global/components/Logo";
+import { FaPlus } from "react-icons/fa";
+import GoogleIcon from "global/components/icons/GoogleIcon";
 
 const SignInPage: React.FC = () => {
     const { t } = useTranslation();
@@ -58,11 +59,18 @@ const SignInPage: React.FC = () => {
             <Loading></Loading>
         )
     }
+    // <form className="flex flex-col gap-4 px-4 py-6 rounded mt-5 md:mt-20 max-w-xl mx-auto mb-20 border border-color" onSubmit={handleSubmit}>
+    const iconSize = 42
 
     return (
-        <div className="w-full px-5 py-3 relative">
-            <form className="flex flex-col gap-4 px-4 py-6 rounded mt-5 md:mt-20 max-w-xl mx-auto mb-20 border border-color" onSubmit={handleSubmit}>
-                <div className="flex items-center justify-between mb-4">
+        <div className="form-view relative">
+
+            <div className="mt-10 mb-10 mx-auto flex justify-center">
+                <Logo />
+            </div>
+
+            <form className="" onSubmit={handleSubmit}>
+                <div className="flex items-center justify-between mb-10">
                     <h2 className="text-lg font-bold">{t("signin.title")}</h2>
 
                     {isDevMode && (
@@ -71,7 +79,7 @@ const SignInPage: React.FC = () => {
                         </Button>)}
 
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-7">
                     <Input
                         name="email"
                         label={t("signin.email")}
@@ -92,54 +100,59 @@ const SignInPage: React.FC = () => {
                     />
                 </div>
 
-                <div className="buttons">
-                    <Button
-                        mode={BtnModes.SECONDARY_TXT}
-                        size={BtnSizes.SMALL}
-                        className="ml-auto mb-10"
-                        onClick={() => {
-                            navigate(Path.FORGOT_PASSWORD);
-                        }}
-                    >
-                        {t("signin.forgotPassword")}
-                    </Button>
+                <Button
+                    mode={BtnModes.SECONDARY_TXT}
+                    size={BtnSizes.SMALL}
+                    className="ml-auto mb-10 secondary-text"
+                    onClick={() => {
+                        navigate(Path.FORGOT_PASSWORD);
+                    }}
+                >
+                    {t("signin.forgotPassword")}
+                </Button>
 
-                    <Button
-                        mode={BtnModes.PRIMARY}
-                        size={BtnSizes.LARGE}
-                        fullWidth={true}
-                        className="mt-5"
-                        type="submit"
-                        disabled={loading || !email || !password}
-                    >
-                        {loading ? t("signin.signingIn") : t("signin.submit")}
-                    </Button>
+                <Button
+                    mode={BtnModes.PRIMARY}
+                    size={BtnSizes.LARGE}
+                    fullWidth={true}
+                    className="mt-5"
+                    type="submit"
+                    disabled={loading || !email || !password}
+                >
+                    {loading ? t("signin.signingIn") : t("signin.submit")}
+                </Button>
 
-                    <Button
-                        mode={BtnModes.SECONDARY}
-                        size={BtnSizes.LARGE}
-                        fullWidth={true}
-                        className="mt-5"
-                        onClick={handleGoogleSignIn}
-                    >
-                        <GoogleIcon />
-                        {t("signin.googleProvider")}
-                    </Button>
-
-                    <Button
-                        mode={BtnModes.PRIMARY_TXT}
-                        fullWidth={true}
-                        className="mt-5"
-                        onClick={() => {
-                            navigate(Path.SIGN_UP);
-                        }}
-                    >
-                        <Email />
-                        {t("signin.signUpForm")}
-                    </Button>
-
-                </div>
             </form>
+
+            {/* TODO */}
+            <div className="text-center mt-10 mb-4">
+                - Or sign in with -
+            </div>
+
+            <div className="tiles-center-wrapper pb-5">
+
+
+                <div className="tile col-tile" onClick={() => handleGoogleSignIn()}>
+                    <GoogleIcon size={iconSize} />
+                    <div>Google</div>
+                </div>
+
+                <div className="tile col-tile">
+                    <FaPlus size={iconSize} />
+                    <div>TODO</div>
+                </div>
+
+            </div>
+
+            <div className="flex items-center mx-auto w-full justify-center mt-10 mb-10" onClick={() => {
+                navigate(Path.SIGN_UP);
+            }}>
+                {/* TODO translation */}
+                <span className="">Don't have an account?</span>
+                <Button mode={BtnModes.PRIMARY_TXT} fullWidth={false} >
+                    Sign Up
+                </Button>
+            </div>
         </div>
     );
 };

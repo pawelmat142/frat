@@ -2,6 +2,7 @@ import { ChangeEventHandler, forwardRef } from 'react';
 import { InputInterface } from '../../interface/controls.interface';
 import ControlLabel from './ControlLabel';
 import FormError from './FormError';
+import { useIsMobile } from 'global/hooks/isMobile';
 
 const Input = forwardRef<HTMLInputElement, InputInterface>(
     ({
@@ -19,6 +20,8 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
         center,
         error
     }, ref) => {
+
+    const mobile = useIsMobile();
 
     let myClass = `pp-control pp-input`;
 
@@ -56,7 +59,9 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
         return (
             <div className={`${className}${center ? ' mx-auto' : ''}`}>
 
-                <ControlLabel id={id} label={label} required={required} />
+                {!mobile && (
+                    <ControlLabel id={id} label={label} required={required} />
+                )}
                 
                 <div>
                     <input
@@ -70,6 +75,7 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
                         disabled={disabled}
                         required={required}
                         autoComplete={autoComplete}
+                        placeholder={!!mobile ? label : undefined}
                     />
                 </div>
 

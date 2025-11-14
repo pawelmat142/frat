@@ -1,10 +1,19 @@
 import { BtnInterface, BtnModes, BtnSizes } from '../../interface/controls.interface';
 import { Link } from 'react-router-dom';
 import { MouseEventHandler } from 'react';
+import { isOneOf } from '@shared/utils/util';
 
 const Button: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, size=BtnSizes.MEDIUM, children, fullWidth=false, className, disabled, onlyMobile, onlyDesktop, mode=BtnModes.PRIMARY }) => {
 
-    let myClass = `rounded-md flex justify-center shadow-sm btn-font btn ${mode} ripple ${size}`;
+    let myClass = ` flex justify-center btn-font btn ${mode} ripple ${size}`;
+
+    if (!isOneOf([
+        BtnModes.ERROR_TXT,
+        BtnModes.SECONDARY_TXT,
+        BtnModes.PRIMARY_TXT
+    ], mode)) {
+        myClass += ' shadow-sm rounded-md';
+    }
 
     if (onlyMobile) {
         myClass += ' flex md:hidden';
