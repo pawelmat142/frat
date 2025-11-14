@@ -16,8 +16,6 @@ export class SearchEmployeeProfileService {
         private readonly employeeProfileRepo: EmployeeProfileRepo,
     ) { }
 
-
-
     async searchEmployeeProfiles(user: UserI, query: EmployeeProfileSearchForm): Promise<EmployeeProfileSearchResponse> {
         const queryBuilder = this.employeeProfileRepo.getQueryBuilder()
             .leftJoinAndSelect('profile.availabilityDateRanges', 'ranges');
@@ -69,10 +67,7 @@ export class SearchEmployeeProfileService {
 
         const count = await queryBuilder.getCount();
 
-        console.log('Count of profiles matching filters:', count);
-
-        // Sortowanie: najpierw profile z datami (rosnąco po najwcześniejszej dacie), potem bez dat
-        // Używamy subquery do obliczenia najwcześniejszej daty
+        // Sortowanie: start date rosnąco 
         queryBuilder
             .addSelect((subQuery) => {
                 return subQuery
@@ -81,6 +76,7 @@ export class SearchEmployeeProfileService {
                     .where('dr.employee_profile_id = profile.employee_profile_id');
             }, 'earliest_date')
             .orderBy('earliest_date', 'ASC', 'NULLS LAST');
+
 
         // Obsługa paginacji
         if (query.skip) {
