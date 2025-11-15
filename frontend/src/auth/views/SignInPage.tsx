@@ -25,7 +25,6 @@ const SignInPage: React.FC = () => {
 
     const isDevMode = Utils.isDevMode();
 
-    // Developer autofill button
     const handleDevFill = () => {
         setEmail("pawelmat142@t.pl");
         setPassword("pawelmat142");
@@ -126,9 +125,8 @@ const SignInPage: React.FC = () => {
 
             </form>
 
-            {/* TODO */}
             <div className="text-center mt-10 mb-4">
-                - Or sign in with -
+                {t("signin.orSignInWith")}
             </div>
 
             <div className="tiles-center-wrapper pb-5">
@@ -147,13 +145,13 @@ const SignInPage: React.FC = () => {
 
             </div>
 
-            <div className="flex items-center mx-auto w-full justify-center mt-10 mb-10" onClick={() => {
+            <div className="flex items-center cursor-pointer mx-auto w-full justify-center mt-10 mb-10" onClick={() => {
                 navigate(Path.SIGN_UP);
             }}>
                 {/* TODO translation */}
-                <span className="">Don't have an account?</span>
+                <span className="">{t("signin.noAccount")}</span>
                 <Button mode={BtnModes.PRIMARY_TXT} fullWidth={false} >
-                    Sign Up
+                    {t("signin.signUp")}
                 </Button>
             </div>
         </div>

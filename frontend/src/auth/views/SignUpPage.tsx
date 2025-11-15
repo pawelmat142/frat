@@ -10,6 +10,9 @@ import { Utils } from "global/utils";
 import { useNavigate } from "react-router-dom";
 import { usePopup } from "global/providers/PopupProvider";
 import { Path } from "./../../path";
+import Loading from "global/components/Loading";
+import Logo from "global/components/Logo";
+import IconButton from "global/components/controls/IconButon";
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
@@ -24,7 +27,6 @@ const SignUpPage: React.FC = () => {
 
     const isDevMode = Utils.isDevMode();
 
-    // Developer autofill button
     const handleDevFill = () => {
         setEmail("pawelmat142@t.pl");
         setRepeatEmail("pawelmat142@t.pl");
@@ -58,10 +60,23 @@ const SignUpPage: React.FC = () => {
         }
     };
 
+    if (loading) {
+        return (
+            <Loading></Loading>
+        )
+    }
+
     return (
-        <div className="w-full px-5 py-3 relative">
-            <form className="flex flex-col gap-4 px-4 py-6 rounded mt-5 md:mt-20 max-w-xl mx-auto mb-20 border border-color" onSubmit={handleSubmit}>
-                <div className="flex items-center justify-between mb-4">
+        <div className="form-view relative">
+
+            <div className="mt-10 mb-10 mx-auto flex justify-center">
+                <IconButton onClick={() => { navigate(Path.HOME) }} icon={
+                    <Logo />
+                }></IconButton>
+            </div>
+
+            <form className="" onSubmit={handleSubmit}>
+                <div className="flex items-center justify-between mb-10 md:mb-6">
                     <h2 className="text-lg font-bold">{t("signup.title")}</h2>
 
                     {isDevMode && (
@@ -70,7 +85,7 @@ const SignUpPage: React.FC = () => {
                         </Button>)}
 
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-7 md:gap-5">
                     <Input
                         name="email"
                         label={t("signup.email")}
@@ -90,6 +105,7 @@ const SignUpPage: React.FC = () => {
                         fullWidth
                     />
                     <Input
+                    className="mt-3"
                         name="password"
                         label={t("signup.password")}
                         type="password"
@@ -109,30 +125,28 @@ const SignUpPage: React.FC = () => {
                     />
                 </div>
 
-                <div className="buttons">
-                    <Button
-                        mode={BtnModes.PRIMARY}
-                        size={BtnSizes.LARGE}
-                        fullWidth={true}
-                        className="mt-5"
-                        type="submit"
-                        disabled={loading || !email || !repeatEmail || !password || !repeatPassword}
-                    >
-                        {loading ? t("signup.registering") : t("signup.submit")}
-                    </Button>
+                <Button
+                    mode={BtnModes.PRIMARY}
+                    size={BtnSizes.LARGE}
+                    fullWidth={true}
+                    className="mt-8"
+                    type="submit"
+                    disabled={loading || !email || !repeatEmail || !password || !repeatPassword}
+                >
+                    {loading ? t("signup.registering") : t("signup.submit")}
+                </Button>
 
-                    <Button
-                        mode={BtnModes.PRIMARY_TXT}
-                        fullWidth={true}
-                        className="mt-5"
-                        onClick={() => {
-                            navigate(-1);
-                        }}
-                    >
-                        {t("common.back")}
-                    </Button>
-                </div>
             </form>
+
+            <div className="flex items-center cursor-pointer mx-auto w-full justify-center mt-10 mb-10" onClick={() => {
+                navigate(Path.SIGN_IN);
+            }}>
+                {/* TODO translation */}
+                <span className="">Already have an account?</span>
+                <Button mode={BtnModes.PRIMARY_TXT} fullWidth={false} >
+                    Sign In
+                </Button>
+            </div>
         </div>
     );
 };

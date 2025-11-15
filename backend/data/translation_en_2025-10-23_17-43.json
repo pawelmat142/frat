@@ -3,6 +3,8 @@
   "version": 35,
   "data": {
     "common": {
+      "h1": "Welcome to FRAT",
+      "h2": "A recruitment platform for high-altitude / industrial rope-access workers",
       "ok": "OK",
       "back": "Back",
       "edit": "Edit",
@@ -10,7 +12,21 @@
       "cancel": "Cancel",
       "submit": "Submit",
       "language": "Language",
-      "networkError": "Network error"
+      "networkError": "Network error",
+      "settings": "Settings"
+    },
+    "lang": {
+      "language": "Language",
+      "notDefined": "Language not defined",
+      "changedTo": "Language changed to {{lang}}",
+      "select": "Select Language"
+    },
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "title": "Theme",
+      "select": "Select theme",
+      "changedTo": "Theme changed to {{theme}}"
     },
     "cookies": {
       "title": "Cookie Notice",
@@ -24,6 +40,7 @@
       "profile": "Profile"
     },
     "signin": {
+      "logout": "Log Out",
       "email": "Email",
       "title": "Sign In",
       "submit": "Sign In",
@@ -31,9 +48,11 @@
       "success": "Successfully signed in!",
       "password": "Password",
       "signingIn": "Signing in...",
-      "forgotPassword": "Forgot Password?",
+      "forgotPassword": "Forgot password?",
       "googleProvider": "Sign In with Google",
-      "forgotPasswordSuccess": "If the email exists, a reset link has been sent."
+      "forgotPasswordSuccess": "If the email exists, a reset link has been sent.",
+      "orSignInWith": " - Or sign in with - ",
+      "noAccount": "Don't have an account?"
     },
     "signup": {
       "email": "Email",
@@ -180,6 +199,7 @@
       "exists": "Employee profile already exists for this user",
       "noChanges": "No changes detected in the employee profile",
       "notFound": "Employee profile not found for update",
+      "search": "Search for employees",
       "error": {
         "dataRequired": "Employee profile data is required",
         "uidRequired": "Employee profile uid is required",
@@ -194,9 +214,6 @@
         "locationRadiusRequired": "Location radius is required for distance location option",
         "locationCountryRequired": "At least one location country is required for selected countries location option",
         "locationCountriesMustNotBeSpecified": "Location countries must not be specified for all Europe location option"
-      },
-      "search": {
-        "label": "Search for employees"
       },
       "form": {
         "title": "Employee Profile Form",
@@ -231,6 +248,14 @@
       "title": "Employee Profile",
       "create": "Create an employee profile",
       "submitSuccess": "Employee profile saved successfully."
+    },
+    "offer": {
+      "search": "Offers search",
+      "add": "Add offer"
+    },
+    "profile": {
+      "tile": "Your profile",
+      "add": "Add profile"
     }
   }
 }

@@ -1,7 +1,9 @@
 import { SelectorItem } from "global/interface/controls.interface";
 import { useBottomSheet } from "global/providers/BottomSheetProvider";
 import { useTheme } from "global/providers/ThemeProvider";
+import { useTranslation } from "react-i18next";
 import { FaLanguage, FaMoon, FaSun } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 interface LangSelectTileProps {
     iconSize?: number;
@@ -12,24 +14,25 @@ const ThemeSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
     const { theme, toggleTheme } = useTheme();
     const bottomSheet = useBottomSheet()
     const isDarkMode = theme === "dark";
+    const { t } = useTranslation();
 
-    // TODO translations
     const selectTheme = () => {
         const items: SelectorItem[] = [{
-            label: "Jasny",
+            label: t("theme.light"),
             value: "light",
             icon: <FaSun />
         }, {
-            label: "Ciemny",
+            label: t("theme.dark"),
             value: "dark",
             icon: <FaMoon />
         }]
         bottomSheet.open({
-            title: "Wybierz motyw",
+            title: t("theme.select"),
             selectedValues: [theme],
             items,
             onSelect: (item) => {
                 toggleTheme()
+                toast.success(t('theme.changedTo', { theme: item?.value }));
             }
         })
     }
@@ -42,7 +45,7 @@ const ThemeSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
                     : <FaSun size={iconSize} />
                 }
             </div>
-            <div className="sec-tile-label">Motyw</div>
+            <div className="sec-tile-label">{t("theme.title")}</div>
         </div>
     )
 

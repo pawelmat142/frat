@@ -9,24 +9,21 @@ interface LangSelectTileProps {
 
 const LangSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
 
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
     const langCode = i18n.language;
     const bottomSheet = useBottomSheet()
 
     const setLang = (langCode?: string) => {
         if (!langCode) {
-            throw new Error("Language code is undefined");
+            throw new Error(t('lang.notDefined'));
         }
         i18n.changeLanguage(langCode);
-        // TODO translation
-        toast.success(`Język zmieniony na: ${langCode}`);
-
+        toast.success(t('lang.changedTo', { lang: langCode }));
     };
 
     const selectLanguage = () => {
         bottomSheet.openDictionarySelector({
-            // TODO translation
-            title: i18n.t('common.select_language'),
+            title: i18n.t('lang.select'),
             translateItems: true,
             code: "LANGUAGES",
             groupCode: "TRANSLATIONS",
@@ -42,7 +39,7 @@ const LangSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
             <div className="square-tile">
                 <FaLanguage size={iconSize} />
             </div>
-            <div className="sec-tile-label">Język</div>
+            <div className="sec-tile-label">{t("lang.language")}</div>
         </div>
     )
 

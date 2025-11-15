@@ -3,6 +3,8 @@
   "version": 6,
   "data": {
     "common": {
+      "h1": "Witamy w FRAT",
+      "h2": "Platforma rekrutacyjna dla wysokościowych / pracowników dostępu linowego (rope-access)",
       "ok": "OK",
       "back": "Wstecz",
       "edit": "Edytuj",
@@ -10,7 +12,21 @@
       "cancel": "Anuluj",
       "submit": "Zatwierdź",
       "language": "Język",
-      "networkError": "Błąd sieci"
+      "networkError": "Błąd sieci",
+      "settings": "Ustawienia"
+    },
+    "lang": {
+      "language": "Język",
+      "notDefined": "Język nie został zdefiniowany",
+      "changedTo": "Język zmieniony na {{lang}}",
+      "select": "Wybierz język"
+    },
+    "theme": {
+      "light": "Jasny",
+      "dark": "Ciemny",
+      "title": "Motyw",
+      "select": "Wybierz motyw",
+      "changedTo": "Motyw zmieniony na {{theme}}"
     },
     "cookies": {
       "title": "Informacja o plikach cookie",
@@ -24,6 +40,7 @@
       "profile": "Profil"
     },
     "signin": {
+      "logout": "Wyloguj się",
       "email": "Email",
       "title": "Logowanie",
       "submit": "Zaloguj się",
@@ -34,7 +51,9 @@
       "signUpForm": "Formularz rejestracji przez email",
       "forgotPassword": "Nie pamiętasz hasła?",
       "googleProvider": "Zaloguj przez Google",
-      "forgotPasswordSuccess": "Jeśli email istnieje, wysłano link do resetu hasła."
+      "forgotPasswordSuccess": "Jeśli email istnieje, wysłano link do resetu hasła.",
+      "orSignInWith": " - Lub zaloguj się przez - ",
+      "noAccount": "Nie masz konta?"
     },
     "signup": {
       "email": "Email",
@@ -181,6 +200,7 @@
       "exists": "Profil pracownika już istnieje dla tego użytkownika",
       "noChanges": "Brak wykrytych zmian w profilu pracownika",
       "notFound": "Nie znaleziono profilu pracownika do aktualizacji",
+      "search": "Szukaj pracowników",
       "error": {
         "dataRequired": "Dane profilu pracownika są wymagane",
         "uidRequired": "UID profilu pracownika jest wymagany",
@@ -229,6 +249,14 @@
       "title": "Profil pracownika",
       "create": "Utwórz profil pracownika",
       "submitSuccess": "Profil pracownika zapisany pomyślnie."
+    },
+    "offer": {
+      "search": "Szukaj ofert",
+      "add": "Dodaj ofertę"
+    },
+    "profile": {
+      "tile": "Twój profil",
+      "add": "Dodaj profil"
     }
   }
 }

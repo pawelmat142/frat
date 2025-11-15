@@ -13,8 +13,8 @@ const MainTiles: React.FC = () => {
 
     const iconSize = 42
 
-    {/* todo translations */ }
     // TODO zamykanie bottom sheeta nawigacja
+    // TODO bottom sheet - popup na desktop
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -28,18 +28,18 @@ const MainTiles: React.FC = () => {
                 {!me && (
                     <div className="square-tile col-tile big" onClick={() => navigate(Path.SIGN_IN)}>
                         <FaSignInAlt size={iconSize} />
-                        <div>Zaloguj się</div>
+                        <div>{t("signin.submit")}</div>
                     </div>
                 )}
                 <div className="square-tile col-tile" onClick={() => navigate(Path.EMPLOYEE_SEARCH)}>
                     <FaSearch size={iconSize} />
-                    <div>Szukaj pracowników</div>
+                    <div>{t("employeeProfile.search")}</div>
                 </div>
                 <div className="square-tile col-tile" onClick={() => {
                     toast.info("Funkcja w budowie");
                 }}>
                     <FaBriefcase size={iconSize} />
-                    <div>Przeglądaj oferty</div>
+                    <div>{t("offer.search")}</div>
                 </div>
 
                 {!!me && (
@@ -47,18 +47,18 @@ const MainTiles: React.FC = () => {
                         {employeeProfile ? (
                             <div className="square-tile col-tile" onClick={() => navigate(Path.getEmployeeProfilePath(me!.displayName))}>
                                 <FaUser size={iconSize} />
-                                <div>Twój profil</div>
+                                <div>{t("profile.tile")}</div>
                             </div>
                         ) : (
                             <div className="square-tile col-tile" onClick={() => navigate(Path.EMPLOYEE_PROFILE_FORM)}>
                                 <FaUserPlus size={iconSize} />
-                                <div>Dodaj profil</div>
+                                <div>{t("profile.add")}</div>
                             </div>
                         )}
                         {/* TODO add job offer view */}
                         <div className="square-tile col-tile">
                             <FaPlus size={iconSize} />
-                            <div>Dodaj ofertę</div>
+                            <div>{t("offer.add")}</div>
                         </div>
                     </>
 
@@ -75,7 +75,7 @@ const MainTiles: React.FC = () => {
                     <div className="square-tile">
                         <FaCog size={iconSize} />
                     </div>
-                    <div className="sec-tile-label">Ustawienia</div>
+                    <div className="sec-tile-label">{t("common.settings")}</div>
                     {/* TODO settings view */}
                 </div>)}
 
@@ -87,7 +87,7 @@ const MainTiles: React.FC = () => {
                     <div className="square-tile">
                         <FaSignOutAlt size={iconSize} />
                     </div>
-                    <div className="sec-tile-label">Wyloguj</div>
+                    <div className="sec-tile-label">{t("signin.logout")}</div>
                 </div>)}
 
             </div>
