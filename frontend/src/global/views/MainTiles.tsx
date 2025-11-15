@@ -14,8 +14,6 @@ const MainTiles: React.FC = () => {
     const iconSize = 42
 
     {/* todo translations */ }
-
-    // TODO desktop version 
     // TODO zamykanie bottom sheeta nawigacja
 
     const navigate = useNavigate();
@@ -44,7 +42,6 @@ const MainTiles: React.FC = () => {
                     <div>Przeglądaj oferty</div>
                 </div>
 
-
                 {!!me && (
                     <>
                         {employeeProfile ? (
@@ -70,6 +67,9 @@ const MainTiles: React.FC = () => {
 
 
             <div className='sec-tiles'>
+                {/* offset */}
+                <div className='desktop-flex'></div>
+
                 {!!me && (<div className="sec-tile-wrapper">
                     <div className="square-tile">
                         <FaCog size={iconSize} />
