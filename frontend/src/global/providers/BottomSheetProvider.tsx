@@ -7,14 +7,9 @@ import { Utils } from 'global/utils';
 import { useIsDesktop } from 'global/hooks/isMobile';
 import SelectorItems from 'global/components/selector/SelectorItems';
 
-export interface BottomSheetParams<T extends SelectorValue = SelectorValue> {
+export interface OpenSheetParams {
     title?: string;
-    items: SelectorItem<T>[];
-    multiSelect?: boolean;
-    selectedValues?: T[];
-    translateItems?: boolean
-    onSelect?: (item: SelectorItem<T>) => void;
-    onSelectMulti?: (items: SelectorItem<T>[]) => void;
+    children: React.ReactNode;
 }
 
 export interface BottomSheetDictionaryParams<T extends SelectorValue = SelectorValue> {
@@ -26,11 +21,6 @@ export interface BottomSheetDictionaryParams<T extends SelectorValue = SelectorV
     selectedValues?: T[];
     onSelect?: (item: SelectorItem<T>) => void;
     onSelectMulti?: (items: SelectorItem<T>[]) => void;
-}
-
-export interface OpenSheetParams {
-    title?: string;
-    children: React.ReactNode;
 }
 
 export interface OpenSelectorParams<T extends SelectorValue = SelectorValue> {
@@ -61,6 +51,7 @@ interface BottomSheetContextType {
     close: () => void;
     params: OpenSheetParams | null;
     isOpen: boolean;
+    closing: boolean;
 }
 
 const BottomSheetContext = createContext<BottomSheetContextType | undefined>(undefined);
@@ -68,6 +59,7 @@ const BottomSheetContext = createContext<BottomSheetContextType | undefined>(und
 export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [params, setParams] = useState<OpenSheetParams | null>(null);
+    const [closing, setClosing] = useState(false);
 
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
     const [groupCode, setGroupCode] = useState<string | null>(null);
@@ -75,7 +67,7 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
     const isDesktop = useIsDesktop();
 
-    const open = <T extends SelectorValue = SelectorValue>(newParams: OpenSheetParams) => {
+    const open = (newParams: OpenSheetParams) => {
         if (isDesktop) {
             // TODO popup
             return
@@ -85,9 +77,11 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
     };
 
     const close = () => {
-        setIsOpen(false);
+        setClosing(true);
         setTimeout(() => {
+            setIsOpen(false);
             setParams(null)
+            setClosing(false);
         }, 300); // czekamy na animację zamknięcia
     };
 
@@ -100,7 +94,7 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
                 multiSelect={params.multiSelect}
                 translateItems={params.translateItems}
                 onSelect={(item) => {
-                    close();
+                    close()
                     params.onSelect?.(item)
                 }}
                 onSelectMulti={(items) => {
@@ -139,7 +133,7 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }
 
     return (
-        <BottomSheetContext.Provider value={{ open, close, openDictionarySelector, openSelector, params, isOpen }}>
+        <BottomSheetContext.Provider value={{ open, close, openDictionarySelector, openSelector, params, isOpen, closing }}>
             {params && (
                 <BottomSheet />
             )}

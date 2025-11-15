@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import { useTranslation } from 'react-i18next';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 
 
 const BottomSheet = () => {
 
-    const { t } = useTranslation();
     const ctx = useBottomSheet();
     
     useEffect(() => {
@@ -29,9 +27,9 @@ const BottomSheet = () => {
     if (!ctx.isOpen) return null;
 
     return (
-        <div className="bottom-sheet-backdrop" onClick={handleBackdropClick}>
+        <div className={`bottom-sheet-backdrop${ctx.closing ? ' closing' : ''}`} onClick={handleBackdropClick}>
             <div 
-                className={`bottom-sheet ${ctx.isOpen ? 'bottom-sheet-open' : ''}`}
+                className={`bottom-sheet${ctx.isOpen ? ' open' : ''}${ctx.closing ? ' closing' : ''}`}
             >
                 <div className="bottom-sheet-header">
                     <div className="bottom-sheet-drag-handle" />

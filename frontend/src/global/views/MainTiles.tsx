@@ -13,7 +13,6 @@ const MainTiles: React.FC = () => {
 
     const iconSize = 42
 
-    // TODO zamykanie bottom sheeta animacja
     // TODO bottom sheet - popup na desktop
 
     const navigate = useNavigate();
