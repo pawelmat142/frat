@@ -4,7 +4,6 @@ import Input from "global/components/controls/Input";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import React from "react";
-
 import CommunicationLanguagesSection from "../components/CommunicationLanguagesSection";
 import EmployeeLocationSection from "../components/EmployeeLocationSection";
 import { FormValidator } from "global/FormValidator";
@@ -121,31 +120,27 @@ const EmployeeProfileFormView: React.FC = () => {
     }
 
     if (loading) {
-        return <Loading></Loading>
+        return <Loading />;
     }
 
     return (
-        <div className="w-full px-5 py-3 relative">
-
+        <div className="form-view relative mt-10">
             <form
                 onSubmit={handleSubmit(onSubmit, errors => {
                     console.log("Form errors", errors);
                     toast.error("error")//todo translation
                 })}
                 noValidate
-                className="flex flex-col gap-4 px-4 py-6 rounded mt-5 md:mt-20 max-w-xl mx-auto mb-20 border border-color">
-
-                <div className="flex items-center justify-between mb-4">
+                className=""
+            >
+                <div className="flex items-center justify-between mb-10 md:mb-6">
                     <h2 className="text-lg font-bold">{t("employeeProfile.form.title")}</h2>
-
                     {isDevMode && (
                         <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
                             DEV FILL
                         </Button>)}
                 </div>
-
-                <div className="flex flex-col gap-3">
-
+                <div className="flex flex-col gap-7 md:gap-5">
                     <Controller
                         name="firstName"
                         control={control}
@@ -190,7 +185,6 @@ const EmployeeProfileFormView: React.FC = () => {
                         />
                         }
                     />
-
                     <Controller
                         name="skills"
                         control={control}
@@ -208,7 +202,6 @@ const EmployeeProfileFormView: React.FC = () => {
                         />
                         }
                     />
-
                     <Controller
                         name="certificates"
                         control={control}
@@ -226,35 +219,28 @@ const EmployeeProfileFormView: React.FC = () => {
                         />
                         }
                     />
-
                     <CommunicationLanguagesSection
                         control={control}
                         setValue={setValue}
                         watch={watch}
                         formState={formState}
                     />
-
                     <EmployeeLocationSection
                         control={control}
                         setValue={setValue}
                         watch={watch}
                         formState={formState}
                     />
-
                     <EmployeeProfileDates
                         control={control}
                         setValue={setValue}
                         watch={watch}
                         formState={formState}
                     />
-
                 </div>
-
-                <div className="flex flex-col gap-5 mt-10">
-                    <Button type='submit'>
-                        {employeeProfile ? t('common.save') : t('common.submit')}
-                    </Button>
-                </div>
+                <Button type='submit' className="mt-8" size={BtnSizes.LARGE} mode={BtnModes.PRIMARY} fullWidth>
+                    {employeeProfile ? t('common.save') : t('common.submit')}
+                </Button>
             </form>
         </div>
     );

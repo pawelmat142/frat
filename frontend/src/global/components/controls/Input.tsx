@@ -73,7 +73,7 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
                         disabled={disabled}
                         required={required}
                         autoComplete={autoComplete}
-                        placeholder={label}
+                        placeholder={showLabel ? undefined : label}
                     />
                 </div>
 

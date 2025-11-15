@@ -19,7 +19,8 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
         center = false,
         className = '',
         error,
-        enableSearchText = true
+        enableSearchText = true,
+        showLabel
     }: SelectorInterface<T>,
     ref: React.Ref<HTMLDivElement>
 ) => {
@@ -42,7 +43,7 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
     // Calculate if dropdown should open upward
     useEffect(() => {
         if (!open || !dropdownRef.current || !listRef.current) return;
-        
+
         const dropdownRect = dropdownRef.current.getBoundingClientRect();
         const listHeight = listRef.current.offsetHeight;
         const viewportHeight = window.innerHeight;
@@ -113,8 +114,11 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
             style={{ position: 'relative' }}
             ref={ref || dropdownRef}
         >
-            <ControlLabel id={id} label={label} required={required} />
-            
+
+            {showLabel && (
+                <ControlLabel id={id} label={label} required={required} />
+            )}
+
             <div
                 className={myClass}
                 tabIndex={disabled ? -1 : 0}
@@ -130,7 +134,7 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
                 {!open ? (
                     <span className="dropdown-selected flex items-center gap-2">
                         {value?.src && <span><img className="pp-dropdown-icon" src={value?.src} alt={value?.label} /></span>}
-                        {value?.label || <span className="secondary-text">select...</span>}
+                        {value?.label || <span className="secondary-text">{label}</span>}
                     </span>
                 ) : (
                     enableSearchText ? (
@@ -148,12 +152,12 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
                                 }
                                 e.stopPropagation();
                             }}
-                            placeholder="search..."
+                            placeholder={showLabel ? undefined : label}
                         />
                     ) : (
                         <span className="dropdown-selected flex items-center gap-2">
                             {value?.src && <span><img className="pp-dropdown-icon" src={value?.src} alt={value?.label} /></span>}
-                            {value?.label || <span className="secondary-text">select...</span>}
+                            {value?.label || <span className="secondary-text">{label}</span>}
                         </span>
                     )
                 )}
@@ -161,7 +165,7 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
                 <ArrowIcon open={open} />
 
                 {open && (
-                    <ul 
+                    <ul
                         ref={listRef}
                         className={`pp-dropdown-list${openUpward ? ' pp-dropdown-upward' : ''}`}
                     >
@@ -170,7 +174,7 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
                                 No results found
                             </li>
                         ) : (
-                            (filteredItems as Array<SelectorItem<T> & { disabled?: boolean }> ).map(item => (
+                            (filteredItems as Array<SelectorItem<T> & { disabled?: boolean }>).map(item => (
                                 <li
                                     key={String(item.value)}
                                     className={`dropdown-item${isActive(item) ? ' active' : ''}${item.disabled ? ' disabled' : ''}`}

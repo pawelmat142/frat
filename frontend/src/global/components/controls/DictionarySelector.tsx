@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 interface DictionarySelectorProps<T extends SelectorValue = SelectorValue> extends DictionarySelectorInterface<T> {
     disabledValues?: string[];
     elementLabelTranslationKey?: string
+    showLabel?: boolean
 }
 const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -30,7 +31,8 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         disabledValues = [],
         elementLabelTranslationKey = 'NAME',
         error,
-        enableSearchText = true
+        enableSearchText = true,
+        showLabel
     }: DictionarySelectorProps<T>,
     ref: React.Ref<any>
 ) => {
@@ -100,6 +102,7 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             onSelect={handleSelect}
             error={error}
             enableSearchText={enableSearchText}
+            showLabel={showLabel}
         />;
     }
 
@@ -122,6 +125,7 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             className={className}
             error={error}
             displayElementsAsChips={true}
+            showLabel={showLabel}
         />;
     }
 

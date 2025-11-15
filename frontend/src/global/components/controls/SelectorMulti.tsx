@@ -22,6 +22,7 @@ function SelectorMulti<T extends SelectorValue = SelectorValue>({
     error,
     enableSearchText = true,
     displayElementsAsChips = false,
+    showLabel
 }: SelectorMultiProps<T>) {
 
     const [open, setOpen] = useState(false);
@@ -41,7 +42,7 @@ function SelectorMulti<T extends SelectorValue = SelectorValue>({
     // Calculate if dropdown should open upward
     useEffect(() => {
         if (!open || !dropdownRef.current || !listRef.current) return;
-        
+
         const dropdownRect = dropdownRef.current.getBoundingClientRect();
         const listHeight = listRef.current.offsetHeight;
         const viewportHeight = window.innerHeight;
@@ -113,7 +114,10 @@ function SelectorMulti<T extends SelectorValue = SelectorValue>({
             style={{ position: 'relative' }}
             ref={dropdownRef}
         >
-            <ControlLabel id={id} label={label} required={required} />
+
+            {showLabel && (
+                <ControlLabel id={id} label={label} required={required} />
+            )}
 
             <div
                 className={myClass}
@@ -142,18 +146,20 @@ function SelectorMulti<T extends SelectorValue = SelectorValue>({
                                         {v.label}
                                     </div>
                                 ))
-                                : <span className="secondary-text">select...</span>}
+                                : <span className="secondary-text">{
+                                    showLabel ? undefined : label
+                                }</span>}
                         </div>
                     ) : (
                         Array.isArray(values) && values.length > 0
                             ? values.map(v => v.label).join(', ')
                             : <span className="secondary-text">select...</span>
                     )}
-                    
+
                 </span>
                 <ArrowIcon open={open} />
                 {open && (
-                    <ul 
+                    <ul
                         ref={listRef}
                         className={`pp-dropdown-list${openUpward ? ' pp-dropdown-upward' : ''}`}
                     >
@@ -230,7 +236,7 @@ function SelectorMulti<T extends SelectorValue = SelectorValue>({
             </div>
 
             <FormError error={error}></FormError>
-            
+
         </div>
     );
 };
