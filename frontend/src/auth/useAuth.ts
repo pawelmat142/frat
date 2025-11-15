@@ -64,10 +64,10 @@ export const useAuth = () => {
             }
 
             if (newFirebaseUser) {
-                navigate(Path.getProfilePath(newFirebaseUser.uid), { replace: true });
+                navigate(Path.HOME, { replace: true });
                 toast.success(t('signin.success'));
             } else {
-                navigate(Path.SIGN_IN, { replace: true });
+                navigate(Path.HOME, { replace: true });
                 toast.success(t('signin.signout'));
             }
 		});

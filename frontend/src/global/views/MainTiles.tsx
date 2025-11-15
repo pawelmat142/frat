@@ -66,9 +66,10 @@ const MainTiles: React.FC = () => {
             </div>
 
 
-            <div className='sec-tiles'>
+            <div className='sec-tiles mb-20'>
                 {/* offset */}
                 <div className='desktop-flex'></div>
+                {!me && (<div className=''></div>)}
 
                 {!!me && (<div className="sec-tile-wrapper">
                     <div className="square-tile">

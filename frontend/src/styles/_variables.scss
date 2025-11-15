@@ -144,8 +144,9 @@ textarea::placeholder,
   color: var(--primary-color);
 }
 
-$transition: .15s ease-out all;
-
+.border {
+  border-color: $border-color;
+} 
 
 // FONT
 $btnFont: 1.1rem;

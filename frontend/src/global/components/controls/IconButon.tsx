@@ -12,7 +12,7 @@ export interface IconBtnInterface {
 
 const IconButton: React.FC<IconBtnInterface> = ({ onClick, size = BtnSizes.MEDIUM, icon, className, disabled, mode = BtnModes.PRIMARY }) => {
 
-    let myClass = `rounded-md shadow-sm btn-font icon-btn ripple`;
+    let myClass = `rounded-md shadow-sm btn-font icon-btn ripple p-2`;
 
     if (className) {
         myClass += ` ${className}`;
