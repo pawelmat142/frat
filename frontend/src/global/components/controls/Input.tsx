@@ -2,7 +2,6 @@ import { ChangeEventHandler, forwardRef } from 'react';
 import { InputInterface } from '../../interface/controls.interface';
 import ControlLabel from './ControlLabel';
 import FormError from './FormError';
-import { useIsMobile } from 'global/hooks/isMobile';
 
 const Input = forwardRef<HTMLInputElement, InputInterface>(
     ({
@@ -21,8 +20,6 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
         error,
         showLabel,
     }, ref) => {
-
-    const mobile = useIsMobile();
 
     let myClass = `pp-control pp-input`;
 

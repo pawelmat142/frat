@@ -1,5 +1,5 @@
 import MobileMock from "../../global/components/MobileMock";
-import { useIsMobile } from "../../global/hooks/isMobile";
+import { useIsDesktop } from "../../global/hooks/isMobile";
 import AdminPanelSidebar from "./AdminPanelSidebar";
 import { Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
@@ -17,11 +17,11 @@ const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = 
 );
 
 const AdminPanelPage: React.FC = () => {
-    const mobile = useIsMobile();
+    const isDesktop = useIsDesktop();
     const location = useLocation();
     const direction = location.state?.direction === 'back' ? -1 : 1;
 
-    if (mobile) {
+    if (!isDesktop) {
         return <MobileMock />;
     }
 

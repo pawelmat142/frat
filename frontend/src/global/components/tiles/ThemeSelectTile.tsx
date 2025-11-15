@@ -26,7 +26,7 @@ const ThemeSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
             value: "dark",
             icon: <FaMoon />
         }]
-        bottomSheet.open({
+        bottomSheet.openSelector({
             title: t("theme.select"),
             selectedValues: [theme],
             items,
