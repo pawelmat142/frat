@@ -54,6 +54,7 @@ export interface InputInterface {
     valueType?: DictionaryColumnType,
     error?: { message?: string } | null
     rows?: number; // for textarea
+    showLabel?: boolean;
 }
 
 export interface SelectorInterface<T extends SelectorValue = SelectorValue> {

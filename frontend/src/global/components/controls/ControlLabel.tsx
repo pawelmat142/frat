@@ -11,7 +11,7 @@ const ControlLabel: React.FC<ControlLabelProps> = ({ id, label, required, classN
     if (!label) return null;
     return (
         <label htmlFor={id} className={`flex gap-1 mb-1${className ? ` ${className}` : ''}`}>
-            {required && <span className="error-color">*</span>} {label}
+            {required && <span className="opacity-70 error-color">*</span>} {label}
         </label>
     );
 };

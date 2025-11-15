@@ -18,7 +18,8 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
         autoComplete,
         name,
         center,
-        error
+        error,
+        showLabel,
     }, ref) => {
 
     const mobile = useIsMobile();
@@ -59,7 +60,7 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
         return (
             <div className={`${className}${center ? ' mx-auto' : ''}`}>
 
-                {!mobile && (
+                {showLabel && (
                     <ControlLabel id={id} label={label} required={required} />
                 )}
                 
@@ -75,7 +76,7 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
                         disabled={disabled}
                         required={required}
                         autoComplete={autoComplete}
-                        placeholder={!!mobile ? label : undefined}
+                        placeholder={label}
                     />
                 </div>
 

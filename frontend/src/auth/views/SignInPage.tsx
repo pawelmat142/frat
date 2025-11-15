@@ -13,6 +13,7 @@ import Loading from "global/components/Loading";
 import Logo from "global/components/Logo";
 import { FaPlus } from "react-icons/fa";
 import GoogleIcon from "global/components/icons/GoogleIcon";
+import IconButton from "global/components/controls/IconButon";
 
 const SignInPage: React.FC = () => {
     const { t } = useTranslation();
@@ -59,18 +60,19 @@ const SignInPage: React.FC = () => {
             <Loading></Loading>
         )
     }
-    // <form className="flex flex-col gap-4 px-4 py-6 rounded mt-5 md:mt-20 max-w-xl mx-auto mb-20 border border-color" onSubmit={handleSubmit}>
     const iconSize = 42
 
     return (
         <div className="form-view relative">
 
             <div className="mt-10 mb-10 mx-auto flex justify-center">
-                <Logo />
+                <IconButton onClick={() => { navigate(Path.HOME) }} icon={
+                    <Logo />
+                }></IconButton>
             </div>
 
             <form className="" onSubmit={handleSubmit}>
-                <div className="flex items-center justify-between mb-10">
+                <div className="flex items-center justify-between mb-10 md:mb-6">
                     <h2 className="text-lg font-bold">{t("signin.title")}</h2>
 
                     {isDevMode && (
@@ -79,7 +81,7 @@ const SignInPage: React.FC = () => {
                         </Button>)}
 
                 </div>
-                <div className="flex flex-col gap-7">
+                <div className="flex flex-col gap-7 md:gap-5">
                     <Input
                         name="email"
                         label={t("signin.email")}
@@ -103,7 +105,7 @@ const SignInPage: React.FC = () => {
                 <Button
                     mode={BtnModes.SECONDARY_TXT}
                     size={BtnSizes.SMALL}
-                    className="ml-auto mb-10 secondary-text"
+                    className="ml-auto mb-10 md:mb-5 secondary-text"
                     onClick={() => {
                         navigate(Path.FORGOT_PASSWORD);
                     }}
@@ -131,13 +133,14 @@ const SignInPage: React.FC = () => {
 
             <div className="tiles-center-wrapper pb-5">
 
+                <div></div>
 
-                <div className="tile col-tile" onClick={() => handleGoogleSignIn()}>
+                <div className="square-tile p-5 col-tile" onClick={() => handleGoogleSignIn()}>
                     <GoogleIcon size={iconSize} />
                     <div>Google</div>
                 </div>
 
-                <div className="tile col-tile">
+                <div className="square-tile p-5 col-tile">
                     <FaPlus size={iconSize} />
                     <div>TODO</div>
                 </div>

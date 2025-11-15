@@ -249,22 +249,13 @@ $headerHeight: 60px;
 .form-view {
     padding: 1.5rem;
     width: 100%;
-    max-width: $tablet;
+    max-width: $mobile;
 }
 
 
 .tiles-center-wrapper {
     width: 100%;
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 1rem;
-
-    .tile {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: .3rem;
-        width: 7rem;
-    }
 }
