@@ -1,11 +1,13 @@
+import CloseBtn from 'global/components/CloseBtn';
 import Button from 'global/components/controls/Button';
 import { BtnMode, BtnModes } from 'global/interface/controls.interface';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-
+import { FaTimes } from 'react-icons/fa';
 interface PopupContextType {
   confirm: (options: ConfirmOptions) => Promise<boolean>;
   popup: (config: PopupConfig) => Promise<boolean>;
+  close: () => void;
 }
 
 interface ConfirmOptions {
@@ -17,8 +19,10 @@ interface ConfirmOptions {
 
 export interface PopupConfig {
   title?: string
-  message: string
-  buttons: PopupButtonConfig[]
+  message?: string
+  buttons?: PopupButtonConfig[]
+  children?: ReactNode
+  showClose?: boolean
 }
 export type PopupHandler = (options: PopupConfig) => Promise<boolean>;
 
@@ -26,6 +30,7 @@ interface PopupButtonConfig {
   text: string;
   mode?: BtnMode;
   action?: () => boolean | Promise<boolean>;
+  showClose?: boolean;
 }
 
 const PopupContext = createContext<PopupContextType | undefined>(undefined);
@@ -39,7 +44,7 @@ export const useConfirm = () => {
 export const usePopup = () => {
   const ctx = useContext(PopupContext);
   if (!ctx) throw new Error('usePopup must be used within PopupProvider');
-  return ctx.popup;
+  return ctx;
 };
 
 export const PopupProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -78,7 +83,7 @@ export const PopupProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   return (
-    <PopupContext.Provider value={{ confirm, popup }}>
+    <PopupContext.Provider value={{ confirm, popup, close: () => handleClose(false) }}>
       {children}
       <PopupDialog
         open={state.open}
@@ -101,7 +106,7 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
   const [closing, setClosing] = React.useState(false)
 
   const { t } = useTranslation();
-  
+
   React.useEffect(() => {
     if (open) {
       setVisible(true);
@@ -123,7 +128,7 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
   const btnAction = (btn: PopupButtonConfig) => {
     setShow(false);
     setClosing(true);
-    
+
     if (btn.action) {
       const result = btn.action();
       if (result instanceof Promise) {
@@ -141,17 +146,30 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
       <div
         className={`primary-bg rounded-lg shadow-lg p-6 min-w-[300px] transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
       >
-        {config?.title && <h2 className="text-lg font-semibold mb-5">{t(config.title)}</h2>}
-        <div className="mb-6">{t(config?.message)}</div>
-        <div className="flex justify-end gap-2">
 
-          {config?.buttons.map((btn, idx) => (
-            <Button key={idx} mode={btn.mode} onClick={() => btnAction(btn)}>
-              {t(btn.text)}
-            </Button>
-          ))}
-
+        <div className="flex items-start justify-between mb-5 gap-2">
+          {config?.title && <h2 className="text-lg font-semibold ">{t(config.title)}</h2>}
+          {config?.showClose && (<CloseBtn size={24} onClick={() => {
+            onClose(false)}} />)}
         </div>
+
+        {config?.children ? (
+          config.children
+        ) : (
+          <>
+            <div className="mb-6">{t(config?.message)}</div>
+            <div className="flex justify-end gap-2">
+
+              {config?.buttons?.map((btn, idx) => (
+                <Button key={idx} mode={btn.mode} onClick={() => btnAction(btn)}>
+                  {t(btn.text)}
+                </Button>
+              ))}
+
+            </div>
+          </>
+        )}
+
       </div>
     </div>
   );

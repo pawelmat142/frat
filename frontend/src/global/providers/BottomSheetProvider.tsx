@@ -6,10 +6,12 @@ import { DictionaryService } from 'global/services/DictionaryService';
 import { Utils } from 'global/utils';
 import { useIsDesktop } from 'global/hooks/isMobile';
 import SelectorItems from 'global/components/selector/SelectorItems';
+import { usePopup } from './PopupProvider';
 
 export interface OpenSheetParams {
     title?: string;
     children: React.ReactNode;
+    showClose?: boolean;
 }
 
 export interface BottomSheetDictionaryParams<T extends SelectorValue = SelectorValue> {
@@ -67,9 +69,15 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
     const isDesktop = useIsDesktop();
 
+    const popupCtx = usePopup();
+
     const open = (newParams: OpenSheetParams) => {
         if (isDesktop) {
-            // TODO popup
+            popupCtx.popup({
+                title: newParams.title,
+                children: newParams.children,
+                showClose: newParams.showClose,
+            })
             return
         }
         setParams(newParams);
@@ -78,6 +86,7 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
     const close = () => {
         setClosing(true);
+        popupCtx.close();
         setTimeout(() => {
             setIsOpen(false);
             setParams(null)
@@ -89,6 +98,7 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const openSelector = async <T extends SelectorValue = SelectorValue>(params: OpenSelectorParams<T>) => {
         open({
             title: params.title,
+            showClose: true,
             children: <SelectorItems
                 items={params.items} selectedValues={params.selectedValues}
                 multiSelect={params.multiSelect}
@@ -100,8 +110,6 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
                 onSelectMulti={(items) => {
                     params.onSelectMulti?.(items)
                 }}
-
-
             ></SelectorItems>
         })
     }

@@ -23,7 +23,7 @@ const SignUpPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
-    const popup = usePopup();
+    const popupCtx = usePopup();
 
     const isDevMode = Utils.isDevMode();
 
@@ -46,7 +46,7 @@ const SignUpPage: React.FC = () => {
                 confirmPassword: repeatPassword
             })
 
-            await popup({
+            await popupCtx.popup({
                 title: t("signup.successTitle"),
                 message: t("signup.successMessage"),
                 buttons: [{ text: t("common.ok") }] 

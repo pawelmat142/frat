@@ -13,8 +13,6 @@ const MainTiles: React.FC = () => {
 
     const iconSize = 42
 
-    // TODO bottom sheet - popup na desktop
-
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { me } = useAuthContext()

@@ -43,12 +43,12 @@ const App: React.FC = () => {
     const location = useLocation();
     const direction = location.state?.direction === 'back' ? -1 : 1;
 
-    const popup = usePopup();
+    const popupCtx = usePopup();
     const navigate = useNavigate()
     
     React.useEffect(() => {
-        httpClient.setPopupHandler(popup);
-    }, [popup]);
+        httpClient.setPopupHandler(popupCtx.popup);
+    }, [popupCtx.popup]);
     React.useEffect(() => {
         httpClient.setNavigate(navigate);
     }, [navigate]);
