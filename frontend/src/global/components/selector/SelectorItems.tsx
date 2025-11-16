@@ -1,6 +1,8 @@
-import { SelectorItem, SelectorValue } from "global/interface/controls.interface";
+import { BtnModes, SelectorItem, SelectorValue } from "global/interface/controls.interface";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCheck } from "react-icons/fa";
+import Button from "../controls/Button";
 
 interface Props<T extends SelectorValue = SelectorValue> {
     items: SelectorItem<T>[]
@@ -24,16 +26,26 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     onClean
 }: Props<T>) => {
 
+    // TODO szukajka pole dla multiselect - parametr
     const { t } = useTranslation();
 
-    // TODO multi select mode
+    const [localSelectedValues, setLocalSelectedValues] = useState<T[]>(selectedValues);
+
     const handleItemClick = (item: SelectorItem<T>) => {
         if (multiSelect) {
-            // const isSelected = localSelectedValues.includes(item.value);
-            // const newSelected = isSelected
-            //     ? localSelectedValues.filter(v => v !== item.value)
-            //     : [...localSelectedValues, item.value];
-            // setLocalSelectedValues(newSelected);
+            const newValues = [...localSelectedValues];
+            const isSelected = newValues.includes(item.value);
+
+            if (isSelected) {
+                const index = newValues.indexOf(item.value);
+                if (index > -1) {
+                    newValues.splice(index, 1);
+                }
+            } else {
+                newValues.push(item.value);
+            }
+
+            setLocalSelectedValues(newValues);
         } else {
             onSelect?.(item);
         }
@@ -41,15 +53,20 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
     const handleConfirm = () => {
         if (multiSelect && onSelectMulti) {
-            const selectedItems = items.filter(item => null
-                // localSelectedValues.includes(item.value)
-            );
+            const selectedItems = items.filter(item => localSelectedValues.includes(item.value));
             onSelectMulti(selectedItems);
         }
         onClose?.();
     };
 
-    const isSelected = (value: T) => selectedValues.includes(value);
+    const handleClean = () => {
+        if (onClean) {
+            onClean();
+        }
+        onClose?.();
+    }
+
+    const isSelected = (value: T) => localSelectedValues.includes(value);
 
 
     return (
@@ -81,34 +98,24 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                         )}
                     </div>
                 ))}
-                
+
             </div>
 
-            {onClean && (
-                <div
-                    className="bottom-sheet-item"
-                    onClick={() => {
-                        onClean();
-                    }}
-                >
-                    <div className="bottom-sheet-item-content w-full mx-auto flex justify-center">
-                        <div>
-                            {t("common.cancel")}
-                        </div>
-                    </div>
-                </div>
-            )}
 
-            {multiSelect && (
-                <div className="bottom-sheet-footer">
-                    <button
-                        className="bottom-sheet-confirm-btn"
-                        onClick={handleConfirm}
-                    >
-                        Potwierdź
-                    </button>
-                </div>
-            )}
+            <div className="flex gap-2 bottom-sheet-footer py-3">
+
+                {onClean && (
+                    <Button onClick={handleClean} mode={BtnModes.ERROR_TXT} fullWidth={true}>
+                        {t("common.cancel")}
+                    </Button>
+                )}
+
+                {multiSelect && (
+                    <Button onClick={handleConfirm} mode={BtnModes.PRIMARY_TXT} fullWidth={true}>
+                        {t("common.confirm")}
+                    </Button>
+                )}
+            </div>
         </>
     )
 }

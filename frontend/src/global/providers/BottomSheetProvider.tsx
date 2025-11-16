@@ -110,6 +110,7 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
                     params.onSelect?.(item)
                 }}
                 onSelectMulti={(items) => {
+                    close()
                     params.onSelectMulti?.(items)
                 }}
                 onClean={params.onClean ? () => {

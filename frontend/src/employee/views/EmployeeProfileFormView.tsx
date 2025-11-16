@@ -289,14 +289,6 @@ const EmployeeProfileFormView: React.FC = () => {
                     ))}
                 </div>
 
-                {isDevMode && currentStep === 'step1' && (
-                    <div className="flex items-center justify-end">
-                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
-                            DEV FILL
-                        </Button>
-                    </div>
-                )}
-
                 {renderStep()}
 
                 <div className="flex gap-4 mt-8 mb-10">
@@ -332,7 +324,15 @@ const EmployeeProfileFormView: React.FC = () => {
                             {t("employeeProfile.form.submit")}
                         </Button>
                     )}
+
                 </div>
+                {isDevMode && (
+                    <div className="flex items-center justify-end">
+                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
+                            DEV FILL
+                        </Button>
+                    </div>
+                )}
             </form>
         </div>
     );

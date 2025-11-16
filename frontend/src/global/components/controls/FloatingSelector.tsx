@@ -1,13 +1,11 @@
-import { useState, useRef, useEffect, forwardRef } from 'react';
+import { forwardRef } from 'react';
 import ArrowIcon from './ArrowIcon';
 import FloatingLabel from './FloatingLabel';
 import { SelectorValue, SelectorInterface, SelectorItem } from 'global/interface/controls.interface';
 import FormError from './FormError';
-import { Utils } from 'global/utils';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 
 // TODO popup zamykanie/otwieranie - animacja
-// TODO remove logic of dropdown list
 
 const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -31,14 +29,6 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         throw new Error("onSingleSelect prop is required for single-select dropdowns");
     }
 
-    const [open, setOpen] = useState(false);
-    const [openUpward, setOpenUpward] = useState(false);
-    const [searchText, setSearchText] = useState('');
-    const [isFocused, setIsFocused] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-    const listRef = useRef<HTMLUListElement>(null);
-    const searchInputRef = useRef<HTMLInputElement>(null);
-
     const bottomSheet = useBottomSheet();
 
     let myClass = `pp-control pp-dropdown floating-input`;
@@ -55,91 +45,28 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     }
 
     const hasValue = () => {
-        return value !== null && value !== undefined;
+        return !!value?.value;
     };
-
-    const isLabelFloating = isFocused || hasValue() || open;
-
-    // Calculate if dropdown should open upward
-    useEffect(() => {
-        if (!open || !dropdownRef.current || !listRef.current) return;
-
-        const dropdownRect = dropdownRef.current.getBoundingClientRect();
-        const listHeight = listRef.current.offsetHeight;
-        const viewportHeight = window.innerHeight;
-        const spaceBelow = viewportHeight - dropdownRect.bottom;
-        const spaceAbove = dropdownRect.top;
-
-        setOpenUpward(spaceBelow < listHeight && spaceAbove > spaceBelow);
-    }, [open]);
-
-    // Focus search input when dropdown opens
-    useEffect(() => {
-        if (open && searchInputRef.current) {
-            searchInputRef.current.focus();
-            const length = searchInputRef.current.value.length;
-            searchInputRef.current.setSelectionRange(length, length);
-        }
-    }, [open]);
-
-    // Initialize search text with selected value label when opening
-    useEffect(() => {
-        if (open) {
-            setSearchText(value?.label || '');
-        }
-    }, [open, value?.label]);
-
-    useEffect(() => {
-        if (!open) return;
-        const handleClickOutside = (event: MouseEvent) => {
-            setTimeout(() => {
-                if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                    setOpen(false);
-                    setIsFocused(false);
-                }
-            });
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [open]);
-
+    const isLabelFloating = hasValue();
+    
     const handleSelect = (item: SelectorItem<T>) => {
         if (disabled) return;
         if (item?.value === value?.value) {
             if (!required) {
-                setOpen(false);
-                setSearchText('');
-                setIsFocused(false);
                 onSingleSelect(null);
             }
         } else {
-            setOpen(false);
-            setSearchText('');
-            setIsFocused(false);
             onSingleSelect(item);
         }
     };
 
-    const isActive = (item: SelectorItem<T>) => {
-        return String(item.value) === String(value?.value);
-    };
-
-    const filteredItems = enableSearchText
-        ? items.filter(item => Utils.normalize(item.label).includes(Utils.normalize(searchText)))
-        : items;
-
     const handleOpen = () => {
-        const doOpen = !open;
-        if (doOpen) {
-            openSelectorList();
-        } else {
-            setOpen(doOpen);
-        }
+        openSelectorList();
     }
 
     const openSelectorList = () => {
         bottomSheet.openSelector({
-            items: filteredItems,
+            items: items,
             selectedValues: value ? [value.value] : [],
             title: label || '',
             onSelect: (item) => {
@@ -147,7 +74,6 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             },
             onClean: () => {
                 onSingleSelect(null);
-                setOpen(false);
             },
         })
     }
@@ -156,100 +82,25 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         <div
             className={`floating-input-wrapper ${className || ''}${center ? ' mx-auto' : ''}`}
             style={{ position: 'relative' }}
-            ref={ref || dropdownRef}
         >
             <div className="floating-input-container">
                 <div
                     className={myClass}
                     tabIndex={disabled ? -1 : 0}
                     aria-disabled={disabled}
-                    aria-expanded={open}
                     onClick={() => {
                         if (!disabled) {
                             handleOpen();
-                            setIsFocused(true);
-                        }
-                    }}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={(e) => {
-                        // Only blur if clicking outside completely
-                        if (!dropdownRef.current?.contains(e.relatedTarget as Node)) {
-                            setIsFocused(false);
-                        }
-                    }}
-                    onKeyDown={e => {
-                        if (disabled) return;
-                        if (e.key === 'Enter' || e.key === ' ') setOpen(!open);
-                        if (e.key === 'Escape') {
-                            setOpen(false);
-                            setIsFocused(false);
                         }
                     }}
                 >
-                    {!open ? (
-                        <span className="dropdown-selected flex items-center gap-2">
+
+                         <span className="dropdown-selected flex items-center gap-2">
                             {value?.src && <span><img className="pp-dropdown-icon" src={value?.src} alt={value?.label} /></span>}
                             {value?.label || <span className="opacity-0">placeholder</span>}
                         </span>
-                    ) : (
-                        enableSearchText ? (
-                            <input
-                                ref={searchInputRef}
-                                type="text"
-                                className="w-full bg-transparent outline-none"
-                                value={searchText}
-                                onChange={(e) => setSearchText(e.target.value)}
-                                onClick={(e) => e.stopPropagation()}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Escape') {
-                                        setOpen(false);
-                                        setSearchText('');
-                                        setIsFocused(false);
-                                    }
-                                    e.stopPropagation();
-                                }}
-                            />
-                        ) : (
-                            <span className="dropdown-selected flex items-center gap-2">
-                                {value?.src && <span><img className="pp-dropdown-icon" src={value?.src} alt={value?.label} /></span>}
-                                {value?.label || <span className="opacity-0">placeholder</span>}
-                            </span>
-                        )
-                    )}
+                    <ArrowIcon open={true} />
 
-                    <ArrowIcon open={open} />
-
-                    {open && (
-                        <ul
-                            ref={listRef}
-                            className={`pp-dropdown-list${openUpward ? ' pp-dropdown-upward' : ''}`}
-                        >
-                            {filteredItems.length === 0 ? (
-                                <li className="dropdown-item disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
-                                    No results found
-                                </li>
-                            ) : (
-                                (filteredItems as Array<SelectorItem<T> & { disabled?: boolean }>).map(item => (
-                                    <li
-                                        key={String(item.value)}
-                                        className={`dropdown-item${isActive(item) ? ' active' : ''}${item.disabled ? ' disabled' : ''}`}
-                                        onClick={() => !item.disabled && handleSelect(item)}
-                                        tabIndex={item.disabled ? -1 : 0}
-                                        aria-disabled={item.disabled}
-                                        onKeyDown={e => {
-                                            if (!item.disabled && (e.key === 'Enter' || e.key === ' ')) handleSelect(item);
-                                        }}
-                                        style={item.disabled ? { opacity: 0.5, pointerEvents: 'none' } : {}}
-                                    >
-                                        <span className='flex items-center gap-2'>
-                                            {item.src && <img className="pp-dropdown-icon" src={item.src} alt={item.label} />}
-                                            <span>{item.label}</span>
-                                        </span>
-                                    </li>
-                                ))
-                            )}
-                        </ul>
-                    )}
                 </div>
 
                 <FloatingLabel
