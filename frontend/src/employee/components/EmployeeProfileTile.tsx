@@ -4,6 +4,7 @@ import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { isOneOf, Util } from "@shared/utils/util";
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
+import { Utils } from "global/utils";
 
 interface Props {
     employeeProfile: EmployeeProfileI,
@@ -21,12 +22,8 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
     // if (residenceFlagSrc) {
     //     srcs.add(residenceFlagSrc);
     // }
-    employeeProfile.communicationLanguages?.forEach(lang => {
-        const flagSrc = languagesDictionary?.elements.find(el => el.code === lang)?.values.SRC;
-        if (flagSrc) {
-            srcs.add(flagSrc);
-        }
-    });
+
+    Utils.prepareFlagSrcs(employeeProfile.communicationLanguages || [], languagesDictionary).forEach(src => srcs.add(src));
 
     const prepareName = () => {
         let result = ``

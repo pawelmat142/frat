@@ -19,7 +19,8 @@
       "settings": "Settings",
       "confirm": "Confirm",
       "start": "Start",
-      "end": "End"
+      "end": "End",
+      "filters": "Filters"
     },
     "lang": {
       "language": "Language",

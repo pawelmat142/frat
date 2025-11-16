@@ -36,7 +36,7 @@ const EmployeeSearchViewContent: React.FC = () => {
     return (
         <div className="list-view">
 
-            <EmployeeSearchFilters />
+            <EmployeeSearchFilters languagesDictionary={languagesDictionary} />
 
             <div className="results flex flex-col gap-1">
                 {!!languagesDictionary && results.map((profile, index) => (

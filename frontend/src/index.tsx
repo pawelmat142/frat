@@ -15,7 +15,7 @@ import { CookieProvider } from 'global/providers/CookieProvider';
 import { AuthProvider } from 'auth/AuthProvider';
 import { UserProvider } from 'user/UserProvider';
 import { BottomSheetProvider } from 'global/providers/BottomSheetProvider';
-import { PositionSelectorProvider } from 'global/components/selector/position/PositionSelectorProvider';
+import DrawerProvider from 'global/providers/DrawerProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -25,36 +25,38 @@ root.render(
     <BrowserRouter>
       <PopupProvider>
         <BottomSheetProvider>
-          <CookieProvider>
-            <AuthProvider>
-              <UserProvider>
-                <MenuProvider>
-                  <ThemeProvider>
-                    <div className="min-h-screen flex flex-col">
-                      <Header />
-                      <main className="flex-1 flex flex-col items-center w-full overflow-x-hidden">
-                        <App />
-                      </main>
-                      <Footer />
-                    </div>
-                    <CookieBanner />
-                    <ToastContainer
-                      position="top-right"
-                      autoClose={3000}
-                      hideProgressBar={false}
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                      theme="light"
-                    />
-                  </ThemeProvider>
-                </MenuProvider>
-              </UserProvider>
-            </AuthProvider>
-          </CookieProvider>
+          <DrawerProvider>
+            <CookieProvider>
+              <AuthProvider>
+                <UserProvider>
+                  <MenuProvider>
+                    <ThemeProvider>
+                      <div className="min-h-screen flex flex-col">
+                        <Header />
+                        <main className="flex-1 flex flex-col items-center w-full overflow-x-hidden">
+                          <App />
+                        </main>
+                        <Footer />
+                      </div>
+                      <CookieBanner />
+                      <ToastContainer
+                        position="top-right"
+                        autoClose={3000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                      />
+                    </ThemeProvider>
+                  </MenuProvider>
+                </UserProvider>
+              </AuthProvider>
+            </CookieProvider>
+          </DrawerProvider>
         </BottomSheetProvider>
       </PopupProvider>
     </BrowserRouter>

@@ -24,6 +24,7 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     from {
         background-color: $backdropColor;
     }
+
     to {
         background-color: transparent;
     }
@@ -34,6 +35,7 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         background-color: transparent;
         opacity: 0;
     }
+
     to {
         background-color: $backdropColor;
         opacity: 1;
@@ -44,6 +46,7 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     from {
         transform: translateY(100%);
     }
+
     to {
         transform: translateY(0);
     }
@@ -53,6 +56,7 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     from {
         transform: translateY(0);
     }
+
     to {
         transform: translateY(100%);
     }
@@ -79,6 +83,10 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
     &.closing {
         animation: slideDown 0.3s ease-in forwards;
+    }
+
+    .bottom-sheet-item {
+        min-width: 300px;
     }
 }
 
@@ -140,7 +148,6 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     transition: $transition;
     font-size: $lFont;
     border-radius: .75rem;
-    min-width: 300px;
 
     &:hover {
         background-color: $active-bg;
@@ -158,6 +165,7 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
 .bottom-sheet-footer {
     padding: 0 1rem;
+
     .bottom-sheet-item {
         min-width: unset;
     }

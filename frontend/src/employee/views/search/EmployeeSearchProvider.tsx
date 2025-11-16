@@ -8,7 +8,7 @@ interface Pagination {
     currentPage: number;
     itemsPerPage: number;
 }
-interface EmployeeSearchContextProps {
+export interface EmployeeSearchContextProps {
     filters: EmployeeProfileSearchForm;
     setFilters: (filters: EmployeeProfileSearchForm) => void;
     results: EmployeeProfileI[];
@@ -56,11 +56,6 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     const doSearch = useCallback(async (overrideFilters?: EmployeeProfileSearchForm) => {
         const searchFilters = overrideFilters || filters;
-        if (abortControllerRef.current) {
-            abortControllerRef.current.abort();
-        }
-        const controller = new AbortController();
-        abortControllerRef.current = controller;
         try {
             setLoading(true);
             const result = await EmployeeProfileService.searchEmployeeProfiles(searchFilters);
@@ -75,6 +70,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         } finally {
             setLoading(false);
         }
+
+        console.log("Search executed with filters:", searchFilters);
     }, [filters]);
 
     const nextPage = () => {

@@ -23,4 +23,15 @@ export abstract class Utils {
             };
         })
     }
+
+    public static prepareFlagSrcs = (languages: string[], languagesDictionary: DictionaryI): Set<string> => {
+        const srcs = new Set<string>();
+        languages.forEach(lang => {
+            const flagSrc = languagesDictionary?.elements.find(el => el.code === lang)?.values.SRC;
+            if (flagSrc) {
+                srcs.add(flagSrc);
+            }
+        });
+        return srcs;
+    }
 }

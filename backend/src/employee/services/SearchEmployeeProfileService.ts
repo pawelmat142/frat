@@ -39,15 +39,15 @@ export class SearchEmployeeProfileService {
         this.addDateRangeFilter(queryBuilder, query, hasFilter);
 
         if (communicationLanguages?.length) {
-            queryBuilder.andWhere('profile.communication_languages && :languages', { languages: communicationLanguages });
+            queryBuilder.andWhere('profile.communication_languages @> :languages', { languages: communicationLanguages });
             hasFilter = true;
         }
         if (certificates?.length) {
-            queryBuilder.andWhere('profile.certificates && :certificates', { certificates });
+            queryBuilder.andWhere('profile.certificates @> :certificates', { certificates });
             hasFilter = true;
         }
         if (skills?.length) {
-            queryBuilder.andWhere('profile.skills && :skills', { skills });
+            queryBuilder.andWhere('profile.skills @> :skills', { skills });
             hasFilter = true;
         }
 
