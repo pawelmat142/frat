@@ -356,24 +356,18 @@ $btnPaddingY: 0.375rem;
     outline: none;
   }
 
-  .MuiSvgIcon-root {
-    padding-bottom: 1px;
-  }
-
   .pp-date-input-row {
     position: relative;
     display: flex;
     align-items: center;
   }
 
-  .pp-date-input-calendar {
-    position: absolute;
-    right: 10px;
+  .pp-date-input-icon {
     cursor: pointer;
     color: #888;
   }
 
-  .pp-date-input-calendar.disabled {
+  .pp-date-input-icon.disabled {
     cursor: not-allowed;
   }
 

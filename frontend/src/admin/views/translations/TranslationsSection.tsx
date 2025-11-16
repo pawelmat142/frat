@@ -11,7 +11,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TranslationI } from "@shared/interfaces/TranslationI";
 import { AdminImportService } from "admin/services/AdminImport.service";
-import SelectFileButton from "global/components/controls/SelectFileButton";
+import SelectFileButton from "global/components/selector/SelectFileButton";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { TranslationService } from "global/services/Translation.service";
 import { TranslationAdminService } from "admin/services/TranslationAdmin.service";

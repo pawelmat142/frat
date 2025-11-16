@@ -1,9 +1,9 @@
 import React from "react";
 import { Controller, Control, FormState } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import DictionarySelector from "global/components/controls/DictionarySelector";
 import { FormValidator } from "global/FormValidator";
 import { EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
+import DictionarySelector from "global/components/selector/DictionarySelector";
 
 interface Props {
     control: Control<EmployeeProfileForm>;

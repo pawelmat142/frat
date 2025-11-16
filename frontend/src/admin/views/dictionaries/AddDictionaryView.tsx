@@ -1,5 +1,4 @@
 import Button from "global/components/controls/Button";
-import Selector from "global/components/controls/Selector";
 import Input from "global/components/controls/Input";
 import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
@@ -19,6 +18,7 @@ import { DictionaryColumnTypes, DictionaryI, DictionaryElement, DictionaryStatus
 import { BtnModes, BtnSizes, SelectorItem } from "global/interface/controls.interface";
 import { useTranslation } from "react-i18next";
 import BackBtn from "global/components/controls/BackBtn";
+import Selector from "global/components/selector/Selector";
 
 interface ColumnForm {
   code: string;

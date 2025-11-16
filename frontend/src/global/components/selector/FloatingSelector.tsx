@@ -1,8 +1,8 @@
 import { forwardRef } from 'react';
-import ArrowIcon from './ArrowIcon';
-import FloatingLabel from './FloatingLabel';
+import ArrowIcon from '../controls/ArrowIcon';
+import FloatingLabel from '../controls/FloatingLabel';
 import { SelectorValue, SelectorInterface, SelectorItem } from 'global/interface/controls.interface';
-import FormError from './FormError';
+import FormError from '../controls/FormError';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 
 // TODO popup zamykanie/otwieranie - animacja

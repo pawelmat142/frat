@@ -1,8 +1,8 @@
-import FloatingLabel from './FloatingLabel';
-import ArrowIcon from './ArrowIcon';
 import { SelectorValue, SelectorMultiProps, SelectorItem } from 'global/interface/controls.interface';
-import FormError from './FormError';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
+import ArrowIcon from '../controls/ArrowIcon';
+import FloatingLabel from '../controls/FloatingLabel';
+import FormError from '../controls/FormError';
 
 function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
     items,

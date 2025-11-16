@@ -5,7 +5,7 @@ import { DictionaryI } from '@shared/interfaces/DictionaryI';
 import { DictionaryService } from 'global/services/DictionaryService';
 import Loading from '../Loading';
 import { useTranslation } from 'react-i18next';
-import FloatingSelector from './FloatingSelector';
+import FloatingSelector from '../selector/FloatingSelector';
 import FloatingSelectorMulti from './FloatingSelectorMulti';
 
 interface DictionarySelectorProps<T extends SelectorValue = SelectorValue> extends DictionarySelectorInterface<T> {

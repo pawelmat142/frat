@@ -1,6 +1,5 @@
 import { useAuthContext } from "auth/AuthProvider";
 import Button from "global/components/controls/Button";
-import DictionarySelector from "global/components/controls/DictionarySelector";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -15,6 +14,7 @@ import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import Loading from "global/components/Loading";
 import { BtnModes } from "global/interface/controls.interface";
 import DateRangeInput from "global/components/controls/DateRangeInput";
+import DictionarySelector from "global/components/selector/DictionarySelector";
 
 const EmployeeSearchView: React.FC = () => {
 

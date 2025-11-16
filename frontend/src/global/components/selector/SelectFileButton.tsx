@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import Button from './Button';
+import Button from '../controls/Button';
 import { BtnModes } from 'global/interface/controls.interface';
 
 interface SelectFileButtonProps {

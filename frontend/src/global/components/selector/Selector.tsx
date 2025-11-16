@@ -1,10 +1,10 @@
 
 import { useState, useRef, useEffect, forwardRef } from 'react';
-import ControlLabel from './ControlLabel';
-import ArrowIcon from './ArrowIcon';
 import { SelectorValue, SelectorInterface, SelectorItem } from 'global/interface/controls.interface';
-import FormError from './FormError';
 import { Utils } from 'global/utils';
+import ArrowIcon from '../controls/ArrowIcon';
+import ControlLabel from '../controls/ControlLabel';
+import FormError from '../controls/FormError';
 
 const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {

@@ -2,12 +2,12 @@ import React from "react";
 import { Controller, UseFormSetValue, UseFormWatch, Control, FormState } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import TabSwitcher, { TabSwitcherOption } from "./TabSwitcher";
-import DictionarySelector from "global/components/controls/DictionarySelector";
-import Input from "global/components/controls/Input";
 import { FormValidator } from "global/FormValidator";
 import { EmployeeProfileLocationOptions, EmployeeProfileLocationOption, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
 import PositionSelector from "global/components/selector/position/PositionSelector";
-
+import DictionarySelector from "global/components/selector/DictionarySelector";
+import FloatingInput from "global/components/controls/FloatingInput";
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 interface Props {
     control: Control<EmployeeProfileForm>;
@@ -111,7 +111,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ control, setValue, watch, formS
                                     rules={required}
                                     control={control}
                                     render={({ field }) => (
-                                        <Input
+                                        <FloatingInput
                                             type="number"
                                             {...field}
                                             value={field.value ?? null}
@@ -119,6 +119,10 @@ const EmployeeProfileStep3: React.FC<Props> = ({ control, setValue, watch, formS
                                             fullWidth
                                             required
                                             error={formState?.errors.step3?.locationDistanceRadius}
+                                            icon={
+                    <CalendarTodayIcon fontSize="medium" />
+
+                                            }
                                         />
                                     )}
                                 />

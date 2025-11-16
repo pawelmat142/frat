@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
-import ControlLabel from './ControlLabel';
-import ArrowIcon from './ArrowIcon';
 import { useTranslation } from 'react-i18next';
 import { SelectorValue, SelectorMultiProps, SelectorItem } from 'global/interface/controls.interface';
-import FormError from './FormError';
-import Checkbox from './Checkbox';
 import { Utils } from 'global/utils';
-import Input from './Input';
+import ArrowIcon from '../controls/ArrowIcon';
+import Checkbox from '../controls/Checkbox';
+import ControlLabel from '../controls/ControlLabel';
+import FormError from '../controls/FormError';
+import Input from '../controls/Input';
 
 // TODO dodatkowe okienko szukania powinno byc nieco mniejsze + ikona search 
 function SelectorMulti<T extends SelectorValue = SelectorValue>({

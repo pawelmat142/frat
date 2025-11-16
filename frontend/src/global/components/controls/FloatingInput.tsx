@@ -1,9 +1,14 @@
-import { ChangeEventHandler, forwardRef, useState } from 'react';
+import { ChangeEventHandler, forwardRef, ReactNode, useState } from 'react';
 import { InputInterface } from '../../interface/controls.interface';
 import FormError from './FormError';
 import FloatingLabel from './FloatingLabel';
 
-const FloatingInput = forwardRef<HTMLInputElement, InputInterface>(
+interface FloatingInputProps extends InputInterface {
+    icon?: ReactNode;
+    onIconClick?: () => void;
+}
+
+const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
     ({
         type = 'text',
         fullWidth = false,
@@ -18,80 +23,85 @@ const FloatingInput = forwardRef<HTMLInputElement, InputInterface>(
         name,
         center,
         error,
+        icon,
+        onIconClick,
     }, ref) => {
 
-    const [isFocused, setIsFocused] = useState(false);
+        const [isFocused, setIsFocused] = useState(false);
 
-    let myClass = `pp-control pp-input floating-input`;
+        let myClass = `pp-control pp-input floating-input`;
 
-    if (fullWidth) {
-        myClass += ' w-full';
-    } else {
-        myClass += ' w-fit';
-    }
-    if (disabled) {
-        myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
-    }
-    if (error) {
-        myClass += ' pp-control-error';   
-    }
-
-    const handleChange: ChangeEventHandler<HTMLInputElement> = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (fullWidth) {
+            myClass += ' w-full';
+        } else {
+            myClass += ' w-fit';
+        }
         if (disabled) {
-            event.preventDefault()
+            myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
         }
-        else if (onChange) {
-            onChange(event);
+        if (error) {
+            myClass += ' pp-control-error';
         }
-    };
 
-    const getValue = (): string | number | undefined => {
-        if (typeof value === 'string') {
-            return value || '';
-        }
-        if (typeof value === 'number') {
-            return value || 0;
-        }
-        return undefined;
-    }
-    
-    const hasValue = () => {
-        const val = getValue();
-        return val !== '' && val !== undefined && val !== null;
-    }
+        const handleChange: ChangeEventHandler<HTMLInputElement> = (event: React.ChangeEvent<HTMLInputElement>) => {
+            if (disabled) {
+                event.preventDefault()
+            }
+            else if (onChange) {
+                onChange(event);
+            }
+        };
 
-    const isLabelFloating = isFocused || hasValue();
+        const getValue = (): string | number | undefined => {
+            if (typeof value === 'string') {
+                return value || '';
+            }
+            if (typeof value === 'number') {
+                return value || 0;
+            }
+            return undefined;
+        }
 
-    return (
-        <div className={`floating-input-wrapper ${className}${center ? ' mx-auto' : ''}`}>
-            <div className="floating-input-container">
-                <input
-                    ref={ref}
-                    id={id}
-                    name={name || id}
-                    type={type}
-                    value={getValue()}
-                    onChange={handleChange}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
-                    className={myClass}
-                    disabled={disabled}
-                    required={required}
-                    autoComplete={autoComplete}
-                    placeholder=" "
-                />
-                <FloatingLabel
-                    htmlFor={id}
-                    label={label}
-                    required={required}
-                    isActive={isLabelFloating}
-                    error={error}
-                />
+        const hasValue = () => {
+            const val = getValue();
+            return val !== '' && val !== undefined && val !== null;
+        }
+
+        const isLabelFloating = isFocused || hasValue();
+
+        return (
+            <div className={`floating-input-wrapper ${className}${center ? ' mx-auto' : ''}`}>
+                <div className="floating-input-container">
+                    <input
+                        ref={ref}
+                        id={id}
+                        name={name || id}
+                        type={type}
+                        value={getValue()}
+                        onChange={handleChange}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
+                        className={`${myClass}${icon ? ' pr-10' : ''}`}
+                        disabled={disabled}
+                        required={required}
+                        autoComplete={autoComplete}
+                        placeholder=" "
+                    />
+                    {icon && (
+                        icon
+                    )}
+                    <FloatingLabel
+                        htmlFor={id}
+                        label={label}
+                        required={required}
+                        isActive={isLabelFloating}
+                        error={error}
+                    />
+                </div>
+                <FormError error={error} />
             </div>
-            <FormError error={error} />
-        </div>
-    );
-});
+        );
+    });
 
 FloatingInput.displayName = 'FloatingInput';
 

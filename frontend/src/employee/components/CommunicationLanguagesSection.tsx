@@ -1,5 +1,4 @@
 import { Controller, UseFormSetValue, UseFormWatch, Control, FormState } from "react-hook-form";
-import DictionarySelector from "global/components/controls/DictionarySelector";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from "global/components/controls/Button";
@@ -8,6 +7,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
 import { EmployeeProfileForm, EmployeeProfileFormStep1 } from "@shared/interfaces/EmployeeProfileI";
+import DictionarySelector from "global/components/selector/DictionarySelector";
 
 interface Props {
   control: Control<any>;

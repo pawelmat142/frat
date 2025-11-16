@@ -1,7 +1,7 @@
 import Button from "../../../global/components/controls/Button";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path"
-import SelectFileButton from "../../../global/components/controls/SelectFileButton";
+import SelectFileButton from "../../../global/components/selector/SelectFileButton";
 import { useEffect, useState } from "react";
 import { Util } from "@shared/utils/util";
 import AddIcon from '@mui/icons-material/Add';
