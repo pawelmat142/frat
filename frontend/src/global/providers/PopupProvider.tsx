@@ -3,7 +3,7 @@ import Button from 'global/components/controls/Button';
 import { BtnMode, BtnModes } from 'global/interface/controls.interface';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaTimes } from 'react-icons/fa';
+
 interface PopupContextType {
   confirm: (options: ConfirmOptions) => Promise<boolean>;
   popup: (config: PopupConfig) => Promise<boolean>;
@@ -144,7 +144,7 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
   return (
     <div className={`popup fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-200 ${show && !closing ? 'opacity-100' : 'opacity-0'}`}>
       <div
-        className={`primary-bg rounded-lg shadow-lg p-6 min-w-[300px] transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
+        className={`primary-bg rounded-lg shadow-lg p-4 min-w-[300px] transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}
       >
 
         <div className="flex items-start justify-between mb-5 gap-2">

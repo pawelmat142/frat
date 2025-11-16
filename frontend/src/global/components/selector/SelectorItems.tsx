@@ -10,6 +10,7 @@ interface Props<T extends SelectorValue = SelectorValue> {
     onSelectMulti?: (items: SelectorItem<T>[]) => void;
     multiSelect?: boolean;
     translateItems?: boolean
+    onClean?: () => void;
 }
 
 const SelectorItems = <T extends SelectorValue = SelectorValue>({
@@ -19,7 +20,8 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     onSelectMulti,
     selectedValues = [],
     translateItems = false,
-    onClose
+    onClose,
+    onClean
 }: Props<T>) => {
 
     const { t } = useTranslation();
@@ -79,7 +81,23 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                         )}
                     </div>
                 ))}
+                
             </div>
+
+            {onClean && (
+                <div
+                    className="bottom-sheet-item"
+                    onClick={() => {
+                        onClean();
+                    }}
+                >
+                    <div className="bottom-sheet-item-content w-full mx-auto flex justify-center">
+                        <div>
+                            {t("common.cancel")}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {multiSelect && (
                 <div className="bottom-sheet-footer">

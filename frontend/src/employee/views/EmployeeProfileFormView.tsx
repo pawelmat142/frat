@@ -16,12 +16,12 @@ import EmployeeProfileStep2 from "../components/EmployeeProfileStep2";
 import EmployeeProfileStep3 from "../components/EmployeeProfileStep3";
 import EmployeeProfileStep4 from "../components/EmployeeProfileStep4";
 
-// TODO single selector poprawić - dostosowac do mobile,
-// TODO single selector poprawić - poprawic dzialanie na kompie
+// TODO multiselect selector popra
 // TODO krok 2
 // TODO krok 3
 // TODO krok 4
 // TODO sprawdiic backend czy działa
+// TODO czyscic storage po wyslaniu formularza
 // TODO widok z lista profili
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
@@ -65,43 +65,57 @@ const EmployeeProfileFormView: React.FC = () => {
     });
 
     React.useEffect(() => {
-        if (employeeProfile) {
-            let locationDistancePosition: any = undefined;
-            if (employeeProfile.point && Array.isArray(employeeProfile.point.coordinates)) {
-                locationDistancePosition = {
-                    lat: employeeProfile.point.coordinates[1],
-                    lng: employeeProfile.point.coordinates[0],
-                    address: employeeProfile.address
-                };
-            }
-            const availabilityDateRanges: DateRange[] = (employeeProfile.availabilityDateRanges || [])
-                .map(r => DateRangeUtil.toDateRange(r))
-                .filter((r): r is DateRange => r != null);
+        // Load from localStorage if no employeeProfile exists
+        if (!employeeProfile) {
+            const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-            reset({
-                step1: {
-                    firstName: employeeProfile.firstName || "",
-                    lastName: employeeProfile.lastName || "",
-                    residenceCountry: employeeProfile.residenceCountry || "",
-                    communicationLanguages: employeeProfile.communicationLanguages || [""]
-                },
-                step2: {
-                    skills: employeeProfile.skills || [],
-                    certificates: employeeProfile.certificates || []
-                },
-                step3: {
-                    locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.ALL_EUROPE,
-                    locationCountries: employeeProfile.locationCountries || [],
-                    locationDistancePosition,
-                    locationDistanceRadius: employeeProfile.pointRadius ?? NaN
-                },
-                step4: {
-                    availabilityOption: employeeProfile.availabilityOption || EmployeeProfileAvailabilityOptions.ANYTIME,
-                    availabilityDateRanges: availabilityDateRanges
+            if (savedData) {
+                try {
+                    const parsedData: EmployeeProfileForm = JSON.parse(savedData);
+                    reset(parsedData);
+                } catch (error) {
+                    console.error("Error loading form from localStorage:", error);
                 }
-            });
+            }
+            return;
         }
-    }, [employeeProfile, reset]);
+
+        // Load from employeeProfile if it exists
+        let locationDistancePosition: any = undefined;
+        if (employeeProfile.point && Array.isArray(employeeProfile.point.coordinates)) {
+            locationDistancePosition = {
+                lat: employeeProfile.point.coordinates[1],
+                lng: employeeProfile.point.coordinates[0],
+                address: employeeProfile.address
+            };
+        }
+        const availabilityDateRanges: DateRange[] = (employeeProfile.availabilityDateRanges || [])
+            .map(r => DateRangeUtil.toDateRange(r))
+            .filter((r): r is DateRange => r != null);
+
+        reset({
+            step1: {
+                firstName: employeeProfile.firstName || "",
+                lastName: employeeProfile.lastName || "",
+                residenceCountry: employeeProfile.residenceCountry || "",
+                communicationLanguages: employeeProfile.communicationLanguages || [""]
+            },
+            step2: {
+                skills: employeeProfile.skills || [],
+                certificates: employeeProfile.certificates || []
+            },
+            step3: {
+                locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.ALL_EUROPE,
+                locationCountries: employeeProfile.locationCountries || [],
+                locationDistancePosition,
+                locationDistanceRadius: employeeProfile.pointRadius ?? NaN
+            },
+            step4: {
+                availabilityOption: employeeProfile.availabilityOption || EmployeeProfileAvailabilityOptions.ANYTIME,
+                availabilityDateRanges: availabilityDateRanges
+            }
+        });
+    }, [employeeProfile, reset, trigger]);
 
     const onSubmit = async (form: EmployeeProfileForm) => {
         if (employeeProfile) {
@@ -111,9 +125,10 @@ const EmployeeProfileFormView: React.FC = () => {
         try {
             setLoading(true);
             const result = await EmployeeProfileService.createEmployeeProfile(form);
-            initEmployeeProfile()
+            initEmployeeProfile();
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
-            navigate(-1)
+            navigate(-1);
         } catch (error) {
             console.error("Error creating employee profile:", error);
         } finally {
@@ -125,9 +140,10 @@ const EmployeeProfileFormView: React.FC = () => {
         try {
             setLoading(true);
             const result = await EmployeeProfileService.updateEmployeeProfile(form);
-            initEmployeeProfile()
+            initEmployeeProfile();
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
-            navigate(-1)
+            navigate(-1);
         } catch (error) {
             console.error("Error updating employee profile:", error);
         } finally {
@@ -283,8 +299,7 @@ const EmployeeProfileFormView: React.FC = () => {
 
                 {renderStep()}
 
-                {/* Navigation buttons */}
-                <div className="flex gap-4 mt-8">
+                <div className="flex gap-4 mt-8 mb-10">
                     {currentStep !== 'step1' && (
                         <Button
                             type="button"

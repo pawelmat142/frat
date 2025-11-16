@@ -27,7 +27,7 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
     <div>
       <div className="flex flex-col gap-3 md:gap-2">
         {communicationLanguages.map((lang, idx) => (
-          <div key={idx} className="flex gap-2">
+          <div key={idx} className="flex gap-2 items-center">
             <Controller
               name={`step1.communicationLanguages.${idx}` as const}
               control={control}
@@ -48,7 +48,7 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
             />
             {idx > 0 && (
               <IconButton
-                className="mt-auto mb-1"
+                className=""
                 icon={<DeleteIcon />}
                 size={BtnSizes.SMALL}
                 mode={BtnModes.ERROR}

@@ -132,7 +132,7 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .bottom-sheet-item {
-    padding: 1rem 1.5rem;
+    padding: .75rem 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -210,5 +210,15 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
         opacity: 0.9;
+    }
+}
+
+
+
+// POPUP
+.popup-content {
+    .bottom-sheet-content {
+        max-height: 70vh;
+        overflow-y: scroll;
     }
 }

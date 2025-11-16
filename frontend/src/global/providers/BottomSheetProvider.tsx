@@ -12,6 +12,7 @@ export interface OpenSheetParams {
     title?: string;
     children: React.ReactNode;
     showClose?: boolean;
+    onClean?: () => void;
 }
 
 export interface BottomSheetDictionaryParams<T extends SelectorValue = SelectorValue> {
@@ -33,6 +34,7 @@ export interface OpenSelectorParams<T extends SelectorValue = SelectorValue> {
     multiSelect?: boolean;
     onSelect?: (item: SelectorItem<T>) => void;
     onSelectMulti?: (items: SelectorItem<T>[]) => void;
+    onClean?: () => void;
 }
 
 export interface OpenDictionaryParams<T extends SelectorValue = SelectorValue> {
@@ -110,7 +112,11 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
                 onSelectMulti={(items) => {
                     params.onSelectMulti?.(items)
                 }}
-            ></SelectorItems>
+                onClean={params.onClean ? () => {
+                    close()
+                    params.onClean?.()
+                } : undefined}
+            ></SelectorItems>,
         })
     }
 

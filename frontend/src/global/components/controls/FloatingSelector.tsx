@@ -4,9 +4,10 @@ import FloatingLabel from './FloatingLabel';
 import { SelectorValue, SelectorInterface, SelectorItem } from 'global/interface/controls.interface';
 import FormError from './FormError';
 import { Utils } from 'global/utils';
+import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 
-// TODO porawic usuwanie wyboru 
-// TODO poprawic liste jak cos jest wybrane już
+// TODO popup zamykanie/otwieranie - animacja
+// TODO remove logic of dropdown list
 
 const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -37,7 +38,9 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     const dropdownRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
-    
+
+    const bottomSheet = useBottomSheet();
+
     let myClass = `pp-control pp-dropdown floating-input`;
     if (fullWidth) {
         myClass += ' w-full';
@@ -125,6 +128,30 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         ? items.filter(item => Utils.normalize(item.label).includes(Utils.normalize(searchText)))
         : items;
 
+    const handleOpen = () => {
+        const doOpen = !open;
+        if (doOpen) {
+            openSelectorList();
+        } else {
+            setOpen(doOpen);
+        }
+    }
+
+    const openSelectorList = () => {
+        bottomSheet.openSelector({
+            items: filteredItems,
+            selectedValues: value ? [value.value] : [],
+            title: label || '',
+            onSelect: (item) => {
+                handleSelect(item as SelectorItem<T>);
+            },
+            onClean: () => {
+                onSingleSelect(null);
+                setOpen(false);
+            },
+        })
+    }
+
     return (
         <div
             className={`floating-input-wrapper ${className || ''}${center ? ' mx-auto' : ''}`}
@@ -139,7 +166,7 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
                     aria-expanded={open}
                     onClick={() => {
                         if (!disabled) {
-                            setOpen(!open);
+                            handleOpen();
                             setIsFocused(true);
                         }
                     }}
