@@ -131,7 +131,6 @@ const EmployeeProfileFormView: React.FC = () => {
                     toast.error("error")//todo translation
                 })}
                 noValidate
-                className=""
             >
                 <h2 className="form-header">
                     {t("employeeProfile.form.title")}
