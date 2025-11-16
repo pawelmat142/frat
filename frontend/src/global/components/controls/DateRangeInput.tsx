@@ -73,7 +73,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     return (
         <div className={myClass}>
             <ControlLabel label={label} required={required} />
-            <div className="pp-control pp-date-input-row gap-2">
+            <div className="pp-control pp-input-row gap-2">
                 <DatePicker
                     selected={startDate}
                     onChange={handleStartChange}

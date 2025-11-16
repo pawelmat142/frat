@@ -29,7 +29,7 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
 
         const [isFocused, setIsFocused] = useState(false);
 
-        let myClass = `pp-control pp-input floating-input`;
+        let myClass = `pp-control-bg pp-input floating-input`;
 
         if (fullWidth) {
             myClass += ' w-full';
@@ -72,31 +72,33 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
         return (
             <div className={`floating-input-wrapper ${className}${center ? ' mx-auto' : ''}`}>
                 <div className="floating-input-container">
-                    <input
-                        ref={ref}
-                        id={id}
-                        name={name || id}
-                        type={type}
-                        value={getValue()}
-                        onChange={handleChange}
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                        className={`${myClass}${icon ? ' pr-10' : ''}`}
-                        disabled={disabled}
-                        required={required}
-                        autoComplete={autoComplete}
-                        placeholder=" "
-                    />
-                    {icon && (
-                        icon
-                    )}
-                    <FloatingLabel
-                        htmlFor={id}
-                        label={label}
-                        required={required}
-                        isActive={isLabelFloating}
-                        error={error}
-                    />
+                    <div className="pp-control pp-input-row">
+                        <input
+                            ref={ref}
+                            id={id}
+                            name={name || id}
+                            type={type}
+                            value={getValue()}
+                            onChange={handleChange}
+                            onFocus={() => setIsFocused(true)}
+                            onBlur={() => setIsFocused(false)}
+                            className={`${myClass}${icon ? ' pr-10' : ''}`}
+                            disabled={disabled}
+                            required={required}
+                            autoComplete={autoComplete}
+                            placeholder=" "
+                        />
+                        {icon && (
+                            icon
+                        )}
+                        <FloatingLabel
+                            htmlFor={id}
+                            label={label}
+                            required={required}
+                            isActive={isLabelFloating}
+                            error={error}
+                        />
+                    </div>
                 </div>
                 <FormError error={error} />
             </div>
