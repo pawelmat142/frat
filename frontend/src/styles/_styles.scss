@@ -243,13 +243,20 @@ $headerHeight: 60px;
 }
 
 
-
-
 // FORMS
 .form-view {
     padding: 1.5rem;
     width: 100%;
     max-width: $mobile;
+}
+
+.form-header {
+    font-size: $xlFont;
+    font-weight: 700;
+    color: $primary-text;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
 }
 
 

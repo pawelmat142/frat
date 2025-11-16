@@ -5,14 +5,14 @@ import { isOneOf } from '@shared/utils/util';
 
 const Button: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, size=BtnSizes.MEDIUM, children, fullWidth=false, className, disabled, onlyMobile, onlyDesktop, mode=BtnModes.PRIMARY }) => {
 
-    let myClass = ` flex justify-center btn-font btn ${mode} ripple ${size}`;
+    let myClass = ` flex rounded-md justify-center btn-font btn ${mode} ripple ${size}`;
 
     if (!isOneOf([
         BtnModes.ERROR_TXT,
         BtnModes.SECONDARY_TXT,
         BtnModes.PRIMARY_TXT
     ], mode)) {
-        myClass += ' shadow-sm rounded-md';
+        myClass += ' shadow-sm ';
     }
 
     if (onlyMobile) {

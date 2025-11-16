@@ -76,15 +76,19 @@ const SignUpPage: React.FC = () => {
             </div>
 
             <form className="" onSubmit={handleSubmit}>
-                <div className="flex items-center justify-between mb-10 md:mb-6">
-                    <h2 className="text-lg font-bold">{t("signup.title")}</h2>
 
-                    {isDevMode && (
-                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
+                <h2 className="form-header">
+                    {t("signup.title")}
+                </h2>
+
+                {isDevMode && (
+                    <div className="flex items-center justify-end">
+                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
                             DEV FILL
-                        </Button>)}
+                        </Button>
+                    </div>
+                )}
 
-                </div>
                 <div className="flex flex-col gap-7 md:gap-5">
                     <Input
                         name="email"
@@ -141,10 +145,9 @@ const SignUpPage: React.FC = () => {
             <div className="flex items-center cursor-pointer mx-auto w-full justify-center mt-10 mb-10" onClick={() => {
                 navigate(Path.SIGN_IN);
             }}>
-                {/* TODO translation */}
-                <span className="">Already have an account?</span>
+                <span className="">{t("signin.alreadyHaveAccount")}</span>
                 <Button mode={BtnModes.PRIMARY_TXT} fullWidth={false} >
-                    Sign In
+                    {t("signin.submit")}
                 </Button>
             </div>
         </div>

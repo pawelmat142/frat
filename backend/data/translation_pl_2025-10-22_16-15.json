@@ -50,15 +50,17 @@
       "signingIn": "Logowanie...",
       "signUpForm": "Formularz rejestracji przez email",
       "forgotPassword": "Nie pamiętasz hasła?",
+      "forgotPasswordTitle": "Resetowanie hasła",
       "googleProvider": "Zaloguj przez Google",
       "forgotPasswordSuccess": "Jeśli email istnieje, wysłano link do resetu hasła.",
       "orSignInWith": " - Lub zaloguj się przez - ",
-      "noAccount": "Nie masz konta?"
+      "noAccount": "Nie masz konta?",
+      "alreadyHaveAccount": "Masz już konto?"
     },
     "signup": {
       "email": "Email",
       "title": "Rejestracja",
-      "submit": "Zarejestruj się",
+      "submit": "Załóż konto",
       "password": "Hasło",
       "registering": "Rejestracja...",
       "repeatEmail": "Powtórz email",

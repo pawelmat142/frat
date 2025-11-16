@@ -64,22 +64,25 @@ const SignInPage: React.FC = () => {
     return (
         <div className="form-view relative">
 
-            <div className="mt-10 mb-10 mx-auto flex justify-center">
+            <div className="mt-10 mb-5 mx-auto flex justify-center">
                 <IconButton onClick={() => { navigate(Path.HOME) }} icon={
                     <Logo />
                 }></IconButton>
             </div>
 
             <form className="" onSubmit={handleSubmit}>
-                <div className="flex items-center justify-between mb-10 md:mb-6">
-                    <h2 className="text-lg font-bold">{t("signin.title")}</h2>
+                <h2 className="form-header">
+                    {t("signin.title")}
+                </h2>
 
-                    {isDevMode && (
-                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
+                {isDevMode && (
+                    <div className="flex items-center justify-end">
+                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
                             DEV FILL
-                        </Button>)}
+                        </Button>
+                    </div>
+                )}
 
-                </div>
                 <div className="flex flex-col gap-7 md:gap-5">
                     <Input
                         name="email"
@@ -151,7 +154,7 @@ const SignInPage: React.FC = () => {
                 {/* TODO translation */}
                 <span className="">{t("signin.noAccount")}</span>
                 <Button mode={BtnModes.PRIMARY_TXT} fullWidth={false} >
-                    {t("signin.signUp")}
+                    {t("signup.title")}
                 </Button>
             </div>
         </div>

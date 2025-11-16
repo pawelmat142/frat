@@ -49,10 +49,12 @@
       "password": "Password",
       "signingIn": "Signing in...",
       "forgotPassword": "Forgot password?",
+      "forgotPasswordTitle": "Password reset",
       "googleProvider": "Sign In with Google",
       "forgotPasswordSuccess": "If the email exists, a reset link has been sent.",
       "orSignInWith": " - Or sign in with - ",
-      "noAccount": "Don't have an account?"
+      "noAccount": "Don't have an account?",
+      "alreadyHaveAccount": "Already have an account?"
     },
     "signup": {
       "email": "Email",

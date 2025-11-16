@@ -34,13 +34,16 @@ const ForgotPassword: React.FC = () => {
 
     return (
         <div className="form-view relative">
+
             <div className="mt-10 mb-10 mx-auto flex justify-center">
                 <IconButton onClick={() => { navigate("/") }} icon={<Logo />} />
             </div>
             <form className="" onSubmit={handleSubmit}>
-                <div className="flex items-center justify-between mb-10 md:mb-6">
-                    <h2 className="text-lg font-bold">{t("signin.forgotPasswordTitle", "Forgot Password")}</h2>
-                </div>
+
+            <h2 className="form-header">
+                {t("signin.forgotPasswordTitle")}
+            </h2>
+
                 <div className="flex flex-col gap-7 md:gap-5">
                     <Input
                         name="email"

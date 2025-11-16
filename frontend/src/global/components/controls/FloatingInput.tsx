@@ -62,9 +62,6 @@ const FloatingInput = forwardRef<HTMLInputElement, InputInterface>(
 
     const isLabelFloating = isFocused || hasValue();
 
-    console.log(getValue());
-    console.log(isLabelFloating);
-
     return (
         <div className={`floating-input-wrapper ${className}${center ? ' mx-auto' : ''}`}>
             <div className="floating-input-container">
