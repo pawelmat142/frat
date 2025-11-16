@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileLocationOptions, EmployeeProfileStatus, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileFormDto, EmployeeProfileLocationOptions, EmployeeProfileStatus, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { EPUtil } from './EPUtil';
 import { GeoPointService } from './GeoPointService';
@@ -54,7 +54,7 @@ export class EmployeeProfileService {
         return this.employeeProfileRepo.findByDisplayName(displayName);
     }
 
-    public async createEmployeeProfile(user: UserI, form: EmployeeProfileForm): Promise<EmployeeProfileEntity> {
+    public async createEmployeeProfile(user: UserI, form: EmployeeProfileFormDto): Promise<EmployeeProfileEntity> {
         const exists = await this.employeeProfileRepo.findByUid(user.uid);
         if (exists) {
             throw new ToastException('employeeProfile.exists', this);
@@ -65,12 +65,12 @@ export class EmployeeProfileService {
         return result;
     }
 
-    public async updateEmployeeProfile(user: UserI, form: EmployeeProfileForm): Promise<EmployeeProfileEntity> {
+    public async updateEmployeeProfile(user: UserI, form: EmployeeProfileFormDto): Promise<EmployeeProfileEntity> {
         const profile = await this.prepareProfile(user, form);
         return this.employeeProfileRepo.update(profile);
     }
 
-    private async prepareProfile(user: UserI, form: EmployeeProfileForm): Promise<DeepPartial<EmployeeProfileEntity>> {
+    private async prepareProfile(user: UserI, form: EmployeeProfileFormDto): Promise<DeepPartial<EmployeeProfileEntity>> {
         const status = this.getProfileStatus(user, form);
 
         const result: DeepPartial<EmployeeProfileEntity> = {
@@ -100,7 +100,7 @@ export class EmployeeProfileService {
         return result;
     }
 
-    private fillAvailabilityData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileForm): void {
+    private fillAvailabilityData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): void {
         if (result.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES) {
             result.availabilityDateRanges = form.availabilityDateRanges.map(dateRange => DateRangeUtil.fromDateRange([], dateRange));
         } if (result.availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE) {
@@ -116,7 +116,7 @@ export class EmployeeProfileService {
         }
     }
 
-    private async fillLocationData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileForm): Promise<void> {
+    private async fillLocationData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): Promise<void> {
         EPUtil.fillLocationData(result, form)
 
         if (result.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
@@ -132,7 +132,7 @@ export class EmployeeProfileService {
         }
     }
 
-    private getProfileStatus(user: UserI, form: EmployeeProfileForm): EmployeeProfileStatus {
+    private getProfileStatus(user: UserI, form: EmployeeProfileFormDto): EmployeeProfileStatus {
         // TODO
         return EmployeeProfileStatuses.ACTIVE;
     }

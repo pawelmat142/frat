@@ -11,6 +11,9 @@
       "close": "Close",
       "cancel": "Cancel",
       "submit": "Submit",
+      "save": "Save",
+      "next": "Next",
+      "previous": "Previous",
       "language": "Language",
       "networkError": "Network error",
       "settings": "Settings"
@@ -219,6 +222,9 @@
       },
       "form": {
         "title": "Employee Profile Form",
+        "submitSuccess": "Profile saved successfully",
+        "submitError": "Please fill in all required fields correctly",
+        "validationError": "Please fill in all required fields in this step",
         "radius": "Radius",
         "skills": "Skills",
         "address": "Address",
@@ -228,6 +234,22 @@
         "addLanguage": "Add language",
         "jobLocation": "Where you want to work?",
         "certificates": "Certificates",
+        "step1": {
+          "label": "Step 1",
+          "title": "Personal Information"
+        },
+        "step2": {
+          "label": "Step 2",
+          "title": "Skills and Certificates"
+        },
+        "step3": {
+          "label": "Step 3",
+          "title": "Work Location"
+        },
+        "step4": {
+          "label": "Step 4",
+          "title": "Availability"
+        },
         "locationOption": {
           "DISTANCE": {
             "msg": "Choose a location and the maximum distance from which you want to receive offers.",

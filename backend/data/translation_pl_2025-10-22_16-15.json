@@ -11,6 +11,9 @@
       "close": "Zamknij",
       "cancel": "Anuluj",
       "submit": "Zatwierdź",
+      "save": "Zapisz",
+      "next": "Dalej",
+      "previous": "Wstecz",
       "language": "Język",
       "networkError": "Błąd sieci",
       "settings": "Ustawienia"
@@ -220,6 +223,9 @@
       },
       "form": {
         "title": "Formularz profilu pracownika",
+        "submitSuccess": "Profil został zapisany pomyślnie",
+        "submitError": "Proszę poprawnie wypełnić wszystkie wymagane pola",
+        "validationError": "Proszę wypełnić wszystkie wymagane pola w tym kroku",
         "radius": "Promień",
         "skills": "Umiejętności",
         "address": "Adres",
@@ -229,6 +235,22 @@
         "addLanguage": "Dodaj język",
         "jobLocation": "Gdzie chcesz pracować?",
         "certificates": "Certyfikaty",
+        "step1": {
+          "title": "Dane osobowe",
+          "label": "Krok 1"
+        },
+        "step2": {
+          "title": "Umiejętności i certyfikaty",
+          "label": "Krok 2"
+        },
+        "step3": {
+          "title": "Lokalizacja pracy",
+          "label": "Krok 3"
+        },
+        "step4": {
+          "title": "Dostępność",
+          "label": "Krok 4"
+        },
         "locationOption": {
           "DISTANCE": {
             "msg": "Wybierz lokalizację i maksymalną odległość, z której chcesz otrzymywać oferty.",

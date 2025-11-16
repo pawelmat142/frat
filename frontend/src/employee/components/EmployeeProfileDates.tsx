@@ -20,8 +20,8 @@ interface Props {
 }
 
 const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formState }) => {
-    const availabilityOption = watch("availabilityOption");
-    const availabilityDateRanges = watch("availabilityDateRanges") || [];
+    const availabilityOption = watch("step4.availabilityOption");
+    const availabilityDateRanges = watch("step4.availabilityDateRanges") || [];
 
     const getDefaultDateRange = (): DateRange => {
         const end = new Date();
@@ -40,17 +40,17 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
         ) {
             const ranges = getDefaultDateRange()
             if (ranges) {
-                setValue("availabilityDateRanges", [ranges]);
+                setValue("step4.availabilityDateRanges", [ranges]);
             }
         }
         if (availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE) {
             if (availabilityDateRanges.length) {
-                setValue("availabilityDateRanges", [{ 
+                setValue("step4.availabilityDateRanges", [{ 
                     start: availabilityDateRanges[0]?.start || new Date(),
                     id: availabilityDateRanges[0]?.id || DateRangeUtil.newId(availabilityDateRanges)
                  }]);
             } else {
-                setValue("availabilityDateRanges", [{ 
+                setValue("step4.availabilityDateRanges", [{ 
                     start: new Date(),
                     id: DateRangeUtil.newId(availabilityDateRanges)
                  }]);
@@ -80,7 +80,7 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
             newRange
         ]
         console.log('newRanges', newRanges);
-        setValue("availabilityDateRanges", newRanges);
+        setValue("step4.availabilityDateRanges", newRanges);
     }
 
     const { t } = useTranslation();
@@ -105,7 +105,7 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
 
     const removeDateRange = (id?: number) => {
         const ranges = availabilityDateRanges?.filter((r, i) => r && r.id !== id);
-        setValue("availabilityDateRanges", (ranges || []).filter(Boolean));
+        setValue("step4.availabilityDateRanges", (ranges || []).filter(Boolean));
     }
 
     const rangesIds = (availabilityDateRanges || []).filter(Boolean).map(r => r.id);
@@ -119,7 +119,7 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
             <TabSwitcher
                 options={tabOptions}
                 value={availabilityOption}
-                onChange={code => setValue("availabilityOption", code as EmployeeProfileAvailabilityOption)}
+                onChange={code => setValue("step4.availabilityOption", code as EmployeeProfileAvailabilityOption)}
             />
 
             <div className="w-full flex mt-4">
@@ -134,12 +134,12 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
                             Szukam pracy od dnia:
 
                             <Controller
-                                name={`availabilityDateRanges.0` as const}
+                                name={`step4.availabilityDateRanges.0` as const}
                                 control={control}
                                 rules={required}
                                 render={({ field }) => {
                                     // Extract string message for this specific range error (RHF stores errors by index/key)
-                                    const fieldError = (formState?.errors?.availabilityDateRanges as any)?.[0];
+                                    const fieldError = (formState?.errors?.step4?.availabilityDateRanges as any)?.[0];
                                     const errorMessage = fieldError?.message as string | undefined;
                                     return (
                                         <DateInput
@@ -168,12 +168,12 @@ const EmployeeProfileDates: React.FC<Props> = ({ control, setValue, watch, formS
                                 return (
                                     <div key={dateRange.id} className="flex gap-2 items-end mt-4">
                                         <Controller
-                                            name={`availabilityDateRanges.${idx}` as const}
+                                            name={`step4.availabilityDateRanges.${idx}` as const}
                                             control={control}
                                             rules={required}
                                             render={({ field }) => {
                                                 // Extract string message for this specific range error (RHF stores errors by index/key)
-                                                const fieldError = (formState?.errors?.availabilityDateRanges as any)?.[idx];
+                                                const fieldError = (formState?.errors?.step4?.availabilityDateRanges as any)?.[idx];
                                                 const errorMessage = fieldError?.message as string | undefined;
                                                 return (
                                                     <DateRangeInput

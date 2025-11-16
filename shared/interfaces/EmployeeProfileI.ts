@@ -54,7 +54,39 @@ export const EmployeeProfileAvailabilityOptions = {
 } as const;
 export type EmployeeProfileAvailabilityOption = typeof EmployeeProfileAvailabilityOptions[keyof typeof EmployeeProfileAvailabilityOptions];
 
+export interface EmployeeProfileFormStep1 {
+  firstName: string;
+  lastName: string;
+  communicationLanguages: string[];
+  residenceCountry: string;
+}
+
+export interface EmployeeProfileFormStep2 {
+  skills: string[];
+  certificates: string[];
+}
+
+export interface EmployeeProfileFormStep3 {
+  locationOption: EmployeeProfileLocationOption;
+  locationCountries?: string[];
+  locationDistancePosition?: Position;
+  locationDistanceRadius?: number; // [km]
+}
+
+export interface EmployeeProfileFormStep4 {
+  availabilityOption: EmployeeProfileAvailabilityOption;
+  availabilityDateRanges?: DateRange[];
+}
+
 export interface EmployeeProfileForm {
+  step1: EmployeeProfileFormStep1;
+  step2: EmployeeProfileFormStep2;
+  step3: EmployeeProfileFormStep3;
+  step4: EmployeeProfileFormStep4;
+}
+
+// Flat API structure for backend communication
+export interface EmployeeProfileFormDto {
   firstName: string;
   lastName: string;
   communicationLanguages: string[];
@@ -63,15 +95,11 @@ export interface EmployeeProfileForm {
   skills?: string[];
   certificates?: string[];
 
-  // LOCATION
   locationOption: EmployeeProfileLocationOption;
-  // if SELECTED_COUNTRIES_EUROPE
   locationCountries?: string[];
-  // if DISTANCE
   locationDistancePosition?: Position;
   locationDistanceRadius?: number; // [km]
 
-  // AVAILABILITY DATES
   availabilityOption: EmployeeProfileAvailabilityOption;
   availabilityDateRanges?: DateRange[];
 }

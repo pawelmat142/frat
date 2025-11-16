@@ -1,4 +1,4 @@
-import { EmployeeProfileForm, EmployeeProfileLocationOptions, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileFormDto, EmployeeProfileLocationOptions, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
 import { UserI } from "@shared/interfaces/UserI";
 import { PointUtil } from "@shared/utils/PointUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
@@ -7,7 +7,7 @@ import { DeepPartial } from "typeorm";
 
 export abstract class EPUtil {
 
-    public static buildEmployeeProfileFromForm(user: UserI, form: EmployeeProfileForm, status: EmployeeProfileStatus): DeepPartial<EmployeeProfileEntity> {
+    public static buildEmployeeProfileFromForm(user: UserI, form: EmployeeProfileFormDto, status: EmployeeProfileStatus): DeepPartial<EmployeeProfileEntity> {
         let profile: DeepPartial<EmployeeProfileEntity> = {
             employeeProfileId: 0,
             uid: user.uid,
@@ -30,7 +30,7 @@ export abstract class EPUtil {
         return profile;
     }
 
-    public static fillLocationData(profile: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileForm): void {
+    public static fillLocationData(profile: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): void {
         if (form.locationOption === EmployeeProfileLocationOptions.ALL_EUROPE) {
             profile.locationCountries = []
             EPUtil.cleanLocationDataDistance(profile);
@@ -50,7 +50,7 @@ export abstract class EPUtil {
         delete profile.address;
     }
 
-    private static fillLocationDataDistance(profile: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileForm): void {
+    private static fillLocationDataDistance(profile: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): void {
         profile.point = PointUtil.toGeoPoint(form.locationDistancePosition!);
         profile.pointRadius = form.locationDistanceRadius;
         profile.address = form.locationDistancePosition.address;

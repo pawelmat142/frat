@@ -1,5 +1,26 @@
 import { httpClient } from "global/services/http";
-import { EmployeeProfileForm, EmployeeProfileI, EmployeeProfileSearchForm, EmployeeProfileSearchResponse } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileForm, EmployeeProfileFormDto, EmployeeProfileI, EmployeeProfileSearchForm, EmployeeProfileSearchResponse } from "@shared/interfaces/EmployeeProfileI";
+
+// Mapper to convert nested form structure to flat API structure
+const mapFormToApi = (form: EmployeeProfileForm): EmployeeProfileFormDto => {
+	return {
+		firstName: form.step1.firstName,
+		lastName: form.step1.lastName,
+		residenceCountry: form.step1.residenceCountry,
+		communicationLanguages: form.step1.communicationLanguages,
+
+		skills: form.step2.skills,
+		certificates: form.step2.certificates,
+
+		locationOption: form.step3.locationOption,
+		locationCountries: form.step3.locationCountries,
+		locationDistancePosition: form.step3.locationDistancePosition,
+		locationDistanceRadius: form.step3.locationDistanceRadius,
+
+		availabilityOption: form.step4.availabilityOption,
+		availabilityDateRanges: form.step4.availabilityDateRanges
+	};
+};
 
 export const EmployeeProfileService = {
 
@@ -12,11 +33,13 @@ export const EmployeeProfileService = {
 	},
 
 	createEmployeeProfile(form: EmployeeProfileForm): Promise<EmployeeProfileI> {
-		return httpClient.post<EmployeeProfileI>(`/employee-profile`, form);
+		const apiPayload = mapFormToApi(form);
+		return httpClient.post<EmployeeProfileI>(`/employee-profile`, apiPayload);
 	},
 
 	updateEmployeeProfile(form: EmployeeProfileForm): Promise<EmployeeProfileI> {
-		return httpClient.put<EmployeeProfileI>(`/employee-profile`, form);
+		const apiPayload = mapFormToApi(form);
+		return httpClient.put<EmployeeProfileI>(`/employee-profile`, apiPayload);
 	},
 
 	searchEmployeeProfiles(params: EmployeeProfileSearchForm): Promise<EmployeeProfileSearchResponse> {

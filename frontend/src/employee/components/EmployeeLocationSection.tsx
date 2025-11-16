@@ -16,7 +16,7 @@ interface Props {
 }
 
 const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch, formState }) => {
-    const locationOption = watch("locationOption");
+    const locationOption = watch("step3.locationOption");
 
     const { t } = useTranslation();
 
@@ -46,7 +46,7 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch, fo
             <TabSwitcher
                 options={tabOptions}
                 value={locationOption}
-                onChange={code => setValue("locationOption", code as EmployeeProfileLocationOption)}
+                onChange={code => setValue("step3.locationOption", code as EmployeeProfileLocationOption)}
             />
 
             <div className="w-full flex mt-4">
@@ -62,7 +62,7 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch, fo
                                 {t("employeeProfile.form.locationOption.SELECTED_COUNTRIES.msg")}
                             </div>
                             <Controller
-                                name="locationCountries"
+                                name="step3.locationCountries"
                                 control={control}
                                 rules={required}
                                 render={({ field }) => (
@@ -76,7 +76,7 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch, fo
                                         elementLabelTranslationKey="COUNTRY_NAME"
                                         fullWidth
                                         required
-                                        error={formState?.errors.locationCountries}
+                                        error={formState?.errors.step3?.locationCountries}
                                     />
                                 )}
                             />
@@ -88,7 +88,7 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch, fo
                                 {t("employeeProfile.form.locationOption.DISTANCE.msg")}
                             </div>
                             <Controller
-                                name="locationDistancePosition"
+                                name="step3.locationDistancePosition"
                                 control={control}
                                 rules={required}
                                 render={({ field }) => (
@@ -99,12 +99,12 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch, fo
                                         value={field.value}
                                         required
                                         onChange={field.onChange}
-                                        error={formState?.errors.locationDistancePosition}
+                                        error={formState?.errors.step3?.locationDistancePosition}
                                     />
                                 )}
                             />
                             <Controller
-                                name="locationDistanceRadius"
+                                name="step3.locationDistanceRadius"
                                 rules={required}
                                 control={control}
                                 render={({ field }) => (
@@ -115,7 +115,7 @@ const EmployeeLocationSection: React.FC<Props> = ({ control, setValue, watch, fo
                                         label={t("employeeProfile.form.radius")}
                                         fullWidth
                                         required
-                                        error={formState?.errors.locationDistanceRadius}
+                                        error={formState?.errors.step3?.locationDistanceRadius}
                                     />
                                 )}
                             />

@@ -15,7 +15,7 @@ import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { UserI, UserRoles } from '@shared/interfaces/UserI';
 import { EmployeeProfileService } from './services/EmployeeProfileService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
-import { EmployeeProfileForm, EmployeeProfileI, EmployeeProfileSearchForm, EmployeeProfileSearchResponse, EmployeeProfileStatus } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileFormDto, EmployeeProfileI, EmployeeProfileSearchForm, EmployeeProfileSearchResponse, EmployeeProfileStatus } from '@shared/interfaces/EmployeeProfileI';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
 import { Serialize } from 'global/decorators/Serialize';
 import { EmployeeProfileEntity } from './model/EmployeeProfileEntity';
@@ -56,7 +56,7 @@ export class EmployeeProfileController {
   @Serialize(EmployeeProfileEntity)
   createEmployeeProfile(
     @CurrentUser() user: UserI,
-    @Body() form: EmployeeProfileForm
+    @Body() form: EmployeeProfileFormDto
   ): Promise<EmployeeProfileI> {
     return this.employeeProfileService.createEmployeeProfile(user, form);
   }
@@ -66,7 +66,7 @@ export class EmployeeProfileController {
   @Serialize(EmployeeProfileEntity)
   updateEmployeeProfile(
     @CurrentUser() user: UserI,
-    @Body() form: EmployeeProfileForm
+    @Body() form: EmployeeProfileFormDto
   ): Promise<EmployeeProfileI> {
     return this.employeeProfileService.updateEmployeeProfile(user, form);
   }

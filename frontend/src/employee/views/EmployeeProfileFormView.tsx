@@ -1,12 +1,7 @@
 import Button from "global/components/controls/Button";
-import DictionarySelector from "global/components/controls/DictionarySelector";
-import FloatingInput from "global/components/controls/FloatingInput";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import React from "react";
-import CommunicationLanguagesSection from "../components/CommunicationLanguagesSection";
-import EmployeeLocationSection from "../components/EmployeeLocationSection";
-import { FormValidator } from "global/FormValidator";
 import { DateRange, EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
 import { toast } from "react-toastify";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
@@ -15,33 +10,57 @@ import { Utils } from "global/utils";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
 import { useNavigate } from "react-router-dom";
-import EmployeeProfileDates from "employee/components/EmployeeProfileDates";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
+import EmployeeProfileStep1 from "../components/EmployeeProfileStep1";
+import EmployeeProfileStep2 from "../components/EmployeeProfileStep2";
+import EmployeeProfileStep3 from "../components/EmployeeProfileStep3";
+import EmployeeProfileStep4 from "../components/EmployeeProfileStep4";
+
+// TODO single selector poprawić - dostosowac do mobile,
+// TODO single selector poprawić - poprawic dzialanie na kompie
+// TODO krok 2
+// TODO krok 3
+// TODO krok 4
+// TODO sprawdiic backend czy działa
+// TODO widok z lista profili
+
+const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
+
+type StepKey = 'step1' | 'step2' | 'step3' | 'step4';
+
+const STEPS_ORDER: StepKey[] = ['step1', 'step2', 'step3', 'step4'];
 
 const EmployeeProfileFormView: React.FC = () => {
 
     const { t } = useTranslation();
-    const required = FormValidator.required(t);
     const [loading, setLoading] = React.useState<boolean>(false);
+    const [currentStep, setCurrentStep] = React.useState<StepKey>('step1');
     const { employeeProfile, initEmployeeProfile } = useUserContext();
     const navigate = useNavigate();
     const isDevMode = Utils.isDevMode();
 
-    const { control, handleSubmit, watch, setValue, reset, formState } = useForm<EmployeeProfileForm>({
+    const { control, handleSubmit, watch, setValue, reset, formState, trigger } = useForm<EmployeeProfileForm>({
         defaultValues: {
-            firstName: "",
-            lastName: "",
-            residenceCountry: "",
-            skills: [],
-            certificates: [],
-            communicationLanguages: [""],
-            locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
-            locationCountries: [],
-            locationDistancePosition: undefined,
-            locationDistanceRadius: NaN,
-
-            availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
-            availabilityDateRanges: []
+            step1: {
+                firstName: "",
+                lastName: "",
+                residenceCountry: "",
+                communicationLanguages: [""]
+            },
+            step2: {
+                skills: [],
+                certificates: []
+            },
+            step3: {
+                locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
+                locationCountries: [],
+                locationDistancePosition: undefined,
+                locationDistanceRadius: NaN
+            },
+            step4: {
+                availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
+                availabilityDateRanges: []
+            }
         },
     });
 
@@ -60,38 +79,35 @@ const EmployeeProfileFormView: React.FC = () => {
                 .filter((r): r is DateRange => r != null);
 
             reset({
-                firstName: employeeProfile.firstName || "",
-                lastName: employeeProfile.lastName || "",
-                residenceCountry: employeeProfile.residenceCountry || "",
-                skills: employeeProfile.skills || [],
-                certificates: employeeProfile.certificates || [],
-                communicationLanguages: employeeProfile.communicationLanguages || [""],
-                locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.ALL_EUROPE,
-                locationCountries: employeeProfile.locationCountries || [],
-                locationDistancePosition,
-                locationDistanceRadius: employeeProfile.pointRadius ?? NaN,
-                availabilityOption: employeeProfile.availabilityOption || EmployeeProfileAvailabilityOptions.ANYTIME,
-                availabilityDateRanges: availabilityDateRanges
+                step1: {
+                    firstName: employeeProfile.firstName || "",
+                    lastName: employeeProfile.lastName || "",
+                    residenceCountry: employeeProfile.residenceCountry || "",
+                    communicationLanguages: employeeProfile.communicationLanguages || [""]
+                },
+                step2: {
+                    skills: employeeProfile.skills || [],
+                    certificates: employeeProfile.certificates || []
+                },
+                step3: {
+                    locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.ALL_EUROPE,
+                    locationCountries: employeeProfile.locationCountries || [],
+                    locationDistancePosition,
+                    locationDistanceRadius: employeeProfile.pointRadius ?? NaN
+                },
+                step4: {
+                    availabilityOption: employeeProfile.availabilityOption || EmployeeProfileAvailabilityOptions.ANYTIME,
+                    availabilityDateRanges: availabilityDateRanges
+                }
             });
         }
     }, [employeeProfile, reset]);
 
-    const handleDevFill = () => {
-        setValue("firstName", "Pawel");
-        setValue("lastName", "Mat");
-        setValue("residenceCountry", "pl");
-        setValue("skills", ["ONE", "TWO"]);
-        setValue("certificates", ["ONE"]);
-        setValue("communicationLanguages", ["en", "pl"]);
-    };
-
     const onSubmit = async (form: EmployeeProfileForm) => {
-        console.log(form)
         if (employeeProfile) {
             await updateEmployeeProfile(form);
             return;
         }
-
         try {
             setLoading(true);
             const result = await EmployeeProfileService.createEmployeeProfile(form);
@@ -119,24 +135,145 @@ const EmployeeProfileFormView: React.FC = () => {
         }
     }
 
+    const handleDevFill = () => {
+        setValue("step1.firstName", "Pawel");
+        setValue("step1.lastName", "Mat");
+        setValue("step1.residenceCountry", "pl");
+        setValue("step2.skills", ["ONE", "TWO"]);
+        setValue("step2.certificates", ["ONE"]);
+        setValue("step1.communicationLanguages", ["en", "pl"]);
+    };
+
     if (loading) {
         return <Loading />;
     }
 
+    const renderStep = () => {
+        switch (currentStep) {
+            case 'step1':
+                return (
+                    <EmployeeProfileStep1
+                        control={control}
+                        setValue={setValue}
+                        watch={watch}
+                        formState={formState}
+                    />
+                );
+            case 'step2':
+                return (
+                    <EmployeeProfileStep2
+                        control={control}
+                        formState={formState}
+                    />
+                );
+            case 'step3':
+                return (
+                    <EmployeeProfileStep3
+                        control={control}
+                        setValue={setValue}
+                        watch={watch}
+                        formState={formState}
+                    />
+                );
+            case 'step4':
+                return (
+                    <EmployeeProfileStep4
+                        control={control}
+                        setValue={setValue}
+                        watch={watch}
+                        formState={formState}
+                    />
+                );
+            default:
+                return null;
+        }
+    };
+
+    const handleNext = async () => {
+        const isValid = await validateCurrentStep();
+        if (isValid) {
+            saveFormToLocalStorage();
+            const currentIndex = STEPS_ORDER.indexOf(currentStep);
+            if (currentIndex < STEPS_ORDER.length - 1) {
+                setCurrentStep(STEPS_ORDER[currentIndex + 1]);
+            }
+        }
+    };
+
+    const validateCurrentStep = async (): Promise<boolean> => {
+        return validateStep(currentStep);
+    }
+
+    const validateStep = async (step: StepKey): Promise<boolean> => {
+        const result = await trigger(step);
+        if (!result) {
+            toast.error(t("employeeProfile.form.validationError"));
+        }
+        return result;
+    }
+
+    const saveFormToLocalStorage = () => {
+        const formData = watch();
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formData));
+    }
+
+    const handlePrev = () => {
+        saveFormToLocalStorage();
+        const currentIndex = STEPS_ORDER.indexOf(currentStep);
+        if (currentIndex > 0) {
+            setCurrentStep(STEPS_ORDER[currentIndex - 1]);
+        }
+    };
+
+    const selectStep = async (targetStep: StepKey) => {
+        const targetIndex = STEPS_ORDER.indexOf(targetStep);
+        const currentIndex = STEPS_ORDER.indexOf(currentStep);
+
+        if (targetIndex < currentIndex) {
+            // Going back - no validation needed
+            setCurrentStep(targetStep);
+        } else if (targetIndex > currentIndex) {
+            // Going forward - validate current step
+            const isValid = await validateCurrentStep();
+            if (isValid) {
+                saveFormToLocalStorage();
+                setCurrentStep(targetStep);
+            }
+        }
+    }
+
     return (
         <div className="form-view relative mt-10">
+            <h2 className="form-header">
+                {t("employeeProfile.form.title")}
+            </h2>
+
             <form
                 onSubmit={handleSubmit(onSubmit, errors => {
                     console.log("Form errors", errors);
-                    toast.error("error")//todo translation
+                    toast.error(t("employeeProfile.form.submitError"));
                 })}
                 noValidate
             >
-                <h2 className="form-header">
-                    {t("employeeProfile.form.title")}
-                </h2>
+                {/* Step indicator */}
+                <div className="flex justify-center items-center gap-2 mb-8">
+                    {STEPS_ORDER.map((step) => (
+                        <Button
+                            onClick={() => selectStep(step)}
+                            key={step}
+                            type="button"
+                            mode={currentStep === step ? BtnModes.PRIMARY_TXT : BtnModes.SECONDARY_TXT}
+                            size={BtnSizes.SMALL}
+                            disabled={currentStep === step ||
+                                STEPS_ORDER.indexOf(step) > STEPS_ORDER.indexOf(currentStep)
+                            }
+                        >
+                            {t(`employeeProfile.form.${step}.label`)}
+                        </Button>
+                    ))}
+                </div>
 
-                {isDevMode && (
+                {isDevMode && currentStep === 'step1' && (
                     <div className="flex items-center justify-end">
                         <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
                             DEV FILL
@@ -144,107 +281,43 @@ const EmployeeProfileFormView: React.FC = () => {
                     </div>
                 )}
 
-                <div className="flex flex-col gap-7 md:gap-5">
-                    <Controller
-                        name="firstName"
-                        control={control}
-                        rules={required}
-                        render={({ field }) => <FloatingInput
-                            {...field}
-                            label={t("employeeProfile.form.firstName")}
-                            fullWidth
-                            required
-                            error={formState.errors.firstName}
-                        />
-                        }
-                    />
-                    <Controller
-                        name="lastName"
-                        control={control}
-                        rules={required}
-                        render={({ field }) => <FloatingInput
-                            {...field}
-                            label={t("employeeProfile.form.lastName")}
-                            fullWidth
-                            required
-                            error={formState.errors.lastName}
-                        />
-                        }
-                    />
-                    <Controller
-                        name="residenceCountry"
-                        control={control}
-                        rules={required}
-                        render={({ field }) => <DictionarySelector
-                            className="w-full"
-                            valueInput={field.value ?? ""}
-                            onSelect={item => field.onChange(item ? String(item.value) : "")}
-                            label={t("employeeProfile.form.residenceCountry")}
-                            code="LANGUAGES"
-                            groupCode="COMMUNICATION"
-                            elementLabelTranslationKey="COUNTRY_NAME"
-                            fullWidth
-                            required
-                            error={formState.errors.residenceCountry}
-                        />
-                        }
-                    />
-                    <Controller
-                        name="skills"
-                        control={control}
-                        rules={required}
-                        render={({ field }) => <DictionarySelector
-                            type="multi"
-                            className="w-full"
-                            valueInput={field.value}
-                            onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
-                            label={t("employeeProfile.form.skills")}
-                            code="SKILLS"
-                            fullWidth
-                            required
-                            error={formState.errors.skills}
-                        />
-                        }
-                    />
-                    <Controller
-                        name="certificates"
-                        control={control}
-                        rules={required}
-                        render={({ field }) => <DictionarySelector
-                            type="multi"
-                            className="w-full"
-                            valueInput={field.value}
-                            onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
-                            label={t("employeeProfile.form.certificates")}
-                            code="CERTIFICATES"
-                            fullWidth
-                            required
-                            error={formState.errors.certificates}
-                        />
-                        }
-                    />
-                    <CommunicationLanguagesSection
-                        control={control}
-                        setValue={setValue}
-                        watch={watch}
-                        formState={formState}
-                    />
-                    <EmployeeLocationSection
-                        control={control}
-                        setValue={setValue}
-                        watch={watch}
-                        formState={formState}
-                    />
-                    <EmployeeProfileDates
-                        control={control}
-                        setValue={setValue}
-                        watch={watch}
-                        formState={formState}
-                    />
+                {renderStep()}
+
+                {/* Navigation buttons */}
+                <div className="flex gap-4 mt-8">
+                    {currentStep !== 'step1' && (
+                        <Button
+                            type="button"
+                            onClick={handlePrev}
+                            size={BtnSizes.LARGE}
+                            mode={BtnModes.SECONDARY}
+                            className="flex-1"
+                        >
+                            {t("common.previous")}
+                        </Button>
+                    )}
+
+                    {currentStep !== 'step4' ? (
+                        <Button
+                            type="button"
+                            onClick={handleNext}
+                            size={BtnSizes.LARGE}
+                            mode={BtnModes.PRIMARY}
+                            className="flex-1"
+                        >
+                            {t("common.next")}
+                        </Button>
+                    ) : (
+                        <Button
+                            type="submit"
+                            size={BtnSizes.LARGE}
+                            mode={BtnModes.PRIMARY}
+                            className="flex-1"
+                        >
+                            {t("employeeProfile.form.submit")}
+                        </Button>
+                    )}
                 </div>
-                <Button type='submit' className="mt-8" size={BtnSizes.LARGE} mode={BtnModes.PRIMARY} fullWidth>
-                    {employeeProfile ? t('common.save') : t('common.submit')}
-                </Button>
             </form>
         </div>
     );
