@@ -1,6 +1,6 @@
 import Button from "global/components/controls/Button";
 import DictionarySelector from "global/components/controls/DictionarySelector";
-import Input from "global/components/controls/Input";
+import FloatingInput from "global/components/controls/FloatingInput";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import React from "react";
@@ -145,7 +145,7 @@ const EmployeeProfileFormView: React.FC = () => {
                         name="firstName"
                         control={control}
                         rules={required}
-                        render={({ field }) => <Input
+                        render={({ field }) => <FloatingInput
                             {...field}
                             label={t("employeeProfile.form.firstName")}
                             fullWidth
@@ -158,7 +158,7 @@ const EmployeeProfileFormView: React.FC = () => {
                         name="lastName"
                         control={control}
                         rules={required}
-                        render={({ field }) => <Input
+                        render={({ field }) => <FloatingInput
                             {...field}
                             label={t("employeeProfile.form.lastName")}
                             fullWidth

@@ -8,6 +8,7 @@ import Checkbox from './Checkbox';
 import { Utils } from 'global/utils';
 import Input from './Input';
 
+// TODO dodatkowe okienko szukania powinno byc nieco mniejsze + ikona search 
 function SelectorMulti<T extends SelectorValue = SelectorValue>({
     items,
     values,

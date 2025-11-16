@@ -152,6 +152,7 @@ textarea::placeholder,
 // FONT
 $btnFont: 1.1rem;
 $smallFont: .8rem;
+$xsFont: .6rem;
 $lFont: 1.25rem;
 $xlFont: 1.5rem;
 $xxlFont: 1.75rem;
@@ -162,6 +163,9 @@ $padding2x: 2rem;
 $padding4x: 4rem;
 $paddingSmall: .5rem;
 
+.xs-font {
+  font-size: $xsFont;
+}
 .small-font {
   font-size: $smallFont;
 }
