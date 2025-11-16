@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Button from './Button';
 import { BtnModes, BtnSizes } from 'global/interface/controls.interface';
+import { useTranslation } from 'react-i18next';
 
 interface DateRangePickerSheetProps {
     value?: Date | null;
@@ -33,6 +34,8 @@ const DateRangePickerSheet: React.FC<DateRangePickerSheetProps> = ({
         onChange(null);
     };
 
+    const { t } = useTranslation();
+
     return (
         <div className="date-picker-sheet">
             <div className="date-picker-sheet-calendar">
@@ -48,22 +51,13 @@ const DateRangePickerSheet: React.FC<DateRangePickerSheetProps> = ({
                     highlightDates={startDate && !endDate ? [startDate] : undefined}
                 />
             </div>
+
             <div className="date-picker-sheet-actions">
-                <Button
-                    mode={BtnModes.SECONDARY}
-                    size={BtnSizes.LARGE}
-                    onClick={handleCancel}
-                    fullWidth
-                >
-                    Anuluj
+                <Button onClick={handleCancel} mode={BtnModes.ERROR_TXT} fullWidth={true}>
+                    {t("common.cancel")}
                 </Button>
-                <Button
-                    mode={BtnModes.PRIMARY}
-                    size={BtnSizes.LARGE}
-                    onClick={handleConfirm}
-                    fullWidth
-                >
-                    Potwierdź
+                <Button onClick={handleConfirm} mode={BtnModes.PRIMARY_TXT} fullWidth={true}>
+                    {t("common.confirm")}
                 </Button>
             </div>
         </div>

@@ -36,10 +36,9 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Expose()
   lastName: string;
   
-  @Column({ name: 'residence_country' })
-  @Expose()
-  residenceCountry: string;
-
+  // @Column({ name: 'residence_country' })
+  // @Expose()
+  // residenceCountry: string;
 
   
   // DICTIONARY FIELDS

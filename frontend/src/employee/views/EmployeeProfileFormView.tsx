@@ -16,7 +16,6 @@ import EmployeeProfileStep2 from "../components/EmployeeProfileStep2";
 import EmployeeProfileStep3 from "../components/EmployeeProfileStep3";
 import EmployeeProfileStep4 from "../components/EmployeeProfileStep4";
 
-// TODO sprawdiic backend czy działa
 // TODO czyscic storage po wyslaniu formularza
 // TODO widok z lista profili
 
@@ -40,7 +39,6 @@ const EmployeeProfileFormView: React.FC = () => {
             step1: {
                 firstName: "",
                 lastName: "",
-                residenceCountry: "",
                 communicationLanguages: [""]
             },
             step2: {
@@ -93,7 +91,7 @@ const EmployeeProfileFormView: React.FC = () => {
             step1: {
                 firstName: employeeProfile.firstName || "",
                 lastName: employeeProfile.lastName || "",
-                residenceCountry: employeeProfile.residenceCountry || "",
+                // residenceCountry: employeeProfile.residenceCountry || "",
                 communicationLanguages: employeeProfile.communicationLanguages || [""]
             },
             step2: {
@@ -158,7 +156,6 @@ const EmployeeProfileFormView: React.FC = () => {
     const handleDevFill = () => {
         setValue("step1.firstName", "Pawel");
         setValue("step1.lastName", "Mat");
-        setValue("step1.residenceCountry", "pl");
         setValue("step2.skills", ["ONE", "TWO"]);
         setValue("step2.certificates", ["ONE"]);
         setValue("step1.communicationLanguages", ["en", "pl"]);

@@ -75,7 +75,7 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
           <div><span className="font-semibold secondary-text">Email:</span> <span className="primary-text">{localProfile.email}</span></div>
           <div><span className="font-semibold secondary-text">First Name:</span> <span className="primary-text">{localProfile.firstName}</span></div>
           <div><span className="font-semibold secondary-text">Last Name:</span> <span className="primary-text">{localProfile.lastName}</span></div>
-          <div><span className="font-semibold secondary-text">Residence Country:</span> <span className="primary-text">{localProfile.residenceCountry}</span></div>
+          {/* <div><span className="font-semibold secondary-text">Residence Country:</span> <span className="primary-text">{localProfile.residenceCountry}</span></div> */}
         </div>
         <div className="flex flex-col gap-2">
           <div><span className="font-semibold secondary-text">Skills:</span> <span className="primary-text">{localProfile.skills?.join(", ") || '-'}</span></div>

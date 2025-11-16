@@ -17,7 +17,9 @@
       "language": "Język",
       "networkError": "Błąd sieci",
       "settings": "Ustawienia",
-      "confirm": "Potwierdź"
+      "confirm": "Potwierdź",
+      "start": "Początek",
+      "end": "Koniec"
     },
     "lang": {
       "language": "Język",

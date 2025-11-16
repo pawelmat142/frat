@@ -5,6 +5,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { DateRange } from '@shared/interfaces/EmployeeProfileI';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import DateRangePickerSheet from './DateRangePickerSheet';
+import { useTranslation } from 'react-i18next';
 
 interface DateRangeProps {
     value?: DateRange;
@@ -30,12 +31,13 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomSheetCtx = useBottomSheet();
 
+    const { t } = useTranslation();
     const handleStartDateClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (disabled) return;
         
         bottomSheetCtx.open({
-            title: `${label} - Data początkowa`,
+            title: `${label} - ${t('common.start')}`,
             showClose: true,
             children: (
                 <DateRangePickerSheet
@@ -59,7 +61,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
         if (disabled) return;
         
         bottomSheetCtx.open({
-            title: `${label} - Data końcowa`,
+            title: `${label} - ${t('common.end')}`,
             showClose: true,
             children: (
                 <DateRangePickerSheet

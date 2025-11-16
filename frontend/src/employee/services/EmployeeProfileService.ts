@@ -6,7 +6,7 @@ const mapFormToApi = (form: EmployeeProfileForm): EmployeeProfileFormDto => {
 	return {
 		firstName: form.step1.firstName,
 		lastName: form.step1.lastName,
-		residenceCountry: form.step1.residenceCountry,
+		// residenceCountry: form.step1.residenceCountry,
 		communicationLanguages: form.step1.communicationLanguages,
 
 		skills: form.step2.skills,

@@ -163,7 +163,7 @@ const EmployeeProfileStep4: React.FC<Props> = ({ control, setValue, watch, formS
                                 {availabilityDateRanges.map((dateRange, idx) => {
 
                                     return (
-                                        <div key={dateRange.id} className="flex gap-2 items-end mt-4">
+                                        <div key={dateRange?.id ?? idx} className="flex gap-2 items-end mt-4">
                                             <Controller
                                                 name={`step4.availabilityDateRanges.${idx}` as const}
                                                 control={control}

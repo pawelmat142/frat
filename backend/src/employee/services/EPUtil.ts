@@ -17,7 +17,7 @@ export abstract class EPUtil {
 
             firstName: form.firstName,
             lastName: form.lastName,
-            residenceCountry: form.residenceCountry,
+            // residenceCountry: form.residenceCountry,
 
             skills: form.skills || [],
             certificates: form.certificates || [],
@@ -75,9 +75,9 @@ export abstract class EPUtil {
         if (!profile?.lastName) {
             throw new ToastException('employeeProfile.error.lastNameRequired', this);
         }
-        if (!profile?.residenceCountry) {
-            throw new ToastException('employeeProfile.error.residenceCountryRequired', this);
-        }
+        // if (!profile?.residenceCountry) {
+        //     throw new ToastException('employeeProfile.error.residenceCountryRequired', this);
+        // }
         if (!profile?.communicationLanguages.length) {
             throw new ToastException('employeeProfile.error.communicationLanguagesRequired', this);
         }

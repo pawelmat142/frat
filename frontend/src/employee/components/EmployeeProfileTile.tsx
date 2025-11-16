@@ -15,10 +15,10 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
     const navigate = useNavigate();
     
     const srcs = new Set<string>();
-    const residenceFlagSrc = languagesDictionary.elements.find(el => el.values.COUNTRY_CODE === employeeProfile.residenceCountry)?.values.SRC;
-    if (residenceFlagSrc) {
-        srcs.add(residenceFlagSrc);
-    }
+    // const residenceFlagSrc = languagesDictionary.elements.find(el => el.values.COUNTRY_CODE === employeeProfile.residenceCountry)?.values.SRC;
+    // if (residenceFlagSrc) {
+    //     srcs.add(residenceFlagSrc);
+    // }
     employeeProfile.communicationLanguages?.forEach(lang => {
         const flagSrc = languagesDictionary?.elements.find(el => el.code === lang)?.values.SRC;
         if (flagSrc) {

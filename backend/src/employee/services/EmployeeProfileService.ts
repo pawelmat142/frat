@@ -82,7 +82,7 @@ export class EmployeeProfileService {
 
             firstName: form.firstName,
             lastName: form.lastName,
-            residenceCountry: form.residenceCountry,
+            // residenceCountry: form.residenceCountry,
 
             skills: form.skills || [],
             certificates: form.certificates || [],

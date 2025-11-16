@@ -11,7 +11,7 @@ export interface EmployeeProfileI {
   // form data
   firstName: string;
   lastName: string;
-  residenceCountry: string;
+  // residenceCountry: string;
 
   skills?: string[];
   certificates?: string[];
@@ -58,7 +58,7 @@ export interface EmployeeProfileFormStep1 {
   firstName: string;
   lastName: string;
   communicationLanguages: string[];
-  residenceCountry: string;
+  // residenceCountry: string;
 }
 
 export interface EmployeeProfileFormStep2 {
@@ -90,7 +90,7 @@ export interface EmployeeProfileFormDto {
   firstName: string;
   lastName: string;
   communicationLanguages: string[];
-  residenceCountry: string;
+  // residenceCountry: string;
 
   skills?: string[];
   certificates?: string[];
