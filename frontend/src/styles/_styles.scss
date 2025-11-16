@@ -182,6 +182,7 @@ $headerHeight: 60px;
 
     @media screen and (min-width: $tablet) {
         grid-template-columns: 1fr 1fr 1fr 1fr;
+
         .square-tile {
             &.big {
                 aspect-ratio: unset;
@@ -259,10 +260,54 @@ $headerHeight: 60px;
     margin-bottom: 2rem;
 }
 
+.form-control-error-msg {
+    color: $error-color;
+    margin-left: 1rem;
+    font-size: $smallFont;
+}
+
+
+
 
 .tiles-center-wrapper {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 1rem;
+}
+
+
+
+
+// TAB SWITCHER
+.tab-switcher {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $secondary-bg;
+    border-radius: .75rem;
+    overflow: hidden;
+    
+}
+
+.tab-switcher-option {
+    border-radius: .75rem;
+    box-sizing: content-box;
+    color: $primary-text;
+    padding: .75rem .5rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    height: 100%;
+
+    &:not(:last-child) {
+        border-right: 3px solid $primary-bg
+    }
+
+    &.active {
+        background-color: $primary-color;
+        color: #fff;
+    }
 }

@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import Search from '@mui/icons-material/Search'
 import Input from "global/components/controls/Input";
-import PositionSelector from "global/components/controls/PositionSelector";
+import PositionSelector from "global/components/selector/position/PositionSelector";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import { EmployeeProfileI, EmployeeProfileSearchForm } from "@shared/interfaces/EmployeeProfileI";
 import EmployeeProfileTile from "employee/components/EmployeeProfileTile";

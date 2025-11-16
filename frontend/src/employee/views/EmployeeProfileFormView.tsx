@@ -16,9 +16,8 @@ import EmployeeProfileStep2 from "../components/EmployeeProfileStep2";
 import EmployeeProfileStep3 from "../components/EmployeeProfileStep3";
 import EmployeeProfileStep4 from "../components/EmployeeProfileStep4";
 
-// TODO multiselect selector popra
-// TODO krok 2
-// TODO krok 3
+// TODO position selector - nowy widok na mobile - popup na dekstop
+// TODO dostosowac date range selector do podejscia z popup/bottom sheet
 // TODO krok 4
 // TODO sprawdiic backend czy działa
 // TODO czyscic storage po wyslaniu formularza
@@ -117,7 +116,13 @@ const EmployeeProfileFormView: React.FC = () => {
         });
     }, [employeeProfile, reset, trigger]);
 
-    const onSubmit = async (form: EmployeeProfileForm) => {
+    const onSubmit = async () => {
+        const valid = await validateCurrentStep();
+        if (!valid) {
+            toast.error(t("employeeProfile.form.validationError"));
+            return;
+        }
+        const form = watch();
         if (employeeProfile) {
             await updateEmployeeProfile(form);
             return;
@@ -265,7 +270,7 @@ const EmployeeProfileFormView: React.FC = () => {
             </h2>
 
             <form
-                onSubmit={handleSubmit(onSubmit, errors => {
+                onSubmit={handleSubmit(() => {}, errors => {
                     console.log("Form errors", errors);
                     toast.error(t("employeeProfile.form.submitError"));
                 })}
@@ -291,7 +296,7 @@ const EmployeeProfileFormView: React.FC = () => {
 
                 {renderStep()}
 
-                <div className="flex gap-4 mt-8 mb-10">
+                <div className="flex gap-4 mt-20 mb-10">
                     {currentStep !== 'step1' && (
                         <Button
                             type="button"
@@ -316,7 +321,10 @@ const EmployeeProfileFormView: React.FC = () => {
                         </Button>
                     ) : (
                         <Button
-                            type="submit"
+                            type="button"
+                            onClick={() => {
+                                onSubmit()
+                            }}
                             size={BtnSizes.LARGE}
                             mode={BtnModes.PRIMARY}
                             className="flex-1"

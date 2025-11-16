@@ -234,7 +234,6 @@
         "location": "Lokalizacja",
         "firstName": "Imię",
         "addLanguage": "Dodaj język",
-        "jobLocation": "Gdzie chcesz pracować?",
         "certificates": "Certyfikaty",
         "step1": {
           "title": "Dane osobowe",
@@ -245,7 +244,7 @@
           "label": "Krok 2"
         },
         "step3": {
-          "title": "Lokalizacja pracy",
+          "title": "Gdzie chcesz pracować?",
           "label": "Krok 3"
         },
         "step4": {
@@ -263,7 +262,7 @@
           },
           "SELECTED_COUNTRIES": {
             "msg": "Wybierz kraje, z których chcesz otrzymywać oferty.",
-            "tab": "Wybrane kraje"
+            "tab": "Kraje"
           }
         },
         "residenceCountry": "Kraj zamieszkania",

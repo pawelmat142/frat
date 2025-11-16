@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react';
 import FloatingLabel from './FloatingLabel';
+import ArrowIcon from './ArrowIcon';
 import { SelectorValue, SelectorMultiProps, SelectorItem } from 'global/interface/controls.interface';
 import FormError from './FormError';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
@@ -19,7 +19,6 @@ function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
     displayElementsAsChips = false,
 }: SelectorMultiProps<T>) {
 
-    const [isFocused, setIsFocused] = useState(false);
     const bottomSheet = useBottomSheet();
     
     let myClass = `pp-control pp-dropdown floating-input`;
@@ -39,7 +38,7 @@ function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
         return Array.isArray(values) && values.length > 0;
     };
 
-    const isLabelFloating = isFocused || hasValue();
+    const isLabelFloating = hasValue();
 
     const handleOpen = () => {
         bottomSheet.openSelector({
@@ -66,29 +65,28 @@ function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
                     className={myClass}
                     tabIndex={disabled ? -1 : 0}
                     aria-disabled={disabled}
-                    aria-expanded={isFocused}
                     onClick={() => {
                         if (disabled) return;
                         handleOpen();
                     }}
-                    onFocus={() => setIsFocused(true)}
                 >
                     <span className="dropdown-selected">
-                        {displayElementsAsChips ? (
-                            <div className="chip-container">
-                                {Array.isArray(values) && values.length > 0
-                                    ? values.map(v => (
-                                        <div key={String(v.value)} className="chip">
-                                            {v.label}
-                                        </div>
-                                    ))
-                                    : <div className='empty-chips'></div>}
-                            </div>
-                        ) : (
-                            Array.isArray(values) && values.length > 0
-                                ? values.map(v => v.label).join(', ')
-                                : <span className="opacity-0">placeholder</span>
-                        )}
+                            {displayElementsAsChips ? (
+                                <div className="chip-container">
+                                    {Array.isArray(values) && values.length > 0
+                                        ? values.map(v => (
+                                            <div key={String(v.value)} className="chip">
+                                                {v.label}
+                                            </div>
+                                        ))
+                                        : <div className='empty-chips'></div>}
+                                </div>
+                            ) : (
+                                Array.isArray(values) && values.length > 0
+                                    ? values.map(v => v.label).join(', ')
+                                    : <span className="opacity-0">placeholder</span>
+                            )}
+                            <ArrowIcon open={true} />
                     </span>
                 </div>
 

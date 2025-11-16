@@ -315,7 +315,7 @@ $btnPaddingY: 0.375rem;
   position: absolute;
   right: 10px;
   top: 50%;
-  padding-top: 2px;
+  transform: translateY(-50%);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -455,31 +455,6 @@ $btnPaddingY: 0.375rem;
   }
 }
 
-
-
-.tab-switcher-option {
-  box-sizing: content-box;
-  color: $primary-text;
-  border-bottom: 2px solid transparent;
-
-  &:hover {
-    color: $primary-text-active;
-    border-bottom: 2px solid $primary-text;
-  }
-
-  &.active {
-    color: $primary-color;
-    border-bottom: 2px solid $primary-color;
-  }
-
-}
-
-
-.form-control-error-msg {
-  color: $error-color;
-  margin-left: 1rem;
-  font-size: $smallFont;
-}
 
 
 

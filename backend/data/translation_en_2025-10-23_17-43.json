@@ -233,7 +233,6 @@
         "location": "Location",
         "firstName": "First name",
         "addLanguage": "Add language",
-        "jobLocation": "Where you want to work?",
         "certificates": "Certificates",
         "step1": {
           "label": "Step 1",
@@ -245,7 +244,7 @@
         },
         "step3": {
           "label": "Step 3",
-          "title": "Work Location"
+          "title": "Where you want to work?"
         },
         "step4": {
           "label": "Step 4",
@@ -262,7 +261,7 @@
           },
           "SELECTED_COUNTRIES": {
             "msg": "Choose the countries from which you want to receive offers.",
-            "tab": "Selected countries"
+            "tab": "Countries"
           }
         },
         "residenceCountry": "Country of residence",

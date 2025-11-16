@@ -1,8 +1,13 @@
 import React from "react";
-import { Control, FormState, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import { Controller, UseFormSetValue, UseFormWatch, Control, FormState } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
-import EmployeeLocationSection from "./EmployeeLocationSection";
+import TabSwitcher, { TabSwitcherOption } from "./TabSwitcher";
+import DictionarySelector from "global/components/controls/DictionarySelector";
+import Input from "global/components/controls/Input";
+import { FormValidator } from "global/FormValidator";
+import { EmployeeProfileLocationOptions, EmployeeProfileLocationOption, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
+import PositionSelector from "global/components/selector/position/PositionSelector";
+
 
 interface Props {
     control: Control<EmployeeProfileForm>;
@@ -14,19 +19,115 @@ interface Props {
 const EmployeeProfileStep3: React.FC<Props> = ({ control, setValue, watch, formState }) => {
     const { t } = useTranslation();
 
+    // --- EmployeeLocationSection logic inlined below ---
+    const locationOption = watch("step3.locationOption");
+    const required = FormValidator.required(t);
+    const tabOptions: TabSwitcherOption[] = [
+        {
+            label: t("employeeProfile.form.locationOption.ALL_EUROPE.tab"),
+            code: EmployeeProfileLocationOptions.ALL_EUROPE,
+        },
+        {
+            label: t("employeeProfile.form.locationOption.SELECTED_COUNTRIES.tab"),
+            code: EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE,
+        },
+        {
+            label: t("employeeProfile.form.locationOption.DISTANCE.tab"),
+            code: EmployeeProfileLocationOptions.DISTANCE,
+        },
+    ];
+
+    const msgClass = "secondary-text mb-5"
+
     return (
-        <div className="flex flex-col gap-7 md:gap-5">
-            <h3 className="text-xl font-semibold mb-2">
+        <>
+            <h3 className="form-header">
                 {t("employeeProfile.form.step3.title")}
             </h3>
-            
-            <EmployeeLocationSection
-                control={control}
-                setValue={setValue}
-                watch={watch}
-                formState={formState}
-            />
-        </div>
+
+            <div className="flex flex-col gap-7 md:gap-5 mt-5">
+                <TabSwitcher
+                    options={tabOptions}
+                    value={locationOption}
+                    onChange={code => setValue("step3.locationOption", code as EmployeeProfileLocationOption)}
+                />
+
+                <div className="w-full flex mt-4">
+                    <div className="primary-text w-full">
+                        {locationOption === EmployeeProfileLocationOptions.ALL_EUROPE && (
+                            <div className={msgClass}>
+                                {t("employeeProfile.form.locationOption.ALL_EUROPE.msg")}
+                            </div>
+                        )}
+                        {locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE && (
+                            <div className="w-full">
+                                <div className={msgClass}>
+                                    {t("employeeProfile.form.locationOption.SELECTED_COUNTRIES.msg")}
+                                </div>
+                                <Controller
+                                    name="step3.locationCountries"
+                                    control={control}
+                                    rules={required}
+                                    render={({ field }) => (
+                                        <DictionarySelector
+                                            type="multi"
+                                            className="w-full"
+                                            valueInput={field.value ?? []}
+                                            onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
+                                            label={t("employeeProfile.form.locationCountries")}
+                                            code="LANGUAGES"
+                                            elementLabelTranslationKey="COUNTRY_NAME"
+                                            fullWidth
+                                            required
+                                            error={formState?.errors.step3?.locationCountries}
+                                        />
+                                    )}
+                                />
+                            </div>
+                        )}
+                        {locationOption === EmployeeProfileLocationOptions.DISTANCE && (
+                            <div className="flex flex-col gap-3">
+                                <div className={msgClass}>
+                                    {t("employeeProfile.form.locationOption.DISTANCE.msg")}
+                                </div>
+                                <Controller
+                                    name="step3.locationDistancePosition"
+                                    control={control}
+                                    rules={required}
+                                    render={({ field }) => (
+                                        <PositionSelector
+                                            label={t("employeeProfile.form.location")}
+                                            name="locationDistance"
+                                            className="w-full"
+                                            value={field.value}
+                                            required
+                                            onChange={field.onChange}
+                                            error={formState?.errors.step3?.locationDistancePosition}
+                                        />
+                                    )}
+                                />
+                                <Controller
+                                    name="step3.locationDistanceRadius"
+                                    rules={required}
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Input
+                                            type="number"
+                                            {...field}
+                                            value={field.value ?? null}
+                                            label={t("employeeProfile.form.radius")}
+                                            fullWidth
+                                            required
+                                            error={formState?.errors.step3?.locationDistanceRadius}
+                                        />
+                                    )}
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </>
     );
 };
 

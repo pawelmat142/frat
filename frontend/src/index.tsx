@@ -15,6 +15,7 @@ import { CookieProvider } from 'global/providers/CookieProvider';
 import { AuthProvider } from 'auth/AuthProvider';
 import { UserProvider } from 'user/UserProvider';
 import { BottomSheetProvider } from 'global/providers/BottomSheetProvider';
+import { PositionSelectorProvider } from 'global/components/selector/position/PositionSelectorProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
