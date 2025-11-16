@@ -417,21 +417,32 @@ input {
   transition: $transition;
 }
 
-.react-datepicker__day--selected,
-.react-datepicker__day--selected:not([aria-disabled=true]):hover,
-.react-datepicker__day--keyboard-selected {
-  background: $primary-color;
-  color: #fff;
-}
-
 .react-datepicker__day--today {
   border: 1px solid $primary-color;
 }
 
 .react-datepicker__day--disabled {
-  color: $gray-400;
-  background: $gray-100;
+  color: $disabled-text;
+  // background: $gray-100;
   cursor: not-allowed;
+}
+
+.react-datepicker__day--in-range,
+.react-datepicker__day--in-range:not([aria-disabled=true]):hover {
+  background-color: $secondary-text;
+  border: none;
+}
+
+.react-datepicker__day--highlighted {
+  background-color: color-mix(in srgb, $primary-color, transparent 70%);
+  border-radius: .25rem;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--selected:not([aria-disabled=true]):hover,
+.react-datepicker__day--keyboard-selected {
+  background: $primary-color;
+  color: #fff;
 }
 
 .react-datepicker__month-container {

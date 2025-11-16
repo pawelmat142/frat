@@ -280,7 +280,8 @@
           "DATE_RANGES": {
             "msg": "Choose the dates you are available to work.",
             "tab": "Date ranges",
-            "add": "Add date range"
+            "add": "Add date range",
+            "label": "Date range"
           }
         },
         "residenceCountry": "Country of residence",

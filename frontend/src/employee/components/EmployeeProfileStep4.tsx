@@ -174,6 +174,7 @@ const EmployeeProfileStep4: React.FC<Props> = ({ control, setValue, watch, formS
                                                     const errorMessage = fieldError?.message as string | undefined;
                                                     return (
                                                         <DateRangeInput
+                                                            label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label") + (availabilityDateRanges.length ? ` #${idx + 1}` : "")}
                                                             className="w-full"
                                                             value={field.value || getDefaultDateRange()}
                                                             onChange={(dateRange) => {

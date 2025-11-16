@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import ControlLabel from './ControlLabel';
+import React, { useState, useRef } from 'react';
 import FormError from './FormError';
+import FloatingLabel from './FloatingLabel';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { DateRange } from '@shared/interfaces/EmployeeProfileI';
-import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
-import { DateUtil } from '@shared/utils/DateUtil';
+import { useBottomSheet } from 'global/providers/BottomSheetProvider';
+import DateRangePickerSheet from './DateRangePickerSheet';
 
 interface DateRangeProps {
     value?: DateRange;
@@ -28,41 +27,59 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     name,
     className = '',
 }) => {
-    const [startDate, setStartDate] = useState<Date | null>(value?.start || null);
-    const [endDate, setEndDate] = useState<Date | null>(value?.end || null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const bottomSheetCtx = useBottomSheet();
 
-    const handleStartChange = (_date: Date | null) => {
-        const date = _date ? DateRangeUtil.newLocalDate(_date) : null
-        if (!date) {
-            return
-        }
-        setStartDate(date);
-        if (onChange) {
-            onChange({ start: date, end: getEndDate(date, endDate) });
-        }
+    const handleStartDateClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (disabled) return;
+        
+        bottomSheetCtx.open({
+            title: `${label} - Data początkowa`,
+            showClose: true,
+            children: (
+                <DateRangePickerSheet
+                    value={value?.start}
+                    onChange={(startDate) => {
+                        if (onChange) {
+                            onChange({ start: startDate, end: value?.end });
+                        }
+                        bottomSheetCtx.close();
+                    }}
+                    disabled={disabled}
+                    startDate={value?.start}
+                    endDate={value?.end}
+                />
+            )
+        });
     };
 
-    const getEndDate = (startDate: Date, prevEndDate: Date | null): Date | null => {
-        if (!prevEndDate) {
-            return prevEndDate
-        }
-        if (DateUtil.isBefore(prevEndDate, startDate)) {
-            const result = new Date(startDate);
-            result.setDate(result.getDate() + 7);
-            return result;
-        }
-        return prevEndDate;
-    }
-    
-    const handleEndChange = (_date: Date | null) => {
-        const date = _date ? DateRangeUtil.newLocalDate(_date) : null;
-        setEndDate(date);
-        if (onChange) {
-            onChange({ start: startDate, end: date });
-        }
+    const handleEndDateClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (disabled) return;
+        
+        bottomSheetCtx.open({
+            title: `${label} - Data końcowa`,
+            showClose: true,
+            children: (
+                <DateRangePickerSheet
+                    value={value?.end}
+                    onChange={(endDate) => {
+                        if (onChange) {
+                            onChange({ start: value?.start, end: endDate });
+                        }
+                        bottomSheetCtx.close();
+                    }}
+                    disabled={disabled}
+                    minDate={value?.start}
+                    startDate={value?.start}
+                    endDate={value?.end}
+                />
+            )
+        });
     };
 
-    let myClass = `pp-date-input ${className} cursor-pointer`;
+    let myClass = `pp-date-input ${className}`;
     if (disabled) {
         myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
     }
@@ -70,36 +87,55 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
         myClass += ' pp-control-error';
     }
 
+    const hasValue = !!(value?.start || value?.end);
+    const isLabelFloating = hasValue;
+
     return (
-        <div className={myClass}>
-            <ControlLabel label={label} required={required} />
-            <div className="pp-control pp-input-row gap-2">
-                <DatePicker
-                    selected={startDate}
-                    onChange={handleStartChange}
-                    selectsStart
-                    startDate={startDate}
-                    endDate={endDate}
-                    disabled={disabled}
-                    placeholderText="Start"
-                    className="w-32"
-                    name={name ? `${name}_start` : undefined}
-                    dateFormat={"dd-MM-yyyy"}
+        <div className={`floating-input-wrapper ${myClass}`}>
+            <div className="floating-input-container">
+                <div className="pp-control pp-input-row">
+                    <div className="flex items-center gap-2 w-full">
+                        <input
+                            ref={inputRef}
+                            id={name}
+                            name={name ? `${name}_start` : undefined}
+                            type="text"
+                            value={value?.start?.toLocaleDateString() || ''}
+                            onClick={handleStartDateClick}
+                            className="floating-input pr-10 primary-text flex-1 cursor-pointer"
+                            disabled={disabled}
+                            required={required}
+                            readOnly
+                            placeholder=" "
+                        />
+                        <span className="secondary-text">-</span>
+                        <input
+                            id={name ? `${name}_end` : undefined}
+                            name={name ? `${name}_end` : undefined}
+                            type="text"
+                            value={value?.end?.toLocaleDateString() || ''}
+                            onClick={handleEndDateClick}
+                            className="floating-input pr-10 primary-text flex-1 cursor-pointer"
+                            disabled={disabled}
+                            required={required}
+                            readOnly
+                            placeholder=" "
+                        />
+                    </div>
+                    <span
+                        className={`pp-date-input-calendar MuiSvgIcon-root${disabled ? ' disabled' : ''}`}
+                        onClick={handleStartDateClick}
+                    >
+                        <CalendarTodayIcon fontSize="medium" />
+                    </span>
+                    <FloatingLabel
+                        htmlFor={name}
+                        label={label}
+                        required={required}
+                        isActive={isLabelFloating}
+                        error={error ? { message: error } : undefined}
                     />
-                <span className="mx-2">-</span>
-                <DatePicker
-                    selected={endDate}
-                    onChange={handleEndChange}
-                    selectsEnd
-                    startDate={startDate}
-                    endDate={endDate}
-                    minDate={startDate || undefined}
-                    disabled={disabled}
-                    placeholderText="Koniec"
-                    className="w-32"
-                    name={name ? `${name}_end` : undefined}
-                    dateFormat={"dd-MM-yyyy"}
-                />
+                </div>
             </div>
             <FormError error={error ? { message: error } : undefined} />
         </div>

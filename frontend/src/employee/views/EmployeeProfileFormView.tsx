@@ -16,8 +16,6 @@ import EmployeeProfileStep2 from "../components/EmployeeProfileStep2";
 import EmployeeProfileStep3 from "../components/EmployeeProfileStep3";
 import EmployeeProfileStep4 from "../components/EmployeeProfileStep4";
 
-// TODO dostosowac date range selector do podejscia z popup/bottom sheet
-
 // TODO sprawdiic backend czy działa
 // TODO czyscic storage po wyslaniu formularza
 // TODO widok z lista profili
@@ -132,6 +130,8 @@ const EmployeeProfileFormView: React.FC = () => {
             initEmployeeProfile();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
+
+            // TODO redirect to profiles list
             navigate(-1);
         } catch (error) {
             console.error("Error creating employee profile:", error);
@@ -328,7 +328,7 @@ const EmployeeProfileFormView: React.FC = () => {
                             mode={BtnModes.PRIMARY}
                             className="flex-1"
                         >
-                            {t("employeeProfile.form.submit")}
+                            {t("common.save")}
                         </Button>
                     )}
 

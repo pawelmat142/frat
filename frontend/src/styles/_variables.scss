@@ -18,6 +18,7 @@ $mobile: 480px;
   
   --border-color: #ebe6e7;
 
+  --disabled-text: #cbd5e1;
   --error-color: #ef4444;
 }
 
@@ -36,6 +37,7 @@ $mobile: 480px;
 
   --border-color: #ffffff1a;
 
+  --disabled-text: #475467;
   --error-color: #f87171;
 }
 
@@ -45,6 +47,7 @@ $primary-color-active: var(--primary-color-active);
 $primary-bg: var(--primary-bg);
 $secondary-bg: var(--secondary-bg);
 $active-bg: var(--active-bg);
+$disabled-text: var(--disabled-text);
 
 $primary-text: var(--primary-text);
 $primary-text-active: var(--primary-text-active);
@@ -92,6 +95,10 @@ textarea::placeholder,
 
 .bg-primary-color-active {
   background-color: $primary-color-active;
+}
+
+.disabled-text {
+  color: $disabled-text;
 }
 
 .primary-bg {

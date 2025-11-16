@@ -7,7 +7,7 @@ import { EmployeeProfileLocationOptions, EmployeeProfileLocationOption, Employee
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import FloatingInput from "global/components/controls/FloatingInput";
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import StraightenIcon from '@mui/icons-material/Straighten';
 
 interface Props {
     control: Control<EmployeeProfileForm>;
@@ -120,8 +120,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ control, setValue, watch, formS
                                             required
                                             error={formState?.errors.step3?.locationDistanceRadius}
                                             icon={
-                    <CalendarTodayIcon fontSize="medium" />
-
+                                                <div>[km]</div>
                                             }
                                         />
                                     )}

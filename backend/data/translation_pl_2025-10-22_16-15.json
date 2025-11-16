@@ -278,7 +278,8 @@
           "DATE_RANGES": {
             "msg": "Wybierz daty, w których jesteś dostępny/a do pracy.",
             "tab": "Terminy",
-            "add": "Dodaj termin"
+            "add": "Dodaj termin",
+            "label": "Termin"
           }
         },
         "residenceCountry": "Kraj zamieszkania",
