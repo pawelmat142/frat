@@ -1,5 +1,5 @@
 import { ChangeEventHandler, forwardRef, ReactNode, useState } from 'react';
-import { InputInterface } from '../../interface/controls.interface';
+import { FloatingInputModes, InputInterface } from '../../interface/controls.interface';
 import FormError from './FormError';
 import FloatingLabel from './FloatingLabel';
 
@@ -25,11 +25,12 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
         error,
         icon,
         onIconClick,
+        mode = FloatingInputModes.DEFAULT,
     }, ref) => {
 
         const [isFocused, setIsFocused] = useState(false);
 
-        let myClass = `pp-control-bg pp-input floating-input`;
+        let myClass = `pp-control-bg pp-input floating-input ${mode}`;
 
         if (fullWidth) {
             myClass += ' w-full';

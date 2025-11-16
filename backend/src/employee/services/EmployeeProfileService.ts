@@ -101,8 +101,9 @@ export class EmployeeProfileService {
 
     private fillAvailabilityData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): void {
         if (result.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES) {
-            result.availabilityDateRanges = form.availabilityDateRanges.map(dateRange => DateRangeUtil.fromDateRange([], dateRange));
-        } if (result.availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE) {
+            const ranges = form.availabilityDateRanges.map(dateRange => DateRangeUtil.fromDateRange([], dateRange))
+            result.availabilityDateRanges = ranges;
+        } else if (result.availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE) {
             const rangeInput = form.availabilityDateRanges[0];
             if (!rangeInput) {
                 throw new ToastException("employeeProfile.error.startDate", this);

@@ -254,6 +254,13 @@ $tile-edge-radius: 1rem;
 }
 
 
+
+.list-view {
+    padding: .5rem;
+    width: 100%;
+    max-width: $mobile;
+}
+
 // FORMS
 .form-view {
     padding: 1.5rem;

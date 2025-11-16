@@ -244,6 +244,7 @@
         "firstName": "Imię",
         "addLanguage": "Dodaj język",
         "certificates": "Certyfikaty",
+        "freeText": "Szukaj...",
         "step1": {
           "title": "Dane osobowe",
           "label": "Krok 1"

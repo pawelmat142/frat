@@ -98,7 +98,7 @@ export abstract class EPUtil {
             }
         }
         if (profile.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES) {
-            if (!profile.availabilityDateRanges || !profile.availabilityDateRanges.length) {
+            if (!profile.availabilityDateRanges?.length) {
                 throw new ToastException('employeeProfile.error.availabilityDateRangesRequired', this);
             }
             // Przynajmniej jeden zakres z start i end (DateRange) lub dateRange (DateRangeI)

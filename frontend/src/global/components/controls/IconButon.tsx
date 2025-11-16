@@ -10,7 +10,13 @@ export interface IconBtnInterface {
     mode?: BtnMode
 }
 
-const IconButton: React.FC<IconBtnInterface> = ({ onClick, size = BtnSizes.MEDIUM, icon, className, disabled, mode = BtnModes.PRIMARY }) => {
+const IconButton: React.FC<IconBtnInterface> = ({
+    onClick, size = BtnSizes.MEDIUM,
+    icon,
+    className,
+    disabled,
+    mode = BtnModes.PRIMARY_TXT
+}) => {
 
     let myClass = `rounded-md btn-font icon-btn ripple p-2`;
 

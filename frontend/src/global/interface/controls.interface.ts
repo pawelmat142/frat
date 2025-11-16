@@ -36,6 +36,11 @@ export const BtnModes = {
 
 export type BtnMode = typeof BtnModes[keyof typeof BtnModes];
 
+export const FloatingInputModes = {
+    DEFAULT: 'default',
+    THIN: 'thin',
+} as const;
+export type FloatingInputMode = typeof FloatingInputModes[keyof typeof FloatingInputModes];
 
 export interface InputInterface {
     id?: string;
@@ -55,6 +60,7 @@ export interface InputInterface {
     error?: { message?: string } | null
     rows?: number; // for textarea
     showLabel?: boolean;
+    mode?: FloatingInputMode;
 }
 
 export interface SelectorInterface<T extends SelectorValue = SelectorValue> {

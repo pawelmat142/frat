@@ -242,6 +242,7 @@
         "firstName": "First name",
         "addLanguage": "Add language",
         "certificates": "Certificates",
+        "freeText": "Search...",
         "step1": {
           "label": "Step 1",
           "title": "Personal Information"

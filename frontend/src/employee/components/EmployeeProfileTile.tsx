@@ -76,16 +76,14 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
 
                 </div>
 
-                <div className="tile-content-row mid items-center">
+                <div className="tile-content-row mid items-center justify-between w-full">
                     <div className="">{employeeProfile.email}</div>
 
-                    <div className="">
-                        {employeeProfile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font">Available anytime</span>}
+                        {employeeProfile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font text-right">Available anytime</span>}
                         {isOneOf([
                             EmployeeProfileAvailabilityOptions.DATE_RANGES, 
                             EmployeeProfileAvailabilityOptions.FROM_DATE
-                            ], employeeProfile.availabilityOption) && <span className="small-font">Available on from {getAvailableFromDate()}</span>}
-                    </div>
+                            ], employeeProfile.availabilityOption) && <span className="small-font text-right">From {getAvailableFromDate()}</span>}
                 </div>
 
                 <div className="tile-content-row bottom">
