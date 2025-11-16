@@ -16,9 +16,9 @@ import EmployeeProfileStep2 from "../components/EmployeeProfileStep2";
 import EmployeeProfileStep3 from "../components/EmployeeProfileStep3";
 import EmployeeProfileStep4 from "../components/EmployeeProfileStep4";
 
-// TODO position selector - nowy widok na mobile - popup na dekstop
 // TODO dostosowac date range selector do podejscia z popup/bottom sheet
-// TODO krok 4
+// TODO number input
+// TODO date input
 // TODO sprawdiic backend czy działa
 // TODO czyscic storage po wyslaniu formularza
 // TODO widok z lista profili

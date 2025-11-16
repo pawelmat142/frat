@@ -248,7 +248,10 @@
         },
         "step4": {
           "label": "Step 4",
-          "title": "Availability"
+          "title": "Availability",
+          "tab1": "Immediately",
+          "tab2": "From date",
+          "tab3": "Dates"
         },
         "locationOption": {
           "DISTANCE": {
@@ -262,6 +265,21 @@
           "SELECTED_COUNTRIES": {
             "msg": "Choose the countries from which you want to receive offers.",
             "tab": "Countries"
+          }
+        },
+        "availabilityOption": {
+          "ANYTIME": {
+            "msg": "I am available to start work immediately.",
+            "tab": "Immediately"
+          },
+          "FROM_DATE": {
+            "msg": "I am available to start work from:",
+            "tab": "From date"
+          },
+          "DATE_RANGES": {
+            "msg": "Choose the dates you are available to work.",
+            "tab": "Date ranges",
+            "add": "Add date range"
           }
         },
         "residenceCountry": "Country of residence",

@@ -265,6 +265,21 @@
             "tab": "Kraje"
           }
         },
+        "availabilityOption": {
+          "ANYTIME": {
+            "msg": "Szukam pracy od zaraz",
+            "tab": "Od zaraz"
+          },
+          "FROM_DATE": {
+            "msg": "Szukam pracy od dnia:",
+            "tab": "Od dnia"
+          },
+          "DATE_RANGES": {
+            "msg": "Wybierz daty, w których jesteś dostępny/a do pracy.",
+            "tab": "Terminy",
+            "add": "Dodaj termin"
+          }
+        },
         "residenceCountry": "Kraj zamieszkania",
         "locationCountries": "Kraje lokalizacji",
         "communicationLanguage": "Język komunikacji",
