@@ -54,6 +54,11 @@ const EmployeeSearchFiltersSheet: React.FC<{ctx: EmployeeSearchContextProps}> = 
         })
     }
 
+    const resetFilters = () => {
+        ctx.resetFilters()
+        drawerCtx.close();
+    }
+
     return (
         <div className="flex flex-col py-3 px-5">
 
@@ -68,6 +73,10 @@ const EmployeeSearchFiltersSheet: React.FC<{ctx: EmployeeSearchContextProps}> = 
 
             <div className="bottom-sheet-item" onClick={handleCommunicationLanguagesSelection}>
                 {t("employeeProfile.form.communicationLanguages")}
+            </div>
+
+            <div className="bottom-sheet-item" onClick={resetFilters}>
+                {t("common.reset")}
             </div>
 
         </div>

@@ -11,6 +11,7 @@ interface Pagination {
 export interface EmployeeSearchContextProps {
     filters: EmployeeProfileSearchForm;
     setFilters: (filters: EmployeeProfileSearchForm) => void;
+    resetFilters: () => void;
     results: EmployeeProfileI[];
     pagination: Pagination;
     loading: boolean;
@@ -90,6 +91,19 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     };  
 
+    const resetFilters = () => {
+        const defaultFilters: EmployeeProfileSearchForm = {
+            freeText: '',
+            skills: [],
+            certificates: [],
+            communicationLanguages: [],
+            locationCountry: null,
+            skip: 0,
+            limit: itemsPerPage,
+        };
+        handleSetFilters(defaultFilters);
+    }
+
     return (
         <EmployeeSearchContext.Provider value={{
             filters,
@@ -104,7 +118,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 totalPages,
                 currentPage: Math.floor(filters.skip / itemsPerPage) + 1,
                 itemsPerPage
-            }
+            },
+            resetFilters
         }}>
             {children}
         </EmployeeSearchContext.Provider>

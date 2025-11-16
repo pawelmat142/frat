@@ -20,7 +20,8 @@
       "confirm": "Potwierdź",
       "start": "Początek",
       "end": "Koniec",
-      "filters": "Filtry"
+      "filters": "Filtry",
+      "reset": "Resetuj"
     },
     "lang": {
       "language": "Język",
