@@ -24,7 +24,7 @@ const EmployeeProfileStep4: React.FC<Props> = ({ control, setValue, watch, formS
     const availabilityOption = watch("step4.availabilityOption");
     const availabilityDateRanges = watch("step4.availabilityDateRanges") || [];
 
-    const required = FormValidator.required(t);
+    const required = FormValidator.dateRangeRequired(t);
 
     const getDefaultDateRange = (): DateRange => {
         const end = new Date();

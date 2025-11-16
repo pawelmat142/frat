@@ -1,5 +1,6 @@
-import { EmployeeProfileFormDto, EmployeeProfileLocationOptions, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
+import { DateRangeI, EmployeeProfileAvailabilityOptions, EmployeeProfileFormDto, EmployeeProfileLocationOptions, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
 import { UserI } from "@shared/interfaces/UserI";
+import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { PointUtil } from "@shared/utils/PointUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
 import { ToastException } from "global/exceptions/ToastException";
@@ -75,12 +76,58 @@ export abstract class EPUtil {
         if (!profile?.lastName) {
             throw new ToastException('employeeProfile.error.lastNameRequired', this);
         }
-        // if (!profile?.residenceCountry) {
-        //     throw new ToastException('employeeProfile.error.residenceCountryRequired', this);
-        // }
         if (!profile?.communicationLanguages.length) {
             throw new ToastException('employeeProfile.error.communicationLanguagesRequired', this);
         }
+
+        // Availability validation
+        if (profile.availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE) {
+            if (!profile.availabilityDateRanges || profile.availabilityDateRanges.length !== 1) {
+                throw new ToastException('employeeProfile.error.availabilityFromDateRequired', this);
+            }
+            const range = profile.availabilityDateRanges[0];
+            // Obsługa zarówno DateRangeI (dateRange: string) jak i DateRange (start: Date)
+            const hasStart = (
+                range && (
+                    (typeof range.dateRange === 'string' && range.dateRange) ||
+                    ('start' in range && range.start)
+                )
+            );
+            if (!hasStart) {
+                throw new ToastException('employeeProfile.error.availabilityFromDateRequired', this);
+            }
+        }
+        if (profile.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES) {
+            if (!profile.availabilityDateRanges || !profile.availabilityDateRanges.length) {
+                throw new ToastException('employeeProfile.error.availabilityDateRangesRequired', this);
+            }
+            // Przynajmniej jeden zakres z start i end (DateRange) lub dateRange (DateRangeI)
+            const valid = profile.availabilityDateRanges?.length && profile.availabilityDateRanges.every(r => {
+                const dateRange = DateRangeUtil.toDateRange(r as DateRangeI);
+                if (dateRange.start && dateRange.end) {
+                    return true;
+                }
+                return false;
+            });
+            if (!valid) {
+                throw new ToastException('employeeProfile.error.availabilityDateRangeStartEndRequired', this);
+            }
+        }
+        // Additional location validation
+        if (profile.locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE) {
+            if (!profile.locationCountries || profile.locationCountries.length === 0) {
+                throw new ToastException('employeeProfile.error.locationCountryRequired', this);
+            }
+        }
+        if (profile.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
+            if (!profile.point) {
+                throw new ToastException('employeeProfile.error.locationPositionRequired', this);
+            }
+            if (!profile.pointRadius || isNaN(profile.pointRadius) || profile.pointRadius <= 0) {
+                throw new ToastException('employeeProfile.error.locationRadiusRequired', this);
+            }
+        }
+
         EPUtil.validateLocationData(profile);
     }
 

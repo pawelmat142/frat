@@ -16,7 +16,6 @@ import EmployeeProfileStep2 from "../components/EmployeeProfileStep2";
 import EmployeeProfileStep3 from "../components/EmployeeProfileStep3";
 import EmployeeProfileStep4 from "../components/EmployeeProfileStep4";
 
-// TODO czyscic storage po wyslaniu formularza
 // TODO widok z lista profili
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';

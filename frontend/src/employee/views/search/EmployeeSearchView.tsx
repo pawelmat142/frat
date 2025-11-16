@@ -284,9 +284,15 @@ const EmployeeSearchView: React.FC = () => {
 
                 </form>
 
-                <div className="results">
-                    {!!languagesDictionary && employeeProfiles.map(profile => (
-                        <EmployeeProfileTile key={profile.employeeProfileId} employeeProfile={profile} languagesDictionary={languagesDictionary} />
+                <div className="results flex flex-col gap-1">
+                    {!!languagesDictionary && employeeProfiles.map((profile, index) => (
+                        <EmployeeProfileTile 
+                        key={profile.employeeProfileId} 
+                        employeeProfile={profile}
+                         languagesDictionary={languagesDictionary} 
+                         first={index === 0}
+                         last={index === employeeProfiles.length - 1}
+                         />
                     ))}
                 </div>
 

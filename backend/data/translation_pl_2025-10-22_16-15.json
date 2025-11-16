@@ -184,7 +184,8 @@
     },
     "validation": {
       "form": {
-        "required": "To pole jest wymagane."
+        "required": "To pole jest wymagane.",
+        "dateRangeRequired": "Daty rozpoczęcia i zakończenia są wymagane."
       },
       "view": {
         "title": "Coś poszło nie tak!",
@@ -196,6 +197,7 @@
         "title": "Wystąpił błąd",
         "goHome": "Wróć na stronę główną"
       },
+      "notFound": "Nie znaleziono",
       "success": "Rejestracja zakończona sukcesem!",
       "required": "Wszystkie pola są wymagane.",
       "emailMatch": "Email i powtórzony email muszą się zgadzać.",
@@ -208,8 +210,10 @@
       "exists": "Profil pracownika już istnieje dla tego użytkownika",
       "noChanges": "Brak wykrytych zmian w profilu pracownika",
       "notFound": "Nie znaleziono profilu pracownika do aktualizacji",
+      "alreadyInStatus": "Profil jest już w określonym statusie",
       "search": "Szukaj pracowników",
       "error": {
+        "startDate": "Brak daty rozpoczęcia",
         "dataRequired": "Dane profilu pracownika są wymagane",
         "uidRequired": "UID profilu pracownika jest wymagany",
         "statusRequired": "Status profilu pracownika jest wymagany",
@@ -222,7 +226,10 @@
         "locationPositionRequired": "Pozycja lokalizacji jest wymagana dla opcji lokalizacji na odległość",
         "locationRadiusRequired": "Promień lokalizacji jest wymagany dla opcji lokalizacji na odległość",
         "locationCountryRequired": "Wymagany jest co najmniej jeden kraj lokalizacji dla wybranych krajów",
-        "locationCountriesMustNotBeSpecified": "Kraje lokalizacji nie mogą być określone dla opcji cała Europa"
+        "locationCountriesMustNotBeSpecified": "Kraje lokalizacji nie mogą być określone dla opcji cała Europa",
+        "availabilityDateRangesRequired": "Wymagany jest co najmniej jeden zakres dat dostępności",
+        "availabilityDateRangeStartEndRequired": "Daty rozpoczęcia i zakończenia są wymagane dla zakresów dat dostępności"
+      
       },
       "form": {
         "title": "Formularz profilu pracownika",

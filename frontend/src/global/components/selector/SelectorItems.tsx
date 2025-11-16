@@ -68,36 +68,41 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
     const isSelected = (value: T) => localSelectedValues.includes(value);
 
-
     return (
         <>
             <div className="bottom-sheet-content">
-                {items.map((item, index) => (
-                    <div
-                        key={index}
-                        className={`bottom-sheet-item ${isSelected(item.value) ? 'selected' : ''}`}
-                        onClick={() => handleItemClick(item)}
-                    >
-                        <div className="bottom-sheet-item-content">
-                            {item.icon && (
-                                <span className="bottom-sheet-item-icon">{item.icon}</span>
-                            )}
-                            {item.src && (
-                                <img
-                                    src={item.src}
-                                    alt={translateItems ? t(item.label) : item.label}
-                                    className="bottom-sheet-item-image"
-                                />
-                            )}
-                            <span className="bottom-sheet-item-label">{translateItems ? t(item.label) : item.label}</span>
-                        </div>
-                        {multiSelect && (
-                            <div className={`bottom-sheet-checkbox ${isSelected(item.value) ? 'checked' : ''}`}>
-                                {isSelected(item.value) && <FaCheck size={14} />}
+                {items.map((item, index) => {
+                    const translatedLabel = translateItems ? t(item.label) : item.label
+                    const displayLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
+                    return (
+                        <div
+                            key={index}
+                            className={`bottom-sheet-item ${isSelected(item.value) ? 'selected' : ''}`}
+                            onClick={() => handleItemClick(item)}
+                        >
+                            <div className="bottom-sheet-item-content">
+                                {item.icon && (
+                                    <span className="bottom-sheet-item-icon">{item.icon}</span>
+                                )}
+                                {item.src && (
+                                    <img
+                                        src={item.src}
+                                        alt={displayLabel}
+                                        className="bottom-sheet-item-image"
+                                    />
+                                )}
+                                <span className="bottom-sheet-item-label">{displayLabel}</span>
                             </div>
-                        )}
-                    </div>
-                ))}
+                            {multiSelect && (
+                                <div className={`bottom-sheet-checkbox ${isSelected(item.value) ? 'checked' : ''}`}>
+                                    {isSelected(item.value) && <FaCheck size={14} />}
+                                </div>
+                            )}
+                        </div>
+                    )
+                }
+
+                )}
 
             </div>
 

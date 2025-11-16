@@ -15,10 +15,6 @@ export abstract class Utils {
     public static dictionaryToSelectorItems<T extends string | number>(dictionary: DictionaryI, elementLabelTranslationKey: string = 'NAME', disabledValues: string[] = []): SelectorItem<T>[] {
         return dictionary.elements.map(element => {
             const translationKey = `dictionary.${dictionary.code}.${elementLabelTranslationKey}.${element.code}`;
-
-            // TODO move to sheet
-            // const translatedLabel = t(translationKey);
-            // const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
             return {
                 label: translationKey,
                 value: element.code as T,

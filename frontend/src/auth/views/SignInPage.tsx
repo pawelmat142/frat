@@ -151,7 +151,6 @@ const SignInPage: React.FC = () => {
             <div className="flex items-center cursor-pointer mx-auto w-full justify-center mt-10 mb-10" onClick={() => {
                 navigate(Path.SIGN_UP);
             }}>
-                {/* TODO translation */}
                 <span className="">{t("signin.noAccount")}</span>
                 <Button mode={BtnModes.PRIMARY_TXT} fullWidth={false} >
                     {t("signup.title")}

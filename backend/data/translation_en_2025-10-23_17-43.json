@@ -175,7 +175,8 @@
     },
     "validation": {
       "form": {
-        "required": "This field is required."
+        "required": "This field is required.",
+        "dateRangeRequired": "Start and end dates are required."
       },
       "view": {
         "title": "Something went wrong!",
@@ -187,6 +188,7 @@
         "title": "An error occurred",
         "goHome": "Go back to the home page"
       },
+      "notFound": "Not found",
       "success": "Registration successful!",
       "required": "All fields are required.",
       "emailMatch": "Email and confirm email must match.",
@@ -207,8 +209,10 @@
       "exists": "Employee profile already exists for this user",
       "noChanges": "No changes detected in the employee profile",
       "notFound": "Employee profile not found for update",
+      "alreadyInStatus": "Profile is already in the specified status",
       "search": "Search for employees",
       "error": {
+        "startDate": "Start date missing",
         "dataRequired": "Employee profile data is required",
         "uidRequired": "Employee profile uid is required",
         "statusRequired": "Employee profile status is required",
@@ -221,7 +225,9 @@
         "locationPositionRequired": "Location position is required for distance location option",
         "locationRadiusRequired": "Location radius is required for distance location option",
         "locationCountryRequired": "At least one location country is required for selected countries location option",
-        "locationCountriesMustNotBeSpecified": "Location countries must not be specified for all Europe location option"
+        "locationCountriesMustNotBeSpecified": "Location countries must not be specified for all Europe location option",
+        "availabilityDateRangesRequired": "At least one availability date range is required",
+        "availabilityDateRangeStartEndRequired": "Start and end dates are required for availability date ranges"
       },
       "form": {
         "title": "Employee Profile Form",

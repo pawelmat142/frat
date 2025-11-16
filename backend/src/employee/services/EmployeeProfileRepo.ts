@@ -33,8 +33,7 @@ export class EmployeeProfileRepo {
     public async findByDisplayName(displayName: string): Promise<EmployeeProfileEntity | null> {
         const result = await this.employeeProfileRepository.findOne({ where: { displayName } });
         if (!result) {
-            // TODO translation
-            throw new ToastException("Nie znaleziono", this);
+            throw new ToastException("validation.notFound", this);
         }
         if (result?.availabilityDateRanges) {
             this.sortRanges([result]);
@@ -61,7 +60,6 @@ export class EmployeeProfileRepo {
             throw new NotFoundException("employeeProfile.notFound");
         }
         if (profile.status === status) {
-            // TODO trasnlation
             throw new ToastException("employeeProfile.alreadyInStatus", this);
         }
 

@@ -41,8 +41,7 @@ export class EmployeeProfileService {
             return await this.employeeProfileRepo.initialLoad();
         } catch (e) {
             console.error(e)
-            // TODO translation
-            throw new ToastException('employeeProfile.initialLoadFailed', this);
+            throw new ToastException("Initial load failed", this);
         }
     }
 
@@ -106,8 +105,7 @@ export class EmployeeProfileService {
         } if (result.availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE) {
             const rangeInput = form.availabilityDateRanges[0];
             if (!rangeInput) {
-                // TODO translation
-                throw new ToastException("Missing start date!", this);
+                throw new ToastException("employeeProfile.error.startDate", this);
             }
             result.availabilityDateRanges = [DateRangeUtil.fromDateRange([], rangeInput)];
 

@@ -8,9 +8,11 @@ import { useNavigate } from "react-router-dom";
 interface Props {
     employeeProfile: EmployeeProfileI,
     languagesDictionary: DictionaryI
+    first?: boolean,
+    last?: boolean,
 }
 
-const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDictionary }) => {
+const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDictionary, first, last }) => {
 
     const navigate = useNavigate();
     
@@ -54,7 +56,7 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
 
 
     return (
-        <div className="tile clickable" onClick={() => goToProfileView(employeeProfile)}>
+        <div className={`tile clickable${first ? " first" : ""}${last ? " last" : ""}`} onClick={() => goToProfileView(employeeProfile)}>
 
             <div className="tile-avatar">
 

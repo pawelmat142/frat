@@ -8,7 +8,6 @@ import ControlLabel from '../controls/ControlLabel';
 import FormError from '../controls/FormError';
 import Input from '../controls/Input';
 
-// TODO dodatkowe okienko szukania powinno byc nieco mniejsze + ikona search 
 function SelectorMulti<T extends SelectorValue = SelectorValue>({
     items,
     values,
