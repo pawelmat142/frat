@@ -4,13 +4,13 @@ import { useTranslation } from "react-i18next";
 import { DateRange, EmployeeProfileAvailabilityOption, EmployeeProfileAvailabilityOptions, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
 import { FormValidator } from "global/FormValidator";
 import TabSwitcher, { TabSwitcherOption } from "./TabSwitcher";
-import DateInput from "global/components/controls/DateInput";
 import DateRangeInput from "global/components/controls/DateRangeInput";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
+import FloatingDateInput from "global/components/controls/FloatingDateInput";
 
 interface Props {
     control: Control<EmployeeProfileForm>;
@@ -140,9 +140,10 @@ const EmployeeProfileStep4: React.FC<Props> = ({ control, setValue, watch, formS
                                         const fieldError = (formState?.errors?.step4?.availabilityDateRanges as any)?.[0];
                                         const errorMessage = fieldError?.message as string | undefined;
                                         return (
-                                            <DateInput
+                                            <FloatingDateInput
                                                 className="w-full mt-5"
                                                 value={ field.value?.start || new Date() }
+                                                label={t("employeeProfile.form.availabilityOption.FROM_DATE.startLabel")}
                                                 onChange={(date) => {
                                                     if (date) {
                                                         field.onChange({ ...field.value, start: date })

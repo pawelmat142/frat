@@ -274,7 +274,8 @@
           },
           "FROM_DATE": {
             "msg": "I am available to start work from:",
-            "tab": "From date"
+            "tab": "From date",
+            "startLabel": "Start date"
           },
           "DATE_RANGES": {
             "msg": "Choose the dates you are available to work.",

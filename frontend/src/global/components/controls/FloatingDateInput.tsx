@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { InputInterface } from '../../interface/controls.interface';
-import ControlLabel from './ControlLabel';
 import FloatingLabel from './FloatingLabel';
 // Możesz podmienić na inną ikonę lub bibliotekę
 import DatePicker from 'react-datepicker';
@@ -13,7 +12,7 @@ interface DateInputProps extends Omit<InputInterface, 'type' | 'value' | 'onChan
     onChange?: (date: Date | null) => void;
 }
 
-const DateInput: React.FC<DateInputProps> = ({
+const FloatingDateInput: React.FC<DateInputProps> = ({
     fullWidth = false,
     className = '',
     disabled,
@@ -105,4 +104,4 @@ const DateInput: React.FC<DateInputProps> = ({
 
 };
 
-export default DateInput;
+export default FloatingDateInput;

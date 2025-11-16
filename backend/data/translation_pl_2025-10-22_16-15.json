@@ -272,7 +272,8 @@
           },
           "FROM_DATE": {
             "msg": "Szukam pracy od dnia:",
-            "tab": "Od dnia"
+            "tab": "Od dnia",
+            "startLabel": "Data rozpoczęcia"
           },
           "DATE_RANGES": {
             "msg": "Wybierz daty, w których jesteś dostępny/a do pracy.",
