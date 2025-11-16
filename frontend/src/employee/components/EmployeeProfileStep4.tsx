@@ -142,12 +142,10 @@ const EmployeeProfileStep4: React.FC<Props> = ({ control, setValue, watch, formS
                                         return (
                                             <FloatingDateInput
                                                 className="w-full mt-5"
-                                                value={ field.value?.start || new Date() }
+                                                value={ field.value?.start }
                                                 label={t("employeeProfile.form.availabilityOption.FROM_DATE.startLabel")}
                                                 onChange={(date) => {
-                                                    if (date) {
-                                                        field.onChange({ ...field.value, start: date })
-                                                    }
+                                                    field.onChange({ ...field.value, start: date })
                                                 }}
                                                 name={field.name}
                                                 error={errorMessage? { message: errorMessage } : undefined}

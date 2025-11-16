@@ -1,11 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { InputInterface } from '../../interface/controls.interface';
 import FloatingLabel from './FloatingLabel';
-// Możesz podmienić na inną ikonę lub bibliotekę
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import FormError from './FormError';
+import { useBottomSheet } from 'global/providers/BottomSheetProvider';
+import DatePickerSheet from './DatePickerSheet';
 
 interface DateInputProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: Date | null;
@@ -26,8 +25,8 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     onChange,
     error,
 }) => {
-    const [showPicker, setShowPicker] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+    const bottomSheetCtx = useBottomSheet();
 
     let myClass = `pp-date-input ${className}`;
     if (fullWidth) {
@@ -43,65 +42,66 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     }
 
     const handleInputClick = () => {
-        if (!disabled) setShowPicker(true);
-    };
-
-    const handleDateChange = (date: Date | null) => {
-        setShowPicker(false);
-        if (onChange) onChange(date);
+        if (disabled) return;
+        
+        bottomSheetCtx.open({
+            title: label,
+            showClose: true,
+            children: (
+                <DatePickerSheet
+                    value={value}
+                    onChange={(date) => {
+                        if (onChange) onChange(date);
+                        bottomSheetCtx.close();
+                    }}
+                    disabled={disabled}
+                />
+            )
+        });
     };
 
     const _value = value instanceof Date ? value.toLocaleDateString() : ''
 
     const isLabelFloating = !!_value;
 
-        return (
-            <div className={`floating-input-wrapper ${myClass}${center ? ' mx-auto' : ''}`}>
-                <div className="floating-input-container">
-                    <div className="pp-control pp-date-input-row">
-                        <input
-                            ref={inputRef}
-                            id={id}
-                            name={name || id}
-                            type="text"
-                            value={_value}
-                            onClick={handleInputClick}
-                            className={`floating-input pr-10`}
-                            disabled={disabled}
-                            required={required}
-                            autoComplete={autoComplete}
-                            readOnly
-                            placeholder=" "
-                        />
-                        <span
-                            className={`pp-date-input-calendar MuiSvgIcon-root${disabled ? ' disabled' : ''}`}
-                            onClick={handleInputClick}
-                        >
-                            <CalendarTodayIcon fontSize="medium" />
-                        </span>
-                        {showPicker && (
-                            <div className="pp-date-input-picker left">
-                                <DatePicker
-                                    selected={value || new Date()}
-                                    onChange={handleDateChange}
-                                    inline
-                                    disabled={disabled}
-                                />
-                            </div>
-                        )}
-                        <FloatingLabel
-                            htmlFor={id}
-                            label={label}
-                            required={required}
-                            isActive={isLabelFloating}
-                            error={error}
-                        />
-                    </div>
-                </div>
-                <FormError error={error} />
-            </div>
-        );
+    // TODO translations of datepicker content
 
+    return (
+        <div className={`floating-input-wrapper ${myClass}${center ? ' mx-auto' : ''}`}>
+            <div className="floating-input-container">
+                <div className="pp-control pp-date-input-row">
+                    <input
+                        ref={inputRef}
+                        id={id}
+                        name={name || id}
+                        type="text"
+                        value={_value}
+                        onClick={handleInputClick}
+                        className={`floating-input pr-10 primary-text`}
+                        disabled={disabled}
+                        required={required}
+                        autoComplete={autoComplete}
+                        readOnly
+                        placeholder=" "
+                    />
+                    <span
+                        className={`pp-date-input-calendar MuiSvgIcon-root${disabled ? ' disabled' : ''}`}
+                        onClick={handleInputClick}
+                    >
+                        <CalendarTodayIcon fontSize="medium" />
+                    </span>
+                    <FloatingLabel
+                        htmlFor={id}
+                        label={label}
+                        required={required}
+                        isActive={isLabelFloating}
+                        error={error}
+                    />
+                </div>
+            </div>
+            <FormError error={error} />
+        </div>
+    );
 };
 
 export default FloatingDateInput;
