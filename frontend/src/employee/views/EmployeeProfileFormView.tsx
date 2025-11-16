@@ -133,13 +133,18 @@ const EmployeeProfileFormView: React.FC = () => {
                 noValidate
                 className=""
             >
-                <div className="flex items-center justify-between mb-10 md:mb-6">
-                    <h2 className="text-lg font-bold">{t("employeeProfile.form.title")}</h2>
-                    {isDevMode && (
-                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT} className="ripple mb-2">
+                <h2 className="form-header">
+                    {t("employeeProfile.form.title")}
+                </h2>
+
+                {isDevMode && (
+                    <div className="flex items-center justify-end">
+                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
                             DEV FILL
-                        </Button>)}
-                </div>
+                        </Button>
+                    </div>
+                )}
+
                 <div className="flex flex-col gap-7 md:gap-5">
                     <Controller
                         name="firstName"
