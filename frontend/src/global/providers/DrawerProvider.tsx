@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useRef, useEffect, ReactNode, useCallback } from "react";
+import CloseBtn from "global/components/CloseBtn";
 
 export interface OpenDrawerParams {
     title?: string;
@@ -69,10 +70,14 @@ const DrawerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                         className={`drawer-panel absolute right-0 top-0 h-full shadow-xl ${animate ? 'translate-x-0' : 'translate-x-full'}`}
                         onClick={e => e.stopPropagation()}
                     >
-                        {params.showClose && (
-                            <button className="drawer-close" onClick={close}>×</button>
-                        )}
-                        {params.title && <div className="drawer-title">{params.title}</div>}
+
+                        <div className="flex justify-between items-center px-5 py-5">
+                            {params.title && <div className="xl-font font-bold primary-color">{params.title}</div>}
+                            {params.showClose && (
+                                <CloseBtn onClick={close}></CloseBtn>
+                            )}
+                        </div>
+
                         <div className="drawer-content">{params.children}</div>
                     </div>
                 </div>

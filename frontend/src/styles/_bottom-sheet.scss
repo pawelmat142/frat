@@ -149,9 +149,6 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     font-size: $lFont;
     border-radius: .75rem;
 
-    &:hover {
-        background-color: $active-bg;
-    }
 
     &.selected {
         color: $primary-color;

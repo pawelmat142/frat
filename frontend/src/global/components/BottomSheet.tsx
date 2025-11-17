@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
+import CloseBtn from './CloseBtn';
 
 
 const BottomSheet = () => {
@@ -34,13 +35,7 @@ const BottomSheet = () => {
                 <div className="bottom-sheet-header">
                     <div className="bottom-sheet-drag-handle" />
                     {ctx.params?.title && <h3 className="bottom-sheet-title">{ctx.params.title}</h3>}
-                    <button 
-                        className="bottom-sheet-close-btn"
-                        onClick={ctx.close}
-                        aria-label="Close"
-                    >
-                        <FaTimes />
-                    </button>
+                    <CloseBtn onClick={ctx.close}></CloseBtn>
                 </div>
 
                 {ctx.params?.children}

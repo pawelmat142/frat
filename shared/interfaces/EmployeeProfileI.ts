@@ -114,7 +114,7 @@ export interface EmployeeProfileSearchForm {
   locationCountry?: string | null;
   locationPosition?: Position;
 
-  dateRange?: { start?: Date, end?: Date };
+  dateRange?: DateRange | null;
 
   skip: number;
   limit: number;

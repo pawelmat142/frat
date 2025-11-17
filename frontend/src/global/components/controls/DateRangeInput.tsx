@@ -8,7 +8,7 @@ import DateRangePickerSheet from './DateRangePickerSheet';
 import { useTranslation } from 'react-i18next';
 
 interface DateRangeProps {
-    value?: DateRange;
+    value?: DateRange | null;
     onChange?: (range: DateRange | null) => void;
     label?: string;
     required?: boolean;

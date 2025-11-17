@@ -2,57 +2,21 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { EmployeeSearchContextProps } from "./EmployeeSearchProvider";
 import { useDrawer } from "global/providers/DrawerProvider";
-import { useBottomSheet } from "global/providers/BottomSheetProvider";
+import DictionarySelector from "global/components/selector/DictionarySelector";
+import Button from "global/components/controls/Button";
+import { BtnModes } from "global/interface/controls.interface";
+import DateRangeInput from "global/components/controls/DateRangeInput";
+import { DateRange } from "@shared/interfaces/EmployeeProfileI";
 
-const EmployeeSearchFiltersSheet: React.FC<{ctx: EmployeeSearchContextProps}> = ({ctx}) => {
+const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> = ({ ctx }) => {
 
     const { t } = useTranslation();
-
     const drawerCtx = useDrawer();
-    const bottomSheetCtx = useBottomSheet()
-    
-    const handleSkillsSelection = () => {
-        drawerCtx.close();
-        bottomSheetCtx.openDictionarySelector({
-            multiSelect: true,  
-            title: t("employeeProfile.form.skills"),
-            translateItems: true,
-            code: "SKILLS",
-            selectedValues: ctx.filters.skills || [],
-            onSelectMulti: (items) => {
-                ctx.setFilters({ ...ctx.filters, skills: items.map(i => String(i.value)) });
-            },
-        })
-    }
 
-    const handleCertificatesSelection = () => {
-        drawerCtx.close();
-        bottomSheetCtx.openDictionarySelector({
-            multiSelect: true,  
-            title: t("employeeProfile.form.certificates"),
-            translateItems: true,
-            code: "CERTIFICATES",
-            selectedValues: ctx.filters.certificates || [], 
-            onSelectMulti: (items) => {
-                ctx.setFilters({ ...ctx.filters, certificates: items.map(i => String(i.value)) });
-            },
-        })
-    }
-
-    const handleCommunicationLanguagesSelection = () => {
-        drawerCtx.close();
-        bottomSheetCtx.openDictionarySelector({
-            multiSelect: true,
-            title: t("employeeProfile.form.communicationLanguages"),
-            translateItems: true,
-            code: "LANGUAGES",
-            groupCode: "COMMUNICATION",
-            selectedValues: ctx.filters.communicationLanguages || [], 
-            onSelectMulti: (items) => {
-                ctx.setFilters({ ...ctx.filters, communicationLanguages: items.map(i => String(i.value)) });
-            },
-        })
-    }
+    const [skills, setSkills] = React.useState<string[]>(ctx.filters.skills || []);
+    const [certificates, setCertificates] = React.useState<string[]>(ctx.filters.certificates || []);
+    const [languages, setLanguages] = React.useState<string[]>(ctx.filters.communicationLanguages || []);
+    const [dateRange, setDateRange] = React.useState<DateRange | null>(ctx.filters.dateRange || null);
 
     const resetFilters = () => {
         ctx.resetFilters()
@@ -60,24 +24,67 @@ const EmployeeSearchFiltersSheet: React.FC<{ctx: EmployeeSearchContextProps}> = 
     }
 
     return (
-        <div className="flex flex-col py-3 px-5">
+        <div className="flex flex-col px-3 pt-5 gap-1">
 
+            <DictionarySelector
+                type="multi"
+                className="w-full"
+                valueInput={skills}
+                onSelectMulti={items => {
+                    const skillValues = items.map(i => String(i.value));
+                    ctx.setFilters({ ...ctx.filters, skills: skillValues })
+                    setSkills(skillValues);
+                }}
+                label={t("employeeProfile.form.skills")}
+                code="SKILLS"
+                fullWidth
+            />
 
-            <div className="bottom-sheet-item" onClick={handleSkillsSelection}>
-                {t("employeeProfile.form.skills")}
-            </div>
+            <DictionarySelector
+                type="multi"
+                className="w-full"
+                valueInput={certificates}
+                onSelectMulti={items => {
+                    const certificateValues = items.map(i => String(i.value));
+                    ctx.setFilters({ ...ctx.filters, certificates: certificateValues })
+                    setCertificates(certificateValues);
+                }}
+                label={t("employeeProfile.form.certificates")}
+                code="CERTIFICATES"
+                fullWidth
+            />
 
-            <div className="bottom-sheet-item" onClick={handleCertificatesSelection}>
-                {t("employeeProfile.form.certificates")}
-            </div>
+            <DictionarySelector
+                type='multi'
+                className="w-full"
+                valueInput={languages}
+                onSelectMulti={items => {
+                    const languageValues = items.map(i => String(i.value));
+                    ctx.setFilters({ ...ctx.filters, communicationLanguages: languageValues })
+                    setLanguages(languageValues);
+                }}
+                label={t("employeeProfile.form.communicationLanguage")}
+                code="LANGUAGES"
+                groupCode="COMMUNICATION"
+                fullWidth
+                required
+            />
 
-            <div className="bottom-sheet-item" onClick={handleCommunicationLanguagesSelection}>
-                {t("employeeProfile.form.communicationLanguages")}
-            </div>
+            <DateRangeInput
+                label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label") }
+                className="w-full"
+                value={dateRange}
+                onChange={(dateRange) => {
+                    if (dateRange) {
+                        setDateRange(dateRange);
+                        ctx.setFilters({ ...ctx.filters, dateRange });
+                    }
+                }}
+            />
 
-            <div className="bottom-sheet-item" onClick={resetFilters}>
+            <Button onClick={resetFilters} mode={BtnModes.ERROR} className="mt-5" fullWidth>
                 {t("common.reset")}
-            </div>
+            </Button>
 
         </div>
     );
