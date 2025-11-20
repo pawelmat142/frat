@@ -608,6 +608,7 @@ $topLabelOffset: 0.3rem;
     display: flex;
     justify-content: center;
     width: 100%;
+    min-height: 400px;
 
     .react-datepicker {
       font-size: 1.2rem;

@@ -104,20 +104,20 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                             type="text"
                             value={value?.start?.toLocaleDateString() || ''}
                             onClick={handleStartDateClick}
-                            className="floating-input pr-10 primary-text flex-1 cursor-pointer"
+                            className="floating-input primary-text flex-1 cursor-pointer"
                             disabled={disabled}
                             required={required}
                             readOnly
                             placeholder=" "
                         />
-                        <span className="secondary-text">-</span>
+                        <span className="secondary-text pt-6">-</span>
                         <input
                             id={name ? `${name}_end` : undefined}
                             name={name ? `${name}_end` : undefined}
                             type="text"
                             value={value?.end?.toLocaleDateString() || ''}
                             onClick={handleEndDateClick}
-                            className="floating-input pr-10 primary-text flex-1 cursor-pointer"
+                            className="floating-input primary-text flex-1 cursor-pointer"
                             disabled={disabled}
                             required={required}
                             readOnly

@@ -41,7 +41,6 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const [results, setResults] = useState<EmployeeProfileI[]>([]);
     const [count, setCount] = useState(0);
     const [loading, setLoading] = useState(false);
-    const abortControllerRef = useRef<AbortController | null>(null);
 
     const itemsPerPage = 5;
     const totalPages = Math.ceil(count / itemsPerPage);

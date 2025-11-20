@@ -117,15 +117,6 @@ $tile-edge-radius: 1rem;
         border-bottom-left-radius: $tile-edge-radius;
         border-bottom-right-radius: $tile-edge-radius;
     }
-
-    &.clickable {
-        cursor: pointer;
-        transition: $transition;
-
-        &:hover {
-            background-color: $active-bg;
-        }
-    }
 }
 
 .tile-content-row {

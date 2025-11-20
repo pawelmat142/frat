@@ -53,10 +53,10 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
 
 
     return (
-        <div className={`tile clickable${first ? " first" : ""}${last ? " last" : ""}`} onClick={() => goToProfileView(employeeProfile)}>
+        <div className={`tile ripple${first ? " first" : ""}${last ? " last" : ""}`} onClick={() => goToProfileView(employeeProfile)}>
 
             <div className="tile-avatar">
-
+                {/* TODO?? */}
             </div>
 
             <div className="tile-content">
