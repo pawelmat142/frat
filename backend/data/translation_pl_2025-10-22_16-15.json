@@ -231,7 +231,6 @@
         "locationCountriesMustNotBeSpecified": "Kraje lokalizacji nie mogą być określone dla opcji cała Europa",
         "availabilityDateRangesRequired": "Wymagany jest co najmniej jeden zakres dat dostępności",
         "availabilityDateRangeStartEndRequired": "Daty rozpoczęcia i zakończenia są wymagane dla zakresów dat dostępności"
-      
       },
       "form": {
         "title": "Formularz profilu pracownika",
@@ -243,6 +242,8 @@
         "address": "Adres",
         "lastName": "Nazwisko",
         "location": "Lokalizacja",
+        "locationCountry": "Kraj lokalizacji",
+        "locationPoint": "Dokładna lokalizacja",
         "firstName": "Imię",
         "addLanguage": "Dodaj język",
         "certificates": "Certyfikaty",

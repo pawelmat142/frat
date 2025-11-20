@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { EmployeeProfileAvailabilityOptions, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileI, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
 import { ToastException } from "global/exceptions/ToastException";
@@ -87,8 +87,7 @@ export class EmployeeProfileRepo {
     }
 
 
-    public async initialLoad(): Promise<void> {
-        const profiles = EmployeeProfilesInitialData()
+    public async initialLoad(profiles: EmployeeProfileI[]): Promise<void> {
         await this.employeeProfileRepository.save(profiles);
     }
 

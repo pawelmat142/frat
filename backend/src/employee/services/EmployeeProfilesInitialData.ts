@@ -85,7 +85,7 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
             communicationLanguages: ['pl', 'en'],
             locationOption: EmployeeProfileLocationOptions.DISTANCE,
             point: { type: 'Point', coordinates: [21.0122, 52.2297] }, // Warsaw
-            pointRadius: 150,
+            pointRadius: 500,
             status: EmployeeProfileStatuses.ACTIVE,
             employeeProfileId: 1,
             createdAt: getRandomizedCreatedAt(1),
@@ -135,7 +135,7 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
             communicationLanguages: ['pl', 'de'],
             locationOption: EmployeeProfileLocationOptions.DISTANCE,
             point: { type: 'Point', coordinates: [19.945, 50.0647] }, // Krakow
-            pointRadius: 100,
+            pointRadius: 300,
             status: EmployeeProfileStatuses.ACTIVE,
             employeeProfileId: 4,
             createdAt: getRandomizedCreatedAt(4),
@@ -185,7 +185,7 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
             communicationLanguages: ['cs', 'en'],
             locationOption: EmployeeProfileLocationOptions.DISTANCE,
             point: { type: 'Point', coordinates: [14.4378, 50.0755] }, // Prague
-            pointRadius: 120,
+            pointRadius: 1000,
             status: EmployeeProfileStatuses.ACTIVE,
             employeeProfileId: 7,
             createdAt: getRandomizedCreatedAt(7),

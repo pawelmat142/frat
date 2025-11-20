@@ -77,7 +77,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                     return (
                         <div
                             key={index}
-                            className={`bottom-sheet-item ${isSelected(item.value) ? 'selected' : ''}`}
+                            className={`bottom-sheet-item ripple${isSelected(item.value) ? ' selected' : ''}`}
                             onClick={() => handleItemClick(item)}
                         >
                             <div className="bottom-sheet-item-content">

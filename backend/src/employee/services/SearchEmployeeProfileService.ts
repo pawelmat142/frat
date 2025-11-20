@@ -51,6 +51,11 @@ export class SearchEmployeeProfileService {
             hasFilter = true;
         }
 
+        if (query.locationCountry) {
+            queryBuilder.andWhere(':locationCountry = ANY (profile.location_countries)', { locationCountry: query.locationCountry });
+            hasFilter = true;
+        }
+
         // Free text fuzzy search
         if (query.freeText && query.freeText.trim().length > 1) {
             const freeText = `%${query.freeText.trim().toLowerCase()}%`;

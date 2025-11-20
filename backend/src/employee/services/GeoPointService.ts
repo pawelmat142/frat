@@ -15,6 +15,9 @@ export class GeoPointService {
     ) { }
 
     public async getCountriesInRadius(lat: number, lng: number, radiusKm: number): Promise<string[]> {
+        if (radiusKm <= 0) {
+            return [];
+        }
         const path = require('path');
         const countriesPath = path.resolve(__dirname, 'countries.geojson');
         const countries = JSON.parse(fs.readFileSync(countriesPath, 'utf8'));

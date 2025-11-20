@@ -3,12 +3,14 @@ import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmployeeProfileAvailabilityOptions, EmployeeProfileFormDto, EmployeeProfileLocationOptions, EmployeeProfileStatus, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileFormDto, EmployeeProfileI, EmployeeProfileLocationOptions, EmployeeProfileStatus, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { EPUtil } from './EPUtil';
 import { GeoPointService } from './GeoPointService';
 import { DeepPartial } from 'typeorm';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
+import { EmployeeProfilesInitialData } from './EmployeeProfilesInitialData';
+import { PointUtil } from '@shared/utils/PointUtil';
 
 @Injectable()
 export class EmployeeProfileService {
@@ -38,7 +40,13 @@ export class EmployeeProfileService {
 
     public async initialLoad(): Promise<void> {
         try {
-            return await this.employeeProfileRepo.initialLoad();
+            const profiles = EmployeeProfilesInitialData()
+            for (const profile of profiles) {
+                if (profile.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
+                    await this.fillLocationCountries(profile as EmployeeProfileEntity);
+                }
+            }
+            return await this.employeeProfileRepo.initialLoad(profiles as EmployeeProfileI[]);
         } catch (e) {
             console.error(e)
             throw new ToastException("Initial load failed", this);
@@ -115,6 +123,7 @@ export class EmployeeProfileService {
         }
     }
 
+    // TODO optimize this method 
     private async fillLocationData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): Promise<void> {
         EPUtil.fillLocationData(result, form)
 
@@ -129,6 +138,16 @@ export class EmployeeProfileService {
             delete result.pointRadius;
             delete result.address;
         }
+    }
+
+    private async fillLocationCountries(profile: EmployeeProfileEntity) {
+        const position = PointUtil.fromGeoPoint(profile.point);
+        const countires = await this.geoPointService.getCountriesInRadius(
+            position.lat,
+            position.lng,
+            profile.pointRadius || 0
+        )
+        profile.locationCountries = countires;
     }
 
     private getProfileStatus(user: UserI, form: EmployeeProfileFormDto): EmployeeProfileStatus {
