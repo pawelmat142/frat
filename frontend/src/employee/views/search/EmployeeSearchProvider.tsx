@@ -71,8 +71,6 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         } finally {
             setLoading(false);
         }
-
-        console.log("Search executed with filters:", searchFilters);
     }, [filters]);
 
     const nextPage = () => {

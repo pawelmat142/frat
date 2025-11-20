@@ -14,14 +14,12 @@ const EmployeeSearchViewContent: React.FC = () => {
 
     // TODO opcje sortowania na widoku
     // TODO implementacja sortowanie w backendzie
-    // TODO szukanie po krajach, lokacji/odległości
     // TODO sensowne indexy na searach
-
-    const { t } = useTranslation();
-    const { me } = useAuthContext()
-    const { filters, setFilters, results, loading, setLoading, pagination, nextPage, prevPage } = useEmployeeSearch();
+    // TODO desktop RWD adjustment
 
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null);
+    const { results, loading, setLoading, pagination, nextPage, prevPage } = useEmployeeSearch();
+    const { t } = useTranslation();
 
     useEffect(() => {
         const initDictionary = async () => {
@@ -32,13 +30,17 @@ const EmployeeSearchViewContent: React.FC = () => {
         }
         initDictionary();
     }, []);
-    
+
     return (
         <div className="list-view">
 
             <EmployeeSearchFilters languagesDictionary={languagesDictionary} />
 
-            <div className="results flex flex-col gap-1">
+            {!loading && !results.length ? (
+                <div className="flex flex-col items-center justify-center mt-20">
+                    <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
+                </div>
+            ) : <div className="results flex flex-col gap-1">
                 {!!languagesDictionary && results.map((profile, index) => (
                     <EmployeeProfileTile
                         key={profile.employeeProfileId}
@@ -48,7 +50,7 @@ const EmployeeSearchViewContent: React.FC = () => {
                         last={index === results.length - 1}
                     />
                 ))}
-            </div>
+            </div>}
 
             {loading ? (<div>
                 <Loading></Loading>

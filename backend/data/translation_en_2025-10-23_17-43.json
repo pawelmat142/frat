@@ -21,7 +21,8 @@
       "start": "Start",
       "end": "End",
       "filters": "Filters",
-      "reset": "Reset"
+      "reset": "Reset",
+      "noResults": "No results found"
     },
     "lang": {
       "language": "Language",
