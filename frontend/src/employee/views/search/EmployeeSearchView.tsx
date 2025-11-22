@@ -7,10 +7,10 @@ import { DictionaryService } from "global/services/DictionaryService";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import Loading from "global/components/Loading";
 import { BtnModes } from "global/interface/controls.interface";
-import EmployeeSearchProvider, { useEmployeeSearch } from "./EmployeeSearchProvider";
+import { useEmployeeSearch } from "./EmployeeSearchProvider";
 import EmployeeSearchFilters from "./EmployeeSearchFilters";
 
-const EmployeeSearchViewContent: React.FC = () => {
+const EmployeeSearchView: React.FC = () => {
 
     // TODO opcje sortowania na widoku
     // TODO implementacja sortowanie w backendzie
@@ -81,10 +81,5 @@ const EmployeeSearchViewContent: React.FC = () => {
     )
 }
 
-const EmployeeSearchView: React.FC = () => (
-    <EmployeeSearchProvider>
-        <EmployeeSearchViewContent />
-    </EmployeeSearchProvider>
-);
 
 export default EmployeeSearchView;

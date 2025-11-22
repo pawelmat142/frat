@@ -24,7 +24,7 @@ import EmployeeProfileFormView from 'employee/views/EmployeeProfileFormView';
 import AdminFeedbacks from 'admin/views/feedback/AdminFeedbacks';
 import EmployeeSearchView from 'employee/views/search/EmployeeSearchView';
 import AdminEmployeeProfiles from 'admin/views/employee_profiles/AdminEmployeeProfiles';
-import EmployeeProfileView from 'employee/views/EmployeeProfileView';
+import EmployeeProfileView from 'employee/views/profile/EmployeeProfileView';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -45,7 +45,7 @@ const App: React.FC = () => {
 
     const popupCtx = usePopup();
     const navigate = useNavigate()
-    
+
     React.useEffect(() => {
         httpClient.setPopupHandler(popupCtx.popup);
     }, [popupCtx.popup]);
@@ -56,35 +56,38 @@ const App: React.FC = () => {
     return (
         <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
-                
+
                 <Route path={Path.HOME} element={<PageWrapper direction={-1}><HomePage /></PageWrapper>} />
 
                 <Route path={Path.PROFILE} element={<PageWrapper direction={1}><ProtectedRoute><ProfilePage /></ProtectedRoute></PageWrapper>} />
+
+                {/* EMPLOYEE PROFILE */}
                 <Route path={Path.EMPLOYEE_PROFILE} element={<PageWrapper direction={1}><EmployeeProfileView /></PageWrapper>} />
-                
+                <Route path={Path.EMPLOYEE_SEARCH} element={<PageWrapper direction={1}><ProtectedRoute><EmployeeSearchView /></ProtectedRoute></PageWrapper>} />
+                {/* <Route path={Path.EMPLOYEE_PROFILE} element={<PageWrapper direction={1}><EmployeeProfileViewOld /></PageWrapper>} /> */}
                 <Route path={Path.EMPLOYEE_PROFILE_FORM} element={<PageWrapper direction={1}><ProtectedRoute><EmployeeProfileFormView /></ProtectedRoute></PageWrapper>} />
 
-                <Route path={Path.EMPLOYEE_SEARCH} element={<PageWrapper direction={1}><ProtectedRoute><EmployeeSearchView /></ProtectedRoute></PageWrapper>} />
+
 
                 <Route path={Path.SIGN_IN} element={<PageWrapper direction={1}><SignInPage /></PageWrapper>} />
                 <Route path={Path.SIGN_UP} element={<PageWrapper direction={1}><SignUpPage /></PageWrapper>} />
                 <Route path={Path.FORGOT_PASSWORD} element={<PageWrapper direction={1}><ForgotPassword /></PageWrapper>} />
 
                 <Route path={Path.ERROR_PAGE} element={<ErrorPage />} />
-               
+
                 <Route path={Path.ADMIN_PANEL} element={
                     <AdminPanelProvider>
                         <ProtectedRoute roles={[UserRoles.ADMIN, UserRoles.SUPERADMIN]}>
                             <AdminPanelPage />
                         </ProtectedRoute>
                     </AdminPanelProvider>
-                 }  >
+                }  >
                     <Route path={Path.ADMIN_DICTIONARY} element={<DictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES} element={<AdminDictionaries />} />
                     <Route path={Path.ADMIN_DICTIONARIES_ADD} element={<AddDictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES_EDIT} element={<AddDictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES_GROUP} element={<DictionaryGroupForm />} />
-                    
+
                     <Route path={Path.ADMIN_TRANSLATIONS} element={<AdminTranslations />} />
                     <Route path={Path.ADMIN_USERS} element={<AdminUsers />} />
                     <Route path={Path.ADMIN_FEEDBACKS} element={<AdminFeedbacks />} />

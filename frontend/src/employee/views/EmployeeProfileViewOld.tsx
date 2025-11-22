@@ -7,7 +7,7 @@ import SelectedProfile from "admin/views/employee_profiles/SelectedProfile";
 import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import BackBtn from "global/components/controls/BackBtn";
 
-const EmployeeProfileView: React.FC = () => {
+const EmployeeProfileViewOld: React.FC = () => {
 
     const params = useParams<{ displayName?: string }>();
     const displayName = params.displayName;
@@ -46,4 +46,4 @@ const EmployeeProfileView: React.FC = () => {
     );
 }
 
-export default EmployeeProfileView;
+export default EmployeeProfileViewOld;
