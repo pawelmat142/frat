@@ -113,7 +113,7 @@ const MonthCallendar: React.FC<MonthCallendarProps> = ({
     return (
         <>
             <div className="w-full">
-                {showDaysHeader && (<CallendarDaysHeader />)}
+                {showDaysHeader && (<CallendarDaysHeader fullScreenMode={fullScreenMode} />)}
             </div>
 
             {showMonthHeader && (

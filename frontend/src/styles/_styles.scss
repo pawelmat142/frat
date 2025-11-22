@@ -309,6 +309,10 @@ $tileRadius: 1rem;
         font-size: $xsFont;
         color: $primary-color;
         margin-bottom: 6px;
+
+        &.big {
+            font-size: 1rem;
+        }
     }
 
     &.disabled {

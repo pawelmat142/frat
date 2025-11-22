@@ -82,7 +82,6 @@ const EmployeeProfileStep4: React.FC<Props> = ({ control, setValue, watch, formS
             ...availabilityDateRanges,
             newRange
         ]
-        console.log('newRanges', newRanges);
         setValue("step4.availabilityDateRanges", newRanges);
     }
 

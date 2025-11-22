@@ -18,16 +18,16 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
     const date = range?.start || null;
 
     const prepareMonthsArray = (range: DateRange): Date[] => {
-        // prepare array of months to show
         const months: Date[] = [];
         if (!range.start || !range.end) return months;
-        let current = new Date(range.start.getFullYear(), range.start.getMonth(), 1);
-        const end = new Date(range.end.getFullYear(), range.end.getMonth(), 1);
+        // Start one month before range.start
+        let current = new Date(range.start.getFullYear(), range.start.getMonth() - 1, 1);
+        // End five months after range.end
+        const end = new Date(range.end.getFullYear(), range.end.getMonth() + 5, 1);
         while (current <= end) {
             months.push(new Date(current));
             current.setMonth(current.getMonth() + 1);
         }
-
         return months;
     }
 
@@ -47,7 +47,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
         <div className="callendars-view-wrapper">
 
             <div className="callendars-view-header">
-                <CallendarDaysHeader />
+                <CallendarDaysHeader fullScreenMode={true} />
             </div>
 
             <div className="w-full flex flex-col items-center gap-4 h-full justify-center p-2 callendars-view-fullscreen">
