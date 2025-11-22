@@ -3,14 +3,28 @@ import React from "react";
 import { EPUtil } from "employee/EPUtil";
 import { Util } from "@shared/utils/util";
 import { useTranslation } from "react-i18next";
+import { DictionaryI } from "@shared/interfaces/DictionaryI";
+import Loading from "global/components/Loading";
+import Flags from "global/Flags";
 
 interface ProfileDataTileProps {
     profile: EmployeeProfileI
+    languagesDictionary?: DictionaryI | null
 }
 
-const ProfileDataTile: React.FC<ProfileDataTileProps> = ({ profile }) => {
+const ProfileDataTile: React.FC<ProfileDataTileProps> = ({ profile, languagesDictionary }) => {
 
     const { t } = useTranslation();
+
+    if (!languagesDictionary) {
+        return (<Loading></Loading>);
+    }
+
+    const languageNames = profile.communicationLanguages.map(code => {
+        return languagesDictionary.elements.find(el => el.code === code)?.values.NAME;
+    }).filter(name => name !== undefined)
+        .map(name => t(name))
+        .join(', ');
 
     return (
         <div className="square-tile data-tile p-1">
@@ -22,8 +36,23 @@ const ProfileDataTile: React.FC<ProfileDataTileProps> = ({ profile }) => {
 
             <div className="xs-font secondary-text">{profile.email}</div>
 
-            <div className="xs-font secondary-text">{t('employeeProfile.joined')} {Util.displayDate(profile.createdAt)}</div>
+            <div>
+                <div className="mb-1">{t('employeeProfile.form.communicationLanguages')}</div>
+                <div className="ml-1">
+                    <Flags languages={profile.communicationLanguages} languagesDictionary={languagesDictionary} />
+                    <div className="xs-font secondary-text mt-1">{languageNames}</div>
 
+                </div>
+            </div>
+
+
+            <div className="xs-font secondary-text">{t('employeeProfile.joined')} {Util.displayDate(profile.createdAt)}</div>
+            
+            <div className="xs-font secondary-text">{t('employeeProfile.views')} {0}</div>
+            <div className="xs-font secondary-text">{t('employeeProfile.jobs')} {0}</div>
+
+{/* TODO wyswietlen: */}
+{/* TODO jobs: */}
 
         </div>
     );

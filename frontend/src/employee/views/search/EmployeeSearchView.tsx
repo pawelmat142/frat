@@ -8,7 +8,6 @@ import Loading from "global/components/Loading";
 import { BtnModes } from "global/interface/controls.interface";
 import { useEmployeeSearch } from "./EmployeeSearchProvider";
 import EmployeeSearchFilters from "./EmployeeSearchFilters";
-import { EmployeeProfileSearchForm } from "@shared/interfaces/EmployeeProfileI";
 
 const EmployeeSearchView: React.FC = () => {
 

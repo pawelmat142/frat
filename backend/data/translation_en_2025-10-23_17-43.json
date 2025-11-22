@@ -258,6 +258,11 @@
       "notFound": "Employee profile not found for update",
       "alreadyInStatus": "Profile is already in the specified status",
       "search": "Search for employees",
+      "joined": "Joined:",
+      "experience": "Experience",
+      "availability": "Availability",
+      "views": "Views",
+      "jobs": "Jobs",
       "error": {
         "startDate": "Start date missing",
         "dataRequired": "Employee profile data is required",

@@ -260,6 +260,10 @@
       "alreadyInStatus": "Profil jest już w określonym statusie",
       "search": "Szukaj pracowników",
       "joined": "Dołączono:",
+      "experience": "Doświadczenie",
+      "availability": "Dostępność",
+      "views": "Wyświetlenia",
+      "jobs": "Zlecenia",
       "error": {
         "startDate": "Brak daty rozpoczęcia",
         "dataRequired": "Dane profilu pracownika są wymagane",

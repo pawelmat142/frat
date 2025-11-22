@@ -55,9 +55,11 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ profile }) => {
     return (
         <div className="square-tile month-tile ripple p-1" onClick={goToCallendarsView}>
 
-            <div className="mb-2">{t(`callendar.monthShort.${month}`)} {year}</div>
+            <div className="mb-2 small-font">{t(`callendar.monthShort.${month}`)} {year}</div>
 
-            <MonthCallendar date={date} selectedRange={range} />
+            <div className="month-tile-wrapper">
+                <MonthCallendar date={date} selectedRange={range} />
+            </div>
 
         </div>
     );
