@@ -271,7 +271,8 @@
       "experience": "Experience",
       "availability": "Availability",
       "views": "Views",
-      "jobs": "Jobs",
+      "jobs": "Jobs finished",
+      "editButton": "Edit Employee Profile",
       "error": {
         "startDate": "Start date missing",
         "dataRequired": "Employee profile data is required",

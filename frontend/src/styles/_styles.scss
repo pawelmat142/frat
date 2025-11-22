@@ -397,6 +397,13 @@ $tileRadius: 1rem;
     justify-content: center;
     margin-bottom: 2rem;
 }
+.form-subheader {
+    font-size: $lFont;
+    color: $secondary-text;
+    // color: $primary-text;
+    display: flex;
+    margin-bottom: 1rem;
+}
 
 .form-control-error-msg {
     color: $error-color;

@@ -52,8 +52,11 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
 
             <div className="w-full flex flex-col items-center gap-4 h-full justify-center p-2 callendars-view-fullscreen">
 
-                {months.map((monthDate, index) => {
-                    return (<div className="callendars-view-item">
+                {months.map((monthDate) => {
+                    return (<div
+                        key={`${monthDate.getFullYear()}-${monthDate.getMonth()}`}
+                        className="callendars-view-item"
+                    >
                         <MonthCallendar
                             showDaysHeader={false}
                             date={monthDate}

@@ -16,7 +16,7 @@ const EmployeeProfileStep2: React.FC<Props> = ({ control, formState }) => {
 
     return (
         <>
-            <h2 className="form-header">
+            <h2 className="form-subheader">
                 {t("employeeProfile.form.step2.title")}
             </h2>
 

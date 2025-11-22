@@ -19,7 +19,7 @@ const EmployeeProfileStep1: React.FC<Props> = ({ control, setValue, watch, formS
 
     return (
         <>
-            <h2 className="form-header">
+            <h2 className="form-subheader">
                 {t("employeeProfile.form.step1.title")}
             </h2>
             <div className="flex flex-col gap-7 md:gap-5">

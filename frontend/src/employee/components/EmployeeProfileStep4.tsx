@@ -109,9 +109,9 @@ const EmployeeProfileStep4: React.FC<Props> = ({ control, setValue, watch, formS
 
     return (
         <>
-            <h3 className="form-header">
+            <h3 className="form-subheader">
                 {t("employeeProfile.form.step4.title")}
-            </h3>
+            </h3>   
 
             <div className="flex flex-col gap-7 md:gap-5">
                 <TabSwitcher

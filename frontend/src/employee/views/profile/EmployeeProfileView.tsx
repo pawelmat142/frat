@@ -13,6 +13,11 @@ import { DictionaryService } from "global/services/DictionaryService";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { useTranslation } from "react-i18next";
 import Chips from "global/components/chips/Chips";
+import { useAuthContext } from "auth/AuthProvider";
+import Button from "global/components/controls/Button";
+import { BtnModes } from "global/interface/controls.interface";
+import { FaEdit } from "react-icons/fa";
+import EditButton from "global/components/buttons/EditButton";
 
 const EmployeeProfileView: React.FC = () => {
 
@@ -23,6 +28,7 @@ const EmployeeProfileView: React.FC = () => {
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null);
 
     const { t } = useTranslation();
+    const { me } = useAuthContext()
 
     useEffect(() => {
         const initDictionary = async () => {
@@ -76,7 +82,11 @@ const EmployeeProfileView: React.FC = () => {
         return <div className="py-8 text-center secondary-text italic">Profile not found.</div>;
     }
 
+    const goToEditForm = () => {
 
+    }
+
+    const isMyProfile = me?.uid === profile.uid;
 
     return (
         <div className="view-container">
@@ -103,6 +113,12 @@ const EmployeeProfileView: React.FC = () => {
 
                 <div className="mt-5 mb-1">{t('employeeProfile.experience')}: </div>
             </div>
+
+            {isMyProfile && (
+                <div className="mt-10 mb-10">
+                    <EditButton onClick={goToEditForm} label={t('employeeProfile.editButton')}></EditButton>
+                </div>
+            )}
 
         </div>
     );

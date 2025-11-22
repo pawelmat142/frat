@@ -272,7 +272,8 @@
       "experience": "Doświadczenie",
       "availability": "Dostępność",
       "views": "Wyświetlenia",
-      "jobs": "Zlecenia",
+      "jobs": "Zlecenia ukończone",
+      "editButton": "Edytuj profil pracownika",
       "error": {
         "startDate": "Brak daty rozpoczęcia",
         "dataRequired": "Dane profilu pracownika są wymagane",

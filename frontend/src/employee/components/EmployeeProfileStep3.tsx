@@ -41,7 +41,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ control, setValue, watch, formS
 
     return (
         <>
-            <h3 className="form-header">
+            <h3 className="form-subheader">
                 {t("employeeProfile.form.step3.title")}
             </h3>
 

@@ -1,11 +1,9 @@
 import CloseBtn from 'global/components/CloseBtn';
 import Button from 'global/components/controls/Button';
-import IconButton from 'global/components/controls/IconButon';
 import Header from 'global/components/Header';
 import { BtnMode, BtnModes } from 'global/interface/controls.interface';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaArrowLeft } from 'react-icons/fa';
 
 interface PopupContextType {
   confirm: (options: ConfirmOptions) => Promise<boolean>;
@@ -105,22 +103,35 @@ interface PopupDialogProps {
 }
 
 const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
-  const [visible, setVisible] = React.useState(open)
-  const [show, setShow] = React.useState(false)
-  const [closing, setClosing] = React.useState(false)
+  
+  const [visible, setVisible] = React.useState(open);
+  const [show, setShow] = React.useState(false);
+  const [closing, setClosing] = React.useState(false);
+  const historyInjectedRef = React.useRef(false);
 
-  const handlePopState = (event: PopStateEvent) => {
-    event.preventDefault();
-    onClose(false);
-  };
+  // Stable popstate handler
+  const popHandlerRef = React.useRef<(e: PopStateEvent) => void>();
+  if (!popHandlerRef.current) {
+    popHandlerRef.current = () => {
+      // User pressed back -> close popup
+      onClose(false);
+      historyInjectedRef.current = false; // consumed
+    };
+  }
 
   React.useEffect(() => {
-    window.history.pushState({ popup: true }, "", window.location.href);
-    window.addEventListener("popstate", handlePopState);
+    if (open && !historyInjectedRef.current) {
+      try {
+        window.history.pushState({ popup: true }, '', window.location.href);
+        historyInjectedRef.current = true;
+      } catch { /* ignore */ }
+      window.addEventListener('popstate', popHandlerRef.current!);
+    }
     return () => {
-      window.removeEventListener("popstate", handlePopState);
+      // Cleanup listener when component unmounts or open changes
+      window.removeEventListener('popstate', popHandlerRef.current!);
     };
-  }, [handlePopState]);
+  }, [open, onClose]);
 
   const { t } = useTranslation();
 
@@ -128,14 +139,21 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
     if (open) {
       setVisible(true);
       setClosing(false);
-      setTimeout(() => setShow(true), 10)
+      setTimeout(() => setShow(true), 10);
     } else if (visible) {
-      setShow(false)
-      setClosing(true)
+      setShow(false);
+      setClosing(true);
       const timeout = setTimeout(() => {
-        setVisible(false)
-        setClosing(false)
-      }, 200)
+        setVisible(false);
+        setClosing(false);
+        // Remove artificial history entry if it still exists (closed programmatically)
+        if (historyInjectedRef.current) {
+          try {
+            window.history.back();
+          } catch { /* ignore */ }
+          historyInjectedRef.current = false;
+        }
+      }, 200);
       return () => clearTimeout(timeout);
     }
   }, [open, visible]);
