@@ -1,8 +1,11 @@
 import CloseBtn from 'global/components/CloseBtn';
 import Button from 'global/components/controls/Button';
+import IconButton from 'global/components/controls/IconButon';
+import Header from 'global/components/Header';
 import { BtnMode, BtnModes } from 'global/interface/controls.interface';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaArrowLeft } from 'react-icons/fa';
 
 interface PopupContextType {
   confirm: (options: ConfirmOptions) => Promise<boolean>;
@@ -23,6 +26,7 @@ export interface PopupConfig {
   buttons?: PopupButtonConfig[]
   children?: ReactNode
   showClose?: boolean
+  fullScreen?: boolean
 }
 export type PopupHandler = (options: PopupConfig) => Promise<boolean>;
 
@@ -141,8 +145,20 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
     }
   }
 
+  const overlayClass = `popup fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-200 ${show && !closing ? 'opacity-100' : 'opacity-0'}`;
+
+  if (config.fullScreen) {
+    return (
+      <div className={overlayClass}>
+        <div className={`primary-bg rounded-lg shadow-lg w-full h-full max-w-full max-h-full transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}>
+          <Header onBack={() => onClose(false)} title={config?.title} hideMenu={true}></Header>
+          {config?.children}
+        </div>
+      </div>
+    )
+  }
   return (
-    <div className={`popup fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-200 ${show && !closing ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={overlayClass}>
       <div
         className={`primary-bg rounded-lg shadow-lg pt-4 min-w-[300px] transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}
       >
@@ -150,7 +166,8 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
         <div className="popup-header flex items-start justify-between mb-5 gap-2">
           {config?.title && <h2 className="text-lg font-semibold ">{t(config.title)}</h2>}
           {config?.showClose && (<CloseBtn size={24} onClick={() => {
-            onClose(false)}} />)}
+            onClose(false)
+          }} />)}
         </div>
 
         {config?.children ? (

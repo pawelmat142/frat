@@ -1,10 +1,11 @@
 import { DateRange, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
-import { on } from "events";
 import MonthCallendar from "global/components/callendar/MonthCallendar";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { usePopup } from "global/providers/PopupProvider";
+import CallendarsView from "global/components/callendar/CallendarsView";
 
 interface CallendarTileProps {
     profile: EmployeeProfileI
@@ -38,7 +39,20 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ profile }) => {
     const month = date.getMonth();
     const year = date.getFullYear();
 
-    const goToCallendarsView = () => {
+    const popup = usePopup();
+
+    const goToCallendarsView = async () => {
+        if (!range) return;
+
+        popup.popup({
+            fullScreen: true,
+            children: (
+                <CallendarsView
+                    range={range}
+                />
+            )
+        });
+
     }
 
     return (

@@ -34,6 +34,11 @@ $headerHeight: 60px;
         padding-left: 1rem;
         padding-right: 1rem;
     }
+
+    .header-content-left {
+        display: flex;
+        align-items: center;
+    }
 }
 
 // FOOTER
