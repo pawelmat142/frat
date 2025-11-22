@@ -45,7 +45,7 @@ const EmployeeSearchView: React.FC = () => {
                 {!!languagesDictionary && ctx.results.map((profile, index) => (
                     <EmployeeProfileTile
                         key={profile.employeeProfileId}
-                        employeeProfile={profile}
+                        profile={profile}
                         languagesDictionary={languagesDictionary}
                         first={index === 0}
                         last={index === ctx.results.length - 1}

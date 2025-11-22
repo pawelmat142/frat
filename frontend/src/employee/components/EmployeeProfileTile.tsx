@@ -5,44 +5,29 @@ import { isOneOf, Util } from "@shared/utils/util";
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import { Utils } from "global/utils";
+import { useTranslation } from "react-i18next";
+import { EPUtil } from "employee/EPUtil";
 
 interface Props {
-    employeeProfile: EmployeeProfileI,
+    profile: EmployeeProfileI,
     languagesDictionary: DictionaryI
     first?: boolean,
     last?: boolean,
 }
 
-const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDictionary, first, last }) => {
+const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, first, last }) => {
 
     const navigate = useNavigate();
-    
+    const { t } = useTranslation();
+
     const srcs = new Set<string>();
-    // const residenceFlagSrc = languagesDictionary.elements.find(el => el.values.COUNTRY_CODE === employeeProfile.residenceCountry)?.values.SRC;
-    // if (residenceFlagSrc) {
-    //     srcs.add(residenceFlagSrc);
-    // }
 
-    Utils.prepareFlagSrcs(employeeProfile.communicationLanguages || [], languagesDictionary).forEach(src => srcs.add(src));
+    Utils.prepareFlagSrcs(profile.communicationLanguages || [], languagesDictionary).forEach(src => srcs.add(src));
 
-    const prepareName = () => {
-        let result = ``
-        if (employeeProfile.firstName) {
-            result += employeeProfile.firstName
-        }
-        if (employeeProfile.lastName) {
-            if (employeeProfile.firstName) {
-                result += ` `
-            }
-            result += `${employeeProfile.lastName}`
-        }
-        return `, (${result})`
-    }
-
-    const name = prepareName();
+    const name = EPUtil.prepareName(profile);
 
     const getAvailableFromDate = (): string => {
-        const range = DateRangeUtil.toDateRange(employeeProfile.availabilityDateRanges![0]);
+        const range = DateRangeUtil.toDateRange(profile.availabilityDateRanges![0]);
         const from = Util.displayDate(range!.start!);
         return from;
     }
@@ -53,7 +38,7 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
 
 
     return (
-        <div className={`tile ripple${first ? " first" : ""}${last ? " last" : ""}`} onClick={() => goToProfileView(employeeProfile)}>
+        <div className={`tile ripple${first ? " first" : ""}${last ? " last" : ""}`} onClick={() => goToProfileView(profile)}>
 
             <div className="tile-avatar">
                 {/* TODO?? */}
@@ -62,7 +47,7 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
             <div className="tile-content">
 
                 <div className="tile-content-row top">
-                    <div className="tile-content-title">{employeeProfile.displayName}
+                    <div className="tile-content-title">{profile.displayName}
                         {name && <span>{name}</span>}
                     </div>
                     <div className="flex">
@@ -74,21 +59,21 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
                 </div>
 
                 <div className="tile-content-row mid items-center justify-between w-full">
-                    <div className="">{employeeProfile.email}</div>
+                    <div className="">{profile.email}</div>
 
-                        {employeeProfile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font text-right">Available anytime</span>}
+                        {profile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font text-right">{t('others.availableAnytimeShort')}</span>}
                         {isOneOf([
                             EmployeeProfileAvailabilityOptions.DATE_RANGES, 
                             EmployeeProfileAvailabilityOptions.FROM_DATE
-                            ], employeeProfile.availabilityOption) && <span className="small-font text-right">From {getAvailableFromDate()}</span>}
+                            ], profile.availabilityOption) && <span className="small-font text-right">{t('common.from')} {getAvailableFromDate()}</span>}
                 </div>
 
                 <div className="tile-content-row bottom">
 
                     <div className="flex">
                         <div className="chip-container">
-                            {Array.isArray(employeeProfile.skills) && !!employeeProfile.skills.length
-                                && employeeProfile.skills.map(v => (
+                            {Array.isArray(profile.skills) && !!profile.skills.length
+                                && profile.skills.map(v => (
                                     <div key={String(v)} className="chip">
                                         {v}
                                     </div>
@@ -96,8 +81,8 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
                             }
                         </div>
                         <div className="ml-10 chip-container">
-                            {Array.isArray(employeeProfile.certificates) && !!employeeProfile.certificates.length
-                                && employeeProfile.certificates.map(v => (
+                            {Array.isArray(profile.certificates) && !!profile.certificates.length
+                                && profile.certificates.map(v => (
                                     <div key={String(v)} className="chip">
                                         {v}
                                     </div>
@@ -106,7 +91,7 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
                         </div>
                     </div>
 
-                    <div className="">{Util.displayDate(employeeProfile.createdAt)}</div>
+                    <div className="">{Util.displayDate(profile.createdAt)}</div>
 
                 </div>
             </div>
@@ -116,4 +101,4 @@ const EmployeeLocationTile: React.FC<Props> = ({ employeeProfile, languagesDicti
 
 }
 
-export default EmployeeLocationTile;
+export default EmployeeProfileTile;

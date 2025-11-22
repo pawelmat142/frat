@@ -106,6 +106,7 @@ $headerHeight: 60px;
 
 
 $tile-edge-radius: 1rem;
+
 .tile {
     width: 100%;
     background-color: $secondary-bg;
@@ -250,6 +251,7 @@ $tile-edge-radius: 1rem;
 
 .avatar-tile {
     overflow: hidden;
+
     img {
         width: 100%;
         height: 100%;
@@ -262,6 +264,16 @@ $tile-edge-radius: 1rem;
 
 
 // CALLENDAR
+.square-tile.data-tile {
+    color: $primary-text;
+    font-size: $smallFont;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    padding: .5rem 1rem;
+    flex-direction: column;
+}
+
 .square-tile.month-tile {
     display: flex;
     flex-direction: column;
@@ -284,22 +296,27 @@ $tile-edge-radius: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
+
     &.header-cell {
         font-size: $xsFont;
         color: $primary-color;
         margin-bottom: 6px;
     }
+
     &.disabled {
         color: $secondary-text;
     }
+
     &.selected {
-        background-color: $primary-color-transparent;   
+        background-color: $primary-color-transparent;
         // color: $primary-text-active;
     }
+
     &.first {
         border-top-left-radius: .5rem;
         // border-bottom-left-radius: .5rem;
     }
+
     &.last {
         // border-top-right-radius: .5rem;
         border-bottom-right-radius: .5rem;
@@ -356,7 +373,7 @@ $tile-edge-radius: 1rem;
     background-color: $secondary-bg;
     border-radius: .75rem;
     overflow: hidden;
-    
+
 }
 
 .tab-switcher-option {

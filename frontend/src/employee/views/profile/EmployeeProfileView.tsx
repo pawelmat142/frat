@@ -7,6 +7,7 @@ import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import { useEmployeeSearch } from "../search/EmployeeSearchProvider";
 import AvatarTile from "./AvatarTile";
 import CallendarTile from "./CallendarTile";
+import ProfileDataTile from "./ProfileDataTile";
 
 const EmployeeProfileView: React.FC = () => {
 
@@ -57,7 +58,7 @@ const EmployeeProfileView: React.FC = () => {
 
                     <CallendarTile profile={profile}></CallendarTile>
 
-                    <div className="square-tile col-tile">a</div>
+                    <ProfileDataTile profile={profile}></ProfileDataTile>
 
                     <div className="square-tile col-tile">a</div>
 

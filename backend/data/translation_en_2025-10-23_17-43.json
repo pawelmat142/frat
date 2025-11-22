@@ -22,10 +22,12 @@
       "end": "End",
       "filters": "Filters",
       "reset": "Reset",
-      "noResults": "No results found"
+      "noResults": "No results found",
+      "from": "From"
     },
     "others": {
-      "availableAnytime": "Available anytime"
+      "availableAnytime": "Available anytime",
+      "availableAnytimeShort": "Anytime"
     },
     "callendar": {
       "month": {

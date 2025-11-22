@@ -22,10 +22,12 @@
       "end": "Koniec",
       "filters": "Filtry",
       "reset": "Resetuj",
-      "noResults": "Brak wyników"
+      "noResults": "Brak wyników",
+      "from": "Od"
     },
     "others": {
-      "availableAnytime": "Dostępny od zaraz"
+      "availableAnytime": "Dostępny od zaraz",
+      "availableAnytimeShort": "Od zaraz"
     },
     "callendar": {
       "month": {
@@ -257,6 +259,7 @@
       "notFound": "Nie znaleziono profilu pracownika do aktualizacji",
       "alreadyInStatus": "Profil jest już w określonym statusie",
       "search": "Szukaj pracowników",
+      "joined": "Dołączono:",
       "error": {
         "startDate": "Brak daty rozpoczęcia",
         "dataRequired": "Dane profilu pracownika są wymagane",

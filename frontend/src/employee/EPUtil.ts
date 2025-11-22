@@ -1,4 +1,4 @@
-import { EmployeeProfileSearchForm } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileI, EmployeeProfileSearchForm } from "@shared/interfaces/EmployeeProfileI";
 
 export abstract class EPUtil {
 
@@ -40,5 +40,19 @@ export abstract class EPUtil {
             skip: skip < 0 ? 0 : skip,
             limit,
         };
+    }
+
+    public static prepareName = (employeeProfile: EmployeeProfileI) => {
+        let result = ``
+        if (employeeProfile.firstName) {
+            result += employeeProfile.firstName
+        }
+        if (employeeProfile.lastName) {
+            if (employeeProfile.firstName) {
+                result += ` `
+            }
+            result += `${employeeProfile.lastName}`
+        }
+        return `, (${result})`
     }
 }
