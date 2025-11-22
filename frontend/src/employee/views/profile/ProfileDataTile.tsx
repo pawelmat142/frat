@@ -29,12 +29,14 @@ const ProfileDataTile: React.FC<ProfileDataTileProps> = ({ profile, languagesDic
     return (
         <div className="square-tile data-tile p-1">
 
-            <div className="nowrap ">
-                <span className="tile-content-title">{profile.displayName}</span>
-                <span>{EPUtil.prepareName(profile)}</span>
+            <div>
+                <div>
+                    <span className="tile-content-title">{profile.displayName}</span>
+                    <span>{EPUtil.prepareName(profile)}</span>
+                </div>
+                <div className="xs-font secondary-text">{profile.email}</div>
             </div>
 
-            <div className="xs-font secondary-text">{profile.email}</div>
 
             <div>
                 <div className="mb-1">{t('employeeProfile.form.communicationLanguages')}</div>
@@ -45,14 +47,13 @@ const ProfileDataTile: React.FC<ProfileDataTileProps> = ({ profile, languagesDic
                 </div>
             </div>
 
+            <div>
+                <div className="xs-font secondary-text">{t('employeeProfile.joined')} {Util.displayDate(profile.createdAt)}</div>
+                <div className="xs-font secondary-text">{t('employeeProfile.views')} {0}</div>
+                {/* TODO countery implementacja */}
+                <div className="xs-font secondary-text">{t('employeeProfile.jobs')} {0}</div>
+            </div>
 
-            <div className="xs-font secondary-text">{t('employeeProfile.joined')} {Util.displayDate(profile.createdAt)}</div>
-            
-            <div className="xs-font secondary-text">{t('employeeProfile.views')} {0}</div>
-            <div className="xs-font secondary-text">{t('employeeProfile.jobs')} {0}</div>
-
-{/* TODO wyswietlen: */}
-{/* TODO jobs: */}
 
         </div>
     );

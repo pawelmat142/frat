@@ -65,7 +65,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
             }
         };
         buildSearch(filters);
-    }, [filters, location.pathname, location.search, navigate]);
+    }, [filters]);
 
     // Re-parse filters if user navigates with browser history to a different search
     useEffect(() => {

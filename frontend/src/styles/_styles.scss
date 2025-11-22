@@ -273,6 +273,7 @@ $tileRadius: 1rem;
     width: 100%;
     padding: .5rem;
     flex-direction: column;
+    aspect-ratio: unset;
 }
 
 .month-tile-wrapper {
