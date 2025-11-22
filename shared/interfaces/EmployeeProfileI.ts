@@ -28,7 +28,6 @@ export interface EmployeeProfileI {
   availabilityOption: EmployeeProfileAvailabilityOption;
   availabilityDateRanges?: DateRangeI[];
 
-
   createdAt: Date;
 }
 

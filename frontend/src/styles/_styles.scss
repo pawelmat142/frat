@@ -210,7 +210,6 @@ $tile-edge-radius: 1rem;
     .square-tile {
         width: 100%;
         border-radius: .6rem;
-
     }
 
     .sec-tile-label {
@@ -253,6 +252,54 @@ $tile-edge-radius: 1rem;
     }
 }
 
+
+
+
+
+// CALLENDAR
+.square-tile.month-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    gap: 0;
+    color: $primary-text;
+    overflow: hidden;
+}
+
+.month-callendar {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.month-callendar-cell {
+    font-size: $smallFont;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.header-cell {
+        font-size: $xsFont;
+        color: $primary-color;
+        margin-bottom: 6px;
+    }
+    &.disabled {
+        color: $secondary-text;
+    }
+    &.selected {
+        background-color: $primary-color-transparent;   
+        // color: $primary-text-active;
+    }
+    &.first {
+        border-top-left-radius: .5rem;
+        // border-bottom-left-radius: .5rem;
+    }
+    &.last {
+        // border-top-right-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+    }
+}
 
 
 .list-view {

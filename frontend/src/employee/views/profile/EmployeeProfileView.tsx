@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import { useEmployeeSearch } from "../search/EmployeeSearchProvider";
 import AvatarTile from "./AvatarTile";
+import CallendarTile from "./CallendarTile";
 
 const EmployeeProfileView: React.FC = () => {
 
@@ -44,15 +45,22 @@ const EmployeeProfileView: React.FC = () => {
         return <div className="py-8 text-center secondary-text italic">Profile not found.</div>;
     }
 
+
+
     return (
         <div className="view-container">
 
             <div>
                 <div className="main-tiles">
+
                     <AvatarTile />
+
+                    <CallendarTile profile={profile}></CallendarTile>
+
                     <div className="square-tile col-tile">a</div>
+
                     <div className="square-tile col-tile">a</div>
-                    <div className="square-tile col-tile">a</div>
+
                 </div>
             </div>
 
