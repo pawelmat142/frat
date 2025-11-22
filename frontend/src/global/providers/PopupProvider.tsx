@@ -109,6 +109,19 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
   const [show, setShow] = React.useState(false)
   const [closing, setClosing] = React.useState(false)
 
+  const handlePopState = (event: PopStateEvent) => {
+    event.preventDefault();
+    onClose(false);
+  };
+
+  React.useEffect(() => {
+    window.history.pushState({ popup: true }, "", window.location.href);
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [handlePopState]);
+
   const { t } = useTranslation();
 
   React.useEffect(() => {

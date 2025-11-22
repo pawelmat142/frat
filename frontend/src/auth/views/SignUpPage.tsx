@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import Input from "global/components/controls/Input";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { AuthService } from "auth/services/AuthService";
@@ -13,6 +12,7 @@ import { Path } from "./../../path";
 import Loading from "global/components/Loading";
 import Logo from "global/components/Logo";
 import IconButton from "global/components/controls/IconButon";
+import FloatingInput from "global/components/controls/FloatingInput";
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
@@ -49,7 +49,7 @@ const SignUpPage: React.FC = () => {
             await popupCtx.popup({
                 title: t("signup.successTitle"),
                 message: t("signup.successMessage"),
-                buttons: [{ text: t("common.ok") }] 
+                buttons: [{ text: t("common.ok") }]
             })
 
             navigate(Path.SIGN_IN);
@@ -90,7 +90,7 @@ const SignUpPage: React.FC = () => {
                 )}
 
                 <div className="flex flex-col gap-7 md:gap-5">
-                    <Input
+                    <FloatingInput
                         name="email"
                         label={t("signup.email")}
                         type="email"
@@ -99,7 +99,7 @@ const SignUpPage: React.FC = () => {
                         required
                         fullWidth
                     />
-                    <Input
+                    <FloatingInput
                         name="repeatEmail"
                         label={t("signup.repeatEmail")}
                         type="email"
@@ -108,8 +108,8 @@ const SignUpPage: React.FC = () => {
                         required
                         fullWidth
                     />
-                    <Input
-                    className="mt-3"
+                    <FloatingInput
+                        className="mt-3"
                         name="password"
                         label={t("signup.password")}
                         type="password"
@@ -118,7 +118,7 @@ const SignUpPage: React.FC = () => {
                         required
                         fullWidth
                     />
-                    <Input
+                    <FloatingInput
                         name="repeatPassword"
                         label={t("signup.repeatPassword")}
                         type="password"

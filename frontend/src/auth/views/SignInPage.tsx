@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import Input from "global/components/controls/Input";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { AuthService } from "auth/services/AuthService";
@@ -14,6 +13,7 @@ import Logo from "global/components/Logo";
 import { FaPlus } from "react-icons/fa";
 import GoogleIcon from "global/components/icons/GoogleIcon";
 import IconButton from "global/components/controls/IconButon";
+import FloatingInput from "global/components/controls/FloatingInput";
 
 const SignInPage: React.FC = () => {
     const { t } = useTranslation();
@@ -84,7 +84,7 @@ const SignInPage: React.FC = () => {
                 )}
 
                 <div className="flex flex-col gap-7 md:gap-5">
-                    <Input
+                    <FloatingInput
                         name="email"
                         label={t("signin.email")}
                         type="email"
@@ -93,7 +93,7 @@ const SignInPage: React.FC = () => {
                         required
                         fullWidth
                     />
-                    <Input
+                    <FloatingInput
                         name="password"
                         label={t("signin.password")}
                         type="password"

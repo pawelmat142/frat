@@ -331,6 +331,46 @@ $tileRadius: 1rem;
     }
 }
 
+.month-callendar.full-screen-mode {
+    .month-callendar-cell {
+        min-height: 50px;
+        width: 100%;
+    }
+}
+
+.callendars-view-wrapper {
+    // position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%
+}
+
+.callendars-view-header {
+    padding: 1rem 0;
+    border-bottom: 1px solid $border-color;
+
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.callendars-view-fullscreen {
+    overflow-y: auto;
+    flex-grow: 1;
+    flex: 1;
+    justify-content: flex-start!important;
+    align-items: flex-start!important;
+    padding-bottom: 5rem!important;
+}
+
+.callendars-view-item {
+    width: 100%;
+    padding-top: 1rem;
+    // border-top: 1px solid $border-color;
+    margin-bottom: 1rem;
+}
+
 
 .list-view {
     padding: .5rem;

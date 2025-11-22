@@ -1,4 +1,4 @@
-import { DateRange, DateRangeI } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, DateRangeI, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 
 export abstract class DateRangeUtil {
 
@@ -54,6 +54,15 @@ export abstract class DateRangeUtil {
                 end: dateRange.end ? DateRangeUtil.displayLocalDate(dateRange.end) : undefined,
             }),
         }
+    }
+
+
+    public static getFirstRange = (profile: EmployeeProfileI): DateRange | null => {
+        const rangeI = profile.availabilityDateRanges?.[0];
+        if (!rangeI) {
+            return null;
+        }
+        return DateRangeUtil.toDateRange(rangeI);
     }
 
     public static displayLocalDate = (date: Date): string => {

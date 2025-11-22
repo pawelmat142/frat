@@ -1,11 +1,11 @@
 
 @use 'variables.scss' as *;
 @use 'default' as *;
-@use 'styles' as *;
 @use 'controls' as *;
 @use 'cookie-banner' as *;
 @use 'bottom-sheet' as *;
 @use 'drawer' as *;
+@use 'styles' as *;
 
 @tailwind base;
 @tailwind components;

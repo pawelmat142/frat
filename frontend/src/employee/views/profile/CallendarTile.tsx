@@ -14,15 +14,7 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ profile }) => {
 
     const { t } = useTranslation();
 
-    const getFirstRange = (): DateRange | null => {
-        const rangeI = profile.availabilityDateRanges?.[0];
-        if (!rangeI) {
-            return null;
-        }
-        return DateRangeUtil.toDateRange(rangeI);
-    }
-
-    const range = getFirstRange();
+    const range = DateRangeUtil.getFirstRange(profile);
     const date = range?.start || null;
 
     if (!date) {
