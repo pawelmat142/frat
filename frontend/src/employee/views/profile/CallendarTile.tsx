@@ -3,7 +3,6 @@ import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import MonthCallendar from "global/components/callendar/MonthCallendar";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import { usePopup } from "global/providers/PopupProvider";
 import CallendarsView from "global/components/callendar/CallendarsView";
 
@@ -14,7 +13,6 @@ interface CallendarTileProps {
 const CallendarTile: React.FC<CallendarTileProps> = ({ profile }) => {
 
     const { t } = useTranslation();
-    const navigate = useNavigate();
 
     const getFirstRange = (): DateRange | null => {
         const rangeI = profile.availabilityDateRanges?.[0];
@@ -29,9 +27,8 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ profile }) => {
 
     if (!date) {
         return (
-            <div className="square-tile col-tile">
-                {/* TODO translation */}
-                Available anytime
+            <div className="square-tile col-tile px-5">
+                {t("others.availableAnytime")}
             </div>
         )
     }

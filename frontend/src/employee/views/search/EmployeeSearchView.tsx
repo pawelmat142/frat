@@ -1,4 +1,3 @@
-import { useAuthContext } from "auth/AuthProvider";
 import Button from "global/components/controls/Button";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,6 +8,7 @@ import Loading from "global/components/Loading";
 import { BtnModes } from "global/interface/controls.interface";
 import { useEmployeeSearch } from "./EmployeeSearchProvider";
 import EmployeeSearchFilters from "./EmployeeSearchFilters";
+import { EmployeeProfileSearchForm } from "@shared/interfaces/EmployeeProfileI";
 
 const EmployeeSearchView: React.FC = () => {
 
@@ -18,15 +18,16 @@ const EmployeeSearchView: React.FC = () => {
     // TODO desktop RWD adjustment
 
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null);
-    const { results, loading, setLoading, pagination, nextPage, prevPage } = useEmployeeSearch();
+    const ctx = useEmployeeSearch();
     const { t } = useTranslation();
+
 
     useEffect(() => {
         const initDictionary = async () => {
-            setLoading(true);
+            ctx.setLoading(true);
             const dictionary = await DictionaryService.getDictionary('LANGUAGES');
             setLanguagesDictionary(dictionary);
-            setLoading(false);
+            ctx.setLoading(false);
         }
         initDictionary();
     }, []);
@@ -36,40 +37,40 @@ const EmployeeSearchView: React.FC = () => {
 
             <EmployeeSearchFilters languagesDictionary={languagesDictionary} />
 
-            {!loading && !results.length ? (
+            {!ctx.loading && !ctx.results.length ? (
                 <div className="flex flex-col items-center justify-center mt-20">
                     <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
                 </div>
             ) : <div className="results flex flex-col gap-1">
-                {!!languagesDictionary && results.map((profile, index) => (
+                {!!languagesDictionary && ctx.results.map((profile, index) => (
                     <EmployeeProfileTile
                         key={profile.employeeProfileId}
                         employeeProfile={profile}
                         languagesDictionary={languagesDictionary}
                         first={index === 0}
-                        last={index === results.length - 1}
+                        last={index === ctx.results.length - 1}
                     />
                 ))}
             </div>}
 
-            {loading ? (<div>
+            {ctx.loading ? (<div>
                 <Loading></Loading>
             </div>) : (
                 <div className="flex-[2] flex justify-center items-center gap-4 mt-5 mb-10">
                     <Button
                         mode={BtnModes.PRIMARY_TXT}
-                        onClick={() => prevPage()}
-                        disabled={pagination.currentPage === 1}
+                        onClick={() => ctx.prevPage()}
+                        disabled={ctx.pagination.currentPage === 1}
                     >
                         Previous
                     </Button>
                     <span className="secondary-text whitespace-nowrap">
-                        Page {pagination.currentPage} of {pagination.totalPages} ({pagination.count} items)
+                        Page {ctx.pagination.currentPage} of {ctx.pagination.totalPages} ({ctx.pagination.count} items)
                     </span>
                     <Button
                         mode={BtnModes.PRIMARY_TXT}
-                        onClick={() => nextPage()}
-                        disabled={pagination.currentPage === pagination.totalPages}
+                        onClick={() => ctx.nextPage()}
+                        disabled={ctx.pagination.currentPage === ctx.pagination.totalPages}
                     >
                         Next
                     </Button>

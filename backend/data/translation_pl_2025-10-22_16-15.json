@@ -24,6 +24,9 @@
       "reset": "Resetuj",
       "noResults": "Brak wyników"
     },
+    "others": {
+      "availableAnytime": "Dostępny od zaraz"
+    },
     "callendar": {
       "month": {
         "0": "Styczeń",
