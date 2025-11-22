@@ -46,4 +46,8 @@ export const EmployeeProfileService = {
 		return httpClient.get<EmployeeProfileSearchResponse>(`/employee-profile/search/list`, { params });
 	},
 
+	notifyProfileView(profileUid: string): Promise<void> {
+		return httpClient.get<void>(`/employee-profile/notify-profile-view/${profileUid}`);
+	}
+
 };

@@ -28,6 +28,9 @@ export interface EmployeeProfileI {
   availabilityOption: EmployeeProfileAvailabilityOption;
   availabilityDateRanges?: DateRangeI[];
 
+  views: string[];
+  jobs: string[];
+
   createdAt: Date;
 }
 

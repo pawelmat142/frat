@@ -41,13 +41,13 @@ const EmployeeProfileView: React.FC = () => {
             if (displayName) {
                 const p = profileCtx.results?.find(p => p.displayName === displayName)
                 if (p) {
-                    setProfile(p);
+                    _setProfile(p);
                     return;
                 }
                 try {
                     setLoading(true);
                     const result = await EmployeeProfileService.getEmployeeProfileByDisplayName(displayName)
-                    setProfile(result);
+                    _setProfile(result);
                 } finally {
                     setLoading(false);
                 }
@@ -56,6 +56,18 @@ const EmployeeProfileView: React.FC = () => {
         initEmployeeProfile();
     }, []);
 
+    const notifyProfileView = async (profile: EmployeeProfileI) => {
+        if (profile?.uid) {
+            await EmployeeProfileService.notifyProfileView(profile.uid);
+        }
+    }
+
+    const _setProfile = (profile: EmployeeProfileI | null) => {
+        setProfile(profile);
+        if (profile) {
+            notifyProfileView(profile); 
+        }   
+    }
 
     if (loading) {
         return <Loading />;

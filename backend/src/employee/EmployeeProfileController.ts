@@ -130,4 +130,13 @@ export class EmployeeProfileController {
   initialLoad(): Promise<void> {
     return this.employeeProfileService.initialLoad();
   }
+
+  @Get("/notify-profile-view/:profileUid")
+  @UseGuards(JwtAuthGuard)
+  notifyProfileView(
+    @Param('profileUid') profileUid: string,
+    @CurrentUser() user: UserI,
+  ): Promise<void> {
+    return this.employeeProfileService.notifyProfileView(profileUid, user.uid);
+  }
 }

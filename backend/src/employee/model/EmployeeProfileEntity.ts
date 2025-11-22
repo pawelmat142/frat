@@ -91,6 +91,18 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
 
 
 
+  // STATS
+  @Expose()
+  @Column({ name: 'views', type: 'text', array: true, default: [] })
+  views: string[];
+  
+  @Expose()
+  @Column({ name: 'jobs', type: 'text', array: true, default: [] })
+  jobs: string[];
+
+
+
+
   // AUDIT FIELDS
   @Expose()
   @Column({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

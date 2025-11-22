@@ -141,13 +141,25 @@ export class EmployeeProfileRepo {
             updatedFlag = true;
         }
 
+        if (ObjUtil.arrayChanged(profile.views, newProfile.views || [])) {
+            this.logger.log(`Updating EmployeeProfile views from ${profile.views} to ${newProfile.views}`);
+            profile.views = newProfile.views || [];
+            updatedFlag = true;
+        }
+
+        if (ObjUtil.arrayChanged(profile.jobs, newProfile.jobs || [])) {
+            this.logger.log(`Updating EmployeeProfile jobs from ${profile.jobs} to ${newProfile.jobs}`);
+            profile.jobs = newProfile.jobs || [];
+            updatedFlag = true;
+        }
+
         if (profile.locationOption !== newProfile.locationOption) {
             this.logger.log(`Updating EmployeeProfile locationOption from ${profile.locationOption} to ${newProfile.locationOption}`);
             profile.locationOption = newProfile.locationOption;
             updatedFlag = true;
         }
 
-        if (ObjUtil.arrayChanged(profile.locationCountries, newProfile.locationCountries || [])) {
+        if (ObjUtil.arrayChanged(profile.locationCountries || [], newProfile.locationCountries || [])) {
             this.logger.log(`Updating EmployeeProfile locationCountries from ${profile.locationCountries} to ${newProfile.locationCountries}`);
             profile.locationCountries = newProfile.locationCountries || [];
             updatedFlag = true;
