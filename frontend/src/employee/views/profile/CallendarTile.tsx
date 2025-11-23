@@ -30,7 +30,9 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ profile }) => {
     const popup = usePopup();
 
     return (
-        <div className="square-tile month-tile ripple p-1" onClick={() => popup.goToCallendarsView(range)}>
+        <div className="square-tile month-tile ripple p-1" onClick={() => popup.goToCallendarsView({
+            range: range,
+        })}>
 
             <div className="mb-2 small-font">{t(`callendar.monthShort.${month}`)} {year}</div>
 

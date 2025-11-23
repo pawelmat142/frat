@@ -5,6 +5,7 @@ import { DateRange } from '@shared/interfaces/EmployeeProfileI';
 import { usePopup } from 'global/providers/PopupProvider';
 import { Utils } from 'global/utils';
 import { useTranslation } from 'react-i18next';
+import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 
 interface DateRangeProps {
     value?: DateRange | null;
@@ -29,19 +30,23 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const popupCtx = usePopup();
+    const bottomSheetCtx = useBottomSheet();
     const { t } = useTranslation();
-    
+
     const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (disabled) return;
 
-        popupCtx.goToCallendarsView(value, (dateRange) => {
-            if (onChange) {
-                console.log('dateRange from popup:', dateRange);
-                onChange(dateRange || null);
-            }
-        },
-            true);
+        popupCtx.goToCallendarsView({
+            range: value,
+            selectorMode: true,
+            bottomSheetCtx,
+            onSubmit: (dateRange) => {
+                if (onChange) {
+                    onChange(dateRange || null);
+                }
+            },
+        });
     };
 
     let myClass = `pp-date-input ${className}`;

@@ -6,19 +6,21 @@ import MonthCallendar from "./MonthCallendar";
 import CallendarDaysHeader from "./CallendarDaysHeader";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import CallendarsViewControl from "./CallendarsViewControl";
+import CallendarViewDurationSelector from "./CallendarViewDurationSelector";
+import { BottomSheetContextType } from "global/providers/BottomSheetProvider";
 
 interface CallendarsViewProps {
     range: DateRange;
     onSubmit?: (result?: DateRange) => void;
     onCancel?: () => void;
     selectorMode?: boolean;
+    bottomSheetCtx: BottomSheetContextType;
 }
 
-// TODO opcja na wybór liczby miesięcy
-
-const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCancel, selectorMode }) => {
+const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCancel, selectorMode, bottomSheetCtx }) => {
 
     const { t } = useTranslation();
+
     const date = range?.start || null;
 
     // activeControl determines which control is currently selected/focused
@@ -93,6 +95,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
 
             <div className="callendars-view-header flex flex-col gap-2 px-3">
                 {selectorMode && (<>
+
                     <CallendarsViewControl
                         onFocus={() => setActiveControl('start')}
                         onRemove={() => {
@@ -107,6 +110,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
                         label={t("callendar.control.rangeStartLabel")}
                         id="start-date"
                     ></CallendarsViewControl>
+
                     <CallendarsViewControl
                         onFocus={() => setActiveControl('end')}
                         onRemove={() => {
@@ -124,7 +128,26 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
                             : t('callendar.control.anytime')}
                         label={t("callendar.control.rangeEndLabel")}
                         id="end-date"
+                        injectRightComponent={!!currentRange.start &&
+                            <CallendarViewDurationSelector
+                                bottomSheetCtx={bottomSheetCtx}
+                                initial={currentRange.end ?
+                                    Math.max(1,
+                                        (currentRange.end.getFullYear() - currentRange.start.getFullYear()) * 12 +
+                                        (currentRange.end.getMonth() - currentRange.start.getMonth()))
+                                    : 1}
+                                onSubmit={(value) => {
+                                    if (!value) {
+                                        setCurrentRange({ start: currentRange.start || null, end: null });
+                                    } else {
+                                        const endDate = new Date(currentRange.start!);
+                                        endDate.setMonth(endDate.getMonth() + value);
+                                        setCurrentRange({ start: currentRange.start || null, end: endDate });
+                                    }
+                                }}></CallendarViewDurationSelector>
+                        }
                     ></CallendarsViewControl>
+
                 </>)}
 
                 <div className="mt-2">
@@ -159,7 +182,10 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
                         {t("common.reset")}
                     </Button>
 
-                    <Button onClick={() => onSubmit?.(currentRange)} size={BtnSizes.LARGE} mode={BtnModes.PRIMARY} fullWidth={true}>
+                    <Button
+                        disabled={!currentRange.start}
+                        onClick={() => onSubmit?.(currentRange)}
+                        size={BtnSizes.LARGE} mode={BtnModes.PRIMARY} fullWidth={true}>
                         {t("common.confirm")}
                     </Button>
                 </div>

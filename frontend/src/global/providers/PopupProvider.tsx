@@ -6,16 +6,13 @@ import Header from 'global/components/Header';
 import { BtnMode, BtnModes } from 'global/interface/controls.interface';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BottomSheetContextType } from './BottomSheetProvider';
 
 interface PopupContextType {
   confirm: (options: ConfirmOptions) => Promise<boolean>;
   popup: (config: PopupConfig) => Promise<boolean>;
   close: () => void;
-  goToCallendarsView: (
-    range?: DateRange | null,
-    onSubmit?: (result?: DateRange | null) => void,
-    selectorMode?: boolean
-  ) => void;
+  goToCallendarsView: (props: CallendarsViewProps) => void;
 }
 
 interface ConfirmOptions {
@@ -23,6 +20,14 @@ interface ConfirmOptions {
   message: string;
   confirmText?: string;
   cancelText?: string;
+}
+
+export interface CallendarsViewProps {
+  range?: DateRange | null;
+  onSubmit?: (result?: DateRange) => void;
+  onCancel?: () => void;
+  selectorMode?: boolean;
+  bottomSheetCtx?: BottomSheetContextType;
 }
 
 export interface PopupConfig {
@@ -91,23 +96,24 @@ export const PopupProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setState({ ...state, open: false, resolve: undefined });
   };
 
-  const goToCallendarsView = async (_range?: DateRange | null, onSubmit?: (result?: DateRange | null) => void, selectorMode?: boolean) => {
-    const range: DateRange = !!_range?.start ? _range : { start: null, end: null };
+  const goToCallendarsView = async (props: CallendarsViewProps) => {
+    const range: DateRange = !!props.range?.start ? props.range : { start: null, end: null };
 
     popup({
       fullScreen: true,
       children: (
         <CallendarsView
+          bottomSheetCtx={props.bottomSheetCtx!}
           range={range}
           onSubmit={(dateRange) => {
-            onSubmit?.(dateRange);
+            props.onSubmit?.(dateRange);
             handleClose(true);
           }}
           onCancel={() => {
-            onSubmit?.(null)
+            props.onCancel?.();
             handleClose(false);
           }}
-          selectorMode={selectorMode}
+          selectorMode={props.selectorMode}
         />
       )
     });

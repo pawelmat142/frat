@@ -11,6 +11,7 @@ interface CallendarsViewControlProps {
     label: string;
     id: string;
     onRemove?: () => void;
+    injectRightComponent?: React.ReactNode;
 }
 
 const CallendarsViewControl: React.FC<CallendarsViewControlProps> = ({
@@ -20,7 +21,8 @@ const CallendarsViewControl: React.FC<CallendarsViewControlProps> = ({
     placeholder,
     label,
     id,
-    onRemove
+    onRemove,
+    injectRightComponent
 }) => {
 
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -39,19 +41,20 @@ const CallendarsViewControl: React.FC<CallendarsViewControlProps> = ({
                 <div className="callendar-view-label">
                     <label htmlFor={id} className="">{label}</label>
                 </div>
-                <input
-                    type="text"
-                    value={Utils.formatDate(t, date, placeholder)}
-                    onFocus={onFocus}
+                <div
+                    onClick={onFocus}
                     className={`callendar-view-input`}
                     ref={inputRef}
-                    readOnly
-                />
+                >{Utils.formatDate(t, date, placeholder)}</div>
                 {!!date && (
                     <div className="callendar-view-btn">
                         <RemoveButton onClick={() => onRemove?.()}></RemoveButton>
                     </div>
                 )}
+            {!!injectRightComponent && (
+                <div className="callendar-view-right-inject">{injectRightComponent}</div>
+            )}
+
             </div>
         </div>
     );

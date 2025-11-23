@@ -171,7 +171,9 @@ input {
 }
 
 .pp-control.callendar-view {
-  padding: .5rem .75rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
 }
 .callendar-view-row {
   display: flex;
@@ -179,18 +181,22 @@ input {
   width: 100%;
 }
 .callendar-view-input {
+  padding: .5rem .75rem;
   background-color: $secondary-bg;
-  flex: 2;
+  display: flex;
+  flex-grow: 2;
+  width: 100%;
 }
 .callendar-view-label {
-  flex-shrink: 1;
+  padding-left: .75rem;
+  flex-grow: 1;
   margin-right: .75rem;
   font-weight: bold;
   font-size: $smallFont;
   color: $secondary-text;
 }
 .callendar-view-btn {
-  flex: 1;
+  flex-grow: 1;
   display: flex;
   justify-content: flex-end;
 }
@@ -201,6 +207,15 @@ input {
   .callendar-view-input {
     color: $secondary-text;
   }
+}
+.callendar-view-right-inject {
+  flex-grow: 1;
+  border-left: 1px solid $border-color;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  padding-right: .75rem;
+  padding-left: .75rem;
 }
 
 .pp-control-error {

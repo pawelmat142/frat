@@ -85,6 +85,13 @@
         "5": "Friday",
         "6": "Saturday"
       },
+      "duration": {
+        "title": "Duration",
+        "selectLabel": "Select number of months",
+        "month": "month",
+        "months2": "months",
+        "months": "months"
+      },
       "control": {
         "anytime": "Anytime",
         "rangeStartLabel": "Start",

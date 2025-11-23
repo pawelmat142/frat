@@ -116,6 +116,15 @@ const MonthCallendar: React.FC<MonthCallendarProps> = ({
         return null;
     }, [selectedRange]);
 
+    // Single end day (no start) highlight
+    const singleEndMid = useMemo(() => {
+        if (selectedRange?.end && !selectedRange?.start) {
+            const e = selectedRange.end instanceof Date ? selectedRange.end : new Date(selectedRange.end as any);
+            return new Date(e.getFullYear(), e.getMonth(), e.getDate()).getTime();
+        }
+        return null;
+    }, [selectedRange]);
+
     // Base times for month boundaries to reduce Date allocations for current month cells
     const currentMonthBase = useMemo(() => new Date(year, month, 1).getTime(), [year, month]);
     const prevMonthBase = useMemo(() => new Date(month === 0 ? year - 1 : year, month === 0 ? 11 : month - 1, 1).getTime(), [year, month]);
@@ -151,6 +160,7 @@ const MonthCallendar: React.FC<MonthCallendarProps> = ({
                     let isFirst = false;
                     let isLast = false;
                     let isStartingOnly = false;
+                    let isEndingOnly = false;
                     if (rangeBoundaries && cell.day !== null && cell.monthOffset === 0) { // selection only within current month when showOnlyDateMonth
                         isSelected = cellTime >= rangeBoundaries.start && cellTime <= rangeBoundaries.end;
                         if (isSelected) {
@@ -161,11 +171,14 @@ const MonthCallendar: React.FC<MonthCallendarProps> = ({
                     if (!rangeBoundaries && singleStartMid && cell.day !== null && cell.monthOffset === 0) {
                         isStartingOnly = cellTime === singleStartMid;
                     }
+                    if (!rangeBoundaries && singleEndMid && cell.day !== null && cell.monthOffset === 0) {
+                        isEndingOnly = cellTime === singleEndMid;
+                    }
 
                     return (
                         <div
                             key={idx}
-                            className={`month-callendar-cell month-callendar-day${disabled ? ' disabled' : ''}${isSelected ? ' selected' : ''}${isFirst ? ' first' : ''}${isLast ? ' last' : ''}${isStartingOnly ? ' starting' : ''}`}
+                            className={`month-callendar-cell month-callendar-day${disabled ? ' disabled' : ''}${isSelected ? ' selected' : ''}${isFirst ? ' first' : ''}${isLast ? ' last' : ''}${isStartingOnly ? ' starting' : ''}${isEndingOnly ? ' ending' : ''}`}
                             onClick={() => {
                                 if (!disabled && cell.day !== null) {
                                     const clickedDate = new Date(year, month, cell.day);

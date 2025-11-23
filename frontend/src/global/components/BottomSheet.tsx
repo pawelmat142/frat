@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { FaTimes } from 'react-icons/fa';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import CloseBtn from './CloseBtn';
 
@@ -21,7 +20,7 @@ const BottomSheet = () => {
 
     const handleBackdropClick = (e: React.MouseEvent) => {
         if (e.target === e.currentTarget) {
-            ctx.close();
+            ctx.close(true);
         }
     };
 
@@ -35,7 +34,7 @@ const BottomSheet = () => {
                 <div className="bottom-sheet-header">
                     <div className="bottom-sheet-drag-handle" />
                     {ctx.params?.title && <h3 className="bottom-sheet-title">{ctx.params.title}</h3>}
-                    <CloseBtn onClick={ctx.close}></CloseBtn>
+                    <CloseBtn onClick={() => ctx.close(true)}></CloseBtn>
                 </div>
 
                 {ctx.params?.children}

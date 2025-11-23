@@ -48,11 +48,11 @@ export interface OpenDictionaryParams<T extends SelectorValue = SelectorValue> {
     onSelectMulti?: (items: SelectorItem<T>[]) => void;
 }
 
-interface BottomSheetContextType {
+export interface BottomSheetContextType {
     open: (params: OpenSheetParams) => void;
     openSelector: <T extends SelectorValue = SelectorValue>(params: OpenSelectorParams<T>) => Promise<void>;
     openDictionarySelector: (params: OpenDictionaryParams) => Promise<void>;
-    close: () => void;
+    close: (skipClosePopup?: boolean) => void;
     params: OpenSheetParams | null;
     isOpen: boolean;
     closing: boolean;
@@ -86,9 +86,11 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
         setIsOpen(true);
     };
 
-    const close = () => {
+    const close = (skipClosePopup?: boolean) => {
         setClosing(true);
-        popupCtx.close();
+        if (!skipClosePopup) {
+            popupCtx.close();
+        }
         setTimeout(() => {
             setIsOpen(false);
             setParams(null)

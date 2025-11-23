@@ -51,8 +51,8 @@ const ProfileDataTile: React.FC<ProfileDataTileProps> = ({ profile, languagesDic
                 <div className="xs-font secondary-text">{t('employeeProfile.joined')} {Util.displayDate(profile.createdAt)}</div>
 
                 <div className="flex w-full gap-5">
-                    <span className="xs-font secondary-text">{t('employeeProfile.views')} {profile.views?.length || 0}</span>
-                    <span className="xs-font secondary-text">{t('employeeProfile.jobs')} {profile.jobs?.length || 0}</span>
+                    <span className="xs-font secondary-text">{t('employeeProfile.views')}: {profile.views?.length || 0}</span>
+                    <span className="xs-font secondary-text">{t('employeeProfile.jobs')}: {profile.jobs?.length || 0}</span>
                 </div>
 
             </div>

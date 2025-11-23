@@ -85,6 +85,13 @@
         "5": "Piątek",
         "6": "Sobota"
       },
+      "duration": {
+        "title": "Czas trwania",
+        "selectLabel": "Wybierz liczbę miesięcy",
+        "month": "miesiąc",
+        "months2": "miesiące",
+        "months": "miesięcy"
+      },
       "control": {
         "anytime": "Kiedykolwiek",
         "rangeStartLabel": "Początek",

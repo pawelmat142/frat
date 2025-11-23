@@ -12,7 +12,7 @@ const EditButton: React.FC<EditButtonProps> = ({ onClick, label }) => {
     return (
         <Button onClick={onClick} mode={BtnModes.PRIMARY_TXT} fullWidth>
             <span className="flex items-center justify-center gap-2">
-                <FaEdit />
+                <FaEdit />  
                 {label ? label : null }
             </span>
         </Button>
