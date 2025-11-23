@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import Button from './Button';
+import Button from '../controls/Button';
 import { BtnModes, BtnSizes } from 'global/interface/controls.interface';
 import { useTranslation } from 'react-i18next';
 

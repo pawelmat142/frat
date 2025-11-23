@@ -5,9 +5,9 @@ import { useDrawer } from "global/providers/DrawerProvider";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
-import DateRangeInput from "global/components/controls/DateRangeInput";
 import { DateRange } from "@shared/interfaces/EmployeeProfileI";
 import PositionSelector from "global/components/selector/position/PositionSelector";
+import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 
 const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> = ({ ctx }) => {
 
@@ -30,15 +30,13 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
     return (
         <div className="flex flex-col px-3 pt-5 gap-1">
 
-            <DateRangeInput
+            <DateRangeInputViewSelector
                 label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label")}
                 className="w-full"
                 value={dateRange}
                 onChange={(dateRange) => {
-                    if (dateRange) {
-                        setDateRange(dateRange);
-                        ctx.setFilters({ ...ctx.filters, dateRange });
-                    }
+                    setDateRange(dateRange);
+                    ctx.setFilters({ ...ctx.filters, dateRange });
                 }}
             />
 

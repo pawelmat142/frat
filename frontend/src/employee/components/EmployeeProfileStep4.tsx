@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { DateRange, EmployeeProfileAvailabilityOption, EmployeeProfileAvailabilityOptions, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
 import { FormValidator } from "global/FormValidator";
 import TabSwitcher, { TabSwitcherOption } from "./TabSwitcher";
-import DateRangeInput from "global/components/controls/DateRangeInput";
+import DateRangeInput from "global/components/callendar/DateRangeInput";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";

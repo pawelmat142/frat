@@ -75,6 +75,12 @@
         "4": "Thu",
         "5": "Fri",
         "6": "Sat"
+      },
+      "control": {
+        "rangeStartLabel": "Start",
+        "rangeEndLabel": "End",
+        "rangeStartPlaceholder": "Select start date",
+        "rangeEndPlaceholder": "Select end date"
       }
     },
     "lang": {

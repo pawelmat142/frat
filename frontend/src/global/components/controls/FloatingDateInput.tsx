@@ -28,7 +28,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomSheetCtx = useBottomSheet();
 
-    let myClass = `pp-date-input ${className}`;
+    let myClass = `  ${className}`;
     if (fullWidth) {
         myClass += ' w-full';
     } else {
@@ -44,7 +44,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     const handleInputClick = () => {
         if (disabled) return;
         
-        bottomSheetCtx.open({
+        bottomSheetCtx?.open({
             title: label,
             showClose: true,
             children: (
@@ -65,7 +65,6 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     const isLabelFloating = !!_value;
 
     // TODO translations of datepicker content
-
     return (
         <div className={`floating-input-wrapper ${myClass}${center ? ' mx-auto' : ''}`}>
             <div className="floating-input-container">

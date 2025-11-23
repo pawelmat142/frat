@@ -75,6 +75,12 @@
         "4": "Czw",
         "5": "Pią",
         "6": "Sob"
+      },
+      "control": {
+        "rangeStartLabel": "Początek",
+        "rangeEndLabel": "Koniec",
+        "rangeStartPlaceholder": "Wybierz datę rozpoczęcia",
+        "rangeEndPlaceholder": "Wybierz datę zakończenia"
       }
     },
     "lang": {

@@ -1,3 +1,5 @@
+import { DateRange } from '@shared/interfaces/EmployeeProfileI';
+import CallendarsView from 'global/components/callendar/CallendarsView';
 import CloseBtn from 'global/components/CloseBtn';
 import Button from 'global/components/controls/Button';
 import Header from 'global/components/Header';
@@ -9,6 +11,10 @@ interface PopupContextType {
   confirm: (options: ConfirmOptions) => Promise<boolean>;
   popup: (config: PopupConfig) => Promise<boolean>;
   close: () => void;
+  goToCallendarsView: (
+    range?: DateRange | null,
+    onSubmit?: (result?: DateRange | null) => void
+  ) => void;
 }
 
 interface ConfirmOptions {
@@ -84,8 +90,28 @@ export const PopupProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setState({ ...state, open: false, resolve: undefined });
   };
 
+  const goToCallendarsView = async (_range?: DateRange | null, onSubmit?: (result?: DateRange | null) => void) => {
+    const range: DateRange = !!_range?.start ? _range : { start: null, end: null };
+    popup({
+      fullScreen: true,
+      children: (
+        <CallendarsView
+          range={range}
+          onSubmit={(dateRange) => {
+            handleClose(true);
+            onSubmit?.(dateRange);
+          }}
+          onCancel={() => {
+            onSubmit?.(null)
+            handleClose(false);
+          }}
+        />
+      )
+    });
+  }
+
   return (
-    <PopupContext.Provider value={{ confirm, popup, close: () => handleClose(false) }}>
+    <PopupContext.Provider value={{ confirm, popup, close: () => handleClose(false), goToCallendarsView }}>
       {children}
       <PopupDialog
         open={state.open}
@@ -103,7 +129,7 @@ interface PopupDialogProps {
 }
 
 const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
-  
+
   const [visible, setVisible] = React.useState(open);
   const [show, setShow] = React.useState(false);
   const [closing, setClosing] = React.useState(false);

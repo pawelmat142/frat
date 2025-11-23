@@ -166,7 +166,31 @@ input {
   &:hover {
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color), transparent 80%);
   }
+}
 
+.pp-control.callendar-view {
+  padding: .5rem .75rem;
+}
+.callendar-view-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.callendar-view-input {
+  background-color: $secondary-bg;
+  flex: 2;
+}
+.callendar-view-label {
+  flex-shrink: 1;
+  margin-right: .75rem;
+  font-weight: bold;
+  font-size: $smallFont;
+  color: $secondary-text;
+}
+.callendar-view-btn {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .pp-control-error {

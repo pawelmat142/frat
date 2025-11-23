@@ -1,11 +1,9 @@
-import React, { useState, useRef } from 'react';
-import FormError from './FormError';
-import FloatingLabel from './FloatingLabel';
+import React, { useRef } from 'react';
+import FormError from '../controls/FormError';
+import FloatingLabel from '../controls/FloatingLabel';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { DateRange } from '@shared/interfaces/EmployeeProfileI';
-import { useBottomSheet } from 'global/providers/BottomSheetProvider';
-import DateRangePickerSheet from './DateRangePickerSheet';
-import { useTranslation } from 'react-i18next';
+import { usePopup } from 'global/providers/PopupProvider';
 
 interface DateRangeProps {
     value?: DateRange | null;
@@ -29,58 +27,20 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     className = '',
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
-    const bottomSheetCtx = useBottomSheet();
+    const popupCtx = usePopup();
 
-    const { t } = useTranslation();
-    const handleStartDateClick = (e: React.MouseEvent) => {
+    const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (disabled) return;
-        
-        bottomSheetCtx.open({
-            title: `${label} - ${t('common.start')}`,
-            showClose: true,
-            children: (
-                <DateRangePickerSheet
-                    value={value?.start}
-                    onChange={(startDate) => {
-                        if (onChange) {
-                            onChange({ start: startDate, end: value?.end });
-                        }
-                        bottomSheetCtx.close();
-                    }}
-                    disabled={disabled}
-                    startDate={value?.start}
-                    endDate={value?.end}
-                />
-            )
+
+        popupCtx.goToCallendarsView(value, (dateRange) => {
+            if (onChange) {
+                console.log('dateRange from popup:', dateRange);
+                onChange(dateRange || null);
+            }
         });
     };
-
-    const handleEndDateClick = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (disabled) return;
-        
-        bottomSheetCtx.open({
-            title: `${label} - ${t('common.end')}`,
-            showClose: true,
-            children: (
-                <DateRangePickerSheet
-                    value={value?.end}
-                    onChange={(endDate) => {
-                        if (onChange) {
-                            onChange({ start: value?.start, end: endDate });
-                        }
-                        bottomSheetCtx.close();
-                    }}
-                    disabled={disabled}
-                    minDate={value?.start}
-                    startDate={value?.start}
-                    endDate={value?.end}
-                />
-            )
-        });
-    };
-
+    
     let myClass = `pp-date-input ${className}`;
     if (disabled) {
         myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
@@ -92,6 +52,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     const hasValue = !!(value?.start || value?.end);
     const isLabelFloating = hasValue;
 
+    // TODO display - 1 kontrolka
     return (
         <div className={`floating-input-wrapper ${myClass}`}>
             <div className="floating-input-container">
@@ -103,7 +64,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                             name={name ? `${name}_start` : undefined}
                             type="text"
                             value={value?.start ? new Date(value.start).toLocaleDateString() : ''}
-                            onClick={handleStartDateClick}
+                            onClick={handleClick}
                             className="floating-input primary-text flex-1 cursor-pointer"
                             disabled={disabled}
                             required={required}
@@ -116,7 +77,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                             name={name ? `${name}_end` : undefined}
                             type="text"
                             value={value?.end?.toLocaleDateString() || ''}
-                            onClick={handleEndDateClick}
+                            onClick={handleClick}
                             className="floating-input primary-text flex-1 cursor-pointer"
                             disabled={disabled}
                             required={required}
@@ -126,7 +87,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                     </div>
                     <span
                         className={`pp-date-input-calendar MuiSvgIcon-root${disabled ? ' disabled' : ''}`}
-                        onClick={handleStartDateClick}
+                        onClick={handleClick}
                     >
                         <CalendarTodayIcon fontSize="medium" />
                     </span>

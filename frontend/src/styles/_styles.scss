@@ -299,11 +299,14 @@ $tileRadius: 1rem;
     grid-template-columns: repeat(7, 1fr);
 }
 
+$cellRadius: .25rem;
+
 .month-callendar-cell {
     font-size: $smallFont;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: $transition;
 
     &.header-cell {
         font-size: $xsFont;
@@ -319,26 +322,48 @@ $tileRadius: 1rem;
         color: $secondary-text;
     }
 
+    &.starting {
+        background-color: $primary-color-transparent;
+        border-top-left-radius: 2*$cellRadius;
+        border-bottom-right-radius: 2*$cellRadius;
+    }
+
     &.selected {
         background-color: $primary-color-transparent;
         // color: $primary-text-active;
     }
 
     &.first {
-        border-top-left-radius: .5rem;
+        border-top-left-radius: $cellRadius;
         // border-bottom-left-radius: .5rem;
     }
 
     &.last {
         // border-top-right-radius: .5rem;
-        border-bottom-right-radius: .5rem;
+        border-bottom-right-radius: $cellRadius;
     }
 }
+
+
+$cellRadiusBig: 1rem;
 
 .month-callendar.full-screen-mode {
     .month-callendar-cell {
         min-height: 50px;
         width: 100%;
+
+        &.starting {
+            border-top-left-radius: $cellRadiusBig;
+            border-bottom-right-radius: $cellRadiusBig;
+        }
+
+        &.first {
+            border-top-left-radius: $cellRadiusBig;
+        }
+
+        &.last {
+            border-bottom-right-radius: $cellRadiusBig;
+        }
     }
 }
 
@@ -350,7 +375,7 @@ $tileRadius: 1rem;
 }
 
 .callendars-view-header {
-    padding: 1rem 0;
+    padding: .5rem 0;
     border-bottom: 1px solid $border-color;
 
     position: sticky;
@@ -359,13 +384,24 @@ $tileRadius: 1rem;
     right: 0;
 }
 
+.callendars-view-footer {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid $border-color;
+    background-color: $primary-bg;
+}
+
+
+
 .callendars-view-fullscreen {
     overflow-y: auto;
     flex-grow: 1;
     flex: 1;
-    justify-content: flex-start!important;
-    align-items: flex-start!important;
-    padding-bottom: 5rem!important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    padding-bottom: 5rem !important;
 }
 
 .callendars-view-item {
@@ -397,6 +433,7 @@ $tileRadius: 1rem;
     justify-content: center;
     margin-bottom: 2rem;
 }
+
 .form-subheader {
     font-size: $lFont;
     color: $secondary-text;

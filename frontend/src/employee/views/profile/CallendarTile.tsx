@@ -4,7 +4,6 @@ import MonthCallendar from "global/components/callendar/MonthCallendar";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { usePopup } from "global/providers/PopupProvider";
-import CallendarsView from "global/components/callendar/CallendarsView";
 
 interface CallendarTileProps {
     profile: EmployeeProfileI
@@ -30,22 +29,8 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ profile }) => {
 
     const popup = usePopup();
 
-    const goToCallendarsView = async () => {
-        if (!range) return;
-
-        popup.popup({
-            fullScreen: true,
-            children: (
-                <CallendarsView
-                    range={range}
-                />
-            )
-        });
-
-    }
-
     return (
-        <div className="square-tile month-tile ripple p-1" onClick={goToCallendarsView}>
+        <div className="square-tile month-tile ripple p-1" onClick={() => popup.goToCallendarsView(range)}>
 
             <div className="mb-2 small-font">{t(`callendar.monthShort.${month}`)} {year}</div>
 
