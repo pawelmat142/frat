@@ -13,7 +13,8 @@ interface PopupContextType {
   close: () => void;
   goToCallendarsView: (
     range?: DateRange | null,
-    onSubmit?: (result?: DateRange | null) => void
+    onSubmit?: (result?: DateRange | null) => void,
+    selectorMode?: boolean
   ) => void;
 }
 
@@ -90,21 +91,23 @@ export const PopupProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setState({ ...state, open: false, resolve: undefined });
   };
 
-  const goToCallendarsView = async (_range?: DateRange | null, onSubmit?: (result?: DateRange | null) => void) => {
+  const goToCallendarsView = async (_range?: DateRange | null, onSubmit?: (result?: DateRange | null) => void, selectorMode?: boolean) => {
     const range: DateRange = !!_range?.start ? _range : { start: null, end: null };
+
     popup({
       fullScreen: true,
       children: (
         <CallendarsView
           range={range}
           onSubmit={(dateRange) => {
-            handleClose(true);
             onSubmit?.(dateRange);
+            handleClose(true);
           }}
           onCancel={() => {
             onSubmit?.(null)
             handleClose(false);
           }}
+          selectorMode={selectorMode}
         />
       )
     });

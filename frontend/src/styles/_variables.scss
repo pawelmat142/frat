@@ -6,7 +6,7 @@ $mobile: 480px;
 :root {
   --primary-color: #4f46e5;
   --primary-color-active: #7A73EB;
-  --primary-color-transparent: rgba(79, 70, 229, 0.3);
+  --primary-color-transparent: rgba(79, 70, 229, 0.1);
 
   --primary-bg: #fbf9fa;
   --secondary-bg: #fff;
@@ -26,7 +26,7 @@ $mobile: 480px;
 .dark {
   --primary-color: #7A73EB;
   --primary-color-active: #4f46e5;
-  --primary-color-transparent: rgba(122, 115, 235, 0.4);
+  --primary-color-transparent: rgba(122, 115, 235, 0.1);
   
   --primary-bg: #101828;
   --secondary-bg: #0c1420;

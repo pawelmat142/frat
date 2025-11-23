@@ -76,7 +76,17 @@
         "5": "Pią",
         "6": "Sob"
       },
+      "dayOfWeekFull": {
+        "0": "Niedziela",
+        "1": "Poniedziałek",
+        "2": "Wtorek",
+        "3": "Środa",
+        "4": "Czwartek",
+        "5": "Piątek",
+        "6": "Sobota"
+      },
       "control": {
+        "anytime": "Kiedykolwiek",
         "rangeStartLabel": "Początek",
         "rangeEndLabel": "Koniec",
         "rangeStartPlaceholder": "Wybierz datę rozpoczęcia",

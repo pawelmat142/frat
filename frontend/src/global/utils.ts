@@ -1,6 +1,7 @@
 import removeAccents from 'remove-accents';
 import { SelectorItem } from './interface/controls.interface';
 import { DictionaryI } from '@shared/interfaces/DictionaryI';
+import { DateRange } from '@shared/interfaces/EmployeeProfileI';
 
 export abstract class Utils {
     public static isDevMode(): boolean {
@@ -33,5 +34,29 @@ export abstract class Utils {
             }
         });
         return srcs;
+    }
+
+    public static formatDate = (t: any, date?: Date | null, placeholder?: string): string => {
+        if (!date) return placeholder || '';
+        const dayFull = t(`callendar.dayOfWeekFull.${date.getDay()}`);
+        const dayNumber = date.getDate();
+        const monthFull = t(`callendar.monthShort.${date.getMonth()}`);
+        return `${dayFull}, ${dayNumber} ${monthFull}`;
+    }
+
+    public static formatDateRange = (t: any, range?: DateRange | null, placeholder?: string): string => {
+        if (!range?.start)  return placeholder || '';
+    
+        const startMonth = t(`callendar.monthShort.${range.start.getMonth()}`);
+        const startDayNumber = range.start.getDate();
+        let result = `${startDayNumber} ${startMonth}`;
+        if (range.end) {
+            const endMonth = t(`callendar.monthShort.${range.end.getMonth()}`);
+            const endDayNumber = range.end.getDate();
+            result += ` - ${endDayNumber} ${endMonth} ${range.end.getFullYear()}`;
+        } else {
+            result += ` ${range.start.getFullYear()}`;
+        }
+        return result;
     }
 }

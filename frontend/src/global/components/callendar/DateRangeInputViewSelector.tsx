@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import FormError from '../controls/FormError';
 import FloatingLabel from '../controls/FloatingLabel';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { DateRange } from '@shared/interfaces/EmployeeProfileI';
 import { usePopup } from 'global/providers/PopupProvider';
+import { Utils } from 'global/utils';
+import { useTranslation } from 'react-i18next';
 
 interface DateRangeProps {
     value?: DateRange | null;
@@ -28,7 +29,8 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const popupCtx = usePopup();
-
+    const { t } = useTranslation();
+    
     const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (disabled) return;
@@ -38,9 +40,10 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                 console.log('dateRange from popup:', dateRange);
                 onChange(dateRange || null);
             }
-        });
+        },
+            true);
     };
-    
+
     let myClass = `pp-date-input ${className}`;
     if (disabled) {
         myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
@@ -52,7 +55,6 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     const hasValue = !!(value?.start || value?.end);
     const isLabelFloating = hasValue;
 
-    // TODO display - 1 kontrolka
     return (
         <div className={`floating-input-wrapper ${myClass}`}>
             <div className="floating-input-container">
@@ -63,20 +65,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                             id={name}
                             name={name ? `${name}_start` : undefined}
                             type="text"
-                            value={value?.start ? new Date(value.start).toLocaleDateString() : ''}
-                            onClick={handleClick}
-                            className="floating-input primary-text flex-1 cursor-pointer"
-                            disabled={disabled}
-                            required={required}
-                            readOnly
-                            placeholder=" "
-                        />
-                        <span className="secondary-text pt-6">-</span>
-                        <input
-                            id={name ? `${name}_end` : undefined}
-                            name={name ? `${name}_end` : undefined}
-                            type="text"
-                            value={value?.end?.toLocaleDateString() || ''}
+                            value={Utils.formatDateRange(t, value)}
                             onClick={handleClick}
                             className="floating-input primary-text flex-1 cursor-pointer"
                             disabled={disabled}
@@ -85,12 +74,6 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                             placeholder=" "
                         />
                     </div>
-                    <span
-                        className={`pp-date-input-calendar MuiSvgIcon-root${disabled ? ' disabled' : ''}`}
-                        onClick={handleClick}
-                    >
-                        <CalendarTodayIcon fontSize="medium" />
-                    </span>
                     <FloatingLabel
                         htmlFor={name}
                         label={label}

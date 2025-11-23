@@ -64,7 +64,6 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
 
     const isLabelFloating = !!_value;
 
-    // TODO translations of datepicker content
     return (
         <div className={`floating-input-wrapper ${myClass}${center ? ' mx-auto' : ''}`}>
             <div className="floating-input-container">

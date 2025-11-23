@@ -159,10 +159,12 @@ input {
   display: flex;
   font-size: $lFont;
 
+  &.focus,
   &:focus {
     outline: 2px solid $primary-color;
   }
-
+  
+  &.focus,
   &:hover {
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color), transparent 80%);
   }
@@ -191,6 +193,14 @@ input {
   flex: 1;
   display: flex;
   justify-content: flex-end;
+}
+.empty {
+  .callendar-view-label {
+    color: $primary-text;
+  }
+  .callendar-view-input {
+    color: $secondary-text;
+  }
 }
 
 .pp-control-error {

@@ -11,13 +11,18 @@ interface CallendarsViewProps {
     range: DateRange;
     onSubmit?: (result?: DateRange) => void;
     onCancel?: () => void;
+    selectorMode?: boolean;
 }
 
-const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCancel }) => {
+// TODO opcja na wybór liczby miesięcy
+
+const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCancel, selectorMode }) => {
 
     const { t } = useTranslation();
     const date = range?.start || null;
-    const selectorMode = !!onSubmit;
+
+    // activeControl determines which control is currently selected/focused
+    const [activeControl, setActiveControl] = useState<'start' | 'end'>('start');
 
     const [currentRange, setCurrentRange] = useState<DateRange>(range);
 
@@ -52,19 +57,23 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
         if (!selectorMode) return;
 
         let newRange: DateRange = { ...currentRange };
-        const { start, end } = currentRange;
 
-        if (!start || (start && end)) {
-            newRange = { start: day, end: null };
+        if (activeControl === 'start') {
+            newRange.start = day;
+        } else {
+            newRange.end = day;
         }
-        else if (start && !end) {
-            if (day < start) {
-                newRange = { start: day, end: start };
-            } else {
-                newRange = { start: start, end: day };
-            }
+
+        // Normalize ordering if both set and start > end
+        if (newRange.start && newRange.end && newRange.start > newRange.end) {
+            const temp = newRange.start;
+            newRange.start = newRange.end;
+            newRange.end = temp;
         }
+
         setCurrentRange(newRange);
+        // Cycle to next control
+        setActiveControl(activeControl === 'start' ? 'end' : 'start');
     }
 
 
@@ -83,28 +92,41 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
         <div className="callendars-view-wrapper">
 
             <div className="callendars-view-header flex flex-col gap-2 px-3">
-                <CallendarsViewControl
-                    onFocus={() => { console.log('start')}}
-                    onRemove={() => {
-                        setCurrentRange({ start: null, end: currentRange.end || null });
-                    }}
-                    selected={false}
-                    date={currentRange?.start}
-                    placeholder={t("callendar.control.rangeStartPlaceholder")}
-                    label={t("callendar.control.rangeStartLabel")}
-                    id="start-date"
-                ></CallendarsViewControl>
-                <CallendarsViewControl
-                    onFocus={() => { console.log('end')}}
-                    onRemove={() => {
-                        setCurrentRange({ start: currentRange.start || null, end: null });
-                    }}
-                    selected={false}
-                    date={currentRange.end}
-                    placeholder={t("callendar.control.rangeEndPlaceholder")}
-                    label={t("callendar.control.rangeEndLabel")}
-                    id="end-date"
-                ></CallendarsViewControl>
+                {selectorMode && (<>
+                    <CallendarsViewControl
+                        onFocus={() => setActiveControl('start')}
+                        onRemove={() => {
+                            setCurrentRange({ start: null, end: currentRange.end || null });
+                            setActiveControl('start');
+                        }}
+                        selected={activeControl === 'start'}
+                        date={currentRange?.start}
+                        placeholder={activeControl === 'start'
+                            ? t("callendar.control.rangeStartPlaceholder")
+                            : t('callendar.control.anytime')}
+                        label={t("callendar.control.rangeStartLabel")}
+                        id="start-date"
+                    ></CallendarsViewControl>
+                    <CallendarsViewControl
+                        onFocus={() => setActiveControl('end')}
+                        onRemove={() => {
+                            setCurrentRange({ start: currentRange.start || null, end: null });
+                            if (currentRange.start) {
+                                setActiveControl('end');
+                            } else {
+                                setActiveControl('start');
+                            }
+                        }}
+                        selected={activeControl === 'end'}
+                        date={currentRange.end}
+                        placeholder={activeControl === 'end'
+                            ? t("callendar.control.rangeEndPlaceholder")
+                            : t('callendar.control.anytime')}
+                        label={t("callendar.control.rangeEndLabel")}
+                        id="end-date"
+                    ></CallendarsViewControl>
+                </>)}
+
                 <div className="mt-2">
                     <CallendarDaysHeader fullScreenMode={true} />
                 </div>
