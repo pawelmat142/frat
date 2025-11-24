@@ -5,8 +5,6 @@ import { SelectorValue, SelectorInterface, SelectorItem } from 'global/interface
 import FormError from '../controls/FormError';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 
-// TODO popup zamykanie/otwieranie - animacja
-
 const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
         items,

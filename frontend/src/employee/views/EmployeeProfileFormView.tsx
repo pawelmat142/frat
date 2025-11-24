@@ -16,8 +16,6 @@ import EmployeeProfileStep2 from "../components/EmployeeProfileStep2";
 import EmployeeProfileStep3 from "../components/EmployeeProfileStep3";
 import EmployeeProfileStep4 from "../components/EmployeeProfileStep4";
 
-// TODO widok z lista profili
-
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
 type StepKey = 'step1' | 'step2' | 'step3' | 'step4';
@@ -127,8 +125,6 @@ const EmployeeProfileFormView: React.FC = () => {
             initEmployeeProfile();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
-
-            // TODO redirect to profiles list
             navigate(-1);
         } catch (error) {
             console.error("Error creating employee profile:", error);

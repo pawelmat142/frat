@@ -33,4 +33,8 @@ export class FeedbackService {
         return this.feedbackRepository.find();
     }
 
+    public async deleteFeedback(feedbackId: number): Promise<void> {
+        await this.feedbackRepository.delete({ feedbackId });
+    }
+
 }

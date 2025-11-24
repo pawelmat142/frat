@@ -16,7 +16,6 @@ const AdminFeedbacks: React.FC = () => {
     const [feedbacks, setFeedbacks] = useState<FeedbackI[]>([]);
     const [selectedFeedback, setSelectedFeedback] = useState<FeedbackI | null>(null);
 
-    const { t } = useTranslation();
     const confirm = useConfirm();
 
     const _initFeedbacks = async () => {
@@ -54,8 +53,9 @@ const AdminFeedbacks: React.FC = () => {
 
         try {
             setLoading(true);
+            await FeedbackService.deleteFeedback(String(feedback.feedbackId));
             await _initFeedbacks();
-            toast.success("TODO deleting feedback");
+            toast.success("Feedback deleted successfully");
         } catch (e) { } finally {
             setLoading(false);
         }

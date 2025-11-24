@@ -10,6 +10,10 @@ export const FeedbackService = {
 
     list(): Promise<FeedbackI[]> {
         return httpClient.get<FeedbackI[]>('/feedback/list');
+    },
+
+    deleteFeedback(feedbackId: string): Promise<void> {
+        return httpClient.delete<void>(`/feedback/${feedbackId}`);
     }
 
 };

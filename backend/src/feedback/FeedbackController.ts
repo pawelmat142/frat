@@ -2,7 +2,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   UseGuards,
   UseInterceptors,
@@ -41,6 +43,15 @@ export class FeedbackController {
   @Serialize(FeedbackEntity)
   listFeedbacks(): Promise<FeedbackEntity[]> {
     return this.feedbackService.listFeedbacks();
+  }
+
+  @Delete('/:feedbackId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
+  async deleteFeedback(
+    @Param('feedbackId') feedbackId: string
+  ): Promise<void> {
+    return this.feedbackService.deleteFeedback(Number(feedbackId));
   }
   
 }
