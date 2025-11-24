@@ -328,7 +328,7 @@
         "lastName": "Nazwisko",
         "location": "Lokalizacja",
         "locationCountry": "Kraj lokalizacji",
-        "locationPoint": "Dokładna lokalizacja",
+        "locationPoint": "Dokładna lokalizacja [lat lng]",
         "firstName": "Imię",
         "addLanguage": "Dodaj język",
         "certificates": "Certyfikaty",

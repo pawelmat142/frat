@@ -6,14 +6,14 @@ import Button from '../../controls/Button';
 import { BtnModes } from 'global/interface/controls.interface';
 import CloseIcon from '@mui/icons-material/Close';
 
-interface PositionSelectorPopupProps {
+interface PositionSelectorContentProps {
     initialPosition?: Position | null;
     initializeByCountryCode?: string | null;
     onConfirm: (position: Position | null) => void;
     onCancel: () => void;
 }
 
-const PositionSelectorPopup: React.FC<PositionSelectorPopupProps> = ({
+const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     initialPosition,
     initializeByCountryCode,
     onConfirm,
@@ -218,4 +218,4 @@ const PositionSelectorPopup: React.FC<PositionSelectorPopupProps> = ({
     );
 };
 
-export default PositionSelectorPopup;
+export default PositionSelectorContent;

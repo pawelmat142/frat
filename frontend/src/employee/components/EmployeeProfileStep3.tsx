@@ -4,10 +4,9 @@ import { useTranslation } from "react-i18next";
 import TabSwitcher, { TabSwitcherOption } from "./TabSwitcher";
 import { FormValidator } from "global/FormValidator";
 import { EmployeeProfileLocationOptions, EmployeeProfileLocationOption, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
-import PositionSelector from "global/components/selector/position/PositionSelector";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import FloatingInput from "global/components/controls/FloatingInput";
-import StraightenIcon from '@mui/icons-material/Straighten';
+import PositionSelector from "global/components/selector/position/PositionSelector";
 
 interface Props {
     control: Control<EmployeeProfileForm>;

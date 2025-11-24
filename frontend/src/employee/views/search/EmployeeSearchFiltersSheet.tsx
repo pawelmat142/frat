@@ -5,10 +5,9 @@ import { useDrawer } from "global/providers/DrawerProvider";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
-import PositionSelector from "global/components/selector/position/PositionSelector";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 import { DateRange, EmployeeProfileSearchFilters, Position } from "@shared/interfaces/EmployeeProfileI";
-import PositionViewSelector from "global/components/selector/position/PositionViewSelector";
+import PositionSelector from "global/components/selector/position/PositionSelector";
 
 const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> = ({ ctx }) => {
 
@@ -98,23 +97,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                     ctx.setFilters(filters);
                 }}
             ></PositionSelector>
-
-            <PositionViewSelector
-                label={t("employeeProfile.form.locationPoint")}
-                className="w-full"
-                value={preparePosition()}
-                initializePositionByCountryCode={localFilters.locationCountry}
-                name={""}
-                onChange={(point) => {
-                    const filters = {
-                        ...localFilters,
-                        lat: point ? point.lat : null,
-                        lng: point ? point.lng : null
-                    };
-                    setLocalFilters(filters);
-                    ctx.setFilters(filters);
-                }}
-            ></PositionViewSelector>
 
             <DictionarySelector
                 type="multi"
