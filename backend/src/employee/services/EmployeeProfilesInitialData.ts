@@ -16,7 +16,6 @@ function getRandomizedCreatedAt(idx: number): Date {
     return new Date(year, month, day, 8, 0, 0, 0); // 8:00 rano
 }
 
-// TODO sprawdzic uzupelnianie sie pol od distance i selected country
 const rangesJ: DateRangeI[] = []
 
 const fillAvailabilityRanges = (profile: DeepPartial<EmployeeProfileI>) => {

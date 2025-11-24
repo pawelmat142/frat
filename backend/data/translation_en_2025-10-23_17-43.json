@@ -168,6 +168,7 @@
       "passwordResetNotAvailable": "Password reset is not available for this account."
     },
     "report": {
+      "feedbackPopupTitle": "Is your feedback complete?",
       "title": "What can we do better?",
       "feedbackLabel": "Your feedback",
       "contactLabel": "Email - if you want a response",

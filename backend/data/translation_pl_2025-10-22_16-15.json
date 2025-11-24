@@ -177,6 +177,7 @@
       "passwordResetNotAvailable": "Reset hasła nie jest dostępny dla tego konta."
     },
     "report": {
+      "feedbackPopupTitle": "Czy to już na pewno wszystko?",
       "title": "Co możemy zrobić lepiej?",
       "feedbackLabel": "Twoja opinia",
       "contactLabel": "Email - jeśli chcesz otrzymać odpowiedź",

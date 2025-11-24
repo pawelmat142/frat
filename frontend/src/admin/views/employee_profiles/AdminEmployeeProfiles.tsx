@@ -101,7 +101,7 @@ const AdminEmployeeProfiles: React.FC = () => {
             setLoading(true);
             await EmployeeProfilesAdminService.deleteProfile(profile.employeeProfileId);
             await _initEmployeeProfiles();
-            toast.success('todo...');
+            toast.success('Employee profile has been deleted.');
         } catch (e) { } finally {
             setLoading(false);
         }

@@ -21,7 +21,6 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
     const { open } = useDrawer();
 
     // TODO prezentacja pinezki jesli jest lokacja dokladna podana
-
     // Debounce effect: update RHF value after 500ms
     useEffect(() => {
         const handler = setTimeout(() => {

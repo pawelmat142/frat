@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { FeedbackI } from "@shared/interfaces/FeedbackI";
 import { FeedbackService } from "global/services/FeedbackService";
 import { Util } from "@shared/utils/util";
+import { useTranslation } from "react-i18next";
 
 const AdminFeedbacks: React.FC = () => {
 
@@ -15,6 +16,7 @@ const AdminFeedbacks: React.FC = () => {
     const [feedbacks, setFeedbacks] = useState<FeedbackI[]>([]);
     const [selectedFeedback, setSelectedFeedback] = useState<FeedbackI | null>(null);
 
+    const { t } = useTranslation();
     const confirm = useConfirm();
 
     const _initFeedbacks = async () => {
@@ -44,19 +46,17 @@ const AdminFeedbacks: React.FC = () => {
         setSelectedFeedback(feedback)
     }
 
-    // TODO
     const handleFeedbackAction = async (feedback: FeedbackI) => {
         const confirmed = await confirm({
-            title: "TODO",
-            message: "todo...",
+            message: t("report.feedbackPopupTitle"),
         });
-        if (!confirmed) return;
+        if (!confirmed) return; 
 
         try {
             setLoading(true);
             // await UsersAdminService.deleteUser(user.uid);
             await _initFeedbacks();
-            toast.success('todo...');
+            toast.success(t("report.thankYouTitle"));
         } catch (e) { } finally {
             setLoading(false);
         }
