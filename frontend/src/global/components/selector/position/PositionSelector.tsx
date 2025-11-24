@@ -56,13 +56,12 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                 children: <PositionSelectorContent
                     initialPosition={value}
                     initializeByCountryCode={initializePositionByCountryCode}
-                    onConfirm={(position) => {
+                    onChange={(position) => {
                         fullScreenDialogCtx.close();
                         onChange?.(position);
                         setSelectedPosition(position);
                     }}
                     onCancel={() => {
-                        onChange?.(null)
                         fullScreenDialogCtx.close();
                     }}
                 ></PositionSelectorContent>

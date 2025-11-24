@@ -9,17 +9,17 @@ import CloseIcon from '@mui/icons-material/Close';
 interface PositionSelectorContentProps {
     initialPosition?: Position | null;
     initializeByCountryCode?: string | null;
-    onConfirm: (position: Position | null) => void;
+    onChange: (position: Position | null) => void;
     onCancel: () => void;
 }
 
 const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     initialPosition,
     initializeByCountryCode,
-    onConfirm,
+    onChange,
     onCancel,
 }) => {
-    const apiKey = ""; // TODO
+    const apiKey = ""; // TODO maps API key
 
     const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
     const [currentPosition, setCurrentPosition] = useState<Position | null>(null);
@@ -180,21 +180,13 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         }
     };
 
-    const handleCancel = () => {
-        onCancel();
-    };
-
-    const handleConfirm = () => {
-        onConfirm(selectedPosition || currentPosition);
-    };
-
     return (
         <div className="position-selector-popup-overlay fixed inset-0 z-50 flex items-center justify-center bg-opacity-50">
             <div className="position-selector-popup secondary-bg rounded-lg shadow-xl w-full h-full md:w-[90%] md:h-[90%] max-w-6xl flex flex-col">
                 <div className="position-selector-header p-4 flex items-center justify-between border-b">
                     <h2 className="text-xl font-semibold">{t('employee.selectPosition')}</h2>
                     <button
-                        onClick={handleCancel}
+                        onClick={() => onCancel()}
                         className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                     >
                         <CloseIcon />
@@ -206,10 +198,10 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
                 </div>
 
                 <div className="position-selector-footer p-4 flex gap-4 justify-between border-t">
-                    <Button onClick={handleCancel} mode={BtnModes.ERROR_TXT}>
-                        {t('common.cancel')}
+                    <Button onClick={() => onChange(null)} mode={BtnModes.ERROR_TXT}>
+                        {t('common.reset')}
                     </Button>
-                    <Button onClick={handleConfirm}>
+                    <Button onClick={() => onChange(selectedPosition || currentPosition)}>
                         {t('common.confirm')}
                     </Button>
                 </div>
