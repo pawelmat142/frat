@@ -20,8 +20,6 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
     const ctx = useEmployeeSearch();
     const { open } = useDrawer();
 
-    // TODO prezentacja date range
-    // TODO prezentacja kraju lokalizacji
     // TODO prezentacja pinezki jesli jest lokacja dokladna podana
 
     // Debounce effect: update RHF value after 500ms
@@ -39,19 +37,17 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
             showClose: true,
         });
     }
-
     
     const flags = languagesDictionary 
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.communicationLanguages || [], languagesDictionary))
         : [];
 
     if (ctx.filters.locationCountry) {
-        const countryFlagSrc = languagesDictionary?.elements.find(el => el.values.COUNTRY_CODE === ctx.filters.locationCountry)?.values.FLAG_SRC;
+        const countryFlagSrc = languagesDictionary?.elements.find(el => el.code === ctx.filters.locationCountry)?.values.SRC;
         if (countryFlagSrc) {
             flags.unshift(countryFlagSrc);
         }
     }
-
 
     return (
         <div className="filters-container mb-5">
@@ -100,6 +96,11 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
                     ))}
                 </div>
             )}
+
+            {!! ctx.filters.dateRange?.start && (
+                <div className="xs-font ml-2 mt-1">
+                    {Utils.formatFromTo(t, ctx.filters.dateRange)}
+            </div> )}
 
         </div>
     );

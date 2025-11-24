@@ -13,13 +13,15 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
     const { t } = useTranslation();
     const drawerCtx = useDrawer();
 
-    const resetFilters = () => {
-        ctx.resetFilters()
-        drawerCtx.close();
-    }
-
     // LOCAL STATE IS REQUIRED HERE BCS ctx.filters UPDATES ONLY ON "APPLY" ACTION
     const [localFilters, setLocalFilters] = useState(ctx.filters);
+
+
+    const resetFilters = () => {
+        ctx.resetFilters()
+        setLocalFilters(ctx.defaultFilters);
+        drawerCtx.close();
+    }
 
     // TODO szukanie po dokladnej lokalizacji
 

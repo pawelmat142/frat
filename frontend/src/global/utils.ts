@@ -46,7 +46,7 @@ export abstract class Utils {
 
     public static formatDateRange = (t: any, range?: DateRange | null, placeholder?: string): string => {
         if (!range?.start)  return placeholder || '';
-    
+
         const startMonth = t(`callendar.monthShort.${range.start.getMonth()}`);
         const startDayNumber = range.start.getDate();
         let result = `${startDayNumber} ${startMonth}`;
@@ -56,6 +56,20 @@ export abstract class Utils {
             result += ` - ${endDayNumber} ${endMonth} ${range.end.getFullYear()}`;
         } else {
             result += ` ${range.start.getFullYear()}`;
+        }
+        return result;
+    }
+
+    public static formatFromTo(t: any, range?: DateRange | null): string | null {
+        if (!range?.start) return null;
+
+        const startMonth = t(`callendar.monthShort.${range.start.getMonth()}`);
+        const startDayNumber = range.start.getDate();
+        let result = `${t("common.from")} ${startDayNumber} ${startMonth}`;
+        if (range.end) {
+            const endMonth = t(`callendar.monthShort.${range.end.getMonth()}`);
+            const endDayNumber = range.end.getDate();
+            result += ` ${t("common.to")} ${endDayNumber} ${endMonth}`;
         }
         return result;
     }

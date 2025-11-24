@@ -23,7 +23,8 @@
       "filters": "Filters",
       "reset": "Reset",
       "noResults": "No results found",
-      "from": "From"
+      "from": "From",
+      "to": "to"
     },
     "others": {
       "availableAnytime": "Available anytime",

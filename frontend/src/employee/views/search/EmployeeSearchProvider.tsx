@@ -13,6 +13,7 @@ interface Pagination {
 }
 export interface EmployeeSearchContextProps {
     filters: EmployeeProfileSearchForm;
+    defaultFilters: EmployeeProfileSearchForm;
     setFilters: (filters: EmployeeProfileSearchForm) => void;
     resetFilters: () => void;
     results: EmployeeProfileI[];
@@ -151,7 +152,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 currentPage: Math.floor(filters.skip / itemsPerPage) + 1,
                 itemsPerPage
             },
-            resetFilters
+            resetFilters,
+            defaultFilters
         }}>
             {children}
         </EmployeeSearchContext.Provider>
