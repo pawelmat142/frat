@@ -37,6 +37,7 @@ export interface PopupConfig {
   children?: ReactNode
   showClose?: boolean
   fullScreen?: boolean
+  popupClassName?: string
 }
 export type PopupHandler = (options: PopupConfig) => Promise<boolean>;
 
@@ -71,6 +72,7 @@ export const PopupProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const confirm = (options: ConfirmOptions) => {
     return popup({
+      popupClassName: 'pp-confirm-popup',
       title: options.title,
       message: options.message,
       buttons: [{
@@ -126,6 +128,8 @@ export const PopupProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         open={state.open}
         config={state.config}
         onClose={handleClose}
+        className={state.config.popupClassName}
+
       />
     </PopupContext.Provider>
   );
@@ -134,10 +138,11 @@ export const PopupProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 interface PopupDialogProps {
   open: boolean;
   config: PopupConfig;
+  className?: string;
   onClose: (result: boolean) => void;
 }
 
-const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
+const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config, className }) => {
 
   const [visible, setVisible] = React.useState(open);
   const [show, setShow] = React.useState(false);
@@ -216,7 +221,7 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
   if (config.fullScreen) {
     return (
       <div className={overlayClass}>
-        <div className={`primary-bg rounded-lg shadow-lg w-full h-full max-w-full max-h-full transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}>
+        <div className={`${className} primary-bg rounded-lg shadow-lg w-full h-full max-w-full max-h-full transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}>
           <Header onBack={() => onClose(false)} title={config?.title} hideMenu={true}></Header>
           {config?.children}
         </div>
@@ -226,7 +231,7 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config }) => {
   return (
     <div className={overlayClass}>
       <div
-        className={`primary-bg rounded-lg shadow-lg pt-4 min-w-[300px] transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}
+        className={`${className} primary-bg rounded-lg shadow-lg pt-4 min-w-[300px] transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}
       >
 
         <div className="popup-header flex items-start justify-between mb-5 gap-2">

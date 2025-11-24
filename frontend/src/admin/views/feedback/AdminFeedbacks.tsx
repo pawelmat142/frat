@@ -48,15 +48,14 @@ const AdminFeedbacks: React.FC = () => {
 
     const handleFeedbackAction = async (feedback: FeedbackI) => {
         const confirmed = await confirm({
-            message: t("report.feedbackPopupTitle"),
+            message: "Are you sure you want to delete this feedback? This action cannot be undone.",
         });
         if (!confirmed) return; 
 
         try {
             setLoading(true);
-            // await UsersAdminService.deleteUser(user.uid);
             await _initFeedbacks();
-            toast.success(t("report.thankYouTitle"));
+            toast.success("TODO deleting feedback");
         } catch (e) { } finally {
             setLoading(false);
         }
