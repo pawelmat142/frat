@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Search from '@mui/icons-material/Search';
 import FilterList from '@mui/icons-material/FilterList';
+import Place from '@mui/icons-material/Place';
 import FloatingInput from "global/components/controls/FloatingInput";
 import IconButton from "global/components/controls/IconButon";
 import { BtnModes, FloatingInputModes } from "global/interface/controls.interface";
@@ -20,7 +21,6 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
     const ctx = useEmployeeSearch();
     const { open } = useDrawer();
 
-    // TODO prezentacja pinezki jesli jest lokacja dokladna podana
     // Debounce effect: update RHF value after 500ms
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -36,8 +36,8 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
             showClose: true,
         });
     }
-    
-    const flags = languagesDictionary 
+
+    const flags = languagesDictionary
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.communicationLanguages || [], languagesDictionary))
         : [];
 
@@ -68,11 +68,17 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
                 </div>
             </div>
 
-            
-            {!! ctx.filters.startDate && (
+            {!!(ctx.filters.lat && ctx.filters.lng) && (
+                <div className="ml-2 mt-1 flex items-center gap-1">
+                    <Place fontSize="inherit" className="primary-color" />
+                    <span className="xs-font">{Utils.formatPosition({ lat: ctx.filters.lat, lng: ctx.filters.lng })}</span>
+                </div>
+            )}
+
+            {!!ctx.filters.startDate && (
                 <div className="xs-font ml-2 mt-1">
                     {Utils.formatFromTo(t, { start: ctx.filters.startDate, end: ctx.filters.endDate })}
-            </div> )}
+                </div>)}
 
             {(!!ctx.filters.skills?.length || !!ctx.filters.certificates?.length) && (
                 <div className="chip-container ml-2 mt-1">

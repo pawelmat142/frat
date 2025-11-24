@@ -1,7 +1,7 @@
 import removeAccents from 'remove-accents';
 import { SelectorItem } from './interface/controls.interface';
 import { DictionaryI } from '@shared/interfaces/DictionaryI';
-import { DateRange } from '@shared/interfaces/EmployeeProfileI';
+import { DateRange, Position } from '@shared/interfaces/EmployeeProfileI';
 
 export abstract class Utils {
     public static isDevMode(): boolean {
@@ -72,5 +72,9 @@ export abstract class Utils {
             result += ` ${t("common.to")} ${endDayNumber} ${endMonth}`;
         }
         return result;
+    }
+
+    public static formatPosition = (position: Position): string => {
+        return `${position.lat.toFixed(4)}, ${position.lng.toFixed(4)}`;  
     }
 }

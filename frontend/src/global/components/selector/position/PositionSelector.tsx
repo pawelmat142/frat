@@ -5,6 +5,7 @@ import FormError from '../../controls/FormError';
 import { Position } from '@shared/interfaces/EmployeeProfileI';
 import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import PositionSelectorContent from './PositionSelectorContent';
+import { Utils } from 'global/utils';
 
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
@@ -69,7 +70,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         };
 
         const displayValue = selectedPosition
-            ? selectedPosition.address || `${selectedPosition.lat.toFixed(3)}, ${selectedPosition.lng.toFixed(3)}`
+            ? selectedPosition.address || Utils.formatPosition(selectedPosition)
             : '';
 
         const hasValue = () => {
