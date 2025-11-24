@@ -106,7 +106,7 @@ export interface EmployeeProfileFormDto {
   availabilityDateRanges?: DateRange[];
 }
 
-export interface EmployeeProfileSearchForm {
+export interface EmployeeProfileSearchFilters {
   freeText?: string;
 
   communicationLanguages?: string[];
@@ -116,7 +116,11 @@ export interface EmployeeProfileSearchForm {
   locationCountry?: string | null;
   locationPosition?: Position;
 
-  dateRange?: DateRange | null;
+  startDate?: Date | null;
+  endDate?: Date | null;
+
+  lat?: number;
+  lng?: number;
 
   skip: number;
   limit: number;

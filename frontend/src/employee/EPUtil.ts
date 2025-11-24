@@ -1,20 +1,18 @@
-import { EmployeeProfileI, EmployeeProfileSearchForm } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
 
 export abstract class EPUtil {
 
-    public static prepareUrlParams = (f: EmployeeProfileSearchForm, defaultFilters: EmployeeProfileSearchForm) => {
+    public static prepareUrlParams = (f: EmployeeProfileSearchFilters, defaultFilters: EmployeeProfileSearchFilters) => {
         const params = new URLSearchParams();
         if (f.freeText) params.set('q', f.freeText);
         if (f.skills?.length) params.set('skills', f.skills.join(','));
         if (f.certificates?.length) params.set('certs', f.certificates.join(','));
         if (f.communicationLanguages?.length) params.set('langs', f.communicationLanguages.join(','));
         if (f.locationCountry) params.set('country', f.locationCountry);
-        if (f.dateRange) {
-            if (f.dateRange.start) {
-                params.set('startDate', f.dateRange.start.toISOString());
-            }
-            if (f.dateRange.end) {
-                params.set('endDate', f.dateRange.end.toISOString());
+        if (f.startDate) {
+            params.set('startDate', f.startDate.toISOString());
+            if (f.endDate) {
+                params.set('endDate', f.endDate.toISOString());
             }
         }
         const page = Math.floor(f.skip / f.limit) + 1;
@@ -24,7 +22,7 @@ export abstract class EPUtil {
         return searchStr;
     }
 
-    public static parseFiltersFromSearch = (search: string, defaultFilters: EmployeeProfileSearchForm): EmployeeProfileSearchForm => {
+    public static parseFiltersFromSearch = (search: string, defaultFilters: EmployeeProfileSearchFilters): EmployeeProfileSearchFilters => {
         const params = new URLSearchParams(search);
         const getArray = (key: string): string[] => {
             const v = params.get(key);
@@ -41,7 +39,6 @@ export abstract class EPUtil {
         const skip = (page - 1) * limit;
         const startDate = params.get('startDate') ? new Date(params.get('startDate')!) : null;
         const endDate = params.get('endDate') ? new Date(params.get('endDate')!) : null;
-        const dateRange = startDate || endDate ? { start: startDate, end: endDate } : null;
         return {
             freeText,
             skills,
@@ -50,7 +47,8 @@ export abstract class EPUtil {
             locationCountry,
             skip: skip < 0 ? 0 : skip,
             limit,
-            dateRange,
+            startDate: startDate,
+            endDate: endDate,
         };
     }
 

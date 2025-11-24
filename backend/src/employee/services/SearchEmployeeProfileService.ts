@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmployeeProfileAvailabilityOptions, EmployeeProfileSearchForm, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileSearchFilters, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { SelectQueryBuilder } from 'typeorm';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
@@ -16,7 +16,7 @@ export class SearchEmployeeProfileService {
         private readonly employeeProfileRepo: EmployeeProfileRepo,
     ) { }
 
-    async searchEmployeeProfiles(user: UserI, query: EmployeeProfileSearchForm): Promise<EmployeeProfileSearchResponse> {
+    async searchEmployeeProfiles(user: UserI, filters: EmployeeProfileSearchFilters): Promise<EmployeeProfileSearchResponse> {
         const queryBuilder = this.employeeProfileRepo.getQueryBuilder()
             .leftJoinAndSelect('profile.availabilityDateRanges', 'ranges');
 
@@ -27,16 +27,16 @@ export class SearchEmployeeProfileService {
             return undefined;
         };
 
-        const skills = parseArray(query.skills);
-        const certificates = parseArray(query.certificates);
-        const communicationLanguages = parseArray(query.communicationLanguages);
+        const skills = parseArray(filters.skills);
+        const certificates = parseArray(filters.certificates);
+        const communicationLanguages = parseArray(filters.communicationLanguages);
 
         let hasFilter = false;
 
         // Base condition - only ACTIVE profiles
         queryBuilder.where('profile.status = :status', { status: EmployeeProfileStatuses.ACTIVE });
 
-        this.addDateRangeFilter(queryBuilder, query, hasFilter);
+        this.addDateRangeFilter(queryBuilder, filters, hasFilter);
 
         if (communicationLanguages?.length) {
             queryBuilder.andWhere('profile.communication_languages @> :languages', { languages: communicationLanguages });
@@ -51,14 +51,14 @@ export class SearchEmployeeProfileService {
             hasFilter = true;
         }
 
-        if (query.locationCountry) {
-            queryBuilder.andWhere(':locationCountry = ANY (profile.location_countries)', { locationCountry: query.locationCountry });
+        if (filters.locationCountry) {
+            queryBuilder.andWhere(':locationCountry = ANY (profile.location_countries)', { locationCountry: filters.locationCountry });
             hasFilter = true;
         }
 
         // Free text fuzzy search
-        if (query.freeText && query.freeText.trim().length > 1) {
-            const freeText = `%${query.freeText.trim().toLowerCase()}%`;
+        if (filters.freeText && filters.freeText.trim().length > 1) {
+            const freeText = `%${filters.freeText.trim().toLowerCase()}%`;
             queryBuilder.andWhere(`(
                 LOWER(profile.display_name) ILIKE :freeText OR
                 LOWER(profile.email) ILIKE :freeText OR
@@ -84,11 +84,11 @@ export class SearchEmployeeProfileService {
 
 
         // Obsługa paginacji
-        if (query.skip) {
-            queryBuilder.skip(query.skip);
+        if (filters.skip) {
+            queryBuilder.skip(filters.skip);
         }
-        if (query.limit) {
-            queryBuilder.take(query.limit);
+        if (filters.limit) {
+            queryBuilder.take(filters.limit);
         }
         
         const results = await queryBuilder.getMany();
@@ -98,9 +98,9 @@ export class SearchEmployeeProfileService {
         };
     }
 
-    private addDateRangeFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, query: EmployeeProfileSearchForm, hasFilter: boolean) {
+    private addDateRangeFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
         // Date range filter - use already joined ranges
-        if (query.dateRange?.start && query.dateRange?.end) {
+        if (filters.startDate && filters.endDate) {
             queryBuilder.andWhere(`(
                 profile.availability_option = '${EmployeeProfileAvailabilityOptions.ANYTIME}'
                 OR ranges.date_range @> daterange(:startDate, :endDate, '[]')
@@ -109,11 +109,11 @@ export class SearchEmployeeProfileService {
                     AND lower(ranges.date_range) <= :startDate::date
                 )
             )`, {
-                startDate: DateRangeUtil.displayLocalDate(query.dateRange.start),
-                endDate: DateRangeUtil.displayLocalDate(query.dateRange.end)
+                startDate: DateRangeUtil.displayLocalDate(filters.startDate),
+                endDate: DateRangeUtil.displayLocalDate(filters.endDate)
             });
             hasFilter = true;
-        } else if (query.dateRange?.start) {
+        } else if (filters.startDate) {
             // znajdz profile, gdzie start miesci sie w którymś z przedziałów tego profilu 
             queryBuilder.andWhere(`(
                 profile.availability_option = '${EmployeeProfileAvailabilityOptions.ANYTIME}'
@@ -123,7 +123,7 @@ export class SearchEmployeeProfileService {
                     AND lower(ranges.date_range) <= :startDate::date
                 )
             )`, {
-                startDate: DateRangeUtil.displayLocalDate(query.dateRange.start)
+                startDate: DateRangeUtil.displayLocalDate(filters.startDate)
             });
             hasFilter = true;
         }

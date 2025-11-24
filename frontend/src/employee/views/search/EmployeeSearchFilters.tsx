@@ -68,6 +68,12 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
                 </div>
             </div>
 
+            
+            {!! ctx.filters.startDate && (
+                <div className="xs-font ml-2 mt-1">
+                    {Utils.formatFromTo(t, { start: ctx.filters.startDate, end: ctx.filters.endDate })}
+            </div> )}
+
             {(!!ctx.filters.skills?.length || !!ctx.filters.certificates?.length) && (
                 <div className="chip-container ml-2 mt-1">
                     {(ctx.filters.skills || []).map(skill => (
@@ -95,11 +101,6 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
                     ))}
                 </div>
             )}
-
-            {!! ctx.filters.dateRange?.start && (
-                <div className="xs-font ml-2 mt-1">
-                    {Utils.formatFromTo(t, ctx.filters.dateRange)}
-            </div> )}
 
         </div>
     );

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
-import { EmployeeProfileI, EmployeeProfileSearchForm } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
 import { EPUtil } from "employee/EPUtil";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 
@@ -12,9 +12,9 @@ interface Pagination {
     itemsPerPage: number;
 }
 export interface EmployeeSearchContextProps {
-    filters: EmployeeProfileSearchForm;
-    defaultFilters: EmployeeProfileSearchForm;
-    setFilters: (filters: EmployeeProfileSearchForm) => void;
+    filters: EmployeeProfileSearchFilters;
+    defaultFilters: EmployeeProfileSearchFilters;
+    setFilters: (filters: EmployeeProfileSearchFilters) => void;
     resetFilters: () => void;
     results: EmployeeProfileI[];
     pagination: Pagination;
@@ -36,19 +36,20 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const location = useLocation();
     const navigate = useNavigate();
 
-    const defaultFilters: EmployeeProfileSearchForm = {
+    const defaultFilters: EmployeeProfileSearchFilters = {
         freeText: '',
         skills: [],
         certificates: [],
         communicationLanguages: [],
         locationCountry: null,
-        dateRange: null,
+        startDate: null,
+        endDate: null,
         skip: 0,
         limit: 5,
     };
 
     // Initialize from URL (fallback to defaults)
-    const [filters, setFilters] = useState<EmployeeProfileSearchForm>(() => {
+    const [filters, setFilters] = useState<EmployeeProfileSearchFilters>(() => {
         return EPUtil.parseFiltersFromSearch(location.search, defaultFilters)
     });
     const [results, setResults] = useState<EmployeeProfileI[]>([])
@@ -71,7 +72,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         doSearch();
     }, [])
 
-    const handleSetFilters = (newFilters: EmployeeProfileSearchForm) => {
+    const handleSetFilters = (newFilters: EmployeeProfileSearchFilters) => {
         const searchStr = EPUtil.prepareUrlParams(newFilters, defaultFilters);
         const newUrl = searchStr ? `?${searchStr}` : '';
         if (newUrl !== location.search) {
@@ -80,11 +81,11 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     }
 
-    const filtersEquals = (f1: EmployeeProfileSearchForm, f2: EmployeeProfileSearchForm): boolean => {
+    const filtersEquals = (f1: EmployeeProfileSearchFilters, f2: EmployeeProfileSearchFilters): boolean => {
         if (f1.freeText !== f2.freeText) return false;
         if (f1.locationCountry !== f2.locationCountry) return false;
-        if (f1.dateRange?.start?.toISOString() !== f2.dateRange?.start?.toISOString()) return false;
-        if (f1.dateRange?.end?.toISOString() !== f2.dateRange?.end?.toISOString()) return false;
+        if (f1.startDate?.toISOString() !== f2.startDate?.toISOString()) return false;
+        if (f1.endDate?.toISOString() !== f2.endDate?.toISOString()) return false;
         if (ObjUtil.arrayChanged(f1.skills || [], f2.skills || [])) return false;
         if (ObjUtil.arrayChanged(f1.certificates || [], f2.certificates || [])) return false;
         if (ObjUtil.arrayChanged(f1.communicationLanguages || [], f2.communicationLanguages || [])) return false;
@@ -99,7 +100,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     //     // Runs only once intentionally; dependency array left empty
     // }, []);
 
-    const doSearch = async (overrideFilters?: EmployeeProfileSearchForm) => {
+    const doSearch = async (overrideFilters?: EmployeeProfileSearchFilters) => {
         const searchFilters = overrideFilters || filters;
         try {
             setLoading(true);

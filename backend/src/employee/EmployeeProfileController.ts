@@ -15,7 +15,7 @@ import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { UserI, UserRoles } from '@shared/interfaces/UserI';
 import { EmployeeProfileService } from './services/EmployeeProfileService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
-import { EmployeeProfileFormDto, EmployeeProfileI, EmployeeProfileSearchForm, EmployeeProfileSearchResponse, EmployeeProfileStatus } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileFormDto, EmployeeProfileI, EmployeeProfileSearchFilters, EmployeeProfileSearchResponse, EmployeeProfileStatus } from '@shared/interfaces/EmployeeProfileI';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
 import { Serialize } from 'global/decorators/Serialize';
 import { EmployeeProfileEntity } from './model/EmployeeProfileEntity';
@@ -76,9 +76,9 @@ export class EmployeeProfileController {
   @Serialize(EmployeeProfileEntity)
   searchEmployeeProfiles(
     @CurrentUser() user: UserI,
-    @Query() query: EmployeeProfileSearchForm
+    @Query() filters: EmployeeProfileSearchFilters
   ): Promise<EmployeeProfileSearchResponse> {
-    return this.searchEmployeeProfileService.searchEmployeeProfiles(user, query);
+    return this.searchEmployeeProfileService.searchEmployeeProfiles(user, filters);
   }
 
 

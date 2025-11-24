@@ -7,6 +7,7 @@ import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
+import { DateRange, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
 
 const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> = ({ ctx }) => {
 
@@ -25,15 +26,27 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
 
     // TODO szukanie po dokladnej lokalizacji
 
+    const prepareDateRange = (): DateRange | null => {
+        if (!localFilters.startDate) {
+            return null
+        }
+        return {
+            start: localFilters.startDate,
+            end: localFilters.endDate
+        }
+    }
+
     return (
         <div className="flex flex-col px-3 pt-5 gap-1">
 
             <DateRangeInputViewSelector
                 label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label")}
                 className="w-full"
-                value={localFilters.dateRange}
+                value={prepareDateRange()}
                 onChange={(dateRange) => {
-                    const filters = { ...localFilters, dateRange: dateRange };
+                    const filters: EmployeeProfileSearchFilters = { ...localFilters, 
+                        startDate: dateRange?.start || null, 
+                        endDate: dateRange?.end || null };
                     setLocalFilters(filters);
                     ctx.setFilters(filters);
                 }}
@@ -61,6 +74,7 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 value={null}
                 name={""}
                 onChange={(point) => {
+                    console.log(point);
                     // TODO
                 }}
             ></PositionSelector>
