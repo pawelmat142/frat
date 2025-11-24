@@ -4,6 +4,9 @@ import MonthCallendar from "global/components/callendar/MonthCallendar";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { usePopup } from "global/providers/PopupProvider";
+import { useFullScreenDialog } from "global/providers/FullScreenDialogProvider";
+import CallendarsView from "global/components/callendar/CallendarsView";
+import { useBottomSheet } from "global/providers/BottomSheetProvider";
 
 interface CallendarTileProps {
     profile: EmployeeProfileI
@@ -29,10 +32,22 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ profile }) => {
 
     const popup = usePopup();
 
+    const fullScreenDialogCtx = useFullScreenDialog();
+    const bottomSheetCtx = useBottomSheet();
+
+
+    const openDialong = () => {
+        fullScreenDialogCtx.open({
+            title: t("employeeProfile.availability"),
+            children: <CallendarsView
+                range={range!}
+                bottomSheetCtx={bottomSheetCtx}
+            />,
+        });
+    }
+
     return (
-        <div className="square-tile month-tile ripple p-1" onClick={() => popup.goToCallendarsView({
-            range: range,
-        })}>
+        <div className="square-tile month-tile ripple p-1" onClick={() => openDialong()}>
 
             <div className="mb-2 small-font">{t(`callendar.monthShort.${month}`)} {year}</div>
 

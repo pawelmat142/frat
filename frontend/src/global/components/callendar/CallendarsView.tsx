@@ -10,8 +10,8 @@ import CallendarViewDurationSelector from "./CallendarViewDurationSelector";
 import { BottomSheetContextType } from "global/providers/BottomSheetProvider";
 
 interface CallendarsViewProps {
-    range: DateRange;
-    onSubmit?: (result?: DateRange) => void;
+    range?: DateRange | null;
+    onSubmit?: (result?: DateRange | null) => void;
     onCancel?: () => void;
     selectorMode?: boolean;
     bottomSheetCtx: BottomSheetContextType;
@@ -26,8 +26,8 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
     // activeControl determines which control is currently selected/focused
     const [activeControl, setActiveControl] = useState<'start' | 'end'>('start');
 
-    const [currentRange, setCurrentRange] = useState<DateRange>(range);
-
+    const [currentRange, setCurrentRange] = useState<DateRange | null>(range || {start: null, end: null});
+    
     const prepareMonthsArray = (range: DateRange): Date[] => {
         const months: Date[] = [];
         if (selectorMode) {
@@ -85,6 +85,10 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
                 {t("others.availableAnytime")}
             </div>
         )
+    }
+
+    if (!currentRange) {
+        return <div>??</div>
     }
 
     const months = prepareMonthsArray(currentRange);

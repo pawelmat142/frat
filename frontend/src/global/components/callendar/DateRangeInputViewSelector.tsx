@@ -6,10 +6,12 @@ import { usePopup } from 'global/providers/PopupProvider';
 import { Utils } from 'global/utils';
 import { useTranslation } from 'react-i18next';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
+import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
+import CallendarsView from './CallendarsView';
 
 interface DateRangeProps {
     value?: DateRange | null;
-    onChange?: (range: DateRange | null) => void;
+    onChange?: (range?: DateRange | null) => void;
     label?: string;
     required?: boolean;
     error?: string;
@@ -31,21 +33,27 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     const inputRef = useRef<HTMLInputElement>(null);
     const popupCtx = usePopup();
     const bottomSheetCtx = useBottomSheet();
+    const fullScreenDialogCtx = useFullScreenDialog();
     const { t } = useTranslation();
 
     const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (disabled) return;
 
-        popupCtx.goToCallendarsView({
-            range: value,
-            selectorMode: true,
-            bottomSheetCtx,
-            onSubmit: (dateRange) => {
-                if (onChange) {
-                    onChange(dateRange || null)
-                }
-            },
+        fullScreenDialogCtx.open({
+            children: <CallendarsView
+                range={value}
+                selectorMode={true}
+                bottomSheetCtx={bottomSheetCtx}
+                onSubmit={(dateRange) => {
+                    onChange?.(dateRange);
+                    fullScreenDialogCtx.close();
+                }}
+                onCancel={() => {
+                    onChange?.(null);
+                    fullScreenDialogCtx.close();
+                }}
+            ></CallendarsView>
         })
     }
 

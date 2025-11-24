@@ -1,8 +1,6 @@
 import { DateRange } from '@shared/interfaces/EmployeeProfileI';
-import CallendarsView from 'global/components/callendar/CallendarsView';
 import CloseBtn from 'global/components/CloseBtn';
 import Button from 'global/components/controls/Button';
-import Header from 'global/components/Header';
 import { BtnMode, BtnModes } from 'global/interface/controls.interface';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +10,6 @@ interface PopupContextType {
   confirm: (options: ConfirmOptions) => Promise<boolean>;
   popup: (config: PopupConfig) => Promise<boolean>;
   close: () => void;
-  goToCallendarsView: (props: CallendarsViewProps) => void;
 }
 
 interface ConfirmOptions {
@@ -36,7 +33,6 @@ export interface PopupConfig {
   buttons?: PopupButtonConfig[]
   children?: ReactNode
   showClose?: boolean
-  fullScreen?: boolean
   popupClassName?: string
 }
 export type PopupHandler = (options: PopupConfig) => Promise<boolean>;
@@ -98,31 +94,8 @@ export const PopupProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setState({ ...state, open: false, resolve: undefined });
   };
 
-  const goToCallendarsView = async (props: CallendarsViewProps) => {
-    const range: DateRange = !!props.range?.start ? props.range : { start: null, end: null };
-
-    popup({
-      fullScreen: true,
-      children: (
-        <CallendarsView
-          bottomSheetCtx={props.bottomSheetCtx!}
-          range={range}
-          onSubmit={(dateRange) => {
-            props.onSubmit?.(dateRange);
-            handleClose(true);
-          }}
-          onCancel={() => {
-            props.onCancel?.();
-            handleClose(false);
-          }}
-          selectorMode={props.selectorMode}
-        />
-      )
-    });
-  }
-
   return (
-    <PopupContext.Provider value={{ confirm, popup, close: () => handleClose(false), goToCallendarsView }}>
+    <PopupContext.Provider value={{ confirm, popup, close: () => handleClose(false) }}>
       {children}
       <PopupDialog
         open={state.open}
@@ -217,17 +190,6 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config, classN
   }
 
   const overlayClass = `popup fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-200 ${show && !closing ? 'opacity-100' : 'opacity-0'}`;
-
-  if (config.fullScreen) {
-    return (
-      <div className={overlayClass}>
-        <div className={`${className} primary-bg rounded-lg shadow-lg w-full h-full max-w-full max-h-full transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}>
-          <Header onBack={() => onClose(false)} title={config?.title} hideMenu={true}></Header>
-          {config?.children}
-        </div>
-      </div>
-    )
-  }
   return (
     <div className={overlayClass}>
       <div

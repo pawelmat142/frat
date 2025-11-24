@@ -14,7 +14,6 @@ interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 
     initializePositionByCountryCode?: string | null;
 }
 
-// TODO date range picker przerobić na ten nowy popup
 // TODO auto uzupelniaj location country na podstawie pozycji
 const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
     ({
