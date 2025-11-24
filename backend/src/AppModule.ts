@@ -10,6 +10,7 @@ import { GlobalController } from 'global/GlobalController';
 import { UsersAdminModule } from 'admin/users/UsersAdminModule';
 import { EmployeeProfileModule } from 'employee/EmployeeProfileModule';
 import { FeedbackModule } from 'feedback/FeedbackModule';
+import { OffersModule } from 'offer/OfferModule';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { FeedbackModule } from 'feedback/FeedbackModule';
     AuthModule,
 
     EmployeeProfileModule,
+    OffersModule,
 
     FeedbackModule
   ],

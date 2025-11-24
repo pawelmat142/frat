@@ -6,7 +6,6 @@ import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
 import { ToastException } from "global/exceptions/ToastException";
 import { DeepPartial, FindManyOptions, Repository, SelectQueryBuilder } from "typeorm";
 import { DateRangeEntity } from "employee/model/DateRangeEntity";
-import { EmployeeProfilesInitialData } from "./EmployeeProfilesInitialData";
 
 @Injectable()
 export class EmployeeProfileRepo {
