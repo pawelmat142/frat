@@ -2,19 +2,23 @@ import { useState, useEffect, forwardRef } from 'react';
 import { InputInterface } from '../../../interface/controls.interface';
 import FloatingLabel from '../../controls/FloatingLabel';
 import PushPinIcon from '@mui/icons-material/PushPin';
-import { useTranslation } from 'react-i18next';
 import FormError from '../../controls/FormError';
 import { Position } from '@shared/interfaces/EmployeeProfileI';
 import { usePositionSelector } from 'global/components/selector/position/PositionSelectorProvider';
 
 
-interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
+interface PositionViewSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: Position | null;
     onChange?: (position: Position | null) => void;
     initializePositionByCountryCode?: string | null;
 }
 
-const PositionSelectorControl = forwardRef<HTMLInputElement, PositionSelectorProps>(
+// TODO dodac provider jak popup ale z fullscreen
+// TODO position selector użyć w tym fullscreenie
+// TODO przerobic stare na ten nowy position selector
+// TODO date range picker przerobić na ten nowy popup
+
+const PositionViewSelector = forwardRef<HTMLInputElement, PositionViewSelectorProps>(
     ({
         fullWidth = false,
         className = '',
@@ -31,7 +35,6 @@ const PositionSelectorControl = forwardRef<HTMLInputElement, PositionSelectorPro
     }, ref) => {
 
     const [selectedPosition, setSelectedPosition] = useState<Position | null>(value || null);
-    const positionSelectorCtx = usePositionSelector();
 
     let myClass = `pp-control pp-position-selector floating-input ${className}`;
     if (fullWidth) {
@@ -49,11 +52,9 @@ const PositionSelectorControl = forwardRef<HTMLInputElement, PositionSelectorPro
 
     const handleInputClick = async () => {
         if (disabled) return;
-        
-        const result = await positionSelectorCtx.openPositionSelector(
-            value,
-            initializePositionByCountryCode
-        );
+
+        // TODO!!
+        const result = null
         
         if (onChange) {
             onChange(result);
@@ -108,5 +109,4 @@ const PositionSelectorControl = forwardRef<HTMLInputElement, PositionSelectorPro
     );
 });
 
-PositionSelectorControl.displayName = 'PositionSelector';
-export default PositionSelectorControl;
+export default PositionViewSelector;
