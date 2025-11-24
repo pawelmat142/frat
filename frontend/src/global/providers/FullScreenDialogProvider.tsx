@@ -2,7 +2,7 @@ import Header from 'global/components/Header';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface FullScreenDialogContextType {
-  open(config: FullScreenDialogConfig): Promise<boolean>;
+  open<T>(config: FullScreenDialogConfig): Promise<T | null | undefined>;
   close: () => void;
 }
 
@@ -24,19 +24,17 @@ export const FullScreenDialogProvider: React.FC<{ children: ReactNode }> = ({ ch
   const [state, setState] = useState<{
     open: boolean;
     config: FullScreenDialogConfig;
-    resolve?: (result: boolean) => void;
   }>({ open: false, config: { children: null } });
 
-
-  const open = (config: FullScreenDialogConfig) => {
-    return new Promise<boolean>((resolve) => {
-      setState({ open: true, config, resolve });
+  
+  const open = <T,>(config: FullScreenDialogConfig) => {
+    return new Promise<T | null | undefined>((resolve) => {
+      setState({ open: true, config });
     })
   }
 
   const handleClose = (result: boolean) => {
-    state.resolve?.(result);
-    setState({ ...state, open: false, resolve: undefined });
+    setState({ ...state, open: false });
   };
 
   return (
@@ -65,7 +63,10 @@ const FullScreenDialog: React.FC<FullScreenDialogProps> = ({ open, onClose, conf
   const [show, setShow] = React.useState(false);
   const [closing, setClosing] = React.useState(false);
 
+  if (!visible) return null;
+
   const overlayClass = `popup fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-200 ${show && !closing ? 'opacity-100' : 'opacity-0'}`;
+  
   return (
     <div className={overlayClass}>
       <div className={`${className} primary-bg rounded-lg shadow-lg w-full h-full max-w-full max-h-full transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}>

@@ -5,6 +5,7 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import FormError from '../../controls/FormError';
 import { Position } from '@shared/interfaces/EmployeeProfileI';
 import { usePositionSelector } from 'global/components/selector/position/PositionSelectorProvider';
+import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 
 
 interface PositionViewSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
@@ -36,6 +37,8 @@ const PositionViewSelector = forwardRef<HTMLInputElement, PositionViewSelectorPr
 
     const [selectedPosition, setSelectedPosition] = useState<Position | null>(value || null);
 
+    const fullScreenDialogCtx = useFullScreenDialog();
+
     let myClass = `pp-control pp-position-selector floating-input ${className}`;
     if (fullWidth) {
         myClass += ' w-full';
@@ -53,6 +56,9 @@ const PositionViewSelector = forwardRef<HTMLInputElement, PositionViewSelectorPr
     const handleInputClick = async () => {
         if (disabled) return;
 
+        await fullScreenDialogCtx.open({
+            children: <div>TODO position selector fullscreen here</div>
+        })
         // TODO!!
         const result = null
         
