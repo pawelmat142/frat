@@ -17,7 +17,7 @@ import { UserProvider } from 'user/UserProvider';
 import { BottomSheetProvider } from 'global/providers/BottomSheetProvider';
 import DrawerProvider from 'global/providers/DrawerProvider';
 import EmployeeSearchProvider from 'employee/views/search/EmployeeSearchProvider';
-import { FullScreenDialogProvider } from 'global/providers/FullScreenSelectorProvider';
+import { FullScreenDialogProvider } from 'global/providers/FullScreenDialogProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
