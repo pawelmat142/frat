@@ -18,6 +18,8 @@ export abstract class EPUtil {
         const page = Math.floor(f.skip / f.limit) + 1;
         if (page > 1) params.set('page', String(page));
         if (f.limit !== defaultFilters.limit) params.set('limit', String(f.limit));
+        if (f.lat) params.set('lat', String(f.lat));
+        if (f.lng) params.set('lng', String(f.lng)); 
         const searchStr = params.toString();
         return searchStr;
     }
@@ -49,7 +51,15 @@ export abstract class EPUtil {
             limit,
             startDate: startDate,
             endDate: endDate,
+            lat: EPUtil.prepareNumberParam(params, 'lat'),
+            lng: EPUtil.prepareNumberParam(params, 'lng'),
         };
+    }
+
+    private static prepareNumberParam = (params: URLSearchParams, name: string): number | null => {
+        const value = params.get(name)
+        const parsed = value ? parseFloat(value) : null
+        return isNaN(parsed as number) ? null : parsed;
     }
 
     public static prepareName = (employeeProfile: EmployeeProfileI) => {

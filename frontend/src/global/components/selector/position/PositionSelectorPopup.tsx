@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 interface PositionSelectorPopupProps {
     initialPosition?: Position | null;
-    initializeByCountryCode?: string;
+    initializeByCountryCode?: string | null;
     onConfirm: (position: Position | null) => void;
     onCancel: () => void;
 }

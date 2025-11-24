@@ -7,7 +7,7 @@ import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
-import { DateRange, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, EmployeeProfileSearchFilters, Position } from "@shared/interfaces/EmployeeProfileI";
 
 const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> = ({ ctx }) => {
 
@@ -17,7 +17,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
     // LOCAL STATE IS REQUIRED HERE BCS ctx.filters UPDATES ONLY ON "APPLY" ACTION
     const [localFilters, setLocalFilters] = useState(ctx.filters);
 
-
     const resetFilters = () => {
         ctx.resetFilters()
         setLocalFilters(ctx.defaultFilters);
@@ -25,6 +24,8 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
     }
 
     // TODO szukanie po dokladnej lokalizacji
+
+    console.log('localFilters', localFilters);
 
     const prepareDateRange = (): DateRange | null => {
         if (!localFilters.startDate) {
@@ -36,6 +37,16 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
         }
     }
 
+    const preparePosition = (): Position | null => {
+        if (localFilters.lat && localFilters.lng) {
+            return {
+                lat: localFilters.lat,
+                lng: localFilters.lng,
+            }
+        }
+        return null;
+    }
+
     return (
         <div className="flex flex-col px-3 pt-5 gap-1">
 
@@ -44,9 +55,11 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 className="w-full"
                 value={prepareDateRange()}
                 onChange={(dateRange) => {
-                    const filters: EmployeeProfileSearchFilters = { ...localFilters, 
-                        startDate: dateRange?.start || null, 
-                        endDate: dateRange?.end || null };
+                    const filters: EmployeeProfileSearchFilters = {
+                        ...localFilters,
+                        startDate: dateRange?.start || null,
+                        endDate: dateRange?.end || null
+                    };
                     setLocalFilters(filters);
                     ctx.setFilters(filters);
                 }}
@@ -71,11 +84,17 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
             <PositionSelector
                 label={t("employeeProfile.form.locationPoint")}
                 className="w-full"
-                value={null}
+                value={preparePosition()}
+                initializePositionByCountryCode={localFilters.locationCountry}
                 name={""}
                 onChange={(point) => {
-                    console.log(point);
-                    // TODO
+                    const filters = {
+                        ...localFilters,
+                        lat: point ? point.lat : null,
+                        lng: point ? point.lng : null
+                    };
+                    setLocalFilters(filters);
+                    ctx.setFilters(filters);
                 }}
             ></PositionSelector>
 

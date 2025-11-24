@@ -46,6 +46,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         endDate: null,
         skip: 0,
         limit: 5,
+        lat: null,
+        lng: null,
     };
 
     // Initialize from URL (fallback to defaults)
@@ -89,6 +91,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         if (ObjUtil.arrayChanged(f1.skills || [], f2.skills || [])) return false;
         if (ObjUtil.arrayChanged(f1.certificates || [], f2.certificates || [])) return false;
         if (ObjUtil.arrayChanged(f1.communicationLanguages || [], f2.communicationLanguages || [])) return false;
+        if (f1.lat !== f2.lat) return false;
+        if (f1.lng !== f2.lng) return false;
         if (f1.skip !== f2.skip) return false;
         if (f1.limit !== f2.limit) return false;
         return true;

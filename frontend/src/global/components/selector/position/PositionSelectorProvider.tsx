@@ -3,12 +3,12 @@ import { Position } from '@shared/interfaces/EmployeeProfileI';
 import PositionSelectorPopup from 'global/components/selector/position/PositionSelectorPopup';
 
 interface PositionSelectorContextType {
-    openPositionSelector: (initialPosition?: Position | null, initializeByCountryCode?: string) => Promise<Position | null>;
+    openPositionSelector: (initialPosition?: Position | null, initializeByCountryCode?: string | null) => Promise<Position | null>;
 }
 
 interface PendingSelection {
     initialPosition?: Position | null;
-    initializeByCountryCode?: string;
+    initializeByCountryCode?: string | null;
 }
 
 const PositionSelectorContext = createContext<PositionSelectorContextType | undefined>(undefined);
@@ -20,7 +20,7 @@ export const PositionSelectorProvider: React.FC<{ children: React.ReactNode }> =
 
     const openPositionSelector = (
         initialPosition?: Position | null,
-        initializeByCountryCode?: string
+        initializeByCountryCode?: string | null
     ): Promise<Position | null> => {
         return new Promise((resolve) => {
             resolveRef.current = resolve;

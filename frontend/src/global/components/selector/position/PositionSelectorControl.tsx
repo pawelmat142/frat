@@ -11,7 +11,7 @@ import { usePositionSelector } from 'global/components/selector/position/Positio
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: Position | null;
     onChange?: (position: Position | null) => void;
-    initializePositionByCountryCode?: string;
+    initializePositionByCountryCode?: string | null;
 }
 
 const PositionSelectorControl = forwardRef<HTMLInputElement, PositionSelectorProps>(

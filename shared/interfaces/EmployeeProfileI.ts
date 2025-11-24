@@ -119,8 +119,8 @@ export interface EmployeeProfileSearchFilters {
   startDate?: Date | null;
   endDate?: Date | null;
 
-  lat?: number;
-  lng?: number;
+  lat?: number | null;
+  lng?: number | null;
 
   skip: number;
   limit: number;
