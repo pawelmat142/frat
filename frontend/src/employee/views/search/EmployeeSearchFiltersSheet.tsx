@@ -25,10 +25,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
         drawerCtx.close();
     }
 
-    // TODO szukanie po dokladnej lokalizacji
-
-    console.log('localFilters', localFilters);
-
     const prepareDateRange = (): DateRange | null => {
         if (!localFilters.startDate) {
             return null

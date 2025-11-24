@@ -174,7 +174,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
                 setSelectedPosition(fullPosition);
             }
         } catch (error) {
-            console.error('Geocoding error:', error);
+            // console.error('Geocoding error:', error);
             const fullPosition: Position = { ...position };
             setSelectedPosition(fullPosition);
         }

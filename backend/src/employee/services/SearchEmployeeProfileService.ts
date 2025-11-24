@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmployeeProfileAvailabilityOptions, EmployeeProfileSearchFilters, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileLocationOptions, EmployeeProfileSearchFilters, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { SelectQueryBuilder } from 'typeorm';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
@@ -20,23 +20,19 @@ export class SearchEmployeeProfileService {
         const queryBuilder = this.employeeProfileRepo.getQueryBuilder()
             .leftJoinAndSelect('profile.availabilityDateRanges', 'ranges');
 
-        // --- Fix: parse arrays from query string if needed ---
-        const parseArray = (val: any): string[] | undefined => {
-            if (Array.isArray(val)) return val;
-            if (typeof val === 'string' && val.length > 0) return val.split(',');
-            return undefined;
-        };
+        const skills = this.parseArray(filters.skills);
+        const certificates = this.parseArray(filters.certificates);
+        const communicationLanguages = this.parseArray(filters.communicationLanguages);
+        // Allow passing multiple countries as comma-separated string or array
 
-        const skills = parseArray(filters.skills);
-        const certificates = parseArray(filters.certificates);
-        const communicationLanguages = parseArray(filters.communicationLanguages);
-
+        // Location filter (countries overlap + global ALL_EUROPE option)
         let hasFilter = false;
 
         // Base condition - only ACTIVE profiles
         queryBuilder.where('profile.status = :status', { status: EmployeeProfileStatuses.ACTIVE });
 
         this.addDateRangeFilter(queryBuilder, filters, hasFilter);
+        this.addPositionFilter(queryBuilder, filters, hasFilter);
 
         if (communicationLanguages?.length) {
             queryBuilder.andWhere('profile.communication_languages @> :languages', { languages: communicationLanguages });
@@ -51,10 +47,6 @@ export class SearchEmployeeProfileService {
             hasFilter = true;
         }
 
-        if (filters.locationCountry) {
-            queryBuilder.andWhere(':locationCountry = ANY (profile.location_countries)', { locationCountry: filters.locationCountry });
-            hasFilter = true;
-        }
 
         // Free text fuzzy search
         if (filters.freeText && filters.freeText.trim().length > 1) {
@@ -90,12 +82,30 @@ export class SearchEmployeeProfileService {
         if (filters.limit) {
             queryBuilder.take(filters.limit);
         }
-        
+
         const results = await queryBuilder.getMany();
         return {
             profiles: results,
             count
         };
+    }
+
+    private addPositionFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
+        const locationCountries = this.parseArray(filters.locationCountry);
+
+        if (!locationCountries?.length) {
+            return;
+        }
+        hasFilter = true;
+        // Matching logic: ANY overlap between provided list and profile.location_countries OR profile is ALL_EUROPE
+        // Uses Postgres array overlap operator '&&'.
+        queryBuilder.andWhere(`(
+            profile.location_option = :allEuropeOption
+            OR profile.location_countries && :locationCountries
+        )`, {
+            locationCountries,
+            allEuropeOption: EmployeeProfileLocationOptions.ALL_EUROPE
+        });
     }
 
     private addDateRangeFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
@@ -127,6 +137,13 @@ export class SearchEmployeeProfileService {
             });
             hasFilter = true;
         }
-
     }
+
+    // UTILS
+    // --- Fix: parse arrays from query string if needed ---
+    private parseArray = (val: any): string[] | undefined => {
+        if (Array.isArray(val)) return val;
+        if (typeof val === 'string' && val.length > 0) return val.split(',');
+        return undefined;
+    };
 }
