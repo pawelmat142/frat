@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import Search from '@mui/icons-material/Search';
 import FilterList from '@mui/icons-material/FilterList';
 import Place from '@mui/icons-material/Place';
+import DateRange from '@mui/icons-material/DateRange';
 import FloatingInput from "global/components/controls/FloatingInput";
 import IconButton from "global/components/controls/IconButon";
 import { BtnModes, FloatingInputModes } from "global/interface/controls.interface";
@@ -41,12 +42,10 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.communicationLanguages || [], languagesDictionary))
         : [];
 
-    if (ctx.filters.locationCountry) {
-        const countryFlagSrc = languagesDictionary?.elements.find(el => el.code === ctx.filters.locationCountry)?.values.SRC;
-        if (countryFlagSrc) {
-            flags.unshift(countryFlagSrc);
-        }
-    }
+
+    const countryFlagSrc = ctx.filters.locationCountry
+        ? languagesDictionary?.elements.find(el => el.code === ctx.filters.locationCountry)?.values.SRC
+        : null;
 
     return (
         <div className="filters-container mb-5">
@@ -68,17 +67,26 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
                 </div>
             </div>
 
-            {!!(ctx.filters.lat && ctx.filters.lng) && (
+            {!!ctx.filters.startDate && (
+                <div className="ml-2 mt-1 flex items-center gap-1">
+                    <DateRange fontSize="inherit" className="primary-color" />
+                    <span className="xs-font">
+                        {Utils.formatFromTo(t, { start: ctx.filters.startDate, end: ctx.filters.endDate })}
+                    </span>
+                </div>)}
+
+
+            {(!!(ctx.filters.lat && ctx.filters.lng) || !!countryFlagSrc) && (
                 <div className="ml-2 mt-1 flex items-center gap-1">
                     <Place fontSize="inherit" className="primary-color" />
-                    <span className="xs-font">{Utils.formatPosition({ lat: ctx.filters.lat, lng: ctx.filters.lng })}</span>
+
+                    <img className="filters-flag-chip pl-1" src={countryFlagSrc} alt={"flag"} />
+
+                    {!!(ctx.filters.lat && ctx.filters.lng) && (
+                        <span className="xs-font">{Utils.formatPosition({ lat: ctx.filters.lat, lng: ctx.filters.lng })}</span>
+                    )}
                 </div>
             )}
-
-            {!!ctx.filters.startDate && (
-                <div className="xs-font ml-2 mt-1">
-                    {Utils.formatFromTo(t, { start: ctx.filters.startDate, end: ctx.filters.endDate })}
-                </div>)}
 
             {(!!ctx.filters.skills?.length || !!ctx.filters.certificates?.length) && (
                 <div className="chip-container ml-2 mt-1">

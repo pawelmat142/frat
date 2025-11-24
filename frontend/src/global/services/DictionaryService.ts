@@ -77,6 +77,20 @@ export const DictionaryService = {
         setCachedDictionary(response, key);
         return response;
     },
+
+    async getLanguageDictionaryCodeByCountryCode(countryCode: string): Promise<string | null> {
+        const dictionary = await this.getDictionary('LANGUAGES');
+        if (!dictionary) {
+            console.warn('LANGUAGES dictionary not found');
+            return null
+        }
+        const element = dictionary.elements.find(el => el.values.COUNTRY_CODE === countryCode);
+        if (!element?.code) {
+            console.warn(`Language for country code ${countryCode} not found in LANGUAGES dictionary`);
+            return null;
+        }
+        return element.code;
+    },
     
     clearCache() {
         clearCache();

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { EmployeeSearchContextProps } from "./EmployeeSearchProvider";
 import { useDrawer } from "global/providers/DrawerProvider";
@@ -8,6 +8,8 @@ import { BtnModes } from "global/interface/controls.interface";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 import { DateRange, EmployeeProfileSearchFilters, Position } from "@shared/interfaces/EmployeeProfileI";
 import PositionSelector from "global/components/selector/position/PositionSelector";
+import { PositionService } from "global/services/PositionService";
+import { DictionaryService } from "global/services/DictionaryService";
 
 const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> = ({ ctx }) => {
 
@@ -45,6 +47,50 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
             }
         }
         return null;
+    }
+
+    // Simple in-memory cache for reverse geocoded country codes to reduce API calls
+    const countryCacheRef = useRef<Record<string, string>>({});
+    const [geoLoading, setGeoLoading] = useState(false);
+
+    /**
+     * Attempt to reverse geocode the provided lat/lng and update country filter automatically.
+     * Uses OpenStreetMap Nominatim (public) – consider proxying via backend for production to respect rate limits.
+     */
+    const autofillCountryByPosition = async (position?: Position | null) => {
+        if (!position) {
+            return;
+        }
+
+        const key = `${position.lat.toFixed(3)},${position.lng.toFixed(3)}`; // coarse key to improve cache hits
+        if (countryCacheRef.current[key]) {
+            const filters = { ...localFilters, locationCountry: countryCacheRef.current[key] };
+            setLocalFilters(filters);
+            ctx.setFilters(filters);
+            return;
+        }
+
+        setGeoLoading(true);
+        try {
+            const countryCode = await PositionService.callApiFindCountryByPosition(position);
+            if (countryCode) {
+                const languageCode = await DictionaryService.getLanguageDictionaryCodeByCountryCode(countryCode || '');
+                if (languageCode) {
+                    countryCacheRef.current[key] = languageCode;
+                    const filters = { ...localFilters, 
+                        locationCountry: languageCode,
+                        lat: position.lat,
+                        lng: position.lng
+                    };
+                    setLocalFilters(filters);
+                    ctx.setFilters(filters);
+                }
+            }
+        } catch (e) {
+            // Intentionally swallow errors – network issues shouldn't break filter sheet.
+        } finally {
+            setGeoLoading(false);
+        }
     }
 
     return (
@@ -87,14 +133,16 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 value={preparePosition()}
                 initializePositionByCountryCode={localFilters.locationCountry}
                 name={""}
-                onChange={(point) => {
+                onChange={(position) => {
                     const filters = {
                         ...localFilters,
-                        lat: point ? point.lat : null,
-                        lng: point ? point.lng : null
+                        lat: position ? position.lat : null,
+                        lng: position ? position.lng : null
                     };
                     setLocalFilters(filters);
                     ctx.setFilters(filters);
+                    // Fire and forget reverse geocode (no await to keep UI responsive)
+                    autofillCountryByPosition(position);
                 }}
             ></PositionSelector>
 
@@ -142,7 +190,7 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 required
             />
 
-            <Button onClick={resetFilters} mode={BtnModes.ERROR} className="mt-5" fullWidth>
+            <Button onClick={resetFilters} mode={BtnModes.ERROR} className="mt-5" fullWidth disabled={geoLoading}>
                 {t("common.reset")}
             </Button>
 

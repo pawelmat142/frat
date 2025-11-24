@@ -14,7 +14,6 @@ interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 
     initializePositionByCountryCode?: string | null;
 }
 
-// TODO auto uzupelniaj location country na podstawie pozycji
 const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
     ({
         fullWidth = false,
