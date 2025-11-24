@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import { EmployeeProfileI, EmployeeProfileSearchForm } from "@shared/interfaces/EmployeeProfileI";
 import { EPUtil } from "employee/EPUtil";
+import { ObjUtil } from "@shared/utils/ObjUtil";
 
 interface Pagination {
     count: number;
@@ -40,55 +41,64 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         certificates: [],
         communicationLanguages: [],
         locationCountry: null,
+        dateRange: null,
         skip: 0,
         limit: 5,
     };
 
     // Initialize from URL (fallback to defaults)
     const [filters, setFilters] = useState<EmployeeProfileSearchForm>(() => {
-        return EPUtil.parseFiltersFromSearch(location.search, defaultFilters);
+        return EPUtil.parseFiltersFromSearch(location.search, defaultFilters)
     });
-    const [results, setResults] = useState<EmployeeProfileI[]>([]);
-    const [count, setCount] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [results, setResults] = useState<EmployeeProfileI[]>([])
+    const [count, setCount] = useState(0)
+    const [loading, setLoading] = useState(false)
+    const [searchUrl, setSearchUrl] = useState(location.search)
 
-    const itemsPerPage = 5;
-    const totalPages = Math.ceil(count / itemsPerPage);
+    const itemsPerPage = 5
+    const totalPages = Math.ceil(count / itemsPerPage)
 
-    // Sync URL when filters change
     useEffect(() => {
-        const buildSearch = (f: EmployeeProfileSearchForm) => {
-            const searchStr = EPUtil.prepareUrlParams(f, defaultFilters);
-            const newUrl = searchStr ? `?${searchStr}` : '';
-            if (newUrl !== location.search) {
-                navigate({ pathname: location.pathname, search: newUrl }, { replace: true });
-            }
-        };
-        buildSearch(filters);
-    }, [filters]);
-
-    // Re-parse filters if user navigates with browser history to a different search
-    useEffect(() => {
-        const urlFilters = EPUtil.parseFiltersFromSearch(location.search, defaultFilters);
-        // only update if meaningfully different (avoid loop)
-        const serialize = (f: EmployeeProfileSearchForm) => JSON.stringify(f);
-        if (serialize(urlFilters) !== serialize(filters)) {
-            setFilters(urlFilters);
+        const urlFilters = EPUtil.parseFiltersFromSearch(location.search, defaultFilters)
+        if (!filtersEquals(urlFilters, filters)) {
+            setFilters(urlFilters)
+            doSearch(urlFilters)
         }
-    }, [location.search]);
+    }, [searchUrl]);
 
-    // Initial search on mount
     useEffect(() => {
-        doSearch(filters);
-        // Runs only once intentionally; dependency array left empty
-    }, []);
+        doSearch();
+    }, [])
 
     const handleSetFilters = (newFilters: EmployeeProfileSearchForm) => {
-        setFilters(newFilters);
-        doSearch(newFilters);
-    };
+        const searchStr = EPUtil.prepareUrlParams(newFilters, defaultFilters);
+        const newUrl = searchStr ? `?${searchStr}` : '';
+        if (newUrl !== location.search) {
+            navigate({ pathname: location.pathname, search: newUrl }, { replace: true });
+            setSearchUrl(newUrl);
+        }
+    }
 
-    const doSearch = useCallback(async (overrideFilters?: EmployeeProfileSearchForm) => {
+    const filtersEquals = (f1: EmployeeProfileSearchForm, f2: EmployeeProfileSearchForm): boolean => {
+        if (f1.freeText !== f2.freeText) return false;
+        if (f1.locationCountry !== f2.locationCountry) return false;
+        if (f1.dateRange?.start?.toISOString() !== f2.dateRange?.start?.toISOString()) return false;
+        if (f1.dateRange?.end?.toISOString() !== f2.dateRange?.end?.toISOString()) return false;
+        if (ObjUtil.arrayChanged(f1.skills || [], f2.skills || [])) return false;
+        if (ObjUtil.arrayChanged(f1.certificates || [], f2.certificates || [])) return false;
+        if (ObjUtil.arrayChanged(f1.communicationLanguages || [], f2.communicationLanguages || [])) return false;
+        if (f1.skip !== f2.skip) return false;
+        if (f1.limit !== f2.limit) return false;
+        return true;
+    }
+
+    // Initial search on mount
+    // useEffect(() => {
+    //     doSearch(filters);
+    //     // Runs only once intentionally; dependency array left empty
+    // }, []);
+
+    const doSearch = async (overrideFilters?: EmployeeProfileSearchForm) => {
         const searchFilters = overrideFilters || filters;
         try {
             setLoading(true);
@@ -104,11 +114,11 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         } finally {
             setLoading(false);
         }
-    }, [filters]);
+    };
 
     const nextPage = () => {
         if (filters.skip + itemsPerPage < count) {
-            const newSkip = filters.skip + itemsPerPage;   
+            const newSkip = filters.skip + itemsPerPage;
             const updatedFilters = { ...filters, skip: newSkip };
             handleSetFilters(updatedFilters);
         }
@@ -120,7 +130,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
             const updatedFilters = { ...filters, skip: newSkip };
             handleSetFilters(updatedFilters);
         }
-    };  
+    };
 
     const resetFilters = () => {
         handleSetFilters({ ...defaultFilters, limit: itemsPerPage });

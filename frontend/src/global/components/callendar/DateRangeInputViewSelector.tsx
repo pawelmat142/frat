@@ -43,11 +43,11 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
             bottomSheetCtx,
             onSubmit: (dateRange) => {
                 if (onChange) {
-                    onChange(dateRange || null);
+                    onChange(dateRange || null)
                 }
             },
-        });
-    };
+        })
+    }
 
     let myClass = `pp-date-input ${className}`;
     if (disabled) {

@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EmployeeSearchContextProps } from "./EmployeeSearchProvider";
 import { useDrawer } from "global/providers/DrawerProvider";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
-import { DateRange } from "@shared/interfaces/EmployeeProfileI";
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 
@@ -14,16 +13,13 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
     const { t } = useTranslation();
     const drawerCtx = useDrawer();
 
-    const [skills, setSkills] = React.useState<string[]>(ctx.filters.skills || []);
-    const [certificates, setCertificates] = React.useState<string[]>(ctx.filters.certificates || []);
-    const [languages, setLanguages] = React.useState<string[]>(ctx.filters.communicationLanguages || []);
-    const [dateRange, setDateRange] = React.useState<DateRange | null>(ctx.filters.dateRange || null);
-    const [locationCountry, setLocationCountry] = React.useState<string | null>(ctx.filters.locationCountry || null);
-
     const resetFilters = () => {
         ctx.resetFilters()
         drawerCtx.close();
     }
+
+    // LOCAL STATE IS REQUIRED HERE BCS ctx.filters UPDATES ONLY ON "APPLY" ACTION
+    const [localFilters, setLocalFilters] = useState(ctx.filters);
 
     // TODO szukanie po dokladnej lokalizacji
 
@@ -33,21 +29,22 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
             <DateRangeInputViewSelector
                 label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label")}
                 className="w-full"
-                value={dateRange}
+                value={localFilters.dateRange}
                 onChange={(dateRange) => {
-                    setDateRange(dateRange);
-                    ctx.setFilters({ ...ctx.filters, dateRange });
+                    const filters = { ...localFilters, dateRange: dateRange };
+                    setLocalFilters(filters);
+                    ctx.setFilters(filters);
                 }}
             />
 
-            {/* todo make it work */}
             <DictionarySelector
                 className="w-full"
-                valueInput={locationCountry || ''}
+                valueInput={localFilters.locationCountry || ''}
                 onSelect={item => {
                     const locationCountryValue = item ? String(item.value) : null;
-                    ctx.setFilters({ ...ctx.filters, locationCountry: locationCountryValue })
-                    setLocationCountry(locationCountryValue);
+                    const filters = { ...localFilters, locationCountry: locationCountryValue };
+                    setLocalFilters(filters);
+                    ctx.setFilters(filters);
                 }}
                 label={t("employeeProfile.form.locationCountry")}
                 code="LANGUAGES"
@@ -69,11 +66,11 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
             <DictionarySelector
                 type="multi"
                 className="w-full"
-                valueInput={skills}
+                valueInput={localFilters.skills}
                 onSelectMulti={items => {
-                    const skillValues = items.map(i => String(i.value));
-                    ctx.setFilters({ ...ctx.filters, skills: skillValues })
-                    setSkills(skillValues);
+                    const filters = { ...localFilters, skills: items.map(i => String(i.value)) };
+                    setLocalFilters(filters);
+                    ctx.setFilters(filters);
                 }}
                 label={t("employeeProfile.form.skills")}
                 code="SKILLS"
@@ -83,11 +80,11 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
             <DictionarySelector
                 type="multi"
                 className="w-full"
-                valueInput={certificates}
+                valueInput={localFilters.certificates}
                 onSelectMulti={items => {
-                    const certificateValues = items.map(i => String(i.value));
-                    ctx.setFilters({ ...ctx.filters, certificates: certificateValues })
-                    setCertificates(certificateValues);
+                    const filters = { ...localFilters, certificates: items.map(i => String(i.value)) };
+                    setLocalFilters(filters);
+                    ctx.setFilters(filters);
                 }}
                 label={t("employeeProfile.form.certificates")}
                 code="CERTIFICATES"
@@ -97,11 +94,11 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
             <DictionarySelector
                 type='multi'
                 className="w-full"
-                valueInput={languages}
+                valueInput={localFilters.communicationLanguages}
                 onSelectMulti={items => {
-                    const languageValues = items.map(i => String(i.value));
-                    ctx.setFilters({ ...ctx.filters, communicationLanguages: languageValues })
-                    setLanguages(languageValues);
+                    const filters = { ...localFilters, communicationLanguages: items.map(i => String(i.value)) };
+                    setLocalFilters(filters);
+                    ctx.setFilters(filters);
                 }}
                 label={t("employeeProfile.form.communicationLanguage")}
                 code="LANGUAGES"

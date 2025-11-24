@@ -24,7 +24,6 @@ const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null
     // TODO prezentacja kraju lokalizacji
     // TODO prezentacja pinezki jesli jest lokacja dokladna podana
 
-
     // Debounce effect: update RHF value after 500ms
     useEffect(() => {
         const handler = setTimeout(() => {
