@@ -13,10 +13,10 @@ const MainTiles: React.FC = () => {
 
     const iconSize = 42
 
-    const navigate = useNavigate();
-    const { t } = useTranslation();
+    const navigate = useNavigate()
+    const { t } = useTranslation()
     const { me } = useAuthContext()
-    const { employeeProfile } = useUserContext();
+    const { employeeProfile } = useUserContext()
 
     return (
         <div>
@@ -53,7 +53,7 @@ const MainTiles: React.FC = () => {
                             </div>
                         )}
                         {/* TODO add job offer view */}
-                        <div className="square-tile col-tile">
+                        <div className="square-tile col-tile" onClick={() => navigate(Path.OFFER_FORM)}>
                             <FaPlus size={iconSize} />
                             <div>{t("offer.add")}</div>
                         </div>

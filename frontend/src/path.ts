@@ -12,6 +12,10 @@ export abstract class Path {
     public static readonly EMPLOYEE_PROFILE_FORM = '/employee-profile-form';
 
     public static readonly EMPLOYEE_SEARCH = '/employee-search';
+
+
+    // OFFERS
+    public static readonly OFFER_FORM = '/offers/form';
     
     public static readonly ERROR_PAGE = '/error';
 

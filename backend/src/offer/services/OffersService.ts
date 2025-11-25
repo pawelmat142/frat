@@ -15,7 +15,7 @@ export class OffersService {
     public async createOffer(user: UserI, newOffer: CreateOfferForm): Promise<OfferI> {
         // TODO preare offer entity 
         // TODO validate data
-        const createdOffer = await this.offersRepo.create(newOffer);
+        const createdOffer = await this.offersRepo.create({});
         this.logger.log(`Offer created with ID: ${createdOffer.offerId}`);
         return createdOffer;
     }
