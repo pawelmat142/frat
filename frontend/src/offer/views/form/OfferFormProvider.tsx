@@ -11,7 +11,7 @@ const OfferFormContext = createContext<OfferFormProps | undefined>(undefined);
 const defaultNewForm = (): CreateOfferForm => ({
     currentStep: OfferFormSteps.STEP_ONE,
     STEP_ONE: {
-        type: null,
+        category: null,
         locationCountry: null
     }
 })

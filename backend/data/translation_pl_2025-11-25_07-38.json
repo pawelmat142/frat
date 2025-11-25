@@ -1,0 +1,422 @@
+{
+  "langCode": "pl",
+  "version": 39,
+  "data": {
+    "lang": {
+      "select": "Wybierz język",
+      "language": "Język",
+      "changedTo": "Język zmieniony na {{lang}}",
+      "notDefined": "Język nie został zdefiniowany"
+    },
+    "user": {
+      "error": {
+        "notFound": "Nie znaleziono użytkownika",
+        "invalidRole": "Nieprawidłowa rola",
+        "cannotDelete": "Nie można usunąć użytkownika",
+        "missingRoles": "Brak ról"
+      }
+    },
+    "offer": {
+      "add": "Dodaj ofertę",
+      "form": {
+        "title": "Formularz oferty pracy",
+        "STEP_ONE": {
+          "label": "Krok 1",
+          "title": "Podstawowe informacje"
+        },
+        "STEP_TWO": {
+          "label": "Krok 2"
+        },
+        "STEP_FOUR": {
+          "label": "Krok 4"
+        },
+        "STEP_THREE": {
+          "label": "Krok 3"
+        }
+      },
+      "range": "Czas trwania umowy",
+      "search": "Szukaj ofert",
+      "workCountry": "Kraj pracy",
+      "workCategory": "Kategoria",
+      "workLocation": "Miejsce pracy"
+    },
+    "theme": {
+      "dark": "Ciemny",
+      "light": "Jasny",
+      "title": "Motyw",
+      "select": "Wybierz motyw",
+      "changedTo": "Motyw zmieniony na {{theme}}"
+    },
+    "common": {
+      "h1": "Witamy w FRAT",
+      "h2": "Platforma rekrutacyjna dla wysokościowych / pracowników dostępu linowego (rope-access)",
+      "ok": "OK",
+      "to": "do",
+      "end": "Koniec",
+      "back": "Wstecz",
+      "edit": "Edytuj",
+      "from": "Od",
+      "next": "Dalej",
+      "save": "Zapisz",
+      "close": "Zamknij",
+      "reset": "Resetuj",
+      "start": "Początek",
+      "cancel": "Anuluj",
+      "submit": "Zatwierdź",
+      "confirm": "Potwierdź",
+      "filters": "Filtry",
+      "language": "Język",
+      "previous": "Wstecz",
+      "settings": "Ustawienia",
+      "noResults": "Brak wyników",
+      "networkError": "Błąd sieci"
+    },
+    "header": {
+      "home": "Strona główna",
+      "admin": "Panel admina",
+      "signUp": "Rejestracja",
+      "profile": "Profil"
+    },
+    "others": {
+      "availableAnytime": "Dostępny od zaraz",
+      "availableAnytimeShort": "Od zaraz"
+    },
+    "report": {
+      "send": "Wyślij",
+      "title": "Co możemy zrobić lepiej?",
+      "sending": "Wysyłanie...",
+      "thankYouMsg": "Doceniamy Twój głos i wykorzystamy go, aby ulepszyć naszą platformę.",
+      "contactLabel": "Email - jeśli chcesz otrzymać odpowiedź",
+      "errorRequired": "Wpisz swoją opinię.",
+      "feedbackLabel": "Twoja opinia",
+      "thankYouTitle": "Dziękujemy za Twoją opinię!",
+      "feedbackPopupTitle": "Czy to już na pewno wszystko?"
+    },
+    "signin": {
+      "email": "Email",
+      "title": "Logowanie",
+      "logout": "Wyloguj się",
+      "submit": "Zaloguj się",
+      "signout": "Wylogowano!",
+      "success": "Zalogowano pomyślnie!",
+      "password": "Hasło",
+      "noAccount": "Nie masz konta?",
+      "signingIn": "Logowanie...",
+      "signUpForm": "Formularz rejestracji przez email",
+      "orSignInWith": " - Lub zaloguj się przez - ",
+      "forgotPassword": "Nie pamiętasz hasła?",
+      "googleProvider": "Zaloguj przez Google",
+      "alreadyHaveAccount": "Masz już konto?",
+      "forgotPasswordTitle": "Resetowanie hasła",
+      "forgotPasswordSuccess": "Jeśli email istnieje, wysłano link do resetu hasła."
+    },
+    "signup": {
+      "email": "Email",
+      "title": "Rejestracja",
+      "submit": "Załóż konto",
+      "password": "Hasło",
+      "registering": "Rejestracja...",
+      "repeatEmail": "Powtórz email",
+      "successTitle": "Rejestracja zakończona sukcesem",
+      "errorRequired": "Wszystkie pola są wymagane.",
+      "repeatPassword": "Powtórz hasło",
+      "successMessage": "Sprawdź swój email, aby zweryfikować konto.",
+      "errorEmailMatch": "Emaile się nie zgadzają.",
+      "errorPasswordMatch": "Hasła się nie zgadzają.",
+      "verificationEmailSent": "Email weryfikacyjny został wysłany. Sprawdź swoją skrzynkę."
+    },
+    "cookies": {
+      "title": "Informacja o plikach cookie",
+      "accept": "Akceptuję",
+      "description": "Używamy niezbędnych plików cookie, aby zapewnić prawidłowe działanie strony. Te pliki umożliwiają podstawowe funkcje, takie jak nawigacja, uwierzytelnianie i bezpieczeństwo."
+    },
+    "profile": {
+      "add": "Dodaj profil",
+      "tile": "Twój profil"
+    },
+    "authError": {
+      "userDisabled": "Konto zablokowane",
+      "userNotFound": "Nieprawidłowy email lub hasło",
+      "wrongPassword": "Nieprawidłowy email lub hasło",
+      "sessionExpired": "Sesja wygasła, zaloguj się ponownie.",
+      "tooManyRequests": "Zbyt wiele prób. Spróbuj ponownie później.",
+      "invalidCredential": "Nieprawidłowy email lub hasło",
+      "passwordResetNotError": "Błąd podczas wysyłania emaila do resetu hasła.",
+      "passwordResetNotAvailable": "Reset hasła nie jest dostępny dla tego konta."
+    },
+    "callendar": {
+      "month": {
+        "0": "Styczeń",
+        "1": "Luty",
+        "2": "Marzec",
+        "3": "Kwiecień",
+        "4": "Maj",
+        "5": "Czerwiec",
+        "6": "Lipiec",
+        "7": "Sierpień",
+        "8": "Wrzesień",
+        "9": "Październik",
+        "10": "Listopad",
+        "11": "Grudzień"
+      },
+      "control": {
+        "anytime": "Kiedykolwiek",
+        "rangeEndLabel": "Koniec",
+        "rangeStartLabel": "Początek",
+        "rangeEndPlaceholder": "Wybierz datę zakończenia",
+        "rangeStartPlaceholder": "Wybierz datę rozpoczęcia"
+      },
+      "duration": {
+        "month": "miesiąc",
+        "title": "Czas trwania",
+        "months": "miesięcy",
+        "months2": "miesiące",
+        "selectLabel": "Wybierz liczbę miesięcy"
+      },
+      "monthShort": {
+        "0": "Sty",
+        "1": "Lut",
+        "2": "Mar",
+        "3": "Kwi",
+        "4": "Maj",
+        "5": "Cze",
+        "6": "Lip",
+        "7": "Sie",
+        "8": "Wrz",
+        "9": "Paź",
+        "10": "Lis",
+        "11": "Gru"
+      },
+      "dayOfWeekFull": {
+        "0": "Niedziela",
+        "1": "Poniedziałek",
+        "2": "Wtorek",
+        "3": "Środa",
+        "4": "Czwartek",
+        "5": "Piątek",
+        "6": "Sobota"
+      },
+      "dayOfWeekLetter": {
+        "0": "N",
+        "1": "P",
+        "2": "W",
+        "3": "Ś",
+        "4": "C",
+        "5": "P",
+        "6": "S"
+      },
+      "dayOfWeekThreeLetter": {
+        "0": "Nie",
+        "1": "Pon",
+        "2": "Wto",
+        "3": "Śro",
+        "4": "Czw",
+        "5": "Pią",
+        "6": "Sob"
+      }
+    },
+    "dictionary": {
+      "SKILLS": {
+        "NAME": {
+          "ONE": "ONE",
+          "SIX": "SIX",
+          "TWO": "TWO",
+          "FIVE": "FIVE",
+          "FOUR": "FOUR",
+          "SEVEN": "SEVEN",
+          "THREE": "THREE"
+        }
+      },
+      "LANGUAGES": {
+        "NAME": {
+          "bg": "bułgarski",
+          "cs": "czeski",
+          "da": "duński",
+          "de": "niemiecki",
+          "el": "grecki",
+          "en": "angielski",
+          "es": "hiszpański",
+          "et": "estoński",
+          "fi": "fiński",
+          "fr": "francuski",
+          "hr": "chorwacki",
+          "hu": "węgierski",
+          "it": "włoski",
+          "lt": "litewski",
+          "lv": "łotewski",
+          "nl": "holenderski",
+          "no": "norweski",
+          "pl": "polski",
+          "pt": "portugalski",
+          "ro": "rumuński",
+          "sk": "słowacki",
+          "sl": "słoweński",
+          "sv": "szwedzki"
+        },
+        "COUNTRY_NAME": {
+          "bg": "Bułgaria",
+          "cs": "Czechy",
+          "da": "Dania",
+          "de": "Niemcy",
+          "el": "Grecja",
+          "en": "Wielka Brytania",
+          "es": "Hiszpania",
+          "et": "Estonia",
+          "fi": "Finlandia",
+          "fr": "Francja",
+          "hr": "Chorwacja",
+          "hu": "Węgry",
+          "it": "Włochy",
+          "lt": "Litwa",
+          "lv": "Łotwa",
+          "nl": "Holandia",
+          "no": "Norwegia",
+          "pl": "Polska",
+          "pt": "Portugalia",
+          "ro": "Rumunia",
+          "sk": "Słowacja",
+          "sl": "Słowenia",
+          "sv": "Szwecja"
+        }
+      },
+      "CERTIFICATES": {
+        "NAME": {
+          "ONE": "ONE",
+          "SIX": "SIX",
+          "TWO": "TWO",
+          "FIVE": "FIVE",
+          "FOUR": "FOUR",
+          "SEVEN": "SEVEN",
+          "THREE": "THREE"
+        }
+      }
+    },
+    "validation": {
+      "form": {
+        "required": "To pole jest wymagane.",
+        "dateRangeRequired": "Daty rozpoczęcia i zakończenia są wymagane.",
+        "dateRangeStartRequired": "Data rozpoczęcia jest wymagana."
+      },
+      "view": {
+        "title": "Coś poszło nie tak!",
+        "goHome": "Wróć na stronę główną",
+        "reportTitle": "Pomóż nam poprawić się, zgłaszając problem"
+      },
+      "popup": {
+        "stay": "Zostań na tej stronie",
+        "title": "Wystąpił błąd",
+        "goHome": "Wróć na stronę główną"
+      },
+      "success": "Rejestracja zakończona sukcesem!",
+      "notFound": "Nie znaleziono",
+      "required": "Wszystkie pola są wymagane.",
+      "emailMatch": "Email i powtórzony email muszą się zgadzać.",
+      "firebaseError": "Rejestracja nie powiodła się. Spróbuj ponownie później.",
+      "passwordMatch": "Hasło i powtórone hasło muszą się zgadzać.",
+      "dictionaryNotFound": "Nie znaleziono słownika"
+    },
+    "employeeProfile": {
+      "edit": "Edytuj profil pracownika",
+      "form": {
+        "step1": {
+          "label": "Krok 1",
+          "title": "Dane osobowe"
+        },
+        "step2": {
+          "label": "Krok 2",
+          "title": "Umiejętności i certyfikaty"
+        },
+        "step3": {
+          "label": "Krok 3",
+          "title": "Gdzie chcesz pracować?"
+        },
+        "step4": {
+          "label": "Krok 4",
+          "title": "Dostępność"
+        },
+        "title": "Formularz profilu pracownika",
+        "radius": "Promień",
+        "skills": "Umiejętności",
+        "address": "Adres",
+        "freeText": "Szukaj...",
+        "lastName": "Nazwisko",
+        "location": "Lokalizacja",
+        "firstName": "Imię",
+        "addLanguage": "Dodaj język",
+        "submitError": "Proszę poprawnie wypełnić wszystkie wymagane pola",
+        "certificates": "Certyfikaty",
+        "locationPoint": "Dokładna lokalizacja [lat lng]",
+        "submitSuccess": "Profil został zapisany pomyślnie",
+        "locationOption": {
+          "DISTANCE": {
+            "msg": "Wybierz lokalizację i maksymalną odległość, z której chcesz otrzymywać oferty.",
+            "tab": "Odległość"
+          },
+          "ALL_EUROPE": {
+            "msg": "Będą trafiać do Ciebie oferty z całej Europy.",
+            "tab": "Europa"
+          },
+          "SELECTED_COUNTRIES": {
+            "msg": "Wybierz kraje, z których chcesz otrzymywać oferty.",
+            "tab": "Kraje"
+          }
+        },
+        "locationCountry": "Kraj lokalizacji",
+        "validationError": "Proszę wypełnić wszystkie wymagane pola w tym kroku",
+        "residenceCountry": "Kraj zamieszkania",
+        "locationCountries": "Kraje lokalizacji",
+        "availabilityOption": {
+          "ANYTIME": {
+            "msg": "Szukam pracy od zaraz",
+            "tab": "Od zaraz"
+          },
+          "FROM_DATE": {
+            "msg": "Szukam pracy od dnia:",
+            "tab": "Od dnia",
+            "startLabel": "Data rozpoczęcia"
+          },
+          "DATE_RANGES": {
+            "add": "Dodaj termin",
+            "msg": "Wybierz daty, w których jesteś dostępny/a do pracy.",
+            "tab": "Terminy",
+            "label": "Termin"
+          }
+        },
+        "communicationLanguage": "Język komunikacji",
+        "communicationLanguages": "Języki komunikacji"
+      },
+      "jobs": "Zlecenia ukończone",
+      "error": {
+        "startDate": "Brak daty rozpoczęcia",
+        "uidRequired": "UID profilu pracownika jest wymagany",
+        "dataRequired": "Dane profilu pracownika są wymagane",
+        "emailRequired": "Email użytkownika jest wymagany do utworzenia profilu pracownika",
+        "statusRequired": "Status profilu pracownika jest wymagany",
+        "lastNameRequired": "Nazwisko profilu pracownika jest wymagane",
+        "firstNameRequired": "Imię profilu pracownika jest wymagane",
+        "locationOptionRequired": "Opcja lokalizacji profilu pracownika jest wymagana",
+        "locationRadiusRequired": "Promień lokalizacji jest wymagany dla opcji lokalizacji na odległość",
+        "locationCountryRequired": "Wymagany jest co najmniej jeden kraj lokalizacji dla wybranych krajów",
+        "locationPositionRequired": "Pozycja lokalizacji jest wymagana dla opcji lokalizacji na odległość",
+        "residenceCountryRequired": "Kraj zamieszkania profilu pracownika jest wymagany",
+        "availabilityDateRangesRequired": "Wymagany jest co najmniej jeden zakres dat dostępności",
+        "communicationLanguagesRequired": "Wymagany jest co najmniej jeden język komunikacji",
+        "locationCountriesMustNotBeSpecified": "Kraje lokalizacji nie mogą być określone dla opcji cała Europa",
+        "availabilityDateRangeStartEndRequired": "Daty rozpoczęcia i zakończenia są wymagane dla zakresów dat dostępności"
+      },
+      "title": "Profil pracownika",
+      "views": "Wyświetlenia",
+      "create": "Utwórz profil pracownika",
+      "exists": "Profil pracownika już istnieje dla tego użytkownika",
+      "joined": "Dołączono:",
+      "search": "Szukaj pracowników",
+      "notFound": "Nie znaleziono profilu pracownika do aktualizacji",
+      "noChanges": "Brak wykrytych zmian w profilu pracownika",
+      "editButton": "Edytuj profil pracownika",
+      "experience": "Doświadczenie",
+      "availability": "Dostępność",
+      "submitSuccess": "Profil pracownika zapisany pomyślnie.",
+      "alreadyInStatus": "Profil jest już w określonym statusie"
+    }
+  }
+}

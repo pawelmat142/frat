@@ -1,0 +1,53 @@
+{
+  "code": "WORK_CATEGORY",
+  "description": "work category",
+  "version": 2,
+  "status": "INACTIVE",
+  "elements": [
+    {
+      "code": "LADDERS",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.WORK_CATEGORY.NAME.LADDERS"
+      },
+      "description": "ladders"
+    },
+    {
+      "code": "SCAFFOLD",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.WORK_CATEGORY.NAME.SCAFFOLD"
+      },
+      "description": "scaffold"
+    },
+    {
+      "code": "WORK_PLATFORM",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.WORK_CATEGORY.NAME.WORK_PLATFORM"
+      },
+      "description": "work platform"
+    },
+    {
+      "code": "LIFT",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.WORK_CATEGORY.NAME.LIFT"
+      },
+      "description": "lift"
+    }
+  ],
+  "columns": [
+    {
+      "code": "NAME",
+      "type": "string",
+      "required": true,
+      "description": "name",
+      "defaultValue": "TODO NAME",
+      "translatable": true
+    }
+  ],
+  "groups": [],
+  "createdAt": "2025-11-25T07:00:49.374Z",
+  "updatedAt": "2025-11-25T07:02:45.857Z"
+}

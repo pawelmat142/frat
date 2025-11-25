@@ -19,9 +19,20 @@ export abstract class FormValidator {
     
     public static dateRangeRequired = (t: any) => {
         return {
-            validate: (value: DateRange | undefined) => {
+            validate: (value?: DateRange | null) => {
                 if (!value || !value.start || !value.end) {
-                    return t('validation.form.required');
+                    return t('validation.form.dateRangeRequired');
+                }
+                return true;
+            }
+        };
+    }
+    
+    public static dateRangeStartRequired = (t: any) => {
+        return {
+            validate: (value?: DateRange | null) => {
+                if (!value?.start) {
+                    return t('validation.form.dateRangeStartRequired');
                 }
                 return true;
             }

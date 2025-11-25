@@ -1,4 +1,4 @@
-import { Point, Position } from "./EmployeeProfileI";
+import { DateRange, Point, Position } from "./EmployeeProfileI";
 
 export interface OfferI {
 
@@ -6,6 +6,7 @@ export interface OfferI {
 
     uid: string;
     status: OfferStatus;
+    category: string;
 
     displayName?: string;
 
@@ -22,17 +23,7 @@ export interface OfferI {
     point?: Point;
     displayAddress?: string;
 
-    type?: OfferType;
-
-    // salaryHourlyFrom?: number;
-    // salaryHourlyTo?: number;
-
-    // salaryMonthlyFrom?: number;
-    // salaryMonthlyTo?: number;
-
-    // currency?: Currency;
-
-    salary: Salary | null;
+    salary?: Salary | null;
 }
 
 
@@ -59,14 +50,6 @@ export const OfferStatuses = {
   INACTIVE: 'INACTIVE'
 } as const;
 export type OfferStatus = typeof OfferStatuses[keyof typeof OfferStatuses];
-
-export const OfferTypes = {
-    LADDERS: 'LADDERS',
-    SCAFFOLD: 'SCAFFOLD',
-    WORK_PLATFORM: 'WORK_PLATFORM',
-    LIFTS: 'LIFT',
-} as const;
-export type OfferType = typeof OfferTypes[keyof typeof OfferTypes];
 
 export const Currencies = {
     EUR: 'EUR',
@@ -99,9 +82,10 @@ export const OFFER_STEPS_ORDER = [
 ]
 
 export interface OfferFormOne {
-    type: OfferType | null;
+    category: string | null;
     locationCountry: string | null;
     position?: Position | null;
+    range?: DateRange | null;
 }
 
 export interface OfferFormTwo {
