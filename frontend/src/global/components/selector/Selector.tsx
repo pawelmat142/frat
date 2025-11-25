@@ -84,9 +84,9 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [open]);
 
-    const handleSelect = (item: SelectorItem<T>) => {
+    const handleSelect = (item: T) => {
         if (disabled) return;
-        if (item?.value === value?.value) {
+        if (item === value?.value) {
             if (!required) {
                 setOpen(false);
                 setSearchText('');
@@ -178,11 +178,11 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
                                 <li
                                     key={String(item.value)}
                                     className={`dropdown-item${isActive(item) ? ' active' : ''}${item.disabled ? ' disabled' : ''}`}
-                                    onClick={() => !item.disabled && handleSelect(item)}
+                                    onClick={() => !item.disabled && handleSelect(item.value)}
                                     tabIndex={item.disabled ? -1 : 0}
                                     aria-disabled={item.disabled}
                                     onKeyDown={e => {
-                                        if (!item.disabled && (e.key === 'Enter' || e.key === ' ')) handleSelect(item);
+                                        if (!item.disabled && (e.key === 'Enter' || e.key === ' ')) handleSelect(item.value);
                                     }}
                                     style={item.disabled ? { opacity: 0.5, pointerEvents: 'none' } : {}}
                                 >

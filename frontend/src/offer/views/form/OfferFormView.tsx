@@ -25,7 +25,6 @@ const OfferFormContent: React.FC = () => {
         console.log("Submitting form");
     }
 
-
     const selectStep = async (targetStep: OfferFormStep) => { }
 
     const renderStep = () => {
@@ -45,7 +44,11 @@ const OfferFormContent: React.FC = () => {
 
     const handleDevFill = () => {
         // TODO
+        ctx.formCtx.setValue("STEP_ONE.category", "SCAFFOLD");
         ctx.formCtx.setValue("STEP_ONE.locationCountry", "pl");
+        ctx.formCtx.setValue("STEP_ONE.dateRange", {start: new Date(), end: null});
+        ctx.formCtx.setValue("STEP_TWO.certificatesRequired", ["ONE", "TWO"]);
+        ctx.formCtx.setValue("STEP_THREE.hourlySalaryStart", "100");
     };
 
     return (
@@ -81,7 +84,7 @@ const OfferFormContent: React.FC = () => {
 
                 {renderStep()}
 
-                <div className="flex gap-4 mt-20 mb-10">
+                <div className="flex gap-4 mt-10 mb-10">
                     {currentStep !== OfferFormSteps.STEP_ONE && (
                         <Button
                             type="button"

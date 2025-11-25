@@ -37,12 +37,15 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     ref: React.Ref<any>
 ) => {
 
-    if (type === 'single' && Array.isArray(valueInput)) {
-        throw new Error("For single select, value must not be an array");
+    if (valueInput) {
+        if (type === 'single' && Array.isArray(valueInput)) {
+            throw new Error("For single select, value must not be an array");
+        }
+        if (type === 'multi' && !Array.isArray(valueInput)) {
+            throw new Error("For multi select, value must be an array");
+        }
     }
-    if (type === 'multi' && !Array.isArray(valueInput)) {
-        throw new Error("For multi select, value must be an array");
-    }
+
 
     const [loading, setLoading] = useState(false);
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
@@ -67,9 +70,9 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         return <div>{t('validation.dictionaryNotFound')}</div>;
     }
 
-    const handleSelect = (item: SelectorItem<SelectorValue> | null): void => {
+    const handleSelect = (item: SelectorValue | null): void => {
         if (onSelect) {
-            const element = dictionary.elements.find(el => String(el.code) === String(item?.value));
+            const element = dictionary.elements.find(el => String(el.code) === String(item));
             onSelect(item as SelectorItem<T> | null, element);
         }
     }

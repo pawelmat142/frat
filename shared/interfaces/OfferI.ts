@@ -85,15 +85,24 @@ export interface OfferFormOne {
     category: string | null;
     locationCountry: string | null;
     position?: Position | null;
-    range?: DateRange | null;
+    dateRange?: DateRange | null;
 }
 
 export interface OfferFormTwo {
-
+    skillsRequired?: string[];
+    skillsNiceToHave?: string[];
+    certificatesRequired?: string[];
+    certificatesNiceToHave?: string[];
+    languagesRequired?: string[];
+    languagesNiceToHave?: string[];
 }
 
 export interface OfferFormThree {
-
+    monthlySalaryStart?: string | null;
+    monthlySalaryEnd?: string | null;
+    hourlySalaryStart?: string | null;
+    hourlySalaryEnd?: string | null;
+    currency?: Currency | null;
 }
 
 export interface OfferFormFour {

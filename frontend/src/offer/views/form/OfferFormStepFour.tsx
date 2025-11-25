@@ -1,6 +1,4 @@
-import FloatingInput from "global/components/controls/FloatingInput";
 import { FormValidator } from "global/FormValidator";
-import { Controller } from "react-hook-form"
 import { useTranslation } from "react-i18next";
 import { useOfferForm } from "./OfferFormProvider";
 
@@ -16,20 +14,8 @@ const OfferFormStepFour: React.FC = () => {
                 {t("offer.form.stepFour.title")}
             </h2>
             <div className="flex flex-col gap-7 md:gap-5">
-                <Controller
-                    name="STEP_ONE.locationCountry"
-                    control={ctx.formCtx.control}
-                    rules={required}
-                    render={({ field }) => (
-                        <FloatingInput
-                            {...field}
-                            label={t("offer.form.locationCountry")}
-                            fullWidth
-                            required
-                            error={ctx.formCtx.formState.errors.STEP_ONE?.locationCountry}
-                        />
-                    )}
-                />
+
+                {/* TODO */}
             </div>
         </>
     )

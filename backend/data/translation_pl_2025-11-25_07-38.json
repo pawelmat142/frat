@@ -25,20 +25,36 @@
           "title": "Podstawowe informacje"
         },
         "STEP_TWO": {
-          "label": "Krok 2"
+          "label": "Krok 2",
+          "title": "Wymagania"
         },
         "STEP_FOUR": {
           "label": "Krok 4"
         },
         "STEP_THREE": {
-          "label": "Krok 3"
+          "label": "Krok 3",
+          "title": "Wynagrodzenie"
+        },
+        "validation": {
+          "atLeastOneSalaryRequired": "Wymagane jest podanie wynagrodzenia (miesięczne lub godzinowe)."
         }
       },
-      "range": "Czas trwania umowy",
+      "dateRange": "Czas trwania umowy",
       "search": "Szukaj ofert",
       "workCountry": "Kraj pracy",
       "workCategory": "Kategoria",
-      "workLocation": "Miejsce pracy"
+      "workLocation": "Miejsce pracy",
+      "skillsRequired": "Wymagane umiejętności",
+      "skillsNiceToHave": "Mile widziane umiejętności",
+      "certificatesRequired": "Wymagane certyfikaty",
+      "certificatesNiceToHave": "Mile widziane certyfikaty",
+      "languagesRequired": "Wymagane języki",
+      "languagesNiceToHave": "Mile widziane języki",
+      "hourlySalaryStart": "Stawka godzinowa od",
+      "hourlySalaryEnd": "do",
+      "monthlySalaryStart": "Wynagrodzenie miesięczne od",
+      "monthlySalaryEnd": "do",
+      "currency": "Waluta"
     },
     "theme": {
       "dark": "Ciemny",

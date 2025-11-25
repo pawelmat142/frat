@@ -66,7 +66,7 @@ export interface InputInterface {
 export interface SelectorInterface<T extends SelectorValue = SelectorValue> {
     items: SelectorItem<T>[];
     value: SelectorItem<T> | null;
-    onSelect: (item: SelectorItem<T> | null) => void;
+    onSelect: (item: T | null) => void;
     id?: string;
     label?: string;
     fullWidth?: boolean;

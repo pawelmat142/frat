@@ -10,6 +10,7 @@ import { Position } from "@shared/interfaces/EmployeeProfileI";
 import { useState } from "react";
 import { PositionService } from "global/services/PositionService";
 import { DictionaryService } from "global/services/DictionaryService";
+import Loading from "global/components/Loading";
 
 const OfferFormStepOne: React.FC = () => {
 
@@ -98,41 +99,43 @@ const OfferFormStepOne: React.FC = () => {
                     )}
                 />
 
-                <Controller
-                    name="STEP_ONE.position"
-                    control={ctx.formCtx.control}
-                    render={({ field }) => (
-                        <PositionSelector
-                            label={t("offer.workLocation")}
-                            name="STEP_ONE.position"
-                            className="w-full"
-                            value={field.value}
-                            required
-                            onChange={(p) => {
-                                autofillCountryByPosition(p);
-                                field.onChange(p);
-                            }}
-                            initializePositionByCountryCode={form.locationCountry}
-                            error={ctx.formCtx.formState.errors.STEP_ONE?.position}
-                        />
-                    )}
-                />
+                {geoLoading ? (<Loading></Loading>): (
+                    <Controller
+                        name="STEP_ONE.position"
+                        control={ctx.formCtx.control}
+                        render={({ field }) => (
+                            <PositionSelector
+                                label={t("offer.workLocation")}
+                                name="STEP_ONE.position"
+                                className="w-full"
+                                value={field.value}
+                                required
+                                onChange={(p) => {
+                                    autofillCountryByPosition(p);
+                                    field.onChange(p);
+                                }}
+                                initializePositionByCountryCode={form.locationCountry}
+                                error={ctx.formCtx.formState.errors.STEP_ONE?.position}
+                            />
+                        )}  
+                    />
+                )}
 
                 <Controller
-                    name="STEP_ONE.range"
+                    name="STEP_ONE.dateRange"
                     control={ctx.formCtx.control}
                     rules={dateRangeStartRequired}
                     render={({ field }) => (
                         <DateRangeInput
-                            label={t("offer.range")}
-                            name="STEP_ONE.range"
+                            label={t("offer.dateRange")}
+                            name="STEP_ONE.dateRange"
                             className="w-full"
                             value={field.value}
                             required
                             onChange={(p) => {
                                 field.onChange(p);
                             }}
-                            error={ctx.formCtx.formState.errors.STEP_ONE?.range?.message}
+                            error={ctx.formCtx.formState.errors.STEP_ONE?.dateRange?.message}
                         />
                     )}
                 />

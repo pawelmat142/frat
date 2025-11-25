@@ -25,20 +25,36 @@
           "title": "Basic Information"
         },
         "STEP_TWO": {
-          "label": "Step 2"
+          "label": "Step 2",
+          "title": "Requirements"
         },
         "STEP_FOUR": {
           "label": "Step 4"
         },
         "STEP_THREE": {
-          "label": "Step 3"
+          "label": "Step 3",
+          "title": "Salary"
+        },
+        "validation": {
+          "atLeastOneSalaryRequired": "At least one salary (monthly or hourly) is required."
         }
       },
-      "range": "Contract duration",
+      "dateRange": "Contract duration",
       "search": "Offers search",
       "workCountry": "Work country",
       "workCategory": "Work category",
-      "workLocation": "Work location"
+      "workLocation": "Work location",
+      "skillsRequired": "Required skills",
+      "skillsNiceToHave": "Nice to have skills",
+      "certificatesRequired": "Required certificates",
+      "certificatesNiceToHave": "Nice to have certificates",
+      "languagesRequired": "Required languages",
+      "languagesNiceToHave": "Ni  ce to have languages",
+      "hourlySalaryStart": "Hourly salary from",
+      "hourlySalaryEnd": "to",
+      "monthlySalaryStart": "Monthly salary from",
+      "monthlySalaryEnd": "to",
+      "currency": "Currency"
     },
     "theme": {
       "dark": "Dark",

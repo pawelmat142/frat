@@ -54,7 +54,7 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
                 onSingleSelect(null);
             }
         } else {
-            onSingleSelect(item);
+            onSingleSelect(item.value);
         }
     };
 
