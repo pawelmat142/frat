@@ -32,7 +32,7 @@ const ThemeSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
             items,
             onSelect: (item) => {
                 toggleTheme()
-                toast.success(t('theme.changedTo', { theme: item?.value }));
+                toast.success(t('theme.changedTo', { theme: item }));
             }
         })
     }

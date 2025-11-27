@@ -90,7 +90,7 @@ function SelectorMulti<T extends SelectorValue = SelectorValue>({
         } else {
             newValues = [...currentValues, item];
         }
-        onSelect(newValues);
+        onSelect(newValues.map(i => i.value));
     };
 
     const removeItem = (item: SelectorItem<T>): SelectorItem<T>[] => {

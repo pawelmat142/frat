@@ -35,7 +35,7 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
               render={({ field }) => <DictionarySelector
                 className="w-full"
                 valueInput={field.value ?? ""}
-                onSelect={item => field.onChange(item ? String(item.value) : "")}
+                onSelect={item => field.onChange(item ? String(item) : "")}
                 label={t("employeeProfile.form.communicationLanguage") + (communicationLanguages.length > 1 ? ` #${idx + 1}` : "")}
                 code="LANGUAGES"
                 groupCode="COMMUNICATION"

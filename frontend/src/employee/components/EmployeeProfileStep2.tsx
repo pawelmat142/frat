@@ -30,7 +30,7 @@ const EmployeeProfileStep2: React.FC<Props> = ({ control, formState }) => {
                             type="multi"
                             className="w-full"
                             valueInput={field.value}
-                            onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
+                            onSelectMulti={items => field.onChange(items.map(i => String(i)))}
                             label={t("employeeProfile.form.skills")}
                             code="SKILLS"
                             fullWidth
@@ -49,7 +49,7 @@ const EmployeeProfileStep2: React.FC<Props> = ({ control, formState }) => {
                             type="multi"
                             className="w-full"
                             valueInput={field.value}
-                            onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
+                            onSelectMulti={items => field.onChange(items.map(i => String(i)))}
                             label={t("employeeProfile.form.certificates")}
                             code="CERTIFICATES"
                             fullWidth

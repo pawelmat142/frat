@@ -1,5 +1,5 @@
 import { Point } from "@shared/interfaces/EmployeeProfileI";
-import { Currencies, Currency, OfferI, OfferStatus, OfferType, Salary, SalaryTypes } from "@shared/interfaces/OfferI";
+import { Currencies, Currency, OfferI, OfferStatus, Salary, SalaryTypes } from "@shared/interfaces/OfferI";
 import { Expose } from "class-transformer";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
@@ -19,37 +19,41 @@ export class OfferEntity implements OfferI {
     @Expose()
     status: OfferStatus;
 
-    @Column({ name: 'type' })
+    @Column({ name: 'category' })
     @Expose()
-    type: OfferType;
+    category: string;
 
     @Column({ name: 'display_name', nullable: true })
     @Expose()
     displayName?: string;
 
-    @Column({ name: 'required_skills', type: 'text', array: true, nullable: true })
+    @Column({ name: 'description', nullable: true })
     @Expose()
-    requiredSkills?: string[];
+    description?: string;
 
-    @Column({ name: 'nice_to_have_skills', type: 'text', array: true, nullable: true })
+    @Column({ name: 'skills_required', type: 'text', array: true, nullable: true })
     @Expose()
-    niceToHaveSkills?: string[];
+    skillsRequired?: string[];
 
-    @Column({ name: 'required_certificates', type: 'text', array: true, nullable: true })
+    @Column({ name: 'skills_nice_to_have', type: 'text', array: true, nullable: true })
     @Expose()
-    requiredCertificates?: string[];
+    skillsNiceToHave?: string[];
 
-    @Column({ name: 'nice_to_have_certificates', type: 'text', array: true, nullable: true })
+    @Column({ name: 'certificates_required', type: 'text', array: true, nullable: true })
     @Expose()
-    niceToHaveCertificates?: string[];
+    certificatesRequired?: string[];
 
-    @Column({ name: 'required_languages', type: 'text', array: true, nullable: true })
+    @Column({ name: 'certificates_nice_to_have', type: 'text', array: true, nullable: true })
     @Expose()
-    requiredLanguages?: string[];
+    certificatesNiceToHave?: string[];
 
-    @Column({ name: 'nice_to_have_languages', type: 'text', array: true, nullable: true })
+    @Column({ name: 'languages_required', type: 'text', array: true, nullable: true })
     @Expose()
-    niceToHaveLanguages?: string[];
+    languagesRequired?: string[];
+
+    @Column({ name: 'languages_nice_to_have', type: 'text', array: true, nullable: true })
+    @Expose()
+    languagesNiceToHave?: string[];
 
     @Column({ name: 'location_country' })
     @Expose()
@@ -69,42 +73,42 @@ export class OfferEntity implements OfferI {
 
     @Column({ name: 'salary_hourly_from', type: 'int', nullable: true })
     @Expose()
-    salaryHourlyFrom?: number;
+    hourlySalaryStart?: number;
     
     @Column({ name: 'salary_hourly_to', type: 'int', nullable: true })
     @Expose()
-    salaryHourlyTo?: number;
+    hourlySalaryEnd?: number;
 
     @Column({ name: 'salary_monthly_from', type: 'int', nullable: true })
     @Expose()
-    salaryMonthlyFrom?: number;
+    monthlySalaryStart?: number;
     
     @Column({ name: 'salary_monthly_to', type: 'int', nullable: true })
     @Expose()
-    salaryMonthlyTo?: number;
+    monthlySalaryEnd?: number;
 
     @Column({ name: 'currency', nullable: true })
     @Expose()
     currency?: Currency;
 
     get salary(): Salary | null {
-        if (!this.salaryHourlyFrom && !this.salaryMonthlyFrom) {
+        if (!this.hourlySalaryStart && !this.monthlySalaryStart) {
             return null;
         }
         const result: Salary = {
             currency: this.currency || Currencies.EUR,
         }
-        if (this.salaryMonthlyFrom) {
+        if (this.monthlySalaryStart) {
             result.monthly = {
-                from: this.salaryMonthlyFrom,
-                to: this.salaryMonthlyTo,
+                from: this.monthlySalaryStart,
+                to: this.monthlySalaryEnd,
                 type: SalaryTypes.MONTHLY
             }
         }
-        if (this.salaryHourlyFrom) {
+        if (this.hourlySalaryStart) {
             result.hourly = {
-                from: this.salaryHourlyFrom,
-                to: this.salaryHourlyTo,
+                from: this.hourlySalaryStart,
+                to: this.hourlySalaryEnd,
                 type: SalaryTypes.HOURLY
             }
         }

@@ -47,7 +47,7 @@ function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
             title: label || '',
             multiSelect: true,
             onSelectMulti: (items) => {
-                onSelect(items as SelectorItem<T>[]);
+                onSelect(items);
             },
             onClean() {
                 onSelect([]);

@@ -47,14 +47,14 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     };
     const isLabelFloating = hasValue();
     
-    const handleSelect = (item: SelectorItem<T>) => {
+    const handleSelect = (itemValue: T) => {
         if (disabled) return;
-        if (item?.value === value?.value) {
+        if (itemValue === value?.value) {
             if (!required) {
                 onSingleSelect(null);
             }
         } else {
-            onSingleSelect(item.value);
+            onSingleSelect(itemValue);
         }
     };
 
@@ -68,7 +68,7 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             selectedValues: value ? [value.value] : [],
             title: label || '',
             onSelect: (item) => {
-                handleSelect(item as SelectorItem<T>);
+                handleSelect(item as T);
             },
             onClean: () => {
                 onSingleSelect(null);

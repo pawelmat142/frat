@@ -9,15 +9,16 @@ export interface OfferI {
     category: string;
 
     displayName?: string;
+    description?: string;
 
-    requiredSkills?: string[];
-    niceToHaveSkills?: string[];
+    skillsRequired?: string[];
+    skillsNiceToHave?: string[];
 
-    requiredCertificates?: string[];
-    niceToHaveCertificates?: string[];
+    certificatesRequired?: string[];
+    certificatesNiceToHave?: string[];
 
-    requiredLanguages?: string[];
-    niceToHaveLanguages?: string[];
+    languagesRequired?: string[];
+    languagesNiceToHave?: string[];
 
     locationCountry: string;
     point?: Point;
@@ -106,5 +107,6 @@ export interface OfferFormThree {
 }
 
 export interface OfferFormFour {
-
+    displayName?: string | null;
+    description?: string | null;
 }

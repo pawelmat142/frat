@@ -20,6 +20,10 @@ const saveFormToLocalStorage = (form: CreateOfferForm) => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(form));
 }
 
+const removeFormFromLocalStorage = () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+}
+
 export const useOfferForm = () => {
     const ctx = useContext(OfferFormContext);
     if (!ctx) throw new Error("useOfferForm must be used within OfferFormProvider");
@@ -32,6 +36,7 @@ export interface OfferFormProps {
     nextStep: () => Promise<void>;
     prevStep: () => void;
     selectStep: (targetStep: OfferFormStep) => Promise<void>;
+    removeFormFromLocalStorage: () => void;
 }
 
 const OfferFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -99,7 +104,8 @@ const OfferFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }
             formCtx,
             nextStep,
             prevStep,
-            selectStep
+            selectStep,
+            removeFormFromLocalStorage
         }}>{children}</OfferFormContext.Provider>
     );
 };

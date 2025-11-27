@@ -82,7 +82,7 @@ export interface SelectorInterface<T extends SelectorValue = SelectorValue> {
 export interface SelectorMultiProps<T extends SelectorValue = SelectorValue> {
     items: SelectorItem<T>[];
     values: SelectorItem<T>[];
-    onSelect: (items: SelectorItem<T>[]) => void;
+    onSelect: (items: T[]) => void;
     id?: string;
     label?: string;
     fullWidth?: boolean;
@@ -103,8 +103,8 @@ export interface DictionarySelectorInterface<T extends SelectorValue = SelectorV
     groupCode?: string;
     
     valueInput?: string | string[];
-    onSelect?: (item: SelectorItem<T> | null, dictionaryElement?: DictionaryElement) => void;
-    onSelectMulti?: (items: SelectorItem<T>[]) => void;
+    onSelect?: (value: T | null, dictionaryElement?: DictionaryElement) => void;
+    onSelectMulti?: (items: T[]) => void;
     
     id?: string;
     label?: string;

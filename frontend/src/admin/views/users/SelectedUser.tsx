@@ -15,16 +15,13 @@ interface SelectedUserProps {
 const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
 
     const [assignRoleForm, setAssignRoleForm] = useState(false)
-    const [assignRolesValue, setAssignRolesValue] = useState<SelectorItem<UserRole>[]>([])
+    const [assignRolesValue, setAssignRolesValue] = useState<UserRole[]>([])
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         // user changes
         setAssignRoleForm(false)
-        setAssignRolesValue(user?.roles.map(role => ({
-            label: role,
-            value: role
-        })) || [])
+        setAssignRolesValue(user?.roles || [])
 
     }, [user])
 
@@ -47,9 +44,9 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
             setLoading(true)
             setAssignRoleForm(false)
 
-            const result = await UsersAdminService.assignRoleForUser(user?.uid, assignRolesValue.map(role => role.value))
+            const result = await UsersAdminService.assignRoleForUser(user?.uid, assignRolesValue)
             
-            toast.success(`Assigned roles '${assignRolesValue.map(role => role.label).join(', ')}' to user: ${user.displayName}`);
+            toast.success(`Assigned roles '${assignRolesValue.join(', ')}' to user: ${user.displayName}`);
             if (onRefresh) {
                 onRefresh(result)
             }
@@ -84,7 +81,7 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
                         fullWidth
                         className="w-1/3"
                         items={items}
-                        values={assignRolesValue}
+                        values={assignRolesValue.map(r => ({ label: r, value: r }))}
                         onSelect={setAssignRolesValue}
                     />
                     {assignRoleForm && !!assignRolesValue.length && (

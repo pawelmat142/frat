@@ -72,7 +72,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ control, setValue, watch, formS
                                             type="multi"
                                             className="w-full"
                                             valueInput={field.value ?? []}
-                                            onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
+                                            onSelectMulti={items => field.onChange(items.map(i => String(i)))}
                                             label={t("employeeProfile.form.locationCountries")}
                                             code="LANGUAGES"
                                             elementLabelTranslationKey="COUNTRY_NAME"

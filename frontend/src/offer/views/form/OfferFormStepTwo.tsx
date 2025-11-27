@@ -23,7 +23,7 @@ const OfferFormStepTwo: React.FC = () => {
                             type="multi"
                             className="w-full"
                             valueInput={field.value}
-                            onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
+                            onSelectMulti={items => field.onChange(items.map(i => String(i)))}
                             label={t("offer.skillsRequired")}
                             code="SKILLS"
                             fullWidth
@@ -41,7 +41,7 @@ const OfferFormStepTwo: React.FC = () => {
                             type="multi"
                             className="w-full mb-5"
                             valueInput={field.value}
-                            onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
+                            onSelectMulti={items => field.onChange(items.map(i => String(i)))}
                             label={t("offer.skillsNiceToHave")}
                             code="SKILLS"
                             fullWidth
@@ -59,7 +59,7 @@ const OfferFormStepTwo: React.FC = () => {
                             type="multi"
                             className="w-full"
                             valueInput={field.value}
-                            onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
+                            onSelectMulti={items => field.onChange(items.map(i => String(i)))}
                             label={t("offer.certificatesRequired")}
                             code="CERTIFICATES"
                             fullWidth
@@ -77,7 +77,7 @@ const OfferFormStepTwo: React.FC = () => {
                             type="multi"
                             className="w-full mb-5"
                             valueInput={field.value}
-                            onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
+                            onSelectMulti={items => field.onChange(items.map(i => String(i)))}
                             label={t("offer.certificatesNiceToHave")}
                             code="CERTIFICATES"
                             fullWidth
@@ -94,7 +94,7 @@ const OfferFormStepTwo: React.FC = () => {
                         type="multi"
                         className="w-full"
                         valueInput={field.value}
-                        onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
+                        onSelectMulti={items => field.onChange(items.map(i => String(i)))}
                         label={t("offer.languagesRequired")}
                         code="LANGUAGES"
                         groupCode="COMMUNICATION"
@@ -111,7 +111,7 @@ const OfferFormStepTwo: React.FC = () => {
                         type="multi"
                         className="w-full mb-5"
                         valueInput={field.value}
-                        onSelectMulti={items => field.onChange(items.map(i => String(i.value)))}
+                        onSelectMulti={items => field.onChange(items.map(i => String(i)))}
                         label={t("offer.languagesNiceToHave")}
                         code="LANGUAGES"
                         groupCode="COMMUNICATION"

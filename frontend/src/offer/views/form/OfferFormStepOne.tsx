@@ -70,7 +70,9 @@ const OfferFormStepOne: React.FC = () => {
                         <DictionarySelector
                             className="w-full"
                             valueInput={field.value || ''}
-                            onSelect={item => field.onChange(item ? String(item.value) : null)}
+                            onSelect={item => {
+                                field.onChange(item ? String(item) : null)
+                            }}
                             label={t("offer.workCategory")}
                             code="WORK_CATEGORY"
                             fullWidth
@@ -88,10 +90,11 @@ const OfferFormStepOne: React.FC = () => {
                         <DictionarySelector
                             className="w-full"
                             valueInput={field.value || ''}
-                            onSelect={item => field.onChange(item ? String(item.value) : null)}
+                            onSelect={item => field.onChange(item ? String(item) : null)}
                             label={t("offer.workCountry")}
                             code="LANGUAGES"
                             groupCode="COMMUNICATION"
+                            elementLabelTranslationKey="COUNTRY_NAME"
                             fullWidth
                             required
                             error={ctx.formCtx.formState.errors.STEP_ONE?.locationCountry}

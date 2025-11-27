@@ -29,7 +29,7 @@ const LangSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
             groupCode: "TRANSLATIONS",
             selectedValues: [langCode],
             onSelect: (item) => {
-                setLang(item ? String(item.value) : undefined);
+                setLang(item ? String(item) : undefined);
             }
         })
     }

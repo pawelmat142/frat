@@ -22,8 +22,8 @@ export interface BottomSheetDictionaryParams<T extends SelectorValue = SelectorV
     multiSelect?: boolean;
     translateItems?: boolean
     selectedValues?: T[];
-    onSelect?: (item: SelectorItem<T>) => void;
-    onSelectMulti?: (items: SelectorItem<T>[]) => void;
+    onSelect?: (item: T) => void;
+    onSelectMulti?: (items: T[]) => void;
 }
 
 export interface OpenSelectorParams<T extends SelectorValue = SelectorValue> {
@@ -32,8 +32,8 @@ export interface OpenSelectorParams<T extends SelectorValue = SelectorValue> {
     items: SelectorItem<T>[];
     selectedValues?: T[];
     multiSelect?: boolean;
-    onSelect?: (item: SelectorItem<T>) => void;
-    onSelectMulti?: (items: SelectorItem<T>[]) => void;
+    onSelect?: (item: T) => void;
+    onSelectMulti?: (items: T[]) => void;
     onClean?: () => void;
 }
 
@@ -44,8 +44,8 @@ export interface OpenDictionaryParams<T extends SelectorValue = SelectorValue> {
     groupCode?: string;
     selectedValues?: T[];
     multiSelect?: boolean;
-    onSelect?: (item: SelectorItem<T>) => void;
-    onSelectMulti?: (items: SelectorItem<T>[]) => void;
+    onSelect?: (item: T) => void;
+    onSelectMulti?: (items: T[]) => void;
 }
 
 export interface BottomSheetContextType {

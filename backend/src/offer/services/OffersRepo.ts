@@ -16,7 +16,7 @@ export class OffersRepo {
     public async create(newOffer: DeepPartial<OfferEntity>): Promise<OfferEntity> {
         const offer = this.offerRepository.create(newOffer);
         const savedOffer = await this.offerRepository.save(offer);
-        this.logger.log(`Creating new offer: ${savedOffer.offerId}`);
+        this.logger.log(`Created new offer: ${savedOffer.offerId}`);
         return savedOffer;
     }
 

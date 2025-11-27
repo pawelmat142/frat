@@ -73,7 +73,7 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     const handleSelect = (item: SelectorValue | null): void => {
         if (onSelect) {
             const element = dictionary.elements.find(el => String(el.code) === String(item));
-            onSelect(item as SelectorItem<T> | null, element);
+            onSelect(item as T | null, element);
         }
     }
 

@@ -111,7 +111,7 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 className="w-full"
                 valueInput={localFilters.locationCountry || ''}
                 onSelect={item => {
-                    const locationCountryValue = item ? String(item.value) : null;
+                    const locationCountryValue = item ? String(item) : null;
                     const filters = { ...localFilters, locationCountry: locationCountryValue };
                     setLocalFilters(filters);
                     ctx.setFilters(filters);
@@ -147,7 +147,7 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 className="w-full"
                 valueInput={localFilters.skills}
                 onSelectMulti={items => {
-                    const filters = { ...localFilters, skills: items.map(i => String(i.value)) };
+                    const filters = { ...localFilters, skills: items.map(i => String(i)) };
                     setLocalFilters(filters);
                     ctx.setFilters(filters);
                 }}
@@ -161,7 +161,7 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 className="w-full"
                 valueInput={localFilters.certificates}
                 onSelectMulti={items => {
-                    const filters = { ...localFilters, certificates: items.map(i => String(i.value)) };
+                    const filters = { ...localFilters, certificates: items.map(i => String(i)) };
                     setLocalFilters(filters);
                     ctx.setFilters(filters);
                 }}
@@ -175,7 +175,7 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 className="w-full"
                 valueInput={localFilters.communicationLanguages}
                 onSelectMulti={items => {
-                    const filters = { ...localFilters, communicationLanguages: items.map(i => String(i.value)) };
+                    const filters = { ...localFilters, communicationLanguages: items.map(i => String(i)) };
                     setLocalFilters(filters);
                     ctx.setFilters(filters);
                 }}

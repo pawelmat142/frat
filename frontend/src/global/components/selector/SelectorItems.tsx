@@ -8,8 +8,8 @@ interface Props<T extends SelectorValue = SelectorValue> {
     items: SelectorItem<T>[]
     onClose?: () => void;
     selectedValues?: T[];
-    onSelect?: (item: SelectorItem<T>) => void;
-    onSelectMulti?: (items: SelectorItem<T>[]) => void;
+    onSelect?: (item: T) => void;
+    onSelectMulti?: (items: T[]) => void;
     multiSelect?: boolean;
     translateItems?: boolean
     onClean?: () => void;
@@ -47,14 +47,14 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
             setLocalSelectedValues(newValues);
         } else {
-            onSelect?.(item);
+            onSelect?.(item.value);
         }
     };
 
     const handleConfirm = () => {
         if (multiSelect && onSelectMulti) {
             const selectedItems = items.filter(item => localSelectedValues.includes(item.value));
-            onSelectMulti(selectedItems);
+            onSelectMulti(selectedItems.map(item => item.value));
         }
         onClose?.();
     };
