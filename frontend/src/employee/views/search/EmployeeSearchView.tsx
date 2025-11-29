@@ -8,6 +8,7 @@ import Loading from "global/components/Loading";
 import { BtnModes } from "global/interface/controls.interface";
 import { useEmployeeSearch } from "./EmployeeSearchProvider";
 import EmployeeSearchFilters from "./EmployeeSearchFilters";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 const EmployeeSearchView: React.FC = () => {
 
@@ -16,36 +17,32 @@ const EmployeeSearchView: React.FC = () => {
     // TODO sensowne indexy na searach
     // TODO desktop RWD adjustment
 
-    const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null);
     const ctx = useEmployeeSearch();
     const { t } = useTranslation();
+    const globalCtx = useGlobalContext();
+    
 
-
-    useEffect(() => {
-        const initDictionary = async () => {
-            ctx.setLoading(true);
-            const dictionary = await DictionaryService.getDictionary('LANGUAGES');
-            setLanguagesDictionary(dictionary);
-            ctx.setLoading(false);
-        }
-        initDictionary();
-    }, []);
+    if (globalCtx.loading || !globalCtx.dics.languages) {
+        return (<div>
+            <Loading></Loading>
+        </div>)
+    }
 
     return (
         <div className="list-view">
 
-            <EmployeeSearchFilters languagesDictionary={languagesDictionary} />
+            <EmployeeSearchFilters languagesDictionary={globalCtx.dics.languages} />
 
             {!ctx.loading && !ctx.results.length ? (
                 <div className="flex flex-col items-center justify-center mt-20">
                     <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
                 </div>
             ) : <div className="results flex flex-col gap-1">
-                {!!languagesDictionary && ctx.results.map((profile, index) => (
+                {!!globalCtx.dics.languages && ctx.results.map((profile, index) => (
                     <EmployeeProfileTile
                         key={profile.employeeProfileId}
                         profile={profile}
-                        languagesDictionary={languagesDictionary}
+                        languagesDictionary={globalCtx.dics.languages!}
                         first={index === 0}
                         last={index === ctx.results.length - 1}
                     />

@@ -27,6 +27,7 @@ import AdminEmployeeProfiles from 'admin/views/employee_profiles/AdminEmployeePr
 import EmployeeProfileView from 'employee/views/profile/EmployeeProfileView';
 import OfferFormView from 'offer/views/form/OfferFormView';
 import MyOffersList from 'offer/views/MyOffersList';
+import OfferView from 'offer/views/offer-view/OfferView';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -66,14 +67,14 @@ const App: React.FC = () => {
                 {/* EMPLOYEE PROFILE */}
                 <Route path={Path.EMPLOYEE_PROFILE} element={<PageWrapper direction={1}><EmployeeProfileView /></PageWrapper>} />
                 <Route path={Path.EMPLOYEE_SEARCH} element={<PageWrapper direction={1}><ProtectedRoute><EmployeeSearchView /></ProtectedRoute></PageWrapper>} />
-                {/* <Route path={Path.EMPLOYEE_PROFILE} element={<PageWrapper direction={1}><EmployeeProfileViewOld /></PageWrapper>} /> */}
-                <Route path={Path.EMPLOYEE_PROFILE_FORM} element={<PageWrapper direction={1}><ProtectedRoute><EmployeeProfileFormView /></ProtectedRoute></PageWrapper>} />
-
+                {/* unprotected */}
+                <Route path={Path.EMPLOYEE_PROFILE_FORM} element={<PageWrapper direction={1}><EmployeeProfileFormView /></PageWrapper>} />
 
                 {/* OFFERS */}
                 <Route path={Path.OFFER_FORM} element={<PageWrapper direction={1}><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.USER_OFFERS} element={<PageWrapper direction={1}><ProtectedRoute><MyOffersList/></ProtectedRoute></PageWrapper>} />
-
+                {/* unprotected */}
+                <Route path={Path.OFFER} element={<PageWrapper direction={1}><OfferView/></PageWrapper>} />
 
                 <Route path={Path.SIGN_IN} element={<PageWrapper direction={1}><SignInPage /></PageWrapper>} />
                 <Route path={Path.SIGN_UP} element={<PageWrapper direction={1}><SignUpPage /></PageWrapper>} />

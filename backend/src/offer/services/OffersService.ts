@@ -6,6 +6,7 @@ import { DeepPartial } from "typeorm";
 import { DictionariesPublicService } from "admin/dictionaries/services/DictionariesPublicService";
 import { OfferValidator } from "@shared/validators/OfferValidator";
 import { OfferEntity } from "offer/model/OfferEntity";
+import { PointUtil } from "@shared/utils/PointUtil";
 
 @Injectable()
 export class OffersService {
@@ -30,6 +31,8 @@ export class OffersService {
 
             category: newOffer.STEP_ONE.category!,
             locationCountry: newOffer.STEP_ONE.locationCountry!,
+            point: PointUtil.toGeoPoint(newOffer.STEP_ONE.position!),
+
             displayAddress: newOffer.STEP_ONE.displayAddress,
             startDate: new Date(newOffer.STEP_ONE.dateRange.start),
             endDate: newOffer.STEP_ONE.dateRange.end ? new Date(newOffer.STEP_ONE.dateRange.end) : undefined,

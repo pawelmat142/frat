@@ -11,6 +11,7 @@ export interface OfferI {
 
     locationCountry: string
     displayAddress?: string
+    point?: Point
 
     startDate: Date
     endDate?: Date

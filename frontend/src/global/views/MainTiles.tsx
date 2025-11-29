@@ -1,4 +1,4 @@
-import { FaSearch, FaBriefcase, FaUserPlus, FaUser, FaPlus, FaCog, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaSearch, FaBriefcase, FaUserPlus, FaUser, FaPlus, FaCog, FaSignInAlt, FaSignOutAlt, FaTasks } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../path"
 import { toast } from 'react-toastify';
@@ -57,7 +57,7 @@ const MainTiles: React.FC = () => {
 
                         {hasSomeOffers ? (
                             <div className="square-tile col-tile" onClick={() => navigate(Path.getOffersPath(me!.uid))}>
-                                <FaPlus size={iconSize} />
+                                <FaTasks size={iconSize} />
                                 <div>{t("offer.management")}</div>
                             </div>
                         ) : (

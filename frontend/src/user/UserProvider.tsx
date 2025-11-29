@@ -4,6 +4,7 @@ import { EmployeeProfileService } from 'employee/services/EmployeeProfileService
 import { useAuthContext } from 'auth/AuthProvider';
 import { OfferI } from '@shared/interfaces/OfferI';
 import { OffersService } from 'offer/services/OffersService';
+import { DictionaryI } from '@shared/interfaces/DictionaryI';
 
 interface UserContextType {
 	employeeProfile: EmployeeProfileI | null;
@@ -16,6 +17,8 @@ interface UserContextType {
 	setLoading: (loading: boolean) => void;
 }
 
+
+
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -24,19 +27,23 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	const [offers, setOffers] = React.useState<OfferI[]>([]);
 	const [loading, setLoading] = React.useState(false);
+	const [languagesDictionary, setLanguagesDictionary] = React.useState<DictionaryI | null>(null);
 
 	const { me } = useAuthContext();
 
 	React.useEffect(() => {
 		if (me) {
-			initEmployeeProfile();
-			initOffers();
+			Promise.all([
+				initEmployeeProfile(),
+				initOffers(),
+			]).then(() => {
+				setLoading(false);
+			})
 		} else {
-			cleanEmployeeProfile();
-			cleanOffers();
+			cleanEmployeeProfile()
+			cleanOffers()
 		}
 	}, [me]);
-
 
 	const initEmployeeProfile = async () => {
 		try {
@@ -50,8 +57,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			}
 		} catch (error) {
 			setEmployeeProfile(null);
-		} finally {
-			setLoading(false);
 		}
 	}
 
@@ -67,8 +72,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			}
 		} catch (error) {
 			setOffers([]);
-		} finally {
-			setLoading(false);
 		}
 	}
 
@@ -92,7 +95,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			initOffers: initOffers,
 			cleanOffers: cleanOffers,
 			loading: loading,
-			setLoading: setLoading
+			setLoading: setLoading,
 		}}>
 			{children}
 		</UserContext.Provider>

@@ -9,15 +9,11 @@ import AvatarTile from "./AvatarTile";
 import CallendarTile from "./CallendarTile";
 import ProfileDataTile from "./ProfileDataTile";
 import AvailabilityTile from "./AvailabilityTile";
-import { DictionaryService } from "global/services/DictionaryService";
-import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { useTranslation } from "react-i18next";
 import Chips from "global/components/chips/Chips";
 import { useAuthContext } from "auth/AuthProvider";
-import Button from "global/components/controls/Button";
-import { BtnModes } from "global/interface/controls.interface";
-import { FaEdit } from "react-icons/fa";
 import EditButton from "global/components/buttons/EditButton";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 const EmployeeProfileView: React.FC = () => {
 
@@ -25,22 +21,13 @@ const EmployeeProfileView: React.FC = () => {
     const displayName = params.displayName
     const [loading, setLoading] = useState(false)
     const [profile, setProfile] = useState<EmployeeProfileI | null>(null)
-    const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null);
 
     const { t } = useTranslation();
     const { me } = useAuthContext()
 
-    useEffect(() => {
-        const initDictionary = async () => {
-            setLoading(true);
-            const dictionary = await DictionaryService.getDictionary('LANGUAGES');
-            setLanguagesDictionary(dictionary);
-            setLoading(false);
-        }
-        initDictionary();
-    }, []);
 
     const profileCtx = useEmployeeSearch();
+    const globalCtx = useGlobalContext();
 
     useEffect(() => {
         const initEmployeeProfile = async () => {
@@ -98,9 +85,9 @@ const EmployeeProfileView: React.FC = () => {
 
                     <CallendarTile profile={profile}></CallendarTile>
 
-                    <ProfileDataTile profile={profile} languagesDictionary={languagesDictionary}></ProfileDataTile>
+                    <ProfileDataTile profile={profile} languagesDictionary={globalCtx.dics.languages}></ProfileDataTile>
 
-                    <AvailabilityTile profile={profile} languagesDictionary={languagesDictionary}></AvailabilityTile>
+                    <AvailabilityTile profile={profile} languagesDictionary={globalCtx.dics.languages}></AvailabilityTile>
 
                 </div>
 

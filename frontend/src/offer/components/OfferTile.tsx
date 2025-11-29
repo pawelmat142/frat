@@ -22,7 +22,7 @@ const OfferTile: React.FC<Props> = ({ offer, first, last }) => {
     const { t } = useTranslation();
 
     const goToOfferView = (offer: OfferI) => {
-        navigate(Path.getOfferPath(offer.uid));
+        navigate(Path.getOfferPath(offer.offerId));
     };
 
     return (
