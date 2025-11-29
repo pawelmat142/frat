@@ -29,14 +29,16 @@
           "title": "Wymagania"
         },
         "STEP_FOUR": {
-          "label": "Krok 4"
+          "label": "Krok 4",
+          "title": "Szczegóły"
         },
         "STEP_THREE": {
           "label": "Krok 3",
           "title": "Wynagrodzenie"
         },
         "validation": {
-          "atLeastOneSalaryRequired": "Wymagane jest podanie wynagrodzenia (miesięczne lub godzinowe)."
+          "atLeastOneSalaryRequired": "Wymagane jest podanie wynagrodzenia (miesięczne lub godzinowe).",
+          "currencyRequired": "Waluta jest wymagana."
         }
       },
       "dateRange": "Czas trwania umowy",
@@ -54,7 +56,10 @@
       "hourlySalaryEnd": "do",
       "monthlySalaryStart": "Wynagrodzenie miesięczne od",
       "monthlySalaryEnd": "do",
-      "currency": "Waluta"
+      "currency": "Waluta",
+      "displayName": "Nazwa wyświetlana",
+      "description": "Opis oferty",
+      "availableSlots": "Dostępne miejsca"
     },
     "theme": {
       "dark": "Ciemny",
@@ -311,7 +316,8 @@
       "form": {
         "required": "To pole jest wymagane.",
         "dateRangeRequired": "Daty rozpoczęcia i zakończenia są wymagane.",
-        "dateRangeStartRequired": "Data rozpoczęcia jest wymagana."
+        "dateRangeStartRequired": "Data rozpoczęcia jest wymagana.",
+        "positiveInteger": "Wartość musi być dodatnią liczbą całkowitą."
       },
       "view": {
         "title": "Coś poszło nie tak!",

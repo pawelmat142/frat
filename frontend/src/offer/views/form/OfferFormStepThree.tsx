@@ -3,7 +3,7 @@ import { FormValidator } from "global/FormValidator";
 import { Controller } from "react-hook-form"
 import { useTranslation } from "react-i18next";
 import { useOfferForm } from "./OfferFormProvider";
-import { CreateOfferForm, Currencies, Currency } from "@shared/interfaces/OfferI";
+import { OfferForm, Currencies, Currency } from "@shared/interfaces/OfferI";
 import { SelectorItem } from "global/interface/controls.interface";
 import { useEffect } from "react";
 import FloatingSelector from "global/components/selector/FloatingSelector";
@@ -14,7 +14,7 @@ const OfferFormStepThree: React.FC = () => {
     const required = FormValidator.required(t);
     // Custom validator: at least one of monthlySalaryStart or hourlySalaryStart must be filled
     const atLeastOneSalaryRequired = {
-        validate: (_: any, formValues: CreateOfferForm) => {
+        validate: (_: any, formValues: OfferForm) => {
             const monthly = formValues?.STEP_THREE?.monthlySalaryStart;
             const hourly = formValues?.STEP_THREE?.hourlySalaryStart;
             if ((monthly == null || monthly === "") && (hourly == null || hourly === "")) {

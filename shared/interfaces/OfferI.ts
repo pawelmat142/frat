@@ -2,29 +2,60 @@ import { DateRange, Point, Position } from "./EmployeeProfileI";
 
 export interface OfferI {
 
-    offerId: number;
+    offerId: number
 
-    uid: string;
-    status: OfferStatus;
-    category: string;
+    uid: string
+    status: OfferStatus
 
-    displayName?: string;
-    description?: string;
+    // BASIC FIELDS
+    category: string
 
-    skillsRequired?: string[];
-    skillsNiceToHave?: string[];
+    locationCountry: string
+    point?: Point
+    displayAddress?: string
 
-    certificatesRequired?: string[];
-    certificatesNiceToHave?: string[];
+    startDate: Date
+    endDate?: Date
 
-    languagesRequired?: string[];
-    languagesNiceToHave?: string[];
+    availableSlots: number
+    // TODO power fields
+    appliedSlots: number
+    // TODO power fields
+    acceptedSlots: number
 
-    locationCountry: string;
-    point?: Point;
-    displayAddress?: string;
 
-    salary?: Salary | null;
+    // REQUIREMENTS FIELDS
+    skillsRequired?: string[]
+    skillsNiceToHave?: string[]
+
+    certificatesRequired?: string[]
+    certificatesNiceToHave?: string[]
+
+    languagesRequired?: string[]
+    languagesNiceToHave?: string[]
+
+
+
+    // SALARY FIELDS
+    hourlySalaryStart?: number;
+    hourlySalaryEnd?: number;
+    monthlySalaryStart?: number;
+    monthlySalaryEnd?: number;
+    currency?: Currency;
+
+    // DETAILS FIELDS    
+    displayName?: string
+    description?: string
+
+    // AUDIT FIELDS
+    // TODO power fields
+    views: string[]     //uids of profiles who viewed the offer
+    // TODO power fields
+    likes: string[]     //uids of profiles who liked the offer
+    // TODO power fields
+    shares: string[]    //uids of profiles who shared the offer
+    createdAt: Date
+    updatedAt?: Date
 }
 
 
@@ -59,7 +90,7 @@ export const Currencies = {
 } as const;
 export type Currency = typeof Currencies[keyof typeof Currencies];
 
-export interface CreateOfferForm {
+export interface OfferForm {
     currentStep: OfferFormStep;
     STEP_ONE: OfferFormOne;
     STEP_TWO?: OfferFormTwo;
@@ -87,6 +118,7 @@ export interface OfferFormOne {
     locationCountry: string | null;
     position?: Position | null;
     dateRange?: DateRange | null;
+    availableSlots?: number | null;
 }
 
 export interface OfferFormTwo {

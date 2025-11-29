@@ -39,6 +39,31 @@ export abstract class Util {
         return userI.roles.some(role => allowedRoles.includes(role));
     }
 
+    public static isDateString = (value: any) => {
+        // ISO 8601 date string detection
+        return typeof value === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z?$/.test(value);
+    };
+    
+    public static reviveDatesDeep = (obj: any): any => {
+        if (Array.isArray(obj)) {
+            return obj.map(Util.reviveDatesDeep);
+        } else if (obj && typeof obj === "object") {
+            const result: any = {};
+            for (const key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                    const val = obj[key];
+                    if (Util.isDateString(val)) {
+                        result[key] = new Date(val);
+                    } else {
+                        result[key] = Util.reviveDatesDeep(val);
+                    }
+                }
+            }
+            return result;
+        }
+        return obj;
+    };
+
     
 }
 

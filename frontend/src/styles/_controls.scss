@@ -562,32 +562,6 @@ input {
 }
 
 
-.pp-textarea {
-  width: 100%;
-  min-height: 120px;
-  padding: 0.75rem 1rem;
-  font-size: $btnFont;
-  font-family: inherit;
-  background: $secondary-bg;
-  border: 1px solid $border-color;
-  border-radius: .25rem;
-  resize: vertical;
-  transition: $transition;
-  color: $primary-text;
-  outline: none;
-
-  &:focus {
-    outline: 2px solid $primary-color;
-    border-color: $primary-color;
-  }
-
-  &:disabled {
-    background: $gray-200;
-    color: $gray-500;
-    cursor: not-allowed;
-  }
-}
-
 // Floating Input
 .floating-input-wrapper {
   position: relative;
@@ -608,6 +582,12 @@ input {
 }
 
 $topLabelOffset: 0.3rem;
+
+.pp-textarea {
+  .floating-label {
+    top: 10%;
+  }
+}
 
 .floating-label {
   position: absolute;

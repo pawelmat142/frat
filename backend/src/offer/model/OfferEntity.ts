@@ -19,18 +19,48 @@ export class OfferEntity implements OfferI {
     @Expose()
     status: OfferStatus;
 
+    // BASIC FIELDS
     @Column({ name: 'category' })
     @Expose()
     category: string;
 
-    @Column({ name: 'display_name', nullable: true })
+    @Column({ name: 'location_country' })
     @Expose()
-    displayName?: string;
+    locationCountry: string;
 
-    @Column({ name: 'description', nullable: true })
+    @Column({
+        type: 'geography',
+        spatialFeatureType: 'Point',
+        srid: 4326,
+        nullable: true,
+    })
+    point?: Point;
+
+    @Column({ name: 'display_address', nullable: true })
     @Expose()
-    description?: string;
+    displayAddress?: string;
 
+    @Column({ name: 'start_date', type: 'date' })
+    @Expose()
+    startDate: Date;
+
+    @Column({ name: 'end_date', type: 'date', nullable: true })
+    @Expose()
+    endDate?: Date;
+
+    @Column({ name: 'open_slots', type: 'int', default: 0 })
+    @Expose()
+    availableSlots: number;
+
+    @Column({ name: 'applied_slots', type: 'int', default: 0 })
+    @Expose()
+    appliedSlots: number;
+
+    @Column({ name: 'accepted_slots', type: 'int', default: 0 })
+    @Expose()
+    acceptedSlots: number;
+
+    // REQUIREMENTS FIELDS
     @Column({ name: 'skills_required', type: 'text', array: true, nullable: true })
     @Expose()
     skillsRequired?: string[];
@@ -55,26 +85,12 @@ export class OfferEntity implements OfferI {
     @Expose()
     languagesNiceToHave?: string[];
 
-    @Column({ name: 'location_country' })
-    @Expose()
-    locationCountry: string;
 
-    @Column({
-        type: 'geography',
-        spatialFeatureType: 'Point',
-        srid: 4326,
-        nullable: true,
-    })
-    point?: Point;
-
-    @Column({ name: 'display_address', nullable: true })
-    @Expose()
-    displayAddress?: string;
-
+    // SALARY FIELDS
     @Column({ name: 'salary_hourly_from', type: 'int', nullable: true })
     @Expose()
     hourlySalaryStart?: number;
-    
+
     @Column({ name: 'salary_hourly_to', type: 'int', nullable: true })
     @Expose()
     hourlySalaryEnd?: number;
@@ -82,7 +98,7 @@ export class OfferEntity implements OfferI {
     @Column({ name: 'salary_monthly_from', type: 'int', nullable: true })
     @Expose()
     monthlySalaryStart?: number;
-    
+
     @Column({ name: 'salary_monthly_to', type: 'int', nullable: true })
     @Expose()
     monthlySalaryEnd?: number;
@@ -90,6 +106,37 @@ export class OfferEntity implements OfferI {
     @Column({ name: 'currency', nullable: true })
     @Expose()
     currency?: Currency;
+
+    // DETAILS FIELDS
+    @Column({ name: 'display_name', nullable: true })
+    @Expose()
+    displayName?: string;
+
+    @Column({ name: 'description', nullable: true })
+    @Expose()
+    description?: string;
+
+
+    // AUDIT FIELDS
+    @Column({ name: 'views', type: 'text', array: true, default: [] })
+    @Expose()
+    views: string[];
+
+    @Column({ name: 'likes', type: 'text', array: true, default: [] })
+    @Expose()
+    likes: string[];
+
+    @Column({ name: 'shares', type: 'text', array: true, default: [] })
+    @Expose()
+    shares: string[];
+
+    @Column({ name: 'created_at', type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+    @Expose()
+    createdAt: Date;
+
+    @Column({ name: 'updated_at', type: 'timestamptz', nullable: true })
+    @Expose()
+    updatedAt?: Date;
 
     get salary(): Salary | null {
         if (!this.hourlySalaryStart && !this.monthlySalaryStart) {

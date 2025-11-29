@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { OffersRepo } from "./OffersRepo";
-import { CreateOfferForm, OfferI, OfferStatus, OfferStatuses } from "@shared/interfaces/OfferI";
+import { OfferForm, OfferI, OfferStatus, OfferStatuses } from "@shared/interfaces/OfferI";
 import { UserI } from "@shared/interfaces/UserI";
 import { DeepPartial } from "typeorm";
 import { DictionariesPublicService } from "admin/dictionaries/services/DictionariesPublicService";
@@ -17,7 +17,7 @@ export class OffersService {
         private readonly dictionariesPublicService: DictionariesPublicService,
     ) { }
 
-    public async createOffer(user: UserI, newOffer: CreateOfferForm): Promise<OfferI> {
+    public async createOffer(user: UserI, newOffer: OfferForm): Promise<OfferI> {
         await this.validateOfferForm(newOffer);
 
         const newEntity: DeepPartial<OfferEntity> = {
@@ -55,7 +55,7 @@ export class OffersService {
         return Number(value);
     }
 
-    private async validateOfferForm(form: CreateOfferForm): Promise<void> {
+    private async validateOfferForm(form: OfferForm): Promise<void> {
         await this.dictionariesPublicService.validateItemExistence(form.STEP_ONE.category, 'WORK_CATEGORY');
         await this.dictionariesPublicService.validateItemExistence(form.STEP_ONE.locationCountry, 'LANGUAGES', 'COMMUNICATION');
     
@@ -71,7 +71,7 @@ export class OffersService {
         OfferValidator.validateSalary(form);
     }
 
-    private prepareStatusBasedOnForm(form: CreateOfferForm): OfferStatus {
+    private prepareStatusBasedOnForm(form: OfferForm): OfferStatus {
         // TODO 
         return OfferStatuses.ACTIVE;
     }

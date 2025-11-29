@@ -6,7 +6,7 @@ import { Serialize } from "global/decorators/Serialize";
 import { OfferEntity } from "./model/OfferEntity";
 import { CurrentUser } from "auth/decorators/CurrentUserDecorator";
 import { UserI } from "@shared/interfaces/UserI";
-import { CreateOfferForm, OfferI } from "@shared/interfaces/OfferI";
+import { OfferForm, OfferI } from "@shared/interfaces/OfferI";
 
 
 @Controller('api/offers')
@@ -20,7 +20,7 @@ export class OffersController {
     @Serialize(OfferEntity)
     createOffer(
         @CurrentUser() user: UserI,
-        @Body() form: CreateOfferForm
+        @Body() form: OfferForm
     ): Promise<OfferI> {
         return this.offersService.createOffer(user, form);
     }

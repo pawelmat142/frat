@@ -1,5 +1,6 @@
-import { CreateOfferForm, OFFER_STEPS_ORDER, OfferFormStep, OfferFormSteps } from "@shared/interfaces/OfferI";
-import { createContext, useContext } from "react";
+import { OfferForm, OFFER_STEPS_ORDER, OfferFormStep, OfferFormSteps } from "@shared/interfaces/OfferI";
+import { Util } from "@shared/utils/util";
+import { createContext, useContext, useEffect } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -8,20 +9,38 @@ const LOCAL_STORAGE_KEY = 'offerFormDraft';
 
 const OfferFormContext = createContext<OfferFormProps | undefined>(undefined);
 
-const defaultNewForm = (): CreateOfferForm => ({
+const defaultNewForm = (): OfferForm => ({
     currentStep: OfferFormSteps.STEP_ONE,
     STEP_ONE: {
         category: null,
-        locationCountry: null
+        locationCountry: null,
+        availableSlots: null
     }
 })
 
-const saveFormToLocalStorage = (form: CreateOfferForm) => {
+const saveFormToLocalStorage = (form: OfferForm) => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(form));
 }
 
 const removeFormFromLocalStorage = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
+}
+
+
+
+const getFromLocalStorage = (): OfferForm | null => {
+    const savedForm = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (savedForm) {
+        try {
+            const parsedForm = JSON.parse(savedForm) as OfferForm;
+            const revivedForm = Util.reviveDatesDeep(parsedForm);
+            return revivedForm;
+        } catch (e) {
+            console.error("Failed to parse saved offer form from localStorage:", e);
+            return null;
+        }
+    }
+    return null;
 }
 
 export const useOfferForm = () => {
@@ -31,8 +50,8 @@ export const useOfferForm = () => {
 }
 
 export interface OfferFormProps {
-    form: CreateOfferForm;
-    formCtx: UseFormReturn<CreateOfferForm>;
+    form: OfferForm;
+    formCtx: UseFormReturn<OfferForm>;
     nextStep: () => Promise<void>;
     prevStep: () => void;
     selectStep: (targetStep: OfferFormStep) => Promise<void>;
@@ -42,10 +61,15 @@ export interface OfferFormProps {
 const OfferFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     const { t } = useTranslation();
-    const formCtx = useForm<CreateOfferForm>({ defaultValues: defaultNewForm() });
+    const formCtx = useForm<OfferForm>({ defaultValues: defaultNewForm() });
     const form = formCtx.watch();
 
-    console.log("FORM: ", form);
+    useEffect(() => {
+        const savedForm = getFromLocalStorage();
+        if (savedForm) {
+            formCtx.reset(savedForm);
+        }
+    }, [])
 
     const validateStep = async (step: OfferFormStep): Promise<boolean> => {
         const result = await formCtx.trigger(step);

@@ -29,14 +29,16 @@
           "title": "Requirements"
         },
         "STEP_FOUR": {
-          "label": "Step 4"
+          "label": "Step 4",
+          "title": "Details"
         },
         "STEP_THREE": {
           "label": "Step 3",
           "title": "Salary"
         },
         "validation": {
-          "atLeastOneSalaryRequired": "At least one salary (monthly or hourly) is required."
+          "atLeastOneSalaryRequired": "At least one salary (monthly or hourly) is required.",
+          "currencyRequired": "Currency is required."
         }
       },
       "dateRange": "Contract duration",
@@ -54,7 +56,10 @@
       "hourlySalaryEnd": "to",
       "monthlySalaryStart": "Monthly salary from",
       "monthlySalaryEnd": "to",
-      "currency": "Currency"
+      "currency": "Currency",
+      "displayName": "Display name",
+      "description": "Job description",
+      "availableSlots": "Available slots"
     },
     "theme": {
       "dark": "Dark",
@@ -318,7 +323,8 @@
       "form": {
         "required": "This field is required.",
         "dateRangeRequired": "Start and end dates are required.",
-        "dateRangeStartRequired": "Start date is required."
+        "dateRangeStartRequired": "Start date is required.",
+        "positiveInteger": "Value must be a positive integer."
       },
       "view": {
         "title": "Something went wrong!",

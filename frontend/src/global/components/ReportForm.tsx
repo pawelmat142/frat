@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Textarea from './controls/Textarea';
 import Input from './controls/Input';
 import Button from './controls/Button';
 import { BtnModes, BtnSizes } from '../interface/controls.interface';
 import { useTranslation } from 'react-i18next';
 import { FeedbackService } from 'global/services/FeedbackService';
+import FloatingTextarea from './controls/FloatingTextarea';
 
 interface ReportFormProps {
   title?: string;
@@ -52,7 +52,7 @@ const ReportForm: React.FC<ReportFormProps> = ({ title }) => {
   return (
   <form className="flex flex-col gap-4 mt-10 mb-8 w-full md:max-w-xl mx-auto" onSubmit={handleSubmit}>
       <h2 className="text-lg font-bold mb-2">{title ?? t('report.title')}</h2>
-      <Textarea
+      <FloatingTextarea
         name="message"
         label={t('report.feedbackLabel')}
         value={message}

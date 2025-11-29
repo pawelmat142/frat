@@ -11,12 +11,14 @@ import { useState } from "react";
 import { PositionService } from "global/services/PositionService";
 import { DictionaryService } from "global/services/DictionaryService";
 import Loading from "global/components/Loading";
+import FloatingInput from "global/components/controls/FloatingInput";
 
 const OfferFormStepOne: React.FC = () => {
 
     const { t } = useTranslation();
     const required = FormValidator.required(t);
     const dateRangeStartRequired = FormValidator.dateRangeStartRequired(t);
+    const positiveInteger = FormValidator.positiveInterger(t);
     const ctx = useOfferForm();
     const countryCacheRef = useRef<Record<string, string>>({});
     const [geoLoading, setGeoLoading] = useState(false);
@@ -139,6 +141,26 @@ const OfferFormStepOne: React.FC = () => {
                                 field.onChange(p);
                             }}
                             error={ctx.formCtx.formState.errors.STEP_ONE?.dateRange?.message}
+                        />
+                    )}
+                />
+
+                <Controller
+                    name="STEP_ONE.availableSlots"
+                    control={ctx.formCtx.control}
+                    rules={positiveInteger}
+                    render={({ field }) => (
+                        <FloatingInput
+                            type="number"
+                            label={t("offer.availableSlots")}
+                            name="STEP_ONE.availableSlots"
+                            className="w-full"
+                            value={field.value || null}
+                            required
+                            onChange={(p) => {
+                                field.onChange(p);
+                            }}
+                            error={ctx.formCtx.formState.errors.STEP_ONE?.availableSlots}
                         />
                     )}
                 />

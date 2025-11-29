@@ -38,4 +38,17 @@ export abstract class FormValidator {
             }
         };
     }
+
+    public static positiveInterger = (t: any) => {
+        return {
+            validate: (value: any) => {
+                if (value == null || value === '') return true; 
+                const intValue = Number(value);
+                if (!Number.isInteger(intValue) || intValue <= 0) {
+                    return t('validation.form.positiveInteger');
+                }
+                return true;
+            }
+        };
+    }
 }
