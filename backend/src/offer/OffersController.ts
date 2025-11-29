@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseGuards, UseInterceptors } from "@nestjs/common";
 import { LogInterceptor } from "global/interceptors/LogInterceptor";
 import { OffersService } from "./services/OffersService";
 import { JwtAuthGuard } from "auth/guards/JwtAuthGuard";
@@ -14,6 +14,14 @@ import { OfferForm, OfferI } from "@shared/interfaces/OfferI";
 export class OffersController {
 
     constructor(private readonly offersService: OffersService) {}
+
+    @Get(':offerId')
+    @Serialize(OfferEntity)
+    getOfferById(
+        @Param('offerId') offerId: number
+    ) {
+        return this.offersService.getOfferById(offerId);
+    }
 
     @Post()
     @UseGuards(JwtAuthGuard)

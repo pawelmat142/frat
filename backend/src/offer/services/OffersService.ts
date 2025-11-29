@@ -1,12 +1,8 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { OffersRepo } from "./OffersRepo";
-import { OfferForm, OfferI, OfferStatus, OfferStatuses } from "@shared/interfaces/OfferI";
+import { OfferForm, OfferI } from "@shared/interfaces/OfferI";
 import { UserI } from "@shared/interfaces/UserI";
-import { DeepPartial } from "typeorm";
-import { DictionariesPublicService } from "admin/dictionaries/services/DictionariesPublicService";
-import { OfferValidator } from "@shared/validators/OfferValidator";
-import { OfferEntity } from "offer/model/OfferEntity";
-import { PointUtil } from "@shared/utils/PointUtil";
+import { CreateOfferService } from "./CreateOfferService";
 
 @Injectable()
 export class OffersService {
@@ -15,78 +11,21 @@ export class OffersService {
 
     constructor(
         private readonly offersRepo: OffersRepo,
-        private readonly dictionariesPublicService: DictionariesPublicService,
+        private readonly createOfferService: CreateOfferService,
     ) { }
 
-    public async listOffersByUser(user: UserI): Promise<OfferI[]> {
+    public getOfferById(offerId: number): Promise<OfferI> {
+        return this.offersRepo.getById(offerId);
+    }
+
+    public listOffersByUser(user: UserI): Promise<OfferI[]> {
         return this.offersRepo.listOffersByUser(user.uid);
     }
 
     public async createOffer(user: UserI, newOffer: OfferForm): Promise<OfferI> {
-        await this.validateOfferForm(newOffer);
-
-        const newEntity: DeepPartial<OfferEntity> = {
-            uid: user.uid,
-            status: this.prepareStatus(newOffer),
-
-            category: newOffer.STEP_ONE.category!,
-            locationCountry: newOffer.STEP_ONE.locationCountry!,
-            point: PointUtil.toGeoPoint(newOffer.STEP_ONE.position),
-
-            displayAddress: newOffer.STEP_ONE.displayAddress,
-            startDate: new Date(newOffer.STEP_ONE.dateRange.start),
-            endDate: newOffer.STEP_ONE.dateRange.end ? new Date(newOffer.STEP_ONE.dateRange.end) : undefined,
-            availableSlots: newOffer.STEP_ONE.availableSlots || 0,
-            acceptedSlots: 0,
-            appliedSlots: 0,
-            
-            skillsRequired: newOffer.STEP_TWO.skillsRequired,
-            skillsNiceToHave: newOffer.STEP_TWO.skillsNiceToHave,
-            certificatesRequired: newOffer.STEP_TWO.certificatesRequired,
-            certificatesNiceToHave: newOffer.STEP_TWO.certificatesNiceToHave,
-            languagesRequired: newOffer.STEP_TWO.languagesRequired,
-            languagesNiceToHave: newOffer.STEP_TWO.languagesNiceToHave,
-
-            hourlySalaryStart: this.optionalNumber(newOffer.STEP_THREE.hourlySalaryStart),
-            hourlySalaryEnd: this.optionalNumber(newOffer.STEP_THREE.hourlySalaryEnd),  
-            monthlySalaryStart: this.optionalNumber(newOffer.STEP_THREE.monthlySalaryStart),
-            monthlySalaryEnd: this.optionalNumber(newOffer.STEP_THREE.monthlySalaryEnd),
-            currency: newOffer.STEP_THREE.currency,
-
-            displayName: newOffer.STEP_FOUR?.displayName,
-            description: newOffer.STEP_FOUR?.description,
-        }
-
+        const newEntity = await this.createOfferService.createOffer(user, newOffer);
         const createdOffer = await this.offersRepo.create(newEntity);
         this.logger.log(`Offer created with ID: ${createdOffer.offerId}`);
         return createdOffer;
-    }
-
-    private optionalNumber(value: string | null | undefined): number | undefined {
-        if (!value) {
-            return undefined;
-        }
-        return Number(value);
-    }
-
-    private async validateOfferForm(form: OfferForm): Promise<void> {
-        await this.dictionariesPublicService.validateItemExistence(form.STEP_ONE.category, 'WORK_CATEGORY');
-        await this.dictionariesPublicService.validateItemExistence(form.STEP_ONE.locationCountry, 'LANGUAGES', 'COMMUNICATION');
-    
-        await this.dictionariesPublicService.validateItemsExistence(form.STEP_TWO.skillsRequired, 'SKILLS');
-        await this.dictionariesPublicService.validateItemsExistence(form.STEP_TWO.skillsNiceToHave, 'SKILLS');
-    
-        await this.dictionariesPublicService.validateItemsExistence(form.STEP_TWO.certificatesRequired, 'CERTIFICATES');
-        await this.dictionariesPublicService.validateItemsExistence(form.STEP_TWO.certificatesNiceToHave, 'CERTIFICATES');
-
-        await this.dictionariesPublicService.validateItemsExistence(form.STEP_TWO.languagesRequired, 'LANGUAGES', 'COMMUNICATION');
-        await this.dictionariesPublicService.validateItemsExistence(form.STEP_TWO.languagesNiceToHave, 'LANGUAGES', 'COMMUNICATION');
-    
-        OfferValidator.validateSalary(form);
-    }
-
-    private prepareStatus(form: OfferForm): OfferStatus {
-        // TODO 
-        return OfferStatuses.ACTIVE;
     }
 }

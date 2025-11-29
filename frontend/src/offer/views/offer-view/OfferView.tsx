@@ -28,7 +28,7 @@ const OfferView: React.FC = () => {
     const [offer, setOffer] = useState<OfferI | null>(null);
     const [loading, setLoading] = useState(false);
 
-    // TODO trigger view calculation
+    // TODO trigger views count
     // TODO add like button/functionality
 
     // TODO global context - menu - delete, edit, share
@@ -42,7 +42,6 @@ const OfferView: React.FC = () => {
                     return;
                 }
                 // TODO select from searched offers if any
-                // TODO create endpoint
                 try {
                     setLoading(true);
                     const result = await OffersService.getOfferById(oid);

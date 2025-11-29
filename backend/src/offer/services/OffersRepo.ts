@@ -13,7 +13,11 @@ export class OffersRepo {
         private offerRepository: Repository<OfferEntity>,
     ) { }
 
-    public async listOffersByUser(uid: string): Promise<OfferEntity[]> {
+    public getById(offerId: number): Promise<OfferEntity> {
+        return this.offerRepository.findOneBy({ offerId });
+    }
+
+    public listOffersByUser(uid: string): Promise<OfferEntity[]> {
         return this.offerRepository.find({ where: { uid } });
     }
 
