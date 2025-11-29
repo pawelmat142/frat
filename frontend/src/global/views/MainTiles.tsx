@@ -25,7 +25,7 @@ const MainTiles: React.FC = () => {
             <div className="main-tiles">
 
                 {!me && (
-                    <div className="square-tile col-tile big" onClick={() => navigate(Path.SIGN_IN)}>
+                    <div className="square-tile col-tile big py-8" onClick={() => navigate(Path.SIGN_IN)}>
                         <FaSignInAlt size={iconSize} />
                         <div>{t("signin.submit")}</div>
                     </div>

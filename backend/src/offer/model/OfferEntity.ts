@@ -1,7 +1,17 @@
 import { Point } from "@shared/interfaces/EmployeeProfileI";
 import { Currencies, Currency, OfferI, OfferStatus, Salary, SalaryTypes } from "@shared/interfaces/OfferI";
 import { Expose } from "class-transformer";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";
+
+const dateTransformer: ValueTransformer = {
+    to: (value?: Date | null) => value ?? null,
+    from: (value: any) => {
+        if (!value) {
+            return value;
+        }
+        return value instanceof Date ? value : new Date(value);
+    },
+};
 
 
 @Entity('jh_offers')
@@ -40,11 +50,11 @@ export class OfferEntity implements OfferI {
     @Expose()
     displayAddress?: string;
 
-    @Column({ name: 'start_date', type: 'date' })
+    @Column({ name: 'start_date', type: 'date', transformer: dateTransformer })
     @Expose()
     startDate: Date;
 
-    @Column({ name: 'end_date', type: 'date', nullable: true })
+    @Column({ name: 'end_date', type: 'date', nullable: true, transformer: dateTransformer })
     @Expose()
     endDate?: Date;
 

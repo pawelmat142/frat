@@ -14,17 +14,18 @@ import Chips from "global/components/chips/Chips";
 import { useAuthContext } from "auth/AuthProvider";
 import EditButton from "global/components/buttons/EditButton";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 
 const EmployeeProfileView: React.FC = () => {
 
     const params = useParams<{ displayName?: string }>()
     const displayName = params.displayName
+
     const [loading, setLoading] = useState(false)
     const [profile, setProfile] = useState<EmployeeProfileI | null>(null)
 
     const { t } = useTranslation();
     const { me } = useAuthContext()
-
 
     const profileCtx = useEmployeeSearch();
     const globalCtx = useGlobalContext();
@@ -75,6 +76,8 @@ const EmployeeProfileView: React.FC = () => {
 
     const isMyProfile = me?.uid === profile.uid;
 
+    const range = DateRangeUtil.getFirstRange(profile);
+
     return (
         <div className="view-container">
 
@@ -83,7 +86,7 @@ const EmployeeProfileView: React.FC = () => {
 
                     <AvatarTile />
 
-                    <CallendarTile profile={profile}></CallendarTile>
+                    <CallendarTile range={range}></CallendarTile>
 
                     <ProfileDataTile profile={profile} languagesDictionary={globalCtx.dics.languages}></ProfileDataTile>
 

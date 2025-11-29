@@ -184,7 +184,7 @@ $tileRadius: 1rem;
 
         &.big {
             grid-column: span 2;
-            aspect-ratio: 3/1;
+            aspect-ratio: unset;
         }
     }
 

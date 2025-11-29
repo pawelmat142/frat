@@ -90,7 +90,7 @@
       "language": "Language",
       "previous": "Previous",
       "settings": "Settings",
-      "noResults": "No results found",
+      "noResults": "No results found... ;(",
       "networkError": "Network error"
     },
     "header": {

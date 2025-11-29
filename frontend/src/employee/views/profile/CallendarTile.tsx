@@ -1,22 +1,19 @@
-import { DateRange, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
-import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
+import { DateRange } from "@shared/interfaces/EmployeeProfileI";
 import MonthCallendar from "global/components/callendar/MonthCallendar";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { usePopup } from "global/providers/PopupProvider";
 import { useFullScreenDialog } from "global/providers/FullScreenDialogProvider";
 import CallendarsView from "global/components/callendar/CallendarsView";
 import { useBottomSheet } from "global/providers/BottomSheetProvider";
 
 interface CallendarTileProps {
-    profile: EmployeeProfileI
+    range: DateRange | null;
 }
 
-const CallendarTile: React.FC<CallendarTileProps> = ({ profile }) => {
+const CallendarTile: React.FC<CallendarTileProps> = ({ range }) => {
 
     const { t } = useTranslation();
 
-    const range = DateRangeUtil.getFirstRange(profile);
     const date = range?.start || null;
 
     if (!date) {
@@ -30,13 +27,11 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ profile }) => {
     const month = date.getMonth();
     const year = date.getFullYear();
 
-    const popup = usePopup();
-
     const fullScreenDialogCtx = useFullScreenDialog();
     const bottomSheetCtx = useBottomSheet();
 
 
-    const openDialong = () => {
+    const openDialog = () => {
         fullScreenDialogCtx.open({
             title: t("employeeProfile.availability"),
             children: <CallendarsView
@@ -47,7 +42,7 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ profile }) => {
     }
 
     return (
-        <div className="square-tile month-tile ripple p-1" onClick={() => openDialong()}>
+        <div className="square-tile month-tile ripple p-1" onClick={() => openDialog()}>
 
             <div className="mb-2 small-font">{t(`callendar.monthShort.${month}`)} {year}</div>
 

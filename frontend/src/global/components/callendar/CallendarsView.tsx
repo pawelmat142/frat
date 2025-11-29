@@ -30,7 +30,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
     
     const prepareMonthsArray = (range: DateRange): Date[] => {
         const months: Date[] = [];
-        if (selectorMode) {
+        if (selectorMode || !range.end) {
             return prepareMonthArrayForTwelveMonths(range.start || new Date());
         }
         if (!range.start || !range.end) return months;

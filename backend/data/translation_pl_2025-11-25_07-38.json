@@ -19,6 +19,7 @@
     "offer": {
       "add": "Dodaj ofertę",
       "management": "Zarządzanie ofertami",
+      "notFound": "Nie znaleziono oferty :(",
       "form": {
         "title": "Formularz oferty pracy",
         "STEP_ONE": {
@@ -90,7 +91,7 @@
       "language": "Język",
       "previous": "Wstecz",
       "settings": "Ustawienia",
-      "noResults": "Brak wyników",
+      "noResults": "Brak wyników ;( ",
       "networkError": "Błąd sieci"
     },
     "header": {

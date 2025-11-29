@@ -3,6 +3,10 @@ import { httpClient } from "global/services/http";
 
 export const OffersService = {
 
+    getOfferById(offerId: number): Promise<OfferI> {
+        return httpClient.get<OfferI>(`/offers/${offerId}`);
+    },
+
     createOffer(form: OfferForm): Promise<OfferI | null> {
         return httpClient.post<OfferI>(`/offers`, form);
     },

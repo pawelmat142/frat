@@ -30,6 +30,34 @@ export class HttpClient {
     this.navigate = navigate;
   }
 
+  private static isIsoDateString(value: unknown): boolean {
+    return (
+      typeof value === 'string' &&
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z?$/.test(value)
+    );
+  }
+
+  private static reviveDatesDeep<T>(data: T): T {
+    if (Array.isArray(data)) {
+      return data.map(item => HttpClient.reviveDatesDeep(item)) as unknown as T;
+    }
+    if (data && typeof data === 'object') {
+      const result: any = Array.isArray(data) ? [] : {};
+      for (const key in data as any) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          const val = (data as any)[key];
+          if (HttpClient.isIsoDateString(val)) {
+            result[key] = new Date(val as string);
+          } else {
+            result[key] = HttpClient.reviveDatesDeep(val);
+          }
+        }
+      }
+      return result as T;
+    }
+    return data;
+  }
+
   constructor() {
     // Request interceptor - automatycznie dodaj token do każdego requesta
     this.axiosInstance.interceptors.request.use(
@@ -52,7 +80,12 @@ export class HttpClient {
 
     // Response interceptor - obsługa błędów
     this.axiosInstance.interceptors.response.use(
-      response => response,
+      response => {
+        if (response && response.data && !(response.data instanceof Blob)) {
+          response.data = HttpClient.reviveDatesDeep(response.data);
+        }
+        return response;
+      },
       error => {
         if (error.response?.data instanceof Blob) {
           this.handleFileError(error);
