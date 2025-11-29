@@ -3,7 +3,6 @@ import { DateRange, Point, Position } from "./EmployeeProfileI";
 export interface OfferI {
 
     offerId: number
-
     uid: string
     status: OfferStatus
 
@@ -11,7 +10,6 @@ export interface OfferI {
     category: string
 
     locationCountry: string
-    point?: Point
     displayAddress?: string
 
     startDate: Date
@@ -116,6 +114,7 @@ export const OFFER_STEPS_ORDER = [
 export interface OfferFormOne {
     category: string | null;
     locationCountry: string | null;
+    displayAddress?: string | null;
     position?: Position | null;
     dateRange?: DateRange | null;
     availableSlots?: number | null;

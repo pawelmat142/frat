@@ -22,9 +22,16 @@ export class OffersService {
 
         const newEntity: DeepPartial<OfferEntity> = {
             uid: user.uid,
-            status: this.prepareStatusBasedOnForm(newOffer),
+            status: this.prepareStatus(newOffer),
+
             category: newOffer.STEP_ONE.category!,
             locationCountry: newOffer.STEP_ONE.locationCountry!,
+            displayAddress: newOffer.STEP_ONE.displayAddress,
+            startDate: new Date(newOffer.STEP_ONE.dateRange.start),
+            endDate: newOffer.STEP_ONE.dateRange.end ? new Date(newOffer.STEP_ONE.dateRange.end) : undefined,
+            availableSlots: newOffer.STEP_ONE.availableSlots || 0,
+            acceptedSlots: 0,
+            appliedSlots: 0,
             
             skillsRequired: newOffer.STEP_TWO.skillsRequired,
             skillsNiceToHave: newOffer.STEP_TWO.skillsNiceToHave,
@@ -71,7 +78,7 @@ export class OffersService {
         OfferValidator.validateSalary(form);
     }
 
-    private prepareStatusBasedOnForm(form: OfferForm): OfferStatus {
+    private prepareStatus(form: OfferForm): OfferStatus {
         // TODO 
         return OfferStatuses.ACTIVE;
     }

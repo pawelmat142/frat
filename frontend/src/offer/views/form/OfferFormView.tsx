@@ -69,8 +69,16 @@ const OfferFormContent: React.FC = () => {
         ctx.formCtx.setValue("STEP_ONE.category", "SCAFFOLD");
         ctx.formCtx.setValue("STEP_ONE.locationCountry", "pl");
         ctx.formCtx.setValue("STEP_ONE.dateRange", { start: new Date(), end: null });
+        ctx.formCtx.setValue("STEP_ONE.availableSlots", 5);
+
+        ctx.formCtx.setValue("STEP_TWO.skillsRequired", ["ONE", "TWO"]);
+        ctx.formCtx.setValue("STEP_TWO.skillsNiceToHave", ["THREE", "FOUR"]);
         ctx.formCtx.setValue("STEP_TWO.certificatesRequired", ["ONE", "TWO"]);
+
         ctx.formCtx.setValue("STEP_THREE.hourlySalaryStart", "100");
+
+        ctx.formCtx.setValue("STEP_FOUR.displayName", "Sample Offer");
+        ctx.formCtx.setValue("STEP_FOUR.description", "This is a sample offer description.");
     };
 
     return (

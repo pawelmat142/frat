@@ -28,14 +28,6 @@ export class OfferEntity implements OfferI {
     @Expose()
     locationCountry: string;
 
-    @Column({
-        type: 'geography',
-        spatialFeatureType: 'Point',
-        srid: 4326,
-        nullable: true,
-    })
-    point?: Point;
-
     @Column({ name: 'display_address', nullable: true })
     @Expose()
     displayAddress?: string;

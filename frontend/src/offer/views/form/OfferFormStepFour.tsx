@@ -12,7 +12,7 @@ const OfferFormStepFour: React.FC = () => {
     return (
         <>
             <h2 className="form-subheader">
-                {t("offer.form.stepFour.title")}
+                {t("offer.form.STEP_FOUR.title")}
             </h2>
             <div className="flex flex-col gap-7 md:gap-5">
 
