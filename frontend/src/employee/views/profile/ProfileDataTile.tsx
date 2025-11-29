@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import Loading from "global/components/Loading";
 import Flags from "global/Flags";
+import { Utils } from "global/utils";
 
 interface ProfileDataTileProps {
     profile: EmployeeProfileI
@@ -20,11 +21,7 @@ const ProfileDataTile: React.FC<ProfileDataTileProps> = ({ profile, languagesDic
         return (<Loading></Loading>);
     }
 
-    const languageNames = profile.communicationLanguages.map(code => {
-        return languagesDictionary.elements.find(el => el.code === code)?.values.NAME;
-    }).filter(name => name !== undefined)
-        .map(name => t(name))
-        .join(', ');
+    const languageNames = Utils.prepareLanguageNames(t, profile.communicationLanguages, languagesDictionary);
 
     return (
         <div className="square-tile data-tile p-1">
@@ -41,9 +38,8 @@ const ProfileDataTile: React.FC<ProfileDataTileProps> = ({ profile, languagesDic
             <div>
                 <div className="mb-1">{t('employeeProfile.form.communicationLanguages')}</div>
                 <div className="ml-1">
-                    <Flags languages={profile.communicationLanguages} languagesDictionary={languagesDictionary} />
+                    <Flags languages={profile.communicationLanguages} />
                     <div className="xs-font secondary-text mt-1">{languageNames}</div>
-
                 </div>
             </div>
 

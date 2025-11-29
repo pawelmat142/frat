@@ -3,7 +3,7 @@ interface Props {
     className?: string
 }
 
-const Flags: React.FC<Props> = ({ chips, className }) => {
+const Chips: React.FC<Props> = ({ chips, className }) => {
 
     return (
         <div className={`chip-container ${className || ''}`}>
@@ -17,4 +17,4 @@ const Flags: React.FC<Props> = ({ chips, className }) => {
         </div>
     )
 }
-export default Flags;
+export default Chips;

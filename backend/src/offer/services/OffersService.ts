@@ -31,7 +31,7 @@ export class OffersService {
 
             category: newOffer.STEP_ONE.category!,
             locationCountry: newOffer.STEP_ONE.locationCountry!,
-            point: PointUtil.toGeoPoint(newOffer.STEP_ONE.position!),
+            point: PointUtil.toGeoPoint(newOffer.STEP_ONE.position),
 
             displayAddress: newOffer.STEP_ONE.displayAddress,
             startDate: new Date(newOffer.STEP_ONE.dateRange.start),

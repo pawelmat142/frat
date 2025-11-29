@@ -2,7 +2,10 @@ import { Point, Position } from "@shared/interfaces/EmployeeProfileI";
 
 export abstract class PointUtil {
 
-    public static toGeoPoint(position: Position): Point {
+    public static toGeoPoint(position?: Position): Point | null  {
+        if (!position) {
+            return null;
+        }
         return {
             type: 'Point',
             coordinates: [position.lng, position.lat],

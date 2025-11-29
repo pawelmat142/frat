@@ -5,7 +5,7 @@ interface ArrowIconProps {
 }
 
 const ArrowIcon: React.FC<ArrowIconProps> = ({ open }) => (
-    <span className={`dropdown-arrow${open ? ' open' : ''}`}
+    <span className={`dropdown-arrow${open ? ' open' : ''} secondary-text`}
         aria-hidden="true"
     >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

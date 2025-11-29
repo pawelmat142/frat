@@ -1,13 +1,20 @@
-import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { Utils } from "./utils";
+import { useGlobalContext } from "./providers/GlobalProvider";
+import Loading from "./components/Loading";
 
 interface Props {
-    languagesDictionary: DictionaryI
     languages: string[]
     size?: number,
 }
 
-const Flags: React.FC<Props> = ({ languages, languagesDictionary, size = 20 }) => {
+const Flags: React.FC<Props> = ({ languages, size = 20 }) => {
+    const globalCtx = useGlobalContext();
+
+    if (globalCtx.loading || !globalCtx.dics.languages) {
+        return <Loading />;
+    }
+
+    const languagesDictionary = globalCtx.dics.languages
 
     const srcs = new Set<string>();
 
@@ -18,7 +25,7 @@ const Flags: React.FC<Props> = ({ languages, languagesDictionary, size = 20 }) =
             {Array.from(srcs).map((src, index) => {
                 const first = index === 0;
                 return (
-                    <img key={index} className="pp-dropdown-icon" src={src} alt={"flag-" + index} style={{ height: size, paddingLeft: first ? 0 : size / 2 + 'px' }} />
+                    <img key={index} className="pp-dropdown-icon" src={src} alt={"flag-" + index} style={{ height: size, paddingLeft: first ? 0 : size / 4 + 'px' }} />
                 )
             })}
         </div>

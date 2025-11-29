@@ -19,6 +19,10 @@
     "offer": {
       "add": "Add offer",
       "management": "Offer management",
+      "editButton": "Edit Offer",
+      "views": "Views",
+      "likes": "Likes",
+      "created": "Created",
       "form": {
         "title": "Job offer Form",
         "STEP_ONE": {

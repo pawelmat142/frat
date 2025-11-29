@@ -45,7 +45,7 @@ export abstract class Utils {
     }
 
     public static formatDateRange = (t: any, range?: DateRange | null, placeholder?: string): string => {
-        if (!range?.start)  return placeholder || '';
+        if (!range?.start) return placeholder || '';
 
         const startMonth = t(`callendar.monthShort.${range.start.getMonth()}`);
         const startDayNumber = range.start.getDate();
@@ -75,6 +75,19 @@ export abstract class Utils {
     }
 
     public static formatPosition = (position: Position): string => {
-        return `${position.lat.toFixed(4)}, ${position.lng.toFixed(4)}`;  
+        return `${position.lat.toFixed(4)}, ${position.lng.toFixed(4)}`;
+    }
+
+    public static capitalizeFirstLetter = (str: string): string => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    public static prepareLanguageNames = (t: any, codes: string[], languagesDictionary: DictionaryI): string => {
+        return codes.map(code => {
+            return languagesDictionary.elements.find(el => el.code === code)?.values.NAME;
+        }).filter(name => name !== undefined)
+            .map(name => t(name))
+            .join(', ');
+
     }
 }

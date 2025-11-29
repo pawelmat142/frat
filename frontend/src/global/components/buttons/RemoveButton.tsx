@@ -8,7 +8,7 @@ interface EditButtonProps {
     mode?: BtnMode;
 }
 
-const EditButton: React.FC<EditButtonProps> = ({ onClick, label, mode = BtnModes.PRIMARY_TXT }) => {
+const RemoveButton: React.FC<EditButtonProps> = ({ onClick, label, mode = BtnModes.PRIMARY_TXT }) => {
 
     return (
         <Button onClick={onClick} mode={mode}>
@@ -20,4 +20,4 @@ const EditButton: React.FC<EditButtonProps> = ({ onClick, label, mode = BtnModes
     )
 }
 
-export default EditButton;
+export default RemoveButton;

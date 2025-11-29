@@ -1,9 +1,6 @@
 import Button from "global/components/controls/Button";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import EmployeeProfileTile from "employee/components/EmployeeProfileTile";
-import { DictionaryService } from "global/services/DictionaryService";
-import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import Loading from "global/components/Loading";
 import { BtnModes } from "global/interface/controls.interface";
 import { useEmployeeSearch } from "./EmployeeSearchProvider";

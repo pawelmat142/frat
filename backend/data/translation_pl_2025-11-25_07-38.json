@@ -19,7 +19,10 @@
     "offer": {
       "add": "Dodaj ofertę",
       "management": "Zarządzanie ofertami",
-      "notFound": "Nie znaleziono oferty :(",
+      "editButton": "Edytuj ofertę",
+      "views": "Wyświetlenia",
+      "likes": "Polubienia",
+      "created": "Utworzono",
       "form": {
         "title": "Formularz oferty pracy",
         "STEP_ONE": {
