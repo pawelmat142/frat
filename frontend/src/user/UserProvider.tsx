@@ -2,11 +2,16 @@ import React, { createContext, useContext, ReactNode } from 'react';
 import { EmployeeProfileI } from '@shared/interfaces/EmployeeProfileI';
 import { EmployeeProfileService } from 'employee/services/EmployeeProfileService';
 import { useAuthContext } from 'auth/AuthProvider';
+import { OfferI } from '@shared/interfaces/OfferI';
+import { OffersService } from 'offer/services/OffersService';
 
 interface UserContextType {
 	employeeProfile: EmployeeProfileI | null;
 	initEmployeeProfile: () => void;
 	cleanEmployeeProfile: () => void;
+	offers: OfferI[];
+	initOffers: () => void;
+	cleanOffers: () => void;
 	loading: boolean;
 }
 
@@ -15,15 +20,28 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
 	const [employeeProfile, setEmployeeProfile] = React.useState<EmployeeProfileI | null>(null);
+
+	const [offers, setOffers] = React.useState<OfferI[]>([]);
 	const [loading, setLoading] = React.useState(false);
 
 	const { me } = useAuthContext();
 
+	React.useEffect(() => {
+		if (me) {
+			initEmployeeProfile();
+			initOffers();
+		} else {
+			cleanEmployeeProfile();
+			cleanOffers();
+		}
+	}, [me]);
+
+
 	const initEmployeeProfile = async () => {
 		try {
 			setLoading(true);
-			console.log("Fetching employee profile in UserProvider for user:", me);
 			const profile = await EmployeeProfileService.getEmployeeProfile();
+			console.log("Fetched employee profile:", profile);
 			if (profile) {
 				setEmployeeProfile(profile);
 			} else {
@@ -36,24 +54,42 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		}
 	}
 
+	const initOffers = async () => {
+		try {
+			setLoading(true);
+			const offers = await OffersService.listMyOffers();
+			console.log("Fetched user offers:", offers);
+			if (offers) {
+				setOffers(offers);
+			} else {
+				setOffers([]);
+			}
+		} catch (error) {
+			setOffers([]);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	const cleanOffers = () => {
+		console.log("Cleaning offers in UserProvider for user:", me);
+		setOffers([]);
+	}
+
 	const cleanEmployeeProfile = () => {
 		console.log("Cleaning employee profile in UserProvider for user:", me);
 		setEmployeeProfile(null);
 	}
 
-	React.useEffect(() => {
-		if (me) {
-			initEmployeeProfile();
-		} else {
-			cleanEmployeeProfile();
-		}
-	}, [me]);
 
 	return (
 		<UserContext.Provider value={{
 			employeeProfile: employeeProfile,
 			initEmployeeProfile: initEmployeeProfile,
 			cleanEmployeeProfile: cleanEmployeeProfile,
+			offers: offers,
+			initOffers: initOffers,
+			cleanOffers: cleanOffers,
 			loading: loading
 		}}>
 			{children}

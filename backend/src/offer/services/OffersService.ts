@@ -17,6 +17,10 @@ export class OffersService {
         private readonly dictionariesPublicService: DictionariesPublicService,
     ) { }
 
+    public async listOffersByUser(user: UserI): Promise<OfferI[]> {
+        return this.offersRepo.listOffersByUser(user.uid);
+    }
+
     public async createOffer(user: UserI, newOffer: OfferForm): Promise<OfferI> {
         await this.validateOfferForm(newOffer);
 

@@ -5,6 +5,10 @@ export const OffersService = {
 
     createOffer(form: OfferForm): Promise<OfferI | null> {
         return httpClient.post<OfferI>(`/offers`, form);
+    },
+
+    listMyOffers(): Promise<OfferI[]> {
+        return httpClient.get<OfferI[]>(`/offers`);
     }
     
 }

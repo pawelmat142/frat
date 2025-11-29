@@ -13,6 +13,10 @@ export class OffersRepo {
         private offerRepository: Repository<OfferEntity>,
     ) { }
 
+    public async listOffersByUser(uid: string): Promise<OfferEntity[]> {
+        return this.offerRepository.find({ where: { uid } });
+    }
+
     public async create(newOffer: DeepPartial<OfferEntity>): Promise<OfferEntity> {
         const offer = this.offerRepository.create(newOffer);
         const savedOffer = await this.offerRepository.save(offer);
