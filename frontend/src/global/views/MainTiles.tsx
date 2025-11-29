@@ -16,7 +16,9 @@ const MainTiles: React.FC = () => {
     const navigate = useNavigate()
     const { t } = useTranslation()
     const { me } = useAuthContext()
-    const { employeeProfile } = useUserContext()
+    const { employeeProfile, offers } = useUserContext()
+
+    const hasSomeOffers = !!offers?.length
 
     return (
         <div>
@@ -52,11 +54,18 @@ const MainTiles: React.FC = () => {
                                 <div>{t("profile.add")}</div>
                             </div>
                         )}
-                        {/* TODO add job offer view */}
-                        <div className="square-tile col-tile" onClick={() => navigate(Path.OFFER_FORM)}>
-                            <FaPlus size={iconSize} />
-                            <div>{t("offer.add")}</div>
-                        </div>
+
+                        {hasSomeOffers ? (
+                            <div className="square-tile col-tile" onClick={() => navigate(Path.getOffersPath(me!.uid))}>
+                                <FaPlus size={iconSize} />
+                                <div>{t("offer.management")}</div>
+                            </div>
+                        ) : (
+                            <div className="square-tile col-tile" onClick={() => navigate(Path.OFFER_FORM)}>
+                                <FaPlus size={iconSize} />
+                                <div>{t("offer.add")}</div>
+                            </div>
+                        )}
                     </>
 
                 )}

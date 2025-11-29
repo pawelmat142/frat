@@ -13,6 +13,7 @@ import { Utils } from "global/utils";
 import { OffersService } from "offer/services/OffersService";
 import { useState } from "react";
 import Loading from "global/components/Loading";
+import { Path } from "../../../path";
 
 const OfferFormContent: React.FC = () => {
 
@@ -36,9 +37,12 @@ const OfferFormContent: React.FC = () => {
         try {
             setLoading(true);
             const offer = await OffersService.createOffer(ctx.form);
+            if (!offer) {
+                throw new Error("TODO");
+            }
             ctx.removeFormFromLocalStorage();
-            toast.success(t(""));
-            // TODO nav to list
+            toast.success(t("TODO"));
+            navigate(Path.getOffersPath(offer.uid));
         } catch (error) {
             toast.error(t(""));
         } finally {
@@ -65,7 +69,6 @@ const OfferFormContent: React.FC = () => {
     }
 
     const handleDevFill = () => {
-        // TODO
         ctx.formCtx.setValue("STEP_ONE.category", "SCAFFOLD");
         ctx.formCtx.setValue("STEP_ONE.locationCountry", "pl");
         ctx.formCtx.setValue("STEP_ONE.dateRange", { start: new Date(), end: null });

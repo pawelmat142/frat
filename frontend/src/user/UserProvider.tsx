@@ -13,6 +13,7 @@ interface UserContextType {
 	initOffers: () => void;
 	cleanOffers: () => void;
 	loading: boolean;
+	setLoading: (loading: boolean) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -90,7 +91,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			offers: offers,
 			initOffers: initOffers,
 			cleanOffers: cleanOffers,
-			loading: loading
+			loading: loading,
+			setLoading: setLoading
 		}}>
 			{children}
 		</UserContext.Provider>

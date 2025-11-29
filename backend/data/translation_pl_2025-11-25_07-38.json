@@ -18,6 +18,7 @@
     },
     "offer": {
       "add": "Dodaj ofertę",
+      "management": "Zarządzanie ofertami",
       "form": {
         "title": "Formularz oferty pracy",
         "STEP_ONE": {

@@ -18,6 +18,7 @@
     },
     "offer": {
       "add": "Add offer",
+      "management": "Offer management",
       "form": {
         "title": "Job offer Form",
         "STEP_ONE": {

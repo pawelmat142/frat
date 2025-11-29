@@ -15,7 +15,10 @@ export abstract class Path {
 
 
     // OFFERS
-    public static readonly OFFER_FORM = '/offers/form';
+    public static readonly OFFER_FORM = '/offers-form';
+    public static readonly OFFERS = '/offers';
+    public static readonly OFFER = '/offer/:offerId';
+    public static readonly USER_OFFERS = '/offers/:uid';
     
     public static readonly ERROR_PAGE = '/error';
 
@@ -38,4 +41,6 @@ export abstract class Path {
     public static getDictionaryGroupFormPath = (dictionaryCode: string, groupCode: string) => `${Path.ADMIN_DICTIONARIES_GROUP.replace(':dictionaryCode', dictionaryCode).replace(':groupCode', groupCode)}`;
     public static getProfilePath = (uid: string) => `${Path.PROFILE.replace(':uid', uid)}`;
     public static getEmployeeProfilePath = (displayName: string) => `${Path.EMPLOYEE_PROFILE.replace(':displayName', displayName)}`;
+    public static getOfferPath = (offerId: string) => `${Path.OFFER.replace(':offerId', offerId)}`;
+    public static getOffersPath = (uid: string) => `${Path.USER_OFFERS.replace(':uid', uid)}`;
 }
