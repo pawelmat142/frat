@@ -19,6 +19,7 @@ import DrawerProvider from 'global/providers/DrawerProvider';
 import EmployeeSearchProvider from 'employee/views/search/EmployeeSearchProvider';
 import { FullScreenDialogProvider } from 'global/providers/FullScreenDialogProvider';
 import { GlobalProvider } from 'global/providers/GlobalProvider';
+import GlobalHeader from 'global/components/GlobalHeader';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -38,7 +39,7 @@ root.render(
                         <EmployeeSearchProvider>
                           <MenuProvider>
                             <div className="min-h-screen flex flex-col">
-                              <Header />
+                              <GlobalHeader />
                               <main className="flex-1 flex flex-col items-center w-full overflow-x-hidden">
                                 <App />
                               </main>

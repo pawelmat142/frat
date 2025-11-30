@@ -1,8 +1,8 @@
 import MobileMock from "../../global/components/MobileMock";
-import { useIsDesktop } from "../../global/hooks/isMobile";
 import AdminPanelSidebar from "./AdminPanelSidebar";
 import { Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -17,7 +17,7 @@ const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = 
 );
 
 const AdminPanelPage: React.FC = () => {
-    const isDesktop = useIsDesktop();
+    const { isDesktop } = useGlobalContext();
     const location = useLocation();
     const direction = location.state?.direction === 'back' ? -1 : 1;
 

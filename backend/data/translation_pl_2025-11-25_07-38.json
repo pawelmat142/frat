@@ -352,6 +352,7 @@
     },
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",
+      "searchTitle": "Szukaj pracowników",
       "form": {
         "step1": {
           "label": "Krok 1",

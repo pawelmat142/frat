@@ -359,6 +359,7 @@
     },
     "employeeProfile": {
       "edit": "Edit employee profile",
+      "searchTitle": "Employee search",
       "form": {
         "step1": {
           "label": "Step 1",

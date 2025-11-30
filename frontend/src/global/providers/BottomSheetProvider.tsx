@@ -4,9 +4,9 @@ import BottomSheet from '../components/BottomSheet';
 import { DictionaryI } from '@shared/interfaces/DictionaryI';
 import { DictionaryService } from 'global/services/DictionaryService';
 import { Utils } from 'global/utils';
-import { useIsDesktop } from 'global/hooks/isMobile';
 import SelectorItems from 'global/components/selector/SelectorItems';
 import { usePopup } from './PopupProvider';
+import { useGlobalContext } from './GlobalProvider';
 
 export interface OpenSheetParams {
     title?: string;
@@ -69,7 +69,7 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const [groupCode, setGroupCode] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const isDesktop = useIsDesktop();
+    const {isDesktop} = useGlobalContext();
 
     const popupCtx = usePopup();
 

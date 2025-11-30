@@ -176,7 +176,7 @@ const FullScreenDialog: React.FC<FullScreenDialogProps> = ({ open, onClose, conf
         className={`${className} primary-bg w-full h-full max-w-full max-h-full transform transition-all duration-200 will-change-transform will-change-opacity ${show && !closing ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'} popup-content overflow-y-auto`}
         onClick={(e) => e.stopPropagation()}
       >
-        <Header onBack={() => onClose(null)} title={config?.title} hideMenu={true} />
+        <Header onBack={() => onClose(null)} title={config?.title} />
         {config?.children}
       </div>
     </div>
