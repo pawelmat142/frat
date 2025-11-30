@@ -99,7 +99,11 @@
       "previous": "Wstecz",
       "settings": "Ustawienia",
       "noResults": "Brak wyników ;( ",
-      "networkError": "Błąd sieci"
+      "networkError": "Błąd sieci",
+      "month": "miesiąc",
+      "hour": "godzina",
+      "day": "dzień",
+      "year": "rok"
     },
     "header": {
       "home": "Strona główna",

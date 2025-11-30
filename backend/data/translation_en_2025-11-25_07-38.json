@@ -99,7 +99,11 @@
       "previous": "Previous",
       "settings": "Settings",
       "noResults": "No results found... ;(",
-      "networkError": "Network error"
+      "networkError": "Network error",
+      "month": "month",
+      "hour": "hour",
+      "day": "day",
+      "year": "year"
     },
     "header": {
       "home": "Home",
