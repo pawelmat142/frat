@@ -1,20 +1,27 @@
-import React, { createContext, useContext, useMemo, ReactNode } from 'react';
-import { useLocation } from 'react-router-dom';
-import { MenuItem } from '../interfaces';
+import React, { createContext, useContext, ReactNode } from 'react';
+import { matchPath, useNavigate } from 'react-router-dom';
 import { Path } from '../../path';
 import { useAuthContext } from 'auth/AuthProvider';
-import { UserI, UserRoles } from '@shared/interfaces/UserI';
-import { Util } from '@shared/utils/util';
+import { UserRoles } from '@shared/interfaces/UserI';
+import { isOneOf } from '@shared/utils/util';
 import { MenuConfig } from 'global/components/selector/MenuItems';
 import { useBottomSheet } from './BottomSheetProvider';
 import { useGlobalContext } from './GlobalProvider';
 import IconButton from 'global/components/controls/IconButon';
-import { FaEllipsisV } from 'react-icons/fa';
+import { FaBriefcase, FaEllipsisV, FaHome, FaListUl, FaSearch } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+
+interface NewMenuItem {
+    label: string
+    active: boolean
+    icon: ReactNode,
+    onClick: () => void
+}
 
 interface MenuContextType {
-    allMenuItems: MenuItem[];
-    menuItems: MenuItem[];
     setupHeaderMenu: (menu: MenuConfig) => void;
+    items: NewMenuItem[]
 }
 
 const MenuContext = createContext<MenuContextType | undefined>(undefined)
@@ -26,8 +33,9 @@ interface NavigationProviderProps {
 export const MenuProvider: React.FC<NavigationProviderProps> = ({
     children,
 }) => {
-    const location = useLocation();
-    const { me, isAuthenticated } = useAuthContext();
+    const { me } = useAuthContext();
+    const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const bottomSheetCtx = useBottomSheet();
     const globalCtx = useGlobalContext();
@@ -38,46 +46,44 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         }} />} />);
     }
 
-    // TODO to remove!!
-    // Dodajemy właściwość active na podstawie location.pathname
-    const allMenuItems: MenuItem[] = useMemo(() => [
-        {
-            to: Path.HOME,
-            label: 'header.home',
-        },
-        {
-            to: Path.ADMIN_DICTIONARIES,
-            label: 'header.admin',
-            skipMobileMenu: true,
-            rolesGuard: [UserRoles.ADMIN, UserRoles.SUPERADMIN],
-        },
-        isAuthenticated ?
-            {
-                to: Path.getProfilePath(me!.uid),
-                label: 'header.profile',
-                authGuard: true
-            } :
-            {
-                to: Path.SIGN_IN,
-                label: 'signin.title'
-            }
-    ].map(item => ({
-        ...item,
-        active: isMenuItemActive(item),
-    })), [location.pathname, isAuthenticated]);
+    const iconSize = 22
+
+    const items: NewMenuItem[] = [{
+        label: t('nav.start'),
+        active: !!matchPath({ path: Path.HOME, end: true }, location.pathname),
+        onClick: () => navigate(Path.HOME),
+        icon: <FaHome size={iconSize} />
+    }, {
+        label: t('nav.employees'),
+        active: !!matchPath({ path: Path.EMPLOYEE_SEARCH, end: true }, location.pathname),
+        onClick: () => navigate(Path.EMPLOYEE_SEARCH),
+        icon: <FaSearch size={iconSize} />
+    }, {
+        label: t('nav.offers'),
+        active: !!matchPath({ path: Path.OFFERS_SEARCH, end: true }, location.pathname),
+        onClick: () => navigate(Path.OFFERS_SEARCH),
+        icon: <FaBriefcase size={iconSize} />
+    }, {
+        label: t('nav.todo'),
+        active: false,
+        onClick: () => toast.info("TODO"),
+        icon: <FaListUl size={iconSize} />
+    }]
 
 
-    const filteredMenuItems = useMemo(
-        () => allMenuItems
-            .filter(item => !item.authGuard || isAuthenticated)
-            .filter(item => Util.hasPermission(item.rolesGuard, me)),
-        [allMenuItems, me]
-    );
+    const isAdmin = me?.roles.some(role => isOneOf([UserRoles.ADMIN, UserRoles.SUPERADMIN], role));
+
+    if (isAdmin && globalCtx.isDesktop) {
+        items.push({
+            label: t('header.admin'),
+            active: false,
+            onClick: () => navigate(Path.ADMIN_DICTIONARIES),
+            icon: null
+        });
+    }
 
     const value: MenuContextType = {
-        allMenuItems: allMenuItems,
-        menuItems: filteredMenuItems,
-
+        items: items,
         setupHeaderMenu
     };
 
@@ -88,25 +94,10 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     );
 };
 
-const isMenuItemActive = (item: MenuItem): boolean => {
-    const pathname = location.pathname
-    if (item.to === Path.HOME) {
-        return item.to === pathname
-    }
-    if (item.to) {
-        return pathname.includes(item.to)
-    }
-    return false
-}
-
 export const useMenuContext = () => {
     const context = useContext(MenuContext);
     if (!context) {
         throw new Error('useMenuContext must be used within NavigationProvider');
     }
     return context;
-};
-
-const hasPermission = (item: MenuItem, user?: UserI | null): boolean => {
-    return Util.hasPermission(item.rolesGuard, user)
 };

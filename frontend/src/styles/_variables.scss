@@ -206,6 +206,7 @@ $paddingSmall: .5rem;
 
 
 $rippleBg: rgba(0, 0, 0, 0.15);
+$rippleBgLight: color-mix(in srgb, $primary-color, transparent 85%);
 
 // RIPPLE EFFECT 
 .ripple {
@@ -219,20 +220,24 @@ $rippleBg: rgba(0, 0, 0, 0.15);
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 100%;
-    height: 100%;
+    width: 50px;
+    height: 50px;
     background: $rippleBg;
     border-radius: 50%;
     transform: translate(-50%, -50%) scale(0);
-    animation: ripple-effect 0.5s linear;
+    animation: ripple-effect 0.1s linear;
     pointer-events: none;
     z-index: 1;
+  }
+
+  .ripple.light-ripple:active::after {
+    background: $rippleBgLight;
   }
 }
 
 @keyframes ripple-effect {
   to {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%) scale(5);
     opacity: 0;
   }
 }
@@ -255,6 +260,10 @@ $rippleBg: rgba(0, 0, 0, 0.15);
 
   .ripple:hover::after {
     transform: translate(-50%, -50%) scale(1);
+  }
+
+  .ripple.light::after {
+    background: $rippleBgLight;
   }
 }
 

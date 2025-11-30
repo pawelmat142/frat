@@ -1,7 +1,7 @@
-import HeaderMenu from "global/components/HeaderMenu";
 import MainHeaderState from "./MainHeaderState";
 import HeaderBackBtn from "./HeaderBackBtn";
 import { Path } from "../../path";
+import DesktopMenu from "global/components/DesktopMenu";
 
 export interface HeaderState {
     title?: string;
@@ -12,7 +12,7 @@ export interface HeaderState {
 export const STATES: { [key: string]: HeaderState } = {
     [Path.HOME]: {
         leftBtn: <MainHeaderState/>,
-        rightBtn: <HeaderMenu/>,
+        rightBtn: <DesktopMenu/>,
     },
     [Path.EMPLOYEE_PROFILE_FORM]: {
         leftBtn: <HeaderBackBtn/>,

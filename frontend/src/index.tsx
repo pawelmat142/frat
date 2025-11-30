@@ -6,6 +6,7 @@ import './styles/index.scss';
 import { BrowserRouter } from 'react-router-dom';
 import Header from './global/components/Header';
 import Footer from './global/components/Footer';
+import LayoutFooterSwitch from 'global/components/LayoutFooterSwitch';
 import CookieBanner from './global/components/CookieBanner';
 import { ToastContainer } from 'react-toastify';
 import { MenuProvider } from './global/providers/MenuProvider';
@@ -43,7 +44,7 @@ root.render(
                               <main className="flex-1 flex flex-col items-center w-full overflow-x-hidden">
                                 <App />
                               </main>
-                              <Footer />
+                              <LayoutFooterSwitch />
                             </div>
                             <CookieBanner />
                             <ToastContainer

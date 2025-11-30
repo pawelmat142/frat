@@ -2,6 +2,12 @@
   "langCode": "pl",
   "version": 39,
   "data": {
+    "nav": {
+      "start": "Start",
+      "employees": "Pracownicy",
+      "offers": "Oferty",
+      "todo": "Todo"
+    },
     "lang": {
       "select": "Wybierz język",
       "language": "Język",

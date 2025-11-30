@@ -8,7 +8,6 @@ import Flags from "global/Flags";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { Utils } from "global/utils";
 import { OffersService } from "offer/services/OffersService";
-import { FaEllipsisV } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
