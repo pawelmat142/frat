@@ -35,7 +35,6 @@ const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
             }
             result += ` ${offer.currency} / ${t('common.hour')}`;
         }
-
         if (offer.monthlySalaryStart) {
             if (offer.hourlySalaryStart) {
                 result += ` ${t('common.or') || 'or'} `;
@@ -49,7 +48,6 @@ const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
         return result;
     }
     
-
     const salary = getSalaryRange();
 
     return (
