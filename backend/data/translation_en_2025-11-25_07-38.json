@@ -23,8 +23,10 @@
       "views": "Views",
       "likes": "Likes",
       "created": "Created",
+      "noOffers": "You have no offers yet.",
       "form": {
         "title": "Job offer Form",
+        "success": "Offer created successfully",
         "STEP_ONE": {
           "label": "Step 1",
           "title": "Basic Information"
@@ -43,7 +45,9 @@
         },
         "validation": {
           "atLeastOneSalaryRequired": "At least one salary (monthly or hourly) is required.",
-          "currencyRequired": "Currency is required."
+          "currencyRequired": "Currency is required.",
+          "formInvalid": "Form is invalid, please check all fields.",
+          "createError": "Error creating offer, please try again later."
         }
       },
       "dateRange": "Contract duration",

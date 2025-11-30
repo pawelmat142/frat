@@ -23,8 +23,10 @@
       "views": "Wyświetlenia",
       "likes": "Polubienia",
       "created": "Utworzono",
+      "noOffers": "Nie masz jeszcze żadnych ofert.",
       "form": {
         "title": "Formularz oferty pracy",
+        "success": "Oferta została pomyślnie utworzona",
         "STEP_ONE": {
           "label": "Krok 1",
           "title": "Podstawowe informacje"
@@ -43,7 +45,9 @@
         },
         "validation": {
           "atLeastOneSalaryRequired": "Wymagane jest podanie wynagrodzenia (miesięczne lub godzinowe).",
-          "currencyRequired": "Waluta jest wymagana."
+          "currencyRequired": "Waluta jest wymagana.",
+          "formInvalid": "Formularz jest nieprawidłowy, sprawdź wszystkie pola.",
+          "createError": "Błąd podczas tworzenia oferty, spróbuj ponownie później."
         }
       },
       "dateRange": "Czas trwania umowy",

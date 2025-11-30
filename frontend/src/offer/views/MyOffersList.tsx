@@ -23,13 +23,12 @@ const MyOffersList: React.FC = () => {
 
     const offers = profileCtx.offers;
 
-    // TODO translations
     if (!offers?.length) {
 
         // TODO replace header with header title
         return (
             <div className="flex flex-col items-center justify-center mt-20">
-                <p className="xl-font mb-4 secondary-text">You have no offers yet.</p>
+                <p className="xl-font mb-4 secondary-text">{t("offer.noOffers")}</p>
             </div>
         )
     }
@@ -53,8 +52,7 @@ const MyOffersList: React.FC = () => {
             </div>
 
             <div className="mt-auto flex flex-col mb-5 px-3">
-                {/* TODO translation */}
-                <Button fullWidth onClick={() => navigate(Path.OFFER_FORM)} size={BtnSizes.LARGE}>Add Offer</Button>
+                <Button fullWidth onClick={() => navigate(Path.OFFER_FORM)} size={BtnSizes.LARGE}>{t("offer.add")}</Button>
 
             </div>
 

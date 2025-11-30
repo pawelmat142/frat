@@ -29,8 +29,7 @@ const OfferFormContent: React.FC = () => {
     const onSubmit = async () => {
         const valid = await ctx.formCtx.trigger();
         if (!valid) {
-            // TODO
-            toast.error(t(""));
+            toast.error(t("offer.form.validation.formInvalid"));
             return;
         }
 
@@ -38,13 +37,13 @@ const OfferFormContent: React.FC = () => {
             setLoading(true);
             const offer = await OffersService.createOffer(ctx.form);
             if (!offer) {
-                throw new Error("TODO");
+                throw new Error(t("offer.form.validation.createError"));
             }
             ctx.removeFormFromLocalStorage();
-            toast.success(t("TODO"));
+            toast.success(t("offer.form.success"));
             navigate(Path.getOffersPath(offer.uid));
         } catch (error) {
-            toast.error(t(""));
+            toast.error(t("offer.form.validation.createError"));
         } finally {
             setLoading(false);
         }

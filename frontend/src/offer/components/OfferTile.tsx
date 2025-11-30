@@ -11,7 +11,6 @@ interface Props {
     last?: boolean;
 }
 
-// TODO offer view
 // TODO offer form - edit mode
 // TODO offer search view
 // TODO offer tile improve
