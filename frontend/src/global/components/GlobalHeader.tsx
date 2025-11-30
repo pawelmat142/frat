@@ -1,5 +1,6 @@
 import { useGlobalContext } from 'global/providers/GlobalProvider';
 import { useTranslation } from 'react-i18next';
+import DesktopMenu from './DesktopMenu';
 
 const GlobalHeader: React.FC = () => {
 
@@ -22,7 +23,10 @@ const GlobalHeader: React.FC = () => {
                         )}
                     </div>
 
-                    {globalCtx?.header?.rightBtn}
+                    <div className='flex items-center'>
+                        {!!globalCtx.isDesktop && (<DesktopMenu />)}
+                        {globalCtx?.header?.rightBtn}
+                    </div>
                 </div>
 
             </nav>

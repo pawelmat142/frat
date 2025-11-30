@@ -12,7 +12,6 @@ export interface HeaderState {
 export const STATES: { [key: string]: HeaderState } = {
     [Path.HOME]: {
         leftBtn: <MainHeaderState/>,
-        rightBtn: <DesktopMenu/>,
     },
     [Path.EMPLOYEE_PROFILE_FORM]: {
         leftBtn: <HeaderBackBtn/>,

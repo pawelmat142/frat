@@ -15,6 +15,7 @@ import EmployeeProfileStep1 from "../components/EmployeeProfileStep1";
 import EmployeeProfileStep2 from "../components/EmployeeProfileStep2";
 import EmployeeProfileStep3 from "../components/EmployeeProfileStep3";
 import EmployeeProfileStep4 from "../components/EmployeeProfileStep4";
+import { Path } from "../../path";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -125,7 +126,7 @@ const EmployeeProfileFormView: React.FC = () => {
             initEmployeeProfile();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
-            navigate(-1);
+            navigate(Path.getEmployeeProfilePath(`${result.employeeProfileId}`));
         } catch (error) {
             console.error("Error creating employee profile:", error);
         } finally {

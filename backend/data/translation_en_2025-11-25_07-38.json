@@ -372,7 +372,7 @@
     },
     "employeeProfile": {
       "edit": "Edit employee profile",
-      "searchTitle": "Employee search",
+      "searchTitle": "Employees search",
       "form": {
         "step1": {
           "label": "Step 1",
