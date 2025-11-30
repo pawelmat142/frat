@@ -16,6 +16,39 @@ export class CreateOfferService {
         private readonly dictionariesPublicService: DictionariesPublicService,
     ) { }
 
+    public async updateOffer(existingOffer: OfferEntity, updatedOffer: OfferForm): Promise<OfferEntity> {
+        await this.validateOfferForm(updatedOffer);
+
+        // Merge into the existing entity to preserve required fields like offerId, uid, status, createdAt
+        const updatedEntity: OfferEntity = {
+            ...existingOffer,
+            category: updatedOffer.STEP_ONE.category!,
+            locationCountry: updatedOffer.STEP_ONE.locationCountry!,
+            point: PointUtil.toGeoPoint(updatedOffer.STEP_ONE.position) || existingOffer.point,
+            displayAddress: updatedOffer.STEP_ONE.displayAddress,
+            startDate: new Date(updatedOffer.STEP_ONE.dateRange.start),
+            endDate: updatedOffer.STEP_ONE.dateRange.end ? new Date(updatedOffer.STEP_ONE.dateRange.end) : undefined,
+            availableSlots: updatedOffer.STEP_ONE.availableSlots || 0,
+
+            skillsRequired: updatedOffer.STEP_TWO.skillsRequired,
+            skillsNiceToHave: updatedOffer.STEP_TWO.skillsNiceToHave,
+            certificatesRequired: updatedOffer.STEP_TWO.certificatesRequired,
+            certificatesNiceToHave: updatedOffer.STEP_TWO.certificatesNiceToHave,
+            languagesRequired: updatedOffer.STEP_TWO.languagesRequired,
+            languagesNiceToHave: updatedOffer.STEP_TWO.languagesNiceToHave,
+
+            hourlySalaryStart: this.optionalNumber(updatedOffer.STEP_THREE.hourlySalaryStart),
+            hourlySalaryEnd: this.optionalNumber(updatedOffer.STEP_THREE.hourlySalaryEnd),  
+            monthlySalaryStart: this.optionalNumber(updatedOffer.STEP_THREE.monthlySalaryStart),
+            monthlySalaryEnd: this.optionalNumber(updatedOffer.STEP_THREE.monthlySalaryEnd),
+            currency: updatedOffer.STEP_THREE.currency,
+
+            displayName: updatedOffer.STEP_FOUR?.displayName,
+            description: updatedOffer.STEP_FOUR?.description,
+        };
+
+        return updatedEntity;
+    }
 
     public async createOffer(user: UserI, newOffer: OfferForm): Promise<DeepPartial<OfferEntity>> {
         await this.validateOfferForm(newOffer);

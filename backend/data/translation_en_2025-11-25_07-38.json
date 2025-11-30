@@ -47,6 +47,7 @@
       "form": {
         "title": "Job offer form",
         "success": "Offer created successfully",
+        "successUpdate": "Offer updated successfully",
         "STEP_ONE": {
           "label": "Step 1",
           "title": "Basic Information"
@@ -67,7 +68,8 @@
           "atLeastOneSalaryRequired": "At least one salary (monthly or hourly) is required.",
           "currencyRequired": "Currency is required.",
           "formInvalid": "Form is invalid, please check all fields.",
-          "createError": "Error creating offer, please try again later."
+          "createError": "Error creating offer, please try again later.",
+          "notFound": "Offer not found."
         }
       },
       "dateRange": "Contract duration",

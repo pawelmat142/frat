@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import OfferFormProvider, { useOfferForm } from "./OfferFormProvider";
-import { OFFER_STEPS_ORDER, OfferFormStep, OfferFormSteps } from "@shared/interfaces/OfferI";
+import { OFFER_STEPS_ORDER, OfferFormStep, OfferFormSteps, OfferI } from "@shared/interfaces/OfferI";
 import { toast } from "react-toastify";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
@@ -11,12 +11,25 @@ import OfferFormStepThree from "./OfferFormStepThree";
 import OfferFormStepFour from "./OfferFormStepFour";
 import { Utils } from "global/utils";
 import { OffersService } from "offer/services/OffersService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "global/components/Loading";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
+import { OfferUtil } from "@shared/utils/OfferUtil";
 
 const OfferFormContent: React.FC = () => {
+
+    const initForm = async (offerId?: string) => {
+        try {
+            setLoading(true);
+            const offer = await OffersService.getOfferById(Number(offerId));
+            ctx.initForm(OfferUtil.convertToForm(offer));
+        } catch (error) {
+            toast.error(t("offer.form.validation.notFound"));
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const isDevMode = Utils.isDevMode();
 
@@ -27,6 +40,13 @@ const OfferFormContent: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const currentStep = ctx.form?.currentStep;
 
+    const param = useParams<{ offerId?: string }>();
+    const offerId = param.offerId;
+
+    useEffect(() => {
+        initForm(offerId);
+    }, [offerId]);
+
     const onSubmit = async () => {
         const valid = await ctx.formCtx.trigger();
         if (!valid) {
@@ -36,15 +56,28 @@ const OfferFormContent: React.FC = () => {
 
         try {
             setLoading(true);
-            const offer = await OffersService.createOffer(ctx.form);
-            if (!offer) {
-                throw new Error(t("offer.form.validation.createError"));
+
+            let offer: OfferI | null = null;
+            if (offerId) {
+                offer = await OffersService.updateOffer(Number(offerId), ctx.form);
+                if (!offer) {
+                    throw new Error(t("offer.form.validation.createError"));
+                }
+            } else {
+                offer = await OffersService.createOffer(ctx.form);
+                if (!offer) {
+                    throw new Error(t("offer.form.validation.createError"));
+                }
             }
             ctx.removeFormFromLocalStorage();
             await userCtx.initOffers();
             userCtx.setLoading(false);
-            toast.success(t("offer.form.success"));
-            navigate(Path.getOffersPath(offer.uid));
+            if (offerId) {
+                toast.success(t("offer.form.successUpdate"));
+            } else {
+                toast.success(t("offer.form.success"));
+            }
+            navigate(Path.getOffersPath(offer!.uid));
         } catch (error) {
             toast.error(t("offer.form.validation.createError"));
         } finally {

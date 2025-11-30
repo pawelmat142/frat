@@ -53,4 +53,15 @@ export class OffersService {
         this.logger.log(`Offer created with ID: ${createdOffer.offerId}`);
         return createdOffer;
     }
+
+    public async updateOffer(user: UserI, offerId: number, updatedOffer: OfferForm): Promise<OfferI> {
+        const existingOffer = await this.offersRepo.getById(offerId);
+        if (existingOffer.uid !== user.uid) {
+            throw new ForbiddenException()
+        }
+        const updatedEntity = await this.createOfferService.updateOffer(existingOffer, updatedOffer);
+        const savedOffer = await this.offersRepo.update(updatedEntity);
+        this.logger.log(`Offer ${savedOffer.offerId} updated by user ${user.uid}`);
+        return savedOffer;
+    }
 }

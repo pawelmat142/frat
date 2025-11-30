@@ -72,6 +72,7 @@ const App: React.FC = () => {
 
                 {/* OFFERS */}
                 <Route path={Path.OFFER_FORM} element={<PageWrapper direction={1}><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.OFFER_FORM_EDIT} element={<PageWrapper direction={1}><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.USER_OFFERS} element={<PageWrapper direction={1}><ProtectedRoute><MyOffersList/></ProtectedRoute></PageWrapper>} />
                 {/* unprotected */}
                 <Route path={Path.OFFER} element={<PageWrapper direction={1}><OfferView/></PageWrapper>} />

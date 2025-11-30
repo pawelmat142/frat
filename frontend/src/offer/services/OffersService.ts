@@ -21,5 +21,9 @@ export const OffersService = {
 
     deleteOffer(offerId: number): Promise<void> {
         return httpClient.delete<void>(`/offers/${offerId}`);
+    },
+
+    updateOffer(offerId: number, form: OfferForm): Promise<OfferI | null> {
+        return httpClient.patch<OfferI>(`/offers/${offerId}`, form);
     }
 }

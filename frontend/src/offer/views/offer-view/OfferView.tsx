@@ -17,6 +17,7 @@ import { MenuConfig } from "global/components/selector/MenuItems";
 import { useMenuContext } from "global/providers/MenuProvider";
 import { toast } from "react-toastify";
 import { useConfirm } from "global/providers/PopupProvider";
+import { Path } from "../../../path";
 
 const OfferView: React.FC = () => {
 
@@ -103,7 +104,7 @@ const OfferView: React.FC = () => {
     }
 
     const goToEditForm = async (offer: OfferI) => {
-        console.log('TODO goToEditForm');
+        navigate(Path.getOfferFormEditPath(offer.offerId));
     }
 
     const deleteOffer = async (offer: OfferI) => {

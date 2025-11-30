@@ -26,8 +26,6 @@ const removeFormFromLocalStorage = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
 }
 
-
-
 const getFromLocalStorage = (): OfferForm | null => {
     const savedForm = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (savedForm) {
@@ -56,6 +54,7 @@ export interface OfferFormProps {
     prevStep: () => void;
     selectStep: (targetStep: OfferFormStep) => Promise<void>;
     removeFormFromLocalStorage: () => void;
+    initForm: (offer: OfferForm) => void;
 }
 
 const OfferFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -122,6 +121,10 @@ const OfferFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }
         formCtx.setValue("currentStep", step);
     }
 
+    const initForm = (offer: OfferForm) => {
+        formCtx.reset(offer);
+    }
+
     return (
         <OfferFormContext.Provider value={{
             form,
@@ -129,7 +132,8 @@ const OfferFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }
             nextStep,
             prevStep,
             selectStep,
-            removeFormFromLocalStorage
+            removeFormFromLocalStorage,
+            initForm
         }}>{children}</OfferFormContext.Provider>
     );
 };

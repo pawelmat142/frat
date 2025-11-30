@@ -148,29 +148,27 @@ export class OfferEntity implements OfferI {
     @Expose()
     updatedAt?: Date;
 
-    get salary(): Salary | null {
-        if (!this.hourlySalaryStart && !this.monthlySalaryStart) {
-            return null;
-        }
-        const result: Salary = {
-            currency: this.currency || Currencies.EUR,
-        }
-        if (this.monthlySalaryStart) {
-            result.monthly = {
-                from: this.monthlySalaryStart,
-                to: this.monthlySalaryEnd,
-                type: SalaryTypes.MONTHLY
-            }
-        }
-        if (this.hourlySalaryStart) {
-            result.hourly = {
-                from: this.hourlySalaryStart,
-                to: this.hourlySalaryEnd,
-                type: SalaryTypes.HOURLY
-            }
-        }
-        return result;
-    }
-
-
+    // get salary(): Salary | null {
+    //     if (!this.hourlySalaryStart && !this.monthlySalaryStart) {
+    //         return null;
+    //     }
+    //     const result: Salary = {
+    //         currency: this.currency || Currencies.EUR,
+    //     }
+    //     if (this.monthlySalaryStart) {
+    //         result.monthly = {
+    //             from: this.monthlySalaryStart,
+    //             to: this.monthlySalaryEnd,
+    //             type: SalaryTypes.MONTHLY
+    //         }
+    //     }
+    //     if (this.hourlySalaryStart) {
+    //         result.hourly = {
+    //             from: this.hourlySalaryStart,
+    //             to: this.hourlySalaryEnd,
+    //             type: SalaryTypes.HOURLY
+    //         }
+    //     }
+    //     return result;
+    // }
 }

@@ -48,6 +48,7 @@
       "form": {
         "title": "Formularz oferty pracy",
         "success": "Oferta została pomyślnie utworzona",
+        "successUpdate": "Oferta została pomyślnie zaktualizowana",
         "STEP_ONE": {
           "label": "Krok 1",
           "title": "Podstawowe informacje"
@@ -68,7 +69,8 @@
           "atLeastOneSalaryRequired": "Wymagane jest podanie wynagrodzenia (miesięczne lub godzinowe).",
           "currencyRequired": "Waluta jest wymagana.",
           "formInvalid": "Formularz jest nieprawidłowy, sprawdź wszystkie pola.",
-          "createError": "Błąd podczas tworzenia oferty, spróbuj ponownie później."
+          "createError": "Błąd podczas tworzenia oferty, spróbuj ponownie później.",
+          "notFound": "Nie znaleziono oferty."
         }
       },
       "dateRange": "Czas trwania umowy",

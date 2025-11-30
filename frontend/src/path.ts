@@ -14,7 +14,8 @@ export abstract class Path {
     public static readonly EMPLOYEE_SEARCH = '/employee-search';    
 
     // OFFERS
-    public static readonly OFFER_FORM = '/offers-form';
+    public static readonly OFFER_FORM = '/offer-form';
+    public static readonly OFFER_FORM_EDIT = '/offer-form/:offerId';
     public static readonly OFFERS_SEARCH = '/offers-search';
     public static readonly OFFER = '/offer/:offerId';
     public static readonly USER_OFFERS = '/offers/:uid';
@@ -42,4 +43,5 @@ export abstract class Path {
     public static getEmployeeProfilePath = (displayName: string) => `${Path.EMPLOYEE_PROFILE.replace(':displayName', displayName)}`;
     public static getOfferPath = (offerId: number) => `${Path.OFFER.replace(':offerId', `${offerId}`)}`;
     public static getOffersPath = (uid: string) => `${Path.USER_OFFERS.replace(':uid', uid)}`;
+    public static getOfferFormEditPath = (offerId: number) => `${Path.OFFER_FORM_EDIT.replace(':offerId', `${offerId}`)}`;
 }

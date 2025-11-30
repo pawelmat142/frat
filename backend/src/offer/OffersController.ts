@@ -60,4 +60,15 @@ export class OffersController {
     ): Promise<void> {
         return this.offersService.deleteOffer(user, offerId);
     }
+
+    @Patch(':offerId')
+    @UseGuards(JwtAuthGuard)
+    @Serialize(OfferEntity)
+    updateOffer(
+        @CurrentUser() user: UserI,
+        @Param('offerId') offerId: number,
+        @Body() form: OfferForm
+    ): Promise<OfferI> {
+        return this.offersService.updateOffer(user, offerId, form);
+    }
 }
