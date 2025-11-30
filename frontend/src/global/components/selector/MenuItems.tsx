@@ -1,4 +1,5 @@
 import { MenuItem } from "global/interface/controls.interface";
+import { useBottomSheet } from "global/providers/BottomSheetProvider";
 
 export interface MenuConfig {
     items: MenuItem[]
@@ -12,8 +13,11 @@ const MenuItems = ({
     onClose,
 }: MenuConfig) => {
 
+    const bottomSheetCtx = useBottomSheet()
+
     const handleItemClick = (item: MenuItem) => {
         item.onClick?.();
+        bottomSheetCtx.close();
         if (!item.onClick) {
             onClose?.();
         }

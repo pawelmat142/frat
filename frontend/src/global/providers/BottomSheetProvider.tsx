@@ -66,11 +66,9 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const [isOpen, setIsOpen] = useState(false);
     const [params, setParams] = useState<OpenSheetParams | null>(null);
     const [closing, setClosing] = useState(false);
-
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
     const [groupCode, setGroupCode] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-
     const {isDesktop} = useGlobalContext();
 
     const popupCtx = usePopup();

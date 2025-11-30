@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, UseGuards, UseInterceptors } from "@nestjs/common";
 import { LogInterceptor } from "global/interceptors/LogInterceptor";
 import { OffersService } from "./services/OffersService";
 import { JwtAuthGuard } from "auth/guards/JwtAuthGuard";
@@ -40,5 +40,15 @@ export class OffersController {
         @CurrentUser() user: UserI
     ): Promise<OfferI[]> {
         return this.offersService.listOffersByUser(user);
+    }
+
+    @Patch(':offerId/activation')
+    @UseGuards(JwtAuthGuard)
+    @Serialize(OfferEntity)
+    activateOffer(
+        @CurrentUser() user: UserI,
+        @Param('offerId') offerId: number
+    ): Promise<OfferI> {
+        return this.offersService.activation(user, offerId);
     }
 }

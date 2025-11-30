@@ -1,6 +1,6 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { ForbiddenException, Injectable, Logger } from "@nestjs/common";
 import { OffersRepo } from "./OffersRepo";
-import { OfferForm, OfferI } from "@shared/interfaces/OfferI";
+import { OfferForm, OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
 import { UserI } from "@shared/interfaces/UserI";
 import { CreateOfferService } from "./CreateOfferService";
 
@@ -20,6 +20,17 @@ export class OffersService {
 
     public listOffersByUser(user: UserI): Promise<OfferI[]> {
         return this.offersRepo.listOffersByUser(user.uid);
+    }
+
+    public async activation(user: UserI, offerId: number): Promise<OfferI> {
+        const offer = await this.offersRepo.getById(offerId);
+        if (offer.uid !== user.uid) {
+            throw new ForbiddenException()
+        }
+        offer.status = OfferStatuses.ACTIVE === offer.status ? OfferStatuses.INACTIVE : OfferStatuses.ACTIVE;
+        const result = await this.offersRepo.update(offer);
+        this.logger.log(`Offer ${offer.offerId} status changed to ${offer.status} by user ${user.uid}`);
+        return result;
     }
 
     public async createOffer(user: UserI, newOffer: OfferForm): Promise<OfferI> {

@@ -1,4 +1,4 @@
-import { OfferI } from "@shared/interfaces/OfferI";
+import { OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
 import { Util } from "@shared/utils/util";
 import { useTranslation } from "react-i18next";
 import { Utils } from "global/utils";
@@ -21,6 +21,17 @@ const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
             return `${t('offer.availableSlots')}: ${offer.availableSlots - offer.acceptedSlots} / ${offer.availableSlots}`;
         }
         return `${t('offer.availableSlots')}: ${offer.availableSlots}`;
+    }
+
+    function displayStatus(): string {
+        switch (offer.status) {
+            case OfferStatuses.ACTIVE:
+                return t('offer.statusActive');
+            case OfferStatuses.INACTIVE:
+                return t('offer.statusInactive');
+            default:
+                return offer.status;
+        }
     }
 
     function getSalaryRange(): string | null {
@@ -54,7 +65,10 @@ const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
         <div className="square-tile col-tile big offer-details-tile">
             <div className="w-full flex justify-between">
                 <div className="mb-1 primary-text">{category}</div>
-                {!!slots && (<div className="xs-font secondary-text">{slots}</div>)}
+                <div className="text-right">
+                    {!!slots && (<div className="xs-font secondary-text">{slots}</div>)}
+                    <div className="xs-font primary-text mt-1">{displayStatus()}</div>
+                </div>
             </div>
             {!!offer.displayName && (<div className="small-font primary-text">{offer.displayName}</div>)}
             {!!offer.description && (<div className="small-font secondary-text">{offer.description}</div>)}

@@ -1,4 +1,4 @@
-import { OfferI } from "@shared/interfaces/OfferI";
+import { OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
 import { useAuthContext } from "auth/AuthProvider";
 import CallendarTile from "employee/views/profile/CallendarTile";
 import EditButton from "global/components/buttons/EditButton";
@@ -49,6 +49,10 @@ const OfferView: React.FC = () => {
             menu.items.push({
                 label: t('offer.editButton'),
                 onClick: () => { goToEditForm(offer) }
+            })
+            menu.items.push({
+                label: offer.status === OfferStatuses.ACTIVE ? t('offer.deactivateButton') : t('offer.activateButton'),
+                onClick: () => { offerActivation(offer) }
             })
             menu.items.push({
                 label: t('offer.deleteButton'),
@@ -105,8 +109,15 @@ const OfferView: React.FC = () => {
         console.log('TODO deleteOffer');
     }
 
-    const offerActivation = (offer: OfferI) => {
-        console.log('TODO offerActivation');
+    const offerActivation = async (offer: OfferI) => {
+        try {
+            setLoading(true);
+            const result = await OffersService.activation(offer.offerId)
+            setOffer(result);
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
     const likeOffer = (offer: OfferI) => {

@@ -12,7 +12,7 @@ interface GlobalContextType {
     dics: Dictionaries;
     loading: boolean;
     header: HeaderState,
-    setMenu: (menu: React.ReactNode) => void;
+    setHeaderMenu: (menu: React.ReactNode) => void;
 }
 
 interface Dictionaries {
@@ -62,7 +62,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
     }, [location.pathname])
 
-    const setMenu = (menu: React.ReactNode): void => {
+    const setHeaderMenu = (menu: React.ReactNode): void => {
         setHeader({
             ...header,
             rightBtn: menu,
@@ -77,7 +77,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             },
             loading: loading,
             header: header,
-            setMenu,
+            setHeaderMenu,
         }}>
             {children}
         </GlobalContext.Provider>

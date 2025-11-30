@@ -1,7 +1,6 @@
 import MainHeaderState from "./MainHeaderState";
 import HeaderBackBtn from "./HeaderBackBtn";
 import { Path } from "../../path";
-import DesktopMenu from "global/components/DesktopMenu";
 
 export interface HeaderState {
     title?: string;

@@ -17,6 +17,10 @@ export class OffersRepo {
         return this.offerRepository.findOneBy({ offerId });
     }
 
+    public update(offer: OfferEntity): Promise<OfferEntity> {
+        return this.offerRepository.save(offer);
+    }
+
     public listOffersByUser(uid: string): Promise<OfferEntity[]> {
         return this.offerRepository.find({ where: { uid } });
     }

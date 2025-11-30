@@ -41,7 +41,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const globalCtx = useGlobalContext();
 
     const setupHeaderMenu = (menu: MenuConfig) => {
-        globalCtx.setMenu(<IconButton icon={<FaEllipsisV onClick={() => {
+        globalCtx.setHeaderMenu(<IconButton icon={<FaEllipsisV onClick={() => {
             bottomSheetCtx.openMenu(menu)
         }} />} />);
     }
