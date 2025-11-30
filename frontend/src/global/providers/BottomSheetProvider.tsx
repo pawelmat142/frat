@@ -7,6 +7,7 @@ import { Utils } from 'global/utils';
 import SelectorItems from 'global/components/selector/SelectorItems';
 import { usePopup } from './PopupProvider';
 import { useGlobalContext } from './GlobalProvider';
+import MenuItems, { MenuConfig as MenuConfig } from 'global/components/selector/MenuItems';
 
 export interface OpenSheetParams {
     title?: string;
@@ -56,6 +57,7 @@ export interface BottomSheetContextType {
     params: OpenSheetParams | null;
     isOpen: boolean;
     closing: boolean;
+    openMenu: (props: MenuConfig) => Promise<void>;
 }
 
 const BottomSheetContext = createContext<BottomSheetContextType | undefined>(undefined);
@@ -123,6 +125,14 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
         })
     }
 
+    const openMenu = async (props: MenuConfig) => {
+        open({
+            title: props.title,
+            showClose: true,
+            children: <MenuItems {...props}></MenuItems>,
+        })
+    }
+
     const openDictionarySelector = async (params: OpenDictionaryParams) => {
         const dic = await initDictionary(params);
         setGroupCode(params.groupCode || null);
@@ -150,7 +160,7 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }
 
     return (
-        <BottomSheetContext.Provider value={{ open, close, openDictionarySelector, openSelector, params, isOpen, closing }}>
+        <BottomSheetContext.Provider value={{ open, close, openDictionarySelector, openSelector, params, isOpen, closing, openMenu }}>
             {params && (
                 <BottomSheet />
             )}

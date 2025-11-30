@@ -1,40 +1,22 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI"
 import { DictionaryService } from "global/services/DictionaryService"
-import { Path } from "../../path";
 import React from "react"
 import { createContext, useState } from "react"
-import MainHeaderState from "global/header-state/MainHeaderState";
-import { useLocation } from "react-router-dom";
+import { useLocation, matchPath } from "react-router-dom";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { useIsDesktop } from "global/hooks/isMobile";
-import HeaderMenu from "global/components/HeaderMenu";
+import { HeaderState, STATES } from "global/header-state/states";
 
 interface GlobalContextType {
     isDesktop: boolean;
-    dics: Dics;
+    dics: Dictionaries;
     loading: boolean;
-    header: HeaderState
+    header: HeaderState,
+    setMenu: (menu: React.ReactNode) => void;
 }
 
-interface Dics {
+interface Dictionaries {
 	languages: DictionaryI | null;
-}
-
-interface HeaderState {
-    title?: string;
-    leftBtn?: React.ReactNode;
-    rightBtn?: React.ReactNode;
-}
-
-const STATES: { [key: string]: HeaderState } = {
-    [Path.HOME]: {
-        leftBtn: <MainHeaderState/>,
-        rightBtn: <HeaderMenu/>,
-    },
-    [Path.EMPLOYEE_SEARCH]: {
-        leftBtn: <HeaderBackBtn/>,
-        title: 'employeeProfile.searchTitle',
-    }
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -42,6 +24,7 @@ const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     const location = useLocation(); 
+    const isDesktop = useIsDesktop();
 
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null)
     const [loading, setLoading] = useState(false)
@@ -64,19 +47,27 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }, []);
 
     React.useEffect(() => {
-        const path = location.pathname
-        const state = STATES[path]
-        console.log(state)
-        if (state) {
-            setHeader(state)
+        const pathname = location.pathname
+        let resolved: HeaderState | undefined
+        for (const [pattern, state] of Object.entries(STATES)) {
+            if (matchPath({ path: pattern, end: true }, pathname)) {
+                resolved = state
+                break
+            }
+        }
+        if (resolved) {
+            setHeader(resolved)
         } else {
-            setHeader({
-                leftBtn: <HeaderBackBtn />,
-            })
+            setHeader({ leftBtn: <HeaderBackBtn /> })
         }
     }, [location.pathname])
 
-    const isDesktop = useIsDesktop();
+    const setMenu = (menu: React.ReactNode): void => {
+        setHeader({
+            ...header,
+            rightBtn: menu,
+        })  
+    }
 
     return (
         <GlobalContext.Provider value={{
@@ -86,6 +77,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             },
             loading: loading,
             header: header,
+            setMenu,
         }}>
             {children}
         </GlobalContext.Provider>

@@ -47,7 +47,6 @@ const OfferFormContent: React.FC = () => {
         } finally {
             setLoading(false);
         }
-
     }
 
     const selectStep = async (targetStep: OfferFormStep) => { }
@@ -84,11 +83,7 @@ const OfferFormContent: React.FC = () => {
     };
 
     return (
-        <div className="form-view relative mt-10">
-            <h2 className="form-header">
-                {t("offer.form.title")}
-            </h2>
-
+        <div className="form-view relative">
             {loading ? (
                 <Loading></Loading>
             ) : (

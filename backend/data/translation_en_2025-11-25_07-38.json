@@ -20,12 +20,18 @@
       "add": "Add offer",
       "management": "Offer management",
       "editButton": "Edit Offer",
+      "removeButton": "Remove Offer",
+      "likeButton": "Like Offer",
+      "unlikeButton": "Unlike Offer",
       "views": "Views",
       "likes": "Likes",
       "created": "Created",
       "noOffers": "You have no offers yet.",
+      "offersList": "Offers list",
+      "searchTitle": "Offers search",
+      "offerViewTitle": "Offer details",
       "form": {
-        "title": "Job offer Form",
+        "title": "Job offer form",
         "success": "Offer created successfully",
         "STEP_ONE": {
           "label": "Step 1",
@@ -103,7 +109,8 @@
       "month": "month",
       "hour": "hour",
       "day": "day",
-      "year": "year"
+      "year": "year",
+      "options": "Options"
     },
     "header": {
       "home": "Home",

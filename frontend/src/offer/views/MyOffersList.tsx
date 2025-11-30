@@ -16,7 +16,6 @@ const MyOffersList: React.FC = () => {
     const navigate = useNavigate();
     const globalCtx = useGlobalContext();
 
-
     if (globalCtx.loading || profileCtx.loading || !globalCtx.dics.languages) {
         return (<Loading></Loading>);
     }
@@ -24,8 +23,6 @@ const MyOffersList: React.FC = () => {
     const offers = profileCtx.offers;
 
     if (!offers?.length) {
-
-        // TODO replace header with header title
         return (
             <div className="flex flex-col items-center justify-center mt-20">
                 <p className="xl-font mb-4 secondary-text">{t("offer.noOffers")}</p>
@@ -35,10 +32,6 @@ const MyOffersList: React.FC = () => {
 
     return (
         <div className="list-view flex-1 flex flex-col">
-
-            <h2 className="form-header">
-                {t("offer.myList.title")}
-            </h2>
 
             <div className="results flex flex-col gap-1">
                 {!!globalCtx.dics.languages && offers.map((offer, index) => (
@@ -53,9 +46,7 @@ const MyOffersList: React.FC = () => {
 
             <div className="mt-auto flex flex-col mb-5 px-3">
                 <Button fullWidth onClick={() => navigate(Path.OFFER_FORM)} size={BtnSizes.LARGE}>{t("offer.add")}</Button>
-
             </div>
-
 
         </div>
     )

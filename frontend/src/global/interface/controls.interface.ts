@@ -128,3 +128,10 @@ export interface SelectorItem<T extends SelectorValue = SelectorValue> {
     src?: string;
     onClick?: () => void;
 }
+
+export interface MenuItem {
+    label: string
+    src?: string
+    icon?: React.ReactNode
+    onClick?: () => void
+}

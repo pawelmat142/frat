@@ -6,20 +6,19 @@ export abstract class Path {
     public static readonly SIGN_UP = '/sign-up';
     public static readonly FORGOT_PASSWORD = '/forgot-password';
 
-    public static readonly PROFILE = '/profile/:uid';
+    public static readonly ACCOUNT = '/account/:uid';
+
+    // EMPLOYEE PROFILES
     public static readonly EMPLOYEE_PROFILE = '/employee-profile/:displayName';
-
     public static readonly EMPLOYEE_PROFILE_FORM = '/employee-profile-form';
-
-    public static readonly EMPLOYEE_SEARCH = '/employee-search';
-
+    public static readonly EMPLOYEE_SEARCH = '/employee-search';    
 
     // OFFERS
     public static readonly OFFER_FORM = '/offers-form';
-    public static readonly OFFERS = '/offers';
+    public static readonly OFFERS_SEARCH = '/offers-search';
     public static readonly OFFER = '/offer/:offerId';
     public static readonly USER_OFFERS = '/offers/:uid';
-    
+
     public static readonly ERROR_PAGE = '/error';
 
     // ADMIN PANEL
@@ -35,11 +34,11 @@ export abstract class Path {
     public static readonly ADMIN_USERS = `${Path.ADMIN_PANEL}/users`;
     public static readonly ADMIN_FEEDBACKS = `${Path.ADMIN_PANEL}/feedbacks`;
     public static readonly ADMIN_EMPLOYEE_PROFILES = `${Path.ADMIN_PANEL}/employee-profiles`;
-    
+
     public static getDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES}/${code}`;
     public static getEditDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES_EDIT.replace(':code', code)}`;
     public static getDictionaryGroupFormPath = (dictionaryCode: string, groupCode: string) => `${Path.ADMIN_DICTIONARIES_GROUP.replace(':dictionaryCode', dictionaryCode).replace(':groupCode', groupCode)}`;
-    public static getProfilePath = (uid: string) => `${Path.PROFILE.replace(':uid', uid)}`;
+    public static getProfilePath = (uid: string) => `${Path.ACCOUNT.replace(':uid', uid)}`;
     public static getEmployeeProfilePath = (displayName: string) => `${Path.EMPLOYEE_PROFILE.replace(':displayName', displayName)}`;
     public static getOfferPath = (offerId: number) => `${Path.OFFER.replace(':offerId', `${offerId}`)}`;
     public static getOffersPath = (uid: string) => `${Path.USER_OFFERS.replace(':uid', uid)}`;

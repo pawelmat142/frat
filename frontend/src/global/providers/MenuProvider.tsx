@@ -4,13 +4,17 @@ import { MenuItem } from '../interfaces';
 import { Path } from '../../path';
 import { useAuthContext } from 'auth/AuthProvider';
 import { UserI, UserRoles } from '@shared/interfaces/UserI';
-import { AuthValidators } from '@shared/validators/AuthValidator';
 import { Util } from '@shared/utils/util';
-import { skip } from 'node:test';
+import { MenuConfig } from 'global/components/selector/MenuItems';
+import { useBottomSheet } from './BottomSheetProvider';
+import { useGlobalContext } from './GlobalProvider';
+import IconButton from 'global/components/controls/IconButon';
+import { FaEllipsisV } from 'react-icons/fa';
 
 interface MenuContextType {
     allMenuItems: MenuItem[];
     menuItems: MenuItem[];
+    setupHeaderMenu: (menu: MenuConfig) => void;
 }
 
 const MenuContext = createContext<MenuContextType | undefined>(undefined)
@@ -25,6 +29,16 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const location = useLocation();
     const { me, isAuthenticated } = useAuthContext();
 
+    const bottomSheetCtx = useBottomSheet();
+    const globalCtx = useGlobalContext();
+
+    const setupHeaderMenu = (menu: MenuConfig) => {
+        globalCtx.setMenu(<IconButton icon={<FaEllipsisV onClick={() => {
+            bottomSheetCtx.openMenu(menu)
+        }} />} />);
+    }
+
+    // TODO to remove!!
     // Dodajemy właściwość active na podstawie location.pathname
     const allMenuItems: MenuItem[] = useMemo(() => [
         {
@@ -63,6 +77,8 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const value: MenuContextType = {
         allMenuItems: allMenuItems,
         menuItems: filteredMenuItems,
+
+        setupHeaderMenu
     };
 
     return (

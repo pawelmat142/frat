@@ -1,5 +1,6 @@
 import { UserRole } from "@shared/interfaces/UserI"
 
+// TODO remove
 export interface MenuItem {
     to?: string
     onClick?: (event: UIEvent) => void

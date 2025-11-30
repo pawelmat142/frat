@@ -256,10 +256,6 @@ const EmployeeProfileFormView: React.FC = () => {
 
     return (
         <div className="form-view relative mt-10">
-            <h2 className="form-header">
-                {t("employeeProfile.form.title")}
-            </h2>
-
             <form
                 onSubmit={handleSubmit(() => {}, errors => {
                     console.log("Form errors", errors);

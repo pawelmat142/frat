@@ -24,6 +24,10 @@
       "likes": "Polubienia",
       "created": "Utworzono",
       "noOffers": "Nie masz jeszcze żadnych ofert.",
+      "myListTitle": "Moje oferty",
+      "offersList": "Lista ofert",
+      "searchTitle": "Szukaj ofert",
+      "offerViewTitle": "Szczegóły oferty",
       "form": {
         "title": "Formularz oferty pracy",
         "success": "Oferta została pomyślnie utworzona",
@@ -103,7 +107,8 @@
       "month": "miesiąc",
       "hour": "godzina",
       "day": "dzień",
-      "year": "rok"
+      "year": "rok",
+      "options": "Opcje"
     },
     "header": {
       "home": "Strona główna",

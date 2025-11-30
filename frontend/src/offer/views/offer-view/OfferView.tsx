@@ -1,5 +1,4 @@
 import { OfferI } from "@shared/interfaces/OfferI";
-import { Util } from "@shared/utils/util";
 import { useAuthContext } from "auth/AuthProvider";
 import CallendarTile from "employee/views/profile/CallendarTile";
 import EditButton from "global/components/buttons/EditButton";
@@ -9,11 +8,14 @@ import Flags from "global/Flags";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { Utils } from "global/utils";
 import { OffersService } from "offer/services/OffersService";
+import { FaEllipsisV } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
 import OfferDetailsTile from "./OfferDetailsTile";
+import { MenuConfig } from "global/components/selector/MenuItems";
+import { useMenuContext } from "global/providers/MenuProvider";
 
 const OfferView: React.FC = () => {
 
@@ -24,9 +26,43 @@ const OfferView: React.FC = () => {
     const { t } = useTranslation();
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
-    
+
+    const menuCtx = useMenuContext();
+
     const [offer, setOffer] = useState<OfferI | null>(null);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (offer && me) {
+            menuCtx.setupHeaderMenu(getOfferMenuItems(offer))
+        }
+    }, [offer])
+
+    const getOfferMenuItems = (offer: OfferI): MenuConfig => {
+        const isMyOffer = me?.uid === offer!.uid;
+
+        const menu: MenuConfig = {
+            title: 'TODO',
+            items: []
+        }
+
+        if (isMyOffer) {
+            menu.items.push({
+                label: t('offer.editButton'),
+                onClick: () => { goToEditForm(offer) }
+            })
+            menu.items.push({
+                label: t('offer.deleteButton'),
+                onClick: () => { deleteOffer(offer) }
+            })
+        } else {
+            menu.items.push({
+                label: t('offer.likeButton'),
+                onClick: () => { likeOffer(offer) }
+            })
+        }
+        return menu;
+    }
 
     // TODO trigger views count
     // TODO add like button/functionality
@@ -62,13 +98,25 @@ const OfferView: React.FC = () => {
         return <div>{t("common.noResults")}</div>
     }
 
-    const goToEditForm = () => {
-        // TODO 
+    const goToEditForm = (offer: OfferI) => {
+        console.log('TODO goToEditForm');
     }
+
+    const deleteOffer = (offer: OfferI) => {
+        console.log('TODO deleteOffer');
+    }
+
+    const offerActivation = (offer: OfferI) => {
+        console.log('TODO offerActivation');
+    }
+
+    const likeOffer = (offer: OfferI) => {
+        console.log('TODO likeOffer');
+    }
+
 
     const isMyOffer = me?.uid === offer.uid;
 
-    console.log("OfferView render", offer);
     return (
         <div className="view-container">
 
@@ -114,7 +162,7 @@ const OfferView: React.FC = () => {
 
                 {isMyOffer && (
                     <div className="mt-10 mb-10">
-                        <EditButton onClick={goToEditForm} label={t('offer.editButton')}></EditButton>
+                        <EditButton onClick={() => goToEditForm(offer)} label={t('offer.editButton')}></EditButton>
                     </div>
                 )}
 
