@@ -21,6 +21,10 @@ export class OffersRepo {
         return this.offerRepository.save(offer);
     }
 
+    public async delete(offerId: number): Promise<void> {
+        await this.offerRepository.delete(offerId);
+    }
+
     public listOffersByUser(uid: string): Promise<OfferEntity[]> {
         return this.offerRepository.find({ where: { uid } });
     }

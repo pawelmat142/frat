@@ -3,6 +3,8 @@ import { OffersRepo } from "./OffersRepo";
 import { OfferForm, OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
 import { UserI } from "@shared/interfaces/UserI";
 import { CreateOfferService } from "./CreateOfferService";
+import { Util } from "@shared/utils/util";
+import { ToastException } from "global/exceptions/ToastException";
 
 @Injectable()
 export class OffersService {
@@ -31,6 +33,18 @@ export class OffersService {
         const result = await this.offersRepo.update(offer);
         this.logger.log(`Offer ${offer.offerId} status changed to ${offer.status} by user ${user.uid}`);
         return result;
+    }
+
+    public async deleteOffer(user: UserI, offerId: number): Promise<void> {
+        const offer = await this.offersRepo.getById(offerId);
+        if (!offer) {
+            throw new ToastException('validation.notFound', this);
+        }
+        if (offer.uid !== user.uid && !Util.isAdmin(user)) {
+            throw new ForbiddenException()
+        }
+        await this.offersRepo.delete(offerId);
+        this.logger.log(`Offer ${offer.offerId} deleted by user ${user.uid}`);
     }
 
     public async createOffer(user: UserI, newOffer: OfferForm): Promise<OfferI> {

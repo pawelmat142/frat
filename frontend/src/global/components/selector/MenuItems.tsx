@@ -17,7 +17,7 @@ const MenuItems = ({
 
     const handleItemClick = (item: MenuItem) => {
         item.onClick?.();
-        bottomSheetCtx.close();
+        bottomSheetCtx.close(true);
         if (!item.onClick) {
             onClose?.();
         }

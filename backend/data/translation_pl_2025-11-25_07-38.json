@@ -41,6 +41,10 @@
       "offersList": "Lista ofert",
       "searchTitle": "Szukaj ofert",
       "offerViewTitle": "Szczegóły oferty",
+      "activationSuccessToast": "Oferta została pomyślnie aktywowana",
+      "deactivationSuccessToast": "Oferta została pomyślnie dezaktywowana",
+      "deleteSuccessToast": "Oferta została pomyślnie usunięta",
+      "deleteConfirmMessage": "Czy na pewno chcesz usunąć tę ofertę? Tej akcji nie można cofnąć.",
       "form": {
         "title": "Formularz oferty pracy",
         "success": "Oferta została pomyślnie utworzona",

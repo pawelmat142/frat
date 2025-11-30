@@ -10,11 +10,13 @@ import { Utils } from "global/utils";
 import { OffersService } from "offer/services/OffersService";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
 import OfferDetailsTile from "./OfferDetailsTile";
 import { MenuConfig } from "global/components/selector/MenuItems";
 import { useMenuContext } from "global/providers/MenuProvider";
+import { toast } from "react-toastify";
+import { useConfirm } from "global/providers/PopupProvider";
 
 const OfferView: React.FC = () => {
 
@@ -23,10 +25,11 @@ const OfferView: React.FC = () => {
 
     const { me } = useAuthContext();
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
-
     const menuCtx = useMenuContext();
+    const confirm = useConfirm();
 
     const [offer, setOffer] = useState<OfferI | null>(null);
     const [loading, setLoading] = useState(false);
@@ -35,7 +38,7 @@ const OfferView: React.FC = () => {
         if (offer && me) {
             menuCtx.setupHeaderMenu(getOfferMenuItems(offer))
         }
-    }, [offer])
+    }, [offer, me]);
 
     const getOfferMenuItems = (offer: OfferI): MenuConfig => {
         const isMyOffer = me?.uid === offer!.uid;
@@ -69,8 +72,6 @@ const OfferView: React.FC = () => {
 
     // TODO trigger views count
     // TODO add like button/functionality
-
-    // TODO global context - menu - delete, edit, share
     useEffect(() => {
         const initOffer = async () => {
             const oid = Number(offerId);
@@ -101,12 +102,29 @@ const OfferView: React.FC = () => {
         return <div>{t("common.noResults")}</div>
     }
 
-    const goToEditForm = (offer: OfferI) => {
+    const goToEditForm = async (offer: OfferI) => {
         console.log('TODO goToEditForm');
     }
 
-    const deleteOffer = (offer: OfferI) => {
-        console.log('TODO deleteOffer');
+    const deleteOffer = async (offer: OfferI) => {
+        const confirmed = await confirm({
+            title: t('offer.deleteConfirmTitle'),
+            message: t('offer.deleteConfirmMessage'),
+        })
+        if (!confirmed) {
+            return;
+        }
+        try {
+            setLoading(true);
+            await OffersService.deleteOffer(offer.offerId);
+            await userCtx.initOffers();
+            toast.success(t('offer.deleteSuccessToast'));
+            navigate(-1);
+        }
+        finally {
+            setLoading(false);
+            userCtx.setLoading(false);
+        }
     }
 
     const offerActivation = async (offer: OfferI) => {
@@ -114,6 +132,11 @@ const OfferView: React.FC = () => {
             setLoading(true);
             const result = await OffersService.activation(offer.offerId)
             setOffer(result);
+            if (OfferStatuses.ACTIVE === result.status) {
+                toast.success(t('offer.activationSuccessToast'));
+            } else {
+                toast.success(t('offer.deactivationSuccessToast'));
+            }
         }
         finally {
             setLoading(false);

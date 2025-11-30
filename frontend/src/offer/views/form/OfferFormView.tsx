@@ -14,6 +14,7 @@ import { OffersService } from "offer/services/OffersService";
 import { useState } from "react";
 import Loading from "global/components/Loading";
 import { Path } from "../../../path";
+import { useUserContext } from "user/UserProvider";
 
 const OfferFormContent: React.FC = () => {
 
@@ -22,7 +23,7 @@ const OfferFormContent: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const ctx = useOfferForm();
-
+    const userCtx = useUserContext();
     const [loading, setLoading] = useState(false);
     const currentStep = ctx.form?.currentStep;
 
@@ -40,6 +41,8 @@ const OfferFormContent: React.FC = () => {
                 throw new Error(t("offer.form.validation.createError"));
             }
             ctx.removeFormFromLocalStorage();
+            await userCtx.initOffers();
+            userCtx.setLoading(false);
             toast.success(t("offer.form.success"));
             navigate(Path.getOffersPath(offer.uid));
         } catch (error) {

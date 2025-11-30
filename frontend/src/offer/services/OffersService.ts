@@ -1,5 +1,4 @@
 import { OfferForm, OfferI } from "@shared/interfaces/OfferI";
-import { a } from "framer-motion/dist/types.d-Cjd591yU";
 import { httpClient } from "global/services/http";
 
 export const OffersService = {
@@ -18,6 +17,9 @@ export const OffersService = {
 
     activation(offerId: number): Promise<OfferI> {
         return httpClient.patch<OfferI>(`/offers/${offerId}/activation`, {});
+    },
+
+    deleteOffer(offerId: number): Promise<void> {
+        return httpClient.delete<void>(`/offers/${offerId}`);
     }
-    
 }

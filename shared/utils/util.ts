@@ -1,4 +1,4 @@
-import { UserI, UserRole } from "@shared/interfaces/UserI";
+import { UserI, UserRole, UserRoles } from "@shared/interfaces/UserI";
 
 export abstract class Util {
 
@@ -37,6 +37,13 @@ export abstract class Util {
             return false
         }
         return userI.roles.some(role => allowedRoles.includes(role));
+    }
+
+    public static isAdmin(user: UserI | null | undefined): boolean {
+        if (!user) {
+            return false;
+        }
+        return[UserRoles.ADMIN, UserRoles.SUPERADMIN].some(role => user.roles.includes(role));
     }
 
     public static isDateString = (value: any) => {
