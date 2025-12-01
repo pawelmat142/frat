@@ -4,8 +4,6 @@ import App from './App';
 import './global/i18n';
 import './styles/index.scss';
 import { BrowserRouter } from 'react-router-dom';
-import Header from './global/components/Header';
-import Footer from './global/components/Footer';
 import LayoutFooterSwitch from 'global/components/LayoutFooterSwitch';
 import CookieBanner from './global/components/CookieBanner';
 import { ToastContainer } from 'react-toastify';
@@ -21,6 +19,7 @@ import EmployeeSearchProvider from 'employee/views/search/EmployeeSearchProvider
 import { FullScreenDialogProvider } from 'global/providers/FullScreenDialogProvider';
 import { GlobalProvider } from 'global/providers/GlobalProvider';
 import GlobalHeader from 'global/components/GlobalHeader';
+import OfferSearchProvider from 'offer/views/search/OfferSearchProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -37,30 +36,32 @@ root.render(
                   <CookieProvider>
                     <AuthProvider>
                       <UserProvider>
-                        <EmployeeSearchProvider>
-                          <MenuProvider>
-                            <div className="min-h-screen flex flex-col">
-                              <GlobalHeader />
-                              <main className="flex-1 flex flex-col items-center w-full overflow-x-hidden">
-                                <App />
-                              </main>
-                              <LayoutFooterSwitch />
-                            </div>
-                            <CookieBanner />
-                            <ToastContainer
-                              position="top-right"
-                              autoClose={3000}
-                              hideProgressBar={false}
-                              newestOnTop={false}
-                              closeOnClick
-                              rtl={false}
-                              pauseOnFocusLoss
-                              draggable
-                              pauseOnHover
-                              theme="light"
-                            />
-                          </MenuProvider>
-                        </EmployeeSearchProvider>
+                        <OfferSearchProvider>
+                          <EmployeeSearchProvider>
+                            <MenuProvider>
+                              <div className="min-h-screen flex flex-col">
+                                <GlobalHeader />
+                                <main className="flex-1 flex flex-col items-center w-full overflow-x-hidden">
+                                  <App />
+                                </main>
+                                <LayoutFooterSwitch />
+                              </div>
+                              <CookieBanner />
+                              <ToastContainer
+                                position="top-right"
+                                autoClose={3000}
+                                hideProgressBar={false}
+                                newestOnTop={false}
+                                closeOnClick
+                                rtl={false}
+                                pauseOnFocusLoss
+                                draggable
+                                pauseOnHover
+                                theme="light"
+                              />
+                            </MenuProvider>
+                          </EmployeeSearchProvider>
+                        </OfferSearchProvider>
                       </UserProvider>
                     </AuthProvider>
                   </CookieProvider>

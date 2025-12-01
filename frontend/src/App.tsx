@@ -28,6 +28,7 @@ import EmployeeProfileView from 'employee/views/profile/EmployeeProfileView';
 import OfferFormView from 'offer/views/form/OfferFormView';
 import MyOffersList from 'offer/views/MyOffersList';
 import OfferView from 'offer/views/offer-view/OfferView';
+import OfferSearchView from 'offer/views/search/OfferSearchView';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -76,6 +77,7 @@ const App: React.FC = () => {
                 <Route path={Path.USER_OFFERS} element={<PageWrapper direction={1}><ProtectedRoute><MyOffersList/></ProtectedRoute></PageWrapper>} />
                 {/* unprotected */}
                 <Route path={Path.OFFER} element={<PageWrapper direction={1}><OfferView/></PageWrapper>} />
+                <Route path={Path.OFFERS_SEARCH} element={<PageWrapper direction={1}><OfferSearchView/></PageWrapper>} />
 
                 <Route path={Path.SIGN_IN} element={<PageWrapper direction={1}><SignInPage /></PageWrapper>} />
                 <Route path={Path.SIGN_UP} element={<PageWrapper direction={1}><SignUpPage /></PageWrapper>} />

@@ -14,10 +14,9 @@ const EmployeeSearchView: React.FC = () => {
     // TODO sensowne indexy na searach
     // TODO desktop RWD adjustment
 
-    const ctx = useEmployeeSearch();
-    const { t } = useTranslation();
-    const globalCtx = useGlobalContext();
-    
+    const ctx = useEmployeeSearch()
+    const { t } = useTranslation()
+    const globalCtx = useGlobalContext()
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return (<div>
@@ -46,6 +45,7 @@ const EmployeeSearchView: React.FC = () => {
                 ))}
             </div>}
 
+{/* TODO translations */}
             {ctx.loading ? (<div>
                 <Loading></Loading>
             </div>) : (
@@ -69,7 +69,6 @@ const EmployeeSearchView: React.FC = () => {
                     </Button>
                 </div>
             )}
-            <div></div>
         </div>
 
     )
