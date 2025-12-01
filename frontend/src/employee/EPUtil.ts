@@ -1,4 +1,5 @@
 import { EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
+import { FilterUtil } from "global/FilterUtil";
 
 export abstract class EPUtil {
 
@@ -19,22 +20,18 @@ export abstract class EPUtil {
         if (page > 1) params.set('page', String(page));
         if (f.limit !== defaultFilters.limit) params.set('limit', String(f.limit));
         if (f.lat) params.set('lat', String(f.lat));
-        if (f.lng) params.set('lng', String(f.lng)); 
+        if (f.lng) params.set('lng', String(f.lng));
         const searchStr = params.toString();
         return searchStr;
     }
 
     public static parseFiltersFromSearch = (search: string, defaultFilters: EmployeeProfileSearchFilters): EmployeeProfileSearchFilters => {
         const params = new URLSearchParams(search);
-        const getArray = (key: string): string[] => {
-            const v = params.get(key);
-            if (!v) return [];
-            return v.split(',').filter(Boolean);
-        };
+
         const freeText = params.get('q') || '';
-        const skills = getArray('skills');
-        const certificates = getArray('certs');
-        const communicationLanguages = getArray('langs');
+        const skills = FilterUtil.getArray('skills', params);
+        const certificates = FilterUtil.getArray('certs', params);
+        const communicationLanguages = FilterUtil.getArray('langs', params);
         const locationCountry = params.get('country') || null;
         const page = parseInt(params.get('page') || '1', 10);
         const limit = parseInt(params.get('limit') || String(defaultFilters.limit), 10);
@@ -51,15 +48,9 @@ export abstract class EPUtil {
             limit,
             startDate: startDate,
             endDate: endDate,
-            lat: EPUtil.prepareNumberParam(params, 'lat'),
-            lng: EPUtil.prepareNumberParam(params, 'lng'),
+            lat: FilterUtil.prepareNumberParam(params, 'lat'),
+            lng: FilterUtil.prepareNumberParam(params, 'lng'),
         };
-    }
-
-    private static prepareNumberParam = (params: URLSearchParams, name: string): number | null => {
-        const value = params.get(name)
-        const parsed = value ? parseFloat(value) : null
-        return isNaN(parsed as number) ? null : parsed;
     }
 
     public static prepareName = (employeeProfile: EmployeeProfileI) => {

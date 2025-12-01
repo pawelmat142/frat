@@ -74,8 +74,9 @@ export abstract class ObjUtil {
         return false;
     }
 
-    
-    public static arrayChanged(arrOne: string[], arrTwo: string[]): boolean {
+    public static arrayChanged(arrOne?: string[], arrTwo?: string[]): boolean {
+        if (!arrOne && !arrTwo) return false;
+        if (!arrOne || !arrTwo) return true;
         if (arrOne.length !== arrTwo.length) {
             return true;
         }

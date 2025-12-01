@@ -8,6 +8,7 @@ import { OffersService } from './services/OffersService';
 import { OffersRepo } from './services/OffersRepo';
 import { OffersController } from './OffersController';
 import { CreateOfferService } from './services/CreateOfferService';
+import { OffersSearchService } from './services/OffersSearchService';
 
 @Module({
     imports: [
@@ -21,6 +22,7 @@ import { CreateOfferService } from './services/CreateOfferService';
     providers: [
         OffersService,
         CreateOfferService,
+        OffersSearchService,
         OffersRepo,
     ],
     controllers: [

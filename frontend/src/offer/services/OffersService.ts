@@ -1,4 +1,4 @@
-import { OfferForm, OfferI } from "@shared/interfaces/OfferI";
+import { OfferForm, OfferI, OfferSearchFilters, OfferSearchResponse } from "@shared/interfaces/OfferI";
 import { httpClient } from "global/services/http";
 
 export const OffersService = {
@@ -25,5 +25,9 @@ export const OffersService = {
 
     updateOffer(offerId: number, form: OfferForm): Promise<OfferI | null> {
         return httpClient.patch<OfferI>(`/offers/${offerId}`, form);
+    },
+
+    searchOffers(params: OfferSearchFilters): Promise<OfferSearchResponse> {
+		return httpClient.get<OfferSearchResponse>(`/offers/search/list`, { params });
     }
 }

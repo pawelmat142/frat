@@ -10,13 +10,13 @@ import { BtnModes, FloatingInputModes } from "global/interface/controls.interfac
 import { useEmployeeSearch } from "./EmployeeSearchProvider";
 import { useDrawer } from "global/providers/DrawerProvider";
 import EmployeeSearchFiltersSheet from "./EmployeeSearchFiltersSheet";
-import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { Utils } from "global/utils";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
-const EmployeeSearchFilters: React.FC<{ languagesDictionary?: DictionaryI | null }> = ({
-    languagesDictionary
-}) => {
+const EmployeeSearchFilters: React.FC = () => {
 
+    const globalCtx = useGlobalContext();
+    const languagesDictionary = globalCtx.dics.languages;
     const { t } = useTranslation();
     const [freeTextInput, setFreeTextInput] = useState('');
     const ctx = useEmployeeSearch();

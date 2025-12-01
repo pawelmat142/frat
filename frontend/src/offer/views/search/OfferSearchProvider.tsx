@@ -1,18 +1,19 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
-import { EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
 import { EPUtil } from "employee/EPUtil";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { Pagination } from "@shared/interfaces/interfaces";
+import { OfferI, OfferSearchFilters } from "@shared/interfaces/OfferI";
+import { OfferUtil } from "offer/OfferUtil";
+import { OffersService } from "offer/services/OffersService";
 
-
-export interface EmployeeSearchContextProps {
-    filters: EmployeeProfileSearchFilters;
-    defaultFilters: EmployeeProfileSearchFilters;
-    setFilters: (filters: EmployeeProfileSearchFilters) => void;
+export interface OfferSearchContextProps {
+    filters: OfferSearchFilters;
+    defaultFilters: OfferSearchFilters;
+    setFilters: (filters: OfferSearchFilters) => void;
     resetFilters: () => void;
-    results: EmployeeProfileI[];
+    results: OfferI[];
     pagination: Pagination;
     loading: boolean;
     setLoading: (loading: boolean) => void;
@@ -20,37 +21,34 @@ export interface EmployeeSearchContextProps {
     prevPage: () => void;
 }
 
-const EmployeeSearchContext = createContext<EmployeeSearchContextProps | undefined>(undefined);
+const OfferSearchContext = createContext<OfferSearchContextProps | undefined>(undefined);
 
-export const useEmployeeSearch = () => {
-    const ctx = useContext(EmployeeSearchContext);
-    if (!ctx) throw new Error("useEmployeeSearch must be used within EmployeeSearchProvider");
+export const useOfferSearch = () => {
+    const ctx = useContext(OfferSearchContext);
+    if (!ctx) throw new Error("useOfferSearch must be used within OfferSearchProvider");
     return ctx;
 };
 
-const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const defaultFilters: EmployeeProfileSearchFilters = {
+    const defaultFilters: OfferSearchFilters = {
         freeText: '',
+        categories: [],
+        communicationLanguages: [],
+        locationCountries: [],
         skills: [],
         certificates: [],
-        communicationLanguages: [],
-        locationCountry: null,
-        startDate: null,
-        endDate: null,
         skip: 0,
         limit: 5,
-        lat: null,
-        lng: null,
     };
 
     // Initialize from URL (fallback to defaults)
-    const [filters, setFilters] = useState<EmployeeProfileSearchFilters>(() => {
-        return EPUtil.parseFiltersFromSearch(location.search, defaultFilters)
+    const [filters, setFilters] = useState<OfferSearchFilters>(() => {
+        return OfferUtil.parseFiltersFromSearch(location.search, defaultFilters)
     });
-    const [results, setResults] = useState<EmployeeProfileI[]>([])
+    const [results, setResults] = useState<OfferI[]>([])
     const [count, setCount] = useState(0)
     const [loading, setLoading] = useState(false)
     const [searchUrl, setSearchUrl] = useState(location.search)
@@ -59,7 +57,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const totalPages = Math.ceil(count / itemsPerPage)
 
     useEffect(() => {
-        const urlFilters = EPUtil.parseFiltersFromSearch(location.search, defaultFilters)
+        const urlFilters = OfferUtil.parseFiltersFromSearch(location.search, defaultFilters)
         if (!filtersEquals(urlFilters, filters)) {
             setFilters(urlFilters)
             doSearch(urlFilters)
@@ -79,16 +77,19 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     }
 
-    const filtersEquals = (f1: EmployeeProfileSearchFilters, f2: EmployeeProfileSearchFilters): boolean => {
+    const filtersEquals = (f1: OfferSearchFilters, f2: OfferSearchFilters): boolean => {
         if (f1.freeText !== f2.freeText) return false;
-        if (f1.locationCountry !== f2.locationCountry) return false;
-        if (f1.startDate?.toISOString() !== f2.startDate?.toISOString()) return false;
-        if (f1.endDate?.toISOString() !== f2.endDate?.toISOString()) return false;
-        if (ObjUtil.arrayChanged(f1.skills, f2.skills)) return false;
-        if (ObjUtil.arrayChanged(f1.certificates, f2.certificates)) return false;
+        if (ObjUtil.arrayChanged(f1.categories, f2.categories)) return false;
+
         if (ObjUtil.arrayChanged(f1.communicationLanguages, f2.communicationLanguages)) return false;
-        if (f1.lat !== f2.lat) return false;
-        if (f1.lng !== f2.lng) return false;
+        if (ObjUtil.arrayChanged(f1.locationCountries, f2.locationCountries)) return false;
+
+        if (ObjUtil.arrayChanged(f1.skills, f2.skills)) return false;
+        if (ObjUtil.arrayChanged(f1.certificates, f2.certificates)) return false;   
+        
+        if (f1.monthlySalaryStart !== f2.monthlySalaryStart) return false;
+        if (f1.hourlySalaryStart !== f2.hourlySalaryStart) return false;
+
         if (f1.skip !== f2.skip) return false;
         if (f1.limit !== f2.limit) return false;
         return true;
@@ -98,14 +99,14 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const searchFilters = overrideFilters || filters;
         try {
             setLoading(true);
-            const result = await EmployeeProfileService.searchEmployeeProfiles(searchFilters);
+            const result = await OffersService.searchOffers(searchFilters);
             setResults(result.profiles);
             setCount(result.count);
         } catch (error: any) {
             if (error.name === 'AbortError') {
                 // Request anulowany
             } else {
-                console.error("Error searching employee profiles:", error);
+                console.error("Error searching offers:", error);
             }
         } finally {
             setLoading(false);
@@ -133,7 +134,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
 
     return (
-        <EmployeeSearchContext.Provider value={{
+        <OfferSearchContext.Provider value={{
             filters,
             setFilters: handleSetFilters,
             results,
@@ -151,8 +152,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
             defaultFilters
         }}>
             {children}
-        </EmployeeSearchContext.Provider>
+        </OfferSearchContext.Provider>
     );
 };
 
-export default EmployeeSearchProvider;
+export default OfferSearchProvider;

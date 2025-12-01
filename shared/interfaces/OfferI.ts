@@ -77,8 +77,8 @@ export const SalaryTypes = {
 export type SalaryType = typeof SalaryTypes[keyof typeof SalaryTypes];
 
 export const OfferStatuses = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE'
+    ACTIVE: 'ACTIVE',
+    INACTIVE: 'INACTIVE'
 } as const;
 export type OfferStatus = typeof OfferStatuses[keyof typeof OfferStatuses];
 
@@ -141,4 +141,27 @@ export interface OfferFormThree {
 export interface OfferFormFour {
     displayName?: string | null;
     description?: string | null;
+}
+
+export interface OfferSearchFilters {
+    freeText?: string;
+
+    categories?: string[];
+
+    communicationLanguages?: string[];
+    locationCountries?: string[]
+
+    skills?: string[];
+    certificates?: string[];
+
+    monthlySalaryStart?: number | null;
+    hourlySalaryStart?: number | null;
+
+    skip: number;
+    limit: number;
+}
+
+export interface OfferSearchResponse {
+  profiles: OfferI[];
+  count: number;
 }

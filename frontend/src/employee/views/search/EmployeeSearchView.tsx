@@ -28,7 +28,7 @@ const EmployeeSearchView: React.FC = () => {
     return (
         <div className="list-view">
 
-            <EmployeeSearchFilters languagesDictionary={globalCtx.dics.languages} />
+            <EmployeeSearchFilters />
 
             {!ctx.loading && !ctx.results.length ? (
                 <div className="flex flex-col items-center justify-center mt-20">

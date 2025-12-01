@@ -6,14 +6,17 @@ import { Serialize } from "global/decorators/Serialize";
 import { OfferEntity } from "./model/OfferEntity";
 import { CurrentUser } from "auth/decorators/CurrentUserDecorator";
 import { UserI } from "@shared/interfaces/UserI";
-import { OfferForm, OfferI } from "@shared/interfaces/OfferI";
-
+import { OfferForm, OfferI, OfferSearchFilters, OfferSearchResponse } from "@shared/interfaces/OfferI";
+import { OffersSearchService } from "./services/OffersSearchService";
 
 @Controller('api/offers')
 @UseInterceptors(LogInterceptor)
 export class OffersController {
 
-    constructor(private readonly offersService: OffersService) {}
+    constructor(
+        private readonly offersService: OffersService,
+        private readonly offersSearchService: OffersSearchService
+    ) {}
 
     @Get(':offerId')
     @Serialize(OfferEntity)
@@ -70,5 +73,14 @@ export class OffersController {
         @Body() form: OfferForm
     ): Promise<OfferI> {
         return this.offersService.updateOffer(user, offerId, form);
+    }
+
+    @Get('search/list')
+    @Serialize(OfferEntity)
+    searchOffers(
+        @CurrentUser() user: UserI,
+        @Param() filters: OfferSearchFilters
+    ): Promise<OfferSearchResponse> {
+        return this.offersSearchService.searchOffers(user, filters);
     }
 }
