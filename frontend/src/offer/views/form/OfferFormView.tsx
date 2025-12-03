@@ -19,7 +19,10 @@ import { OfferUtil } from "@shared/utils/OfferUtil";
 
 const OfferFormContent: React.FC = () => {
 
-    const initForm = async (offerId?: string) => {
+    const initFormIfEditMode = async (offerId?: string) => {
+        if (!offerId) {
+            return;
+        }
         try {
             setLoading(true);
             const offer = await OffersService.getOfferById(Number(offerId));
@@ -44,7 +47,7 @@ const OfferFormContent: React.FC = () => {
     const offerId = param.offerId;
 
     useEffect(() => {
-        initForm(offerId);
+        initFormIfEditMode(offerId);
     }, [offerId]);
 
     const onSubmit = async () => {

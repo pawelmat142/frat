@@ -313,7 +313,7 @@ input {
 
 .chip-container {
   display: flex;
-  gap: .2rem;
+  gap: .1rem;
   flex-wrap: wrap;
 }
 
@@ -350,6 +350,11 @@ input {
   }
 
   &.secondary {
+    color: $primary-text;
+    border: .5px solid $primary-text;
+  }
+
+  &.tertiary {
     color: $secondary-text;
     border: .5px solid $secondary-text;
   }

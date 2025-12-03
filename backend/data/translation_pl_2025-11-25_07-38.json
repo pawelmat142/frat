@@ -45,6 +45,11 @@
       "deactivationSuccessToast": "Oferta została pomyślnie dezaktywowana",
       "deleteSuccessToast": "Oferta została pomyślnie usunięta",
       "deleteConfirmMessage": "Czy na pewno chcesz usunąć tę ofertę? Tej akcji nie można cofnąć.",
+      "filters": {
+        "categories": "Kategorie",
+        "countries": "Kraje",
+        "communicationLanguages": "Języki komunikacji"
+      },
       "form": {
         "title": "Formularz oferty pracy",
         "success": "Oferta została pomyślnie utworzona",

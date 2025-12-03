@@ -6,6 +6,7 @@ import { OfferSearchFilters } from "@shared/interfaces/OfferI";
 import { BtnModes } from "global/interface/controls.interface";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import Button from "global/components/controls/Button";
+import FloatingInput from "global/components/controls/FloatingInput";
 
 const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ ctx }) => {
     const { t } = useTranslation();
@@ -33,7 +34,7 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
                     setLocalFilters(filters);
                     ctx.setFilters(filters);
                 }}
-                label={t("employeeProfile.form.communicationLanguage")}
+                label={t("offer.filters.categories")}
                 code="WORK_CATEGORY"
                 fullWidth
                 required
@@ -48,7 +49,7 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
                     setLocalFilters(filters);
                     ctx.setFilters(filters);
                 }}
-                label={t("employeeProfile.form.locationCountry")}
+                label={t("offer.filters.countries")}
                 code="LANGUAGES"
                 groupCode="COMMUNICATION"
                 elementLabelTranslationKey="COUNTRY_NAME"
@@ -64,7 +65,7 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
                     setLocalFilters(filters);
                     ctx.setFilters(filters);
                 }}
-                label={t("employeeProfile.form.communicationLanguage")}
+                label={t("offer.filters.communicationLanguages")}
                 code="LANGUAGES"
                 groupCode="COMMUNICATION"
                 fullWidth
@@ -97,6 +98,32 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
                 label={t("employeeProfile.form.certificates")}
                 code="CERTIFICATES"
                 fullWidth
+            />
+            <FloatingInput
+                type="number"
+                value={localFilters.hourlySalaryStart ?? ""}
+                onChange={(value) => {
+                    // todo debounce
+                    const filters = { ...localFilters, hourlySalaryStart: value.target.value ? Number(value.target.value) : null };
+                    setLocalFilters(filters);
+                    ctx.setFilters(filters);
+                }}
+                label={t("offer.hourlySalaryStart")}
+                fullWidth
+                name={""}
+            />
+            <FloatingInput
+                type="number"
+                value={localFilters.monthlySalaryStart ?? ""}
+                onChange={(value) => {
+                    // todo debounce
+                    const filters = { ...localFilters, monthlySalaryStart: value.target.value ? Number(value.target.value) : null };
+                    setLocalFilters(filters);
+                    ctx.setFilters(filters);
+                }}
+                label={t("offer.monthlySalaryStart")}
+                fullWidth
+                name={""}
             />
 
             <Button onClick={resetFilters} mode={BtnModes.ERROR} className="mt-5" fullWidth>

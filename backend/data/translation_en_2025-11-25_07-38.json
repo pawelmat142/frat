@@ -44,6 +44,11 @@
       "deactivationSuccessToast": "Offer deactivated successfully",
       "deleteSuccessToast": "Offer deleted successfully",
       "deleteConfirmMessage": "Are you sure you want to delete this offer? This action cannot be undone.",
+      "filters": {
+        "categories": "Categories",
+        "countries": "Countries",
+        "communicationLanguages": "Communication languages"
+      },
       "form": {
         "title": "Job offer form",
         "success": "Offer created successfully",

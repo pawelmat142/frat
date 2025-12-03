@@ -22,7 +22,7 @@ const EmployeeSearchFilters: React.FC = () => {
     const ctx = useEmployeeSearch();
     const { open } = useDrawer();
 
-    // Debounce effect: update RHF value after 500ms
+    // TODO wyciagnac do custom hooka
     useEffect(() => {
         const handler = setTimeout(() => {
             ctx.setFilters({ ...ctx.filters, freeText: freeTextInput });

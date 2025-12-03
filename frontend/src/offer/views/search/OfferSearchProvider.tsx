@@ -68,8 +68,8 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
         doSearch();
     }, [])
 
-    const handleSetFilters = (newFilters: EmployeeProfileSearchFilters) => {
-        const searchStr = EPUtil.prepareUrlParams(newFilters, defaultFilters);
+    const handleSetFilters = (newFilters: OfferSearchFilters) => {
+        const searchStr = OfferUtil.prepareUrlParams(newFilters, defaultFilters);
         const newUrl = searchStr ? `?${searchStr}` : '';
         if (newUrl !== location.search) {
             navigate({ pathname: location.pathname, search: newUrl }, { replace: true });

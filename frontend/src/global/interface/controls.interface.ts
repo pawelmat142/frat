@@ -44,7 +44,7 @@ export type FloatingInputMode = typeof FloatingInputModes[keyof typeof FloatingI
 
 export interface InputInterface {
     id?: string;
-    name: string;
+    name?: string;
     type?: 'text' | 'number' | 'password' | 'email' | 'date';
     label?: string;
     fullWidth?: boolean;
