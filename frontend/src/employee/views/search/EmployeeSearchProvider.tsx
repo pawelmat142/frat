@@ -46,9 +46,6 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const location = useLocation();
     const navigate = useNavigate();
 
-
-
-    // Initialize from URL (fallback to defaults)
     const [filters, setFilters] = useState<EmployeeProfileSearchFilters>(() => {
         return EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters)
     });

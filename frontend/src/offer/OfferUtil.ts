@@ -28,7 +28,7 @@ export abstract class OfferUtil {
     public static parseFiltersFromSearch = (search: string, defaultFilters: OfferSearchFilters): OfferSearchFilters => {
         const params = new URLSearchParams(search);
 
-        const freeText = params.get('q') || '';
+        const freeText = params.get('q') || undefined;
         const categories = FilterUtil.getArray('categories', params);
 
         const communicationLanguages = FilterUtil.getArray('communicationLanguages', params);
