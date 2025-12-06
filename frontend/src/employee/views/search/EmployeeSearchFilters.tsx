@@ -12,6 +12,8 @@ import { useDrawer } from "global/providers/DrawerProvider";
 import EmployeeSearchFiltersSheet from "./EmployeeSearchFiltersSheet";
 import { Utils } from "global/utils";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import { useDebouncedValue } from "shared/utils/useDebouncedValue";
+import { FaLanguage } from "react-icons/fa";
 
 const EmployeeSearchFilters: React.FC = () => {
 
@@ -22,13 +24,11 @@ const EmployeeSearchFilters: React.FC = () => {
     const ctx = useEmployeeSearch();
     const { open } = useDrawer();
 
-    // TODO wyciagnac do custom hooka
+    const debouncedFreeTextInput = useDebouncedValue(freeTextInput, 500);
+
     useEffect(() => {
-        const handler = setTimeout(() => {
-            ctx.setFilters({ ...ctx.filters, freeText: freeTextInput });
-        }, 500);
-        return () => clearTimeout(handler);
-    }, [freeTextInput]);
+        ctx.setFilters({ ...ctx.filters, freeText: debouncedFreeTextInput });
+    }, [debouncedFreeTextInput]);
 
     const openDrawer = () => {
         open({
@@ -41,7 +41,6 @@ const EmployeeSearchFilters: React.FC = () => {
     const flags = languagesDictionary
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.communicationLanguages || [], languagesDictionary))
         : [];
-
 
     const countryFlagSrc = ctx.filters.locationCountry
         ? languagesDictionary?.elements.find(el => el.code === ctx.filters.locationCountry)?.values.SRC
@@ -67,54 +66,56 @@ const EmployeeSearchFilters: React.FC = () => {
                 </div>
             </div>
 
-            {!!ctx.filters.startDate && (
-                <div className="ml-2 mt-1 flex items-center gap-1">
-                    <DateRange fontSize="inherit" className="primary-color" />
-                    <span className="xs-font">
-                        {Utils.formatFromTo(t, { start: ctx.filters.startDate, end: ctx.filters.endDate })}
-                    </span>
-                </div>)}
+            <div className="flex gap-x-3 flex-wrap items-center">
+                {!!ctx.filters.startDate && (
+                    <div className="ml-2 mt-1 flex items-center gap-1">
+                        <DateRange fontSize="inherit" className="secondary-text" />
+                        <span className="xs-font">
+                            {Utils.formatFromTo(t, { start: ctx.filters.startDate, end: ctx.filters.endDate })}
+                        </span>
+                    </div>)}
+
+                {(!!(ctx.filters.lat && ctx.filters.lng) || !!countryFlagSrc) && (
+                    <div className="ml-2 mt-1 flex items-center gap-1">
+                        <Place fontSize="inherit" className="secondary-text" />
+                        <img className="filters-flag-chip pl-1" src={countryFlagSrc} alt={"flag"} />
+                        {!!(ctx.filters.lat && ctx.filters.lng) && (
+                            <span className="xs-font">{Utils.formatPosition({ lat: ctx.filters.lat, lng: ctx.filters.lng })}</span>
+                        )}
+                    </div>
+                )}
+                {(!!ctx.filters.skills?.length) && (
+                    <div className="chip-container ml-2 mt-1">
+                        {(ctx.filters.skills || []).map(skill => (
+                            <div key={skill} className="search-chip tertiary">
+                                {skill}
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {(!!ctx.filters.certificates?.length) && (
+                    <div className="chip-container ml-2 mt-1">
+                        {(ctx.filters.certificates || []).map(cert => (
+                            <div key={cert} className="search-chip secondary">
+                                {cert}
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {!!flags?.length && (
+                    <div className="chip-container mt-1 ml-2">
+                        <FaLanguage className="secondary-text" />
+                        {(flags).map((src, index) => (
+                            <img key={index} className="filters-flag-chip pl-1" src={src} alt={"flag-" + index} />
+                        ))}
+                    </div>
+                )}
+            </div>
 
 
-            {(!!(ctx.filters.lat && ctx.filters.lng) || !!countryFlagSrc) && (
-                <div className="ml-2 mt-1 flex items-center gap-1">
-                    <Place fontSize="inherit" className="primary-color" />
 
-                    <img className="filters-flag-chip pl-1" src={countryFlagSrc} alt={"flag"} />
 
-                    {!!(ctx.filters.lat && ctx.filters.lng) && (
-                        <span className="xs-font">{Utils.formatPosition({ lat: ctx.filters.lat, lng: ctx.filters.lng })}</span>
-                    )}
-                </div>
-            )}
-
-            {(!!ctx.filters.skills?.length || !!ctx.filters.certificates?.length) && (
-                <div className="chip-container ml-2 mt-1">
-                    {(ctx.filters.skills || []).map(skill => (
-                        <div key={skill} className="search-chip primary">
-                            {skill}
-                        </div>
-                    ))}
-
-                    {!!ctx.filters.skills?.length && !!ctx.filters.certificates?.length && (
-                        <div className="chip-separator"></div>
-                    )}
-
-                    {(ctx.filters.certificates || []).map(cert => (
-                        <div key={cert} className="search-chip secondary">
-                            {cert}
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {!!flags?.length && (
-                <div className="chip-container mt-1 ml-2">
-                    {(flags).map((src, index) => (
-                        <img key={index} className="filters-flag-chip pl-1" src={src} alt={"flag-" + index} />
-                    ))}
-                </div>
-            )}
 
         </div>
     );

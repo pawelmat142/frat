@@ -1,11 +1,10 @@
-import Button from "global/components/controls/Button";
 import { useTranslation } from "react-i18next";
 import EmployeeProfileTile from "employee/components/EmployeeProfileTile";
 import Loading from "global/components/Loading";
-import { BtnModes } from "global/interface/controls.interface";
 import { useEmployeeSearch } from "./EmployeeSearchProvider";
 import EmployeeSearchFilters from "./EmployeeSearchFilters";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import Pagination from "global/components/controls/Pagination";
 
 const EmployeeSearchView: React.FC = () => {
 
@@ -45,29 +44,14 @@ const EmployeeSearchView: React.FC = () => {
                 ))}
             </div>}
 
-{/* TODO translations */}
             {ctx.loading ? (<div>
                 <Loading></Loading>
             </div>) : (
-                <div className="flex-[2] flex justify-center items-center gap-4 mt-5 mb-10">
-                    <Button
-                        mode={BtnModes.PRIMARY_TXT}
-                        onClick={() => ctx.prevPage()}
-                        disabled={ctx.pagination.currentPage === 1}
-                    >
-                        Previous
-                    </Button>
-                    <span className="secondary-text whitespace-nowrap">
-                        Page {ctx.pagination.currentPage} of {ctx.pagination.totalPages} ({ctx.pagination.count} items)
-                    </span>
-                    <Button
-                        mode={BtnModes.PRIMARY_TXT}
-                        onClick={() => ctx.nextPage()}
-                        disabled={ctx.pagination.currentPage === ctx.pagination.totalPages}
-                    >
-                        Next
-                    </Button>
-                </div>
+                <Pagination
+                    pagination={ctx.pagination}
+                    onPrev={ctx.prevPage}
+                    onNext={ctx.nextPage}
+                ></Pagination>
             )}
         </div>
 
