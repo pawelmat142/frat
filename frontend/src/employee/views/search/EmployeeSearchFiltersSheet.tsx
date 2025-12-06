@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { EmployeeSearchContextProps } from "./EmployeeSearchProvider";
+import { EmployeeSearchContextProps, EPDefaultFilters } from "./EmployeeSearchProvider";
 import { useDrawer } from "global/providers/DrawerProvider";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import Button from "global/components/controls/Button";
@@ -10,18 +10,30 @@ import { DateRange, EmployeeProfileSearchFilters, Position } from "@shared/inter
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import { PositionService } from "global/services/PositionService";
 import { DictionaryService } from "global/services/DictionaryService";
+import { useLocation } from "react-router-dom";
+import { EPUtil } from "employee/EPUtil";
+import { FaSearch } from "react-icons/fa";
 
 const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> = ({ ctx }) => {
 
     const { t } = useTranslation();
     const drawerCtx = useDrawer();
+    const location = useLocation();
 
-    // LOCAL STATE IS REQUIRED HERE BCS ctx.filters UPDATES ONLY ON "APPLY" ACTION
     const [localFilters, setLocalFilters] = useState(ctx.filters);
+
+    useEffect(() => {
+        const currentFilters = EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters)
+        setLocalFilters(currentFilters);
+    }, [])
 
     const resetFilters = () => {
         ctx.resetFilters()
-        setLocalFilters(ctx.defaultFilters);
+        drawerCtx.close();
+    }
+
+    const search = () => {
+        ctx.setFilters(localFilters);
         drawerCtx.close();
     }
 
@@ -62,7 +74,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
         if (countryCacheRef.current[key]) {
             const filters = { ...localFilters, locationCountry: countryCacheRef.current[key] };
             setLocalFilters(filters);
-            ctx.setFilters(filters);
             return;
         }
 
@@ -73,13 +84,13 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 const languageCode = await DictionaryService.getLanguageDictionaryCodeByCountryCode(countryCode || '');
                 if (languageCode) {
                     countryCacheRef.current[key] = languageCode;
-                    const filters = { ...localFilters, 
+                    const filters = {
+                        ...localFilters,
                         locationCountry: languageCode,
                         lat: position.lat,
                         lng: position.lng
                     };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }
             }
         } catch (e) {
@@ -103,7 +114,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                         endDate: dateRange?.end || null
                     };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }}
             />
 
@@ -114,7 +124,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                     const locationCountryValue = item ? String(item) : null;
                     const filters = { ...localFilters, locationCountry: locationCountryValue };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }}
                 label={t("employeeProfile.form.locationCountry")}
                 code="LANGUAGES"
@@ -136,7 +145,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                         lng: position ? position.lng : null
                     };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                     // Fire and forget reverse geocode (no await to keep UI responsive)
                     autofillCountryByPosition(position);
                 }}
@@ -149,7 +157,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 onSelectMulti={items => {
                     const filters = { ...localFilters, skills: items.map(i => String(i)) };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }}
                 label={t("employeeProfile.form.skills")}
                 code="SKILLS"
@@ -163,7 +170,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 onSelectMulti={items => {
                     const filters = { ...localFilters, certificates: items.map(i => String(i)) };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }}
                 label={t("employeeProfile.form.certificates")}
                 code="CERTIFICATES"
@@ -177,7 +183,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 onSelectMulti={items => {
                     const filters = { ...localFilters, communicationLanguages: items.map(i => String(i)) };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }}
                 label={t("employeeProfile.form.communicationLanguage")}
                 code="LANGUAGES"
@@ -186,9 +191,16 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 required
             />
 
-            <Button onClick={resetFilters} mode={BtnModes.ERROR} className="mt-5" fullWidth disabled={geoLoading}>
-                {t("common.reset")}
-            </Button>
+            <div className="mt-10">
+                <Button onClick={search} mode={BtnModes.PRIMARY} fullWidth>
+                    <FaSearch size={22}></FaSearch>
+                    {t("common.search")}
+                </Button>
+                <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-3" fullWidth>
+                    {t("common.reset")}
+                </Button>
+            </div>
+
 
         </div>
     );

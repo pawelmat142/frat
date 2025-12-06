@@ -20,19 +20,7 @@ export interface EmployeeSearchContextProps {
     prevPage: () => void;
 }
 
-const EmployeeSearchContext = createContext<EmployeeSearchContextProps | undefined>(undefined);
-
-export const useEmployeeSearch = () => {
-    const ctx = useContext(EmployeeSearchContext);
-    if (!ctx) throw new Error("useEmployeeSearch must be used within EmployeeSearchProvider");
-    return ctx;
-};
-
-const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-
-    const defaultFilters: EmployeeProfileSearchFilters = {
+export const EPDefaultFilters: EmployeeProfileSearchFilters = {
         freeText: '',
         skills: [],
         certificates: [],
@@ -46,9 +34,23 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         lng: null,
     };
 
+const EmployeeSearchContext = createContext<EmployeeSearchContextProps | undefined>(undefined);
+
+export const useEmployeeSearch = () => {
+    const ctx = useContext(EmployeeSearchContext);
+    if (!ctx) throw new Error("useEmployeeSearch must be used within EmployeeSearchProvider");
+    return ctx;
+};
+
+const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+
+
     // Initialize from URL (fallback to defaults)
     const [filters, setFilters] = useState<EmployeeProfileSearchFilters>(() => {
-        return EPUtil.parseFiltersFromSearch(location.search, defaultFilters)
+        return EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters)
     });
     const [results, setResults] = useState<EmployeeProfileI[]>([])
     const [count, setCount] = useState(0)
@@ -59,7 +61,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const totalPages = Math.ceil(count / itemsPerPage)
 
     useEffect(() => {
-        const urlFilters = EPUtil.parseFiltersFromSearch(location.search, defaultFilters)
+        const urlFilters = EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters)
         if (!filtersEquals(urlFilters, filters)) {
             setFilters(urlFilters)
             doSearch(urlFilters)
@@ -71,7 +73,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }, [])
 
     const handleSetFilters = (newFilters: EmployeeProfileSearchFilters) => {
-        const searchStr = EPUtil.prepareUrlParams(newFilters, defaultFilters);
+        const searchStr = EPUtil.prepareUrlParams(newFilters, EPDefaultFilters);
         const newUrl = searchStr ? `?${searchStr}` : '';
         if (newUrl !== location.search) {
             navigate({ pathname: location.pathname, search: newUrl }, { replace: true });
@@ -129,7 +131,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
 
     const resetFilters = () => {
-        handleSetFilters({ ...defaultFilters, limit: itemsPerPage });
+        handleSetFilters({ ...EPDefaultFilters, limit: itemsPerPage });
     };
 
     return (
@@ -148,7 +150,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 itemsPerPage
             },
             resetFilters,
-            defaultFilters
+            defaultFilters: EPDefaultFilters
         }}>
             {children}
         </EmployeeSearchContext.Provider>
