@@ -4,7 +4,7 @@ import { EmployeeProfileService } from "employee/services/EmployeeProfileService
 import { EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
 import { EPUtil } from "employee/EPUtil";
 import { ObjUtil } from "@shared/utils/ObjUtil";
-import { Pagination } from "@shared/interfaces/interfaces";
+import { PaginationI } from "@shared/interfaces/Others";
 
 
 export interface EmployeeSearchContextProps {
@@ -13,7 +13,7 @@ export interface EmployeeSearchContextProps {
     setFilters: (filters: EmployeeProfileSearchFilters) => void;
     resetFilters: () => void;
     results: EmployeeProfileI[];
-    pagination: Pagination;
+    pagination: PaginationI;
     loading: boolean;
     setLoading: (loading: boolean) => void;
     nextPage: () => void;

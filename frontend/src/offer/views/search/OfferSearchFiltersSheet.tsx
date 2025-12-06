@@ -136,12 +136,16 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
                 />
             </>)}
 
-            <Button onClick={search} mode={BtnModes.PRIMARY} className="mt-5" fullWidth>
-                {t("common.search")}
-            </Button>
-            <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-5" fullWidth>
-                {t("common.reset")}
-            </Button>
+            <div className="mt-10">
+                <Button onClick={search} mode={BtnModes.PRIMARY} fullWidth>
+                    
+                    {t("common.search")}
+                </Button>
+                <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-3" fullWidth>
+                    {t("common.reset")}
+                </Button>
+            </div>
+
 
         </div>
     );

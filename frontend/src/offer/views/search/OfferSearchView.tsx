@@ -4,8 +4,7 @@ import { useOfferSearch } from "./OfferSearchProvider";
 import Loading from "global/components/Loading";
 import OfferSearchFilters from "./OfferSearchFilters";
 import OfferTile from "offer/components/OfferTile";
-import Button from "global/components/controls/Button";
-import { BtnModes } from "global/interface/controls.interface";
+import Pagination from "global/components/controls/Pagination";
 
 const OfferSearchView: React.FC = () => {
 
@@ -38,29 +37,14 @@ const OfferSearchView: React.FC = () => {
                     ))}
                 </div>}
 
-            {/* TODO translations */}
             {ctx.loading ? (<div>
                 <Loading></Loading>
             </div>) : (
-                <div className="flex-[2] flex justify-center items-center gap-4 mt-5 mb-10">
-                    <Button
-                        mode={BtnModes.PRIMARY_TXT}
-                        onClick={() => ctx.prevPage()}
-                        disabled={ctx.pagination.currentPage === 1}
-                    >
-                        Previous
-                    </Button>
-                    <span className="secondary-text whitespace-nowrap">
-                        Page {ctx.pagination.currentPage} of {ctx.pagination.totalPages} ({ctx.pagination.count} items)
-                    </span>
-                    <Button
-                        mode={BtnModes.PRIMARY_TXT}
-                        onClick={() => ctx.nextPage()}
-                        disabled={ctx.pagination.currentPage === ctx.pagination.totalPages}
-                    >
-                        Next
-                    </Button>
-                </div>
+                <Pagination
+                    pagination={ctx.pagination}
+                    onPrev={ctx.prevPage}
+                    onNext={ctx.nextPage}
+                />
             )}
 
         </div>

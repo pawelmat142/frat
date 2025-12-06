@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
-import { EPUtil } from "employee/EPUtil";
 import { ObjUtil } from "@shared/utils/ObjUtil";
-import { Pagination } from "@shared/interfaces/interfaces";
+import { PaginationI } from "@shared/interfaces/Others";
 import { OfferI, OfferSearchFilters } from "@shared/interfaces/OfferI";
 import { OfferUtil } from "offer/OfferUtil";
 import { OffersService } from "offer/services/OffersService";
@@ -14,7 +13,7 @@ export interface OfferSearchContextProps {
     setFilters: (filters: OfferSearchFilters) => void;
     resetFilters: () => void;
     results: OfferI[];
-    pagination: Pagination;
+    pagination: PaginationI;
     loading: boolean;
     setLoading: (loading: boolean) => void;
     nextPage: () => void;
