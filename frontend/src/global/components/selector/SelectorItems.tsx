@@ -111,7 +111,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
                 {onClean && (
                     <Button onClick={handleClean} mode={BtnModes.ERROR_TXT} fullWidth={true}>
-                        {t("common.cancel")}
+                        {t("common.reset")}
                     </Button>
                 )}
 

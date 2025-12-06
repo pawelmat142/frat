@@ -20,6 +20,16 @@ export interface OfferSearchContextProps {
     nextPage: () => void;
     prevPage: () => void;
 }
+export const defaultOfferFilters: OfferSearchFilters = {
+    freeText: '',
+    categories: [],
+    communicationLanguages: [],
+    locationCountries: [],
+    skills: [],
+    certificates: [],
+    skip: 0,
+    limit: 5,
+};
 
 const OfferSearchContext = createContext<OfferSearchContextProps | undefined>(undefined);
 
@@ -33,20 +43,10 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const location = useLocation();
     const navigate = useNavigate();
 
-    const defaultFilters: OfferSearchFilters = {
-        freeText: '',
-        categories: [],
-        communicationLanguages: [],
-        locationCountries: [],
-        skills: [],
-        certificates: [],
-        skip: 0,
-        limit: 5,
-    };
 
     // Initialize from URL (fallback to defaults)
     const [filters, setFilters] = useState<OfferSearchFilters>(() => {
-        return OfferUtil.parseFiltersFromSearch(location.search, defaultFilters)
+        return OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters)
     });
     const [results, setResults] = useState<OfferI[]>([])
     const [count, setCount] = useState(0)
@@ -57,7 +57,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const totalPages = Math.ceil(count / itemsPerPage)
 
     useEffect(() => {
-        const urlFilters = OfferUtil.parseFiltersFromSearch(location.search, defaultFilters)
+        const urlFilters = OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters)
         if (!filtersEquals(urlFilters, filters)) {
             setFilters(urlFilters)
             doSearch(urlFilters)
@@ -69,7 +69,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, [])
 
     const handleSetFilters = (newFilters: OfferSearchFilters) => {
-        const searchStr = OfferUtil.prepareUrlParams(newFilters, defaultFilters);
+        const searchStr = OfferUtil.prepareUrlParams(newFilters, defaultOfferFilters);
         const newUrl = searchStr ? `?${searchStr}` : '';
         if (newUrl !== location.search) {
             navigate({ pathname: location.pathname, search: newUrl }, { replace: true });
@@ -85,8 +85,9 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (ObjUtil.arrayChanged(f1.locationCountries, f2.locationCountries)) return false;
 
         if (ObjUtil.arrayChanged(f1.skills, f2.skills)) return false;
-        if (ObjUtil.arrayChanged(f1.certificates, f2.certificates)) return false;   
-        
+        if (ObjUtil.arrayChanged(f1.certificates, f2.certificates)) return false;
+
+        if (f1.currency !== f2.currency) return false;
         if (f1.monthlySalaryStart !== f2.monthlySalaryStart) return false;
         if (f1.hourlySalaryStart !== f2.hourlySalaryStart) return false;
 
@@ -130,7 +131,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const resetFilters = () => {
-        handleSetFilters({ ...defaultFilters, limit: itemsPerPage });
+        handleSetFilters({ ...defaultOfferFilters, limit: itemsPerPage });
     };
 
     return (
@@ -149,7 +150,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 itemsPerPage
             },
             resetFilters,
-            defaultFilters
+            defaultFilters: defaultOfferFilters
         }}>
             {children}
         </OfferSearchContext.Provider>

@@ -1,45 +1,35 @@
 import { useTranslation } from "react-i18next";
-import { OfferSearchContextProps } from "./OfferSearchProvider";
+import { defaultOfferFilters, OfferSearchContextProps } from "./OfferSearchProvider";
 import { useDrawer } from "global/providers/DrawerProvider";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Currency, OfferSearchFilters } from "@shared/interfaces/OfferI";
 import { BtnModes } from "global/interface/controls.interface";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import Button from "global/components/controls/Button";
 import FloatingInput from "global/components/controls/FloatingInput";
 import CurrencySelector from "offer/components/CurrencySelector";
-import { useDebouncedValue } from "shared/utils/useDebouncedValue";
+import { useLocation } from "react-router-dom";
+import { OfferUtil } from "offer/OfferUtil";
 
 const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ ctx }) => {
     const { t } = useTranslation();
     const drawerCtx = useDrawer();
+    const location = useLocation();
 
-    // LOCAL STATE IS REQUIRED HERE BCS ctx.filters UPDATES ONLY ON "APPLY" ACTION
-    const [localFilters, setLocalFilters] = useState<OfferSearchFilters>(ctx.filters);
-
-    // Debounce salary inputs
-    const debouncedHourlySalaryStart = useDebouncedValue(localFilters.hourlySalaryStart, 500);
-    const debouncedMonthlySalaryStart = useDebouncedValue(localFilters.monthlySalaryStart, 500);
+    const [localFilters, setLocalFilters] = useState<OfferSearchFilters>(defaultOfferFilters);
 
     useEffect(() => {
-        if (localFilters.hourlySalaryStart !== debouncedHourlySalaryStart) {
-            const filters = { ...localFilters, hourlySalaryStart: debouncedHourlySalaryStart };
-            setLocalFilters(filters);
-            ctx.setFilters(filters);
-        }
-    }, [debouncedHourlySalaryStart]);
-
-    useEffect(() => {
-        if (localFilters.monthlySalaryStart !== debouncedMonthlySalaryStart) {
-            const filters = { ...localFilters, monthlySalaryStart: debouncedMonthlySalaryStart };
-            setLocalFilters(filters);
-            ctx.setFilters(filters);
-        }
-    }, [debouncedMonthlySalaryStart]);
+        const currentFilters = OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters)
+        setLocalFilters(currentFilters);
+    }, [])
 
     const resetFilters = () => {
         ctx.resetFilters()
-        setLocalFilters(ctx.defaultFilters);
+        drawerCtx.close();
+    }
+
+    const search = () => {
+        ctx.setFilters(localFilters);
         drawerCtx.close();
     }
 
@@ -53,7 +43,6 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
                 onSelectMulti={items => {
                     const filters = { ...localFilters, categories: items.map(i => String(i)) };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }}
                 label={t("offer.filters.categories")}
                 code="WORK_CATEGORY"
@@ -68,7 +57,6 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
                 onSelectMulti={items => {
                     const filters = { ...localFilters, locationCountries: items.map(i => String(i)) };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }}
                 label={t("offer.filters.countries")}
                 code="LANGUAGES"
@@ -84,7 +72,6 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
                 onSelectMulti={items => {
                     const filters = { ...localFilters, communicationLanguages: items.map(i => String(i)) };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }}
                 label={t("offer.filters.communicationLanguages")}
                 code="LANGUAGES"
@@ -100,7 +87,6 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
                 onSelectMulti={items => {
                     const filters = { ...localFilters, skills: items.map(i => String(i)) };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }}
                 label={t("employeeProfile.form.skills")}
                 code="SKILLS"
@@ -114,7 +100,6 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
                 onSelectMulti={items => {
                     const filters = { ...localFilters, certificates: items.map(i => String(i)) };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }}
                 label={t("employeeProfile.form.certificates")}
                 code="CERTIFICATES"
@@ -124,9 +109,8 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
             <CurrencySelector
                 value={localFilters.currency}
                 onChange={value => {
-                    const filters = { ...localFilters, currency: `${value}` as Currency };
+                    const filters = { ...localFilters, currency: value ? `${value}` as Currency : null };
                     setLocalFilters(filters);
-                    ctx.setFilters(filters);
                 }}
             />
             {!!localFilters.currency && (<>
@@ -152,7 +136,10 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
                 />
             </>)}
 
-            <Button onClick={resetFilters} mode={BtnModes.ERROR} className="mt-5" fullWidth>
+            <Button onClick={search} mode={BtnModes.PRIMARY} className="mt-5" fullWidth>
+                {t("common.search")}
+            </Button>
+            <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-5" fullWidth>
                 {t("common.reset")}
             </Button>
 
