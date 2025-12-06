@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards, UseInterceptors } from "@nestjs/common";
 import { LogInterceptor } from "global/interceptors/LogInterceptor";
 import { OffersService } from "./services/OffersService";
 import { JwtAuthGuard } from "auth/guards/JwtAuthGuard";
@@ -79,7 +79,7 @@ export class OffersController {
     @Serialize(OfferEntity)
     searchOffers(
         @CurrentUser() user: UserI,
-        @Param() filters: OfferSearchFilters
+        @Query() filters: OfferSearchFilters
     ): Promise<OfferSearchResponse> {
         return this.offersSearchService.searchOffers(user, filters);
     }

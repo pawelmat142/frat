@@ -16,13 +16,6 @@ export interface OfferI {
     startDate: Date
     endDate?: Date
 
-    availableSlots: number
-    // TODO power fields
-    appliedSlots: number
-    // TODO power fields
-    acceptedSlots: number
-
-
     // REQUIREMENTS FIELDS
     skillsRequired?: string[]
     skillsNiceToHave?: string[]
@@ -43,6 +36,13 @@ export interface OfferI {
     // DETAILS FIELDS    
     displayName?: string
     description?: string
+
+    availableSlots: number
+    // TODO power fields
+    appliedSlots: number
+    // TODO power fields
+    acceptedSlots: number
+
 
     // AUDIT FIELDS
     // TODO power fields
@@ -161,6 +161,6 @@ export interface OfferSearchFilters {
 }
 
 export interface OfferSearchResponse {
-  profiles: OfferI[];
+  offers: OfferI[];
   count: number;
 }

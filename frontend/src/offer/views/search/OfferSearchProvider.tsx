@@ -100,7 +100,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             setLoading(true);
             const result = await OffersService.searchOffers(searchFilters);
-            setResults(result.profiles);
+            setResults(result.offers);
             setCount(result.count);
         } catch (error: any) {
             if (error.name === 'AbortError') {

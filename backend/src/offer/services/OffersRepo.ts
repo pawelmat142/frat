@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { OfferEntity } from "offer/model/OfferEntity";
-import { DeepPartial, Repository } from "typeorm";
+import { DeepPartial, Repository, SelectQueryBuilder } from "typeorm";
 
 @Injectable()
 export class OffersRepo {
@@ -34,6 +34,10 @@ export class OffersRepo {
         const savedOffer = await this.offerRepository.save(offer);
         this.logger.log(`Created new offer: ${savedOffer.offerId}`);
         return savedOffer;
+    }
+
+    public getQueryBuilder(): SelectQueryBuilder<OfferEntity> {
+        return this.offerRepository.createQueryBuilder('offer');
     }
 
 }

@@ -1,5 +1,5 @@
 import { Point } from "@shared/interfaces/EmployeeProfileI";
-import { Currencies, Currency, OfferI, OfferStatus, Salary, SalaryTypes } from "@shared/interfaces/OfferI";
+import { Currency, OfferI, OfferStatus } from "@shared/interfaces/OfferI";
 import { Expose } from "class-transformer";
 import { Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";
 
@@ -97,19 +97,19 @@ export class OfferEntity implements OfferI {
 
 
     // SALARY FIELDS
-    @Column({ name: 'salary_hourly_from', type: 'int', nullable: true })
+    @Column({ name: 'hourly_salary_start', type: 'int', nullable: true })
     @Expose()
     hourlySalaryStart?: number;
 
-    @Column({ name: 'salary_hourly_to', type: 'int', nullable: true })
+    @Column({ name: 'hourly_salary_end', type: 'int', nullable: true })
     @Expose()
     hourlySalaryEnd?: number;
 
-    @Column({ name: 'salary_monthly_from', type: 'int', nullable: true })
+    @Column({ name: 'monthly_salary_start', type: 'int', nullable: true })
     @Expose()
     monthlySalaryStart?: number;
 
-    @Column({ name: 'salary_monthly_to', type: 'int', nullable: true })
+    @Column({ name: 'monthly_salary_end', type: 'int', nullable: true })
     @Expose()
     monthlySalaryEnd?: number;
 

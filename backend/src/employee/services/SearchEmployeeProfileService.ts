@@ -6,6 +6,7 @@ import { EmployeeProfileAvailabilityOptions, EmployeeProfileLocationOptions, Emp
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { SelectQueryBuilder } from 'typeorm';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
+import { SearchUtil } from 'global/utils/SearchUtil';
 
 @Injectable()
 export class SearchEmployeeProfileService {
@@ -20,10 +21,9 @@ export class SearchEmployeeProfileService {
         const queryBuilder = this.employeeProfileRepo.getQueryBuilder()
             .leftJoinAndSelect('profile.availabilityDateRanges', 'ranges');
 
-        const skills = this.parseArray(filters.skills);
-        const certificates = this.parseArray(filters.certificates);
-        const communicationLanguages = this.parseArray(filters.communicationLanguages);
-        // Allow passing multiple countries as comma-separated string or array
+        const skills = SearchUtil.parseArray(filters.skills);
+        const certificates = SearchUtil.parseArray(filters.certificates);
+        const communicationLanguages = SearchUtil.parseArray(filters.communicationLanguages);
 
         // Location filter (countries overlap + global ALL_EUROPE option)
         let hasFilter = false;
@@ -47,22 +47,7 @@ export class SearchEmployeeProfileService {
             hasFilter = true;
         }
 
-
-        // Free text fuzzy search
-        if (filters.freeText && filters.freeText.trim().length > 1) {
-            const freeText = `%${filters.freeText.trim().toLowerCase()}%`;
-            queryBuilder.andWhere(`(
-                LOWER(profile.display_name) ILIKE :freeText OR
-                LOWER(profile.email) ILIKE :freeText OR
-                LOWER(profile.first_name) ILIKE :freeText OR
-                LOWER(profile.last_name) ILIKE :freeText OR
-                array_to_string(profile.skills, ',') ILIKE :freeText OR
-                array_to_string(profile.certificates, ',') ILIKE :freeText
-            )`, { freeText });
-            hasFilter = true;
-        }
-
-        const count = await queryBuilder.getCount();
+        this.addFuzzySearchFilter(queryBuilder, filters, hasFilter);
 
         // Sortowanie: start date rosnąco 
         queryBuilder
@@ -75,14 +60,9 @@ export class SearchEmployeeProfileService {
             .orderBy('earliest_date', 'ASC', 'NULLS LAST');
 
 
-        // Obsługa paginacji
-        if (filters.skip) {
-            queryBuilder.skip(filters.skip);
-        }
-        if (filters.limit) {
-            queryBuilder.take(filters.limit);
-        }
+        this.addPagination(queryBuilder, filters);
 
+        const count = await queryBuilder.getCount();
         const results = await queryBuilder.getMany();
         return {
             profiles: results,
@@ -90,8 +70,17 @@ export class SearchEmployeeProfileService {
         };
     }
 
+    private addPagination(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
+        if (filters.skip) {
+            queryBuilder.skip(filters.skip);
+        }
+        if (filters.limit) {
+            queryBuilder.take(filters.limit);
+        }
+    }
+
     private addPositionFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
-        const locationCountries = this.parseArray(filters.locationCountry);
+        const locationCountries = SearchUtil.parseArray(filters.locationCountry);
 
         if (!locationCountries?.length) {
             return;
@@ -139,11 +128,20 @@ export class SearchEmployeeProfileService {
         }
     }
 
-    // UTILS
-    // --- Fix: parse arrays from query string if needed ---
-    private parseArray = (val: any): string[] | undefined => {
-        if (Array.isArray(val)) return val;
-        if (typeof val === 'string' && val.length > 0) return val.split(',');
-        return undefined;
-    };
+    private addFuzzySearchFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
+        // Free text fuzzy search
+        if (filters.freeText && filters.freeText.trim().length > 1) {
+            const freeText = `%${filters.freeText.trim().toLowerCase()}%`;
+            queryBuilder.andWhere(`(
+                LOWER(profile.display_name) ILIKE :freeText OR
+                LOWER(profile.email) ILIKE :freeText OR
+                LOWER(profile.first_name) ILIKE :freeText OR
+                LOWER(profile.last_name) ILIKE :freeText OR
+                array_to_string(profile.skills, ',') ILIKE :freeText OR
+                array_to_string(profile.certificates, ',') ILIKE :freeText
+            )`, { freeText });
+            hasFilter = true;
+        }
+    }
+
 }
