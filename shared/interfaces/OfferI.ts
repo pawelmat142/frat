@@ -33,8 +33,6 @@ export interface OfferI {
     languagesRequired?: string[]
     languagesNiceToHave?: string[]
 
-
-
     // SALARY FIELDS
     hourlySalaryStart?: number;
     hourlySalaryEnd?: number;
@@ -154,6 +152,7 @@ export interface OfferSearchFilters {
     skills?: string[];
     certificates?: string[];
 
+    currency?: Currency | null;
     monthlySalaryStart?: number | null;
     hourlySalaryStart?: number | null;
 

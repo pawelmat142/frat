@@ -11,6 +11,8 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useOfferSearch } from "./OfferSearchProvider";
 import OfferSearchFiltersSheet from "./OfferSearchFiltersSheet";
 import { FaTags, FaLanguage, FaMapMarkerAlt } from "react-icons/fa";
+import { Currencies } from "@shared/interfaces/OfferI";
+import { useDebouncedValue } from "shared/utils/useDebouncedValue";
 
 const OfferSearchFilters: React.FC = () => {
 
@@ -21,13 +23,12 @@ const OfferSearchFilters: React.FC = () => {
     const ctx = useOfferSearch();
     const { open } = useDrawer();
 
+    const debouncedFreeTextInput = useDebouncedValue(freeTextInput, 500);
+
     // Debounce effect: update RHF value after 500ms
     useEffect(() => {
-        const handler = setTimeout(() => {
-            ctx.setFilters({ ...ctx.filters, freeText: freeTextInput });
-        }, 500);
-        return () => clearTimeout(handler);
-    }, [freeTextInput]);
+        ctx.setFilters({ ...ctx.filters, freeText: debouncedFreeTextInput });
+    }, [debouncedFreeTextInput]);
 
     const openDrawer = () => {
         open({
@@ -37,9 +38,6 @@ const OfferSearchFilters: React.FC = () => {
         });
     }
 
-    console.log('OfferSearchFilters')
-    console.log(ctx.filters)
-
     const flags = languagesDictionary
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.communicationLanguages || [], languagesDictionary))
         : [];
@@ -47,6 +45,28 @@ const OfferSearchFilters: React.FC = () => {
     const countryFlags = languagesDictionary
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.locationCountries || [], languagesDictionary))
         : [];
+
+    const getSalaryFilterText = () => {
+        const currency = ctx.filters.currency === Currencies.EUR 
+            ? '€' 
+            : ctx.filters.currency === Currencies.USD 
+            ? '$' 
+            : 'zł';
+
+        let result = ''
+        if (ctx.filters.hourlySalaryStart) {
+            result += `>${ctx.filters.hourlySalaryStart} ${currency}/h`;
+            if (ctx.filters.monthlySalaryStart) {
+                result += ' or ';
+            }
+        }
+        if (ctx.filters.monthlySalaryStart) {
+            result += `>${ctx.filters.monthlySalaryStart} ${currency}/month`; 
+        }
+        return result;
+    }
+
+    const salaryFilterText = getSalaryFilterText();
 
     return (
         <div className="filters-container mb-5">
@@ -68,7 +88,7 @@ const OfferSearchFilters: React.FC = () => {
                 </div>
             </div>
 
-            <div className="flex gap-x-3 flex-wrap">
+            <div className="flex gap-x-3 flex-wrap items-center">
                 {(!!ctx.filters.categories?.length) && (
                     <div className="chip-container ml-2 mt-1">
                         <FaTags className="secondary-text" />
@@ -98,7 +118,7 @@ const OfferSearchFilters: React.FC = () => {
                     </div>
                 )}
 
-                {(!!ctx.filters.skills?.length || !!ctx.filters.certificates?.length) && (
+                {(!!ctx.filters.skills?.length) && (
                     <div className="chip-container ml-2 mt-1">
                         {(ctx.filters.skills || []).map(skill => (
                             <div key={skill} className="search-chip tertiary">
@@ -108,6 +128,7 @@ const OfferSearchFilters: React.FC = () => {
 
                     </div>
                 )}
+
                 {(!!ctx.filters.certificates?.length) && (
                     <div className="chip-container ml-2 mt-1">
                         {(ctx.filters.certificates || []).map(cert => (
@@ -117,7 +138,12 @@ const OfferSearchFilters: React.FC = () => {
                         ))}
                     </div>
                 )}
+
+                {(!!salaryFilterText && (
+                    <div className="ml-2 small-font">{salaryFilterText}</div>
+                ))}
             </div>
+
 
         </div>
     );

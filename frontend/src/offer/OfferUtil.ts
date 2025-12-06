@@ -1,4 +1,4 @@
-import { OfferSearchFilters } from "@shared/interfaces/OfferI";
+import { Currency, OfferSearchFilters } from "@shared/interfaces/OfferI";
 import { FilterUtil } from "global/FilterUtil";
 
 export abstract class OfferUtil {
@@ -14,6 +14,7 @@ export abstract class OfferUtil {
         if (f.skills?.length) params.set('skills', f.skills.join(','));
         if (f.certificates?.length) params.set('certificates', f.certificates.join(','));
         
+        if (f.currency) params.set('currency', f.currency);
         if (f.monthlySalaryStart) params.set('monthlySalaryStart', String(f.monthlySalaryStart));
         if (f.hourlySalaryStart) params.set('hourlySalaryStart', String(f.hourlySalaryStart));
 
@@ -36,6 +37,7 @@ export abstract class OfferUtil {
         const skills = FilterUtil.getArray('skills', params);
         const certificates = FilterUtil.getArray('certificates', params);
 
+        const currency = params.get('currency') as Currency | null
         const monthlySalaryStart = FilterUtil.prepareNumberParam(params, 'monthlySalaryStart');
         const hourlySalaryStart = FilterUtil.prepareNumberParam(params, 'hourlySalaryStart');
 
@@ -50,6 +52,7 @@ export abstract class OfferUtil {
             locationCountries,
             skills,
             certificates,
+            currency: currency,
             monthlySalaryStart,
             hourlySalaryStart,
             skip: skip < 0 ? 0 : skip,

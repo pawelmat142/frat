@@ -4,9 +4,8 @@ import { Controller } from "react-hook-form"
 import { useTranslation } from "react-i18next";
 import { useOfferForm } from "./OfferFormProvider";
 import { OfferForm, Currencies, Currency } from "@shared/interfaces/OfferI";
-import { SelectorItem } from "global/interface/controls.interface";
 import { useEffect } from "react";
-import FloatingSelector from "global/components/selector/FloatingSelector";
+import CurrencySelector from "offer/components/CurrencySelector";
 
 const OfferFormStepThree: React.FC = () => {
 
@@ -27,23 +26,13 @@ const OfferFormStepThree: React.FC = () => {
 
     const ctx = useOfferForm();
 
-    const currencyItems: SelectorItem<string>[] = Object.keys(Currencies).map(curency => ({
-        value: curency,
-        label: curency
-    }))
+
 
     useEffect(() => {
         if (!ctx.form.STEP_THREE?.currency) {
             ctx.formCtx.setValue("STEP_THREE.currency", Currencies.EUR);
         }
     }, [])
-
-    const getCurrencyValue = (fieldValue?: Currency | null) => {
-        if (!fieldValue) return null;
-        const result = currencyItems.find(item => item.value === fieldValue) || null;
-        console.log("getCurrencyValue:", fieldValue, "->", result);
-        return result;
-    }
 
 
     return (
@@ -117,23 +106,12 @@ const OfferFormStepThree: React.FC = () => {
                     )}
                 />
 
-                <Controller
-                    name="STEP_THREE.currency"
+                <CurrencySelector
                     control={ctx.formCtx.control}
-                    rules={required}
-                    render={({ field }) => (
-                        <FloatingSelector
-                            className="mb-5"
-                            {...field}
-                            value={getCurrencyValue(field.value)}
-                            label={t("offer.currency")}
-                            fullWidth
-                            required
-                            error={ctx.formCtx.formState.errors.STEP_THREE?.currency}
-                            items={currencyItems}
-                            onSelect={(value) => field.onChange(value)}
-                        />
-                    )}
+                    error={ctx.formCtx.formState.errors.STEP_THREE?.currency}
+                    value={ctx.form.STEP_THREE?.currency}
+                    required
+                    className="mb-5"
                 />
 
             </div>
