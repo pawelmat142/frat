@@ -17,6 +17,12 @@ export class GlobalController {
         private readonly translationPublicService: TranslationPublicService,
         private readonly dictionariesPublicService: DictionariesPublicService,
     ) {}
+
+    @Get('/test')
+    test() {
+        console.log('Hello world!');
+        return { test: 'hello world!'}
+    }
     
     @Get('get-translations/:langCode')
     @Serialize(TranslationEntity)

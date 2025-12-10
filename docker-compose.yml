@@ -41,22 +41,22 @@ services:
     command: ["npm", "run", "start:nodemon-debug"]
     # command: ["npm", "run", "start:nodemon"]
 
-  frontend:
-    build:
-      context: .
-      dockerfile: frontend/Dockerfile
-    container_name: jobhigh_frontend
-    environment:
-      REACT_APP_API_URL: http://localhost:3100/api
-      NODE_ENV: development
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    networks:
-      - jobhigh_network
-    command: npm start
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: frontend/Dockerfile
+  #   container_name: jobhigh_frontend
+  #   environment:
+  #     REACT_APP_API_URL: http://localhost:3100/api
+  #     NODE_ENV: development
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   networks:
+  #     - jobhigh_network
+  #   command: npm start
 
 volumes:
   postgres_data:
