@@ -1,7 +1,6 @@
 production
 
 backend/node_modules
-backend/package-lock.json
 backend/dist
 backend/firebase.json
 
