@@ -35,7 +35,7 @@ import { OffersModule } from 'offer/OfferModule';
     FeedbackModule
   ],
   controllers: [
-    GlobalController
+    GlobalController,
   ]
 })
 export class AppModule {}

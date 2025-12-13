@@ -4,6 +4,7 @@ import { UsersAdminController } from './UsersAdminController';
 import { UsersAdminService } from './UsersAdminService';
 import { UserModule } from 'user/UserModule';
 import { AuthModule } from 'auth/AuthModule';
+import { SuperAdminController } from './SuperAdminController';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { AuthModule } from 'auth/AuthModule';
     AuthModule
   ],
   controllers: [
-    UsersAdminController
+    UsersAdminController,
+    SuperAdminController
   ],
   providers: [
     UsersAdminService,
