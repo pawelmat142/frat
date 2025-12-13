@@ -9,8 +9,8 @@ import { Path } from '../../path';
 import { FirebaseAuth } from 'auth/services/FirebaseAuth';
 
 // const API_URL = "http://78.159.81.140:3100/api"
-// const API_URL = "http://78.159.81.140/api"
-const API_URL = "http://localhost:3100/api"
+const API_URL = "http://78.159.81.140/api"
+// const API_URL = "http://localhost:3100/api"
 
 export const queryClient = new QueryClient();
 

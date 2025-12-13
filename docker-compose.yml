@@ -27,11 +27,9 @@ services:
     container_name: jobhigh_backend
     env_file:
       - .env
+    expose:
+      - "3100"
     ports:
-      # todo remove start
-      - "80:80"
-      - "443:443"
-      # todo remove end
       - "3100:3100"
       - "9229:9229"
     depends_on:
@@ -42,8 +40,21 @@ services:
       - /app/backend/node_modules
     networks:
       - jobhigh_network
-    command: ["npm", "run", "start:nodemon-debug"]
-    # command: ["npm", "run", "start:nodemon"]
+    # command: ["npm", "run", "start:nodemon-debug"]
+    command: ["npm", "run", "start:nodemon"]
+
+  nginx:
+    image: nginx:alpine
+    container_name: jobhigh_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./frontend/build:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+    networks:
+      - jobhigh_network
 
   # frontend:
   #   build:
