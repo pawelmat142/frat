@@ -31,7 +31,7 @@ const TranslationsSection: React.FC = () => {
     
     const itemsPerPage = 15;
 
-    if (!translation?.selectedLanguage || !translation?.translations) {
+    if (!translation?.translations) {
         return null
     }
 
@@ -64,7 +64,7 @@ const TranslationsSection: React.FC = () => {
         }
     }
 
-    if (!defaultTranslation) {
+    if (!defaultTranslation || !translation?.selectedLanguage) {
         return (
             <div className="error-color mt-10 text-center">
                 Default language (en) translation not found. Please ensure it exists.<br />
