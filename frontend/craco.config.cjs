@@ -1,5 +1,7 @@
 const path = require('path');
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 module.exports = {
   webpack: {
     alias: {
@@ -32,6 +34,8 @@ module.exports = {
           });
         }
       });
+
+      // Usunięto ręczne dodawanie pluginu react-refresh/babel, CRACO/CRA obsługuje to automatycznie
 
       return webpackConfig;
     },

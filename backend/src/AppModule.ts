@@ -2,6 +2,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { DatabaseConfig } from './global/DatabaseConfig';
 import { DictionariesModule } from './admin/dictionaries/DictionariesModule';
 import { TranslationModule } from 'admin/translation/TranslationModule';
@@ -19,6 +21,12 @@ import { OffersModule } from 'offer/OfferModule';
     }),
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConfig,
+    }),
+
+    // Serve static React app from backend/public
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      exclude: ['/api*'],
     }),
 
     // ADMIN
