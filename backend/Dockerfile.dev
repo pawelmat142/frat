@@ -1,5 +1,8 @@
 FROM node:18-alpine
 
+# Instaluj curl
+RUN apk add --no-cache curl
+
 WORKDIR /app
 
 # Kopiuj package*.json i instaluj zależności

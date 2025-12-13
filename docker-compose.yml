@@ -28,6 +28,10 @@ services:
     env_file:
       - .env
     ports:
+      # todo remove start
+      - "80:80"
+      - "443:443"
+      # todo remove end
       - "3100:3100"
       - "9229:9229"
     depends_on:

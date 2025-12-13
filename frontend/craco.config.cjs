@@ -1,13 +1,30 @@
 const path = require('path');
 
-const isDevelopment = process.env.NODE_ENV === 'development';
-
 module.exports = {
   webpack: {
     alias: {
       '@shared': path.resolve(__dirname, '../shared'),
     },
     configure: (webpackConfig) => {
+      // Remove react-refresh plugin in production
+      if (process.env.NODE_ENV === 'production') {
+        // Remove react-refresh from babel-loader options
+        webpackConfig.module.rules.forEach((rule) => {
+          if (rule.oneOf) {
+            rule.oneOf.forEach((oneOfRule) => {
+              if (oneOfRule.loader && oneOfRule.loader.includes('babel-loader')) {
+                if (oneOfRule.options && oneOfRule.options.plugins) {
+                  oneOfRule.options.plugins = oneOfRule.options.plugins.filter((plugin) => {
+                    const pluginPath = Array.isArray(plugin) ? plugin[0] : plugin;
+                    return !pluginPath || !pluginPath.toString().includes('react-refresh');
+                  });
+                }
+              }
+            });
+          }
+        });
+      }
+
       // Allow imports from outside src directory
       const scopePluginIndex = webpackConfig.resolve.plugins.findIndex(
         ({ constructor }) => constructor && constructor.name === 'ModuleScopePlugin'
@@ -34,8 +51,6 @@ module.exports = {
           });
         }
       });
-
-      // Usunięto ręczne dodawanie pluginu react-refresh/babel, CRACO/CRA obsługuje to automatycznie
 
       return webpackConfig;
     },
