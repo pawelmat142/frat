@@ -1,19 +1,44 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Kopiuj package*.json i instaluj zależności
-COPY frontend/package*.json ./
-RUN npm ci
+# Argumenty build-time (zmienne środowiskowe)
+ARG REACT_APP_API_URL
+ARG REACT_APP_FIREBASE_API_KEY
+ARG REACT_APP_FIREBASE_AUTH_DOMAIN
+ARG REACT_APP_FIREBASE_PROJECT_ID
+ARG REACT_APP_FIREBASE_APP_ID
 
-# Kopiuj kod frontendu
-COPY frontend/src ./src
-COPY frontend/public ./public
-COPY frontend/tsconfig.json frontend/postcss.config.js frontend/tailwind.config.js ./
+# Eksportuj jako zmienne środowiskowe dla npm build
+ENV REACT_APP_API_URL=$REACT_APP_API_URL \
+    REACT_APP_FIREBASE_API_KEY=$REACT_APP_FIREBASE_API_KEY \
+    REACT_APP_FIREBASE_AUTH_DOMAIN=$REACT_APP_FIREBASE_AUTH_DOMAIN \
+    REACT_APP_FIREBASE_PROJECT_ID=$REACT_APP_FIREBASE_PROJECT_ID \
+    REACT_APP_FIREBASE_APP_ID=$REACT_APP_FIREBASE_APP_ID
 
-# Kopiuj katalog shared z root do /app/shared
+# Kopiuj frontend i shared
+COPY frontend/package*.json ./frontend/
 COPY shared ./shared
 
-EXPOSE 3000
+# Instaluj zależności
+WORKDIR /app/frontend
+RUN npm install
 
-CMD ["npm", "start"]
+# Kopiuj kod frontendu
+COPY frontend ./
+
+# Zbuduj frontend
+RUN npm run build
+
+# Stage 2: Nginx
+FROM nginx:alpine
+
+# Kopiuj skompilowany frontend z buildera
+COPY --from=builder /app/frontend/build /usr/share/nginx/html
+
+# Kopiuj konfigurację nginx
+COPY frontend/nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
