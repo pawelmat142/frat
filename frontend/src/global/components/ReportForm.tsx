@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Input from './controls/Input';
 import Button from './controls/Button';
 import { BtnModes, BtnSizes } from '../interface/controls.interface';
 import { useTranslation } from 'react-i18next';
 import { FeedbackService } from 'global/services/FeedbackService';
 import FloatingTextarea from './controls/FloatingTextarea';
+import FloatingInput from './controls/FloatingInput';
 
 interface ReportFormProps {
   title?: string;
@@ -62,7 +62,7 @@ const ReportForm: React.FC<ReportFormProps> = ({ title }) => {
         rows={6}
         error={error ? { message: error } : null}
       />
-      <Input
+      <FloatingInput
         name="contact"
         label={t('report.contactLabel')}
         value={contact}

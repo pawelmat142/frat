@@ -23,7 +23,7 @@
       }
     },
     "offer": {
-      "add": "Add offer",
+      "add": "New offer",
       "statusActive": "Active",
       "statusInactive": "Inactive",
       "management": "Offer management",
@@ -38,7 +38,7 @@
       "created": "Created",
       "noOffers": "You have no offers yet.",
       "offersList": "Offers list",
-      "searchTitle": "Offers search",
+      "searchTitle": "Offers",
       "offerViewTitle": "Offer details",
       "activationSuccessToast": "Offer activated successfully",
       "deactivationSuccessToast": "Offer deactivated successfully",
@@ -134,7 +134,8 @@
       "hour": "hour",
       "day": "day",
       "year": "year",
-      "options": "Options"
+      "options": "Options",
+      "search": "Search",
     },
     "header": {
       "home": "Home",
@@ -390,7 +391,7 @@
     },
     "employeeProfile": {
       "edit": "Edit employee profile",
-      "searchTitle": "Employees search",
+      "searchTitle": "Employees",
       "form": {
         "step1": {
           "label": "Step 1",

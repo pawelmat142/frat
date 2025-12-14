@@ -23,7 +23,7 @@
       }
     },
     "offer": {
-      "add": "Dodaj ofertę",
+      "add": "Nowa oferta",
       "statusActive": "Aktywna",
       "statusInactive": "Nieaktywna",
       "management": "Zarządzanie ofertami",
@@ -39,7 +39,7 @@
       "noOffers": "Nie masz jeszcze żadnych ofert.",
       "myListTitle": "Moje oferty",
       "offersList": "Lista ofert",
-      "searchTitle": "Szukaj ofert",
+      "searchTitle": "Oferty",
       "offerViewTitle": "Szczegóły oferty",
       "activationSuccessToast": "Oferta została pomyślnie aktywowana",
       "deactivationSuccessToast": "Oferta została pomyślnie dezaktywowana",
@@ -135,7 +135,8 @@
       "hour": "godzina",
       "day": "dzień",
       "year": "rok",
-      "options": "Opcje"
+      "options": "Opcje",
+      "search": "Szukaj"
     },
     "header": {
       "home": "Strona główna",
@@ -384,7 +385,7 @@
     },
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",
-      "searchTitle": "Szukaj pracowników",
+      "searchTitle": "Specjaliści",
       "form": {
         "step1": {
           "label": "Krok 1",

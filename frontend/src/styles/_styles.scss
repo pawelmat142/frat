@@ -187,6 +187,7 @@ $tile-edge-radius: 1rem;
 
 .mobile-bottom-nav-label {
     color: $secondary-text;
+    font-size: $smallFont;
 }
 
 @media screen and (min-width: $desktop) {
@@ -223,7 +224,8 @@ $tileRadius: 1rem;
 
     .square-tile {
         border-radius: $tileRadius;
-        font-size: $lFont;
+        font-size: $btnFont;
+
         color: $primary-color;
         gap: .5rem;
 
