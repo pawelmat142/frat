@@ -2,7 +2,7 @@ import { OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
 import { useAuthContext } from "auth/AuthProvider";
 import CallendarTile from "employee/views/profile/CallendarTile";
 import EditButton from "global/components/buttons/EditButton";
-import Chips from "global/components/chips/Chips";
+import Chips, { ChipModes } from "global/components/chips/Chips";
 import Loading from "global/components/Loading";
 import Flags from "global/Flags";
 import { useGlobalContext } from "global/providers/GlobalProvider";
@@ -167,20 +167,20 @@ const OfferView: React.FC = () => {
 
                 {!!offer.skillsRequired?.length && (<>
                     <div className="mt-5 mb-1 secondary-text">{t('offer.skillsRequired')}: </div>
-                    <Chips chips={offer.skillsRequired || []}></Chips>
+                    <Chips chips={offer.skillsRequired || []} mode={ChipModes.TERTIARY}></Chips>
                 </>)}
                 {!!offer.skillsNiceToHave?.length && (<>
                     <div className="mt-3 mb-1 secondary-text">{t('offer.skillsNiceToHave')}: </div>
-                    <Chips chips={offer.skillsNiceToHave || []}></Chips>
+                    <Chips chips={offer.skillsNiceToHave || []} mode={ChipModes.SECONDARY}></Chips>
                 </>)}
 
                 {!!offer.certificatesRequired?.length && (<>
                     <div className="mt-5 mb-1 secondary-text">{t('offer.certificatesRequired')}: </div>
-                    <Chips chips={offer.certificatesRequired || []}></Chips>
+                    <Chips chips={offer.certificatesRequired || []} mode={ChipModes.TERTIARY}></Chips>
                 </>)}
                 {!!offer.certificatesNiceToHave?.length && (<>
                     <div className="mt-3 mb-1 secondary-text">{t('offer.certificatesNiceToHave')}: </div>
-                    <Chips chips={offer.certificatesNiceToHave || []}></Chips>
+                    <Chips chips={offer.certificatesNiceToHave || []} mode={ChipModes.SECONDARY}></Chips>
                 </>)}
 
                 {!!offer.languagesRequired?.length && (<div>

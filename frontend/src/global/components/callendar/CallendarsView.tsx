@@ -154,7 +154,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
 
                 </>)}
 
-                <div className="mt-2">
+                <div>
                     <CallendarDaysHeader fullScreenMode={true} />
                 </div>
             </div>
@@ -182,7 +182,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
             </div>
             {selectorMode && (
                 <div className="flex gap-4 bottom-sheet-footer callendars-view-footer w-full py-2">
-                    <Button onClick={onCancel} size={BtnSizes.LARGE} mode={BtnModes.ERROR} fullWidth={true}>
+                    <Button onClick={onCancel} size={BtnSizes.LARGE} mode={BtnModes.ERROR_TXT} fullWidth={true}>
                         {t("common.reset")}
                     </Button>
 

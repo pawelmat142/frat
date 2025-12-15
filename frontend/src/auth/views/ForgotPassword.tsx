@@ -44,7 +44,7 @@ const ForgotPassword: React.FC = () => {
                 {t("signin.forgotPasswordTitle")}
             </h2>
 
-                <div className="flex flex-col gap-7 md:gap-5">
+                <div className="flex flex-col gap-5 md:gap-5">
                     <Input
                         name="email"
                         label={t("signin.email")}

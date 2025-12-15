@@ -9,7 +9,8 @@
     color: $primary-text;
 }
 
-$headerHeight: 60px;
+$headerHeight: 45px;
+$headerHeightDesktop: 60px;
 
 .header {
 
@@ -192,6 +193,8 @@ $tile-edge-radius: 1rem;
 
 @media screen and (min-width: $desktop) {
     .header {
+        max-height: $headerHeightDesktop;
+
         .desktop-menu {
             display: flex;
             flex-wrap: wrap;
@@ -364,8 +367,7 @@ $cellRadius: .25rem;
 
     &.header-cell {
         font-size: $xsFont;
-        color: $primary-color;
-        margin-bottom: 6px;
+        color: $secondary-text;
 
         &.big {
             font-size: 1rem;
@@ -493,7 +495,7 @@ $cellRadiusBig: 1rem;
 
 // FORMS
 .form-view {
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
     width: 100%;
     max-width: $mobile;
 }

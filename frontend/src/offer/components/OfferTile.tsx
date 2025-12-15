@@ -2,7 +2,7 @@ import { OfferI } from "@shared/interfaces/OfferI";
 import { useTranslation } from "react-i18next";
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
-import Chips from "global/components/chips/Chips";
+import Chips, { ChipModes } from "global/components/chips/Chips";
 import { Util } from "@shared/utils/util";
 
 interface Props {
@@ -44,8 +44,8 @@ const OfferTile: React.FC<Props> = ({ offer, first, last }) => {
                 </div>
                 <div className="tile-content-row bottom">
                     <div className="flex">
-                        <Chips chips={offer.skillsRequired || []} />
-                        <Chips className="ml-10" chips={offer.certificatesRequired || []} />
+                        <Chips chips={offer.skillsRequired || []} mode={ChipModes.TERTIARY}/>
+                        <Chips className="ml-5" chips={offer.certificatesRequired || []} mode={ChipModes.SECONDARY} />
                     </div>
                     <div>{Util.displayDate(offer.createdAt)}</div>
                 </div>

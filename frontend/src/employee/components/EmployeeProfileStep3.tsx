@@ -44,7 +44,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ control, setValue, watch, formS
                 {t("employeeProfile.form.step3.title")}
             </h3>
 
-            <div className="flex flex-col gap-7 md:gap-5 mt-5">
+            <div className="flex flex-col gap-5 md:gap-5 mt-5">
                 <TabSwitcher
                     options={tabOptions}
                     value={locationOption}

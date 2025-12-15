@@ -20,7 +20,7 @@ const EmployeeProfileStep2: React.FC<Props> = ({ control, formState }) => {
                 {t("employeeProfile.form.step2.title")}
             </h2>
 
-            <div className="flex flex-col gap-7 md:gap-5">
+            <div className="flex flex-col gap-5 md:gap-5">
                 <Controller
                     name="step2.skills"
                     control={control}

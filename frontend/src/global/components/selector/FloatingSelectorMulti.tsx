@@ -75,7 +75,7 @@ function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
                                 <div className="chip-container">
                                     {Array.isArray(values) && values.length > 0
                                         ? values.map(v => (
-                                            <div key={String(v.value)} className="chip">
+                                            <div key={String(v.value)} className="search-chip primary">
                                                 {v.label}
                                             </div>
                                         ))

@@ -89,7 +89,7 @@ const SignUpPage: React.FC = () => {
                     </div>
                 )}
 
-                <div className="flex flex-col gap-7 md:gap-5">
+                <div className="flex flex-col gap-5 md:gap-5">
                     <FloatingInput
                         name="email"
                         label={t("signup.email")}

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Utils } from "global/utils";
 import { useTranslation } from "react-i18next";
 import { EPUtil } from "employee/EPUtil";
-import Chips from "global/components/chips/Chips";
+import Chips, { ChipModes } from "global/components/chips/Chips";
 
 interface Props {
     profile: EmployeeProfileI,
@@ -72,8 +72,8 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
                 <div className="tile-content-row bottom">
 
                     <div className="flex">
-                        <Chips chips={profile.skills || []}></Chips>
-                        <Chips className="ml-10" chips={profile.certificates || []}></Chips>
+                        <Chips chips={profile.skills || []} mode={ChipModes.TERTIARY}></Chips>
+                        <Chips className="ml-5" chips={profile.certificates || []} mode={ChipModes.SECONDARY}></Chips>
                     </div>
 
                     <div className="">{Util.displayDate(profile.createdAt)}</div>

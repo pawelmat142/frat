@@ -153,13 +153,13 @@ const OfferFormContent: React.FC = () => {
 
                     {renderStep()}
 
-                    <div className="flex gap-4 mt-10 mb-10">
+                    <div className="flex gap-4 mt-6 mb-10">
                         {currentStep !== OfferFormSteps.STEP_ONE && (
                             <Button
                                 type="button"
                                 onClick={ctx.prevStep}
                                 size={BtnSizes.LARGE}
-                                mode={BtnModes.SECONDARY}
+                                mode={BtnModes.SECONDARY_TXT}
                                 className="flex-1"
                             >
                                 {t("common.previous")}
@@ -171,7 +171,7 @@ const OfferFormContent: React.FC = () => {
                                 type="button"
                                 onClick={ctx.nextStep}
                                 size={BtnSizes.LARGE}
-                                mode={BtnModes.PRIMARY}
+                                mode={BtnModes.PRIMARY_TXT}
                                 className="flex-1"
                             >
                                 {t("common.next")}

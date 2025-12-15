@@ -135,7 +135,7 @@
       "day": "day",
       "year": "year",
       "options": "Options",
-      "search": "Search",
+      "search": "Search"
     },
     "header": {
       "home": "Home",
@@ -487,13 +487,13 @@
       "create": "Create an employee profile",
       "exists": "Employee profile already exists for this user",
       "joined": "Joined:",
-      "search": "Search for employees",
-      "notFound": "Employee profile not found for update",
-      "noChanges": "No changes detected in the employee profile",
-      "editButton": "Edit Employee Profile",
+      "search": "Workers",
+      "notFound": "Worker profile not found for update",
+      "noChanges": "No changes detected in the worker profile",
+      "editButton": "Edit Worker Profile",
       "experience": "Experience",
       "availability": "Availability",
-      "submitSuccess": "Employee profile saved successfully.",
+      "submitSuccess": "Worker profile saved successfully.",
       "alreadyInStatus": "Profile is already in the specified status"
     }
   }

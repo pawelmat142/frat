@@ -17,7 +17,6 @@ const IconButton: React.FC<IconBtnInterface> = ({
     disabled,
     mode = BtnModes.PRIMARY_TXT
 }) => {
-
     let myClass = `rounded-md btn-font icon-btn ripple p-2`;
 
     if (className) {

@@ -10,7 +10,7 @@ import CallendarTile from "./CallendarTile";
 import ProfileDataTile from "./ProfileDataTile";
 import AvailabilityTile from "./AvailabilityTile";
 import { useTranslation } from "react-i18next";
-import Chips from "global/components/chips/Chips";
+import Chips, { ChipModes } from "global/components/chips/Chips";
 import { useAuthContext } from "auth/AuthProvider";
 import EditButton from "global/components/buttons/EditButton";
 import { useGlobalContext } from "global/providers/GlobalProvider";
@@ -96,10 +96,10 @@ const EmployeeProfileView: React.FC = () => {
 
 
                 <div className="mt-5 mb-1">{t('employeeProfile.form.skills')}: </div>
-                <Chips chips={profile.skills || []}></Chips>
+                <Chips chips={profile.skills || []} mode={ChipModes.TERTIARY}></Chips>
 
                 <div className="mt-5 mb-1">{t('employeeProfile.form.certificates')}: </div>
-                <Chips chips={profile.certificates || []}></Chips>
+                <Chips chips={profile.certificates || []} mode={ChipModes.SECONDARY}></Chips>
 
                 <div className="mt-5 mb-1">{t('employeeProfile.experience')}: </div>
             </div>

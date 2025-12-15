@@ -184,15 +184,16 @@ input {
 }
 .callendar-view-input {
   padding: .5rem .75rem;
+  padding-left: .25rem;
   background-color: $secondary-bg;
   display: flex;
   flex-grow: 2;
   width: 100%;
 }
 .callendar-view-label {
-  padding-left: .75rem;
+  padding-left: .5rem;
   flex-grow: 1;
-  margin-right: .75rem;
+  margin-right: .25rem;
   font-weight: bold;
   font-size: $smallFont;
   color: $secondary-text;

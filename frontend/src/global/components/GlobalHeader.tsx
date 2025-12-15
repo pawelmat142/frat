@@ -17,7 +17,7 @@ const GlobalHeader: React.FC = () => {
                         {globalCtx?.header?.leftBtn}
 
                         {globalCtx?.header?.title && (
-                            <div className="header-title ml-2 l-font primary-color">
+                            <div className="header-title ml-2 btn-font pri-text">
                                 {t(globalCtx?.header?.title)}
                             </div>
                         )}

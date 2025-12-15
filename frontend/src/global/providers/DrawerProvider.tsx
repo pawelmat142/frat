@@ -71,8 +71,8 @@ const DrawerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                         onClick={e => e.stopPropagation()}
                     >
 
-                        <div className="flex justify-between items-center px-5 py-5">
-                            {params.title && <div className="xl-font font-bold primary-color">{params.title}</div>}
+                        <div className="flex justify-between items-center px-5 py-3">
+                            {params.title && <div className="l-font primary-text">{params.title}</div>}
                             {params.showClose && (
                                 <CloseBtn onClick={close}></CloseBtn>
                             )}
