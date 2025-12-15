@@ -5,6 +5,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import MessageIcon from '@mui/icons-material/Message';
 import BadgeIcon from '@mui/icons-material/Badge';
 import { Path } from '../../path';
+import { FaBriefcase } from 'react-icons/fa';
 
 const AdminPanelSidebar: React.FC = () => {
 
@@ -48,6 +49,14 @@ const AdminPanelSidebar: React.FC = () => {
       >
           <BadgeIcon />
         <span>Employee Profiles</span>
+      </NavLink>
+
+      <NavLink
+        to={Path.ADMIN_OFFERS}
+        className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
+      > 
+        <FaBriefcase className="svg-icon" />
+        <span>Offers</span>
       </NavLink>
     </div>
   );

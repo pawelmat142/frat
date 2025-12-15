@@ -5,6 +5,8 @@ import { TranslationAdminService } from "admin/services/TranslationAdmin.service
 import { TranslationI } from "@shared/interfaces/TranslationI";
 import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdmin.service";
+import { OfferI } from "@shared/interfaces/OfferI";
+import { OffersAdminService } from "admin/services/OffersAdmin.service";
 
 export interface AdminPanelTranslations {
     translations?: TranslationI[];
@@ -21,9 +23,15 @@ export interface AdminPanelEmployeeProfiles {
     initProfiles: () => Promise<void>;
 }
 
+export interface AdminPanelOffers {
+    offers?: OfferI[]
+    initOffers: () => Promise<void>
+}
+
 interface AdminPanelContextType {
     translation?: AdminPanelTranslations
     employeeProfiles?: AdminPanelEmployeeProfiles
+    offers?: AdminPanelOffers
 }
 
 const AdminPanelContext = createContext<AdminPanelContextType | undefined>(undefined)
@@ -38,6 +46,7 @@ export const AdminPanelProvider: React.FC<AdminPanelProviderProps> = ({ children
     const [translations, setTranslations] = useState<TranslationI[]>([]);
 
     const [employeeProfiles, setEmployeeProfiles] = useState<EmployeeProfileI[]>([])
+    const [offers, setOffers] = useState<OfferI[]>([])
 
     const initTranslations = async () => {
         const langs = await TranslationAdminService.getLanguagesList();
@@ -88,10 +97,20 @@ export const AdminPanelProvider: React.FC<AdminPanelProviderProps> = ({ children
         setEmployeeProfiles(profiles);
     }
 
+    const initOffers = async () => {
+        const offers = await OffersAdminService.listOffers();
+        setOffers(offers);
+    }
+
     value.employeeProfiles = { 
         profiles: employeeProfiles,
         initProfiles: initProfiles
     };
+
+    value.offers = {
+        offers,
+        initOffers
+    }
 
     return (
         <AdminPanelContext.Provider value={value}>

@@ -29,6 +29,7 @@ import OfferFormView from 'offer/views/form/OfferFormView';
 import MyOffersList from 'offer/views/MyOffersList';
 import OfferView from 'offer/views/offer-view/OfferView';
 import OfferSearchView from 'offer/views/search/OfferSearchView';
+import AdminOffers from 'admin/views/offer/AdminOffers';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -102,6 +103,7 @@ const App: React.FC = () => {
                     <Route path={Path.ADMIN_USERS} element={<AdminUsers />} />
                     <Route path={Path.ADMIN_FEEDBACKS} element={<AdminFeedbacks />} />
                     <Route path={Path.ADMIN_EMPLOYEE_PROFILES} element={<AdminEmployeeProfiles />} />
+                    <Route path={Path.ADMIN_OFFERS} element={<AdminOffers />} />
                 </Route>
             </Routes>
         </AnimatePresence>
