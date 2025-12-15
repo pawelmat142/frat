@@ -109,7 +109,7 @@ const AdminOffers: React.FC = () => {
         <div className="flex flex-1 flex-col gap-2 items-center w-full p-5">
             <div className="w-full px-0">
 
-                <h2 className="h2 mb-6 pl-2 primary-text">Employee profiles</h2>
+                <h2 className="h2 mb-6 pl-2 primary-text">Offers Admin Panel</h2>
 
                 <div className="flex gap-2 mb-10 mt-5">
 
@@ -127,7 +127,7 @@ const AdminOffers: React.FC = () => {
 
                 </div>
 
-                <h2 className="font-mono font-bold mb-2 mt-10">List of employee profiles:</h2>
+                <h2 className="font-mono font-bold mb-2 mt-10">List of offers:</h2>
 
                 <div className="overflow-x-auto w-full rounded-lg shadow border border-color secondary-bg">
                     <table className="w-full text-left border-collapse">

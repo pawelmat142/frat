@@ -1,5 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { OfferI } from "@shared/interfaces/OfferI";
 import { OfferEntity } from "offer/model/OfferEntity";
 import { DeepPartial, Repository, SelectQueryBuilder } from "typeorm";
 
@@ -13,6 +14,10 @@ export class OffersRepo {
         private offerRepository: Repository<OfferEntity>,
     ) { }
 
+    public findAll(): Promise<OfferEntity[]> {
+        return this.offerRepository.find()
+    }
+
     public getById(offerId: number): Promise<OfferEntity> {
         return this.offerRepository.findOneBy({ offerId });
     }
@@ -23,6 +28,10 @@ export class OffersRepo {
 
     public async delete(offerId: number): Promise<void> {
         await this.offerRepository.delete(offerId);
+    }
+
+    public async deleteAllOffers(): Promise<void> {
+        await this.offerRepository.clear();
     }
 
     public listOffersByUser(uid: string): Promise<OfferEntity[]> {
@@ -38,6 +47,10 @@ export class OffersRepo {
 
     public getQueryBuilder(): SelectQueryBuilder<OfferEntity> {
         return this.offerRepository.createQueryBuilder('offer');
+    }
+
+    public async initialLoad(offers: OfferI[]): Promise<void> {
+        await this.offerRepository.save(offers);
     }
 
 }

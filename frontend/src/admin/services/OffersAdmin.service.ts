@@ -3,7 +3,7 @@ import { httpClient } from 'global/services/http';
 
 export const OffersAdminService = {
 
-	listOffers(): Promise<OfferI[]> {
+	listAdminPanel(): Promise<OfferI[]> {
 		return httpClient.get<OfferI[]>(`/offer/admin/list`);
 	},
 

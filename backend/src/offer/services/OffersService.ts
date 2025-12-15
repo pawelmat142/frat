@@ -5,6 +5,7 @@ import { UserI } from "@shared/interfaces/UserI";
 import { CreateOfferService } from "./CreateOfferService";
 import { Util } from "@shared/utils/util";
 import { ToastException } from "global/exceptions/ToastException";
+import { OffersInitialData } from "./OffersInitialData";
 
 @Injectable()
 export class OffersService {
@@ -43,8 +44,17 @@ export class OffersService {
         if (offer.uid !== user.uid && !Util.isAdmin(user)) {
             throw new ForbiddenException()
         }
+        return this.deleteOfferFn(offerId, user.uid)
+    }
+
+    public async deleteOfferFn(offerId: number, by: string): Promise<void> {
         await this.offersRepo.delete(offerId);
-        this.logger.log(`Offer ${offer.offerId} deleted by user ${user.uid}`);
+        this.logger.log(`Offer ${offerId} deleted by user ${by}`);
+    }
+
+    public async deleteAllOffers(by: string): Promise<void> {
+        await this.offersRepo.deleteAllOffers();
+        this.logger.log(`All offers deleted by user ${by}`);
     }
 
     public async createOffer(user: UserI, newOffer: OfferForm): Promise<OfferI> {
@@ -64,4 +74,15 @@ export class OffersService {
         this.logger.log(`Offer ${savedOffer.offerId} updated by user ${user.uid}`);
         return savedOffer;
     }
+
+        public async initialLoad(): Promise<void> {
+            try {
+                const offers = OffersInitialData()
+                await this.offersRepo.initialLoad(offers as OfferI[]);
+                this.logger.log(`Initial load of offers completed, total offers loaded: ${offers.length}`);
+            } catch (e) {
+                console.error(e)
+                throw new ToastException("Initial load failed", this);
+            }
+        }
 }

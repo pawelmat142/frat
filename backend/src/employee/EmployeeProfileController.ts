@@ -84,7 +84,7 @@ export class EmployeeProfileController {
 
 
 
-
+// TODO przerobic na admin controller
   // ADMIN MANAGEMENT ACTIONS
   @Get("/admin/list")
   @Serialize(EmployeeProfileEntity)

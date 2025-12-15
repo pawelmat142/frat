@@ -15,6 +15,10 @@ export class OffersSearchService {
         private readonly offersRepo: OffersRepo,
     ) { }
 
+    listAdminPanel(): Promise<OfferEntity[]> {
+        return this.offersRepo.findAll()
+    }
+
     async searchOffers(user: UserI, filters: OfferSearchFilters): Promise<OfferSearchResponse> {
         const queryBuilder = this.offersRepo.getQueryBuilder()
 

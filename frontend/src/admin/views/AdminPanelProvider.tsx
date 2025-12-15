@@ -98,7 +98,7 @@ export const AdminPanelProvider: React.FC<AdminPanelProviderProps> = ({ children
     }
 
     const initOffers = async () => {
-        const offers = await OffersAdminService.listOffers();
+        const offers = await OffersAdminService.listAdminPanel();
         setOffers(offers);
     }
 
