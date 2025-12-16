@@ -1,8 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
-import { PaginationI } from "@shared/interfaces/Others";
 import { OfferI, OfferSearchFilters } from "@shared/interfaces/OfferI";
 import { OfferUtil } from "offer/OfferUtil";
 import { OffersService } from "offer/services/OffersService";
@@ -13,12 +11,13 @@ export interface OfferSearchContextProps {
     setFilters: (filters: OfferSearchFilters) => void;
     resetFilters: () => void;
     results: OfferI[];
-    pagination: PaginationI;
     loading: boolean;
-    setLoading: (loading: boolean) => void;
-    nextPage: () => void;
-    prevPage: () => void;
+    loadingMore: boolean;
+    hasMore: boolean;
+    loadMore: () => void;
 }
+const INITIAL_LIMIT = 8;
+const LOAD_MORE_LIMIT = 4;
 export const defaultOfferFilters: OfferSearchFilters = {
     freeText: '',
     categories: [],
@@ -27,8 +26,21 @@ export const defaultOfferFilters: OfferSearchFilters = {
     skills: [],
     certificates: [],
     skip: 0,
-    limit: 5,
+    limit: INITIAL_LIMIT,
 };
+
+const toStateFilters = (filters: OfferSearchFilters): OfferSearchFilters => ({
+    ...defaultOfferFilters,
+    ...filters,
+    skip: 0,
+    limit: INITIAL_LIMIT,
+});
+
+const toSearchFilters = (filters: OfferSearchFilters, skip: number, limit: number): OfferSearchFilters => ({
+    ...filters,
+    skip,
+    limit,
+});
 
 const OfferSearchContext = createContext<OfferSearchContextProps | undefined>(undefined);
 
@@ -42,39 +54,16 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const location = useLocation();
     const navigate = useNavigate();
 
-
-    // Initialize from URL (fallback to defaults)
-    const [filters, setFilters] = useState<OfferSearchFilters>(() => {
-        return OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters)
+    const [filters, setFiltersState] = useState<OfferSearchFilters>(() => {
+        const parsed = OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters);
+        return toStateFilters(parsed);
     });
-    const [results, setResults] = useState<OfferI[]>([])
-    const [count, setCount] = useState(0)
-    const [loading, setLoading] = useState(false)
-    const [searchUrl, setSearchUrl] = useState(location.search)
+    const [results, setResults] = useState<OfferI[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(false);
 
-    const itemsPerPage = 5
-    const totalPages = Math.ceil(count / itemsPerPage)
-
-    useEffect(() => {
-        const urlFilters = OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters)
-        if (!filtersEquals(urlFilters, filters)) {
-            setFilters(urlFilters)
-            doSearch(urlFilters)
-        }
-    }, [searchUrl]);
-
-    useEffect(() => {
-        doSearch();
-    }, [])
-
-    const handleSetFilters = (newFilters: OfferSearchFilters) => {
-        const searchStr = OfferUtil.prepareUrlParams(newFilters, defaultOfferFilters);
-        const newUrl = searchStr ? `?${searchStr}` : '';
-        if (newUrl !== location.search) {
-            navigate({ pathname: location.pathname, search: newUrl }, { replace: true });
-            setSearchUrl(newUrl);
-        }
-    }
+    const requestIdRef = useRef(0);
 
     const filtersEquals = (f1: OfferSearchFilters, f2: OfferSearchFilters): boolean => {
         if (f1.freeText !== f2.freeText) return false;
@@ -93,45 +82,92 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (f1.skip !== f2.skip) return false;
         if (f1.limit !== f2.limit) return false;
         return true;
-    }
+    };
 
-    const doSearch = async (overrideFilters?: EmployeeProfileSearchFilters) => {
-        const searchFilters = overrideFilters || filters;
-        try {
+    const executeSearch = useCallback(async (searchFilters: OfferSearchFilters, append: boolean) => {
+        const requestId = ++requestIdRef.current;
+        if (append) {
+            setLoadingMore(true);
+        } else {
             setLoading(true);
+        }
+
+        try {
             const result = await OffersService.searchOffers(searchFilters);
-            setResults(result.offers);
-            setCount(result.count);
-        } catch (error: any) {
-            if (error.name === 'AbortError') {
-                // Request anulowany
+            if (requestId !== requestIdRef.current) {
+                return;
+            }
+
+            if (append) {
+                setResults(prev => [...prev, ...result.offers]);
             } else {
+                setResults(result.offers);
+            }
+
+            const loaded = searchFilters.skip + result.offers.length;
+            setHasMore(loaded < result.count);
+        } catch (error: any) {
+            if (error?.name !== 'AbortError') {
                 console.error("Error searching offers:", error);
             }
         } finally {
-            setLoading(false);
+            if (requestId === requestIdRef.current) {
+                if (append) {
+                    setLoadingMore(false);
+                } else {
+                    setLoading(false);
+                }
+            }
         }
-    };
+    }, []);
 
-    const nextPage = () => {
-        if (filters.skip + itemsPerPage < count) {
-            const newSkip = filters.skip + itemsPerPage;
-            const updatedFilters = { ...filters, skip: newSkip };
-            handleSetFilters(updatedFilters);
+    useEffect(() => {
+        const parsed = OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters);
+        const normalized = toStateFilters(parsed);
+
+        setFiltersState(normalized);
+        setResults([]);
+        setHasMore(false);
+
+        const searchFilters = toSearchFilters(normalized, 0, INITIAL_LIMIT);
+        void executeSearch(searchFilters, false);
+    }, [location.search, executeSearch]);
+
+    const handleSetFilters = useCallback((newFilters: OfferSearchFilters) => {
+        const normalized = toStateFilters(newFilters);
+        if (filtersEquals(normalized, filters)) {
+            return;
         }
-    };
 
-    const prevPage = () => {
-        if (filters.skip - itemsPerPage >= 0) {
-            const newSkip = filters.skip - itemsPerPage;
-            const updatedFilters = { ...filters, skip: newSkip };
-            handleSetFilters(updatedFilters);
+        setFiltersState(normalized);
+        setResults([]);
+        setHasMore(false);
+
+        const searchStr = OfferUtil.prepareUrlParams(normalized, defaultOfferFilters);
+        const newUrl = searchStr ? `?${searchStr}` : '';
+
+        if (newUrl !== location.search) {
+            navigate({ pathname: location.pathname, search: newUrl }, { replace: true });
+        } else {
+            const searchFilters = toSearchFilters(normalized, 0, INITIAL_LIMIT);
+            void executeSearch(searchFilters, false);
         }
-    };
+    }, [filters, navigate, location.pathname, location.search, executeSearch]);
 
-    const resetFilters = () => {
-        handleSetFilters({ ...defaultOfferFilters, limit: itemsPerPage });
-    };
+    const resultsLength = results.length;
+
+    const loadMore = useCallback(() => {
+        if (loading || loadingMore || !hasMore) {
+            return;
+        }
+
+        const searchFilters = toSearchFilters(filters, resultsLength, LOAD_MORE_LIMIT);
+        void executeSearch(searchFilters, true);
+    }, [loading, loadingMore, hasMore, filters, resultsLength, executeSearch]);
+
+    const resetFilters = useCallback(() => {
+        handleSetFilters(defaultOfferFilters);
+    }, [handleSetFilters]);
 
     return (
         <OfferSearchContext.Provider value={{
@@ -139,15 +175,9 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setFilters: handleSetFilters,
             results,
             loading,
-            setLoading,
-            nextPage,
-            prevPage,
-            pagination: {
-                count,
-                totalPages,
-                currentPage: Math.floor(filters.skip / itemsPerPage) + 1,
-                itemsPerPage
-            },
+            loadingMore,
+            hasMore,
+            loadMore,
             resetFilters,
             defaultFilters: defaultOfferFilters
         }}>

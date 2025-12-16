@@ -107,7 +107,6 @@ const OfferView: React.FC = () => {
         return <div>{t("common.noResults")}</div>
     }
 
-    // TODO replace paginaition with load more on scroll
     const goToEditForm = async (offer: OfferI) => {
         navigate(Path.getOfferFormEditPath(offer.offerId));
     }
