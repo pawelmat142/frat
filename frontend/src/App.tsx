@@ -69,8 +69,7 @@ const App: React.FC = () => {
                 {/* EMPLOYEE PROFILE */}
                 <Route path={Path.EMPLOYEE_PROFILE} element={<PageWrapper direction={1}><EmployeeProfileView /></PageWrapper>} />
                 <Route path={Path.EMPLOYEE_SEARCH} element={<PageWrapper direction={1}><EmployeeSearchView /></PageWrapper>} />
-                {/* unprotected */}
-                <Route path={Path.EMPLOYEE_PROFILE_FORM} element={<PageWrapper direction={1}><EmployeeProfileFormView /></PageWrapper>} />
+                <Route path={Path.EMPLOYEE_PROFILE_FORM} element={<PageWrapper direction={1}><ProtectedRoute><EmployeeProfileFormView /></ProtectedRoute></PageWrapper>} />
 
                 {/* OFFERS */}
                 <Route path={Path.OFFER_FORM} element={<PageWrapper direction={1}><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />

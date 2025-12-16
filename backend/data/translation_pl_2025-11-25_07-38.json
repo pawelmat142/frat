@@ -460,6 +460,7 @@
       },
       "jobs": "Zlecenia ukończone",
       "error": {
+        "notFound": "Nie znaleziono profilu",
         "startDate": "Brak daty rozpoczęcia",
         "uidRequired": "UID profilu pracownika jest wymagany",
         "dataRequired": "Dane profilu pracownika są wymagane",

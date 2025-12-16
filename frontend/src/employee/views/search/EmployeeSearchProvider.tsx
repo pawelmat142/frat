@@ -18,6 +18,7 @@ export interface EmployeeSearchContextProps {
     setLoading: (loading: boolean) => void;
     nextPage: () => void;
     prevPage: () => void;
+    updateOneProfileInResults: (updatedProfile: EmployeeProfileI) => void;
 }
 
 export const EPDefaultFilters: EmployeeProfileSearchFilters = {
@@ -131,6 +132,14 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         handleSetFilters({ ...EPDefaultFilters, limit: itemsPerPage });
     };
 
+    const updateOneProfileInResults = (updatedProfile: EmployeeProfileI) => {
+        if (results.map(profile => profile.uid).includes(updatedProfile.uid)) {
+            setResults(profiles => {
+                return profiles.map(profile => profile.uid === updatedProfile.uid ? updatedProfile : profile);
+            });
+        }
+    }
+
     return (
         <EmployeeSearchContext.Provider value={{
             filters,
@@ -147,7 +156,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 itemsPerPage
             },
             resetFilters,
-            defaultFilters: EPDefaultFilters
+            defaultFilters: EPDefaultFilters,
+            updateOneProfileInResults
         }}>
             {children}
         </EmployeeSearchContext.Provider>

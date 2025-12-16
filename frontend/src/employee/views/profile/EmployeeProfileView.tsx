@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import Loading from "global/components/Loading";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import { useEmployeeSearch } from "../search/EmployeeSearchProvider";
 import AvatarTile from "./AvatarTile";
@@ -15,6 +15,7 @@ import { useAuthContext } from "auth/AuthProvider";
 import EditButton from "global/components/buttons/EditButton";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
+import { Path } from "../../../path";
 
 const EmployeeProfileView: React.FC = () => {
 
@@ -26,6 +27,7 @@ const EmployeeProfileView: React.FC = () => {
 
     const { t } = useTranslation();
     const { me } = useAuthContext()
+    const navigate = useNavigate();
 
     const profileCtx = useEmployeeSearch();
     const globalCtx = useGlobalContext();
@@ -35,45 +37,43 @@ const EmployeeProfileView: React.FC = () => {
             if (displayName) {
                 const p = profileCtx.results?.find(p => p.displayName === displayName)
                 if (p) {
-                    _setProfile(p);
-                    return;
+                    _setProfile(p)
+                    return
                 }
                 try {
-                    setLoading(true);
+                    setLoading(true)
                     const result = await EmployeeProfileService.getEmployeeProfileByDisplayName(displayName)
-                    _setProfile(result);
+                    _setProfile(result)
                 } finally {
-                    setLoading(false);
+                    setLoading(false)
                 }
             }
         }
-        initEmployeeProfile();
+        initEmployeeProfile()
     }, []);
 
     const notifyProfileView = async (profile: EmployeeProfileI) => {
         if (profile?.uid) {
-            await EmployeeProfileService.notifyProfileView(profile.uid);
+            await EmployeeProfileService.notifyProfileView(profile.uid)
         }
     }
 
     const _setProfile = (profile: EmployeeProfileI | null) => {
-        setProfile(profile);
+        setProfile(profile)
         if (profile) {
-            notifyProfileView(profile); 
+            notifyProfileView(profile)
         }   
     }
 
     if (loading) {
-        return <Loading />;
+        return <Loading />
     }
     if (!profile) {
-        return <div className="py-8 text-center secondary-text italic">Profile not found.</div>;
+        return <div className="py-8 text-center secondary-text italic">{t('employeeProfile.notFound')}</div>
     }
 
     const goToEditForm = () => {
-
-        
-        // TODO 
+        navigate(Path.EMPLOYEE_PROFILE_FORM);
     }
 
     const isMyProfile = me?.uid === profile.uid;

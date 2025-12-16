@@ -469,6 +469,7 @@
       },
       "jobs": "Jobs finished",
       "error": {
+        "notFound": "Profile not found",
         "startDate": "Start date missing",
         "uidRequired": "Employee profile uid is required",
         "dataRequired": "Employee profile data is required",

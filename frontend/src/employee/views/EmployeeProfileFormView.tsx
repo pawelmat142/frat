@@ -16,6 +16,7 @@ import EmployeeProfileStep2 from "../components/EmployeeProfileStep2";
 import EmployeeProfileStep3 from "../components/EmployeeProfileStep3";
 import EmployeeProfileStep4 from "../components/EmployeeProfileStep4";
 import { Path } from "../../path";
+import { useEmployeeSearch } from "./search/EmployeeSearchProvider";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -30,6 +31,7 @@ const EmployeeProfileFormView: React.FC = () => {
     const [currentStep, setCurrentStep] = React.useState<StepKey>('step1');
     const { employeeProfile, initEmployeeProfile } = useUserContext();
     const navigate = useNavigate();
+    const profileCtx = useEmployeeSearch();
     const isDevMode = Utils.isDevMode();
 
     const { control, handleSubmit, watch, setValue, reset, formState, trigger } = useForm<EmployeeProfileForm>({
@@ -138,6 +140,7 @@ const EmployeeProfileFormView: React.FC = () => {
         try {
             setLoading(true);
             const result = await EmployeeProfileService.updateEmployeeProfile(form);
+            profileCtx.updateOneProfileInResults(result);
             initEmployeeProfile();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
