@@ -76,7 +76,11 @@ const FloatingScrollTopButton: React.FC<FloatingScrollTopButtonProps> = ({
                 if (visibleRef.current) {
                     setButtonVisible(false);
                 }
-            } else if (scrolledPastThreshold && (isScrollingUp || !visibleRef.current)) {
+            } else if (!isScrollingUp) {
+                if (visibleRef.current) {
+                    setButtonVisible(false);
+                }
+            } else if (scrolledPastThreshold) {
                 if (!visibleRef.current) {
                     setButtonVisible(true);
                 }
