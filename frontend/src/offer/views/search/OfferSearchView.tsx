@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useTranslation } from "react-i18next";
 import { useOfferSearch } from "./OfferSearchProvider";
 import Loading from "global/components/Loading";
 import OfferSearchFilters from "./OfferSearchFilters";
 import OfferTile from "offer/components/OfferTile";
+import { useInfiniteScroll } from "shared/hooks/useInfiniteScroll";
 
 const OfferSearchView: React.FC = () => {
 
@@ -12,42 +13,11 @@ const OfferSearchView: React.FC = () => {
     const globalCtx = useGlobalContext();
     const ctx = useOfferSearch();
 
-    const sentinelRef = useRef<HTMLDivElement | null>(null);
-    const hasMoreRef = useRef(ctx.hasMore);
-    const loadingRef = useRef(ctx.loading || ctx.loadingMore);
-
-    useEffect(() => {
-        hasMoreRef.current = ctx.hasMore;
-    }, [ctx.hasMore]);
-
-    useEffect(() => {
-        loadingRef.current = ctx.loading || ctx.loadingMore;
-    }, [ctx.loading, ctx.loadingMore]);
-
-    useEffect(() => {
-        const sentinel = sentinelRef.current;
-        if (!sentinel) {
-            return;
-        }
-
-        const observer = new IntersectionObserver((entries) => {
-            const entry = entries[0];
-            if (entry && entry.isIntersecting && hasMoreRef.current && !loadingRef.current) {
-                loadingRef.current = true;
-                ctx.loadMore();
-            }
-        }, {
-            root: null,
-            rootMargin: "200px 0px",
-            threshold: 0,
-        });
-
-        observer.observe(sentinel);
-
-        return () => {
-            observer.disconnect();
-        };
-    }, [ctx.loadMore]);
+    const sentinelRef = useInfiniteScroll({
+        hasMore: ctx.hasMore,
+        isLoading: ctx.loading || ctx.loadingMore,
+        onLoadMore: ctx.loadMore,
+    });
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return (
@@ -59,6 +29,7 @@ const OfferSearchView: React.FC = () => {
 
     const initialLoading = ctx.loading && ctx.results.length === 0;
     const noResults = !initialLoading && ctx.results.length === 0;
+    const showEndOfResults = !initialLoading && !ctx.loadingMore && !ctx.hasMore && ctx.results.length > 0;
 
     return (
         <div className="list-view">
@@ -89,6 +60,12 @@ const OfferSearchView: React.FC = () => {
             {ctx.loadingMore && ctx.results.length > 0 && (
                 <div className="flex justify-center py-6">
                     <Loading></Loading>
+                </div>
+            )}
+
+            {showEndOfResults && (
+                <div className="flex justify-center py-4">
+                    <span className="secondary-text small-font">{t('common.endOfResults', { defaultValue: 'No more offers to display.' })}</span>
                 </div>
             )}
 
