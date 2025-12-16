@@ -9,6 +9,93 @@ const getDate = (year: number, month: number, day: number): Date => {
     return new Date(Date.UTC(year, month - 1, day, 8, 0, 0, 0));
 };
 
+const addDays = (date: Date, days: number): Date => {
+    const cloned = new Date(date.getTime());
+    cloned.setUTCDate(cloned.getUTCDate() + days);
+    return cloned;
+};
+
+const pickFromCycle = <T>(items: T[], index: number): T => items[index % items.length];
+
+const locationPool = [
+    { country: "pl", address: "Gdynia Shipyard, Poland", label: "Gdynia", coordinates: [18.673, 54.518] },
+    { country: "gb", address: "Hull Offshore Yard, United Kingdom", label: "Hull", coordinates: [-0.322, 53.744] },
+    { country: "de", address: "Bremerhaven Wind Hub, Germany", label: "Bremerhaven", coordinates: [8.574, 53.539] },
+    { country: "no", address: "Hammerfest Offshore Base, Norway", label: "Hammerfest", coordinates: [23.682, 70.661] },
+    { country: "se", address: "Visby Port Cranes, Sweden", label: "Visby", coordinates: [18.296, 57.634] },
+    { country: "es", address: "Bilbao Coastal Works, Spain", label: "Bilbao", coordinates: [-2.934, 43.263] },
+    { country: "pt", address: "Setúbal Industrial Dock, Portugal", label: "Setúbal", coordinates: [-8.891, 38.523] },
+    { country: "fr", address: "Brest Offshore Campus, France", label: "Brest", coordinates: [-4.486, 48.390] },
+    { country: "ie", address: "Cork Harbour Shipyard, Ireland", label: "Cork", coordinates: [-8.470, 51.898] },
+    { country: "dk", address: "Aalborg Wind Terminal, Denmark", label: "Aalborg", coordinates: [9.921, 57.048] },
+];
+
+const skillPool: string[][] = [
+    ["ONE", "TWO"],
+    ["THREE", "FOUR"],
+    ["FIVE", "SEVEN"],
+    ["TWO", "SIX"],
+    ["FOUR", "SEVEN"],
+    ["ONE", "FOUR"],
+    ["THREE", "FIVE"],
+    ["ONE", "SIX"],
+    ["TWO", "THREE"],
+    ["FOUR", "FIVE"],
+];
+
+const certificatePool: string[][] = [
+    ["ONE"],
+    ["TWO"],
+    ["THREE"],
+    ["FOUR"],
+    ["FIVE"],
+    ["SIX"],
+    ["SEVEN"],
+    ["TWO", "THREE"],
+    ["FOUR", "FIVE"],
+    ["ONE", "SEVEN"],
+];
+
+const languagePool: string[][] = [
+    ["en", "pl"],
+    ["en", "de"],
+    ["en", "es"],
+    ["en", "fr"],
+    ["en", "no"],
+    ["en", "pt"],
+    ["en", "da"],
+    ["en"],
+    ["pl", "en"],
+    ["de", "en"],
+];
+
+const categoryPool: OfferEntity["category"][] = [
+    "WORK_PLATFORM",
+    "LIFT",
+    "SCAFFOLD",
+    "LADDERS",
+];
+
+const categoryLabels: Record<OfferEntity["category"], string> = {
+    WORK_PLATFORM: "Rope Access",
+    LIFT: "Lift Maintenance",
+    SCAFFOLD: "Scaffolding",
+    LADDERS: "Rigging",
+};
+
+const descriptionPool = [
+    "Assist with high-access inspections on critical infrastructure.",
+    "Support routine maintenance for offshore assets requiring rope access.",
+    "Execute composite repairs and minor fabrication at height.",
+    "Coordinate site safety and supervise vertical access crews.",
+    "Inspect structural joints and document findings for engineering teams.",
+    "Install temporary rigging and fall arrest systems on industrial sites.",
+    "Provide rope rescue cover and toolbox talks for shift teams.",
+    "Perform cleaning and coating works on exposed structural elements.",
+    "Monitor weather windows and prepare equipment for suspended operations.",
+    "Audit PPE compliance and support onboarding of new technicians.",
+];
+
 export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
     const result: DeepPartial<OfferEntity>[] = [
         {
@@ -465,6 +552,79 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             createdAt: getCreatedAt(19),
         },
     ]
+
+    const baseIndex = result.length;
+
+    const createGeneratedOffer = (index: number): DeepPartial<OfferEntity> => {
+        const location = pickFromCycle(locationPool, index);
+        const category = pickFromCycle(categoryPool, index + 1);
+        const skillSet = pickFromCycle(skillPool, index);
+        const certSet = pickFromCycle(certificatePool, index + 2);
+        const languageSet = pickFromCycle(languagePool, index + 3);
+        const status = index % 9 === 0 ? OfferStatuses.INACTIVE : OfferStatuses.ACTIVE;
+        const globalIndex = baseIndex + index + 1;
+        const startYear = 2026 + Math.floor(index / 48);
+        const startMonth = (index % 12) + 1;
+        const startDay = 4 + (index % 20);
+        const startDate = getDate(startYear, startMonth, startDay);
+        const endDate = addDays(startDate, 8 + (index % 9));
+        const availableSlots = 4 + (index % 11);
+        const appliedSlots = Math.min(index % 6, availableSlots);
+        const acceptedSlots = Math.min(Math.floor(appliedSlots / 2), appliedSlots);
+        const usesMonthlySalary = index % 3 === 0;
+        const salaryBase = 20 + (index % 11) * 2;
+        const salaryRangeIncrement = 6 + (index % 5) * 2;
+        const description = `${pickFromCycle(descriptionPool, index)} Location: ${location.label}.`;
+        const displayName = `${categoryLabels[category]} Crew - ${location.label}`;
+        const uid = `company-${globalIndex.toString().padStart(3, "0")}`;
+        const viewBase = 700 + index * 3;
+
+        const offer: DeepPartial<OfferEntity> = {
+            uid,
+            status,
+            category,
+            locationCountry: location.country,
+            displayAddress: location.address,
+            point: { type: "Point", coordinates: location.coordinates as [number, number] },
+            startDate,
+            endDate,
+            availableSlots,
+            appliedSlots,
+            acceptedSlots,
+            skillsRequired: skillSet,
+            certificatesRequired: certSet,
+            languagesRequired: languageSet,
+            currency: Currencies.EUR,
+            displayName,
+            description,
+            views: [
+                `profile-${viewBase}`,
+                `profile-${viewBase + 1}`,
+                `profile-${viewBase + 2}`,
+            ],
+            likes: [
+                `profile-${viewBase + 10}`,
+                `profile-${viewBase + 12}`,
+            ],
+            shares: [
+                `profile-${viewBase + 20}`,
+                `profile-${viewBase + 21}`,
+            ],
+        };
+
+        if (usesMonthlySalary) {
+            offer.monthlySalaryStart = salaryBase * 100;
+            offer.monthlySalaryEnd = offer.monthlySalaryStart + salaryRangeIncrement * 100;
+        } else {
+            offer.hourlySalaryStart = salaryBase;
+            offer.hourlySalaryEnd = salaryBase + salaryRangeIncrement;
+        }
+
+        return offer;
+    };
+
+    const additionalOffers = Array.from({ length: 100 }, (_, index) => createGeneratedOffer(index));
+    result.push(...additionalOffers);
 
     return result.map((offer, idx) => ({
         appliedSlots: 0,
