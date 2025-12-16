@@ -11,12 +11,12 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
 import { useNavigate } from "react-router-dom";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
-import EmployeeProfileStep1 from "../components/EmployeeProfileStep1";
-import EmployeeProfileStep2 from "../components/EmployeeProfileStep2";
-import EmployeeProfileStep3 from "../components/EmployeeProfileStep3";
-import EmployeeProfileStep4 from "../components/EmployeeProfileStep4";
-import { Path } from "../../path";
-import { useEmployeeSearch } from "./search/EmployeeSearchProvider";
+import EmployeeProfileStep1 from "./EmployeeProfileStep1";
+import EmployeeProfileStep2 from "./EmployeeProfileStep2";
+import EmployeeProfileStep3 from "./EmployeeProfileStep3";
+import EmployeeProfileStep4 from "./EmployeeProfileStep4";
+import { Path } from "../../../path";
+import { useEmployeeSearch } from "../search/EmployeeSearchProvider";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 

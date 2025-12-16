@@ -20,7 +20,7 @@ import ProfilePage from 'user/views/ProfilePage';
 import ForgotPassword from 'auth/views/ForgotPassword';
 import { ProtectedRoute } from 'auth/ProtectedRoute';
 import { UserRoles } from '@shared/interfaces/UserI';
-import EmployeeProfileFormView from 'employee/views/EmployeeProfileFormView';
+import EmployeeProfileFormView from 'employee/views/form/EmployeeProfileFormView';
 import AdminFeedbacks from 'admin/views/feedback/AdminFeedbacks';
 import EmployeeSearchView from 'employee/views/search/EmployeeSearchView';
 import AdminEmployeeProfiles from 'admin/views/employee_profiles/AdminEmployeeProfiles';

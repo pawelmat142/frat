@@ -3,7 +3,7 @@ import { Control, Controller, FormState, UseFormSetValue, UseFormWatch } from "r
 import { useTranslation } from "react-i18next";
 import { DateRange, EmployeeProfileAvailabilityOption, EmployeeProfileAvailabilityOptions, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
 import { FormValidator } from "global/FormValidator";
-import TabSwitcher, { TabSwitcherOption } from "./TabSwitcher";
+import TabSwitcher, { TabSwitcherOption } from "../../components/TabSwitcher";
 import DateRangeInput from "global/components/callendar/DateRangeInput";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';

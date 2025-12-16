@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import FloatingInput from "global/components/controls/FloatingInput";
 import { FormValidator } from "global/FormValidator";
 import { EmployeeProfileForm, EmployeeProfileFormStep1 } from "@shared/interfaces/EmployeeProfileI";
-import CommunicationLanguagesSection from "./CommunicationLanguagesSection";
+import CommunicationLanguagesSection from "../../components/CommunicationLanguagesSection";
 
 interface Props {
     control: Control<EmployeeProfileForm>;

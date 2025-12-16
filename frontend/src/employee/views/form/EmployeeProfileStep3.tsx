@@ -1,7 +1,7 @@
 import React from "react";
 import { Controller, UseFormSetValue, UseFormWatch, Control, FormState } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import TabSwitcher, { TabSwitcherOption } from "./TabSwitcher";
+import TabSwitcher, { TabSwitcherOption } from "../../components/TabSwitcher";
 import { FormValidator } from "global/FormValidator";
 import { EmployeeProfileLocationOptions, EmployeeProfileLocationOption, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
