@@ -293,7 +293,7 @@ const EmployeeProfileFormView: React.FC = () => {
                             type="button"
                             onClick={handlePrev}
                             size={BtnSizes.LARGE}
-                            mode={BtnModes.SECONDARY}
+                            mode={BtnModes.SECONDARY_TXT}
                             className="flex-1"
                         >
                             {t("common.previous")}
@@ -305,7 +305,7 @@ const EmployeeProfileFormView: React.FC = () => {
                             type="button"
                             onClick={handleNext}
                             size={BtnSizes.LARGE}
-                            mode={BtnModes.PRIMARY}
+                            mode={BtnModes.PRIMARY_TXT}
                             className="flex-1"
                         >
                             {t("common.next")}

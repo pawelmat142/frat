@@ -67,7 +67,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     return (
         <div className={`floating-input-wrapper ${myClass}${center ? ' mx-auto' : ''}`}>
             <div className="floating-input-container">
-                <div className="pp-control pp-input-row">
+                <div className="pp-control pp-input-row justify-between">
                     <input
                         ref={inputRef}
                         id={id}

@@ -25,6 +25,7 @@ const EmployeeProfileStep4: React.FC<Props> = ({ control, setValue, watch, formS
     const availabilityDateRanges = watch("step4.availabilityDateRanges") || [];
 
     const required = FormValidator.dateRangeRequired(t);
+    const dateRangeStartRequired = FormValidator.dateRangeStartRequired(t);
 
     const getDefaultDateRange = (): DateRange => {
         const end = new Date();
@@ -133,7 +134,7 @@ const EmployeeProfileStep4: React.FC<Props> = ({ control, setValue, watch, formS
                                 <Controller
                                     name={`step4.availabilityDateRanges.0` as const}
                                     control={control}
-                                    rules={required}
+                                    rules={dateRangeStartRequired}
                                     render={({ field }) => {
                                         // Extract string message for this specific range error (RHF stores errors by index/key)
                                         const fieldError = (formState?.errors?.step4?.availabilityDateRanges as any)?.[0];
