@@ -6,6 +6,7 @@ import Loading from "global/components/Loading";
 import OfferSearchFilters from "./OfferSearchFilters";
 import OfferTile from "offer/components/OfferTile";
 import { useInfiniteScroll } from "shared/hooks/useInfiniteScroll";
+import FloatingScrollTopButton from "global/components/buttons/FloatingScrollTopButton";
 
 const OfferSearchView: React.FC = () => {
 
@@ -23,10 +24,11 @@ const OfferSearchView: React.FC = () => {
         return (
             <div>
                 <Loading></Loading>
+
             </div>
         );
     }
-
+    
     const initialLoading = ctx.loading && ctx.results.length === 0;
     const noResults = !initialLoading && ctx.results.length === 0;
     const showEndOfResults = !initialLoading && !ctx.loadingMore && !ctx.hasMore && ctx.results.length > 0;
@@ -72,6 +74,9 @@ const OfferSearchView: React.FC = () => {
                 </div>
             )}
 
+
+
+<FloatingScrollTopButton />
         </div>
     );
 
