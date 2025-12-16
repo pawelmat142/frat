@@ -47,7 +47,7 @@ const EmployeeSearchFilters: React.FC = () => {
         : null;
 
     return (
-        <div className="filters-container mb-5">
+        <div className="filters-container">
             <div className="flex justify-between gap-5 w-full">
                 <FloatingInput
                     mode={FloatingInputModes.THIN}
