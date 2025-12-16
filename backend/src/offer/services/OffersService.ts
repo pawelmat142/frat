@@ -75,14 +75,49 @@ export class OffersService {
         return savedOffer;
     }
 
-        public async initialLoad(): Promise<void> {
-            try {
-                const offers = OffersInitialData()
-                await this.offersRepo.initialLoad(offers as OfferI[]);
-                this.logger.log(`Initial load of offers completed, total offers loaded: ${offers.length}`);
-            } catch (e) {
-                console.error(e)
-                throw new ToastException("Initial load failed", this);
-            }
+    public async initialLoad(): Promise<void> {
+        try {
+            const offers = OffersInitialData()
+            await this.offersRepo.initialLoad(offers as OfferI[]);
+            this.logger.log(`Initial load of offers completed, total offers loaded: ${offers.length}`);
+        } catch (e) {
+            console.error(e)
+            throw new ToastException("Initial load failed", this);
         }
+    }
+
+    async notifyOfferView(offerId: number, viewerUid: string): Promise<void> {
+        const offer = await this.offersRepo.getById(offerId);
+        if (offer.uid === viewerUid) {
+            this.logger.log(`Viewer ${viewerUid} viewed own offer ${offerId}, skipping view increment`);
+            return;
+        }
+        if (!offer) {
+            throw new ToastException('employeeProfile.exists', this);
+        }
+        if (offer.views.includes(viewerUid)) {
+            this.logger.log(`Viewer ${viewerUid} viewed offer ${offerId}, skipping view increment`);
+        } else {
+            this.logger.log(`Viewer ${viewerUid} viewed offer ${offerId}, incrementing views`);
+            offer?.views.push(viewerUid);
+            await this.offersRepo.update(offer);
+        }
+    }
+
+    async notifyOfferLike(offerId: number, likerUid: string): Promise<string[]> {
+        const offer = await this.offersRepo.getById(offerId);
+        if (!offer) {
+            throw new ToastException('employeeProfile.exists', this);
+        }
+        if (offer.likes.includes(likerUid)) {
+            this.logger.log(`Liker ${likerUid} unliked offer ${offerId}`);
+            offer.likes = offer.likes.filter(uid => uid !== likerUid);
+            await this.offersRepo.update(offer);
+        } else {
+            this.logger.log(`Liker ${likerUid} liked offer ${offerId}`);
+            offer?.likes.push(likerUid);
+            await this.offersRepo.update(offer);
+        }
+        return offer.likes;
+    }
 }

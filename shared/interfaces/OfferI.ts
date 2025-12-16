@@ -45,9 +45,7 @@ export interface OfferI {
 
 
     // AUDIT FIELDS
-    // TODO power fields
     views: string[]     //uids of profiles who viewed the offer
-    // TODO power fields
     likes: string[]     //uids of profiles who liked the offer
     // TODO power fields
     shares: string[]    //uids of profiles who shared the offer

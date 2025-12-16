@@ -45,6 +45,10 @@
       "deactivationSuccessToast": "Oferta została pomyślnie dezaktywowana",
       "deleteSuccessToast": "Oferta została pomyślnie usunięta",
       "deleteConfirmMessage": "Czy na pewno chcesz usunąć tę ofertę? Tej akcji nie można cofnąć.",
+      "likeSuccessToast": "Polubiłeś ofertę",
+      "likeRemoveToast": "Usunąłeś polubienie",
+      "deleteButton": "Usuń ofertę",
+      "offerMenu": "Menu oferty",
       "filters": {
         "categories": "Kategorie",
         "countries": "Kraje",

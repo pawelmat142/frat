@@ -29,5 +29,13 @@ export const OffersService = {
 
     searchOffers(params: OfferSearchFilters): Promise<OfferSearchResponse> {
 		return httpClient.get<OfferSearchResponse>(`/offers/search/list`, { params });
-    }
+    },
+
+    notifyOfferView(offerId: number): Promise<void> {
+		return httpClient.get<void>(`/offers/notify-offer-view/${offerId}`);
+	},
+
+    notifyOfferLike(offerId: number): Promise<string[]> {
+		return httpClient.get<string[]>(`/offers/notify-offer-like/${offerId}`);
+	}
 }

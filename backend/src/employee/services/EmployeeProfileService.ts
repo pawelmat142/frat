@@ -77,10 +77,12 @@ export class EmployeeProfileService {
         return this.employeeProfileRepo.update(profile);
     }
 
-    // TODO notify profile jobs
-    
     public async notifyProfileView(profileUid: string, viewerUid: string): Promise<void> {
         const profile = await this.employeeProfileRepo.findByUid(profileUid);
+        if (profileUid === viewerUid) {
+            this.logger.log(`Viewer ${viewerUid} viewed own profile, skipping view increment`);
+            return;
+        }
         if (!profile) {
             throw new ToastException('employeeProfile.exists', this);
         }

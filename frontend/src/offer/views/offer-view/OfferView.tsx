@@ -45,7 +45,7 @@ const OfferView: React.FC = () => {
         const isMyOffer = me?.uid === offer!.uid;
 
         const menu: MenuConfig = {
-            title: 'TODO',
+            title: t('offer.offerMenu'),
             items: []
         }
 
@@ -71,22 +71,19 @@ const OfferView: React.FC = () => {
         return menu;
     }
 
-    // TODO trigger views count
-    // TODO add like button/functionality
     useEffect(() => {
         const initOffer = async () => {
             const oid = Number(offerId);
             if (oid) {
                 const o = userCtx.offers?.find(o => o.offerId === oid);
                 if (o) {
-                    setOffer(o);
+                    _setOffer(o);
                     return;
                 }
-                // TODO select from searched offers if any
                 try {
                     setLoading(true);
                     const result = await OffersService.getOfferById(oid);
-                    setOffer(result);
+                    _setOffer(result);
                 }
                 finally {
                     setLoading(false);
@@ -95,6 +92,13 @@ const OfferView: React.FC = () => {
         }
         initOffer()
     }, [])
+
+    const _setOffer = (offer: OfferI | null) => {
+        setOffer(offer);
+        if (offer?.offerId) {
+            OffersService.notifyOfferView(offer.offerId);
+        }
+    }
 
     if (loading || globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading />
@@ -144,8 +148,22 @@ const OfferView: React.FC = () => {
         }
     }
 
-    const likeOffer = (offer: OfferI) => {
-        console.log('TODO likeOffer');
+    const likeOffer = async (offer: OfferI) => {
+        try {
+            setLoading(true);
+            const likesBefore = offer.likes?.length || 0;
+            const likes = await OffersService.notifyOfferLike(offer.offerId);
+            offer.likes = likes;
+            setOffer({ ...offer });
+            if (offer.likes?.length > likesBefore) {
+                toast.success(t('offer.likeSuccessToast'));
+            } else {
+                toast.info(t('offer.likeRemoveToast'));
+            }
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
 

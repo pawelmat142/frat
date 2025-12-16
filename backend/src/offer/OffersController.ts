@@ -83,4 +83,23 @@ export class OffersController {
     ): Promise<OfferSearchResponse> {
         return this.offersSearchService.searchOffers(user, filters);
     }
+
+    @Get('notify-offer-view/:offerId')
+    @UseGuards(JwtAuthGuard)
+    notifyOfferView(
+        @CurrentUser() user: UserI,
+        @Param('offerId') offerId: number
+    ): Promise<void> {
+        return this.offersService.notifyOfferView(offerId, user.uid);
+    }
+    
+    @Get('notify-offer-like/:offerId')
+    @UseGuards(JwtAuthGuard)
+    notifyOfferLike(
+        @CurrentUser() user: UserI,
+        @Param('offerId') offerId: number
+    ): Promise<string[]> {
+        return this.offersService.notifyOfferLike(offerId, user.uid);
+    }
+
 }

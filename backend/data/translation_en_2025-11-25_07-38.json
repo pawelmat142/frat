@@ -44,6 +44,10 @@
       "deactivationSuccessToast": "Offer deactivated successfully",
       "deleteSuccessToast": "Offer deleted successfully",
       "deleteConfirmMessage": "Are you sure you want to delete this offer? This action cannot be undone.",
+      "likeSuccessToast": "Liked the offer",
+      "likeRemoveToast": "Unliked the offer",
+      "deleteButton": "Delete Offer",
+      "offerMenu": "Offer menu",
       "filters": {
         "categories": "Categories",
         "countries": "Countries",
