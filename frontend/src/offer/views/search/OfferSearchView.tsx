@@ -32,8 +32,11 @@ const OfferSearchView: React.FC = () => {
     const showEndOfResults = !initialLoading && !ctx.loadingMore && !ctx.hasMore && ctx.results.length > 0;
 
     return (
-        <div className="list-view">
-            <OfferSearchFilters />
+        <div className="list-view pt-0">
+
+            <div className="infinite-scroll-filters">
+                <OfferSearchFilters />
+            </div>
 
             {initialLoading ? (
                 <div className="flex flex-col items-center justify-center mt-20">

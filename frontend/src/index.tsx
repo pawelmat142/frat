@@ -41,7 +41,7 @@ root.render(
                             <MenuProvider>
                               <div className="min-h-screen flex flex-col">
                                 <GlobalHeader />
-                                <main className="flex-1 flex flex-col items-center w-full overflow-x-hidden">
+                                <main className="flex-1 flex flex-col items-center w-full">
                                   <App />
                                 </main>
                                 <LayoutFooterSwitch />
