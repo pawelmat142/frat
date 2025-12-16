@@ -8,11 +8,6 @@ import Pagination from "global/components/controls/Pagination";
 
 const EmployeeSearchView: React.FC = () => {
 
-    // TODO opcje sortowania na widoku
-    // TODO implementacja sortowanie w backendzie
-    // TODO sensowne indexy na searach
-    // TODO desktop RWD adjustment
-
     const ctx = useEmployeeSearch()
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
