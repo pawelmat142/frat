@@ -4,6 +4,134 @@ import { AdminUtil } from "admin/AdminUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
 import { DeepPartial } from "typeorm";
 
+const pickFromCycle = <T>(items: T[], index: number): T => items[index % items.length];
+
+const firstNamePool = [
+    "Liam",
+    "Emma",
+    "Noah",
+    "Olivia",
+    "Ava",
+    "Mia",
+    "Lucas",
+    "Ethan",
+    "Sofia",
+    "Amelia",
+    "Mateo",
+    "Leo",
+    "Hanna",
+    "Nora",
+    "Ida",
+    "Max",
+    "Anton",
+    "Lukas",
+    "Elise",
+    "Sara",
+    "Tomas",
+    "Marek",
+    "Erik",
+    "Jonas",
+    "Isla",
+];
+
+const lastNamePool = [
+    "Kowalski",
+    "Novak",
+    "Svensson",
+    "Niemi",
+    "Garcia",
+    "Fernandez",
+    "Hansen",
+    "Johansen",
+    "Leclerc",
+    "Dubois",
+    "Muller",
+    "Schmidt",
+    "Berg",
+    "Petrov",
+    "Nowak",
+    "Horvat",
+    "Dimitrov",
+    "Stoica",
+    "Bianchi",
+    "Rossi",
+    "Santos",
+    "Silva",
+    "Larsen",
+    "Nielsen",
+    "Olsen",
+];
+
+const languagePool: string[][] = [
+    ["en", "pl"],
+    ["en", "de"],
+    ["en", "fr"],
+    ["en", "es"],
+    ["en", "no"],
+    ["en", "pt"],
+    ["en", "da"],
+    ["en", "sv"],
+    ["pl", "en"],
+    ["de", "en"],
+    ["fr", "en"],
+    ["es", "en"],
+    ["da", "en"],
+    ["no", "en"],
+    ["cs", "en"],
+    ["sk", "en"],
+    ["it", "en"],
+    ["nl", "en"],
+    ["en"],
+];
+
+const skillPool: string[][] = [
+    ["ONE", "TWO"],
+    ["THREE", "FOUR"],
+    ["FIVE", "SIX"],
+    ["SIX", "SEVEN"],
+    ["TWO", "FOUR"],
+    ["TWO", "SIX"],
+    ["FIVE", "SEVEN"],
+    ["THREE", "FIVE"],
+    ["ONE", "FOUR"],
+    ["ONE", "SIX"],
+    ["TWO", "THREE"],
+    ["FOUR", "FIVE"],
+];
+
+const certificatePool: string[][] = [
+    ["ONE"],
+    ["TWO"],
+    ["THREE"],
+    ["FOUR"],
+    ["FIVE"],
+    ["SIX"],
+    ["SEVEN"],
+    ["ONE", "TWO"],
+    ["THREE", "FOUR"],
+    ["FIVE", "SIX"],
+    ["FOUR", "SEVEN"],
+];
+
+const locationEntries = [
+    { label: "Gdansk", country: "pl", coordinates: [18.649, 54.352], radius: 250, selectedCountries: ["pl", "de"] },
+    { label: "Berlin", country: "de", coordinates: [13.405, 52.52], radius: 300, selectedCountries: ["de", "nl"] },
+    { label: "Oslo", country: "no", coordinates: [10.752, 59.913], radius: 350, selectedCountries: ["no", "se"] },
+    { label: "Lisbon", country: "pt", coordinates: [-9.139, 38.722], radius: 400, selectedCountries: ["pt", "es"] },
+    { label: "Barcelona", country: "es", coordinates: [2.173, 41.385], radius: 320, selectedCountries: ["es", "fr"] },
+    { label: "Bergen", country: "no", coordinates: [5.323, 60.392], radius: 280, selectedCountries: ["no", "dk"] },
+    { label: "Copenhagen", country: "dk", coordinates: [12.568, 55.676], radius: 260, selectedCountries: ["dk", "se"] },
+    { label: "Tallinn", country: "ee", coordinates: [24.753, 59.437], radius: 420, selectedCountries: ["ee", "fi"] },
+    { label: "Vilnius", country: "lt", coordinates: [25.279, 54.687], radius: 380, selectedCountries: ["lt", "lv"] },
+    { label: "Rotterdam", country: "nl", coordinates: [4.479, 51.922], radius: 340, selectedCountries: ["nl", "be"] },
+];
+
+const locationOptionsCycle = [
+    EmployeeProfileLocationOptions.ALL_EUROPE,
+    EmployeeProfileLocationOptions.DISTANCE,
+    EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE,
+];
+
 // Algorytm: rozrzucenie dat po pierwszych 7 dniach kolejnych 24 miesięcy od dziś
 function getRandomizedCreatedAt(idx: number): Date {
     return AdminUtil.getRandomizedCreatedAt(idx)
@@ -202,6 +330,62 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
             availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
         },
     ]
+
+    const baseIndex = result.length;
+
+    const createGeneratedProfile = (index: number): DeepPartial<EmployeeProfileEntity> => {
+        const globalIndex = baseIndex + index;
+        const location = pickFromCycle(locationEntries, index);
+        const firstName = pickFromCycle(firstNamePool, index);
+        const lastName = pickFromCycle(lastNamePool, index + 3);
+        const languages = pickFromCycle(languagePool, index + 5);
+        const skills = pickFromCycle(skillPool, index + 7);
+        const certificates = pickFromCycle(certificatePool, index + 9);
+        const locationOption = pickFromCycle(locationOptionsCycle, index);
+        const availabilityOption = index % 2 === 0
+            ? EmployeeProfileAvailabilityOptions.DATE_RANGES
+            : EmployeeProfileAvailabilityOptions.ANYTIME;
+        const status = index % 12 === 0 ? EmployeeProfileStatuses.INACTIVE : EmployeeProfileStatuses.ACTIVE;
+        const createdAt = getRandomizedCreatedAt(globalIndex);
+
+        const displayName = `${firstName} ${lastName}`;
+        const email = `${firstName}.${lastName}${globalIndex}@example.com`.toLowerCase();
+        const uid = `seed-employee-${globalIndex.toString().padStart(3, "0")}`;
+
+        const profile: DeepPartial<EmployeeProfileEntity> = {
+            uid,
+            displayName,
+            email,
+            firstName,
+            lastName,
+            communicationLanguages: languages,
+            locationOption,
+            status,
+            employeeProfileId: globalIndex,
+            createdAt,
+            skills,
+            certificates,
+            availabilityOption,
+            availabilityDateRanges: availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES ? [] : undefined,
+            jobs: [],
+            views: [],
+        };
+
+        if (locationOption === EmployeeProfileLocationOptions.DISTANCE) {
+            profile.point = { type: 'Point', coordinates: location.coordinates as [number, number] };
+            profile.pointRadius = location.radius;
+            profile.address = `${location.label}, ${location.country.toUpperCase()}`;
+        }
+
+        if (locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE) {
+            profile.locationCountries = location.selectedCountries;
+        }
+
+        return profile;
+    };
+
+    const generatedProfiles = Array.from({ length: 50 }, (_, index) => createGeneratedProfile(index));
+    result.push(...generatedProfiles);
 
     return result.map((profile, idx) => {
         fillAvailabilityRanges(profile);
