@@ -8,6 +8,7 @@ import { Utils } from "global/utils";
 import { useTranslation } from "react-i18next";
 import { EPUtil } from "employee/EPUtil";
 import Chips, { ChipModes } from "global/components/chips/Chips";
+import Flags from "global/Flags";
 
 interface Props {
     profile: EmployeeProfileI,
@@ -37,7 +38,6 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
         navigate(Path.getEmployeeProfilePath(profile.displayName!));
     }
 
-
     return (
         <div className={`tile ripple${first ? " first" : ""}${last ? " last" : ""}`} onClick={() => goToProfileView(profile)}>
 
@@ -51,10 +51,9 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
                     <div className="tile-content-title">{profile.displayName}
                         {name && <span>{name}</span>}
                     </div>
-                    <div className="flex">
-                        {Array.from(srcs).map((src, index) => (
-                            <img key={index} className="pp-dropdown-icon pl-4" src={src} alt={"flag-" + index} />
-                        ))}
+
+                    <div>
+                        <Flags languages={profile.communicationLanguages} />
                     </div>
 
                 </div>
@@ -62,11 +61,11 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
                 <div className="tile-content-row mid items-center justify-between w-full">
                     <div className="">{profile.email}</div>
 
-                        {profile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font text-right">{t('others.availableAnytimeShort')}</span>}
-                        {isOneOf([
-                            EmployeeProfileAvailabilityOptions.DATE_RANGES, 
-                            EmployeeProfileAvailabilityOptions.FROM_DATE
-                            ], profile.availabilityOption) && <span className="small-font text-right">{t('common.from')} {getAvailableFromDate()}</span>}
+                    {profile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font text-right">{t('others.availableAnytimeShort')}</span>}
+                    {isOneOf([
+                        EmployeeProfileAvailabilityOptions.DATE_RANGES,
+                        EmployeeProfileAvailabilityOptions.FROM_DATE
+                    ], profile.availabilityOption) && <span className="small-font text-right">{t('common.from')} {getAvailableFromDate()}</span>}
                 </div>
 
                 <div className="tile-content-row bottom">

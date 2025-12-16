@@ -4,17 +4,13 @@ import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import { Util } from "@shared/utils/util";
+import Flags from "global/Flags";
 
 interface Props {
     offer: OfferI;
     first?: boolean;
     last?: boolean;
 }
-
-// TODO offer form - edit mode
-// TODO offer search view
-// TODO offer tile improve
-// TODO offers view admin app
 
 const OfferTile: React.FC<Props> = ({ offer, first, last }) => {
     const navigate = useNavigate();
@@ -35,7 +31,7 @@ const OfferTile: React.FC<Props> = ({ offer, first, last }) => {
                         <span>{offer.category}</span>
                     </div>
                     <div className="flex">
-                        {/* TODO: Add country flag/icon for offer.locationCountry if available */}
+                        <Flags languages={[offer.locationCountry]} />
                     </div>
                 </div>
                 <div className="tile-content-row mid items-center justify-between w-full">
