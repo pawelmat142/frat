@@ -39,7 +39,7 @@ root.render(
                         <OfferSearchProvider>
                           <EmployeeSearchProvider>
                             <MenuProvider>
-                              <div className="min-h-screen flex flex-col">
+                              <div className="min-h-screen flex flex-col overflow-clip">
                                 <GlobalHeader />
                                 <main className="flex-1 flex flex-col items-center w-full">
                                   <App />
