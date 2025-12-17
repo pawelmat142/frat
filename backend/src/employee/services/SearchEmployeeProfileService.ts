@@ -60,9 +60,14 @@ export class SearchEmployeeProfileService {
             .orderBy('earliest_date', 'ASC', 'NULLS LAST');
 
 
+        const countQuery = queryBuilder.clone()
+            .select('profile.employee_profile_id')
+            .distinct(true);
+
+        const count = await countQuery.getCount();
+
         this.addPagination(queryBuilder, filters);
 
-        const count = await queryBuilder.getCount();
         const results = await queryBuilder.getMany();
         return {
             profiles: results,

@@ -10,6 +10,9 @@ node_modules/
 dist/
 build/
 
+TODO.md
+temp.md
+
 # Environment variables
 .env
 .env.local

@@ -3,7 +3,6 @@ import { CanActivate, ExecutionContext, Injectable, ForbiddenException, Logger }
 import { Reflector } from '@nestjs/core';
 import { UserRole } from '@shared/interfaces/UserI';
 import { Util } from '@shared/utils/util';
-import { AuthValidators } from '@shared/validators/AuthValidator';
 import { ROLES_KEY } from 'auth/decorators/RolesDecorator';
 
 @Injectable()

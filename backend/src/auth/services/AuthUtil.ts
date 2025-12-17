@@ -1,6 +1,5 @@
 /** Created by Pawel Malek **/
 
-
 export abstract class AuthUtil {
 
     public static extractTokenFromHeader(request: any): string | null {

@@ -37,6 +37,4 @@ export class OptionalJwtUser implements CanActivate {
     }
     return true;
   }
-
-  // extractTokenFromHeader moved to utils
 }
