@@ -6,7 +6,7 @@ import Loading from "global/components/Loading";
 import OfferSearchFilters from "./OfferSearchFilters";
 import OfferTile from "offer/components/OfferTile";
 import { useInfiniteScroll } from "shared/hooks/useInfiniteScroll";
-import FloatingScrollTopButton from "global/components/buttons/FloatingScrollTopButton";
+import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
 
 const OfferSearchView: React.FC = () => {
 
@@ -76,7 +76,7 @@ const OfferSearchView: React.FC = () => {
 
 
 
-<FloatingScrollTopButton />
+<FloatingScrollButton />
         </div>
     );
 

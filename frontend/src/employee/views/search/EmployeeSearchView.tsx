@@ -5,7 +5,7 @@ import { useEmployeeSearch } from "./EmployeeSearchProvider";
 import EmployeeSearchFilters from "./EmployeeSearchFilters";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useInfiniteScroll } from "shared/hooks/useInfiniteScroll";
-import FloatingScrollTopButton from "global/components/buttons/FloatingScrollTopButton";
+import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
 
 const EmployeeSearchView: React.FC = () => {
 
@@ -73,7 +73,7 @@ const EmployeeSearchView: React.FC = () => {
                 </div>
             )}
 
-            <FloatingScrollTopButton />
+            <FloatingScrollButton />
         </div>
 
     )

@@ -39,7 +39,7 @@ const scrollToTop = (container: ScrollContainer) => {
     }
 };
 
-const FloatingScrollTopButton: React.FC<FloatingScrollTopButtonProps> = ({
+const FloatingScrollButton: React.FC<FloatingScrollTopButtonProps> = ({
     scrollContainer,
     className = "",
     bottomOffset = 84,
@@ -130,4 +130,4 @@ const FloatingScrollTopButton: React.FC<FloatingScrollTopButtonProps> = ({
     );
 };
 
-export default FloatingScrollTopButton;
+export default FloatingScrollButton;
