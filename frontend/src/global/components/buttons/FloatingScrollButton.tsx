@@ -47,6 +47,7 @@ const FloatingScrollButton: React.FC<FloatingScrollTopButtonProps> = ({
     ariaLabel = "Scroll to top",
 }) => {
     const [visible, setVisibleState] = useState(false);
+    const [hasDisplayed, setHasDisplayed] = useState(false);
     const containerRef = useRef<ScrollContainer | null>(null);
     const lastScrollRef = useRef(0);
     const rafRef = useRef<number>();
@@ -55,6 +56,7 @@ const FloatingScrollButton: React.FC<FloatingScrollTopButtonProps> = ({
     const setButtonVisible = useCallback((nextVisible: boolean) => {
         visibleRef.current = nextVisible;
         setVisibleState(nextVisible);
+        setHasDisplayed(prev => prev || nextVisible);
     }, []);
 
     useEffect(() => {
@@ -115,7 +117,11 @@ const FloatingScrollButton: React.FC<FloatingScrollTopButtonProps> = ({
         setButtonVisible(false);
     }, [setButtonVisible]);
 
-    const combinedClassName = `floating-scroll-top-btn ${visible ? "is-visible" : "is-hidden"} ${className}`.trim();
+    const combinedClassName = [
+        "floating-scroll-top-btn",
+        visible ? "is-visible" : hasDisplayed ? "is-hidden" : "",
+        className,
+    ].filter(Boolean).join(" ");
 
     return (
         <button
