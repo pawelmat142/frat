@@ -7,6 +7,9 @@ import { toast } from "react-toastify";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import Loading from "global/components/Loading";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import DoneIcon from '@mui/icons-material/Done';
 import { useUserContext } from "user/UserProvider";
 import { useNavigate } from "react-router-dom";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
@@ -17,6 +20,7 @@ import EmployeeProfileStep2 from "./EmployeeProfileStep2";
 import EmployeeProfileStep3 from "./EmployeeProfileStep3";
 import EmployeeProfileStep4 from "./EmployeeProfileStep4";
 import { Utils } from "global/utils/utils";
+import { useConfirm } from "global/providers/PopupProvider";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -33,6 +37,7 @@ const EmployeeProfileFormView: React.FC = () => {
     const navigate = useNavigate();
     const profileCtx = useEmployeeSearch();
     const isDevMode = Utils.isDevMode();
+    const confirm = useConfirm();
 
     const { control, handleSubmit, watch, setValue, reset, formState, trigger } = useForm<EmployeeProfileForm>({
         defaultValues: {
@@ -112,6 +117,14 @@ const EmployeeProfileFormView: React.FC = () => {
     }, [employeeProfile, reset, trigger]);
 
     const onSubmit = async () => {
+        const confirmed = await confirm({
+            title: 'employeeProfile.form.confirmTitle',
+            message: 'employeeProfile.form.confirmSubmit',
+            confirmText: 'common.confirm',
+            cancelText: 'common.cancel'
+        });
+        if (!confirmed) return;
+
         const valid = await validateCurrentStep();
         if (!valid) {
             toast.error(t("employeeProfile.form.validationError"));
@@ -259,72 +272,24 @@ const EmployeeProfileFormView: React.FC = () => {
     }
 
     return (
-        <div className="form-view relative mt-10">
+        <div className="form-view relative">
             <form
-                onSubmit={handleSubmit(() => {}, errors => {
+                onSubmit={handleSubmit(() => { }, errors => {
                     console.log("Form errors", errors);
                     toast.error(t("employeeProfile.form.submitError"));
                 })}
                 noValidate
             >
-                {/* Step indicator */}
-                <div className="flex justify-center items-center gap-2 mb-8">
-                    {STEPS_ORDER.map((step) => (
-                        <Button
-                            onClick={() => selectStep(step)}
-                            key={step}
-                            type="button"
-                            mode={currentStep === step ? BtnModes.PRIMARY_TXT : BtnModes.SECONDARY_TXT}
-                            size={BtnSizes.SMALL}
-                            disabled={currentStep === step ||
-                                STEPS_ORDER.indexOf(step) > STEPS_ORDER.indexOf(currentStep)
-                            }
-                        >
-                            {t(`employeeProfile.form.${step}.label`)}
-                        </Button>
-                    ))}
+                <div className="form-wizard-top-wrapper">
+                    <div className="form-wizard-top">
+                        {t(`employeeProfile.form.${currentStep}.label`)}
+
+                    </div>
                 </div>
 
                 {renderStep()}
 
-                <div className="flex gap-4 mt-20 mb-10">
-                    {currentStep !== 'step1' && (
-                        <Button
-                            type="button"
-                            onClick={handlePrev}
-                            size={BtnSizes.LARGE}
-                            mode={BtnModes.SECONDARY_TXT}
-                            className="flex-1"
-                        >
-                            {t("common.previous")}
-                        </Button>
-                    )}
 
-                    {currentStep !== 'step4' ? (
-                        <Button
-                            type="button"
-                            onClick={handleNext}
-                            size={BtnSizes.LARGE}
-                            mode={BtnModes.PRIMARY_TXT}
-                            className="flex-1"
-                        >
-                            {t("common.next")}
-                        </Button>
-                    ) : (
-                        <Button
-                            type="button"
-                            onClick={() => {
-                                onSubmit()
-                            }}
-                            size={BtnSizes.LARGE}
-                            mode={BtnModes.PRIMARY}
-                            className="flex-1"
-                        >
-                            {t("common.save")}
-                        </Button>
-                    )}
-
-                </div>
                 {isDevMode && (
                     <div className="flex items-center justify-end">
                         <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
@@ -333,6 +298,76 @@ const EmployeeProfileFormView: React.FC = () => {
                     </div>
                 )}
             </form>
+
+            <div className="form-wizard-buttons-wrapper">
+                <div className="form-wizard-buttons">
+                    <Button
+                        type="button"
+                        onClick={handlePrev}
+                        size={BtnSizes.LARGE}
+                        mode={BtnModes.SECONDARY_TXT}
+                        disabled={currentStep === 'step1'}
+                        className="flex-1"
+                        aria-label={t("common.previous")}
+                    >
+                        <ArrowBackIosNewIcon />
+                    </Button>
+
+                    <div className="wizard-stepper">
+
+                        {STEPS_ORDER.map((step) => (
+                            <Button
+                                onClick={() => {
+                                    if (currentStep === step || STEPS_ORDER.indexOf(step) > STEPS_ORDER.indexOf(currentStep)) {
+                                        return
+                                    }
+                                    selectStep(step)
+                                }}
+                                key={step}
+                                type="button"
+                                mode={currentStep === step ? BtnModes.PRIMARY_TXT : BtnModes.SECONDARY_TXT}
+                                size={BtnSizes.SMALL}
+                                disabled={
+                                    STEPS_ORDER.indexOf(step) > STEPS_ORDER.indexOf(currentStep)
+                                }
+                            >
+                                <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                                    <circle cx="6" cy="6" r="5" fill={currentStep === step ? 'var(--primary-color, #2563eb)' : '#e5e7eb'} />
+                                </svg>
+                            </Button>
+                        ))}
+
+                    </div>
+
+                    {currentStep !== 'step4' ? (
+                        <Button
+                            type="button"
+                            onClick={handleNext}
+                            size={BtnSizes.LARGE}
+                            mode={BtnModes.PRIMARY_TXT}
+                            className="flex-1"
+                            aria-label={t("common.next")}
+                        >
+                            <ArrowForwardIosIcon />
+                        </Button>
+                    ) : (
+                        <Button
+                            type="button"
+                            onClick={() => {
+                                onSubmit()
+                            }}
+                            size={BtnSizes.LARGE}
+                            mode={BtnModes.PRIMARY_TXT}
+                            className="flex-1 font-bold"
+                            aria-label={t("common.save")}
+                        >
+                            <DoneIcon sx={{ fontSize: 22, transform: 'scale(1.6)' }} />
+                        </Button>
+                    )}
+
+                </div>
+
+            </div>
         </div>
     );
 }

@@ -417,6 +417,8 @@
           "title": "Availability"
         },
         "title": "Employee Profile Form",
+        "confirmTitle": "Confirm submission",
+        "confirmSubmit": "Are you sure you want to save the employee profile?",
         "radius": "Radius",
         "skills": "Skills",
         "address": "Address",

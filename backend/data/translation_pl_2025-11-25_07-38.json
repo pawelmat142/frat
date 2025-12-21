@@ -408,6 +408,8 @@
           "title": "Dostępność"
         },
         "title": "Formularz profilu pracownika",
+        "confirmTitle": "Potwierdź zapisanie profilu",
+        "confirmSubmit": "Czy na pewno chcesz zapisać profil pracownika?",
         "radius": "Promień",
         "skills": "Umiejętności",
         "address": "Adres",

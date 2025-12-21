@@ -495,9 +495,11 @@ $cellRadiusBig: 1rem;
 
 // FORMS
 .form-view {
+    height: 100%;
     padding: 1.5rem 1rem;
     width: 100%;
     max-width: $mobile;
+    flex: 1;
 }
 
 .form-header {
@@ -523,6 +525,47 @@ $cellRadiusBig: 1rem;
     font-size: $smallFont;
 }
 
+.form-wizard-top-wrapper {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
+}
+
+.form-wizard-top {
+    background-color: $primary-bg;
+    padding-top: 1rem;
+    padding-bottom: .5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.form-wizard-buttons-wrapper {
+    padding-top: 2rem;
+    padding-bottom: 54px;
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 4;
+}
+.form-wizard-buttons {
+    background-color: $primary-bg;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.wizard-stepper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 .5rem;
+}
 
 
 
@@ -532,7 +575,6 @@ $cellRadiusBig: 1rem;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 1rem;
 }
-
 
 
 
