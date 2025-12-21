@@ -1,7 +1,7 @@
 import { OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
 import { Util } from "@shared/utils/util";
+import { Utils } from "global/utils/utils";
 import { useTranslation } from "react-i18next";
-import { Utils } from "global/utils";
 
 interface OfferDetailsTileProps {
     offer: OfferI;

@@ -5,8 +5,8 @@ import { Util } from "@shared/utils/util";
 import { useTranslation } from "react-i18next";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import Loading from "global/components/Loading";
-import Flags from "global/Flags";
-import { Utils } from "global/utils";
+import Flags from "global/components/Flags";
+import { Utils } from "global/utils/utils";
 
 interface ProfileDataTileProps {
     profile: EmployeeProfileI

@@ -3,11 +3,11 @@ import React, { createContext, useContext, useState } from 'react';
 import BottomSheet from '../components/BottomSheet';
 import { DictionaryI } from '@shared/interfaces/DictionaryI';
 import { DictionaryService } from 'global/services/DictionaryService';
-import { Utils } from 'global/utils';
 import SelectorItems from 'global/components/selector/SelectorItems';
 import { usePopup } from './PopupProvider';
 import { useGlobalContext } from './GlobalProvider';
 import MenuItems, { MenuConfig as MenuConfig } from 'global/components/selector/MenuItems';
+import { Utils } from 'global/utils/utils';
 
 export interface OpenSheetParams {
     title?: string;

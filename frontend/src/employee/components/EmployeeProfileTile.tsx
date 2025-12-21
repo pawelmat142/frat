@@ -4,11 +4,11 @@ import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { isOneOf, Util } from "@shared/utils/util";
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
-import { Utils } from "global/utils";
 import { useTranslation } from "react-i18next";
 import { EPUtil } from "employee/EPUtil";
 import Chips, { ChipModes } from "global/components/chips/Chips";
-import Flags from "global/Flags";
+import Flags from "global/components/Flags";
+import { Utils } from "global/utils/utils";
 
 interface Props {
     profile: EmployeeProfileI,

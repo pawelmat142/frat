@@ -1,7 +1,7 @@
 import removeAccents from 'remove-accents';
-import { SelectorItem } from './interface/controls.interface';
 import { DictionaryI } from '@shared/interfaces/DictionaryI';
 import { DateRange, Position } from '@shared/interfaces/EmployeeProfileI';
+import { SelectorItem } from 'global/interface/controls.interface';
 
 export abstract class Utils {
     public static isDevMode(): boolean {

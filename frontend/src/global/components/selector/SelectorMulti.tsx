@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SelectorValue, SelectorMultiProps, SelectorItem } from 'global/interface/controls.interface';
-import { Utils } from 'global/utils';
 import ArrowIcon from '../controls/ArrowIcon';
 import Checkbox from '../controls/Checkbox';
 import ControlLabel from '../controls/ControlLabel';
 import FormError from '../controls/FormError';
 import Input from '../controls/Input';
+import { Utils } from 'global/utils/utils';
 
 function SelectorMulti<T extends SelectorValue = SelectorValue>({
     items,

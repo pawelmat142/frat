@@ -4,9 +4,8 @@ import CallendarTile from "employee/views/profile/CallendarTile";
 import EditButton from "global/components/buttons/EditButton";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import Loading from "global/components/Loading";
-import Flags from "global/Flags";
+import Flags from "global/components/Flags";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import { Utils } from "global/utils";
 import { OffersService } from "offer/services/OffersService";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,6 +17,7 @@ import { useMenuContext } from "global/providers/MenuProvider";
 import { toast } from "react-toastify";
 import { useConfirm } from "global/providers/PopupProvider";
 import { Path } from "../../../path";
+import { Utils } from "global/utils/utils";
 
 const OfferView: React.FC = () => {
 

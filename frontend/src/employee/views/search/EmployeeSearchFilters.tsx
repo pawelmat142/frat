@@ -10,10 +10,10 @@ import { BtnModes, FloatingInputModes } from "global/interface/controls.interfac
 import { useEmployeeSearch } from "./EmployeeSearchProvider";
 import { useDrawer } from "global/providers/DrawerProvider";
 import EmployeeSearchFiltersSheet from "./EmployeeSearchFiltersSheet";
-import { Utils } from "global/utils";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useDebouncedValue } from "shared/utils/useDebouncedValue";
 import { FaLanguage } from "react-icons/fa";
+import { Utils } from "global/utils/utils";
 
 const EmployeeSearchFilters: React.FC = () => {
 

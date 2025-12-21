@@ -1,4 +1,4 @@
-import { Utils } from "global/utils";
+import { Utils } from "global/utils/utils";
 import RemoveButton from "../buttons/RemoveButton";
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";

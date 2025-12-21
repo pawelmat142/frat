@@ -1,5 +1,5 @@
 import { EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
-import { FilterUtil } from "global/FilterUtil";
+import { FilterUtil } from "global/utils/FilterUtil";
 
 export abstract class EPUtil {
 

@@ -1,6 +1,6 @@
-import { Utils } from "./utils";
-import { useGlobalContext } from "./providers/GlobalProvider";
-import Loading from "./components/Loading";
+import { Utils } from "global/utils/utils";
+import { useGlobalContext } from "../providers/GlobalProvider";
+import Loading from "./Loading";
 
 interface Props {
     languages: string[]

@@ -9,13 +9,13 @@ import OfferFormStepOne from "./OfferFormStepOne";
 import OfferFormStepTwo from "./OfferFormStepTwo";
 import OfferFormStepThree from "./OfferFormStepThree";
 import OfferFormStepFour from "./OfferFormStepFour";
-import { Utils } from "global/utils";
 import { OffersService } from "offer/services/OffersService";
 import { useEffect, useState } from "react";
 import Loading from "global/components/Loading";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
 import { OfferUtil } from "@shared/utils/OfferUtil";
+import { Utils } from "global/utils/utils";
 
 const OfferFormContent: React.FC = () => {
 

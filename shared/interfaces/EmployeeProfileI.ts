@@ -71,6 +71,9 @@ export interface EmployeeProfileFormStep2 {
 export interface EmployeeProfileFormStep3 {
   locationOption: EmployeeProfileLocationOption;
   locationCountries?: string[];
+  geocodedPosition?: GeocodedPosition | null;
+
+  // TODO remove
   locationDistancePosition?: Position;
   locationDistanceRadius?: number; // [km]
 }
@@ -151,4 +154,16 @@ export interface DateRange {
   start?: Date | null
   end?: Date | null
   id?: number
+}
+
+export interface GeocodedPosition {
+	lat: number;
+	lng: number;
+	street?: string;
+	city?: string;
+	district?: string;
+	state?: string; // administrative_area_level_1
+	postcode?: string;
+	country?: string;
+	fullAddress?: string;
 }

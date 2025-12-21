@@ -1,5 +1,5 @@
 import { Currency, OfferSearchFilters } from "@shared/interfaces/OfferI";
-import { FilterUtil } from "global/FilterUtil";
+import { FilterUtil } from "global/utils/FilterUtil";
 
 export abstract class OfferUtil {
 

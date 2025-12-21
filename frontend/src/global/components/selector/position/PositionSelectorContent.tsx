@@ -1,15 +1,20 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Position } from '@shared/interfaces/EmployeeProfileI';
+import { GeocodedPosition } from '@shared/interfaces/EmployeeProfileI';
 import Button from '../../controls/Button';
 import { BtnModes } from 'global/interface/controls.interface';
 import CloseIcon from '@mui/icons-material/Close';
+import { MapUtil } from 'global/utils/MapUtil';
+
+// TODO inicjalna pozycja na podstawie lokalizacji
+// TODO materializujemy miasta
+// TODO do mapy dodać wyszukiwarke
 
 interface PositionSelectorContentProps {
-    initialPosition?: Position | null;
+    initialPosition?: GeocodedPosition | null;
     initializeByCountryCode?: string | null;
-    onChange: (position: Position | null) => void;
+    onChange: (position: GeocodedPosition | null) => void;
     onCancel: () => void;
 }
 
@@ -19,17 +24,17 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     onChange,
     onCancel,
 }) => {
-    const apiKey = ""; // TODO maps API key
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''; // provide via .env.local
 
-    const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
-    const [currentPosition, setCurrentPosition] = useState<Position | null>(null);
+    const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(null);
+    const [currentPosition, setCurrentPosition] = useState<GeocodedPosition | null>(null);
     const mapRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<google.maps.Map | null>(null);
     const markerRef = useRef<google.maps.Marker | null>(null);
 
     const { t } = useTranslation();
 
-    const initialZoom = 7;
+    const initialZoom = 15;
 
     useEffect(() => {
         // Load Google Maps script
@@ -45,19 +50,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         }
     }, []);
 
-    const getDefaultCoords = async (): Promise<{ lat: number; lng: number }> => {
-        try {
-            const res = await fetch('https://ip-api.com/json/');
-            const data = await res.json();
-            if (data && typeof data.lat === 'number' && typeof data.lon === 'number') {
-                return { lat: data.lat, lng: data.lon };
-            }
-        } catch (e) {
-            console.error(e);
-        }
-        // fallback Warszawa
-        return { lat: 52.2297, lng: 21.0122 };
-    };
+
 
     const initializeMap = async () => {
         if (!mapRef.current) return;
@@ -161,23 +154,31 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     const updatePosition = async (position: { lat: number; lng: number }) => {
         try {
             const geocoder = new google.maps.Geocoder();
-            const result = await geocoder.geocode({ location: position });
+            const result: google.maps.GeocoderResponse = await geocoder.geocode({ location: position });
 
-            if (result.results[0]) {
-                const fullPosition: Position = {
-                    ...position,
-                    address: result.results[0].formatted_address,
-                };
-                setSelectedPosition(fullPosition);
-            } else {
-                const fullPosition: Position = { ...position };
-                setSelectedPosition(fullPosition);
-            }
+            const geoPosition = MapUtil.parseGeocoderResponse(result);
+            console.log(geoPosition);
+            setSelectedPosition(geoPosition);
+
         } catch (error) {
-            // console.error('Geocoding error:', error);
-            const fullPosition: Position = { ...position };
-            setSelectedPosition(fullPosition);
+            console.error('Geocoding error:', error);
+            // TODO translation
+            toast.error(t('employee.positionSelectError'));
         }
+    };
+
+    const getDefaultCoords = async (): Promise<{ lat: number; lng: number }> => {
+        try {
+            const res = await fetch('https://ip-api.com/json/');
+            const data = await res.json();
+            if (data && typeof data.lat === 'number' && typeof data.lon === 'number') {
+                return { lat: data.lat, lng: data.lon };
+            }
+        } catch (e) {
+            console.error(e);
+        }
+        // fallback Warszawa
+        return { lat: 52.2297, lng: 21.0122 };
     };
 
     return (

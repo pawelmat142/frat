@@ -6,17 +6,17 @@ import { DateRange, EmployeeProfileAvailabilityOptions, EmployeeProfileForm, Emp
 import { toast } from "react-toastify";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import Loading from "global/components/Loading";
-import { Utils } from "global/utils";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
 import { useNavigate } from "react-router-dom";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
+import { Path } from "../../../path";
+import { useEmployeeSearch } from "../search/EmployeeSearchProvider";
 import EmployeeProfileStep1 from "./EmployeeProfileStep1";
 import EmployeeProfileStep2 from "./EmployeeProfileStep2";
 import EmployeeProfileStep3 from "./EmployeeProfileStep3";
 import EmployeeProfileStep4 from "./EmployeeProfileStep4";
-import { Path } from "../../../path";
-import { useEmployeeSearch } from "../search/EmployeeSearchProvider";
+import { Utils } from "global/utils/utils";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 

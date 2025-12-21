@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { AuthService } from "auth/services/AuthService";
-import { Utils } from "global/utils";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../path";
 import Loading from "global/components/Loading";
@@ -14,6 +13,7 @@ import { FaPlus } from "react-icons/fa";
 import GoogleIcon from "global/components/icons/GoogleIcon";
 import IconButton from "global/components/controls/IconButon";
 import FloatingInput from "global/components/controls/FloatingInput";
+import { Utils } from "global/utils/utils";
 
 const SignInPage: React.FC = () => {
     const { t } = useTranslation();

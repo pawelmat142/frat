@@ -101,7 +101,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ control, setValue, watch, formS
                                             value={field.value}
                                             required
                                             onChange={field.onChange}
-                                            error={formState?.errors.step3?.locationDistancePosition}
+                                            error={formState?.errors.step3?.geocodedPosition}
                                         />
                                     )}
                                 />

@@ -2,15 +2,15 @@ import { useState, useEffect, forwardRef } from 'react';
 import { InputInterface } from '../../../interface/controls.interface';
 import FloatingLabel from '../../controls/FloatingLabel';
 import FormError from '../../controls/FormError';
-import { Position } from '@shared/interfaces/EmployeeProfileI';
+import { GeocodedPosition, Position } from '@shared/interfaces/EmployeeProfileI';
 import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import PositionSelectorContent from './PositionSelectorContent';
-import { Utils } from 'global/utils';
+import { Utils } from 'global/utils/utils';
 
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
-    value?: Position | null;
-    onChange?: (position?: Position | null) => void;
+    value?: GeocodedPosition | null;
+    onChange?: (position?: GeocodedPosition | null) => void;
     initializePositionByCountryCode?: string | null;
 }
 
@@ -30,7 +30,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         initializePositionByCountryCode
     }, ref) => {
 
-        const [selectedPosition, setSelectedPosition] = useState<Position | null>(value || null);
+        const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(value || null);
 
         const fullScreenDialogCtx = useFullScreenDialog();
 
@@ -68,7 +68,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         };
 
         const displayValue = selectedPosition
-            ? selectedPosition.address || Utils.formatPosition(selectedPosition)
+            ? selectedPosition.fullAddress || selectedPosition.city || Utils.formatPosition(selectedPosition)
             : '';
 
         const hasValue = () => {
@@ -91,7 +91,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                             name={name || id}
                             type="text"
                             value={displayValue}
-                            className="pr-10 bg-transparent"
+                            className=""
                             disabled={disabled}
                             required={required}
                             readOnly

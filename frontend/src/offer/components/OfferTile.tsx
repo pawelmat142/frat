@@ -4,7 +4,7 @@ import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import { Util } from "@shared/utils/util";
-import Flags from "global/Flags";
+import Flags from "global/components/Flags";
 
 interface Props {
     offer: OfferI;
