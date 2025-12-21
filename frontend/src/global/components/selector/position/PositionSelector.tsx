@@ -2,16 +2,16 @@ import { useState, useEffect, forwardRef } from 'react';
 import { InputInterface } from '../../../interface/controls.interface';
 import FloatingLabel from '../../controls/FloatingLabel';
 import FormError from '../../controls/FormError';
-import { GeocodedPosition, Position } from '@shared/interfaces/EmployeeProfileI';
+import { GeocodedPosition } from '@shared/interfaces/EmployeeProfileI';
 import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import PositionSelectorContent from './PositionSelectorContent';
 import { Utils } from 'global/utils/utils';
+import { MapUtil } from 'global/utils/MapUtil';
 
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: GeocodedPosition | null;
     onChange?: (position?: GeocodedPosition | null) => void;
-    initializePositionByCountryCode?: string | null;
 }
 
 const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
@@ -27,12 +27,12 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         center,
         onChange,
         error,
-        initializePositionByCountryCode
     }, ref) => {
 
         const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(value || null);
-
         const fullScreenDialogCtx = useFullScreenDialog();
+
+        const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''; // provide via .env.local
 
         let myClass = `pp-control pp-position-selector floating-input ${className}`;
         if (fullWidth) {
@@ -45,8 +45,38 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         }
 
         useEffect(() => {
-            setSelectedPosition(value || null);
-        }, [value]);
+            // Load Google Maps script
+            if (!window.google) {
+                const script = document.createElement('script');
+                script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey || ''}&libraries=places`;
+                script.async = true;
+                script.defer = true;
+                script.onload = () => initSelectedPosition();
+                document.head.appendChild(script);
+            } else {
+                initSelectedPosition();
+            }
+        }, []);
+
+
+        const initSelectedPosition = async () => {
+            if (value) {
+                setSelectedPosition(value || null);
+            } else {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(async (pos) => {
+                        const geoPosition = await MapUtil.getGeocodedLocation({
+                            lat: pos.coords.latitude,
+                            lng: pos.coords.longitude
+                        }, new google.maps.Geocoder());
+                        setSelectedPosition(geoPosition);
+                    })
+
+                } else {
+                    setSelectedPosition(null);
+                }
+            };
+        }
 
         const handleInputClick = async () => {
             if (disabled) return;
@@ -54,7 +84,6 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
             await fullScreenDialogCtx.open({
                 children: <PositionSelectorContent
                     initialPosition={value}
-                    initializeByCountryCode={initializePositionByCountryCode}
                     onChange={(position) => {
                         fullScreenDialogCtx.close();
                         onChange?.(position);

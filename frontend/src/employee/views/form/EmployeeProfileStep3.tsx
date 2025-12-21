@@ -23,16 +23,16 @@ const EmployeeProfileStep3: React.FC<Props> = ({ control, setValue, watch, formS
     const required = FormValidator.required(t);
     const tabOptions: TabSwitcherOption[] = [
         {
-            label: t("employeeProfile.form.locationOption.ALL_EUROPE.tab"),
-            code: EmployeeProfileLocationOptions.ALL_EUROPE,
+            label: t("employeeProfile.form.locationOption.DISTANCE.tab"),
+            code: EmployeeProfileLocationOptions.DISTANCE,
         },
         {
             label: t("employeeProfile.form.locationOption.SELECTED_COUNTRIES.tab"),
             code: EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE,
         },
         {
-            label: t("employeeProfile.form.locationOption.DISTANCE.tab"),
-            code: EmployeeProfileLocationOptions.DISTANCE,
+            label: t("employeeProfile.form.locationOption.ALL_EUROPE.tab"),
+            code: EmployeeProfileLocationOptions.ALL_EUROPE,
         },
     ];
 

@@ -2,6 +2,12 @@ import { GeocodedPosition } from "@shared/interfaces/EmployeeProfileI";
 
 
 export abstract class MapUtil {
+
+    static async getGeocodedLocation(position: { lat: number; lng: number }, geocoder: google.maps.Geocoder): Promise<GeocodedPosition | null> {
+        const result: google.maps.GeocoderResponse = await geocoder.geocode({ location: position });
+        const geoPosition = MapUtil.parseGeocoderResponse(result);
+        return geoPosition;
+    }
 	/**
 	 * Parse a google.maps.GeocoderResponse and return a simplified position object.
 	 * Heuristics:

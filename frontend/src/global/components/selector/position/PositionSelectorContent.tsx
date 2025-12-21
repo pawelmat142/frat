@@ -6,25 +6,23 @@ import Button from '../../controls/Button';
 import { BtnModes } from 'global/interface/controls.interface';
 import CloseIcon from '@mui/icons-material/Close';
 import { MapUtil } from 'global/utils/MapUtil';
+import PositionSelectorSearchbar from './PositionSelectorSearchbar';
 
+// TODO uprawnienie do lokalizacji
 // TODO inicjalna pozycja na podstawie lokalizacji
 // TODO materializujemy miasta
-// TODO do mapy dodać wyszukiwarke
 
 interface PositionSelectorContentProps {
     initialPosition?: GeocodedPosition | null;
-    initializeByCountryCode?: string | null;
     onChange: (position: GeocodedPosition | null) => void;
     onCancel: () => void;
 }
 
 const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     initialPosition,
-    initializeByCountryCode,
     onChange,
     onCancel,
 }) => {
-    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''; // provide via .env.local
 
     const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(null);
     const [currentPosition, setCurrentPosition] = useState<GeocodedPosition | null>(null);
@@ -33,24 +31,11 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     const markerRef = useRef<google.maps.Marker | null>(null);
 
     const { t } = useTranslation();
-
     const initialZoom = 15;
 
     useEffect(() => {
-        // Load Google Maps script
-        if (!window.google) {
-            const script = document.createElement('script');
-            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey || ''}&libraries=places`;
-            script.async = true;
-            script.defer = true;
-            script.onload = () => initializeMap();
-            document.head.appendChild(script);
-        } else {
-            initializeMap();
-        }
+        initializeMap();
     }, []);
-
-
 
     const initializeMap = async () => {
         if (!mapRef.current) return;
@@ -58,36 +43,6 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         if (initialPosition) {
             createMap(initialPosition);
             return;
-        }
-
-        if (initializeByCountryCode) {
-            await initMapByCountryCode(initializeByCountryCode);
-            return;
-        }
-
-        await initMapByLocation();
-    };
-
-    const initMapByCountryCode = async (countryCode: string) => {
-        try {
-            const code = countryCode.toUpperCase();
-            const res = await fetch(`https://restcountries.com/v3.1/alpha/${code}`);
-            const data = await res.json();
-            if (Array.isArray(data) && data.length > 0) {
-                const country = data[0];
-                if (country.capitalInfo && country.capitalInfo.latlng && country.capitalInfo.latlng.length === 2) {
-                    const [lat, lng] = country.capitalInfo.latlng;
-                    createMap({ lat, lng });
-                    return;
-                }
-                if (country.latlng && country.latlng.length === 2) {
-                    const [lat, lng] = country.latlng;
-                    createMap({ lat, lng });
-                    return;
-                }
-            }
-        } catch (e) {
-            toast.error("Could not initialize map by country code");
         }
         await initMapByLocation();
     };
@@ -152,20 +107,18 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     };
 
     const updatePosition = async (position: { lat: number; lng: number }) => {
+        mapInstanceRef.current?.panTo(new google.maps.LatLng(position.lat, position.lng));
+        markerRef.current?.setPosition(new google.maps.LatLng(position.lat, position.lng));
         try {
-            const geocoder = new google.maps.Geocoder();
-            const result: google.maps.GeocoderResponse = await geocoder.geocode({ location: position });
-
-            const geoPosition = MapUtil.parseGeocoderResponse(result);
-            console.log(geoPosition);
+            const geoPosition = await MapUtil.getGeocodedLocation(position, new google.maps.Geocoder());
             setSelectedPosition(geoPosition);
-
         } catch (error) {
             console.error('Geocoding error:', error);
-            // TODO translation
-            toast.error(t('employee.positionSelectError'));
+            toast.error(t('employeeProfile.error.getGeocodedLocation'));
         }
     };
+
+
 
     const getDefaultCoords = async (): Promise<{ lat: number; lng: number }> => {
         try {
@@ -184,8 +137,13 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     return (
         <div className="position-selector-popup-overlay fixed inset-0 z-50 flex items-center justify-center bg-opacity-50">
             <div className="position-selector-popup secondary-bg rounded-lg shadow-xl w-full h-full md:w-[90%] md:h-[90%] max-w-6xl flex flex-col">
-                <div className="position-selector-header p-4 flex items-center justify-between border-b">
-                    <h2 className="text-xl font-semibold">{t('employee.selectPosition')}</h2>
+                <div className="position-selector-header p-2 flex items-center justify-between border-b primary-bg">
+
+                    <PositionSelectorSearchbar
+                        mapInstanceRef={mapInstanceRef.current}
+                        updatePosition={updatePosition}
+                    />
+
                     <button
                         onClick={() => onCancel()}
                         className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -198,7 +156,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
                     <div ref={mapRef} className="w-full h-full" />
                 </div>
 
-                <div className="position-selector-footer p-4 flex gap-4 justify-between border-t">
+                <div className="position-selector-footer px-4 py-2 flex gap-4 justify-between border-t">
                     <Button onClick={() => onChange(null)} mode={BtnModes.ERROR_TXT}>
                         {t('common.reset')}
                     </Button>

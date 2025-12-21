@@ -136,7 +136,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 label={t("employeeProfile.form.locationPoint")}
                 className="w-full"
                 value={preparePosition()}
-                initializePositionByCountryCode={localFilters.locationCountry}
                 name={""}
                 onChange={(position) => {
                     const filters = {

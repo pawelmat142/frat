@@ -432,7 +432,7 @@
         "locationOption": {
           "DISTANCE": {
             "msg": "Choose a location and the maximum distance from which you want to receive offers.",
-            "tab": "Distance"
+            "tab": "Location"
           },
           "ALL_EUROPE": {
             "msg": "You will receive offers from all over Europe.",
@@ -469,6 +469,7 @@
       },
       "jobs": "Jobs finished",
       "error": {
+        "getGeocodedLocation": "Error getting location",
         "notFound": "Profile not found",
         "startDate": "Start date missing",
         "uidRequired": "Employee profile uid is required",

@@ -423,7 +423,7 @@
         "locationOption": {
           "DISTANCE": {
             "msg": "Wybierz lokalizację i maksymalną odległość, z której chcesz otrzymywać oferty.",
-            "tab": "Odległość"
+            "tab": "Lokalizacja"
           },
           "ALL_EUROPE": {
             "msg": "Będą trafiać do Ciebie oferty z całej Europy.",
@@ -460,6 +460,7 @@
       },
       "jobs": "Zlecenia ukończone",
       "error": {
+        "getGeocodedLocation": "Błąd podczas pobierania lokalizacji",
         "notFound": "Nie znaleziono profilu",
         "startDate": "Brak daty rozpoczęcia",
         "uidRequired": "UID profilu pracownika jest wymagany",

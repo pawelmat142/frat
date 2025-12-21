@@ -119,7 +119,6 @@ const OfferFormStepOne: React.FC = () => {
                                     autofillCountryByPosition(p);
                                     field.onChange(p);
                                 }}
-                                initializePositionByCountryCode={form.locationCountry}
                                 error={ctx.formCtx.formState.errors.STEP_ONE?.position}
                             />
                         )}  
