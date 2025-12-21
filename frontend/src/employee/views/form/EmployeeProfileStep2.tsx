@@ -1,16 +1,16 @@
 import React from "react";
-import { Controller, Control, FormState } from "react-hook-form";
+import { Controller, Control, FormState, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
 import { EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 
 interface Props {
-    control: Control<EmployeeProfileForm>;
-    formState: FormState<EmployeeProfileForm>;
+    formRef: UseFormReturn<EmployeeProfileForm>;
 }
 
-const EmployeeProfileStep2: React.FC<Props> = ({ control, formState }) => {
+const EmployeeProfileStep2: React.FC<Props> = ({ formRef }) => {
+    const { control, formState } = formRef;
     const { t } = useTranslation();
     const requiredArray = FormValidator.requiredArray(t);
 

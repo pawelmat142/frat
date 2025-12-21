@@ -1,21 +1,21 @@
 import React from "react";
-import { Controller, Control, FormState } from "react-hook-form";
+import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import FloatingInput from "global/components/controls/FloatingInput";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileForm, EmployeeProfileFormStep1 } from "@shared/interfaces/EmployeeProfileI";
+import {
+    EmployeeProfileForm
+} from "@shared/interfaces/EmployeeProfileI";
 import CommunicationLanguagesSection from "../../components/CommunicationLanguagesSection";
 
 interface Props {
-    control: Control<EmployeeProfileForm>;
-    setValue: any;
-    watch: any;
-    formState: FormState<EmployeeProfileForm>;
+    formRef: UseFormReturn<EmployeeProfileForm>;
 }
 
-const EmployeeProfileStep1: React.FC<Props> = ({ control, setValue, watch, formState }) => {
+const EmployeeProfileStep1: React.FC<Props> = ({ formRef }) => {
     const { t } = useTranslation();
     const required = FormValidator.required(t);
+    const { control, setValue, watch, formState } = formRef;
 
     return (
         <>

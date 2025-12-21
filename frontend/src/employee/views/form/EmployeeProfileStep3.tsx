@@ -1,5 +1,5 @@
 import React from "react";
-import { Controller, UseFormSetValue, UseFormWatch, Control, FormState } from "react-hook-form";
+import { Controller, UseFormSetValue, UseFormWatch, Control, FormState, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import TabSwitcher, { TabSwitcherOption } from "../../components/TabSwitcher";
 import { FormValidator } from "global/FormValidator";
@@ -9,13 +9,11 @@ import FloatingInput from "global/components/controls/FloatingInput";
 import PositionSelector from "global/components/selector/position/PositionSelector";
 
 interface Props {
-    control: Control<EmployeeProfileForm>;
-    setValue: UseFormSetValue<EmployeeProfileForm>;
-    watch: UseFormWatch<EmployeeProfileForm>;
-    formState: FormState<EmployeeProfileForm>;
+    formRef: UseFormReturn<EmployeeProfileForm>;
 }
 
-const EmployeeProfileStep3: React.FC<Props> = ({ control, setValue, watch, formState }) => {
+const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
+    const { control, setValue, watch, formState } = formRef;
     const { t } = useTranslation();
 
     // --- EmployeeLocationSection logic inlined below ---

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Control, Controller, FormState, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import { Control, Controller, FormState, UseFormReturn, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { DateRange, EmployeeProfileAvailabilityOption, EmployeeProfileAvailabilityOptions, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
 import { FormValidator } from "global/FormValidator";
@@ -13,13 +13,11 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import FloatingDateInput from "global/components/controls/FloatingDateInput";
 
 interface Props {
-    control: Control<EmployeeProfileForm>;
-    setValue: UseFormSetValue<EmployeeProfileForm>;
-    watch: UseFormWatch<EmployeeProfileForm>;
-    formState: FormState<EmployeeProfileForm>;
+    formRef: UseFormReturn<EmployeeProfileForm>;
 }
 
-const EmployeeProfileStep4: React.FC<Props> = ({ control, setValue, watch, formState }) => {
+const EmployeeProfileStep4: React.FC<Props> = ({ formRef }) => {
+    const { control, setValue, watch, formState } = formRef;
     const { t } = useTranslation();
     const availabilityOption = watch("step4.availabilityOption");
     const availabilityDateRanges = watch("step4.availabilityDateRanges") || [];

@@ -39,7 +39,7 @@ const EmployeeProfileFormView: React.FC = () => {
     const isDevMode = Utils.isDevMode();
     const confirm = useConfirm();
 
-    const { control, handleSubmit, watch, setValue, reset, formState, trigger } = useForm<EmployeeProfileForm>({
+    const formRef = useForm<EmployeeProfileForm>({
         defaultValues: {
             step1: {
                 firstName: "",
@@ -71,7 +71,7 @@ const EmployeeProfileFormView: React.FC = () => {
             if (savedData) {
                 try {
                     const parsedData: EmployeeProfileForm = JSON.parse(savedData);
-                    reset(parsedData);
+                    formRef.reset(parsedData);
                 } catch (error) {
                     console.error("Error loading form from localStorage:", error);
                 }
@@ -91,7 +91,7 @@ const EmployeeProfileFormView: React.FC = () => {
             .map(r => DateRangeUtil.toDateRange(r))
             .filter((r): r is DateRange => r != null);
 
-        reset({
+        formRef.reset({
             step1: {
                 firstName: employeeProfile.firstName || "",
                 lastName: employeeProfile.lastName || "",
@@ -122,7 +122,7 @@ const EmployeeProfileFormView: React.FC = () => {
                 availabilityDateRanges: availabilityDateRanges
             }
         });
-    }, [employeeProfile, reset, trigger]);
+    }, [employeeProfile, formRef]);
 
     const onSubmit = async () => {
         const confirmed = await confirm({
@@ -138,7 +138,7 @@ const EmployeeProfileFormView: React.FC = () => {
             toast.error(t("employeeProfile.form.validationError"));
             return;
         }
-        const form = watch();
+        const form = formRef.watch();
         if (employeeProfile) {
             await updateEmployeeProfile(form);
             return;
@@ -174,11 +174,11 @@ const EmployeeProfileFormView: React.FC = () => {
     }
 
     const handleDevFill = () => {
-        setValue("step1.firstName", "Pawel");
-        setValue("step1.lastName", "Mat");
-        setValue("step2.skills", ["ONE", "TWO"]);
-        setValue("step2.certificates", ["ONE"]);
-        setValue("step1.communicationLanguages", ["en", "pl"]);
+        formRef.setValue("step1.firstName", "Pawel");
+        formRef.setValue("step1.lastName", "Mat");
+        formRef.setValue("step2.skills", ["ONE", "TWO"]);
+        formRef.setValue("step2.certificates", ["ONE"]);
+        formRef.setValue("step1.communicationLanguages", ["en", "pl"]);
     };
 
     if (loading) {
@@ -190,35 +190,25 @@ const EmployeeProfileFormView: React.FC = () => {
             case 'step1':
                 return (
                     <EmployeeProfileStep1
-                        control={control}
-                        setValue={setValue}
-                        watch={watch}
-                        formState={formState}
+                        formRef={formRef}
                     />
                 );
             case 'step2':
                 return (
                     <EmployeeProfileStep2
-                        control={control}
-                        formState={formState}
+                        formRef={formRef}
                     />
                 );
             case 'step3':
                 return (
                     <EmployeeProfileStep3
-                        control={control}
-                        setValue={setValue}
-                        watch={watch}
-                        formState={formState}
+                        formRef={formRef}
                     />
                 );
             case 'step4':
                 return (
                     <EmployeeProfileStep4
-                        control={control}
-                        setValue={setValue}
-                        watch={watch}
-                        formState={formState}
+                        formRef={formRef}
                     />
                 );
             default:
@@ -242,7 +232,7 @@ const EmployeeProfileFormView: React.FC = () => {
     }
 
     const validateStep = async (step: StepKey): Promise<boolean> => {
-        const result = await trigger(step);
+        const result = await formRef.trigger(step);
         if (!result) {
             toast.error(t("employeeProfile.form.validationError"));
         }
@@ -250,7 +240,7 @@ const EmployeeProfileFormView: React.FC = () => {
     }
 
     const saveFormToLocalStorage = () => {
-        const formData = watch();
+        const formData = formRef.watch();
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formData));
     }
 
@@ -282,7 +272,7 @@ const EmployeeProfileFormView: React.FC = () => {
     return (
         <div className="form-view relative">
             <form
-                onSubmit={handleSubmit(() => { }, errors => {
+                onSubmit={formRef.handleSubmit(() => { }, errors => {
                     console.log("Form errors", errors);
                     toast.error(t("employeeProfile.form.submitError"));
                 })}
