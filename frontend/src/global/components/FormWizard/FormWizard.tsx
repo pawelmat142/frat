@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { UseFormReturn, FieldValues } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Button from 'global/components/controls/Button';
@@ -30,13 +30,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
     labelKeyPrefix = 'employeeProfile.form',
 }: FormWizardProps<TForm, TStep>) {
 
-    console.log('currentStep:', currentStep);
-
     const { t } = useTranslation();
-
-    useEffect(() => {
-        console.log('FormWizard currentStep changed:', currentStep);
-    }, [])
 
     const saveFormToLocalStorage = React.useCallback(() => {
         try {
