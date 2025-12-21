@@ -7,9 +7,6 @@ import { toast } from "react-toastify";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import Loading from "global/components/Loading";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import DoneIcon from '@mui/icons-material/Done';
 import { useUserContext } from "user/UserProvider";
 import { useNavigate } from "react-router-dom";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
@@ -21,6 +18,7 @@ import EmployeeProfileStep3 from "./EmployeeProfileStep3";
 import EmployeeProfileStep4 from "./EmployeeProfileStep4";
 import { Utils } from "global/utils/utils";
 import { useConfirm } from "global/providers/PopupProvider";
+import FormWizard from "global/components/FormWizard/FormWizard";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -32,12 +30,13 @@ const EmployeeProfileFormView: React.FC = () => {
 
     const { t } = useTranslation();
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [currentStep, setCurrentStep] = React.useState<StepKey>('step1');
     const { employeeProfile, initEmployeeProfile } = useUserContext();
     const navigate = useNavigate();
     const profileCtx = useEmployeeSearch();
     const isDevMode = Utils.isDevMode();
     const confirm = useConfirm();
+
+    const [step, setStep] = React.useState<StepKey>(STEPS_ORDER[0]);
 
     const formRef = useForm<EmployeeProfileForm>({
         defaultValues: {
@@ -124,7 +123,7 @@ const EmployeeProfileFormView: React.FC = () => {
         });
     }, [employeeProfile, formRef]);
 
-    const onSubmit = async () => {
+    const onSubmit = async (validateFn: () => Promise<boolean>) => {
         const confirmed = await confirm({
             title: 'employeeProfile.form.confirmTitle',
             message: 'employeeProfile.form.confirmSubmit',
@@ -133,7 +132,7 @@ const EmployeeProfileFormView: React.FC = () => {
         });
         if (!confirmed) return;
 
-        const valid = await validateCurrentStep();
+        const valid = await validateFn();
         if (!valid) {
             toast.error(t("employeeProfile.form.validationError"));
             return;
@@ -185,188 +184,43 @@ const EmployeeProfileFormView: React.FC = () => {
         return <Loading />;
     }
 
-    const renderStep = () => {
-        switch (currentStep) {
+    const renderStepByKey = (stepKey: StepKey) => {
+        switch (stepKey) {
             case 'step1':
-                return (
-                    <EmployeeProfileStep1
-                        formRef={formRef}
-                    />
-                );
+                return <EmployeeProfileStep1 formRef={formRef} />;
             case 'step2':
-                return (
-                    <EmployeeProfileStep2
-                        formRef={formRef}
-                    />
-                );
+                return <EmployeeProfileStep2 formRef={formRef} />;
             case 'step3':
-                return (
-                    <EmployeeProfileStep3
-                        formRef={formRef}
-                    />
-                );
+                return <EmployeeProfileStep3 formRef={formRef} />;
             case 'step4':
-                return (
-                    <EmployeeProfileStep4
-                        formRef={formRef}
-                    />
-                );
+                return <EmployeeProfileStep4 formRef={formRef} />;
             default:
                 return null;
-        }
-    };
-
-    const handleNext = async () => {
-        const isValid = await validateCurrentStep();
-        if (isValid) {
-            saveFormToLocalStorage();
-            const currentIndex = STEPS_ORDER.indexOf(currentStep);
-            if (currentIndex < STEPS_ORDER.length - 1) {
-                setCurrentStep(STEPS_ORDER[currentIndex + 1]);
-            }
-        }
-    };
-
-    const validateCurrentStep = async (): Promise<boolean> => {
-        return validateStep(currentStep);
-    }
-
-    const validateStep = async (step: StepKey): Promise<boolean> => {
-        const result = await formRef.trigger(step);
-        if (!result) {
-            toast.error(t("employeeProfile.form.validationError"));
-        }
-        return result;
-    }
-
-    const saveFormToLocalStorage = () => {
-        const formData = formRef.watch();
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formData));
-    }
-
-    const handlePrev = () => {
-        saveFormToLocalStorage();
-        const currentIndex = STEPS_ORDER.indexOf(currentStep);
-        if (currentIndex > 0) {
-            setCurrentStep(STEPS_ORDER[currentIndex - 1]);
-        }
-    };
-
-    const selectStep = async (targetStep: StepKey) => {
-        const targetIndex = STEPS_ORDER.indexOf(targetStep);
-        const currentIndex = STEPS_ORDER.indexOf(currentStep);
-
-        if (targetIndex < currentIndex) {
-            // Going back - no validation needed
-            setCurrentStep(targetStep);
-        } else if (targetIndex > currentIndex) {
-            // Going forward - validate current step
-            const isValid = await validateCurrentStep();
-            if (isValid) {
-                saveFormToLocalStorage();
-                setCurrentStep(targetStep);
-            }
         }
     }
 
     return (
-        <div className="form-view relative">
-            <form
-                onSubmit={formRef.handleSubmit(() => { }, errors => {
-                    console.log("Form errors", errors);
-                    toast.error(t("employeeProfile.form.submitError"));
-                })}
-                noValidate
-            >
-                <div className="form-wizard-top-wrapper">
-                    <div className="form-wizard-top">
-                        {t(`employeeProfile.form.${currentStep}.label`)}
-
-                    </div>
-                </div>
-
-                {renderStep()}
-
-
-                {isDevMode && (
-                    <div className="flex items-center justify-end">
-                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
-                            DEV FILL
-                        </Button>
-                    </div>
-                )}
-            </form>
-
-            <div className="form-wizard-buttons-wrapper">
-                <div className="form-wizard-buttons">
-                    <Button
-                        type="button"
-                        onClick={handlePrev}
-                        size={BtnSizes.LARGE}
-                        mode={BtnModes.SECONDARY_TXT}
-                        disabled={currentStep === 'step1'}
-                        className="flex-1"
-                        aria-label={t("common.previous")}
-                    >
-                        <ArrowBackIosNewIcon />
-                    </Button>
-
-                    <div className="wizard-stepper">
-
-                        {STEPS_ORDER.map((step) => (
-                            <Button
-                                onClick={() => {
-                                    if (currentStep === step || STEPS_ORDER.indexOf(step) > STEPS_ORDER.indexOf(currentStep)) {
-                                        return
-                                    }
-                                    selectStep(step)
-                                }}
-                                key={step}
-                                type="button"
-                                mode={currentStep === step ? BtnModes.PRIMARY_TXT : BtnModes.SECONDARY_TXT}
-                                size={BtnSizes.SMALL}
-                                disabled={
-                                    STEPS_ORDER.indexOf(step) > STEPS_ORDER.indexOf(currentStep)
-                                }
-                            >
-                                <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                                    <circle cx="6" cy="6" r="5" fill={currentStep === step ? 'var(--primary-color, #2563eb)' : '#e5e7eb'} />
-                                </svg>
+        <FormWizard
+            localStorageKey={LOCAL_STORAGE_KEY}
+            formRef={formRef}
+            stepsOrder={STEPS_ORDER}
+            initialStep={STEPS_ORDER[0]}
+            onFinalSubmit={onSubmit}
+            onSelectStep={setStep}
+        >
+            {
+                <>
+                    {renderStepByKey(step)}
+                    {isDevMode && (
+                        <div className="flex items-center justify-end">
+                            <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
+                                DEV FILL
                             </Button>
-                        ))}
-
-                    </div>
-
-                    {currentStep !== 'step4' ? (
-                        <Button
-                            type="button"
-                            onClick={handleNext}
-                            size={BtnSizes.LARGE}
-                            mode={BtnModes.PRIMARY_TXT}
-                            className="flex-1"
-                            aria-label={t("common.next")}
-                        >
-                            <ArrowForwardIosIcon />
-                        </Button>
-                    ) : (
-                        <Button
-                            type="button"
-                            onClick={() => {
-                                onSubmit()
-                            }}
-                            size={BtnSizes.LARGE}
-                            mode={BtnModes.PRIMARY_TXT}
-                            className="flex-1 font-bold"
-                            aria-label={t("common.save")}
-                        >
-                            <DoneIcon sx={{ fontSize: 22, transform: 'scale(1.6)' }} />
-                        </Button>
+                        </div>
                     )}
-
-                </div>
-
-            </div>
-        </div>
+                </>
+            }
+        </FormWizard>
     );
 }
 
