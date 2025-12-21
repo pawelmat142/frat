@@ -71,9 +71,23 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Column({ name: 'point_radius', type: 'int', nullable: true })
   pointRadius?: number;
 
-  @Column({ name: 'address', type: 'text', nullable: true })
-  address?: string;
+  @Column({ name: 'street', type: 'text', nullable: true })
+  street?: string;
 
+  @Column({ name: 'city', type: 'text', nullable: true })
+	city?: string;
+
+  @Column({ name: 'district', type: 'text', nullable: true })
+	district?: string;
+
+  @Column({ name: 'state', type: 'text', nullable: true })
+	state?: string; // administrative_area_level_1
+
+  @Column({ name: 'postcode', type: 'text', nullable: true })
+	postcode?: string;
+
+  @Column({ name: 'full_address', type: 'text' })
+	fullAddress: string;
 
 
   // AVAILABILITY DATES

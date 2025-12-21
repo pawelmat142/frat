@@ -53,7 +53,7 @@ const EmployeeProfileFormView: React.FC = () => {
             step3: {
                 locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
                 locationCountries: [],
-                locationDistancePosition: undefined,
+                geocodedPosition: undefined,
                 locationDistanceRadius: NaN
             },
             step4: {
@@ -85,7 +85,6 @@ const EmployeeProfileFormView: React.FC = () => {
             locationDistancePosition = {
                 lat: employeeProfile.point.coordinates[1],
                 lng: employeeProfile.point.coordinates[0],
-                address: employeeProfile.address
             };
         }
         const availabilityDateRanges: DateRange[] = (employeeProfile.availabilityDateRanges || [])
@@ -106,7 +105,16 @@ const EmployeeProfileFormView: React.FC = () => {
             step3: {
                 locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.ALL_EUROPE,
                 locationCountries: employeeProfile.locationCountries || [],
-                locationDistancePosition,
+                geocodedPosition: {
+                    lat: locationDistancePosition?.lat || NaN,
+                    lng: locationDistancePosition?.lng || NaN,
+                    street: employeeProfile.street || '',
+                    city: employeeProfile.city || '',
+                    district: employeeProfile.district || '',
+                    state: employeeProfile.state || '',
+                    postcode: employeeProfile.postcode || '',
+                    fullAddress: employeeProfile.fullAddress || '',
+                },
                 locationDistanceRadius: employeeProfile.pointRadius ?? NaN
             },
             step4: {

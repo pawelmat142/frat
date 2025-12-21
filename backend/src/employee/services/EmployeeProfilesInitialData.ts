@@ -124,6 +124,29 @@ const locationEntries = [
     { label: "Tallinn", country: "ee", coordinates: [24.753, 59.437], radius: 420, selectedCountries: ["ee", "fi"] },
     { label: "Vilnius", country: "lt", coordinates: [25.279, 54.687], radius: 380, selectedCountries: ["lt", "lv"] },
     { label: "Rotterdam", country: "nl", coordinates: [4.479, 51.922], radius: 340, selectedCountries: ["nl", "be"] },
+    { label: "Madrid", country: "es", coordinates: [-3.7038, 40.4168], radius: 400, selectedCountries: ["es", "pt"] },
+    { label: "Rome", country: "it", coordinates: [12.4964, 41.9028], radius: 380, selectedCountries: ["it"] },
+    { label: "Milan", country: "it", coordinates: [9.19, 45.4642], radius: 300, selectedCountries: ["it", "ch"] },
+    { label: "Athens", country: "gr", coordinates: [23.7275, 37.9838], radius: 420, selectedCountries: ["gr"] },
+    { label: "Dublin", country: "ie", coordinates: [-6.2603, 53.3498], radius: 360, selectedCountries: ["ie", "gb"] },
+    { label: "Edinburgh", country: "gb", coordinates: [-3.1883, 55.9533], radius: 300, selectedCountries: ["gb"] },
+    { label: "Manchester", country: "gb", coordinates: [-2.2426, 53.4808], radius: 300, selectedCountries: ["gb"] },
+    { label: "Zurich", country: "ch", coordinates: [8.5417, 47.3769], radius: 260, selectedCountries: ["ch", "de"] },
+    { label: "Geneva", country: "ch", coordinates: [6.1432, 46.2044], radius: 280, selectedCountries: ["ch", "fr"] },
+    { label: "Budapest", country: "hu", coordinates: [19.0402, 47.4979], radius: 340, selectedCountries: ["hu", "sk"] },
+    { label: "Bratislava", country: "sk", coordinates: [17.1077, 48.1486], radius: 300, selectedCountries: ["sk", "hu"] },
+    { label: "Zagreb", country: "hr", coordinates: [15.9819, 45.8150], radius: 320, selectedCountries: ["hr", "si"] },
+    { label: "Ljubljana", country: "si", coordinates: [14.5058, 46.0569], radius: 260, selectedCountries: ["si", "hr"] },
+    { label: "Sofia", country: "bg", coordinates: [23.3219, 42.6977], radius: 380, selectedCountries: ["bg", "ro"] },
+    { label: "Bucharest", country: "ro", coordinates: [26.1025, 44.4268], radius: 400, selectedCountries: ["ro", "bg"] },
+    { label: "Belgrade", country: "rs", coordinates: [20.4573, 44.7872], radius: 360, selectedCountries: ["rs", "bg"] },
+    { label: "Reykjavik", country: "is", coordinates: [-21.8277, 64.1466], radius: 600, selectedCountries: ["is"] },
+    { label: "Helsinki", country: "fi", coordinates: [24.9384, 60.1699], radius: 420, selectedCountries: ["fi", "se"] },
+    { label: "Stockholm", country: "se", coordinates: [18.0686, 59.3293], radius: 400, selectedCountries: ["se", "fi"] },
+    { label: "Malmö", country: "se", coordinates: [13.0038, 55.6050], radius: 260, selectedCountries: ["se", "dk"] },
+    { label: "Antwerp", country: "be", coordinates: [4.4025, 51.2194], radius: 280, selectedCountries: ["be", "nl"] },
+    { label: "Brussels", country: "be", coordinates: [4.3517, 50.8503], radius: 320, selectedCountries: ["be", "fr"] },
+    { label: "Luxembourg", country: "lu", coordinates: [6.1319, 49.6116], radius: 300, selectedCountries: ["lu", "be"] },
 ];
 
 const locationOptionsCycle = [
@@ -138,6 +161,41 @@ function getRandomizedCreatedAt(idx: number): Date {
 }
 
 const rangesJ: DateRangeI[] = []
+
+// Helper: generate a random street name, postcode and fullAddress for a given location
+const streetNames = [
+    'Main St', 'Oak St', 'Pine St', 'Maple Ave', 'High Street', 'Station Road', 'King St', 'Queen St',
+    'Church St', 'Church Lane', 'Market St', 'Broadway', 'Elm Street', 'River Road', 'Garden Lane'
+];
+
+const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+const generatePostcode = (country: string) => {
+    // Very simple postcode generator per country heuristic
+    switch (country) {
+        case 'gb': // UK: AA9 9AA style simplified
+            return `${String.fromCharCode(65 + randomInt(0, 25))}${randomInt(1, 9)} ${randomInt(1,9)}${String.fromCharCode(65 + randomInt(0,25))}${String.fromCharCode(65 + randomInt(0,25))}`;
+        case 'pl':
+            return `${randomInt(10,99)}-${randomInt(100,999)}`;
+        case 'de':
+            return `${randomInt(1,9)}${randomInt(0,9)}${randomInt(0,9)}${randomInt(0,9)}${randomInt(0,9)}`;
+        case 'fr':
+            return `${randomInt(1,9)}${randomInt(0,9)}${randomInt(0,9)}${randomInt(0,9)}${randomInt(0,9)}`;
+        case 'es':
+            return `${randomInt(1,9)}${randomInt(0,9)}${randomInt(0,9)}${randomInt(0,9)}${randomInt(0,9)}`;
+        case 'it':
+            return `${randomInt(1,9)}${randomInt(0,9)}${randomInt(0,9)}${randomInt(0,9)}${randomInt(0,9)}`;
+        default:
+            return `${randomInt(10000, 99999)}`;
+    }
+}
+
+const generateRandomAddress = (location: { label: string; country: string }) => {
+    const street = `${randomInt(1, 200)} ${pickFromCycle(streetNames, randomInt(0, streetNames.length - 1))}`;
+    const postcode = generatePostcode(location.country);
+    const fullAddress = `${street}, ${location.label}, ${location.country.toUpperCase()} ${postcode}`;
+    return { street, postcode, fullAddress };
+}
 
 const fillAvailabilityRanges = (profile: DeepPartial<EmployeeProfileI>) => {
     if (profile.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES && profile.createdAt) {
@@ -178,158 +236,8 @@ const fillAvailabilityRanges = (profile: DeepPartial<EmployeeProfileI>) => {
 }
 
 export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity>[] => {
-    const result: DeepPartial<EmployeeProfileEntity>[] = [
-        {
-            uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
-            displayName: 'John Doe',
-            email: 'john.doe@example.com',
-            firstName: 'John',
-            lastName: 'Doe',
-            // residenceCountry: 'de',
-            communicationLanguages: ['en', 'de'],
-            locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
-            status: EmployeeProfileStatuses.ACTIVE,
-            employeeProfileId: 0,
-            createdAt: getRandomizedCreatedAt(0),
-            skills: ['ONE', 'TWO'],
-            certificates: ['THREE', 'FOUR'],
-            availabilityOption: EmployeeProfileAvailabilityOptions.DATE_RANGES,
-        },
-        {
-            uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
-            displayName: 'Anna Schmidt',
-            email: 'anna.schmidt@example.com',
-            firstName: 'Anna',
-            lastName: 'Schmidt',
-            // residenceCountry: 'pl',
-            communicationLanguages: ['pl', 'en'],
-            locationOption: EmployeeProfileLocationOptions.DISTANCE,
-            point: { type: 'Point', coordinates: [21.0122, 52.2297] }, // Warsaw
-            pointRadius: 500,
-            status: EmployeeProfileStatuses.ACTIVE,
-            employeeProfileId: 1,
-            createdAt: getRandomizedCreatedAt(1),
-            skills: ['THREE', 'FOUR'],
-            certificates: ['ONE', 'TWO'],
-            availabilityOption: EmployeeProfileAvailabilityOptions.DATE_RANGES,
-        },
-        {
-            uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
-            displayName: 'Pierre Martin',
-            email: 'pierre.martin@example.com',
-            firstName: 'Pierre',
-            lastName: 'Martin',
-            // residenceCountry: 'fr',
-            communicationLanguages: ['fr', 'en'],
-            locationOption: EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE,
-            status: EmployeeProfileStatuses.ACTIVE,
-            employeeProfileId: 2,
-            createdAt: getRandomizedCreatedAt(2),
-            skills: ['FIVE', 'SIX'],
-            certificates: ['FIVE', 'SIX'],
-            availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
-        },
-        {
-            uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
-            displayName: 'Maria Rossi',
-            email: 'maria.rossi@example.com',
-            firstName: 'Maria',
-            lastName: 'Rossi',
-            // residenceCountry: 'it',
-            communicationLanguages: ['it', 'en'],
-            locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
-            status: EmployeeProfileStatuses.ACTIVE,
-            employeeProfileId: 3,
-            createdAt: getRandomizedCreatedAt(3),
-            skills: ['SEVEN', 'ONE'],
-            certificates: ['SEVEN', 'ONE'],
-            availabilityOption: EmployeeProfileAvailabilityOptions.DATE_RANGES,
-        },
-        {
-            uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
-            displayName: 'Sofia Nowak',
-            email: 'sofia.nowak@example.com',
-            firstName: 'Sofia',
-            lastName: 'Nowak',
-            // residenceCountry: 'pl',
-            communicationLanguages: ['pl', 'de'],
-            locationOption: EmployeeProfileLocationOptions.DISTANCE,
-            point: { type: 'Point', coordinates: [19.945, 50.0647] }, // Krakow
-            pointRadius: 300,
-            status: EmployeeProfileStatuses.ACTIVE,
-            employeeProfileId: 4,
-            createdAt: getRandomizedCreatedAt(4),
-            skills: ['TWO', 'THREE'],
-            certificates: ['TWO', 'THREE'],
-            availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
-        },
-        {
-            uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
-            displayName: 'Lucas Müller',
-            email: 'lucas.mueller@example.com',
-            firstName: 'Lucas',
-            lastName: 'Müller',
-            // residenceCountry: 'de',
-            communicationLanguages: ['de', 'en'],
-            locationOption: EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE,
-            status: EmployeeProfileStatuses.ACTIVE,
-            employeeProfileId: 5,
-            createdAt: getRandomizedCreatedAt(5),
-            skills: ['FOUR', 'FIVE'],
-            certificates: ['FOUR', 'FIVE'],
-            availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
-        },
-        {
-            uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
-            displayName: 'Elena García',
-            email: 'elena.garcia@example.com',
-            firstName: 'Elena',
-            lastName: 'García',
-            // residenceCountry: 'es',
-            communicationLanguages: ['es', 'en'],
-            locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
-            status: EmployeeProfileStatuses.ACTIVE,
-            employeeProfileId: 6,
-            createdAt: getRandomizedCreatedAt(6),
-            skills: ['SIX', 'SEVEN'],
-            certificates: ['SIX', 'SEVEN'],
-            availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
-        },
-        {
-            uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
-            displayName: 'Marek Novak',
-            email: 'marek.novak@example.com',
-            firstName: 'Marek',
-            lastName: 'Novak',
-            // residenceCountry: 'cz',
-            communicationLanguages: ['cs', 'en'],
-            locationOption: EmployeeProfileLocationOptions.DISTANCE,
-            point: { type: 'Point', coordinates: [14.4378, 50.0755] }, // Prague
-            pointRadius: 1000,
-            status: EmployeeProfileStatuses.ACTIVE,
-            employeeProfileId: 7,
-            createdAt: getRandomizedCreatedAt(7),
-            skills: ['ONE', 'FIVE'],
-            certificates: ['ONE', 'FIVE'],
-            availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
-        },
-        {
-            uid: 'Mx9ELkLpgTWri2ntBiMCWJw7bsM2',
-            displayName: 'Katarzyna Zielinska',
-            email: 'katarzyna.zielinska@example.com',
-            firstName: 'Katarzyna',
-            lastName: 'Zielinska',
-            // residenceCountry: 'pl', 
-            communicationLanguages: ['pl', 'en'],
-            locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
-            status: EmployeeProfileStatuses.ACTIVE,
-            employeeProfileId: 8,
-            createdAt: getRandomizedCreatedAt(8),
-            skills: ['THREE', 'SEVEN'],
-            certificates: ['THREE', 'SEVEN'],
-            availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
-        },
-    ]
+
+    const result = []
 
     const baseIndex = result.length;
 
@@ -352,6 +260,8 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
         const email = `${firstName}.${lastName}${globalIndex}@example.com`.toLowerCase();
         const uid = `seed-employee-${globalIndex.toString().padStart(3, "0")}`;
 
+        const adress = generateRandomAddress(location)
+
         const profile: DeepPartial<EmployeeProfileEntity> = {
             uid,
             displayName,
@@ -367,14 +277,19 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
             certificates,
             availabilityOption,
             availabilityDateRanges: availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES ? [] : undefined,
-            jobs: [],
-            views: [],
+            jobs: numberToStringList(getRandomNumberFromTo(0, 20, globalIndex)).map(n => `job-${n}`),
+            views: numberToStringList(getRandomNumberFromTo(30, 100, globalIndex)).map(n => `view-${n}`),
+            fullAddress: adress.fullAddress,
+            street: adress.street,
+            postcode: adress.postcode,
+            city: location.label,
         };
 
         if (locationOption === EmployeeProfileLocationOptions.DISTANCE) {
-            profile.point = { type: 'Point', coordinates: location.coordinates as [number, number] };
+            profile.point = { type: 'Point', coordinates: randomizeCoordinates((location.coordinates) as [number, number], 0.1) };
             profile.pointRadius = location.radius;
-            profile.address = `${location.label}, ${location.country.toUpperCase()}`;
+            profile.city = location.label;
+            profile.fullAddress = `${location.label}, ${location.country.toUpperCase()}`;
         }
 
         if (locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE) {
@@ -384,6 +299,8 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
         return profile;
     };
 
+    
+
     const generatedProfiles = Array.from({ length: 50 }, (_, index) => createGeneratedProfile(index));
     result.push(...generatedProfiles);
 
@@ -391,4 +308,25 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
         fillAvailabilityRanges(profile);
         return profile;
     });
+
+
+}
+
+const numberToStringList = (number: number): string[] => {
+    let result: string[] = [];
+    for (let i = 0; i < number; i++) {
+        result.push((i + 1).toString());
+    }
+    return result;
+}
+
+const getRandomNumberFromTo = (from: number, to: number, idx: number): number => {
+    const random = (Math.sin(idx + 1) + 1) / 2; // value between 0 and 1
+    return Math.floor(from + random * (to - from + 1));
+}
+
+const randomizeCoordinates = (base: [number, number], maxOffset: number): [number, number] => {
+    const offsetLat = (Math.random() - 0.5) * 2 * maxOffset;
+    const offsetLng = (Math.random() - 0.5) * 2 * maxOffset;
+    return [base[0] + offsetLng, base[1] + offsetLat];
 }

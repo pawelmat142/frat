@@ -83,7 +83,7 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
           <div><span className="font-semibold secondary-text">Languages:</span> <span className="primary-text">{localProfile.communicationLanguages?.join(", ") || '-'}</span></div>
           <div><span className="font-semibold secondary-text">Location Option:</span> <span className="primary-text">{localProfile.locationOption}</span></div>
           <div><span className="font-semibold secondary-text">Location Countries:</span> <span className="primary-text">{localProfile.locationCountries?.join(", ") || '-'}</span></div>
-          <div><span className="font-semibold secondary-text">Address:</span> <span className="primary-text">{localProfile.address || '-'}</span></div>
+          <div><span className="font-semibold secondary-text">Address:</span> <span className="primary-text">{localProfile.fullAddress || '-'}</span></div>
           <div><span className="font-semibold secondary-text">Point Radius:</span> <span className="primary-text">{localProfile.pointRadius ?? '-'} km</span></div>
           <div><span className="font-semibold secondary-text">Availability Option:</span> <span className="primary-text">{localProfile.availabilityOption}</span></div>
         </div>

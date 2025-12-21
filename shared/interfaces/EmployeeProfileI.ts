@@ -22,7 +22,12 @@ export interface EmployeeProfileI {
   locationCountries?: string[];
   point?: Point
   pointRadius?: number; // [km]
-  address?: string; // derived field for distance location option
+  street?: string;
+	city?: string;
+	district?: string;
+	state?: string; // administrative_area_level_1
+	postcode?: string;
+	fullAddress: string;
 
   // availability dates
   availabilityOption: EmployeeProfileAvailabilityOption;
@@ -72,9 +77,6 @@ export interface EmployeeProfileFormStep3 {
   locationOption: EmployeeProfileLocationOption;
   locationCountries?: string[];
   geocodedPosition?: GeocodedPosition | null;
-
-  // TODO remove
-  locationDistancePosition?: Position;
   locationDistanceRadius?: number; // [km]
 }
 
@@ -102,7 +104,7 @@ export interface EmployeeProfileFormDto {
 
   locationOption: EmployeeProfileLocationOption;
   locationCountries?: string[];
-  locationDistancePosition?: Position;
+  geocodedPosition?: GeocodedPosition;
   locationDistanceRadius?: number; // [km]
 
   availabilityOption: EmployeeProfileAvailabilityOption;

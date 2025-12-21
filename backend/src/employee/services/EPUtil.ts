@@ -45,16 +45,29 @@ export abstract class EPUtil {
         }
     }
 
-    private static cleanLocationDataDistance(profile: DeepPartial<EmployeeProfileEntity>): void {
+    public static cleanLocationDataDistance(profile: DeepPartial<EmployeeProfileEntity>): void {
         delete profile.point;
         delete profile.pointRadius;
-        delete profile.address;
+        delete profile.street;
+        delete profile.city
+        delete profile.fullAddress
+        delete profile.district
+        delete profile.postcode
+        delete profile.state
     }
 
     private static fillLocationDataDistance(profile: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): void {
-        profile.point = PointUtil.toGeoPoint(form.locationDistancePosition!);
+        profile.point = PointUtil.toGeoPoint({
+            lat: form.geocodedPosition!.lat,
+            lng: form.geocodedPosition!.lng,
+        });
         profile.pointRadius = form.locationDistanceRadius;
-        profile.address = form.locationDistancePosition.address;
+        profile.street = form.geocodedPosition?.street;
+        profile.city = form.geocodedPosition?.city;
+        profile.district = form.geocodedPosition?.district;
+        profile.state = form.geocodedPosition?.state;
+        profile.postcode = form.geocodedPosition?.postcode;
+        profile.fullAddress = form.geocodedPosition?.fullAddress || '';
     }
 
     public static validateProfile(profile: DeepPartial<EmployeeProfileEntity>): void {

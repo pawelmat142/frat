@@ -42,6 +42,7 @@ export class EmployeeProfileService {
         try {
             const profiles = EmployeeProfilesInitialData()
             for (const profile of profiles) {
+
                 if (profile.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
                     await this.fillLocationCountries(profile as EmployeeProfileEntity);
                 }
@@ -148,14 +149,12 @@ export class EmployeeProfileService {
 
         if (result.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
             result.locationCountries = await this.geoPointService.getCountriesInRadius(
-                form.locationDistancePosition!.lat,
-                form.locationDistancePosition!.lng,
+                form.geocodedPosition!.lat,
+                form.geocodedPosition!.lng,
                 form.locationDistanceRadius || 0
             );
         } else {
-            delete result.point;
-            delete result.pointRadius;
-            delete result.address;
+            EPUtil.cleanLocationDataDistance(result);
         }
     }
 

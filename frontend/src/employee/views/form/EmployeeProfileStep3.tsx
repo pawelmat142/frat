@@ -90,7 +90,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ control, setValue, watch, formS
                                     {t("employeeProfile.form.locationOption.DISTANCE.msg")}
                                 </div>
                                 <Controller
-                                    name="step3.locationDistancePosition"
+                                    name="step3.geocodedPosition"
                                     control={control}
                                     rules={required}
                                     render={({ field }) => (
