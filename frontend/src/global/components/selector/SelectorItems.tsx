@@ -25,8 +25,6 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     onClose,
     onClean
 }: Props<T>) => {
-
-    // TODO szukajka pole dla multiselect - parametr
     const { t } = useTranslation();
 
     const [localSelectedValues, setLocalSelectedValues] = useState<T[]>(selectedValues);

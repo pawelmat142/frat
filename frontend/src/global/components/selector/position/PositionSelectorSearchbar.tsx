@@ -41,21 +41,66 @@ const PositionSelectorSearchbar: React.FC<Props> = ({ mapInstanceRef, onCancel, 
             return;
         }
 
-        // Prefer AutocompleteService when available. New customers may not have it;
-        // in that case fall back to a query-based search using PlacesService.findPlaceFromQuery
+        // Prefer AutocompleteSuggestion (new API) when available, then AutocompleteService,
+        // otherwise fall back to a query-based search using PlacesService.findPlaceFromQuery
         // and normalize results to a compatible shape.
         const places = google.maps.places as any;
-        if (places && places.AutocompleteService) {
-            const service = new places.AutocompleteService();
-            service.getPlacePredictions({ input }, (preds: any[], status: any) => {
-                if (status === google.maps.places.PlacesServiceStatus.OK && preds) {
-                    setPredictions(preds);
-                    setShowPredictions(true);
-                } else {
-                    setPredictions([]);
-                    setShowPredictions(false);
-                }
-            });
+        const ServiceCtor = places && (places.AutocompleteSuggestion || places.AutocompleteService);
+        if (ServiceCtor) {
+            const service = new ServiceCtor();
+
+            // Try known method names in order of likelihood.
+            if (typeof service.getPlacePredictions === 'function') {
+                service.getPlacePredictions({ input }, (preds: any[], status: any) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK && preds) {
+                        setPredictions(preds);
+                        setShowPredictions(true);
+                    } else {
+                        setPredictions([]);
+                        setShowPredictions(false);
+                    }
+                });
+            } else if (typeof service.getSuggestions === 'function') {
+                service.getSuggestions({ input }, (preds: any[], status: any) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK && preds) {
+                        setPredictions(preds);
+                        setShowPredictions(true);
+                    } else {
+                        setPredictions([]);
+                        setShowPredictions(false);
+                    }
+                });
+            } else if (typeof service.getAutocompletePredictions === 'function') {
+                service.getAutocompletePredictions({ input }, (preds: any[], status: any) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK && preds) {
+                        setPredictions(preds);
+                        setShowPredictions(true);
+                    } else {
+                        setPredictions([]);
+                        setShowPredictions(false);
+                    }
+                });
+            } else {
+                // Unknown service shape; fall back to PlacesService
+                const placesService = new google.maps.places.PlacesService(document.createElement('div'));
+                placesService.findPlaceFromQuery(
+                    { query: input, fields: ['place_id', 'formatted_address', 'name', 'geometry'] },
+                    (results: google.maps.places.PlaceResult[] | null, status: google.maps.places.PlacesServiceStatus) => {
+                        if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length) {
+                            const mapped = results.map(r => ({
+                                place_id: r.place_id,
+                                description: r.formatted_address || (r as any).name || r.place_id,
+                                _rawResult: r,
+                            }));
+                            setPredictions(mapped);
+                            setShowPredictions(true);
+                        } else {
+                            setPredictions([]);
+                            setShowPredictions(false);
+                        }
+                    }
+                );
+            }
         } else {
             // Fallback: use findPlaceFromQuery to get candidates and map them to a prediction-like shape
             const placesService = new google.maps.places.PlacesService(document.createElement('div'));
