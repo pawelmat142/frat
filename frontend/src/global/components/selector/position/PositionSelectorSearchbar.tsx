@@ -17,16 +17,14 @@ interface Props {
 const PositionSelectorSearchbar: React.FC<Props> = ({ mapInstanceRef, onCancel, updatePosition, displaValue }) => {
     const { t } = useTranslation();
 
-    const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
+    const [predictions, setPredictions] = useState<any[]>([]);
     const [showPredictions, setShowPredictions] = useState(false);
-    const [selectedPrediction, setSelectedPrediction] = useState<google.maps.places.AutocompletePrediction | null>(null);
+    const [selectedPrediction, setSelectedPrediction] = useState<any | null>(null);
     const [isFocused, setIsFocused] = useState(false);
 
     const [freeTextInput, setFreeTextInput] = useState('');
     const debouncedFreeTextInput = useDebouncedValue(freeTextInput, 500);
 
-
-    const service = new google.maps.places.AutocompleteService();
 
     useEffect(() => {
         if (debouncedFreeTextInput === selectedPrediction?.description) {
@@ -38,28 +36,68 @@ const PositionSelectorSearchbar: React.FC<Props> = ({ mapInstanceRef, onCancel, 
             setShowPredictions(false);
             return;
         }
-        if (typeof google === 'undefined' || !google.maps || !(google.maps.places && google.maps.places.AutocompleteService)) {
+        if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
             console.warn('Google Places library not loaded');
             return;
         }
-        service.getPlacePredictions({ input }, (preds, status) => {
-            if (status === google.maps.places.PlacesServiceStatus.OK && preds) {
-                console.log('Predictions:', preds);
-                setPredictions(preds);
-                setShowPredictions(true);
-            } else {
-                setPredictions([]);
-                setShowPredictions(false);
-            }
-        });
+
+        // Prefer AutocompleteService when available. New customers may not have it;
+        // in that case fall back to a query-based search using PlacesService.findPlaceFromQuery
+        // and normalize results to a compatible shape.
+        const places = google.maps.places as any;
+        if (places && places.AutocompleteService) {
+            const service = new places.AutocompleteService();
+            service.getPlacePredictions({ input }, (preds: any[], status: any) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK && preds) {
+                    setPredictions(preds);
+                    setShowPredictions(true);
+                } else {
+                    setPredictions([]);
+                    setShowPredictions(false);
+                }
+            });
+        } else {
+            // Fallback: use findPlaceFromQuery to get candidates and map them to a prediction-like shape
+            const placesService = new google.maps.places.PlacesService(document.createElement('div'));
+            placesService.findPlaceFromQuery(
+                { query: input, fields: ['place_id', 'formatted_address', 'name', 'geometry'] },
+                (results: google.maps.places.PlaceResult[] | null, status: google.maps.places.PlacesServiceStatus) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length) {
+                        const mapped = results.map(r => ({
+                            place_id: r.place_id,
+                            description: r.formatted_address || (r as any).name || r.place_id,
+                            _rawResult: r,
+                        }));
+                        setPredictions(mapped);
+                        setShowPredictions(true);
+                    } else {
+                        setPredictions([]);
+                        setShowPredictions(false);
+                    }
+                }
+            );
+        }
     }, [debouncedFreeTextInput]);
 
-    const selectPrediction = (prediction: google.maps.places.AutocompletePrediction) => {
-        if (!mapInstanceRef) return;
+    const selectPrediction = (prediction: any) => {
         if (typeof google === 'undefined' || !google.maps || !google.maps.places) return;
         setSelectedPrediction(prediction);
-        const placesService = new google.maps.places.PlacesService(mapInstanceRef);
-        placesService.getDetails({ placeId: prediction.place_id }, (place, status) => {
+
+        // If we have raw geometry from the fallback search, use it directly.
+        if (prediction._rawResult && prediction._rawResult.geometry && prediction._rawResult.geometry.location) {
+            const loc = prediction._rawResult.geometry.location;
+            const position = { lat: typeof loc.lat === 'function' ? loc.lat() : loc.lat, lng: typeof loc.lng === 'function' ? loc.lng() : loc.lng };
+            updatePosition(position);
+            setFreeTextInput(prediction.description || '');
+            setPredictions([]);
+            setShowPredictions(false);
+            return;
+        }
+
+        // Otherwise request details via PlacesService
+        const target = mapInstanceRef || document.createElement('div');
+        const placesService = new google.maps.places.PlacesService(target);
+        placesService.getDetails({ placeId: prediction.place_id }, (place: any, status: any) => {
             if (status === google.maps.places.PlacesServiceStatus.OK && place && place.geometry && place.geometry.location) {
                 const position = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
                 updatePosition(position);

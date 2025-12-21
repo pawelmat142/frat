@@ -496,7 +496,7 @@ $cellRadiusBig: 1rem;
 // FORMS
 .form-view {
     height: 100%;
-    padding: 1.5rem 1rem;
+    padding: 0 1rem;
     width: 100%;
     max-width: $mobile;
     flex: 1;
@@ -531,6 +531,7 @@ $cellRadiusBig: 1rem;
     left: 0;
     right: 0;
     z-index: 4;
+    padding-bottom: 2rem;
 }
 
 .form-wizard-top {
