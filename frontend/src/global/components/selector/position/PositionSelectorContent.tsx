@@ -119,8 +119,6 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         }
     };
 
-
-
     const getDefaultCoords = async (): Promise<{ lat: number; lng: number }> => {
         try {
             const res = await fetch('https://ip-api.com/json/');

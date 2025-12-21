@@ -7,6 +7,7 @@ import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import PositionSelectorContent from './PositionSelectorContent';
 import { Utils } from 'global/utils/utils';
 import { MapUtil } from 'global/utils/MapUtil';
+import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
 
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
@@ -45,17 +46,12 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         }
 
         useEffect(() => {
-            // Load Google Maps script
-            if (!window.google) {
-                const script = document.createElement('script');
-                script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey || ''}&libraries=places`;
-                script.async = true;
-                script.defer = true;
-                script.onload = () => initSelectedPosition();
-                document.head.appendChild(script);
-            } else {
+            // Load Google Maps script via shared loader to avoid duplicate inserts
+            GoogleMapsLoader.load(apiKey).then(() => initSelectedPosition()).catch((e) => {
+                // loader failed or script couldn't be loaded
+                console.warn('Google Maps load failed', e);
                 initSelectedPosition();
-            }
+            });
         }, []);
 
 
