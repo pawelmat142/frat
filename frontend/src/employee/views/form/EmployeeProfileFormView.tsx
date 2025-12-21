@@ -103,7 +103,7 @@ const EmployeeProfileFormView: React.FC = () => {
                 certificates: employeeProfile.certificates || []
             },
             step3: {
-                locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.ALL_EUROPE,
+                locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.DISTANCE,
                 locationCountries: employeeProfile.locationCountries || [],
                 geocodedPosition: {
                     lat: locationDistancePosition?.lat || NaN,
@@ -149,7 +149,7 @@ const EmployeeProfileFormView: React.FC = () => {
             initEmployeeProfile();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
-            navigate(Path.getEmployeeProfilePath(`${result.employeeProfileId}`));
+            navigate(Path.getEmployeeProfilePath(`${result.displayName}`));
         } catch (error) {
             console.error("Error creating employee profile:", error);
         } finally {
@@ -165,7 +165,7 @@ const EmployeeProfileFormView: React.FC = () => {
             initEmployeeProfile();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
-            navigate(-1);
+            navigate(Path.getEmployeeProfilePath(`${result.displayName}`));
         } catch (error) {
             console.error("Error updating employee profile:", error);
         } finally {

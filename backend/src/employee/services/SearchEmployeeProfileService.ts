@@ -142,6 +142,7 @@ export class SearchEmployeeProfileService {
                 LOWER(profile.email) ILIKE :freeText OR
                 LOWER(profile.first_name) ILIKE :freeText OR
                 LOWER(profile.last_name) ILIKE :freeText OR
+                LOWER(profile.full_address) ILIKE :freeText OR
                 array_to_string(profile.skills, ',') ILIKE :freeText OR
                 array_to_string(profile.certificates, ',') ILIKE :freeText
             )`, { freeText });

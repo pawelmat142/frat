@@ -8,7 +8,6 @@ import { MapUtil } from 'global/utils/MapUtil';
 import PositionSelectorSearchbar from './PositionSelectorSearchbar';
 
 // TODO uprawnienie do lokalizacji
-// TODO materializujemy miasta
 // TODO forma / wizarda wydzielamy i reuzywamy w ofertach
 
 interface PositionSelectorContentProps {
@@ -110,8 +109,6 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         markerRef.current?.setPosition(new google.maps.LatLng(position.lat, position.lng));
         try {
             const geoPosition = await MapUtil.getGeocodedLocation(position, new google.maps.Geocoder());
-
-            console.log('Geocoded position:', geoPosition);
             setSelectedPosition(geoPosition);
         } catch (error) {
             console.error('Geocoding error:', error);
