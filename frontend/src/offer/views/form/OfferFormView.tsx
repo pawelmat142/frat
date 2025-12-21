@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import OfferFormProvider, { useOfferForm } from "./OfferFormProvider";
-import { OFFER_STEPS_ORDER, OfferFormStep, OfferFormSteps, OfferI } from "@shared/interfaces/OfferI";
+import { OFFER_STEPS_ORDER, OfferFormSteps, OfferI } from "@shared/interfaces/OfferI";
 import { toast } from "react-toastify";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
@@ -16,6 +16,7 @@ import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
 import { OfferUtil } from "@shared/utils/OfferUtil";
 import { Utils } from "global/utils/utils";
+import FormWizard from "global/components/FormWizard/FormWizard";
 
 const OfferFormContent: React.FC = () => {
 
@@ -41,7 +42,6 @@ const OfferFormContent: React.FC = () => {
     const ctx = useOfferForm();
     const userCtx = useUserContext();
     const [loading, setLoading] = useState(false);
-    const currentStep = ctx.form?.currentStep;
 
     const param = useParams<{ offerId?: string }>();
     const offerId = param.offerId;
@@ -88,8 +88,6 @@ const OfferFormContent: React.FC = () => {
         }
     }
 
-    const selectStep = async (targetStep: OfferFormStep) => { }
-
     const renderStep = () => {
         switch (ctx.form?.currentStep) {
             case OfferFormSteps.STEP_ONE:
@@ -121,89 +119,35 @@ const OfferFormContent: React.FC = () => {
         ctx.formCtx.setValue("STEP_FOUR.description", "This is a sample offer description.");
     };
 
+    const LOCAL_STORAGE_KEY = 'offerFormDraft';
+
+    if (loading) {
+        return <Loading />;
+    }
+
     return (
-        <div className="form-view relative">
-            {loading ? (
-                <Loading></Loading>
-            ) : (
-                <form
-                    onSubmit={ctx.formCtx.handleSubmit(() => { }, errors => {
-                        console.log("Form errors", errors);
-                        toast.error(t("offer.form.submitError"));
-                    })}
-                    noValidate
-                >
-                    {/* Step indicator */}
-                    <div className="flex justify-center items-center gap-2 mb-8">
-                        {OFFER_STEPS_ORDER.map((step) => (
-                            <Button
-                                onClick={() => ctx.selectStep(step)}
-                                key={step}
-                                type="button"
-                                mode={ctx.form?.currentStep === step ? BtnModes.PRIMARY_TXT : BtnModes.SECONDARY_TXT}
-                                size={BtnSizes.SMALL}
-                                disabled={ctx.form?.currentStep === step ||
-                                    OFFER_STEPS_ORDER.indexOf(step) > OFFER_STEPS_ORDER.indexOf(ctx.form.currentStep)
-                                }
-                            >
-                                {t(`offer.form.${step}.label`)}
-                            </Button>
-                        ))}
+        <FormWizard
+            localStorageKey={LOCAL_STORAGE_KEY}
+            formRef={ctx.formCtx}
+            stepsOrder={OFFER_STEPS_ORDER}
+            currentStep={ctx.form.currentStep}
+            onFinalSubmit={onSubmit}
+            onSelectStep={ctx.selectStep}
+            labelKeyPrefix="offer.form"
+        >
+            <>
+                {renderStep()}
+
+                {isDevMode && (
+                    <div className="flex items-center justify-end">
+                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
+                            DEV FILL
+                        </Button>
                     </div>
-
-                    {renderStep()}
-
-                    <div className="flex gap-4 mt-6 mb-10">
-                        {currentStep !== OfferFormSteps.STEP_ONE && (
-                            <Button
-                                type="button"
-                                onClick={ctx.prevStep}
-                                size={BtnSizes.LARGE}
-                                mode={BtnModes.SECONDARY_TXT}
-                                className="flex-1"
-                            >
-                                {t("common.previous")}
-                            </Button>
-                        )}
-
-                        {currentStep !== OfferFormSteps.STEP_FOUR ? (
-                            <Button
-                                type="button"
-                                onClick={ctx.nextStep}
-                                size={BtnSizes.LARGE}
-                                mode={BtnModes.PRIMARY_TXT}
-                                className="flex-1"
-                            >
-                                {t("common.next")}
-                            </Button>
-                        ) : (
-                            <Button
-                                type="button"
-                                onClick={() => {
-                                    onSubmit()
-                                }}
-                                size={BtnSizes.LARGE}
-                                mode={BtnModes.PRIMARY}
-                                className="flex-1"
-                            >
-                                {t("common.save")}
-                            </Button>
-                        )}
-
-                    </div>
-                    {isDevMode && (
-                        <div className="flex items-center justify-end">
-                            <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
-                                DEV FILL
-                            </Button>
-                        </div>
-                    )}
-
-                </form>
-            )}
-
-        </div>
-    )
+                )}
+            </>
+        </FormWizard>
+    );
 }
 
 const OfferFormView: React.FC = () => {

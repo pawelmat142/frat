@@ -204,7 +204,7 @@ const EmployeeProfileFormView: React.FC = () => {
             localStorageKey={LOCAL_STORAGE_KEY}
             formRef={formRef}
             stepsOrder={STEPS_ORDER}
-            initialStep={STEPS_ORDER[0]}
+            currentStep={step}
             onFinalSubmit={onSubmit}
             onSelectStep={setStep}
         >

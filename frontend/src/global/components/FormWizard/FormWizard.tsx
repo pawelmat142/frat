@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UseFormReturn, FieldValues } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Button from 'global/components/controls/Button';
@@ -12,27 +12,31 @@ type FormWizardProps<TForm extends FieldValues, TStep extends string> = {
     localStorageKey: string;
     formRef: UseFormReturn<TForm>;
     stepsOrder: TStep[];
-    initialStep?: TStep;
+    currentStep: TStep;
     onFinalSubmit: (validateFn: () => Promise<boolean>) => void | Promise<void>;
     children: React.ReactNode;
     onSelectStep: (step: TStep) => void;
+    labelKeyPrefix?: string;
 };
 
 function FormWizard<TForm extends FieldValues, TStep extends string = string>({
     localStorageKey,
     formRef,
     stepsOrder,
-    initialStep,
+    currentStep,
     onFinalSubmit,
     children,
-    onSelectStep
+    onSelectStep,
+    labelKeyPrefix = 'employeeProfile.form',
 }: FormWizardProps<TForm, TStep>) {
 
-    const [currentStep, setCurrentStep] = React.useState<TStep>(
-        (initialStep || stepsOrder[0]) as TStep
-    );
+    console.log('currentStep:', currentStep);
 
     const { t } = useTranslation();
+
+    useEffect(() => {
+        console.log('FormWizard currentStep changed:', currentStep);
+    }, [])
 
     const saveFormToLocalStorage = React.useCallback(() => {
         try {
@@ -63,7 +67,6 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
             const currentIndex = stepsOrder.indexOf(currentStep);
             if (currentIndex < stepsOrder.length - 1) {
                 const step = stepsOrder[currentIndex + 1];
-                setCurrentStep(step);
                 onSelectStep(step);
             }
         }
@@ -74,7 +77,6 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
         const currentIndex = stepsOrder.indexOf(currentStep);
         if (currentIndex > 0) {
             const step = stepsOrder[currentIndex - 1];
-            setCurrentStep(step);
             onSelectStep(step);
         }
     };
@@ -82,17 +84,15 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
     const selectStep = async (targetStep: TStep) => {
         const targetIndex = stepsOrder.indexOf(targetStep);
         const currentIndex = stepsOrder.indexOf(currentStep);
-        if (targetIndex < currentIndex) {
-            setCurrentStep(targetStep);
-            onSelectStep(targetStep);
+            if (targetIndex < currentIndex) {
+            onSelectStep?.(targetStep);
             return;
         }
         if (targetIndex > currentIndex) {
             const ok = await validateCurrentStep();
             if (ok) {
                 saveFormToLocalStorage();
-                onSelectStep(targetStep);
-                setCurrentStep(targetStep);
+                onSelectStep?.(targetStep);
             }
         }
     };
@@ -109,7 +109,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
 
                 <div className="form-wizard-top-wrapper">
                     <div className="form-wizard-top">
-                        {t(`employeeProfile.form.${currentStep}.label`)}
+                        {t(`${labelKeyPrefix}.${currentStep}.label`)}
 
                     </div>
                 </div>
