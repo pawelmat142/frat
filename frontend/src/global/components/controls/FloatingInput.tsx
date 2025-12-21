@@ -16,6 +16,8 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
         disabled,
         label,
         onChange,
+        onFocus,
+        onBlur,
         value,
         id,
         required,
@@ -81,8 +83,14 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
                             type={type}
                             value={getValue()}
                             onChange={handleChange}
-                            onFocus={() => setIsFocused(true)}
-                            onBlur={() => setIsFocused(false)}
+                            onFocus={(e) => {
+                                setIsFocused(true);
+                                if (onFocus) onFocus(e as any);
+                            }}
+                            onBlur={(e) => {
+                                setIsFocused(false);
+                                if (onBlur) onBlur(e as any);
+                            }}
                             className={`${myClass}${icon ? ' pr-10' : ''}`}
                             disabled={disabled}
                             required={required}

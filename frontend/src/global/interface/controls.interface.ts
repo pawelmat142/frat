@@ -50,6 +50,8 @@ export interface InputInterface {
     fullWidth?: boolean;
     disabled?: boolean;
     onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onFocus?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     onDateChange?: (date: Date | null) => void;
     value: string | number | Date | null;
     className?: string;

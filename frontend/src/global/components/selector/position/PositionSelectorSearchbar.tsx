@@ -5,19 +5,22 @@ import { FloatingInputModes } from 'global/interface/controls.interface';
 import { Search } from '@mui/icons-material';
 import { useDebouncedValue } from 'shared/utils/useDebouncedValue';
 import { toast } from 'react-toastify';
-import { set } from 'react-hook-form';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface Props {
     mapInstanceRef: google.maps.Map | null;
     updatePosition: (position: { lat: number; lng: number }) => void;
+    displaValue?: string;
+    onCancel: () => void;
 }
 
-const PositionSelectorSearchbar: React.FC<Props> = ({ mapInstanceRef, updatePosition }) => {
+const PositionSelectorSearchbar: React.FC<Props> = ({ mapInstanceRef, onCancel, updatePosition, displaValue }) => {
     const { t } = useTranslation();
 
     const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
     const [showPredictions, setShowPredictions] = useState(false);
     const [selectedPrediction, setSelectedPrediction] = useState<google.maps.places.AutocompletePrediction | null>(null);
+    const [isFocused, setIsFocused] = useState(false);
 
     const [freeTextInput, setFreeTextInput] = useState('');
     const debouncedFreeTextInput = useDebouncedValue(freeTextInput, 500);
@@ -70,28 +73,42 @@ const PositionSelectorSearchbar: React.FC<Props> = ({ mapInstanceRef, updatePosi
     };
 
     return (
-        <div className="relative w-full mr-2">
-            <FloatingInput
-                mode={FloatingInputModes.THIN}
-                name="freeText"
-                value={freeTextInput}
-                onChange={e => setFreeTextInput(e.target.value)}
-                label={t('employeeProfile.form.freeText')}
-                fullWidth
-                icon={<Search />}
-            />
+        <div className="position-selector-searchbar w-full mr-2">
+                <div className="position-selector-header p-2 flex items-center justify-between border-b primary-bg">
+
+                <FloatingInput
+                    mode={FloatingInputModes.THIN}
+                    name="freeText"
+                    value={(isFocused || selectedPrediction) ? freeTextInput : (displaValue || '')}
+                    onChange={e => setFreeTextInput(e.target.value)}
+                    onFocus={() => {
+                        setFreeTextInput('');
+                        setIsFocused(true)}}
+                    onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+                    label={t('employeeProfile.form.freeText')}
+                    fullWidth
+                    icon={<Search />}
+                />
+
+                <button
+                    onClick={() => onCancel()}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                    <CloseIcon />
+                </button>
+            </div>
             {showPredictions && predictions.length > 0 && (
-                <ul className="absolute left-0 right-0 mt-1 bg-white shadow-lg max-h-60 overflow-auto z-50 rounded">
+                <div className="position-selector-searchbar-results">
                     {predictions.map(p => (
-                        <li
+                        <div
                             key={p.place_id}
                             onClick={() => selectPrediction(p)}
                             className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm"
                         >
                             {p.description}
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );

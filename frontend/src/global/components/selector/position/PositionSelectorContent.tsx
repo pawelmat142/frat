@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import { GeocodedPosition } from '@shared/interfaces/EmployeeProfileI';
 import Button from '../../controls/Button';
 import { BtnModes } from 'global/interface/controls.interface';
-import CloseIcon from '@mui/icons-material/Close';
 import { MapUtil } from 'global/utils/MapUtil';
 import PositionSelectorSearchbar from './PositionSelectorSearchbar';
 
@@ -111,6 +110,8 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         markerRef.current?.setPosition(new google.maps.LatLng(position.lat, position.lng));
         try {
             const geoPosition = await MapUtil.getGeocodedLocation(position, new google.maps.Geocoder());
+
+            console.log('Geocoded position:', geoPosition);
             setSelectedPosition(geoPosition);
         } catch (error) {
             console.error('Geocoding error:', error);
@@ -137,20 +138,13 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     return (
         <div className="position-selector-popup-overlay fixed inset-0 z-50 flex items-center justify-center bg-opacity-50">
             <div className="position-selector-popup secondary-bg rounded-lg shadow-xl w-full h-full md:w-[90%] md:h-[90%] max-w-6xl flex flex-col">
-                <div className="position-selector-header p-2 flex items-center justify-between border-b primary-bg">
 
-                    <PositionSelectorSearchbar
-                        mapInstanceRef={mapInstanceRef.current}
-                        updatePosition={updatePosition}
-                    />
-
-                    <button
-                        onClick={() => onCancel()}
-                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                    >
-                        <CloseIcon />
-                    </button>
-                </div>
+                <PositionSelectorSearchbar
+                    mapInstanceRef={mapInstanceRef.current}
+                    updatePosition={updatePosition}
+                    onCancel={onCancel}
+                    displaValue={selectedPosition?.fullAddress}
+                />
 
                 <div className="position-selector-map-container flex-1 relative">
                     <div ref={mapRef} className="w-full h-full" />
