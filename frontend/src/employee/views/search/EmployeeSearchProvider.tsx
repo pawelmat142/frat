@@ -4,7 +4,7 @@ import { EmployeeProfileService } from "employee/services/EmployeeProfileService
 import { EmployeeProfileI, EmployeeProfileSearchFilters, PROFILE_DEFAULT_SORT_OPTION } from "@shared/interfaces/EmployeeProfileI";
 import { EPUtil } from "employee/EPUtil";
 import { ObjUtil } from "@shared/utils/ObjUtil";
-
+import { Path } from "../../../path";
 
 export interface EmployeeSearchContextProps {
     filters: EmployeeProfileSearchFilters;
@@ -89,7 +89,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         if (f1.sortBy !== f2.sortBy) return false;
         return true;
     }, []);
-
+    
     const executeSearch = useCallback(async (searchFilters: EmployeeProfileSearchFilters, append: boolean) => {
         const requestId = ++requestIdRef.current;
         if (append) {
@@ -128,6 +128,9 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }, []);
 
     useEffect(() => {
+        if (!location.pathname.includes(Path.EMPLOYEE_SEARCH)) {
+            return
+        }
         const parsed = EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters);
         const normalized = toStateFilters(parsed);
 

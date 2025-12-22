@@ -50,7 +50,8 @@ const EmployeeSearchView: React.FC = () => {
                 <div className="results flex flex-col gap-1">
                     {(ctx.results ?? []).map((profile, index) => (
                         <EmployeeProfileTile
-                            key={profile.employeeProfileId}
+                            // key={profile.employeeProfileId}
+                            key={index}
                             profile={profile}
                             languagesDictionary={globalCtx.dics.languages!}
                             first={index === 0}

@@ -8,7 +8,6 @@ import { MapUtil } from 'global/utils/MapUtil';
 import PositionSelectorSearchbar from './PositionSelectorSearchbar';
 
 // TODO uprawnienie do lokalizacji
-// TODO forma / wizarda wydzielamy i reuzywamy w ofertach
 
 interface PositionSelectorContentProps {
     initialPosition?: GeocodedPosition | null;

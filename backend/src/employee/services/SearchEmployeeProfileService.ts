@@ -68,7 +68,6 @@ export class SearchEmployeeProfileService {
         };
     }
 
-    // TODO klikniecie search na filtrach profili powoduje strzal po oferty też
     // TODO sortowanie po popularnosci
     // TODO sortowanie po start date miesza kolejność - sprawdzić!
     // TODO sortowanie po dystansie

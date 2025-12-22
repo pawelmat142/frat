@@ -4,6 +4,7 @@ import { ObjUtil } from "@shared/utils/ObjUtil";
 import { OfferI, OfferSearchFilters } from "@shared/interfaces/OfferI";
 import { OfferUtil } from "offer/OfferUtil";
 import { OffersService } from "offer/services/OffersService";
+import { Path } from "../../../path";
 
 export interface OfferSearchContextProps {
     filters: OfferSearchFilters;
@@ -122,6 +123,9 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
 
     useEffect(() => {
+        if (!location.pathname.includes(Path.OFFERS_SEARCH)) {
+            return
+        }
         const parsed = OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters);
         const normalized = toStateFilters(parsed);
 
