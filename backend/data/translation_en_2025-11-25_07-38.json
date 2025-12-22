@@ -404,8 +404,7 @@
           "CREATED_AT_ASC": "Joined: Oldest first",
           "START_FROM_DESC": "Availability: Soonest first",
           "START_FROM_ASC": "Availability: Latest first",
-          "VIEWS_AMOUNT": "Views: Most viewed first",
-          "LIKES_AMOUNT": "Likes: Most liked first"
+          "POPULARITY": "Popularity"
         },
         "step1": {
           "label": "Step 1",

@@ -18,7 +18,7 @@ export abstract class EPUtil {
     private static readonly LIMIT = 'limit';
     private static readonly SORT_BY = 'sortBy';
 
-    public static prepareUrlParams = (f: EmployeeProfileSearchFilters, defaultFilters: EmployeeProfileSearchFilters) => {
+    public static prepareUrlParams = (f: EmployeeProfileSearchFilters, defaultFilters: EmployeeProfileSearchFilters): string => {
         const params = new URLSearchParams();
         if (f.freeText) params.set(EPUtil.FREE_TEXT, f.freeText);
         if (f.skills?.length) params.set(EPUtil.SKILLS, f.skills.join(','));

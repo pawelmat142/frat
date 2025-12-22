@@ -86,6 +86,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         if (f1.lng !== f2.lng) return false;
         if (f1.skip !== f2.skip) return false;
         if (f1.limit !== f2.limit) return false;
+        if (f1.sortBy !== f2.sortBy) return false;
         return true;
     }, []);
 

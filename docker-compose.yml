@@ -40,8 +40,8 @@ services:
       - /app/backend/node_modules
     networks:
       - jobhigh_network
-    # command: ["npm", "run", "start:nodemon-debug"]
-    command: ["npm", "run", "start:nodemon"]
+    command: ["npm", "run", "start:nodemon-debug"]
+    # command: ["npm", "run", "start:nodemon"]
 
   frontend:
     build:

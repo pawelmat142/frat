@@ -172,13 +172,12 @@ export interface GeocodedPosition {
 }
 
 export const EmmployeeProfileSearchSortOptions = {
-  DISTANCE_ASC: 'DISTANCE_ASC',
+  START_FROM_ASC: 'START_FROM_ASC',
+  START_FROM_DESC: 'START_FROM_DESC',
   CREATED_AT_DESC: 'CREATED_AT_DESC',
   CREATED_AT_ASC: 'CREATED_AT_ASC',
-  START_FROM_DESC: 'START_FROM_DESC',
-  START_FROM_ASC: 'START_FROM_ASC',
-  VIEWS_AMOUNT: 'VIEWS_AMOUNT',
-  LIKES_AMOUNT: 'LIKES_AMOUNT',
+  DISTANCE_ASC: 'DISTANCE_ASC',
+  POPULARITY: 'POPULARITY',
 } as const;
 
 export type EmmployeeProfileSearchSortOption = typeof EmmployeeProfileSearchSortOptions[keyof typeof EmmployeeProfileSearchSortOptions];
