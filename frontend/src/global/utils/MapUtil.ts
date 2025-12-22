@@ -3,11 +3,59 @@ import { GeocodedPosition } from "@shared/interfaces/EmployeeProfileI";
 
 export abstract class MapUtil {
 
-    static async getGeocodedLocation(position: { lat: number; lng: number }, geocoder: google.maps.Geocoder): Promise<GeocodedPosition | null> {
-        const result: google.maps.GeocoderResponse = await geocoder.geocode({ location: position });
-        const geoPosition = MapUtil.parseGeocoderResponse(result);
-        return geoPosition;
-    }
+	static async getGeocodedLocationn(coords: { lat: number; lng: number }, apiKey: string): Promise<GeocodedPosition | null> {
+		let geoPosition = null as any;
+		const win: any = window;
+		if (win?.google?.maps && typeof win.google.maps.Geocoder === 'function') {
+			try {
+				geoPosition = await MapUtil.getGeocodedLocation(coords, new win.google.maps.Geocoder());
+			} catch (e) {
+				// fallback to REST geocoding
+				geoPosition = await MapUtil.getGeocodedLocationUsingApiKey(coords, apiKey);
+			}
+		} else {
+			geoPosition = await MapUtil.getGeocodedLocationUsingApiKey(coords, apiKey);
+		}
+		return geoPosition;
+	}
+
+	static async getGeocodedLocation(position: { lat: number; lng: number }, geocoder: google.maps.Geocoder): Promise<GeocodedPosition | null> {
+		// google.maps.Geocoder.geocode uses a callback in the Maps JS API v3.
+		// Wrap it into a Promise for convenience.
+		return new Promise<GeocodedPosition | null>((resolve, reject) => {
+			try {
+				geocoder.geocode({ location: position }, (results: google.maps.GeocoderResult[] | null, status: google.maps.GeocoderStatus) => {
+					if (status !== google.maps.GeocoderStatus.OK || !results) {
+						return resolve(null);
+					}
+					const response: google.maps.GeocoderResponse = { results, status } as any;
+					const geoPosition = MapUtil.parseGeocoderResponse(response);
+					resolve(geoPosition);
+				});
+			} catch (err) {
+				reject(err);
+			}
+		});
+	}
+
+	static async getGeocodedLocationUsingApiKey(position: { lat: number; lng: number }, apiKey: string): Promise<GeocodedPosition | null> {
+		if (!apiKey) return null;
+		try {
+			const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${encodeURIComponent(position.lat + ',' + position.lng)}&key=${encodeURIComponent(apiKey)}`;
+			const res = await fetch(url);
+			if (!res.ok) return null;
+			const json = await res.json();
+			// json has shape similar to google.maps.GeocoderResponse
+			const responseLike: any = {
+				results: json.results || [],
+				status: json.status
+			};
+			return MapUtil.parseGeocoderResponse(responseLike as any);
+		} catch (e) {
+			console.error('MapUtil.getGeocodedLocationUsingApiKey error', e);
+			return null;
+		}
+	}
 	/**
 	 * Parse a google.maps.GeocoderResponse and return a simplified position object.
 	 * Heuristics:

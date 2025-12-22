@@ -108,7 +108,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         mapInstanceRef.current?.panTo(new google.maps.LatLng(position.lat, position.lng));
         markerRef.current?.setPosition(new google.maps.LatLng(position.lat, position.lng));
         try {
-            const geoPosition = await MapUtil.getGeocodedLocation(position, new google.maps.Geocoder());
+            const geoPosition = await MapUtil.getGeocodedLocationn(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
             setSelectedPosition(geoPosition);
         } catch (error) {
             console.error('Geocoding error:', error);

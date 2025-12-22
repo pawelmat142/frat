@@ -4,15 +4,16 @@ import { EmployeeSearchContextProps, EPDefaultFilters } from "./EmployeeSearchPr
 import { useDrawer } from "global/providers/DrawerProvider";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import Button from "global/components/controls/Button";
-import { BtnModes } from "global/interface/controls.interface";
+import { BtnModes, SelectorItem } from "global/interface/controls.interface";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
-import { DateRange, EmployeeProfileSearchFilters, Position } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, EmmployeeProfileSearchSortOption, EmmployeeProfileSearchSortOptions, EmployeeProfileSearchFilters, Position, PROFILE_DEFAULT_SORT_OPTION } from "@shared/interfaces/EmployeeProfileI";
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import { PositionService } from "global/services/PositionService";
 import { DictionaryService } from "global/services/DictionaryService";
 import { useLocation } from "react-router-dom";
 import { EPUtil } from "employee/EPUtil";
 import { FaSearch } from "react-icons/fa";
+import FloatingSelector from "global/components/selector/FloatingSelector";
 
 const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> = ({ ctx }) => {
 
@@ -100,6 +101,11 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
         }
     }
 
+    const sortOptionItems: SelectorItem<string>[] = Object.keys(EmmployeeProfileSearchSortOptions).map((option: string) => ({
+        value: option,
+        label: t('employeeProfile.form.sortOptions.' + option)
+    }))
+    
     return (
         <div className="flex flex-col px-3 pt-5 gap-1">
 
@@ -189,6 +195,19 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 fullWidth
                 required
             />
+
+            <FloatingSelector
+                className="w-full mt-10"
+                items={sortOptionItems}
+                value={sortOptionItems.find(i => i.value === localFilters.sortBy) || null}
+                onSelect={item => {
+                    const value = item ? String(item) : PROFILE_DEFAULT_SORT_OPTION;
+                    const filters = { ...localFilters, sortBy: value as EmmployeeProfileSearchSortOption };
+                    setLocalFilters(filters);
+                }}
+                label={t("employeeProfile.form.sortOptions.title")}
+                fullWidth
+            ></FloatingSelector>
 
             <div className="mt-10">
                 <Button onClick={search} mode={BtnModes.PRIMARY} fullWidth>

@@ -397,6 +397,16 @@
       "edit": "Edit employee profile",
       "searchTitle": "Employees",
       "form": {
+        "sortOptions": {
+          "title": "Sort by",
+          "DISTANCE_ASC": "Distance: Nearest first",
+          "CREATED_AT_DESC": "Joined: Newest first",
+          "CREATED_AT_ASC": "Joined: Oldest first",
+          "START_FROM_DESC": "Availability: Soonest first",
+          "START_FROM_ASC": "Availability: Latest first",
+          "VIEWS_AMOUNT": "Views: Most viewed first",
+          "LIKES_AMOUNT": "Likes: Most liked first"
+        },
         "step1": {
           "label": "Step 1",
           "title": "Personal Information"

@@ -127,6 +127,7 @@ export interface EmployeeProfileSearchFilters {
   lat?: number | null;
   lng?: number | null;
 
+  sortBy: EmmployeeProfileSearchSortOption
   skip: number;
   limit: number;
 }
@@ -169,3 +170,17 @@ export interface GeocodedPosition {
 	country?: string;
 	fullAddress?: string;
 }
+
+export const EmmployeeProfileSearchSortOptions = {
+  DISTANCE_ASC: 'DISTANCE_ASC',
+  CREATED_AT_DESC: 'CREATED_AT_DESC',
+  CREATED_AT_ASC: 'CREATED_AT_ASC',
+  START_FROM_DESC: 'START_FROM_DESC',
+  START_FROM_ASC: 'START_FROM_ASC',
+  VIEWS_AMOUNT: 'VIEWS_AMOUNT',
+  LIKES_AMOUNT: 'LIKES_AMOUNT',
+} as const;
+
+export type EmmployeeProfileSearchSortOption = typeof EmmployeeProfileSearchSortOptions[keyof typeof EmmployeeProfileSearchSortOptions];
+
+export const PROFILE_DEFAULT_SORT_OPTION: EmmployeeProfileSearchSortOption = EmmployeeProfileSearchSortOptions.START_FROM_ASC;

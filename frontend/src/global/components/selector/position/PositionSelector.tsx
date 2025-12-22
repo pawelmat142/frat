@@ -61,10 +61,8 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
             } else {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(async (pos) => {
-                        const geoPosition = await MapUtil.getGeocodedLocation({
-                            lat: pos.coords.latitude,
-                            lng: pos.coords.longitude
-                        }, new google.maps.Geocoder());
+                        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                        const geoPosition = await MapUtil.getGeocodedLocationn(coords, apiKey);
                         setSelectedPosition(geoPosition);
                     })
 

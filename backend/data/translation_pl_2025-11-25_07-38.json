@@ -391,6 +391,16 @@
       "edit": "Edytuj profil pracownika",
       "searchTitle": "Specjaliści",
       "form": {
+        "sortOptions": {
+          "title": "Sortuj według",
+          "DISTANCE_ASC": "Odległość: Najbliżej",
+          "CREATED_AT_DESC": "Dołączył: Najnowszy",
+          "CREATED_AT_ASC": "Dołączył: Najstarszy",
+          "START_FROM_DESC": "Dostępność: Najbliższa",
+          "START_FROM_ASC": "Dostępność: Najdalsza",
+          "VIEWS_AMOUNT": "Wyświetlenia: Najczęściej oglądany",
+          "LIKES_AMOUNT": "Polubienia: Najczęściej lubiany"
+        },
         "step1": {
           "label": "Krok 1",
           "title": "Dane osobowe"

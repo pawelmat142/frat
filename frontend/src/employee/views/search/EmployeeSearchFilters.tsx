@@ -113,10 +113,6 @@ const EmployeeSearchFilters: React.FC = () => {
                 )}
             </div>
 
-
-
-
-
         </div>
     );
 };

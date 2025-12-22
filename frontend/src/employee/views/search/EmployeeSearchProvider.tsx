@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
-import { EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileI, EmployeeProfileSearchFilters, PROFILE_DEFAULT_SORT_OPTION } from "@shared/interfaces/EmployeeProfileI";
 import { EPUtil } from "employee/EPUtil";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 
@@ -31,6 +31,7 @@ export const EPDefaultFilters: EmployeeProfileSearchFilters = {
         locationCountry: null,
         startDate: null,
         endDate: null,
+        sortBy: PROFILE_DEFAULT_SORT_OPTION,
         skip: 0,
         limit: INITIAL_LIMIT,
         lat: null,
