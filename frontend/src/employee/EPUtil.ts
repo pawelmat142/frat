@@ -1,4 +1,4 @@
-import { EmmployeeProfileSearchSortOption, EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
+import { EmmployeeProfileSearchSortOption, EmployeeProfileI, EmployeeProfileSearchFilters, Position } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { FilterUtil } from "global/utils/FilterUtil";
 
@@ -18,6 +18,21 @@ export abstract class EPUtil {
     private static readonly PAGE = 'page';
     private static readonly LIMIT = 'limit';
     private static readonly SORT_BY = 'sortBy';
+
+    public static getDistanceFromToInMeters(from: Position, to: Position): number {
+        const toRad = (deg: number) => deg * Math.PI / 180;
+        const earthRadius = 6371e3; // Earth's radius in meters
+        
+        const lat1 = toRad(from.lat);
+        const lat2 = toRad(to.lat);
+        const deltaLat = toRad(to.lat - from.lat);
+        const deltaLng = toRad(to.lng - from.lng);
+        
+        const a = Math.sin(deltaLat / 2) ** 2 + 
+                  Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLng / 2) ** 2;
+        
+        return earthRadius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
 
     public static prepareUrlParams = (f: EmployeeProfileSearchFilters, defaultFilters: EmployeeProfileSearchFilters): string => {
         const params = new URLSearchParams();

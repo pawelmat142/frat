@@ -1,5 +1,5 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
-import { EmployeeProfileAvailabilityOptions, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI"
+import { EmployeeProfileAvailabilityOptions, EmployeeProfileI, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI"
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { isOneOf, Util } from "@shared/utils/util";
 import { Path } from "../../path";
@@ -38,6 +38,8 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
         navigate(Path.getEmployeeProfilePath(profile.displayName!));
     }
 
+    // const distance = EPUtil.getDistanceFromToInMeters(profile.point, EPUtil.getCurrentLocationPoint());
+
     return (
         <div className={`tile ripple${first ? " first" : ""}${last ? " last" : ""}`} onClick={() => goToProfileView(profile)}>
 
@@ -61,11 +63,27 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
                 <div className="tile-content-row mid items-center justify-between w-full">
                     <div className="">{profile.email}</div>
 
-                    {profile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font text-right">{t('others.availableAnytimeShort')}</span>}
-                    {isOneOf([
-                        EmployeeProfileAvailabilityOptions.DATE_RANGES,
-                        EmployeeProfileAvailabilityOptions.FROM_DATE
-                    ], profile.availabilityOption) && <span className="small-font text-right">{t('common.from')} {getAvailableFromDate()}</span>}
+                    <div className="small-font text-right">
+
+                        {/* PLACE */}
+                        <span className="mr-2">
+                            
+                            {profile.locationOption === EmployeeProfileLocationOptions.ALL_EUROPE && (
+                                <span>{t('employeeProfile.locationOptions.anywhere')}</span>
+                            )}
+
+                            {/* TODO display distance */}
+                        </span>
+
+                        {/* DATE */}
+                        <span>
+                            {profile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font text-right">{t('others.availableAnytimeShort')}</span>}
+                            {isOneOf([
+                                EmployeeProfileAvailabilityOptions.DATE_RANGES,
+                                EmployeeProfileAvailabilityOptions.FROM_DATE
+                            ], profile.availabilityOption) && <span >{t('common.from')} {getAvailableFromDate()}</span>}
+                        </span>
+                    </div>
                 
                 </div>
 
