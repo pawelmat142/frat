@@ -140,7 +140,8 @@
       "day": "dzień",
       "year": "rok",
       "options": "Opcje",
-      "search": "Szukaj"
+      "search": "Szukaj",
+      "anywhere": "Gdziekolwiek"
     },
     "header": {
       "home": "Strona główna",
@@ -432,7 +433,6 @@
         "locationPoint": "Dokładna lokalizacja [lat lng]",
         "submitSuccess": "Profil został zapisany pomyślnie",
         "locationOption": {
-          "anywhere": "Gdziekolwiek",
           "DISTANCE": {
             "msg": "Wybierz lokalizację i maksymalną odległość, z której chcesz otrzymywać oferty.",
             "tab": "Lokalizacja"

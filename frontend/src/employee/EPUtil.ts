@@ -31,7 +31,16 @@ export abstract class EPUtil {
         const a = Math.sin(deltaLat / 2) ** 2 + 
                   Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLng / 2) ** 2;
         
-        return earthRadius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = earthRadius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return distance;
+    }
+
+    public static formatDistance(distanceInMeters: number): string {
+        if (distanceInMeters < 1000) {
+            return `${Math.round(distanceInMeters)} m`;
+        } else {
+            return `${Math.round(distanceInMeters / 1000)} km`;
+        }
     }
 
     public static prepareUrlParams = (f: EmployeeProfileSearchFilters, defaultFilters: EmployeeProfileSearchFilters): string => {

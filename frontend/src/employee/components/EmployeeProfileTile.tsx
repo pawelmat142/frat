@@ -9,6 +9,7 @@ import { EPUtil } from "employee/EPUtil";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import Flags from "global/components/Flags";
 import { Utils } from "global/utils/utils";
+import { useUserContext } from "user/UserProvider";
 
 interface Props {
     profile: EmployeeProfileI,
@@ -21,6 +22,7 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
 
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const userCtx = useUserContext();
 
     const srcs = new Set<string>();
 
@@ -38,7 +40,14 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
         navigate(Path.getEmployeeProfilePath(profile.displayName!));
     }
 
-    // const distance = EPUtil.getDistanceFromToInMeters(profile.point, EPUtil.getCurrentLocationPoint());
+    const distance = userCtx.position && profile.point 
+        ? EPUtil.getDistanceFromToInMeters(userCtx.position, {
+            lat: profile.point.coordinates[1],
+            lng: profile.point.coordinates[0]
+        })
+        : null;
+
+    const formattedDistance = distance ? EPUtil.formatDistance(distance) : null;
 
     return (
         <div className={`tile ripple${first ? " first" : ""}${last ? " last" : ""}`} onClick={() => goToProfileView(profile)}>
@@ -69,10 +78,12 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
                         <span className="mr-2">
                             
                             {profile.locationOption === EmployeeProfileLocationOptions.ALL_EUROPE && (
-                                <span>{t('employeeProfile.locationOptions.anywhere')}</span>
+                                <span>{t('common.anywhere')}</span>
                             )}
 
-                            {/* TODO display distance */}
+                            {formattedDistance && (
+                                <span>{formattedDistance},</span>
+                            )}
                         </span>
 
                         {/* DATE */}

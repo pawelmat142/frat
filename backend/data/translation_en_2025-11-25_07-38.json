@@ -139,7 +139,8 @@
       "day": "day",
       "year": "year",
       "options": "Options",
-      "search": "Search"
+      "search": "Search",
+      "anywhere": "Anywhere"
     },
     "header": {
       "home": "Home",
@@ -441,7 +442,6 @@
         "locationPoint": "Exact location [lat, lng]",
         "submitSuccess": "Profile saved successfully",
         "locationOption": {
-          "anywhere": "Anywhere",
           "DISTANCE": {
             "msg": "Choose a location and the maximum distance from which you want to receive offers.",
             "tab": "Location"
