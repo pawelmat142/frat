@@ -4,6 +4,7 @@ import { EmployeeProfileService } from "employee/services/EmployeeProfileService
 import { EmployeeProfileI, EmployeeProfileSearchFilters, PROFILE_DEFAULT_SORT_OPTION, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT } from "@shared/interfaces/EmployeeProfileI";
 import { EPUtil } from "employee/EPUtil";
 import { Path } from "../../../path";
+import { LocationService } from "global/services/LocationService";
 
 export interface EmployeeSearchContextProps {
     filters: EmployeeProfileSearchFilters;
@@ -55,22 +56,25 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const requestIdRef = useRef(0);
     const resultsLengthRef = useRef(0);
     const hasMoreRef = useRef(false);
-    
-    const executeSearch = useCallback(async (searchFilters: EmployeeProfileSearchFilters, append: boolean) => {
+
+    const executeSearch = useCallback(async (searchFilters: EmployeeProfileSearchFilters, loadMore: boolean) => {
         const requestId = ++requestIdRef.current;
-        if (append) {
+        if (loadMore) {
             setLoadingMore(true);
         } else {
             setLoading(true);
         }
 
         try {
-            const result = await EmployeeProfileService.searchEmployeeProfiles(searchFilters);
+            
+            const filters = await applyLocationFilterIfNotSelected(searchFilters);
+
+            const result = await EmployeeProfileService.searchEmployeeProfiles(filters);
             if (requestId !== requestIdRef.current) {
                 return;
             }
 
-            if (append) {
+            if (loadMore) {
                 setResults(prev => {
                     const newResults = [...prev, ...result.profiles];
                     resultsLengthRef.current = newResults.length;
@@ -90,7 +94,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
             }
         } finally {
             if (requestId === requestIdRef.current) {
-                if (append) {
+                if (loadMore) {
                     setLoadingMore(false);
                 } else {
                     setLoading(false);
@@ -98,6 +102,20 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
             }
         }
     }, []);
+
+    const applyLocationFilterIfNotSelected = async (searchFilters: EmployeeProfileSearchFilters): Promise<EmployeeProfileSearchFilters> => {
+        if (!searchFilters.lat && !searchFilters.lng) {
+            const location = await LocationService.getLocation();
+            if (location) {
+                return {
+                    ...searchFilters,
+                    lat: location.lat,
+                    lng: location.lng,
+                };
+            }
+        }
+        return searchFilters;
+    }
 
     useEffect(() => {
         if (!location.pathname.includes(Path.EMPLOYEE_SEARCH)) {
@@ -141,7 +159,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         if (loading || loadingMore || !hasMoreRef.current) {
             return;
         }
-        
+
         const searchFilters = {
             ...filters,
             skip: resultsLengthRef.current,

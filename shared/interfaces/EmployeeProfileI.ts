@@ -186,3 +186,5 @@ export const PROFILE_DEFAULT_SORT_OPTION: EmmployeeProfileSearchSortOption = Emm
 
 export const PROFILES_INITIAL_SEARCH_LIMIT = 12;
 export const PROFILES_LOAD_MORE_SEARCH_LIMIT = 4;
+
+export const DEFAULT_SEARCH_DISTANCE_M = 1000000;

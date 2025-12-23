@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmmployeeProfileSearchSortOptions, EmployeeProfileAvailabilityOptions, EmployeeProfileLocationOptions, EmployeeProfileSearchFilters, EmployeeProfileSearchResponse, EmployeeProfileStatuses, PROFILES_INITIAL_SEARCH_LIMIT } from '@shared/interfaces/EmployeeProfileI';
+import { DEFAULT_SEARCH_DISTANCE_M, EmmployeeProfileSearchSortOptions, EmployeeProfileAvailabilityOptions, EmployeeProfileLocationOptions, EmployeeProfileSearchFilters, EmployeeProfileSearchResponse, EmployeeProfileStatuses, PROFILES_INITIAL_SEARCH_LIMIT } from '@shared/interfaces/EmployeeProfileI';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { SelectQueryBuilder } from 'typeorm';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
@@ -126,21 +126,21 @@ export class SearchEmployeeProfileService {
     }
 
     private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
-        const locationCountries = SearchUtil.parseArray(filters.locationCountry);
-
-        if (!locationCountries?.length) {
-            return;
+        // Position-based filtering: within 1000km radius OR ALL_EUROPE option
+        if (filters.lat && filters.lng) {
+            baseQueryBuilder.andWhere(`(
+                profile.location_option = '${EmployeeProfileLocationOptions.ALL_EUROPE}'
+                OR ST_DWithin(
+                    profile.point,
+                    ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography,
+                    ${DEFAULT_SEARCH_DISTANCE_M}
+                )
+            )`, {
+                lat: filters.lat,
+                lng: filters.lng
+            });
+            hasFilter = true;
         }
-        hasFilter = true;
-        // Matching logic: ANY overlap between provided list and profile.location_countries OR profile is ALL_EUROPE
-        // Uses Postgres array overlap operator '&&'.
-        baseQueryBuilder.andWhere(`(
-            profile.location_option = :allEuropeOption
-            OR profile.location_countries && :locationCountries
-        )`, {
-            locationCountries,
-            allEuropeOption: EmployeeProfileLocationOptions.ALL_EUROPE
-        });
     }
 
     private addDateRangeFilter(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
