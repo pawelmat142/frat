@@ -1,12 +1,12 @@
 import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import React from "react";
 import { EPUtil } from "employee/EPUtil";
-import { Util } from "@shared/utils/util";
 import { useTranslation } from "react-i18next";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import Loading from "global/components/Loading";
 import Flags from "global/components/Flags";
 import { Utils } from "global/utils/utils";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface ProfileDataTileProps {
     profile: EmployeeProfileI
@@ -44,7 +44,7 @@ const ProfileDataTile: React.FC<ProfileDataTileProps> = ({ profile, languagesDic
             </div>
 
             <div className="w-full">
-                <div className="xs-font secondary-text">{t('employeeProfile.joined')} {Util.displayDate(profile.createdAt)}</div>
+                <div className="xs-font secondary-text">{t('employeeProfile.joined')} {DateUtil.displayDate(profile.createdAt)}</div>
 
                 <div className="flex w-full gap-5">
                     <span className="xs-font secondary-text">{t('employeeProfile.views')}: {profile.views?.length || 0}</span>

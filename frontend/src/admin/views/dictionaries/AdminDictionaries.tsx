@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path"
 import SelectFileButton from "../../../global/components/selector/SelectFileButton";
 import { useEffect, useState } from "react";
-import { Util } from "@shared/utils/util";
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
 import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
 import { DictionaryListItem } from "@shared/interfaces/DictionaryI";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 const AdminDictionaries: React.FC = () => {
 
@@ -95,7 +95,7 @@ const AdminDictionaries: React.FC = () => {
                                         <td className={"px-6 py-3 border-b border-color primary-text"}>{dict.version}</td>
                                         <td className={"px-6 py-3 border-b border-color"}>{dict.status}</td>
                                         <td className={"px-6 py-3 border-b border-color primary-text"}>
-                                            {Util.displayDate(dict.updatedAt) || Util.displayDate(dict.createdAt) || '-'}
+                                            {DateUtil.displayDate(dict.updatedAt) || DateUtil.displayDate(dict.createdAt) || '-'}
                                         </td>
                                     </tr>
                                 ))

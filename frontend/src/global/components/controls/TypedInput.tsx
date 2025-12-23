@@ -1,14 +1,14 @@
 import { InputInterface } from '../../interface/controls.interface';
 import Input from './Input';
 import DateInput from './DateInput';
-import { Util } from '@shared/utils/util';
 import { DictionaryColumnTypes } from '@shared/interfaces/DictionaryI';
+import { DateUtil } from '@shared/utils/DateUtil';
 
 const TypedInput: React.FC<InputInterface> = (param) => {
 
     if (param.valueType === DictionaryColumnTypes.DATE) {
         return <DateInput 
-            value={Util.parseDate(param.value)} 
+            value={DateUtil.parseDate(param.value)} 
             onChange={param.onDateChange} 
             name={param.name}
             label={param.label}

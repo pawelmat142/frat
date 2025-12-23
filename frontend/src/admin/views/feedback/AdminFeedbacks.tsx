@@ -7,8 +7,7 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
 import { FeedbackI } from "@shared/interfaces/FeedbackI";
 import { FeedbackService } from "global/services/FeedbackService";
-import { Util } from "@shared/utils/util";
-import { useTranslation } from "react-i18next";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 const AdminFeedbacks: React.FC = () => {
 
@@ -112,7 +111,7 @@ const AdminFeedbacks: React.FC = () => {
                                             <td className="px-6 py-3 border-b border-color primary-text">{feedback.message}</td>
                                             <td className="px-6 py-3 border-b border-color primary-text">{feedback.uid}</td>
                                             <td className="px-6 py-3 border-b border-color primary-text">{feedback.contactEmail}</td>
-                                            <td className="px-6 py-3 border-b border-color primary-text">{Util.displayDate(feedback.createdAt)}</td>
+                                            <td className="px-6 py-3 border-b border-color primary-text">{DateUtil.displayDate(feedback.createdAt)}</td>
 
                                             <td className="px-6 py-3 border-b border-color primary-text">
                                                 <div className="flex gap-2 justify-end">

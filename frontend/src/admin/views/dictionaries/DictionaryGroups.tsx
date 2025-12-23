@@ -1,11 +1,11 @@
 import React from "react";
-import { Util } from "@shared/utils/util";
 import IconButton from "global/components/controls/IconButon";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useConfirm } from "global/providers/PopupProvider";
 import { DictionaryColumnTypes, DictionaryGroup, DictionaryI } from "@shared/interfaces/DictionaryI";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface DictionaryGroupsProps {
     dictionary: DictionaryI;
@@ -76,7 +76,7 @@ const DictionaryGroups: React.FC<DictionaryGroupsProps> = ({ dictionary, onRemov
                                                 {dictionary.columns.map(col => (
                                                     <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
                                                         {col.type === DictionaryColumnTypes.DATE
-                                                            ? Util.displayDate(el.values[col.code])
+                                                            ? DateUtil.displayDate(el.values[col.code])
                                                             : (el.values[col.code] !== undefined && el.values[col.code] !== "" ? el.values[col.code] : "-")}
                                                     </td>
                                                 ))}

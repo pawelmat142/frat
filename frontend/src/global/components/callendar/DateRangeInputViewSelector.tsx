@@ -68,6 +68,22 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     const hasValue = !!(value?.start || value?.end);
     const isLabelFloating = hasValue;
 
+    const formatDateRange = (range?: DateRange | null, placeholder?: string): string => {
+        if (!range?.start) return placeholder || '';
+
+        const startMonth = t(`callendar.monthShort.${range.start.getMonth()}`);
+        const startDayNumber = range.start.getDate();
+        let result = `${startDayNumber} ${startMonth}`;
+        if (range.end) {
+            const endMonth = t(`callendar.monthShort.${range.end.getMonth()}`);
+            const endDayNumber = range.end.getDate();
+            result += ` - ${endDayNumber} ${endMonth} ${range.end.getFullYear()}`;
+        } else {
+            result += ` ${range.start.getFullYear()}`;
+        }
+        return result;
+    }
+
     return (
         <div className={`floating-input-wrapper ${myClass}`}>
             <div className="floating-input-container">
@@ -78,7 +94,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                             id={name}
                             name={name ? `${name}_start` : undefined}
                             type="text"
-                            value={Utils.formatDateRange(t, value)}
+                            value={formatDateRange(value)}
                             onClick={handleClick}
                             className="floating-input primary-text flex-1 cursor-pointer"
                             disabled={disabled}

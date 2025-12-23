@@ -1,6 +1,6 @@
 import { OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
-import { Util } from "@shared/utils/util";
-import { Utils } from "global/utils/utils";
+import { DateUtil } from "@shared/utils/DateUtil";
+import { StringUtil } from "global/utils/StringUtil";
 import { useTranslation } from "react-i18next";
 
 interface OfferDetailsTileProps {
@@ -10,7 +10,7 @@ interface OfferDetailsTileProps {
 const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
     const { t } = useTranslation();
 
-    const category: string = Utils.capitalizeFirstLetter(t(`dictionary.WORK_CATEGORY.NAME.${offer.category}`));
+    const category: string = StringUtil.capitalizeFirstLetter(t(`dictionary.WORK_CATEGORY.NAME.${offer.category}`));
     const slots = getSlots();
 
     function getSlots(): string | null {
@@ -78,7 +78,7 @@ const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
             <div className="flex w-full justify-between mt-2">
                 <span className="xs-font secondary-text">{t('offer.views')}: {offer.views?.length || 0}</span>
                 <span className="xs-font secondary-text">{t('offer.likes')}: {offer.likes?.length || 0}</span>
-                <div className="xs-font secondary-text">{t('offer.created')}: {Util.displayDate(offer.createdAt)}</div>
+                <div className="xs-font secondary-text">{t('offer.created')}: {DateUtil.displayDate(offer.createdAt)}</div>
             </div>
         </div>
     );

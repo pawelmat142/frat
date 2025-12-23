@@ -1,5 +1,5 @@
 import { OfferForm, OFFER_STEPS_ORDER, OfferFormStep, OfferFormSteps } from "@shared/interfaces/OfferI";
-import { Util } from "@shared/utils/util";
+import { DateUtil } from "@shared/utils/DateUtil";
 import { createContext, useContext, useEffect } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -31,7 +31,7 @@ const getFromLocalStorage = (): OfferForm | null => {
     if (savedForm) {
         try {
             const parsedForm = JSON.parse(savedForm) as OfferForm;
-            const revivedForm = Util.reviveDatesDeep(parsedForm);
+            const revivedForm = DateUtil.reviveDatesDeep(parsedForm);
             return revivedForm;
         } catch (e) {
             console.error("Failed to parse saved offer form from localStorage:", e);

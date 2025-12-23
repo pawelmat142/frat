@@ -5,6 +5,7 @@ import ArrowIcon from '../controls/ArrowIcon';
 import ControlLabel from '../controls/ControlLabel';
 import FormError from '../controls/FormError';
 import { Utils } from 'global/utils/utils';
+import { StringUtil } from 'global/utils/StringUtil';
 
 const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -105,7 +106,7 @@ const Selector = forwardRef(<T extends SelectorValue = SelectorValue>(
 
     // Filter items based on search text, ignoring diacritics
     const filteredItems = enableSearchText
-        ? items.filter(item => Utils.normalize(item.label).includes(Utils.normalize(searchText)))
+        ? items.filter(item => StringUtil.normalize(item.label).includes(StringUtil.normalize(searchText)))
         : items;
 
     return (

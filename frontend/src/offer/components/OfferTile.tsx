@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import Chips, { ChipModes } from "global/components/chips/Chips";
-import { Util } from "@shared/utils/util";
 import Flags from "global/components/Flags";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface Props {
     offer: OfferI;
@@ -36,14 +36,14 @@ const OfferTile: React.FC<Props> = ({ offer, first, last }) => {
                 </div>
                 <div className="tile-content-row mid items-center justify-between w-full">
                     <div>{offer.displayAddress || offer.locationCountry}</div>
-                    <span className="small-font text-right">{t('common.from')} {Util.displayDate(offer.startDate)}</span>
+                    <span className="small-font text-right">{t('common.from')} {DateUtil.displayDate(offer.startDate)}</span>
                 </div>
                 <div className="tile-content-row bottom">
                     <div className="flex">
                         <Chips chips={offer.skillsRequired || []} mode={ChipModes.TERTIARY}/>
                         <Chips className="ml-5" chips={offer.certificatesRequired || []} mode={ChipModes.SECONDARY} />
                     </div>
-                    <div>{Util.displayDate(offer.createdAt)}</div>
+                    <div>{DateUtil.displayDate(offer.createdAt)}</div>
                 </div>
             </div>
         </div>

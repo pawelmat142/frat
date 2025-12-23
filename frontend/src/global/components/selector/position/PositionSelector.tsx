@@ -5,7 +5,7 @@ import FormError from '../../controls/FormError';
 import { GeocodedPosition } from '@shared/interfaces/EmployeeProfileI';
 import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import PositionSelectorContent from './PositionSelectorContent';
-import { Utils } from 'global/utils/utils';
+import { PositionUtil } from '@shared/utils/PositionUtil';
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: GeocodedPosition | null;
@@ -61,7 +61,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         };
 
         const displayValue = selectedPosition
-            ? selectedPosition.fullAddress || selectedPosition.city || Utils.formatPosition(selectedPosition)
+            ? selectedPosition.fullAddress || selectedPosition.city || PositionUtil.formatPosition(selectedPosition)
             : '';
 
         const hasValue = () => {

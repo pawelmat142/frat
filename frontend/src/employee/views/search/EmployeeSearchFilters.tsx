@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import Search from '@mui/icons-material/Search';
 import FilterList from '@mui/icons-material/FilterList';
 import Place from '@mui/icons-material/Place';
-import DateRange from '@mui/icons-material/DateRange';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 import FloatingInput from "global/components/controls/FloatingInput";
 import IconButton from "global/components/controls/IconButon";
 import { BtnModes, FloatingInputModes } from "global/interface/controls.interface";
@@ -14,6 +14,8 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useDebouncedValue } from "shared/utils/useDebouncedValue";
 import { FaLanguage } from "react-icons/fa";
 import { Utils } from "global/utils/utils";
+import { DateRange } from "@shared/interfaces/EmployeeProfileI";
+import { PositionUtil } from "@shared/utils/PositionUtil";
 
 const EmployeeSearchFilters: React.FC = () => {
 
@@ -46,6 +48,21 @@ const EmployeeSearchFilters: React.FC = () => {
         ? languagesDictionary?.elements.find(el => el.code === ctx.filters.locationCountry)?.values.SRC
         : null;
 
+
+    const formatFromTo = (range?: DateRange | null): string | null => {
+        if (!range?.start) return null;
+
+        const startMonth = t(`callendar.monthShort.${range.start.getMonth()}`);
+        const startDayNumber = range.start.getDate();
+        let result = `${t("common.from")} ${startDayNumber} ${startMonth}`;
+        if (range.end) {
+            const endMonth = t(`callendar.monthShort.${range.end.getMonth()}`);
+            const endDayNumber = range.end.getDate();
+            result += ` ${t("common.to")} ${endDayNumber} ${endMonth}`;
+        }
+        return result;
+    }
+
     return (
         <div className="filters-container">
             <div className="flex justify-between gap-5 w-full">
@@ -69,9 +86,9 @@ const EmployeeSearchFilters: React.FC = () => {
             <div className="flex gap-x-3 flex-wrap items-center">
                 {!!ctx.filters.startDate && (
                     <div className="ml-2 mt-1 flex items-center gap-1">
-                        <DateRange fontSize="inherit" className="secondary-text" />
+                        <DateRangeIcon fontSize="inherit" className="secondary-text" />
                         <span className="xs-font">
-                            {Utils.formatFromTo(t, { start: ctx.filters.startDate, end: ctx.filters.endDate })}
+                            {formatFromTo({ start: ctx.filters.startDate, end: ctx.filters.endDate })}
                         </span>
                     </div>)}
 
@@ -79,7 +96,7 @@ const EmployeeSearchFilters: React.FC = () => {
                     <div className="ml-2 mt-1 flex items-center gap-1">
                         <Place fontSize="inherit" className="secondary-text" />
                         {!!(ctx.filters.lat && ctx.filters.lng) && (
-                            <span className="xs-font">{Utils.formatPosition({ lat: ctx.filters.lat, lng: ctx.filters.lng })}</span>
+                            <span className="xs-font">{PositionUtil.formatPosition({ lat: ctx.filters.lat, lng: ctx.filters.lng })}</span>
                         )}
                     </div>
                 )}

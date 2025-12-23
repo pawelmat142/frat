@@ -13,11 +13,11 @@ import { useConfirm } from "global/providers/PopupProvider";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Util } from "@shared/utils/util";
 import DictionaryGroups from "./DictionaryGroups";
 import { AdminImportService } from "admin/services/AdminImport.service";
 import { DictionaryI, DictionaryElement, DictionaryGroup, DictionaryColumnTypes, DictionaryStatuses } from "@shared/interfaces/DictionaryI";
 import { useTranslation } from "react-i18next";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 const DictionaryView: React.FC = () => {
     const navigate = useNavigate();
@@ -252,7 +252,7 @@ const DictionaryView: React.FC = () => {
                                             {dictionary.columns.map(col => (
                                                 <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
                                                     {col.type === DictionaryColumnTypes.DATE
-                                                        ? Util.displayDate(el.values[col.code])
+                                                        ? DateUtil.displayDate(el.values[col.code])
                                                         : (el.values[col.code] !== undefined && el.values[col.code] !== "" ? el.values[col.code] : "-")}
                                                 </td>
                                             ))}

@@ -1,7 +1,7 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { EmployeeProfileAvailabilityOptions, EmployeeProfileI, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI"
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
-import { isOneOf, Util } from "@shared/utils/util";
+import { isOneOf } from "@shared/utils/util";
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,8 @@ import Chips, { ChipModes } from "global/components/chips/Chips";
 import Flags from "global/components/Flags";
 import { Utils } from "global/utils/utils";
 import { useUserContext } from "user/UserProvider";
+import { DateRange, Place } from "@mui/icons-material";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface Props {
     profile: EmployeeProfileI,
@@ -32,7 +34,7 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
 
     const getAvailableFromDate = (): string => {
         const range = DateRangeUtil.toDateRange(profile.availabilityDateRanges![0]);
-        const from = Util.displayDate(range!.start!);
+        const from = DateUtil.displayDate(range!.start!);
         return from;
     }
 
@@ -40,7 +42,7 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
         navigate(Path.getEmployeeProfilePath(profile.displayName!));
     }
 
-    const distance = userCtx.position && profile.point 
+    const distance = userCtx.position && profile.point
         ? EPUtil.getDistanceFromToInMeters(userCtx.position, {
             lat: profile.point.coordinates[1],
             lng: profile.point.coordinates[0]
@@ -70,32 +72,37 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
                 </div>
 
                 <div className="tile-content-row mid items-center justify-between w-full">
-                    <div className="">{profile.email}</div>
 
-                    <div className="small-font text-right">
 
-                        {/* PLACE */}
-                        <span className="mr-2">
-                            
-                            {profile.locationOption === EmployeeProfileLocationOptions.ALL_EUROPE && (
-                                <span>{t('common.anywhere')}</span>
-                            )}
-
-                            {formattedDistance && (
-                                <span>{formattedDistance},</span>
-                            )}
-                        </span>
-
-                        {/* DATE */}
+                    <div>
+    {/* DATE */}
                         <span>
-                            {profile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font text-right">{t('others.availableAnytimeShort')}</span>}
-                            {isOneOf([
-                                EmployeeProfileAvailabilityOptions.DATE_RANGES,
-                                EmployeeProfileAvailabilityOptions.FROM_DATE
-                            ], profile.availabilityOption) && <span >{t('common.from')} {getAvailableFromDate()}</span>}
+                            <DateRange fontSize="inherit" className="secondary-text mr-1" />
+                            <span>
+                                {profile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && <span className="small-font">{t('others.availableAnytimeShort')}</span>}
+                                {isOneOf([
+                                    EmployeeProfileAvailabilityOptions.DATE_RANGES,
+                                    EmployeeProfileAvailabilityOptions.FROM_DATE
+                                ], profile.availabilityOption) && <span className="small-font">{t('common.from')} {getAvailableFromDate()}</span>}
+                            </span>
                         </span>
+
+                        <span>
+                            <Place fontSize="inherit" className="secondary-text ml-3" />
+                            {profile.locationOption === EmployeeProfileLocationOptions.ALL_EUROPE && (
+                                <span className="small-font">{t('common.anywhere')}</span>
+                            )}
+                            {formattedDistance && (
+                                <span className="small-font">{formattedDistance}</span>
+                            )}
+                        </span>
+
                     </div>
-                
+
+                    <div>
+                        <span className="small-font">{t('employeeProfile.views')}: {profile.views?.length || 0}</span>
+                    </div>
+
                 </div>
 
                 <div className="tile-content-row bottom">
@@ -106,8 +113,7 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
                     </div>
 
                     <div>
-                        <span className="mr-2 small-font">{t('employeeProfile.views')}: {profile.views?.length || 0}</span>
-                        <span>{Util.displayDate(profile.createdAt)}</span>
+                        <span>{DateUtil.displayDate(profile.createdAt)}</span>
                     </div>
 
                 </div>

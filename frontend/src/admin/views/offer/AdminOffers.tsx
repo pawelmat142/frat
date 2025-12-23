@@ -5,11 +5,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
-import { Util } from "@shared/utils/util";
 import { userAdminPanelContext } from "../AdminPanelProvider";
 import Button from "global/components/controls/Button";
 import { OfferI } from "@shared/interfaces/OfferI";
 import { OffersAdminService } from "admin/services/OffersAdmin.service";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 const AdminOffers: React.FC = () => {
 
@@ -162,7 +162,7 @@ const AdminOffers: React.FC = () => {
                                             <td className="px-6 py-3 border-b border-color primary-text">{offer.displayName}</td>
                                             <td className="px-6 py-3 border-b border-color primary-text">{offer.category}</td>
                                             <td className="px-6 py-3 border-b border-color primary-text">{offer.locationCountry}</td>
-                                            <td className="px-6 py-3 border-b border-color primary-text">{Util.displayDate(offer.createdAt)}</td>
+                                            <td className="px-6 py-3 border-b border-color primary-text">{DateUtil.displayDate(offer.createdAt)}</td>
                                             <td className="px-6 py-3 border-b border-color primary-text">
                                                 <div className="flex gap-2 justify-end">
                                                     <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleOfferAction(offer)} />

@@ -7,6 +7,7 @@ import ControlLabel from '../controls/ControlLabel';
 import FormError from '../controls/FormError';
 import Input from '../controls/Input';
 import { Utils } from 'global/utils/utils';
+import { StringUtil } from 'global/utils/StringUtil';
 
 function SelectorMulti<T extends SelectorValue = SelectorValue>({
     items,
@@ -105,7 +106,7 @@ function SelectorMulti<T extends SelectorValue = SelectorValue>({
 
     // Filter items based on search text, ignoring diacritics
     const filteredItems = enableSearchText
-        ? items.filter(i => Utils.normalize(i.label).includes(Utils.normalize(searchText)))
+        ? items.filter(i => StringUtil.normalize(i.label).includes(StringUtil.normalize(searchText)))
         : items;
 
     return (

@@ -2,8 +2,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmailConfig } from './EmailConfig';
 import axios from 'axios';
-import { Util } from '@shared/utils/util';
 import { ToastException } from 'global/exceptions/ToastException';
+import { DateUtil } from '@shared/utils/DateUtil';
 
 export interface SendEmailParams {
     to_email: string;
@@ -57,7 +57,7 @@ export class EmailService {
             to_email: email,
             email: this.replyToEmail,
             name: 'FRAT Support',
-            time: Util.displayDateWithTime(new Date()),
+            time: DateUtil.displayDateWithTime(new Date()),
             subject: 'Email Verification',
             message: `Please verify your email by clicking the link:`,
             verification_link: verificationLink,
@@ -72,7 +72,7 @@ export class EmailService {
             to_email: email,
             email: this.replyToEmail,
             name: 'FRAT Support',
-            time: Util.displayDateWithTime(new Date()),
+            time: DateUtil.displayDateWithTime(new Date()),
             subject: 'Password reset',
             message: `Please reset your password by clicking the link:`,
             verification_link: resetLink,

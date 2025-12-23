@@ -5,13 +5,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
-import { Util } from "@shared/utils/util";
 import { EmployeeProfileAvailabilityOptions, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
 import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdmin.service";
 import SelectedProfile from "./SelectedProfile";
 import { userAdminPanelContext } from "../AdminPanelProvider";
 import Button from "global/components/controls/Button";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 const AdminEmployeeProfiles: React.FC = () => {
 
@@ -117,7 +117,7 @@ const AdminEmployeeProfiles: React.FC = () => {
         if (!range?.start) {
             return '';
         }
-        return Util.displayDate(range.start)
+        return DateUtil.displayDate(range.start)
     }
 
     return (
@@ -180,7 +180,7 @@ const AdminEmployeeProfiles: React.FC = () => {
                                                 ? EmployeeProfileAvailabilityOptions.ANYTIME
                                                 : getStartDate(profile)}
                                             </td>
-                                            <td className="px-6 py-3 border-b border-color primary-text">{Util.displayDate(profile.createdAt)}</td>
+                                            <td className="px-6 py-3 border-b border-color primary-text">{DateUtil.displayDate(profile.createdAt)}</td>
 
                                             <td className="px-6 py-3 border-b border-color primary-text">
                                                 <div className="flex gap-2 justify-end">

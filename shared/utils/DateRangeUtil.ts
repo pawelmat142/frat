@@ -1,4 +1,5 @@
 import { DateRange, DateRangeI, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
+import { DateUtil } from "./DateUtil";
 
 export abstract class DateRangeUtil {
 
@@ -17,13 +18,13 @@ export abstract class DateRangeUtil {
         const trimmed = dbRange.replace(/^[\[(]+|[\])]+$/g, '');
         let [start, end] = trimmed.split(',');
         if (adjustEndDate && end) {
-            let endDate = DateRangeUtil.newLocalDate(new Date(end));
+            let endDate = DateUtil.newLocalDate(new Date(end));
             endDate.setDate(endDate.getDate() - 1);
             end = DateRangeUtil.displayLocalDate(endDate);
         }
         return {
             start: start,
-            end: end || DateRangeUtil.displayLocalDate(DateRangeUtil.newLocalDate()),
+            end: end || DateRangeUtil.displayLocalDate(DateUtil.newLocalDate()),
         }
     }
 
@@ -32,12 +33,12 @@ export abstract class DateRangeUtil {
             return null
         }
         const parsed = this.parseDateRangeFromDb(dateRangeI.dateRange);
-        const end = DateRangeUtil.newLocalDate(new Date(parsed.end));
+        const end = DateUtil.newLocalDate(new Date(parsed.end));
         if (params?.adjustEndDate) {
             end.setDate(end.getDate() - 1); // Adjust end date to be inclusive
         }
         return {
-            start: DateRangeUtil.newLocalDate(new Date(parsed.start)),
+            start: DateUtil.newLocalDate(new Date(parsed.start)),
             end: end,
             id: dateRangeI.id,
         };
@@ -66,7 +67,7 @@ export abstract class DateRangeUtil {
     }
 
     public static displayLocalDate = (date: Date): string => {
-        return DateRangeUtil.newLocalDate(date).toISOString().split('T')[0];
+        return DateUtil.newLocalDate(date).toISOString().split('T')[0];
     }
 
     public static newId = (dateRanges: (DateRangeI | DateRange)[]): number => {
@@ -79,9 +80,5 @@ export abstract class DateRangeUtil {
         return maxId + 1;
     }
 
-    public static newLocalDate = (input?: Date | null): Date => {
-        const date = input ? new Date(input) : new Date();
-        // Construct a date at 00:00:00 UTC (not local time)
-        return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-    }
+
 }

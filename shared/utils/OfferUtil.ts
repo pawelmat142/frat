@@ -1,10 +1,10 @@
 import { OfferForm, OfferFormSteps, OfferI } from "@shared/interfaces/OfferI";
 import { DateRange, Position } from "@shared/interfaces/EmployeeProfileI";
-import { PointUtil } from "@shared/utils/PointUtil";
+import { PositionUtil } from "@shared/utils/PositionUtil";
 
 export abstract class OfferUtil {
     public static convertToForm(offer: OfferI): OfferForm {
-        const position: Position | null = offer.point ? PointUtil.fromGeoPoint(offer.point, offer.displayAddress) : null;
+        const position: Position | null = offer.point ? PositionUtil.fromGeoPoint(offer.point, offer.displayAddress) : null;
         const dateRange: DateRange | null = {
             start: offer.startDate ?? null,
             end: offer.endDate ?? null,

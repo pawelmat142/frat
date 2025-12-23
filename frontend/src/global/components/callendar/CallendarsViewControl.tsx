@@ -1,4 +1,3 @@
-import { Utils } from "global/utils/utils";
 import RemoveButton from "../buttons/RemoveButton";
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -35,6 +34,14 @@ const CallendarsViewControl: React.FC<CallendarsViewControlProps> = ({
         }
     }, [selected]);
 
+    const formatDate = (date?: Date | null, placeholder?: string): string => {
+        if (!date) return placeholder || '';
+        const dayFull = t(`callendar.dayOfWeekFull.${date.getDay()}`);
+        const dayNumber = date.getDate();
+        const monthFull = t(`callendar.monthShort.${date.getMonth()}`);
+        return `${dayFull}, ${dayNumber} ${monthFull}`;
+    }
+
     return (
         <div className={`pp-control callendar-view ${selected ? 'focus' : ''}${!date && !selected ? ' empty' : ''}`}>
             <div className="callendar-view-row">
@@ -45,15 +52,15 @@ const CallendarsViewControl: React.FC<CallendarsViewControlProps> = ({
                     onClick={onFocus}
                     className={`callendar-view-input`}
                     ref={inputRef}
-                >{Utils.formatDate(t, date, placeholder)}</div>
+                >{formatDate(date, placeholder)}</div>
                 {!!date && (
                     <div className="callendar-view-btn">
                         <RemoveButton onClick={() => onRemove?.()}></RemoveButton>
                     </div>
                 )}
-            {!!injectRightComponent && (
-                <div className="callendar-view-right-inject">{injectRightComponent}</div>
-            )}
+                {!!injectRightComponent && (
+                    <div className="callendar-view-right-inject">{injectRightComponent}</div>
+                )}
 
             </div>
         </div>
