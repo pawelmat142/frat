@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import { EmployeeProfileI, EmployeeProfileSearchFilters, PROFILE_DEFAULT_SORT_OPTION } from "@shared/interfaces/EmployeeProfileI";
 import { EPUtil } from "employee/EPUtil";
-import { ObjUtil } from "@shared/utils/ObjUtil";
 import { Path } from "../../../path";
 
 export interface EmployeeSearchContextProps {
@@ -24,32 +23,19 @@ const INITIAL_LIMIT = 8;
 const LOAD_MORE_LIMIT = 4;
 
 export const EPDefaultFilters: EmployeeProfileSearchFilters = {
-        freeText: '',
-        skills: [],
-        certificates: [],
-        communicationLanguages: [],
-        locationCountry: null,
-        startDate: null,
-        endDate: null,
-        sortBy: PROFILE_DEFAULT_SORT_OPTION,
-        skip: 0,
-        limit: INITIAL_LIMIT,
-        lat: null,
-        lng: null,
-    };
-
-const toStateFilters = (filters: EmployeeProfileSearchFilters): EmployeeProfileSearchFilters => ({
-    ...EPDefaultFilters,
-    ...filters,
+    freeText: '',
+    skills: [],
+    certificates: [],
+    communicationLanguages: [],
+    locationCountry: null,
+    startDate: null,
+    endDate: null,
+    sortBy: PROFILE_DEFAULT_SORT_OPTION,
     skip: 0,
     limit: INITIAL_LIMIT,
-});
-
-const toSearchFilters = (filters: EmployeeProfileSearchFilters, skip: number, limit: number): EmployeeProfileSearchFilters => ({
-    ...filters,
-    skip,
-    limit,
-});
+    lat: null,
+    lng: null,
+};
 
 const EmployeeSearchContext = createContext<EmployeeSearchContextProps | undefined>(undefined);
 
@@ -63,10 +49,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [filters, setFiltersState] = useState<EmployeeProfileSearchFilters>(() => {
-        const parsed = EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters);
-        return toStateFilters(parsed);
-    });
+    const [filters, setFiltersState] = useState<EmployeeProfileSearchFilters>(EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters))
+
     const [results, setResults] = useState<EmployeeProfileI[]>([]);
     const [loading, setLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
@@ -115,52 +99,55 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         if (!location.pathname.includes(Path.EMPLOYEE_SEARCH)) {
             return
         }
-        const parsed = EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters);
-        const normalized = toStateFilters(parsed);
+        const newFilters = {
+            ...EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters),
+            skip: 0,
+            limit: INITIAL_LIMIT,
+        };
 
-        setFiltersState(normalized);
+        setFiltersState(newFilters);
         setResults([]);
         setHasMore(false);
 
-        const searchFilters = toSearchFilters(normalized, 0, INITIAL_LIMIT);
-        void executeSearch(searchFilters, false);
-    }, [location.search, executeSearch]);
+        void executeSearch(newFilters, false);
+    }, [location.search]);
 
-    const handleSetFilters = useCallback((newFilters: EmployeeProfileSearchFilters) => {
-        const normalized = toStateFilters(newFilters)
-        if (EPUtil.filtersEquals(normalized, filters)) {
+    const handleSetFilters = (newFilters: EmployeeProfileSearchFilters) => {
+        if (EPUtil.filtersEquals(newFilters, filters)) {
             return;
         }
 
-        setFiltersState(normalized);
+        setFiltersState(newFilters);
         setResults([]);
         setHasMore(false);
 
-        const searchStr = EPUtil.prepareUrlParams(normalized, EPDefaultFilters)
+        const searchStr = EPUtil.prepareUrlParams(newFilters, EPDefaultFilters)
         const newUrl = searchStr ? `?${searchStr}` : ''
 
         if (newUrl !== location.search) {
             navigate({ pathname: location.pathname, search: newUrl }, { replace: true })
         } else {
-            const searchFilters = toSearchFilters(normalized, 0, INITIAL_LIMIT)
-            void executeSearch(searchFilters, false)
+            executeSearch(newFilters, false);
         }
-    }, [filters, location.pathname, location.search, executeSearch])
+    }
 
     const resultsLength = results.length;
 
-    const loadMore = useCallback(() => {
+    const loadMore = () => {
         if (loading || loadingMore || !hasMore) {
             return;
         }
+        const searchFilters = {
+            ...filters,
+            skip: resultsLength,
+            limit: LOAD_MORE_LIMIT,
+        }
+        executeSearch(searchFilters, true);
+    };
 
-        const searchFilters = toSearchFilters(filters, resultsLength, LOAD_MORE_LIMIT);
-        void executeSearch(searchFilters, true);
-    }, [loading, loadingMore, hasMore, filters, resultsLength, executeSearch]);
-
-    const resetFilters = useCallback(() => {
+    const resetFilters = () => {
         handleSetFilters(EPDefaultFilters);
-    }, [handleSetFilters]);
+    };
 
     const updateOneProfileInResults = (updatedProfile: EmployeeProfileI) => {
         if (results.map(profile => profile.uid).includes(updatedProfile.uid)) {
