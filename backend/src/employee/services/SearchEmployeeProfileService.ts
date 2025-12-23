@@ -22,28 +22,9 @@ export class SearchEmployeeProfileService {
         const baseQueryBuilder = this.employeeProfileRepo.getQueryBuilder()
             .leftJoin('profile.availabilityDateRanges', 'ranges');
 
-        const skills = SearchUtil.parseArray(filters.skills);
-        const certificates = SearchUtil.parseArray(filters.certificates);
-        const communicationLanguages = SearchUtil.parseArray(filters.communicationLanguages);
-
         let hasFilter = false;
 
-        // Base condition - only ACTIVE profiles
-        baseQueryBuilder.where('profile.status = :status', { status: EmployeeProfileStatuses.ACTIVE });
-
-        if (communicationLanguages?.length) {
-            baseQueryBuilder.andWhere('profile.communication_languages @> :languages', { languages: communicationLanguages });
-            hasFilter = true;
-        }
-        if (certificates?.length) {
-            baseQueryBuilder.andWhere('profile.certificates @> :certificates', { certificates });
-            hasFilter = true;
-        }
-        if (skills?.length) {
-            baseQueryBuilder.andWhere('profile.skills @> :skills', { skills });
-            hasFilter = true;
-        }
-
+        this.addBasicFilters(baseQueryBuilder, filters, hasFilter);
         this.addFuzzySearchFilter(baseQueryBuilder, filters, hasFilter);
         this.addDateRangeFilter(baseQueryBuilder, filters, hasFilter);
         this.addPositionFilter(baseQueryBuilder, filters, hasFilter);
@@ -84,35 +65,29 @@ export class SearchEmployeeProfileService {
     // TODO sortowanie po popularnosci
     // TODO sortowanie po dystansie
 
-    private getCount(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>): Promise<number> {
-        const countQuery = queryBuilder.clone()
-            .select('profile.employee_profile_id')
-            .distinct(true)
-            .orderBy();
-        return countQuery.getCount();
-    }
+
     /** Sorting for ID selection query (raw SQL) */
-    private addSortingForIds(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
+    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
         switch (filters.sortBy) {
             case EmmployeeProfileSearchSortOptions.START_FROM_ASC:
-                queryBuilder
+                idsQueryBuilder
                     .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
                     .orderBy('earliest_date', 'ASC', 'NULLS LAST');
                 break;
 
             case EmmployeeProfileSearchSortOptions.START_FROM_DESC:
-                queryBuilder
+                idsQueryBuilder
                     .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
                     .orderBy('earliest_date', 'DESC', 'NULLS FIRST');
                 break;
 
             case EmmployeeProfileSearchSortOptions.CREATED_AT_DESC:
-                queryBuilder
+                idsQueryBuilder
                     .addSelect('MAX(profile.created_at)', 'sort_created_at')
                     .orderBy('sort_created_at', SearchUtil.DESC);
                 break;
             case EmmployeeProfileSearchSortOptions.CREATED_AT_ASC:
-                queryBuilder
+                idsQueryBuilder
                     .addSelect('MIN(profile.created_at)', 'sort_created_at')
                     .orderBy('sort_created_at', SearchUtil.ASC);
                 break;
@@ -131,13 +106,22 @@ export class SearchEmployeeProfileService {
         queryBuilder.orderBy(`CASE ${orderCase} END`, 'ASC');
     }
 
+    
+    private getCount(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>): Promise<number> {
+        const countQuery = queryBuilder.clone()
+            .select('profile.employee_profile_id')
+            .distinct(true)
+            .orderBy();
+        return countQuery.getCount();
+    }
+
     private addPagination(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
         const skip = Number(filters.skip) || 0;
         const limit = Number(filters.limit) || PROFILES_INITIAL_SEARCH_LIMIT;
         queryBuilder.offset(skip).limit(limit);
     }
 
-    private addPositionFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
+    private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
         const locationCountries = SearchUtil.parseArray(filters.locationCountry);
 
         if (!locationCountries?.length) {
@@ -146,7 +130,7 @@ export class SearchEmployeeProfileService {
         hasFilter = true;
         // Matching logic: ANY overlap between provided list and profile.location_countries OR profile is ALL_EUROPE
         // Uses Postgres array overlap operator '&&'.
-        queryBuilder.andWhere(`(
+        baseQueryBuilder.andWhere(`(
             profile.location_option = :allEuropeOption
             OR profile.location_countries && :locationCountries
         )`, {
@@ -155,10 +139,10 @@ export class SearchEmployeeProfileService {
         });
     }
 
-    private addDateRangeFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
+    private addDateRangeFilter(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
         // Date range filter - use already joined ranges
         if (filters.startDate && filters.endDate) {
-            queryBuilder.andWhere(`(
+            baseQueryBuilder.andWhere(`(
                 profile.availability_option = '${EmployeeProfileAvailabilityOptions.ANYTIME}'
                 OR ranges.date_range @> daterange(:startDate, :endDate, '[]')
                 OR (
@@ -172,7 +156,7 @@ export class SearchEmployeeProfileService {
             hasFilter = true;
         } else if (filters.startDate) {
             // znajdz profile, gdzie start miesci sie w którymś z przedziałów tego profilu 
-            queryBuilder.andWhere(`(
+            baseQueryBuilder.andWhere(`(
                 profile.availability_option = '${EmployeeProfileAvailabilityOptions.ANYTIME}'
                 OR ranges.date_range @> :startDate::date
                 OR (
@@ -201,6 +185,28 @@ export class SearchEmployeeProfileService {
             )`, { freeText });
             hasFilter = true;
         }
+    }
+
+    private addBasicFilters(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
+        const skills = SearchUtil.parseArray(filters.skills);
+        const certificates = SearchUtil.parseArray(filters.certificates);
+        const communicationLanguages = SearchUtil.parseArray(filters.communicationLanguages);
+        // Base condition - only ACTIVE profiles
+        baseQueryBuilder.where('profile.status = :status', { status: EmployeeProfileStatuses.ACTIVE });
+
+        if (communicationLanguages?.length) {
+            baseQueryBuilder.andWhere('profile.communication_languages @> :languages', { languages: communicationLanguages });
+            hasFilter = true;
+        }
+        if (certificates?.length) {
+            baseQueryBuilder.andWhere('profile.certificates @> :certificates', { certificates });
+            hasFilter = true;
+        }
+        if (skills?.length) {
+            baseQueryBuilder.andWhere('profile.skills @> :skills', { skills });
+            hasFilter = true;
+        }
+
     }
 
 }
