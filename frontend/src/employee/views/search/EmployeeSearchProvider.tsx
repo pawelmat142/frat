@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
-import { EmployeeProfileI, EmployeeProfileSearchFilters, PROFILE_DEFAULT_SORT_OPTION } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileI, EmployeeProfileSearchFilters, PROFILE_DEFAULT_SORT_OPTION, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT } from "@shared/interfaces/EmployeeProfileI";
 import { EPUtil } from "employee/EPUtil";
 import { Path } from "../../../path";
 
@@ -19,9 +19,6 @@ export interface EmployeeSearchContextProps {
     updateOneProfileInResults: (updatedProfile: EmployeeProfileI) => void;
 }
 
-const INITIAL_LIMIT = 8;
-const LOAD_MORE_LIMIT = 4;
-
 export const EPDefaultFilters: EmployeeProfileSearchFilters = {
     freeText: '',
     skills: [],
@@ -32,7 +29,7 @@ export const EPDefaultFilters: EmployeeProfileSearchFilters = {
     endDate: null,
     sortBy: PROFILE_DEFAULT_SORT_OPTION,
     skip: 0,
-    limit: INITIAL_LIMIT,
+    limit: PROFILES_INITIAL_SEARCH_LIMIT,
     lat: null,
     lng: null,
 };
@@ -102,7 +99,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const newFilters = {
             ...EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters),
             skip: 0,
-            limit: INITIAL_LIMIT,
+            limit: PROFILES_INITIAL_SEARCH_LIMIT,
         };
 
         setFiltersState(newFilters);
@@ -140,7 +137,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const searchFilters = {
             ...filters,
             skip: resultsLength,
-            limit: LOAD_MORE_LIMIT,
+            limit: PROFILES_LOAD_MORE_SEARCH_LIMIT,
         }
         executeSearch(searchFilters, true);
     };

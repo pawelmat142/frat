@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { EmmployeeProfileSearchSortOptions, EmployeeProfileAvailabilityOptions, EmployeeProfileLocationOptions, EmployeeProfileSearchFilters, EmployeeProfileSearchResponse, EmployeeProfileStatuses } from '@shared/interfaces/EmployeeProfileI';
+import { EmmployeeProfileSearchSortOptions, EmployeeProfileAvailabilityOptions, EmployeeProfileLocationOptions, EmployeeProfileSearchFilters, EmployeeProfileSearchResponse, EmployeeProfileStatuses, PROFILES_INITIAL_SEARCH_LIMIT } from '@shared/interfaces/EmployeeProfileI';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { SelectQueryBuilder } from 'typeorm';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
@@ -18,50 +18,63 @@ export class SearchEmployeeProfileService {
     ) { }
 
     async searchEmployeeProfiles(user: UserI, filters: EmployeeProfileSearchFilters): Promise<EmployeeProfileSearchResponse> {
-        const queryBuilder = this.employeeProfileRepo.getQueryBuilder()
-            .leftJoinAndSelect('profile.availabilityDateRanges', 'ranges');
+        // Step 1: Build base query for filtering (without eagerly loading relations to avoid row multiplication)
+        const baseQueryBuilder = this.employeeProfileRepo.getQueryBuilder()
+            .leftJoin('profile.availabilityDateRanges', 'ranges');
 
         const skills = SearchUtil.parseArray(filters.skills);
         const certificates = SearchUtil.parseArray(filters.certificates);
         const communicationLanguages = SearchUtil.parseArray(filters.communicationLanguages);
 
-        // Location filter (countries overlap + global ALL_EUROPE option)
         let hasFilter = false;
 
         // Base condition - only ACTIVE profiles
-        queryBuilder.where('profile.status = :status', { status: EmployeeProfileStatuses.ACTIVE });
-
+        baseQueryBuilder.where('profile.status = :status', { status: EmployeeProfileStatuses.ACTIVE });
 
         if (communicationLanguages?.length) {
-            queryBuilder.andWhere('profile.communication_languages @> :languages', { languages: communicationLanguages });
+            baseQueryBuilder.andWhere('profile.communication_languages @> :languages', { languages: communicationLanguages });
             hasFilter = true;
         }
         if (certificates?.length) {
-            queryBuilder.andWhere('profile.certificates @> :certificates', { certificates });
+            baseQueryBuilder.andWhere('profile.certificates @> :certificates', { certificates });
             hasFilter = true;
         }
         if (skills?.length) {
-            queryBuilder.andWhere('profile.skills @> :skills', { skills });
+            baseQueryBuilder.andWhere('profile.skills @> :skills', { skills });
             hasFilter = true;
         }
 
-        this.addFuzzySearchFilter(queryBuilder, filters, hasFilter);
+        this.addFuzzySearchFilter(baseQueryBuilder, filters, hasFilter);
+        this.addDateRangeFilter(baseQueryBuilder, filters, hasFilter);
+        this.addPositionFilter(baseQueryBuilder, filters, hasFilter);
 
+        const count: number = await this.getCount(baseQueryBuilder);
 
-        this.addDateRangeFilter(queryBuilder, filters, hasFilter);
-        this.addPositionFilter(queryBuilder, filters, hasFilter);
+        if (!count) {
+            return { profiles: [], count };
+        }
 
-        const countQuery = queryBuilder.clone()
-            .select('profile.employee_profile_id')
-            .distinct(true)
-            .orderBy();
-        
-        const count = await countQuery.getCount();
-        
-        this.addSorting(queryBuilder, filters);
-        this.addPagination(queryBuilder, filters);
+        // Step 3: Get paginated profile IDs (distinct, with sorting)
+        // Using subquery approach to avoid DISTINCT + ORDER BY column mismatch
+        const idsQueryBuilder = baseQueryBuilder.clone()
+            .select('profile.employee_profile_id', 'id')
+            .groupBy('profile.employee_profile_id');
 
-        const results = await queryBuilder.getMany();
+        this.addSortingForIds(idsQueryBuilder, filters);
+        this.addPagination(idsQueryBuilder, filters);
+
+        const idsResult = await idsQueryBuilder.getRawMany();
+        const profileIds = idsResult.map(row => row.id);
+
+        // Step 4: Load full profiles with relations using the IDs
+        const resultsQueryBuilder = this.employeeProfileRepo.getQueryBuilder()
+            .leftJoinAndSelect('profile.availabilityDateRanges', 'ranges')
+            .whereInIds(profileIds);
+
+        this.addSortingById(resultsQueryBuilder, profileIds);
+
+        const results = await resultsQueryBuilder.getMany();
+
         return {
             profiles: results,
             count
@@ -69,54 +82,59 @@ export class SearchEmployeeProfileService {
     }
 
     // TODO sortowanie po popularnosci
-    // TODO sortowanie po start date miesza kolejność - sprawdzić!
     // TODO sortowanie po dystansie
 
-    private addSorting(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
+    private getCount(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>): Promise<number> {
+        const countQuery = queryBuilder.clone()
+            .select('profile.employee_profile_id')
+            .distinct(true)
+            .orderBy();
+        return countQuery.getCount();
+    }
+    /** Sorting for ID selection query (raw SQL) */
+    private addSortingForIds(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
         switch (filters.sortBy) {
             case EmmployeeProfileSearchSortOptions.START_FROM_ASC:
-                // Sortowanie: start date rosnąco 
                 queryBuilder
-                    .addSelect((subQuery) => {
-                        return subQuery
-                            .select('MIN(lower(dr.date_range))', 'earliest')
-                            .from('jh_employee_profile_availability_date_ranges', 'dr')
-                            .where('dr.employee_profile_id = profile.employee_profile_id');
-                    }, 'earliest_date')
-                    .addOrderBy('earliest_date', 'ASC', 'NULLS LAST');
-                break;       
-                
+                    .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
+                    .orderBy('earliest_date', 'ASC', 'NULLS LAST');
+                break;
+
             case EmmployeeProfileSearchSortOptions.START_FROM_DESC:
-                // Sortowanie: start date malejąco
                 queryBuilder
-                    .addSelect((subQuery) => {  
-                        return subQuery
-                            .select('MIN(lower(dr.date_range))', 'earliest')
-                            .from('jh_employee_profile_availability_date_ranges', 'dr')
-                            .where('dr.employee_profile_id = profile.employee_profile_id');
-                    }, 'earliest_date')
-                    .addOrderBy('earliest_date', 'DESC', 'NULLS FIRST');
+                    .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
+                    .orderBy('earliest_date', 'DESC', 'NULLS FIRST');
                 break;
 
             case EmmployeeProfileSearchSortOptions.CREATED_AT_DESC:
-                queryBuilder.addOrderBy('profile.created_at', SearchUtil.DESC);
+                queryBuilder
+                    .addSelect('MAX(profile.created_at)', 'sort_created_at')
+                    .orderBy('sort_created_at', SearchUtil.DESC);
                 break;
             case EmmployeeProfileSearchSortOptions.CREATED_AT_ASC:
-                queryBuilder.addOrderBy('profile.created_at', SearchUtil.ASC);
+                queryBuilder
+                    .addSelect('MIN(profile.created_at)', 'sort_created_at')
+                    .orderBy('sort_created_at', SearchUtil.ASC);
                 break;
         }
     }
 
+    /** Preserve order from paginated IDs query using CASE expression */
+    private addSortingById(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, profileIds: number[]) {
+        if (profileIds.length === 0) return;
+
+        // Preserve original order using CASE WHEN
+        const orderCase = profileIds
+            .map((id, index) => `WHEN profile.employee_profile_id = ${id} THEN ${index}`)
+            .join(' ');
+
+        queryBuilder.orderBy(`CASE ${orderCase} END`, 'ASC');
+    }
+
     private addPagination(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
-        // Using offset/limit instead of skip/take to avoid TypeORM bug with leftJoinAndSelect + orderBy
         const skip = Number(filters.skip) || 0;
-        const limit = Number(filters.limit) || 8;
-        if (skip > 0) {
-            queryBuilder.skip(skip);;
-        }
-        if (limit > 0) {
-            queryBuilder.take(limit)
-        }
+        const limit = Number(filters.limit) || PROFILES_INITIAL_SEARCH_LIMIT;
+        queryBuilder.offset(skip).limit(limit);
     }
 
     private addPositionFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {

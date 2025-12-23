@@ -183,3 +183,6 @@ export const EmmployeeProfileSearchSortOptions = {
 export type EmmployeeProfileSearchSortOption = typeof EmmployeeProfileSearchSortOptions[keyof typeof EmmployeeProfileSearchSortOptions];
 
 export const PROFILE_DEFAULT_SORT_OPTION: EmmployeeProfileSearchSortOption = EmmployeeProfileSearchSortOptions.START_FROM_ASC;
+
+export const PROFILES_INITIAL_SEARCH_LIMIT = 12;
+export const PROFILES_LOAD_MORE_SEARCH_LIMIT = 4;
