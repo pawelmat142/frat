@@ -4,7 +4,7 @@ import { EmployeeProfileService } from "employee/services/EmployeeProfileService
 import { EmployeeProfileI, EmployeeProfileSearchFilters, PROFILE_DEFAULT_SORT_OPTION, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT } from "@shared/interfaces/EmployeeProfileI";
 import { EPUtil } from "employee/EPUtil";
 import { Path } from "../../../path";
-import { LocationService } from "global/services/LocationService";
+import { useUserContext } from "user/UserProvider";
 
 export interface EmployeeSearchContextProps {
     filters: EmployeeProfileSearchFilters;
@@ -46,6 +46,7 @@ export const useEmployeeSearch = () => {
 const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
+    const userCtx = useUserContext();
 
     const [filters, setFiltersState] = useState<EmployeeProfileSearchFilters>(EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters))
 
@@ -101,16 +102,16 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 }
             }
         }
-    }, []);
+    }, [userCtx.position]);
 
     const applyLocationFilterIfNotSelected = async (searchFilters: EmployeeProfileSearchFilters): Promise<EmployeeProfileSearchFilters> => {
         if (!searchFilters.lat && !searchFilters.lng) {
-            const location = await LocationService.getLocation();
-            if (location) {
+            const position = userCtx.position;
+            if (position) {
                 return {
                     ...searchFilters,
-                    lat: location.lat,
-                    lng: location.lng,
+                    lat: position.lat,
+                    lng: position.lng,
                 };
             }
         }

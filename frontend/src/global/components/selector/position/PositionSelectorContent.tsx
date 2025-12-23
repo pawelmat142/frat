@@ -6,8 +6,8 @@ import Button from '../../controls/Button';
 import { BtnModes } from 'global/interface/controls.interface';
 import { MapUtil } from 'global/utils/MapUtil';
 import PositionSelectorSearchbar from './PositionSelectorSearchbar';
-import { LocationService } from 'global/services/LocationService';
 import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
+import { useUserContext } from 'user/UserProvider';
 
 interface PositionSelectorContentProps {
     initialPosition?: GeocodedPosition | null;
@@ -20,6 +20,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     onChange,
     onCancel,
 }) => {
+    const userCtx = useUserContext();
 
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''; // provide via .env.local
 
@@ -48,8 +49,8 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
 
     const initMapByLocation = async () => {
 
-        const location = await LocationService.getLocation();
-        if (!location || !apiKey) {
+        const position = userCtx.position;
+        if (!position || !apiKey) {
             toast.error(t('employeeProfile.error.getGeocodedLocation'));
             onChange(null);
             return;
@@ -58,14 +59,14 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         await GoogleMapsLoader.load(apiKey);
 
         const geoPosition = await MapUtil.getGeocodedLocationn({
-            lat: location.lat,
-            lng: location.lng,
+            lat: position.lat,
+            lng: position.lng,
         }, apiKey);
 
         setSelectedPosition(geoPosition);
         createMap({
-            lat: location.lat,
-            lng: location.lng,
+            lat: position.lat,
+            lng: position.lng,
         });
     };
 

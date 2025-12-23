@@ -1,12 +1,14 @@
 import React, { createContext, useContext, ReactNode } from 'react';
-import { EmployeeProfileI } from '@shared/interfaces/EmployeeProfileI';
+import { EmployeeProfileI, Position } from '@shared/interfaces/EmployeeProfileI';
 import { EmployeeProfileService } from 'employee/services/EmployeeProfileService';
 import { useAuthContext } from 'auth/AuthProvider';
 import { OfferI } from '@shared/interfaces/OfferI';
 import { OffersService } from 'offer/services/OffersService';
+import { toast } from 'react-toastify';
 
 interface UserContextType {
 	employeeProfile: EmployeeProfileI | null;
+	position: Position | null;
 	initEmployeeProfile: () => void;
 	cleanEmployeeProfile: () => void;
 	offers: OfferI[];
@@ -23,7 +25,11 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const [employeeProfile, setEmployeeProfile] = React.useState<EmployeeProfileI | null>(null);
 
 	const [offers, setOffers] = React.useState<OfferI[]>([]);
+
 	const [loading, setLoading] = React.useState(false);
+
+	const [position, setPosition] = React.useState<Position | null>(null);
+	const [positionWatchId, setPositionWatchId] = React.useState<number | null>(null);
 
 	const { me } = useAuthContext();
 
@@ -32,14 +38,54 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			Promise.all([
 				initEmployeeProfile(),
 				initOffers(),
+				initLocation(),
 			]).then(() => {
 				setLoading(false);
 			})
 		} else {
 			cleanEmployeeProfile()
 			cleanOffers()
+			cleanPosition()
 		}
 	}, [me]);
+
+	const initLocation = async () => {
+		try {
+			const status = await navigator.permissions.query({ name: 'geolocation' });
+			if (status.state === 'granted' || status.state === 'prompt') {
+
+				const watchId = navigator.geolocation.watchPosition(
+					(p) => {
+						const _position = {
+							lat: p.coords.latitude,
+							lng: p.coords.longitude,
+						}
+						setPosition(_position)
+					},
+					(error) => {
+						locationErrorToast();
+						console.error("Error fetching position:", error);
+					}
+				);
+				setPositionWatchId(watchId);
+			}
+		} catch (error) {
+			toast.warn('Could not fetch location');
+		}
+	}
+
+	const cleanPosition = () => {
+		setPosition(null);
+		if (positionWatchId) {
+			navigator.geolocation.clearWatch(positionWatchId!);
+		}
+	}
+
+	const locationErrorToast = () => {
+		// TODO transaltion
+		toast.warn('Could not fetch location');
+	}
+
 
 	const initEmployeeProfile = async () => {
 		try {
@@ -92,6 +138,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			cleanOffers: cleanOffers,
 			loading: loading,
 			setLoading: setLoading,
+			position
 		}}>
 			{children}
 		</UserContext.Provider>

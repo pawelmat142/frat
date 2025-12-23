@@ -6,8 +6,6 @@ import EmployeeSearchFilters from "./EmployeeSearchFilters";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
-import { useEffect, useState } from "react";
-import { LocationService } from "global/services/LocationService";
 
 const EmployeeSearchView: React.FC = () => {
 
@@ -15,17 +13,7 @@ const EmployeeSearchView: React.FC = () => {
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
 
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchLocation = async () => {
-            await LocationService.getLocation()
-            setLoading(false)
-        };
-        fetchLocation();
-    }, []);
-
-    if (globalCtx.loading || !globalCtx.dics.languages || loading) {
+    if (globalCtx.loading || !globalCtx.dics.languages) {
         return (
             <div>
                 <Loading></Loading>

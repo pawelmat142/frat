@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useTranslation } from "react-i18next";
 import { useOfferSearch } from "./OfferSearchProvider";
@@ -7,7 +7,6 @@ import OfferSearchFilters from "./OfferSearchFilters";
 import OfferTile from "offer/components/OfferTile";
 import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
-import { LocationService } from "global/services/LocationService";
 
 const OfferSearchView: React.FC = () => {
 
@@ -15,17 +14,7 @@ const OfferSearchView: React.FC = () => {
     const globalCtx = useGlobalContext();
     const ctx = useOfferSearch();
 
-    const [loading, setLoading] = React.useState(true);
-
-    useEffect(() => {
-        const fetchLocation = async () => {
-            await LocationService.getLocation()
-            setLoading(false)
-        };
-        fetchLocation();
-    }, []);
-
-    if (globalCtx.loading || !globalCtx.dics.languages || loading) {
+    if (globalCtx.loading || !globalCtx.dics.languages) {
         return (
             <div>
                 <Loading></Loading>
