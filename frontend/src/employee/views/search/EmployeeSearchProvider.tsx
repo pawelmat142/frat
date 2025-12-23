@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect, use
 import { useLocation, useNavigate } from "react-router-dom";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import { EmployeeProfileI, EmployeeProfileSearchFilters, PROFILE_DEFAULT_SORT_OPTION, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT } from "@shared/interfaces/EmployeeProfileI";
-import { EPUtil } from "employee/EPUtil";
+import { EPUtil } from "@shared/utils/EPUtil";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
 

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 import { useLocation, useNavigate } from "react-router-dom";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { OfferI, OfferSearchFilters } from "@shared/interfaces/OfferI";
-import { OfferUtil } from "offer/OfferUtil";
+import { OfferUtil } from "@shared/utils/OfferUtil";
 import { OffersService } from "offer/services/OffersService";
 import { Path } from "../../../path";
 

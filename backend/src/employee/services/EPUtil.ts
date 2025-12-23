@@ -1,7 +1,7 @@
 import { DateRangeI, EmployeeProfileAvailabilityOptions, EmployeeProfileFormDto, EmployeeProfileLocationOptions, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
 import { UserI } from "@shared/interfaces/UserI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
-import { PointUtil } from "@shared/utils/PointUtil";
+import { PositionUtil } from "@shared/utils/PositionUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
 import { ToastException } from "global/exceptions/ToastException";
 import { DeepPartial } from "typeorm";
@@ -57,7 +57,7 @@ export abstract class EPUtil {
     }
 
     private static fillLocationDataDistance(profile: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): void {
-        profile.point = PointUtil.toGeoPoint({
+        profile.point = PositionUtil.toGeoPoint({
             lat: form.geocodedPosition!.lat,
             lng: form.geocodedPosition!.lng,
         });

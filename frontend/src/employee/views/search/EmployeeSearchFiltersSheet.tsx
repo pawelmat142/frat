@@ -9,7 +9,7 @@ import DateRangeInputViewSelector from "global/components/callendar/DateRangeInp
 import { DateRange, EmmployeeProfileSearchSortOption, EmmployeeProfileSearchSortOptions, EmployeeProfileSearchFilters, Position, PROFILE_DEFAULT_SORT_OPTION } from "@shared/interfaces/EmployeeProfileI";
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import { useLocation } from "react-router-dom";
-import { EPUtil } from "employee/EPUtil";
+import { EPUtil } from "@shared/utils/EPUtil";
 import { FaSearch } from "react-icons/fa";
 import FloatingSelector from "global/components/selector/FloatingSelector";
 

@@ -5,13 +5,14 @@ import { isOneOf } from "@shared/utils/util";
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { EPUtil } from "employee/EPUtil";
+import { EPUtil } from "@shared/utils/EPUtil";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import Flags from "global/components/Flags";
 import { Utils } from "global/utils/utils";
 import { useUserContext } from "user/UserProvider";
 import { DateRange, Place } from "@mui/icons-material";
 import { DateUtil } from "@shared/utils/DateUtil";
+import { PositionUtil } from "@shared/utils/PositionUtil";
 
 interface Props {
     profile: EmployeeProfileI,
@@ -30,7 +31,7 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
 
     Utils.prepareFlagSrcs(profile.communicationLanguages || [], languagesDictionary).forEach(src => srcs.add(src));
 
-    const name = EPUtil.prepareName(profile);
+    const name = EPUtil.displayName(profile);
 
     const getAvailableFromDate = (): string => {
         const range = DateRangeUtil.toDateRange(profile.availabilityDateRanges![0]);
@@ -43,13 +44,13 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
     }
 
     const distance = userCtx.position && profile.point
-        ? EPUtil.getDistanceFromToInMeters(userCtx.position, {
+        ? PositionUtil.getDistanceFromToInMeters(userCtx.position, {
             lat: profile.point.coordinates[1],
             lng: profile.point.coordinates[0]
         })
         : null;
 
-    const formattedDistance = distance ? EPUtil.formatDistance(distance) : null;
+    const formattedDistance = distance ? PositionUtil.displayDistance(distance) : null;
 
     return (
         <div className={`tile ripple${first ? " first" : ""}${last ? " last" : ""}`} onClick={() => goToProfileView(profile)}>

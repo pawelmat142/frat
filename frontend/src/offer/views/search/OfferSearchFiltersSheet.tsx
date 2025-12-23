@@ -9,7 +9,7 @@ import Button from "global/components/controls/Button";
 import FloatingInput from "global/components/controls/FloatingInput";
 import CurrencySelector from "offer/components/CurrencySelector";
 import { useLocation } from "react-router-dom";
-import { OfferUtil } from "offer/OfferUtil";
+import { OfferUtil } from "@shared/utils/OfferUtil";
 import { FaSearch } from "react-icons/fa";
 
 const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ ctx }) => {

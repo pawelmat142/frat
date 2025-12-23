@@ -10,7 +10,7 @@ import { GeoPointService } from './GeoPointService';
 import { DeepPartial } from 'typeorm';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { EmployeeProfilesInitialData } from './EmployeeProfilesInitialData';
-import { PointUtil } from '@shared/utils/PointUtil';
+import { PositionUtil } from '@shared/utils/PositionUtil';
 
 @Injectable()
 export class EmployeeProfileService {
@@ -159,7 +159,7 @@ export class EmployeeProfileService {
     }
 
     private async fillLocationCountries(profile: EmployeeProfileEntity) {
-        const position = PointUtil.fromGeoPoint(profile.point);
+        const position = PositionUtil.fromGeoPoint(profile.point);
         const countires = await this.geoPointService.getCountriesInRadius(
             position.lat,
             position.lng,
