@@ -91,6 +91,21 @@ export class SearchEmployeeProfileService {
                     .addSelect('MIN(profile.created_at)', 'sort_created_at')
                     .addOrderBy('sort_created_at', SearchUtil.ASC);
                 break;
+
+            case EmmployeeProfileSearchSortOptions.DISTANCE_ASC:
+                if (filters.lat && filters.lng) {
+                    idsQueryBuilder
+                        .addSelect(`
+                            ST_Distance(
+                                profile.point::geography,
+                                ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography
+                            )
+                        `, 'distance_meters')
+                        .addOrderBy('distance_meters', SearchUtil.ASC, 'NULLS FIRST')
+                        .setParameter('lng', filters.lng)
+                        .setParameter('lat', filters.lat);
+                }
+                break;
         }
 
         // add views count sorting
