@@ -74,22 +74,6 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     const requestIdRef = useRef(0);
 
-    const filtersEquals = useCallback((f1: EmployeeProfileSearchFilters, f2: EmployeeProfileSearchFilters): boolean => {
-        if (f1.freeText !== f2.freeText) return false;
-        if (f1.locationCountry !== f2.locationCountry) return false;
-        if (f1.startDate?.toISOString() !== f2.startDate?.toISOString()) return false;
-        if (f1.endDate?.toISOString() !== f2.endDate?.toISOString()) return false;
-        if (ObjUtil.arrayChanged(f1.skills, f2.skills)) return false;
-        if (ObjUtil.arrayChanged(f1.certificates, f2.certificates)) return false;
-        if (ObjUtil.arrayChanged(f1.communicationLanguages, f2.communicationLanguages)) return false;
-        if (f1.lat !== f2.lat) return false;
-        if (f1.lng !== f2.lng) return false;
-        if (f1.skip !== f2.skip) return false;
-        if (f1.limit !== f2.limit) return false;
-        if (f1.sortBy !== f2.sortBy) return false;
-        return true;
-    }, []);
-    
     const executeSearch = useCallback(async (searchFilters: EmployeeProfileSearchFilters, append: boolean) => {
         const requestId = ++requestIdRef.current;
         if (append) {
@@ -143,8 +127,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }, [location.search, executeSearch]);
 
     const handleSetFilters = useCallback((newFilters: EmployeeProfileSearchFilters) => {
-        const normalized = toStateFilters(newFilters);
-        if (filtersEquals(normalized, filters)) {
+        const normalized = toStateFilters(newFilters)
+        if (EPUtil.filtersEquals(normalized, filters)) {
             return;
         }
 
@@ -152,16 +136,16 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setResults([]);
         setHasMore(false);
 
-        const searchStr = EPUtil.prepareUrlParams(normalized, EPDefaultFilters);
-        const newUrl = searchStr ? `?${searchStr}` : '';
+        const searchStr = EPUtil.prepareUrlParams(normalized, EPDefaultFilters)
+        const newUrl = searchStr ? `?${searchStr}` : ''
 
         if (newUrl !== location.search) {
-            navigate({ pathname: location.pathname, search: newUrl }, { replace: true });
+            navigate({ pathname: location.pathname, search: newUrl }, { replace: true })
         } else {
-            const searchFilters = toSearchFilters(normalized, 0, INITIAL_LIMIT);
-            void executeSearch(searchFilters, false);
+            const searchFilters = toSearchFilters(normalized, 0, INITIAL_LIMIT)
+            void executeSearch(searchFilters, false)
         }
-    }, [filters, filtersEquals, navigate, location.pathname, location.search, executeSearch]);
+    }, [filters, location.pathname, location.search, executeSearch])
 
     const resultsLength = results.length;
 

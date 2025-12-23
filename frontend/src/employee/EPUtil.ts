@@ -1,4 +1,5 @@
 import { EmmployeeProfileSearchSortOption, EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
+import { ObjUtil } from "@shared/utils/ObjUtil";
 import { FilterUtil } from "global/utils/FilterUtil";
 
 export abstract class EPUtil {
@@ -83,5 +84,21 @@ export abstract class EPUtil {
             result += `${employeeProfile.lastName}`
         }
         return `, (${result})`
+    }
+
+    public static filtersEquals = (f1: EmployeeProfileSearchFilters, f2: EmployeeProfileSearchFilters): boolean => {
+        if (f1.freeText !== f2.freeText) return false;
+        if (f1.locationCountry !== f2.locationCountry) return false;
+        if (f1.startDate?.toISOString() !== f2.startDate?.toISOString()) return false;
+        if (f1.endDate?.toISOString() !== f2.endDate?.toISOString()) return false;
+        if (ObjUtil.arrayChanged(f1.skills, f2.skills)) return false;
+        if (ObjUtil.arrayChanged(f1.certificates, f2.certificates)) return false;
+        if (ObjUtil.arrayChanged(f1.communicationLanguages, f2.communicationLanguages)) return false;
+        if (f1.lat !== f2.lat) return false;
+        if (f1.lng !== f2.lng) return false;
+        if (f1.skip !== f2.skip) return false;
+        if (f1.limit !== f2.limit) return false;
+        if (f1.sortBy !== f2.sortBy) return false;
+        return true;
     }
 }
