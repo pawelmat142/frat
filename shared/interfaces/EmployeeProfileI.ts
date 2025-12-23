@@ -172,8 +172,8 @@ export interface GeocodedPosition {
 }
 
 export const EmmployeeProfileSearchSortOptions = {
-  START_FROM_ASC: 'START_FROM_ASC',
   START_FROM_DESC: 'START_FROM_DESC',
+  START_FROM_ASC: 'START_FROM_ASC',
   CREATED_AT_DESC: 'CREATED_AT_DESC',
   CREATED_AT_ASC: 'CREATED_AT_ASC',
   DISTANCE_ASC: 'DISTANCE_ASC',
@@ -182,7 +182,7 @@ export const EmmployeeProfileSearchSortOptions = {
 
 export type EmmployeeProfileSearchSortOption = typeof EmmployeeProfileSearchSortOptions[keyof typeof EmmployeeProfileSearchSortOptions];
 
-export const PROFILE_DEFAULT_SORT_OPTION: EmmployeeProfileSearchSortOption = EmmployeeProfileSearchSortOptions.START_FROM_ASC;
+export const PROFILE_DEFAULT_SORT_OPTION: EmmployeeProfileSearchSortOption = EmmployeeProfileSearchSortOptions.START_FROM_DESC;
 
 export const PROFILES_INITIAL_SEARCH_LIMIT = 12;
 export const PROFILES_LOAD_MORE_SEARCH_LIMIT = 4;

@@ -51,10 +51,11 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const [results, setResults] = useState<EmployeeProfileI[]>([]);
     const [loading, setLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
-    const [hasMore, setHasMore] = useState(false);
 
     const requestIdRef = useRef(0);
-
+    const resultsLengthRef = useRef(0);
+    const hasMoreRef = useRef(false);
+    
     const executeSearch = useCallback(async (searchFilters: EmployeeProfileSearchFilters, append: boolean) => {
         const requestId = ++requestIdRef.current;
         if (append) {
@@ -70,13 +71,19 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
             }
 
             if (append) {
-                setResults(prev => [...prev, ...result.profiles]);
+                setResults(prev => {
+                    const newResults = [...prev, ...result.profiles];
+                    resultsLengthRef.current = newResults.length;
+                    return newResults;
+                });
             } else {
                 setResults(result.profiles);
+                resultsLengthRef.current = result.profiles.length;
             }
 
             const loaded = searchFilters.skip + result.profiles.length;
-            setHasMore(loaded < result.count);
+            const hasMoreValue = loaded < result.count;
+            hasMoreRef.current = hasMoreValue;
         } catch (error: any) {
             if (error?.name !== 'AbortError') {
                 console.error("Error searching employee profiles:", error);
@@ -98,15 +105,16 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
         const newFilters = {
             ...EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters),
-            skip: 0,
+            skip: 0, // Always start from beginning for new search
             limit: PROFILES_INITIAL_SEARCH_LIMIT,
         };
 
         setFiltersState(newFilters);
         setResults([]);
-        setHasMore(false);
+        resultsLengthRef.current = 0;
+        hasMoreRef.current = false;
 
-        void executeSearch(newFilters, false);
+        executeSearch(newFilters, false);
     }, [location.search]);
 
     const handleSetFilters = (newFilters: EmployeeProfileSearchFilters) => {
@@ -116,7 +124,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         setFiltersState(newFilters);
         setResults([]);
-        setHasMore(false);
+        resultsLengthRef.current = 0;
+        hasMoreRef.current = false;
 
         const searchStr = EPUtil.prepareUrlParams(newFilters, EPDefaultFilters)
         const newUrl = searchStr ? `?${searchStr}` : ''
@@ -128,19 +137,19 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     }
 
-    const resultsLength = results.length;
-
     const loadMore = () => {
-        if (loading || loadingMore || !hasMore) {
+        if (loading || loadingMore || !hasMoreRef.current) {
             return;
         }
+        
         const searchFilters = {
             ...filters,
-            skip: resultsLength,
+            skip: resultsLengthRef.current,
             limit: PROFILES_LOAD_MORE_SEARCH_LIMIT,
         }
+
         executeSearch(searchFilters, true);
-    };
+    }
 
     const resetFilters = () => {
         handleSetFilters(EPDefaultFilters);
@@ -158,10 +167,10 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         <EmployeeSearchContext.Provider value={{
             filters,
             setFilters: handleSetFilters,
+            hasMore: hasMoreRef.current,
             results,
             loading,
             loadingMore,
-            hasMore,
             loadMore,
             setLoading,
             resetFilters,
