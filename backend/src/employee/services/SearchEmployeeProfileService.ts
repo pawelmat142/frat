@@ -109,11 +109,13 @@ export class SearchEmployeeProfileService {
 
     private addPagination(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
         // Using offset/limit instead of skip/take to avoid TypeORM bug with leftJoinAndSelect + orderBy
-        if (filters.skip) {
-            queryBuilder.offset(filters.skip);
+        const skip = Number(filters.skip) || 0;
+        const limit = Number(filters.limit) || 8;
+        if (skip > 0) {
+            queryBuilder.skip(skip);;
         }
-        if (filters.limit) {
-            queryBuilder.limit(filters.limit);
+        if (limit > 0) {
+            queryBuilder.take(limit)
         }
     }
 
