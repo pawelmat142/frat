@@ -78,7 +78,6 @@ const EmployeeSearchFilters: React.FC = () => {
                 {(!!(ctx.filters.lat && ctx.filters.lng) || !!countryFlagSrc) && (
                     <div className="ml-2 mt-1 flex items-center gap-1">
                         <Place fontSize="inherit" className="secondary-text" />
-                        <img className="filters-flag-chip pl-1" src={countryFlagSrc} alt={"flag"} />
                         {!!(ctx.filters.lat && ctx.filters.lng) && (
                             <span className="xs-font">{Utils.formatPosition({ lat: ctx.filters.lat, lng: ctx.filters.lng })}</span>
                         )}

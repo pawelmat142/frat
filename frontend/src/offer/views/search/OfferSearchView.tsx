@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useTranslation } from "react-i18next";
 import { useOfferSearch } from "./OfferSearchProvider";
@@ -7,6 +7,7 @@ import OfferSearchFilters from "./OfferSearchFilters";
 import OfferTile from "offer/components/OfferTile";
 import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
+import { LocationService } from "global/services/LocationService";
 
 const OfferSearchView: React.FC = () => {
 
@@ -14,7 +15,17 @@ const OfferSearchView: React.FC = () => {
     const globalCtx = useGlobalContext();
     const ctx = useOfferSearch();
 
-    if (globalCtx.loading || !globalCtx.dics.languages) {
+    const [loading, setLoading] = React.useState(true);
+
+    useEffect(() => {
+        const fetchLocation = async () => {
+            await LocationService.getLocation()
+            setLoading(false)
+        };
+        fetchLocation();
+    }, []);
+
+    if (globalCtx.loading || !globalCtx.dics.languages || loading) {
         return (
             <div>
                 <Loading></Loading>
@@ -22,7 +33,7 @@ const OfferSearchView: React.FC = () => {
             </div>
         );
     }
-    
+
     const initialLoading = ctx.loading && ctx.results.length === 0;
     const noResults = !initialLoading && ctx.results.length === 0;
     const showEndOfResults = !initialLoading && !ctx.loadingMore && !ctx.hasMore && ctx.results.length > 0;
@@ -52,7 +63,7 @@ const OfferSearchView: React.FC = () => {
                             last={index === (ctx.results?.length ?? 0) - 1}
                         />
                     ))}
-                    <InfiniteScrollEventEmitter emitEvent={ctx.loadMore}/>
+                    <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} />
                 </div>
             )}
 
@@ -70,7 +81,7 @@ const OfferSearchView: React.FC = () => {
 
 
 
-<FloatingScrollButton />
+            <FloatingScrollButton />
         </div>
     );
 

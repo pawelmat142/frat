@@ -8,8 +8,6 @@ import { BtnModes, SelectorItem } from "global/interface/controls.interface";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 import { DateRange, EmmployeeProfileSearchSortOption, EmmployeeProfileSearchSortOptions, EmployeeProfileSearchFilters, Position, PROFILE_DEFAULT_SORT_OPTION } from "@shared/interfaces/EmployeeProfileI";
 import PositionSelector from "global/components/selector/position/PositionSelector";
-import { PositionService } from "global/services/PositionService";
-import { DictionaryService } from "global/services/DictionaryService";
 import { useLocation } from "react-router-dom";
 import { EPUtil } from "employee/EPUtil";
 import { FaSearch } from "react-icons/fa";
@@ -56,49 +54,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
             }
         }
         return null;
-    }
-
-    // Simple in-memory cache for reverse geocoded country codes to reduce API calls
-    const countryCacheRef = useRef<Record<string, string>>({});
-    const [geoLoading, setGeoLoading] = useState(false);
-
-    /**
-     * Attempt to reverse geocode the provided lat/lng and update country filter automatically.
-     * Uses OpenStreetMap Nominatim (public) – consider proxying via backend for production to respect rate limits.
-     */
-    const autofillCountryByPosition = async (position?: Position | null) => {
-        if (!position) {
-            return;
-        }
-
-        const key = `${position.lat.toFixed(3)},${position.lng.toFixed(3)}`; // coarse key to improve cache hits
-        if (countryCacheRef.current[key]) {
-            const filters = { ...localFilters, locationCountry: countryCacheRef.current[key] };
-            setLocalFilters(filters);
-            return;
-        }
-
-        setGeoLoading(true);
-        try {
-            const countryCode = await PositionService.callApiFindCountryByPosition(position);
-            if (countryCode) {
-                const languageCode = await DictionaryService.getLanguageDictionaryCodeByCountryCode(countryCode || '');
-                if (languageCode) {
-                    countryCacheRef.current[key] = languageCode;
-                    const filters = {
-                        ...localFilters,
-                        locationCountry: languageCode,
-                        lat: position.lat,
-                        lng: position.lng
-                    };
-                    setLocalFilters(filters);
-                }
-            }
-        } catch (e) {
-            // Intentionally swallow errors – network issues shouldn't break filter sheet.
-        } finally {
-            setGeoLoading(false);
-        }
     }
 
     const sortOptionItems: SelectorItem<string>[] = Object.keys(EmmployeeProfileSearchSortOptions).map((option: string) => ({
@@ -151,7 +106,6 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                     };
                     setLocalFilters(filters);
                     // Fire and forget reverse geocode (no await to keep UI responsive)
-                    autofillCountryByPosition(position);
                 }}
             ></PositionSelector>
 

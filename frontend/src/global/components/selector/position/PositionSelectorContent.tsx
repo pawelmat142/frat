@@ -6,8 +6,8 @@ import Button from '../../controls/Button';
 import { BtnModes } from 'global/interface/controls.interface';
 import { MapUtil } from 'global/utils/MapUtil';
 import PositionSelectorSearchbar from './PositionSelectorSearchbar';
-
-// TODO uprawnienie do lokalizacji
+import { LocationService } from 'global/services/LocationService';
+import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
 
 interface PositionSelectorContentProps {
     initialPosition?: GeocodedPosition | null;
@@ -20,6 +20,8 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     onChange,
     onCancel,
 }) => {
+
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''; // provide via .env.local
 
     const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(null);
     const [currentPosition, setCurrentPosition] = useState<GeocodedPosition | null>(null);
@@ -45,25 +47,26 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     };
 
     const initMapByLocation = async () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    const coords = {
-                        lat: pos.coords.latitude,
-                        lng: pos.coords.longitude,
-                    };
-                    createMap(coords);
-                },
-                async () => {
-                    const coords = await getDefaultCoords();
-                    createMap(coords);
-                },
-                { timeout: 3000 }
-            );
-        } else {
-            const coords = await getDefaultCoords();
-            createMap(coords);
+
+        const location = await LocationService.getLocation();
+        if (!location || !apiKey) {
+            toast.error(t('employeeProfile.error.getGeocodedLocation'));
+            onChange(null);
+            return;
         }
+
+        await GoogleMapsLoader.load(apiKey);
+
+        const geoPosition = await MapUtil.getGeocodedLocationn({
+            lat: location.lat,
+            lng: location.lng,
+        }, apiKey);
+
+        setSelectedPosition(geoPosition);
+        createMap({
+            lat: location.lat,
+            lng: location.lng,
+        });
     };
 
     const createMap = (position: { lat: number; lng: number }) => {
@@ -113,20 +116,6 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
             console.error('Geocoding error:', error);
             toast.error(t('employeeProfile.error.getGeocodedLocation'));
         }
-    };
-
-    const getDefaultCoords = async (): Promise<{ lat: number; lng: number }> => {
-        try {
-            const res = await fetch('https://ip-api.com/json/');
-            const data = await res.json();
-            if (data && typeof data.lat === 'number' && typeof data.lon === 'number') {
-                return { lat: data.lat, lng: data.lon };
-            }
-        } catch (e) {
-            console.error(e);
-        }
-        // fallback Warszawa
-        return { lat: 52.2297, lng: 21.0122 };
     };
 
     return (

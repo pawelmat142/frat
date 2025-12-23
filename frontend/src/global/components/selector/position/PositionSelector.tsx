@@ -6,9 +6,6 @@ import { GeocodedPosition } from '@shared/interfaces/EmployeeProfileI';
 import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import PositionSelectorContent from './PositionSelectorContent';
 import { Utils } from 'global/utils/utils';
-import { MapUtil } from 'global/utils/MapUtil';
-import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
-
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: GeocodedPosition | null;
@@ -43,33 +40,6 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         }
         if (disabled) {
             myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
-        }
-
-        useEffect(() => {
-            // Load Google Maps script via shared loader to avoid duplicate inserts
-            GoogleMapsLoader.load(apiKey).then(() => initSelectedPosition()).catch((e) => {
-                // loader failed or script couldn't be loaded
-                console.warn('Google Maps load failed', e);
-                initSelectedPosition();
-            });
-        }, []);
-
-
-        const initSelectedPosition = async () => {
-            if (value) {
-                setSelectedPosition(value || null);
-            } else {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(async (pos) => {
-                        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                        const geoPosition = await MapUtil.getGeocodedLocationn(coords, apiKey);
-                        setSelectedPosition(geoPosition);
-                    })
-
-                } else {
-                    setSelectedPosition(null);
-                }
-            };
         }
 
         const handleInputClick = async () => {
