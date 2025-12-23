@@ -5,20 +5,14 @@ import { useOfferSearch } from "./OfferSearchProvider";
 import Loading from "global/components/Loading";
 import OfferSearchFilters from "./OfferSearchFilters";
 import OfferTile from "offer/components/OfferTile";
-import { useInfiniteScroll } from "shared/hooks/useInfiniteScroll";
 import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
+import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
 
 const OfferSearchView: React.FC = () => {
 
     const { t } = useTranslation();
     const globalCtx = useGlobalContext();
     const ctx = useOfferSearch();
-
-    const sentinelRef = useInfiniteScroll({
-        hasMore: ctx.hasMore,
-        isLoading: ctx.loading || ctx.loadingMore,
-        onLoadMore: ctx.loadMore,
-    });
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return (
@@ -58,7 +52,7 @@ const OfferSearchView: React.FC = () => {
                             last={index === (ctx.results?.length ?? 0) - 1}
                         />
                     ))}
-                    <div ref={sentinelRef} className="h-1" aria-hidden="true"></div>
+                    <InfiniteScrollEventEmitter emitEvent={ctx.loadMore}/>
                 </div>
             )}
 

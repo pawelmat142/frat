@@ -4,20 +4,14 @@ import Loading from "global/components/Loading";
 import { useEmployeeSearch } from "./EmployeeSearchProvider";
 import EmployeeSearchFilters from "./EmployeeSearchFilters";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import { useInfiniteScroll } from "shared/hooks/useInfiniteScroll";
 import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
+import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
 
 const EmployeeSearchView: React.FC = () => {
 
     const ctx = useEmployeeSearch()
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
-
-    const sentinelRef = useInfiniteScroll({
-        hasMore: ctx.hasMore,
-        isLoading: ctx.loading || ctx.loadingMore,
-        onLoadMore: ctx.loadMore,
-    });
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return (
@@ -58,7 +52,7 @@ const EmployeeSearchView: React.FC = () => {
                             last={index === (ctx.results?.length ?? 0) - 1}
                         />
                     ))}
-                    <div ref={sentinelRef} className="h-1" aria-hidden="true"></div>
+                    <InfiniteScrollEventEmitter emitEvent={ctx.loadMore}/>
                 </div>
             )}
 
