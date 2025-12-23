@@ -70,7 +70,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				setPositionWatchId(watchId);
 			}
 		} catch (error) {
-			toast.warn('Could not fetch location');
+			locationErrorToast();
 		}
 	}
 
