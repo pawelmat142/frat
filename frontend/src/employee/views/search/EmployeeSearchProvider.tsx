@@ -110,7 +110,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }, [location.search]);
 
     const handleSetFilters = (newFilters: EmployeeProfileSearchFilters) => {
-        if (EPUtil.filtersEquals(newFilters, filters)) {
+        if (EPUtil.filtersEquals(newFilters, filters) && results.length) {
             return;
         }
 

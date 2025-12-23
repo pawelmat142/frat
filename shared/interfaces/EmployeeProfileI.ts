@@ -112,7 +112,7 @@ export interface EmployeeProfileFormDto {
 }
 
 export interface EmployeeProfileSearchFilters {
-  freeText?: string;
+  freeText: string;
 
   communicationLanguages?: string[];
   skills?: string[];

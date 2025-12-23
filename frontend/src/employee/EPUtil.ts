@@ -45,7 +45,7 @@ export abstract class EPUtil {
     public static parseFiltersFromSearch = (search: string, defaultFilters: EmployeeProfileSearchFilters): EmployeeProfileSearchFilters => {
         const params = new URLSearchParams(search);
 
-        const freeText = params.get(EPUtil.FREE_TEXT) || undefined;
+        const freeText = params.get(EPUtil.FREE_TEXT) || '';
         const skills = FilterUtil.getArray(EPUtil.SKILLS, params);
         const certificates = FilterUtil.getArray(EPUtil.CERTIFICATES, params);
         const communicationLanguages = FilterUtil.getArray(EPUtil.COMMUNICATION_LANGUAGES, params);
