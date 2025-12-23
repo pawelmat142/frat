@@ -64,7 +64,7 @@ export class SearchEmployeeProfileService {
 
     // TODO sortowanie po popularnosci
     // TODO sortowanie po dystansie
-
+    // TODO sortowanie po start date jakoś koślawo działa
 
     /** Sorting for ID selection query (raw SQL) */
     private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
@@ -72,26 +72,30 @@ export class SearchEmployeeProfileService {
             case EmmployeeProfileSearchSortOptions.START_FROM_ASC:
                 idsQueryBuilder
                     .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
-                    .orderBy('earliest_date', 'ASC', 'NULLS LAST');
+                    .addOrderBy('earliest_date', SearchUtil.ASC, 'NULLS LAST');
                 break;
 
             case EmmployeeProfileSearchSortOptions.START_FROM_DESC:
                 idsQueryBuilder
                     .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
-                    .orderBy('earliest_date', 'DESC', 'NULLS FIRST');
+                    .addOrderBy('earliest_date', SearchUtil.DESC, 'NULLS FIRST');
                 break;
 
             case EmmployeeProfileSearchSortOptions.CREATED_AT_DESC:
                 idsQueryBuilder
                     .addSelect('MAX(profile.created_at)', 'sort_created_at')
-                    .orderBy('sort_created_at', SearchUtil.DESC);
+                    .addOrderBy('sort_created_at', SearchUtil.DESC);
                 break;
             case EmmployeeProfileSearchSortOptions.CREATED_AT_ASC:
                 idsQueryBuilder
                     .addSelect('MIN(profile.created_at)', 'sort_created_at')
-                    .orderBy('sort_created_at', SearchUtil.ASC);
+                    .addOrderBy('sort_created_at', SearchUtil.ASC);
                 break;
         }
+
+        // add views count sorting
+        idsQueryBuilder
+            .addOrderBy('array_length(profile.views, 1)', SearchUtil.DESC, 'NULLS LAST');
     }
 
     /** Preserve order from paginated IDs query using CASE expression */

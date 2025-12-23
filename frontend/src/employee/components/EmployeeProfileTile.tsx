@@ -66,6 +66,7 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
                         EmployeeProfileAvailabilityOptions.DATE_RANGES,
                         EmployeeProfileAvailabilityOptions.FROM_DATE
                     ], profile.availabilityOption) && <span className="small-font text-right">{t('common.from')} {getAvailableFromDate()}</span>}
+                
                 </div>
 
                 <div className="tile-content-row bottom">
@@ -75,7 +76,10 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
                         <Chips className="ml-5" chips={profile.certificates || []} mode={ChipModes.SECONDARY}></Chips>
                     </div>
 
-                    <div className="">{Util.displayDate(profile.createdAt)}</div>
+                    <div>
+                        <span className="mr-2 small-font">{t('employeeProfile.views')}: {profile.views?.length || 0}</span>
+                        <span>{Util.displayDate(profile.createdAt)}</span>
+                    </div>
 
                 </div>
             </div>
