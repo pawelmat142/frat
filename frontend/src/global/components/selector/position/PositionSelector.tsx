@@ -2,13 +2,14 @@ import { useState, useEffect, forwardRef } from 'react';
 import { InputInterface } from '../../../interface/controls.interface';
 import FloatingLabel from '../../controls/FloatingLabel';
 import FormError from '../../controls/FormError';
-import { GeocodedPosition } from '@shared/interfaces/EmployeeProfileI';
+import { GeocodedPosition, Position } from '@shared/interfaces/EmployeeProfileI';
 import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import PositionSelectorContent from './PositionSelectorContent';
 import { PositionUtil } from '@shared/utils/PositionUtil';
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: GeocodedPosition | null;
+    initialPosition: Position
     onChange?: (position?: GeocodedPosition | null) => void;
 }
 
@@ -19,6 +20,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         disabled,
         label,
         value,
+        initialPosition,
         id,
         required,
         name,
@@ -29,8 +31,6 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
 
         const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(value || null);
         const fullScreenDialogCtx = useFullScreenDialog();
-
-        const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''; // provide via .env.local
 
         let myClass = `pp-control pp-position-selector floating-input ${className}`;
         if (fullWidth) {
@@ -47,7 +47,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
 
             await fullScreenDialogCtx.open({
                 children: <PositionSelectorContent
-                    initialPosition={value}
+                    initialPosition={initialPosition}
                     onChange={(position) => {
                         fullScreenDialogCtx.close();
                         onChange?.(position);

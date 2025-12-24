@@ -13,7 +13,7 @@ import { EPUtil } from "@shared/utils/EPUtil";
 import { FaSearch } from "react-icons/fa";
 import FloatingSelector from "global/components/selector/FloatingSelector";
 
-const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> = ({ ctx }) => {
+const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps, position?: Position | null }> = ({ ctx, position }) => {
 
     const { t } = useTranslation();
     const drawerCtx = useDrawer();
@@ -46,14 +46,14 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
         }
     }
 
-    const preparePosition = (): Position | null => {
+    const preparePosition = (): Position => {
         if (localFilters.lat && localFilters.lng) {
             return {
                 lat: localFilters.lat,
                 lng: localFilters.lng,
             }
         }
-        return null;
+        return position || { lat: 52.2297, lng: 21.0122 };//domyslnie warszawa
     }
 
     const sortOptionItems: SelectorItem<string>[] = Object.keys(EmmployeeProfileSearchSortOptions).map((option: string) => ({
@@ -97,6 +97,7 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps }> 
                 label={t("employeeProfile.form.locationPoint")}
                 className="w-full"
                 value={preparePosition()}
+                initialPosition={preparePosition()}
                 name={""}
                 onChange={(position) => {
                     const filters = {

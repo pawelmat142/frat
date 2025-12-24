@@ -1,16 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { GeocodedPosition } from '@shared/interfaces/EmployeeProfileI';
+import { GeocodedPosition, Position } from '@shared/interfaces/EmployeeProfileI';
 import Button from '../../controls/Button';
 import { BtnModes } from 'global/interface/controls.interface';
 import { MapUtil } from 'global/utils/MapUtil';
 import PositionSelectorSearchbar from './PositionSelectorSearchbar';
 import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
-import { useUserContext } from 'user/UserProvider';
 
 interface PositionSelectorContentProps {
-    initialPosition?: GeocodedPosition | null;
+    initialPosition?: Position;
     onChange: (position: GeocodedPosition | null) => void;
     onCancel: () => void;
 }
@@ -20,8 +19,6 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     onChange,
     onCancel,
 }) => {
-    const userCtx = useUserContext();
-
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''; // provide via .env.local
 
     const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(null);
@@ -38,19 +35,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     }, []);
 
     const initializeMap = async () => {
-        if (!mapRef.current) return;
-
-        if (initialPosition) {
-            createMap(initialPosition);
-            return;
-        }
-        await initMapByLocation();
-    };
-
-    const initMapByLocation = async () => {
-
-        const position = userCtx.position;
-        if (!position || !apiKey) {
+        if (!mapRef.current || !apiKey) {
             toast.error(t('employeeProfile.error.getGeocodedLocation'));
             onChange(null);
             return;
@@ -58,16 +43,18 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
 
         await GoogleMapsLoader.load(apiKey);
 
-        const geoPosition = await MapUtil.getGeocodedLocationn({
-            lat: position.lat,
-            lng: position.lng,
-        }, apiKey);
-
-        setSelectedPosition(geoPosition);
-        createMap({
-            lat: position.lat,
-            lng: position.lng,
-        });
+        if (initialPosition) {
+            const geoPosition = await MapUtil.getGeocodedLocationn({
+                lat: initialPosition.lat,
+                lng: initialPosition.lng,
+            }, apiKey);
+            setSelectedPosition(geoPosition);
+            createMap(initialPosition);
+        } else {
+            // Fallback to default position (Warsaw) if no initial position provided
+            const defaultPosition = { lat: 52.2297, lng: 21.0122 };
+            createMap(defaultPosition);
+        }
     };
 
     const createMap = (position: { lat: number; lng: number }) => {

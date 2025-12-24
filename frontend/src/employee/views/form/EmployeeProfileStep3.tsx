@@ -3,10 +3,11 @@ import { Controller, UseFormSetValue, UseFormWatch, Control, FormState, UseFormR
 import { useTranslation } from "react-i18next";
 import TabSwitcher, { TabSwitcherOption } from "../../components/TabSwitcher";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileLocationOptions, EmployeeProfileLocationOption, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileLocationOptions, EmployeeProfileLocationOption, EmployeeProfileForm, Position } from "@shared/interfaces/EmployeeProfileI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import FloatingInput from "global/components/controls/FloatingInput";
 import PositionSelector from "global/components/selector/position/PositionSelector";
+import { useUserContext } from "user/UserProvider";
 
 interface Props {
     formRef: UseFormReturn<EmployeeProfileForm>;
@@ -15,7 +16,12 @@ interface Props {
 const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
     const { control, setValue, watch, formState } = formRef;
     const { t } = useTranslation();
+    
+    const userCtx = useUserContext();
 
+    const preparePosition = (): Position => {
+        return userCtx.position || { lat: 52.2297, lng: 21.0122 };//domyslnie warszawa
+    }
     // --- EmployeeLocationSection logic inlined below ---
     const locationOption = watch("step3.locationOption");
     const required = FormValidator.required(t);
@@ -97,6 +103,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
                                             name="locationDistance"
                                             className="w-full"
                                             value={field.value}
+                                            initialPosition={preparePosition()}
                                             required
                                             onChange={field.onChange}
                                             error={formState?.errors.step3?.geocodedPosition}

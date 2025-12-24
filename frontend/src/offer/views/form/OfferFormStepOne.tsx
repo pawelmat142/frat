@@ -12,6 +12,7 @@ import { PositionService } from "global/services/PositionService";
 import { DictionaryService } from "global/services/DictionaryService";
 import Loading from "global/components/Loading";
 import FloatingInput from "global/components/controls/FloatingInput";
+import { useUserContext } from "user/UserProvider";
 
 const OfferFormStepOne: React.FC = () => {
 
@@ -20,11 +21,16 @@ const OfferFormStepOne: React.FC = () => {
     const dateRangeStartRequired = FormValidator.dateRangeStartRequired(t);
     const positiveInteger = FormValidator.positiveInterger(t);
     const ctx = useOfferForm();
+    const userCtx = useUserContext();
     const countryCacheRef = useRef<Record<string, string>>({});
     const [geoLoading, setGeoLoading] = useState(false);
 
     const form = ctx.formCtx.getValues().STEP_ONE;
-    
+
+    const preparePosition = (): Position => {
+        return userCtx.position || { lat: 52.2297, lng: 21.0122 };//domyslnie warszawa
+    }
+
     /**
      * Attempt to reverse geocode the provided lat/lng and update country filter automatically.
      * Uses OpenStreetMap Nominatim (public) – consider proxying via backend for production to respect rate limits.
@@ -104,7 +110,7 @@ const OfferFormStepOne: React.FC = () => {
                     )}
                 />
 
-                {geoLoading ? (<Loading></Loading>): (
+                {geoLoading ? (<Loading></Loading>) : (
                     <Controller
                         name="STEP_ONE.position"
                         control={ctx.formCtx.control}
@@ -114,6 +120,7 @@ const OfferFormStepOne: React.FC = () => {
                                 name="STEP_ONE.position"
                                 className="w-full"
                                 value={field.value}
+                                initialPosition={ preparePosition() }
                                 required
                                 onChange={(p) => {
                                     autofillCountryByPosition(p);
@@ -121,7 +128,7 @@ const OfferFormStepOne: React.FC = () => {
                                 }}
                                 error={ctx.formCtx.formState.errors.STEP_ONE?.position}
                             />
-                        )}  
+                        )}
                     />
                 )}
 

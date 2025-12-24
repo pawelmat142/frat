@@ -16,6 +16,7 @@ import { FaLanguage } from "react-icons/fa";
 import { Utils } from "global/utils/utils";
 import { DateRange } from "@shared/interfaces/EmployeeProfileI";
 import { PositionUtil } from "@shared/utils/PositionUtil";
+import { useUserContext } from "user/UserProvider";
 
 const EmployeeSearchFilters: React.FC = () => {
 
@@ -24,6 +25,7 @@ const EmployeeSearchFilters: React.FC = () => {
     const { t } = useTranslation();
     const [freeTextInput, setFreeTextInput] = useState('');
     const ctx = useEmployeeSearch();
+    const userCtx = useUserContext();
     const { open } = useDrawer();
 
     const debouncedFreeTextInput = useDebouncedValue(freeTextInput, 500);
@@ -35,7 +37,7 @@ const EmployeeSearchFilters: React.FC = () => {
     const openDrawer = () => {
         open({
             title: t("common.filters"),
-            children: <EmployeeSearchFiltersSheet ctx={ctx} />,
+            children: <EmployeeSearchFiltersSheet ctx={ctx} position={userCtx.position} />,
             showClose: true,
         });
     }
