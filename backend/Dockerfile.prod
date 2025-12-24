@@ -1,32 +1,42 @@
 
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Instaluj curl
 RUN apk add --no-cache curl
 
 WORKDIR /app
-# Copy backend and shared directories
-COPY backend /app/backend
 
-COPY shared /app/shared
+# Najpierw kopiuj package*.json dla cache'owania npm install
+COPY backend/package*.json ./backend/
 WORKDIR /app/backend
-COPY backend/package*.json ./
-RUN npm ci
+RUN npm ci && npm cache clean --force
+
+# Wróć do głównego katalogu i skopiuj kod
+WORKDIR /app
+COPY backend ./backend
+COPY shared ./shared
+
+# Zbuduj aplikację
+WORKDIR /app/backend
 RUN npm run build
 
-FROM node:18-alpine AS production
+FROM node:20-alpine AS production
 
 # Instaluj curl
 RUN apk add --no-cache curl
 
 WORKDIR /app
-# Copy backend and shared directories
-COPY backend /app/backend
-COPY shared /app/shared
-WORKDIR /app/backend
-COPY backend/package*.json ./
-RUN npm ci --only=production && npm cache clean --force
-COPY --from=builder /app/backend/dist ./dist
 
+# Kopiuj package*.json dla production dependencies
+COPY backend/package*.json ./backend/
+WORKDIR /app/backend
+RUN npm ci --only=production && npm cache clean --force
+
+# Skopiuj shared i zbudowaną aplikację
+WORKDIR /app
+COPY shared ./shared
+COPY --from=builder /app/backend/dist ./backend/dist
+
+WORKDIR /app/backend
 EXPOSE 3100
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/backend/src/main.js"]

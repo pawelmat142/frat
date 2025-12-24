@@ -11,7 +11,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch -r tsconfig-paths/register",
     "start:debug": "nest start --debug --watch -r tsconfig-paths/register",
-    "start:prod": "node -r tsconfig-paths/register dist/backend/src/main.js",
+    "start:prod": "node dist/backend/src/main.js",
     "start:nodemon": "nodemon --legacy-watch --watch src --ext ts --exec \"ts-node -r tsconfig-paths/register src/main.ts\"",
     "start:nodemon-debug": "nodemon --legacy-watch --watch src --ext ts --exec \"node --inspect=0.0.0.0:9229 -r ts-node/register -r tsconfig-paths/register src/main.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

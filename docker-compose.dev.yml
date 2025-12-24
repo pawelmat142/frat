@@ -1,4 +1,8 @@
-version: '3.8'
+
+# zbudowac od nowa obrazy:
+# docker compose down
+# docker compose build --no-cache backend
+# docker compose up -d
 
 services:
   db:
@@ -9,16 +13,15 @@ services:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     ports:
-      - "${DATABASE_PORT}:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d
     networks:
       - jobhigh_network
-    restart: unless-stopped
 
   backend:
-    build:
+    build: 
       context: .
       dockerfile: backend/Dockerfile.dev
     container_name: jobhigh_backend
@@ -31,19 +34,19 @@ services:
       - "9229:9229"
     depends_on:
       - db
-    restart: unless-stopped
     volumes:
       - ./backend:/app/backend
       - ./shared:/app/shared
       - /app/backend/node_modules
     networks:
       - jobhigh_network
-    command: ["npm", "run", "start:nodemon"]
+    command: ["npm", "run", "start:nodemon-debug"]
+    # command: ["npm", "run", "start:nodemon"]
 
   frontend:
     build:
       context: .
-      dockerfile: frontend/Dockerfile.ssl
+      dockerfile: frontend/Dockerfile
       args:
         - REACT_APP_API_URL=${REACT_APP_API_URL}
         - REACT_APP_FIREBASE_API_KEY=${REACT_APP_FIREBASE_API_KEY}
@@ -51,21 +54,12 @@ services:
         - REACT_APP_FIREBASE_PROJECT_ID=${REACT_APP_FIREBASE_PROJECT_ID}
         - REACT_APP_FIREBASE_APP_ID=${REACT_APP_FIREBASE_APP_ID}
     container_name: jobhigh_frontend
-    environment:
-      - DOMAIN_NAME=${DOMAIN_NAME}
     ports:
-      - "80:80"
-      - "443:443"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     depends_on:
       - backend
     networks:
       - jobhigh_network
-    restart: unless-stopped
-    volumes:
-      # Mount Let's Encrypt certificates
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-      # Mount certbot webroot for certificate renewal
-      - /var/www/certbot:/var/www/certbot:ro
 
 volumes:
   postgres_data:
