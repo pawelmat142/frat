@@ -1,6 +1,6 @@
 import { DateRange, Position } from "@shared/interfaces/EmployeeProfileI";
 import { Currency, OfferForm, OfferFormSteps, OfferI, OfferSearchFilters } from "@shared/interfaces/OfferI";
-import { FilterUtil } from "global/utils/FilterUtil";
+import { FilterUtil } from "@shared/utils/FilterUtil";
 import { PositionUtil } from "./PositionUtil";
 
 export abstract class OfferUtil {

@@ -1,6 +1,6 @@
 import { EmmployeeProfileSearchSortOption, EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
-import { FilterUtil } from "global/utils/FilterUtil";
+import { FilterUtil } from "@shared/utils/FilterUtil";
 
 export abstract class EPUtil {
 
