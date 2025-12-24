@@ -20,26 +20,25 @@ services:
   backend:
     build:
       context: .
-      dockerfile: backend/Dockerfile.prod
+      dockerfile: backend/Dockerfile.dev
     container_name: jobhigh_backend
     env_file:
       - .env
-    environment:
-      DATABASE_HOST: db
-      DATABASE_PORT: 5432
-      NODE_ENV: production
-      PORT: 3100
     expose:
       - "3100"
+    ports:
+      - "3100:3100"
+      - "9229:9229"
     depends_on:
       - db
-    networks:
-      - jobhigh_network
     restart: unless-stopped
     volumes:
       - ./backend:/app/backend
       - ./shared:/app/shared
       - /app/backend/node_modules
+    networks:
+      - jobhigh_network
+    command: ["npm", "run", "start:nodemon"]
 
   frontend:
     build:
