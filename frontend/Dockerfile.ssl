@@ -1,0 +1,52 @@
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Build-time arguments
+ARG REACT_APP_API_URL
+ARG REACT_APP_FIREBASE_API_KEY
+ARG REACT_APP_FIREBASE_AUTH_DOMAIN
+ARG REACT_APP_FIREBASE_PROJECT_ID
+ARG REACT_APP_FIREBASE_APP_ID
+
+# Export as environment variables for npm build
+ENV REACT_APP_API_URL=$REACT_APP_API_URL \
+    REACT_APP_FIREBASE_API_KEY=$REACT_APP_FIREBASE_API_KEY \
+    REACT_APP_FIREBASE_AUTH_DOMAIN=$REACT_APP_FIREBASE_AUTH_DOMAIN \
+    REACT_APP_FIREBASE_PROJECT_ID=$REACT_APP_FIREBASE_PROJECT_ID \
+    REACT_APP_FIREBASE_APP_ID=$REACT_APP_FIREBASE_APP_ID
+
+# Copy frontend and shared
+COPY frontend/package*.json ./frontend/
+COPY shared ./shared
+
+# Install dependencies
+WORKDIR /app/frontend
+RUN npm install
+
+# Copy frontend code
+COPY frontend ./
+
+# Build frontend
+RUN npm run build
+
+# Stage 2: Nginx with SSL support
+FROM nginx:alpine
+
+# Install envsubst for environment variable substitution
+RUN apk add --no-cache gettext
+
+# Copy built frontend from builder
+COPY --from=builder /app/frontend/build /usr/share/nginx/html
+
+# Copy nginx SSL configuration template
+COPY frontend/nginx.ssl.conf /etc/nginx/nginx.conf.template
+
+# Copy entrypoint script
+COPY frontend/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+EXPOSE 80 443
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
