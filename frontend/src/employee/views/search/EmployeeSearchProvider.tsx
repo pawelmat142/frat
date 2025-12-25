@@ -37,7 +37,11 @@ export const EPDefaultFilters: EmployeeProfileSearchFilters = {
 const EmployeeSearchContext = createContext<EmployeeSearchContextProps | undefined>(undefined)
 
 const fillPositionAddressIfMissing = (oldFilters: EmployeeProfileSearchFilters, newFilters: EmployeeProfileSearchFilters): void => {
-    if (!newFilters.position?.address && oldFilters.position?.address && newFilters.position?.lat === oldFilters.position?.lat) {
+    if (newFilters.position 
+        && !newFilters.position.address 
+        && oldFilters.position?.address
+        && newFilters.position?.lat === oldFilters.position?.lat
+    ) {
         newFilters.position.address = oldFilters.position.address;
     }
 

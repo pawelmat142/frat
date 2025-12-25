@@ -1,3 +1,6 @@
+# chmod +x install.sh
+# ./install.sh
+
 sudo docker compose down
 # 2. Pobierz najnowszą wersję kodu z repozytorium
 git pull
