@@ -31,11 +31,17 @@ export const EPDefaultFilters: EmployeeProfileSearchFilters = {
     sortBy: PROFILE_DEFAULT_SORT_OPTION,
     skip: 0,
     limit: PROFILES_INITIAL_SEARCH_LIMIT,
-    lat: null,
-    lng: null,
+    position: null
 };
 
-const EmployeeSearchContext = createContext<EmployeeSearchContextProps | undefined>(undefined);
+const EmployeeSearchContext = createContext<EmployeeSearchContextProps | undefined>(undefined)
+
+const fillPositionAddressIfMissing = (oldFilters: EmployeeProfileSearchFilters, newFilters: EmployeeProfileSearchFilters): void => {
+    if (!newFilters.position?.address && oldFilters.position?.address && newFilters.position?.lat === oldFilters.position?.lat) {
+        newFilters.position.address = oldFilters.position.address;
+    }
+
+}
 
 export const useEmployeeSearch = () => {
     const ctx = useContext(EmployeeSearchContext);
@@ -105,13 +111,16 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }, [userCtx.position]);
 
     const applyLocationFilterIfNotSelected = async (searchFilters: EmployeeProfileSearchFilters): Promise<EmployeeProfileSearchFilters> => {
-        if (!searchFilters.lat && !searchFilters.lng) {
+        if (!searchFilters.position) {
             const position = userCtx.position;
             if (position) {
                 return {
                     ...searchFilters,
-                    lat: position.lat,
-                    lng: position.lng,
+                    position: {
+                        lat: position.lat,
+                        lng: position.lng,
+                        address: position.address,
+                    }
                 };
             }
         }
@@ -128,6 +137,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
             limit: PROFILES_INITIAL_SEARCH_LIMIT,
         };
 
+        fillPositionAddressIfMissing(filters, newFilters);
+
         setFiltersState(newFilters);
         setResults([]);
         resultsLengthRef.current = 0;
@@ -135,6 +146,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         executeSearch(newFilters, false);
     }, [location.search]);
+
+    
 
     const handleSetFilters = (newFilters: EmployeeProfileSearchFilters) => {
         if (EPUtil.filtersEquals(newFilters, filters) && results.length) {

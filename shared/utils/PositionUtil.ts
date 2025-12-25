@@ -18,7 +18,7 @@ export abstract class PositionUtil {
     }
 
     public static formatPosition = (position: Position): string => {
-        return `${position.lat.toFixed(4)}, ${position.lng.toFixed(4)}`;
+        return position.address || `${position.lat.toFixed(4)}, ${position.lng.toFixed(4)}`;
     }
 
     public static getDistanceFromToInMeters(from: Position, to: Position): number {

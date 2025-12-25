@@ -1,3 +1,5 @@
+import { Position } from "@shared/interfaces/EmployeeProfileI"
+
 export abstract class FilterUtil {
 
     public static getArray = (key: string, params: URLSearchParams): string[] => {
@@ -10,5 +12,14 @@ export abstract class FilterUtil {
         const value = params.get(name)
         const parsed = value ? parseFloat(value) : null
         return isNaN(parsed as number) ? null : parsed;
+    }
+
+    public static preparePositionParam = (params: URLSearchParams, latKey: string, lngKey: string): Position | null => {
+        const lat = this.prepareNumberParam(params, latKey);
+        const lng = this.prepareNumberParam(params, lngKey);
+        if (!lat || !lng) {
+            return null;
+        }
+        return { lat, lng };
     }
 }

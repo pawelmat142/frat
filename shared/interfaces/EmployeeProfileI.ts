@@ -124,8 +124,7 @@ export interface EmployeeProfileSearchFilters {
   startDate?: Date | null;
   endDate?: Date | null;
 
-  lat?: number | null;
-  lng?: number | null;
+  position?: Position | null;
 
   sortBy: EmmployeeProfileSearchSortOption
   skip: number;

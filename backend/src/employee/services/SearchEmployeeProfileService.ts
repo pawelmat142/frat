@@ -62,11 +62,8 @@ export class SearchEmployeeProfileService {
         };
     }
 
-    // TODO sortowanie po popularnosci
-    // TODO sortowanie po dystansie
     // TODO sortowanie po start date jakoś koślawo działa
 
-    /** Sorting for ID selection query (raw SQL) */
     private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
         switch (filters.sortBy) {
             case EmmployeeProfileSearchSortOptions.START_FROM_ASC:
@@ -93,7 +90,7 @@ export class SearchEmployeeProfileService {
                 break;
 
             case EmmployeeProfileSearchSortOptions.DISTANCE_ASC:
-                if (filters.lat && filters.lng) {
+                if (filters.position) {
                     idsQueryBuilder
                         .addSelect(`
                             ST_Distance(
@@ -102,8 +99,8 @@ export class SearchEmployeeProfileService {
                             )
                         `, 'distance_meters')
                         .addOrderBy('distance_meters', SearchUtil.ASC, 'NULLS FIRST')
-                        .setParameter('lng', filters.lng)
-                        .setParameter('lat', filters.lat);
+                        .setParameter('lng', filters.position.lng)
+                        .setParameter('lat', filters.position.lat);
                 }
                 break;
         }
@@ -142,7 +139,7 @@ export class SearchEmployeeProfileService {
 
     private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
         // Position-based filtering: within 1000km radius OR ALL_EUROPE option
-        if (filters.lat && filters.lng) {
+        if (filters.position) {
             baseQueryBuilder.andWhere(`(
                 profile.location_option = '${EmployeeProfileLocationOptions.ALL_EUROPE}'
                 OR ST_DWithin(
@@ -151,8 +148,8 @@ export class SearchEmployeeProfileService {
                     ${DEFAULT_SEARCH_DISTANCE_M}
                 )
             )`, {
-                lat: filters.lat,
-                lng: filters.lng
+                lat: filters.position.lat,
+                lng: filters.position.lng
             });
             hasFilter = true;
         }

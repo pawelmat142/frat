@@ -94,11 +94,11 @@ const EmployeeSearchFilters: React.FC = () => {
                         </span>
                     </div>)}
 
-                {(!!(ctx.filters.lat && ctx.filters.lng) || !!countryFlagSrc) && (
+                {(!!(ctx.filters.position) || !!countryFlagSrc) && (
                     <div className="ml-2 mt-1 flex items-center gap-1">
                         <Place fontSize="inherit" className="secondary-text" />
-                        {!!(ctx.filters.lat && ctx.filters.lng) && (
-                            <span className="xs-font">{PositionUtil.formatPosition({ lat: ctx.filters.lat, lng: ctx.filters.lng })}</span>
+                        {!!(ctx.filters.position) && (
+                            <span className="xs-font">{PositionUtil.formatPosition(ctx.filters.position)}</span>
                         )}
                     </div>
                 )}

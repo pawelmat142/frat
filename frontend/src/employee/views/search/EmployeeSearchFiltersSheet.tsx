@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { EmployeeSearchContextProps, EPDefaultFilters } from "./EmployeeSearchProvider";
 import { useDrawer } from "global/providers/DrawerProvider";
@@ -47,19 +47,22 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps, po
     }
 
     const preparePosition = (): Position => {
-        if (localFilters.lat && localFilters.lng) {
+        if (localFilters.position) {
             return {
-                lat: localFilters.lat,
-                lng: localFilters.lng,
+                lat: localFilters.position.lat,
+                lng: localFilters.position.lng,
+                address: localFilters.position.address
             }
         }
-        return position || { lat: 52.2297, lng: 21.0122 };//domyslnie warszawa
+        return position || { lat: 52.2297, lng: 21.0122 }
     }
 
     const sortOptionItems: SelectorItem<string>[] = Object.keys(EmmployeeProfileSearchSortOptions).map((option: string) => ({
         value: option,
         label: t('employeeProfile.form.sortOptions.' + option)
     }))
+
+    const initialPosition = preparePosition();
     
     return (
         <div className="flex flex-col px-3 pt-5 gap-1">
@@ -96,17 +99,23 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps, po
             <PositionSelector
                 label={t("employeeProfile.form.locationPoint")}
                 className="w-full"
-                value={preparePosition()}
-                initialPosition={preparePosition()}
+                value={localFilters.position ? {
+                    lat: localFilters.position.lat || 0,
+                    lng: localFilters.position.lng || 0,
+                    fullAddress: localFilters.position.address
+                } : undefined}
+                initialPosition={initialPosition}
                 name={""}
                 onChange={(position) => {
                     const filters = {
                         ...localFilters,
-                        lat: position ? position.lat : null,
-                        lng: position ? position.lng : null
+                        position: position ? {
+                            lat: position.lat,
+                            lng: position.lng,
+                            address: position.fullAddress
+                        } : null
                     };
                     setLocalFilters(filters);
-                    // Fire and forget reverse geocode (no await to keep UI responsive)
                 }}
             ></PositionSelector>
 

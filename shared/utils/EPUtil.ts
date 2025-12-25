@@ -1,4 +1,4 @@
-import { EmmployeeProfileSearchSortOption, EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
+import { EmmployeeProfileSearchSortOption, EmployeeProfileI, EmployeeProfileSearchFilters, Position } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { FilterUtil } from "@shared/utils/FilterUtil";
 
@@ -35,8 +35,10 @@ export abstract class EPUtil {
         const page = Math.floor(f.skip / f.limit) + 1;
         if (page > 1) params.set(EPUtil.PAGE, String(page));
         if (f.limit !== defaultFilters.limit) params.set(EPUtil.LIMIT, String(f.limit));
-        if (f.lat) params.set(EPUtil.LAT, String(f.lat));
-        if (f.lng) params.set(EPUtil.LNG, String(f.lng));
+        if (f.position) {
+            params.set(EPUtil.LAT, String(f.position.lat));
+            params.set(EPUtil.LNG, String(f.position.lng));
+        }
         if (f.sortBy) params.set(EPUtil.SORT_BY, f.sortBy);
         const searchStr = params.toString();
         return searchStr;
@@ -67,8 +69,7 @@ export abstract class EPUtil {
             startDate: startDate,
             endDate: endDate,
             sortBy,
-            lat: FilterUtil.prepareNumberParam(params, EPUtil.LAT),
-            lng: FilterUtil.prepareNumberParam(params, EPUtil.LNG),
+            position: FilterUtil.preparePositionParam(params, EPUtil.LAT, EPUtil.LNG)
         };
     }
 
@@ -94,11 +95,16 @@ export abstract class EPUtil {
         if (ObjUtil.arrayChanged(f1.skills, f2.skills)) return false;
         if (ObjUtil.arrayChanged(f1.certificates, f2.certificates)) return false;
         if (ObjUtil.arrayChanged(f1.communicationLanguages, f2.communicationLanguages)) return false;
-        if (f1.lat !== f2.lat) return false;
-        if (f1.lng !== f2.lng) return false;
+        if (!this.positionEquals(f1.position, f2.position)) return false;
         if (f1.skip !== f2.skip) return false;
         if (f1.limit !== f2.limit) return false;
         if (f1.sortBy !== f2.sortBy) return false;
+        return true;
+    }
+
+    private static positionEquals = (p1?: Position | null, p2?: Position | null): boolean => {
+        if (p1?.lat !== p2?.lat) return false;
+        if (p1?.lng !== p2?.lng) return false;
         return true;
     }
 }
