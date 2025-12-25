@@ -17,6 +17,7 @@ import { Utils } from "global/utils/utils";
 import { DateRange } from "@shared/interfaces/EmployeeProfileI";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import { useUserContext } from "user/UserProvider";
+import Flags from "global/components/Flags";
 
 const EmployeeSearchFilters: React.FC = () => {
 
@@ -94,9 +95,10 @@ const EmployeeSearchFilters: React.FC = () => {
                         </span>
                     </div>)}
 
-                {(!!(ctx.filters.position) || !!countryFlagSrc) && (
+                {(!!(ctx.filters.position) || !!ctx.filters.locationCountry) && (
                     <div className="ml-2 mt-1 flex items-center gap-1">
                         <Place fontSize="inherit" className="secondary-text" />
+                        {!! ctx.filters.locationCountry && (<Flags languages={[ctx.filters.locationCountry!]} size={12} />)}
                         {!!(ctx.filters.position) && (
                             <span className="xs-font">{PositionUtil.formatPosition(ctx.filters.position)}</span>
                         )}
