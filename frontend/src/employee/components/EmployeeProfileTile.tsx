@@ -10,7 +10,7 @@ import Chips, { ChipModes } from "global/components/chips/Chips";
 import Flags from "global/components/Flags";
 import { Utils } from "global/utils/utils";
 import { useUserContext } from "user/UserProvider";
-import { DateRange, Place } from "@mui/icons-material";
+import { DateRange, Place, Visibility } from "@mui/icons-material";
 import { DateUtil } from "@shared/utils/DateUtil";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 
@@ -67,16 +67,26 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
                     </div>
 
                     <div>
-                        <Flags languages={profile.communicationLanguages} />
+                        <Flags languages={profile.communicationLanguages} size={14} />
                     </div>
 
                 </div>
 
-                <div className="tile-content-row mid items-center justify-between w-full">
-
+                <div className="tile-content-row bottom">
+                    <div className="flex">
+                        <Chips chips={profile.skills || []} mode={ChipModes.TERTIARY}></Chips>
+                        <Chips className="ml-5" chips={profile.certificates || []} mode={ChipModes.SECONDARY}></Chips>
+                    </div>
 
                     <div>
-    {/* DATE */}
+                        <span className="small-font">{DateUtil.displayDate(profile.createdAt)}</span>
+                    </div>
+                </div>
+
+                <div className="tile-content-row mid items-center justify-between w-full small-font">
+
+                    <div>
+                        {/* DATE */}
                         <span>
                             <DateRange fontSize="inherit" className="secondary-text mr-1" />
                             <span>
@@ -101,23 +111,14 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
                     </div>
 
                     <div>
-                        <span className="small-font">{t('employeeProfile.views')}: {profile.views?.length || 0}</span>
+                        <Visibility fontSize="inherit" className="secondary-text mr-1" />
+                        <span className="small-font">{profile.views?.length || 0}</span>
                     </div>
 
                 </div>
 
-                <div className="tile-content-row bottom">
 
-                    <div className="flex">
-                        <Chips chips={profile.skills || []} mode={ChipModes.TERTIARY}></Chips>
-                        <Chips className="ml-5" chips={profile.certificates || []} mode={ChipModes.SECONDARY}></Chips>
-                    </div>
 
-                    <div>
-                        <span>{DateUtil.displayDate(profile.createdAt)}</span>
-                    </div>
-
-                </div>
             </div>
 
         </div>

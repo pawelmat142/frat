@@ -13,7 +13,6 @@ $headerHeight: 50px;
 $headerHeightDesktop: 60px;
 
 .header {
-
     background-color: $secondary-bg;
     height: $headerHeight;
     max-height: $headerHeight;
@@ -112,7 +111,7 @@ $tile-edge-radius: 1rem;
     width: 100%;
     background-color: $secondary-bg;
     border-radius: .25rem;
-    padding: 1rem;
+    padding: .5rem .75rem;
     box-shadow: $box-shadow;
 
     &.first {
@@ -133,12 +132,12 @@ $tile-edge-radius: 1rem;
     width: 100%;
 
     &.mid {
-        margin-top: .2rem;
+        margin-top: .3rem;
 
     }
 
     &.bottom {
-        margin-top: .6rem;
+        margin-top: .3rem;
     }
 
 }
