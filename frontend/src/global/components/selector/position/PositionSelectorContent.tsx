@@ -20,6 +20,9 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     onCancel,
 }) => {
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''; // provide via .env.local
+    if (!apiKey) {
+        throw new Error('Google Maps API key is not defined in environment variables.');
+    }
 
     const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(null);
     const [currentPosition, setCurrentPosition] = useState<GeocodedPosition | null>(null);
@@ -59,6 +62,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
 
     const createMap = (position: { lat: number; lng: number }) => {
         if (!mapRef.current) return;
+        
         const map = new google.maps.Map(mapRef.current, {
             center: position,
             zoom: initialZoom,
