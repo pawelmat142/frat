@@ -123,13 +123,17 @@ const EmployeeProfileView: React.FC = () => {
     const profileActivation = async (profile: EmployeeProfileI) => {
         try {
             setLoading(true);
-            const result = await EmployeeProfileService.activation(profile.uid)
+            const result = await EmployeeProfileService.activation()
             setProfile(result);
             if (EmployeeProfileStatuses.ACTIVE === result.status) {
                 toast.success(t('employeeProfile.activationSuccessToast'));
             } else {
                 toast.success(t('employeeProfile.deactivationSuccessToast'));
             }
+        }
+        catch (error) {
+            console.error('Profile activation error:', error);
+            toast.error(t('employeeProfile.activationErrorToast'));
         }
         finally {
             setLoading(false);

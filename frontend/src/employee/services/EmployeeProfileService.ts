@@ -54,9 +54,8 @@ export const EmployeeProfileService = {
 		return httpClient.delete<void>(`/employee-profile`);
 	},
 
-	activation(uid: string): Promise<EmployeeProfileI> {
-		// TODO
-		return httpClient.post<EmployeeProfileI>(`/employee-profile/activation/${uid}`);
+	activation(): Promise<EmployeeProfileI> {
+		return httpClient.patch<EmployeeProfileI>(`/employee-profile/activation`);
 	},
 
 	// TODO

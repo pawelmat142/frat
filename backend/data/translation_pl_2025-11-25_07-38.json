@@ -53,6 +53,7 @@
       "offerViewTitle": "Szczegóły oferty",
       "activationSuccessToast": "Oferta została pomyślnie aktywowana",
       "deactivationSuccessToast": "Oferta została pomyślnie dezaktywowana",
+      "activationErrorToast": "Błąd podczas zmiany statusu aktywacji oferty",
       "deleteSuccessToast": "Oferta została pomyślnie usunięta",
       "deleteConfirmMessage": "Czy na pewno chcesz usunąć tę ofertę? Tej akcji nie można cofnąć.",
       "likeSuccessToast": "Polubiłeś ofertę",

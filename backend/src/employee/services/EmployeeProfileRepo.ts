@@ -21,6 +21,10 @@ export class EmployeeProfileRepo {
         return this.employeeProfileRepository.find(options);
     }
 
+    public getById(employeeProfileId: number): Promise<EmployeeProfileEntity | null> {
+        return this.employeeProfileRepository.findOne({ where: { employeeProfileId } });
+    }
+
     public async findByUid(uid: string): Promise<EmployeeProfileEntity | null> {
         const result = await this.employeeProfileRepository.findOne({ where: { uid } });
         if (result?.availabilityDateRanges) {

@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -79,6 +80,15 @@ export class EmployeeProfileController {
   ): Promise<EmployeeProfileSearchResponse> {
     return this.searchEmployeeProfileService.searchEmployeeProfiles(user, filters);
   }
+  
+  @Get("/notify-profile-view/:profileUid")
+  @UseGuards(JwtAuthGuard)
+  notifyProfileView(
+    @Param('profileUid') profileUid: string,
+    @CurrentUser() user: UserI,
+  ): Promise<void> {
+    return this.employeeProfileService.notifyProfileView(profileUid, user.uid);
+  }
 
   @Delete()
   @UseGuards(JwtAuthGuard)
@@ -88,9 +98,18 @@ export class EmployeeProfileController {
     return this.employeeProfileService.deleteProfileByUid(user);
   }
 
+  @Patch("/activation")
+  @UseGuards(JwtAuthGuard)
+  @Serialize(EmployeeProfileEntity)
+  activation(
+    @CurrentUser() user: UserI,
+  ): Promise<EmployeeProfileI> {
+    return this.employeeProfileService.activation(user);
+  }
 
 
-// TODO przerobic na admin controller
+
+  // TODO przerobic na admin controller
   // ADMIN MANAGEMENT ACTIONS
   @Get("/admin/list")
   @Serialize(EmployeeProfileEntity)
@@ -104,11 +123,11 @@ export class EmployeeProfileController {
   @Serialize(EmployeeProfileEntity)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
-  activation(
+  activationAdmin(
     @Param('id') id: string,
     @Param('status') status: EmployeeProfileStatus
   ): Promise<EmployeeProfileI> {
-    return this.employeeProfileService.activation(Number(id), status);
+    return this.employeeProfileService.activationByAdmin(Number(id), status);
   }
 
   @Delete("/admin/:id")
@@ -137,12 +156,5 @@ export class EmployeeProfileController {
     return this.employeeProfileService.initialLoad();
   }
 
-  @Get("/notify-profile-view/:profileUid")
-  @UseGuards(JwtAuthGuard)
-  notifyProfileView(
-    @Param('profileUid') profileUid: string,
-    @CurrentUser() user: UserI,
-  ): Promise<void> {
-    return this.employeeProfileService.notifyProfileView(profileUid, user.uid);
-  }
+
 }

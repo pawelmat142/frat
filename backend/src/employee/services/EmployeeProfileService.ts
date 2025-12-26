@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
 import { UserI } from '@shared/interfaces/UserI';
@@ -54,7 +54,21 @@ export class EmployeeProfileService implements OnModuleInit, OnModuleDestroy {
         return this.employeeProfileRepo.findAll();
     }
 
-    public activation(id: number, status: EmployeeProfileStatus): Promise<EmployeeProfileEntity> {
+    public async activation(user: UserI): Promise<EmployeeProfileEntity> {
+        const profile = await this.employeeProfileRepo.findByUid(user.uid);
+        if (!profile) {
+            throw new ToastException('employeeProfile.notFound', this);
+        }
+        if (profile.uid !== user.uid) {
+            throw new ForbiddenException()
+        }
+        profile.status = EmployeeProfileStatuses.ACTIVE === profile.status ? EmployeeProfileStatuses.INACTIVE : EmployeeProfileStatuses.ACTIVE;
+        const result = await this.employeeProfileRepo.update(profile);
+        this.logger.log(`Toggled activation for profile ID: ${profile.employeeProfileId}, new status: ${result.status}`);
+        return result;
+    }
+
+    public activationByAdmin(id: number, status: EmployeeProfileStatus): Promise<EmployeeProfileEntity> {
         return this.employeeProfileRepo.activation(id, status);
     }
 
