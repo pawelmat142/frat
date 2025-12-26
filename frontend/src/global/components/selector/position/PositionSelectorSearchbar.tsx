@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import FloatingInput from 'global/components/controls/FloatingInput';
 import { FloatingInputModes } from 'global/interface/controls.interface';
 import { Search } from '@mui/icons-material';
-import { useDebouncedValue } from 'shared/utils/useDebouncedValue';
+import { useDebouncedValue } from 'global/utils/useDebouncedValue';
 import { toast } from 'react-toastify';
 import CloseIcon from '@mui/icons-material/Close';
 

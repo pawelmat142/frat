@@ -11,7 +11,7 @@ import { useEmployeeSearch } from "./EmployeeSearchProvider";
 import { useDrawer } from "global/providers/DrawerProvider";
 import EmployeeSearchFiltersSheet from "./EmployeeSearchFiltersSheet";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import { useDebouncedValue } from "shared/utils/useDebouncedValue";
+import { useDebouncedValue } from "global/utils/useDebouncedValue";
 import { FaLanguage } from "react-icons/fa";
 import { Utils } from "global/utils/utils";
 import { DateRange } from "@shared/interfaces/EmployeeProfileI";

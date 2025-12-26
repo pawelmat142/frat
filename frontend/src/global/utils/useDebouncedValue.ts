@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
  * @returns Debounced value
  */
 
-// TODO move to other file/ refactor structure
 export function useDebouncedValue<T>(value: T, delay: number): T {
     const [debouncedValue, setDebouncedValue] = useState(value);
 

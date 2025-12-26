@@ -11,7 +11,7 @@ import { useOfferSearch } from "./OfferSearchProvider";
 import OfferSearchFiltersSheet from "./OfferSearchFiltersSheet";
 import { FaTags, FaLanguage, FaMapMarkerAlt } from "react-icons/fa";
 import { Currencies } from "@shared/interfaces/OfferI";
-import { useDebouncedValue } from "shared/utils/useDebouncedValue";
+import { useDebouncedValue } from "global/utils/useDebouncedValue";
 import { Utils } from "global/utils/utils";
 
 const OfferSearchFilters: React.FC = () => {
