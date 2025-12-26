@@ -21,6 +21,7 @@ export class UserRepo {
             roles: [UserRoles.USER],
             displayName: createUser.displayName,
             email: createUser.email,
+            telegramChannelId: createUser.telegramChannelId,
             provider: createUser.provider,
             photoURL: createUser.photoURL,
             createdAt: new Date(),
@@ -33,6 +34,10 @@ export class UserRepo {
 
     public getActiveUserByUid(uid: string): Promise<UserEntity | null> {
         return this.userRepository.findOneBy({ uid, status: UserStatuses.ACTIVE });
+    }
+
+    public getByTelegramChannelId(telegramChannelId: string): Promise<UserEntity | null> {
+        return this.userRepository.findOneBy({ telegramChannelId });
     }
 
     public getUserByUid(uid: string): Promise<UserEntity | null> {

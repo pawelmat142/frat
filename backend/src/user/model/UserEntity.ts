@@ -32,6 +32,10 @@ export class UserEntity implements UserI {
   @Expose()
   email: string;
   
+  @Column({ name: 'telegram_channel_id', unique: true, nullable: true })
+  @Expose()
+  telegramChannelId?: string;
+  
   @Column({ name: 'verified', default: false })
   @Expose()
   verified: boolean;

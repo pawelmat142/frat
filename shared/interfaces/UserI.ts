@@ -5,6 +5,7 @@ export interface UserI {
     roles: UserRole[]
     displayName: string
     email: string
+    telegramChannelId?: string
     provider: UserProvider
     verified: boolean
     photoURL?: string
@@ -31,8 +32,7 @@ export type UserStatus = typeof UserStatuses[keyof typeof UserStatuses];
 export const UserProviders = {
     EMAIL: 'EMAIL',
     GOOGLE: 'GOOGLE',
-    FACEBOOK: 'FACEBOOK',
-    APPLE: 'APPLE',
+    TELEGRAM: 'TELEGRAM',
 } as const;
 
 export type UserProvider = typeof UserProviders[keyof typeof UserProviders];

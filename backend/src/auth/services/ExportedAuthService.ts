@@ -2,11 +2,14 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger } from '@nestjs/common';
 import { FirebaseConfig } from './FirebaseConfig';
-import { DecodedIdToken } from 'firebase-admin/auth';
+import { DecodedIdToken, UserRecord } from 'firebase-admin/auth';
 import { UserService } from 'user/services/UserService';
 import { Util } from '@shared/utils/util';
 import { UserI, UserStatuses } from '@shared/interfaces/UserI';
 import { UserUtil } from 'user/UserUtil';
+import { AuthService } from './AuthService';
+import { TelegramUtil } from 'telegram/util/telegram.util';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ExportedAuthService {
@@ -16,8 +19,26 @@ export class ExportedAuthService {
   constructor(
     private readonly firebaseConfig: FirebaseConfig,
     private readonly userService: UserService,
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
   ) { }
 
+  private getSecretKey(): string {
+    const key = this.configService.get<string>('TELEGRAM_SECRET_KEY');
+    if (!key) {
+      throw new Error('TELEGRAM_SECRET_KEY is not configured');
+    }
+    return key;
+  }
+
+   public async registerByTelegram(telegramChannelId: string): Promise<UserRecord> {
+    const credentials = TelegramUtil.prepareCredentials(telegramChannelId, this.getSecretKey());
+     const firebaseUser = await this.authService.registerFormFirebaseUserCreate({
+      email: credentials.email,
+      password: credentials.password,
+     });
+     return firebaseUser;
+   }
 
   public async verifyIdToken(token: string): Promise<DecodedIdToken> {
     return await this.firebaseConfig

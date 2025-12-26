@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import { UserRepo } from './services/UserRepo';
 import { UserController } from './UserController';
 import { UserPublicService } from './services/UserPublicService';
+import { TelegramUserService } from './services/TelegramUserService';
 
 @Module({
     imports: [
@@ -17,12 +18,14 @@ import { UserPublicService } from './services/UserPublicService';
         UserService,
         UserPublicService,
         UserRepo,
+        TelegramUserService
     ],
     controllers: [
         UserController
     ],
     exports: [
         UserService,
+        TelegramUserService,
     ],
 })
 export class UserModule { }

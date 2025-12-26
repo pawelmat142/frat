@@ -12,6 +12,7 @@ import { EmployeeProfileModule } from 'employee/EmployeeProfileModule';
 import { FeedbackModule } from 'feedback/FeedbackModule';
 import { OffersModule } from 'offer/OfferModule';
 import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
+import { TelegramModule } from 'telegram/telegram.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
 
     // AUTH
     AuthModule,
+    TelegramModule,
 
     UserManagementModule,
     EmployeeProfileModule,

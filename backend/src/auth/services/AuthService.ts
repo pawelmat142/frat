@@ -10,9 +10,10 @@ import { PopupException } from 'global/exceptions/PopupException';
 import { EmailService } from 'email/EmailService';
 import { UserService } from 'user/services/UserService';
 import { Util } from '@shared/utils/util';
-import { UserProviders } from '@shared/interfaces/UserI';
+import { UserProviders, UserProvider } from '@shared/interfaces/UserI';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SWWException } from 'global/exceptions/SWWException';
+import { UserEntity } from 'user/model/UserEntity';
 
 @Injectable()
 export class AuthService implements OnModuleInit, OnModuleDestroy {
@@ -39,6 +40,16 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     this.subscription.unsubscribe();
   }
 
+  public async registerFormFirebaseUserCreate(dto: { email: string; password: string }): Promise<UserRecord> {
+    const userRecord: UserRecord = await this.firebaseAuth.createUser({
+      email: dto.email,
+      password: dto.password,
+    });
+
+    this.logger.log('Firebase user created', JSON.stringify(userRecord, null, 2))
+    return userRecord;
+  }
+
   public async registerForm(dto: RegisterFormDto): Promise<void> {
     const validationErrorKey = AuthValidators.validateRegisterForm(dto);
     if (validationErrorKey) {
@@ -46,37 +57,44 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     }
 
     try {
-      const userRecord: UserRecord = await this.firebaseAuth.createUser({
+      const userRecord: UserRecord = await this.registerFormFirebaseUserCreate({
         email: dto.email,
         password: dto.password,
       });
 
-      this.logger.log('Firebase user created', JSON.stringify(userRecord, null, 2))
-
       await this.sendVerificationEmail(dto.email, userRecord.uid);
 
-      await this.createUserEntityByRegisterForm(userRecord, dto)
+      const entity = await this.createUserEntityByRegisterForm(userRecord, dto.email)
 
     } catch (err: any) {
-      try {
-        const msg = AuthValidators.handleFireAuthError(err);
-        if (msg) {
-          throw new PopupException(msg, this)
-        }
-      } catch (error) {
-        throw new SWWException(error, this);
-      }
+      this.handleRegisterError(err);
     }
   }
 
-  private async createUserEntityByRegisterForm(userRecord: UserRecord, dto: RegisterFormDto): Promise<void> {
+  private handleRegisterError(err: any): void {
     try {
-      await this.userService.create({
+      const msg = AuthValidators.handleFireAuthError(err);
+      if (msg) {
+        throw new PopupException(msg, this)
+      }
+    } catch (error) {
+      throw new SWWException(error, this);
+    }
+  }
+
+  private async createUserEntityByRegisterForm(userRecord: UserRecord, email: string): Promise<UserEntity> {
+    return this.createUserEntity(userRecord, email, UserProviders.EMAIL);
+  }
+
+  private async createUserEntity(userRecord: UserRecord, email: string, provider: UserProvider, displayName?: string): Promise<UserEntity> {
+    try {
+      const entity: UserEntity = await this.userService.create({
         uid: userRecord.uid,
-        displayName: userRecord.displayName || Util.trimEmail(dto.email),
-        email: dto.email,
-        provider: UserProviders.EMAIL
+        displayName: displayName || userRecord.displayName || Util.trimEmail(email),
+        email: email,
+        provider: provider
       });
+      return entity;
     } catch (error) {
       this.logger.error('Error creating user entity', error);
       await this.deleteFirebaseUser(userRecord.uid);
@@ -111,17 +129,17 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-    private startSubscription() {
-      this.subscription.add(
-        this.userService.userDeletedEvent.subscribe(async (user) => {
-          try {
-            await this.deleteFirebaseUser(user.uid);
-          } catch (error) {
-            this.logger.error(`Error deleting Firebase user with UID: ${user.uid}`, error);
-          }
-        })
-      );
-    }
+  private startSubscription() {
+    this.subscription.add(
+      this.userService.userDeletedEvent.subscribe(async (user) => {
+        try {
+          await this.deleteFirebaseUser(user.uid);
+        } catch (error) {
+          this.logger.error(`Error deleting Firebase user with UID: ${user.uid}`, error);
+        }
+      })
+    );
+  }
 
   private async deleteFirebaseUser(uid: string): Promise<void> {
     await this.firebaseAuth.deleteUser(uid);

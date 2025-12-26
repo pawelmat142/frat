@@ -5,6 +5,12 @@ export interface RegisterFormDto {
   confirmPassword: string;
 }
 
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  displayName: string;
+}
+
 export interface LoginFormDto {
   email: string;
   password: string;
