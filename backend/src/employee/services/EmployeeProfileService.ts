@@ -128,6 +128,10 @@ export class EmployeeProfileService {
             availabilityOption: form.availabilityOption,
         };
 
+        if (user.avatarRef) {
+            result.avatarRef = user.avatarRef;
+        }
+
         await this.fillLocationData(result, form);
         this.fillAvailabilityData(result, form);
 
