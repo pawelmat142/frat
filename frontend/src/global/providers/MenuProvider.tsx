@@ -8,9 +8,8 @@ import { MenuConfig } from 'global/components/selector/MenuItems';
 import { useBottomSheet } from './BottomSheetProvider';
 import { useGlobalContext } from './GlobalProvider';
 import IconButton from 'global/components/controls/IconButon';
-import { FaBriefcase, FaEllipsisV, FaHome, FaListUl, FaSearch } from 'react-icons/fa';
+import { FaBriefcase, FaEllipsisV, FaHome, FaSearch, FaSignInAlt, FaUserCircle } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 interface NewMenuItem {
     label: string
@@ -63,12 +62,23 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         active: !!matchPath({ path: Path.OFFERS_SEARCH, end: true }, location.pathname),
         onClick: () => navigate(Path.OFFERS_SEARCH),
         icon: <FaBriefcase size={iconSize} />
-    }, {
-        label: t('nav.todo'),
-        active: false,
-        onClick: () => toast.info("TODO"),
-        icon: <FaListUl size={iconSize} />
     }]
+
+    if (me) {
+        items.push({
+            label: t('nav.account'),
+            active: !!matchPath({ path: Path.ACCOUNT, end: true }, location.pathname),
+            onClick: () => navigate(Path.getAccountPath(me.uid)),
+            icon: <FaUserCircle size={iconSize} />
+        });
+    } else {
+        items.push({
+            label: t('signin.submit'),
+            active: !!matchPath({ path: Path.SIGN_IN, end: true }, location.pathname),
+            onClick: () => navigate(Path.SIGN_IN),
+            icon: <FaSignInAlt size={iconSize} />
+        });
+    }
 
 
     const isAdmin = me?.roles.some(role => isOneOf([UserRoles.ADMIN, UserRoles.SUPERADMIN], role));
