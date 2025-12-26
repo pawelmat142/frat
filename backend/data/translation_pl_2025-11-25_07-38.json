@@ -397,9 +397,26 @@
     "success": {
       "avatarUploaded": "Avatar został przesłany"
     },
+    "cloudinary": {
+      "missingConfig": "Brak konfiguracji Cloudinary",
+      "deletionFailed": "Nie udało się usunąć obrazu z Cloudinary",
+      "missingPublicId": "Brak publicznego ID Cloudinary"
+    },
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",
       "searchTitle": "Specjaliści",
+      "profileMenu": "Menu profilu",
+      "activateButton": "Aktywuj profil",   
+      "deactivateButton": "Dezaktywuj profil",
+      "deleteButton": "Usuń profil",
+      "likeButton": "Polub profil",
+      "activationSuccessToast": "Profil pomyślnie aktywowany",
+      "deactivationSuccessToast": "Profil pomyślnie dezaktywowany",
+      "likeSuccessToast": "Polubiłeś profil",
+      "likeRemoveToast": "Usunąłeś polubienie profilu",
+      "deleteConfirmMessage": "Czy na pewno chcesz usunąć ten profil pracownika? Tej akcji nie można cofnąć.",
+      "deleteSuccessToast": "Profil został pomyślnie usunięty",
+      "deleteErrorToast": "Wystąpił błąd podczas usuwania profilu",
       "form": {
         "sortOptions": {
           "title": "Sortuj według",

@@ -48,6 +48,20 @@ export const EmployeeProfileService = {
 
 	notifyProfileView(profileUid: string): Promise<void> {
 		return httpClient.get<void>(`/employee-profile/notify-profile-view/${profileUid}`);
+	},
+
+	deleteProfile(): Promise<void> {
+		return httpClient.delete<void>(`/employee-profile`);
+	},
+
+	activation(uid: string): Promise<EmployeeProfileI> {
+		// TODO
+		return httpClient.post<EmployeeProfileI>(`/employee-profile/activation/${uid}`);
+	},
+
+	// TODO
+	notifyProfileLike(profileUid: string): Promise<string[]> {
+		return httpClient.get<string[]>(`/employee-profile/notify-profile-like/${profileUid}`);
 	}
 
 };

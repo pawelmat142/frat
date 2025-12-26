@@ -61,6 +61,10 @@ export class UserService {
             throw new ToastException('user.error.cannotDelete', this);
         }
         this.logger.log(`Deleted user: ${user.userId} / ${deleted.email}`);
+        // trigger delete firebase user
+        // TODO triggers employee profile deletion
+        // TODO triggers all offers deletion
+        // triggers all assets deletion from Cloudinary
         this._userDeletedEvent$.next(deleted);
     }
 

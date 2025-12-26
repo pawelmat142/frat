@@ -403,9 +403,26 @@
     "success": {
       "avatarUploaded": "Avatar uploaded successfully"
     },
+    "cloudinary": {
+      "missingConfig": "Cloudinary configuration is missing",
+      "deletionFailed": "Failed to delete image from Cloudinary",
+      "missingPublicId": "Cloudinary public ID is missing"
+    },
     "employeeProfile": {
       "edit": "Edit employee profile",
       "searchTitle": "Employees",
+      "profileMenu": "Profile menu",
+      "activateButton": "Activate Profile",
+      "deactivateButton": "Deactivate Profile",
+      "deleteButton": "Delete Profile",
+      "likeButton": "Like Profile",
+      "activationSuccessToast": "Profile activated successfully",
+      "deactivationSuccessToast": "Profile deactivated successfully",
+      "likeSuccessToast": "Liked the profile",
+      "likeRemoveToast": "Unliked the profile",
+      "deleteConfirmMessage": "Are you sure you want to delete this profile? This action cannot be undone.",
+      "deleteSuccessToast": "Profile deleted successfully",
+      "deleteErrorToast": "Error deleting profile",
       "form": {
         "sortOptions": {
           "title": "Sort by",

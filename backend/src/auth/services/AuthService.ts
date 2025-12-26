@@ -1,7 +1,7 @@
 
 /** Created by Pawel Malek **/
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { LoginFormDto, LoginFormResponse, RegisterFormDto } from '@shared/dto/AuthDto';
+import { RegisterFormDto } from '@shared/dto/AuthDto';
 import { AuthValidators } from '@shared/validators/AuthValidator';
 import { ToastException } from 'global/exceptions/ToastException';
 import { FirebaseConfig } from './FirebaseConfig';
@@ -111,17 +111,17 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  private startSubscription() {
-    this.subscription.add(
-      this.userService.userDeletedEvent.subscribe(async (user) => {
-        try {
-          await this.deleteFirebaseUser(user.uid);
-        } catch (error) {
-          this.logger.error(`Error deleting Firebase user with UID: ${user.uid}`, error);
-        }
-      })
-    );
-  }
+    private startSubscription() {
+      this.subscription.add(
+        this.userService.userDeletedEvent.subscribe(async (user) => {
+          try {
+            await this.deleteFirebaseUser(user.uid);
+          } catch (error) {
+            this.logger.error(`Error deleting Firebase user with UID: ${user.uid}`, error);
+          }
+        })
+      );
+    }
 
   private async deleteFirebaseUser(uid: string): Promise<void> {
     await this.firebaseAuth.deleteUser(uid);

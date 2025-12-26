@@ -60,7 +60,9 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         }
     };
 
-    const createMap = (position: { lat: number; lng: number }) => {
+    const createMap = async (position: { lat: number; lng: number }) => {
+        await GoogleMapsLoader.load(apiKey);
+
         if (!mapRef.current) return;
         
         const map = new google.maps.Map(mapRef.current, {

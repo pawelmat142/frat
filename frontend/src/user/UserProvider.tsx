@@ -86,7 +86,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		toast.warn('Could not fetch location');
 	}
 
-
 	const initEmployeeProfile = async () => {
 		try {
 			setLoading(true);

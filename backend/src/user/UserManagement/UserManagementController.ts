@@ -2,7 +2,7 @@
 import {
   Body,
   Controller,
-  Get,
+  Delete,
   Put,
   UseGuards,
   UseInterceptors,
@@ -32,6 +32,13 @@ export class UserManagementController {
     @Body() avatarRef?: AvatarRef
   ): Promise<UserI> {
     return this.userManagementService.updateAvatar(user, avatarRef);
+  }
+
+
+  @Delete('/delete-account')
+  @UseGuards(JwtAuthGuard)
+  deleteAccount(@CurrentUser() user: UserI): Promise<boolean> {
+    return this.userManagementService.deleteAccount(user);
   }
 
 }

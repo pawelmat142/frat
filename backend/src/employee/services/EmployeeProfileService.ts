@@ -30,8 +30,8 @@ export class EmployeeProfileService {
         return this.employeeProfileRepo.activation(id, status);
     }
 
-    public deleteProfile(id: number): Promise<void> {
-        return this.employeeProfileRepo.delete(id);
+    public deleteProfile(employeeProfileId: number): Promise<void> {
+        return this.employeeProfileRepo.delete(employeeProfileId);
     }
 
     public deleteAllProfiles(): Promise<void> {
@@ -95,6 +95,14 @@ export class EmployeeProfileService {
             profile?.views.push(viewerUid);
             await this.employeeProfileRepo.update(profile);
         }
+    }
+
+    async deleteProfileByUid(user: UserI): Promise<void> {
+        const profile = await this.employeeProfileRepo.findByUid(user.uid);
+        if (!profile) {
+            throw new ToastException('employeeProfile.notFound', this);
+        }
+        return this.deleteProfile(profile.employeeProfileId);
     }
 
     private async prepareProfile(user: UserI, form: EmployeeProfileFormDto): Promise<DeepPartial<EmployeeProfileEntity>> {

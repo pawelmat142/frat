@@ -81,6 +81,13 @@ export class EmployeeProfileController {
     return this.searchEmployeeProfileService.searchEmployeeProfiles(user, filters);
   }
 
+  @Delete()
+  @UseGuards(JwtAuthGuard)
+  deleteProfile(
+    @CurrentUser() user: UserI,
+  ): Promise<void> {
+    return this.employeeProfileService.deleteProfileByUid(user);
+  }
 
 
 
@@ -109,7 +116,7 @@ export class EmployeeProfileController {
   @Serialize(EmployeeProfileEntity)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
-  deleteProfile(
+  deleteProfileByAdmin(
     @Param('id') id: string,
   ): Promise<void> {
     return this.employeeProfileService.deleteProfile(Number(id));

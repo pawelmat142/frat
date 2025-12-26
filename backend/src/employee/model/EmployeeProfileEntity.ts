@@ -119,6 +119,10 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Expose()
   @Column({ name: 'jobs', type: 'text', array: true, default: [] })
   jobs: string[];
+  
+  @Expose()
+  @Column({ name: 'likes', type: 'text', array: true, default: [] })
+  likes: string[];
 
 
 

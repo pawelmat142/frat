@@ -90,9 +90,10 @@ export const AvatarService = {
      * Uploads an image file to Cloudinary
      * @param file - The image file to upload
      * @param folder - Optional folder path in Cloudinary (e.g., 'avatars')
+     * @param tags - Optional tags for searching/filtering assets
      * @returns Promise with the upload result containing URL and public ID
      */
-    uploadImage: async (file: File, folder?: string): Promise<AvatarRef> => {
+    uploadImage: async (file: File, folder?: string, tags?: string[]): Promise<AvatarRef> => {
         validateCloudinaryConfig();
 
         const formData = new FormData();
@@ -101,6 +102,10 @@ export const AvatarService = {
         
         if (folder) {
             formData.append('folder', folder);
+        }
+
+        if (tags?.length) {
+            formData.append('tags', tags.join(','));
         }
 
         const { data } = await axios.post<CloudinaryUploadResponse>(
@@ -117,12 +122,13 @@ export const AvatarService = {
     /**
      * Uploads an avatar image with automatic resize/crop
      * @param file - The image file to upload
-     * @param userId - User ID for organizing files
+     * @param uid - User ID for organizing files
      * @returns Promise with the updated user
      */
-    uploadAvatar: async (file: File, userId: string): Promise<UserI> => {
+    uploadAvatar: async (file: File, uid: string): Promise<UserI> => {
         const resizedFile = await AvatarService.resizeAndCropImage(file);
-        const avatarRef = await AvatarService.uploadImage(resizedFile, `avatars/${userId}`);
+        const tags = ['avatar', 'user-avatar', `uid:${uid}`];
+        const avatarRef = await AvatarService.uploadImage(resizedFile, `avatars/${uid}`, tags);
         return UserManagementService.updateAvatar(avatarRef);
     },
 

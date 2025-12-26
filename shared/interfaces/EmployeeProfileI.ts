@@ -38,6 +38,7 @@ export interface EmployeeProfileI {
 
   views: string[];
   jobs: string[];
+  likes: string[];
 
   createdAt: Date;
 }
