@@ -14,6 +14,7 @@ interface CloudinaryUploadResponse {
 
 const CLOUDINARY_CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const CLOUDINARY_UPLOAD_PRESET = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
+const AVATAR_SIZE = 200;
 
 const validateCloudinaryConfig = (): void => {
     if (!CLOUDINARY_CLOUD_NAME) {
@@ -25,6 +26,65 @@ const validateCloudinaryConfig = (): void => {
 };
 
 export const AvatarService = {
+
+    /**
+     * Resizes and center-crops an image to 200x200
+     * @param file - The image file to process
+     * @returns Promise with the processed File
+     */
+    resizeAndCropImage: (file: File): Promise<File> => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            if (!ctx) {
+                reject(new Error('Could not get canvas context'));
+                return;
+            }
+
+            img.onload = () => {
+                canvas.width = AVATAR_SIZE;
+                canvas.height = AVATAR_SIZE;
+
+                // Calculate crop dimensions (center crop to square)
+                const size = Math.min(img.width, img.height);
+                const offsetX = (img.width - size) / 2;
+                const offsetY = (img.height - size) / 2;
+
+                // Draw cropped and resized image
+                ctx.drawImage(
+                    img,
+                    offsetX, offsetY, size, size,  // source (crop from center)
+                    0, 0, AVATAR_SIZE, AVATAR_SIZE  // destination (200x200)
+                );
+
+                canvas.toBlob(
+                    (blob) => {
+                        if (!blob) {
+                            reject(new Error('Could not create blob from canvas'));
+                            return;
+                        }
+                        const resizedFile = new File([blob], file.name, {
+                            type: 'image/jpeg',
+                            lastModified: Date.now(),
+                        });
+                        resolve(resizedFile);
+                    },
+                    'image/jpeg',
+                    0.9 // quality
+                );
+
+                URL.revokeObjectURL(img.src);
+            };
+
+            img.onerror = () => {
+                URL.revokeObjectURL(img.src);
+                reject(new Error('Could not load image'));
+            };
+            img.src = URL.createObjectURL(file);
+        });
+    },
 
     /**
      * Uploads an image file to Cloudinary
@@ -55,43 +115,15 @@ export const AvatarService = {
     },
 
     /**
-     * Uploads an avatar image with automatic transformation
+     * Uploads an avatar image with automatic resize/crop
      * @param file - The image file to upload
      * @param userId - User ID for organizing files
-     * @returns Promise with the upload result
+     * @returns Promise with the updated user
      */
     uploadAvatar: async (file: File, userId: string): Promise<UserI> => {
-        const avatarRef = await AvatarService.uploadImage(file, `avatars/${userId}`);
+        const resizedFile = await AvatarService.resizeAndCropImage(file);
+        const avatarRef = await AvatarService.uploadImage(resizedFile, `avatars/${userId}`);
         return UserManagementService.updateAvatar(avatarRef);
-    },
-
-    /**
-     * Generates a Cloudinary URL with transformations
-     * @param publicId - The public ID of the image
-     * @param options - Transformation options
-     * @returns Transformed image URL
-     */
-    getTransformedUrl: (
-        publicId: string,
-        options: { width?: number; height?: number; crop?: string } = {}
-    ): string => {
-        validateCloudinaryConfig();
-
-        const { width = 200, height = 200, crop = 'fill' } = options;
-        const transformations = `w_${width},h_${height},c_${crop},g_face,q_auto,f_auto`;
-
-        return `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${transformations}/${publicId}`;
-    },
-
-    /**
-     * Deletes an image from Cloudinary (requires backend endpoint for signed deletion)
-     * Note: For security, deletion should be done via backend
-     * @param publicId - The public ID of the image to delete
-     */
-    deleteImage: async (publicId: string): Promise<void> => {
-        // Deletion requires signed request - should be implemented on backend
-        console.warn('Image deletion should be handled by backend for security');
-        throw new Error('Delete operation requires backend implementation');
     },
 
 }

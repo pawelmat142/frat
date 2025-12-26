@@ -15,8 +15,6 @@ export class UserManagementService {
         private readonly cloudinaryService: CloudinaryService,
     ) { }
 
-    // TODO dodać optymalizacje foto - zmniejszanie rozmiaru itp
-    
     public async updateAvatar(user: UserI, avatarRef: AvatarRef): Promise<UserI> {
         const userBefore = await this.userService.getUserByUid(user.uid);
         

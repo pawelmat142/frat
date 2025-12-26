@@ -58,7 +58,7 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
         }
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -69,10 +69,14 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
             return;
         }
 
+        setIsUploading(true);
+        const optimizedFile = await AvatarService.resizeAndCropImage(file);
+        setIsUploading(false);
+
         // Show preview and store file for later upload
-        const previewUrl = URL.createObjectURL(file);
+        const previewUrl = URL.createObjectURL(optimizedFile);
         setPreviewSrc(previewUrl);
-        setPendingFile(file);
+        setPendingFile(optimizedFile);
         e.target.value = '';
     };
 
