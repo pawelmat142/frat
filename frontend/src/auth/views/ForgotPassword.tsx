@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import Input from "global/components/controls/Input";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +8,7 @@ import { AuthService } from "auth/services/AuthService";
 import { toast } from "react-toastify";
 import Logo from "global/components/Logo";
 import IconButton from "global/components/controls/IconButon";
+import FloatingInput from "global/components/controls/FloatingInput";
 
 const ForgotPassword: React.FC = () => {
     const { t } = useTranslation();
@@ -35,17 +35,10 @@ const ForgotPassword: React.FC = () => {
     return (
         <div className="form-view relative">
 
-            <div className="mt-10 mb-10 mx-auto flex justify-center">
-                <IconButton onClick={() => { navigate("/") }} icon={<Logo />} />
-            </div>
-            <form className="" onSubmit={handleSubmit}>
-
-            <h2 className="form-header">
-                {t("signin.forgotPasswordTitle")}
-            </h2>
+            <form className="mt-10" onSubmit={handleSubmit}>
 
                 <div className="flex flex-col gap-5 md:gap-5">
-                    <Input
+                    <FloatingInput
                         name="email"
                         label={t("signin.email")}
                         type="email"

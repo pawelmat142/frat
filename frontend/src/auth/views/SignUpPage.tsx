@@ -69,17 +69,7 @@ const SignUpPage: React.FC = () => {
     return (
         <div className="form-view relative">
 
-            <div className="mt-10 mb-10 mx-auto flex justify-center">
-                <IconButton onClick={() => { navigate(Path.HOME) }} icon={
-                    <Logo />
-                }></IconButton>
-            </div>
-
-            <form className="" onSubmit={handleSubmit}>
-
-                <h2 className="form-header">
-                    {t("signup.title")}
-                </h2>
+            <form className="mt-10" onSubmit={handleSubmit}>
 
                 {isDevMode && (
                     <div className="flex items-center justify-end">

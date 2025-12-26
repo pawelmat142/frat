@@ -8,10 +8,8 @@ import { AuthService } from "auth/services/AuthService";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../path";
 import Loading from "global/components/Loading";
-import Logo from "global/components/Logo";
 import { FaPlus } from "react-icons/fa";
 import GoogleIcon from "global/components/icons/GoogleIcon";
-import IconButton from "global/components/controls/IconButon";
 import FloatingInput from "global/components/controls/FloatingInput";
 import { Utils } from "global/utils/utils";
 
@@ -64,17 +62,7 @@ const SignInPage: React.FC = () => {
     return (
         <div className="form-view relative">
 
-            <div className="mt-10 mb-5 mx-auto flex justify-center">
-                <IconButton onClick={() => { navigate(Path.HOME) }} icon={
-                    <Logo />
-                }></IconButton>
-            </div>
-
-            <form className="" onSubmit={handleSubmit}>
-                <h2 className="form-header">
-                    {t("signin.title")}
-                </h2>
-
+            <form className="mt-10" onSubmit={handleSubmit}>
                 {isDevMode && (
                     <div className="flex items-center justify-end">
                         <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>

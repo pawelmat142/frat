@@ -16,6 +16,18 @@ export const STATES: { [key: string]: HeaderState } = {
         leftBtn: <HeaderBackBtn/>,
         title: 'employeeProfile.form.title',
     },
+    [Path.SIGN_IN]: {
+        leftBtn: <HeaderBackBtn/>,
+        title: 'signin.title',
+    },
+    [Path.SIGN_UP]: {
+        leftBtn: <HeaderBackBtn/>,
+        title: 'signup.title',
+    },
+    [Path.FORGOT_PASSWORD]: {
+        leftBtn: <HeaderBackBtn/>,
+        title: 'signin.forgotPasswordTitle',
+    },
     [Path.EMPLOYEE_SEARCH]: {
         leftBtn: <HeaderBackBtn/>,
         title: 'employeeProfile.searchTitle',
