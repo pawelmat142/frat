@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, Logger } from "@nestjs/common";
+import { ForbiddenException, Injectable, Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { OffersRepo } from "./OffersRepo";
 import { OfferForm, OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
 import { UserI } from "@shared/interfaces/UserI";
@@ -6,16 +6,46 @@ import { CreateOfferService } from "./CreateOfferService";
 import { Util } from "@shared/utils/util";
 import { ToastException } from "global/exceptions/ToastException";
 import { OffersInitialData } from "./OffersInitialData";
+import { Subscription } from "rxjs/internal/Subscription";
+import { UserService } from "user/services/UserService";
 
 @Injectable()
-export class OffersService {
+export class OffersService implements OnModuleInit, OnModuleDestroy {
 
     private readonly logger = new Logger(this.constructor.name);
+
+    private readonly subscription = new Subscription();
 
     constructor(
         private readonly offersRepo: OffersRepo,
         private readonly createOfferService: CreateOfferService,
+        private readonly userService: UserService,
     ) { }
+
+    onModuleInit() {
+        this.startSubscription();
+    }
+
+    onModuleDestroy() {
+        this.subscription.unsubscribe();
+    }
+
+    private startSubscription() {
+        this.subscription.add(
+            this.userService.userDeletedEvent.subscribe(async (user) => {
+                if (user) {
+                    const offers = await this.listOffersByUser(user);
+                    if (offers?.length) {
+                        for (const offer of offers) {
+                            await this.deleteOfferFn(offer.offerId, user.uid);
+                        }
+                    } else {
+                        this.logger.log(`No offers found for deleted user UID: ${user.uid}`);
+                    }
+                }
+            })
+        );
+    }
 
     public getOfferById(offerId: number): Promise<OfferI> {
         return this.offersRepo.getById(offerId);

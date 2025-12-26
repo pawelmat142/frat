@@ -10,6 +10,7 @@ import { DictionariesModule } from 'admin/dictionaries/DictionariesModule';
 import { GeoPointService } from './services/GeoPointService';
 import { SearchEmployeeProfileService } from './services/SearchEmployeeProfileService';
 import { DateRangeEntity } from './model/DateRangeEntity';
+import { UserModule } from 'user/UserModule';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { DateRangeEntity } from './model/DateRangeEntity';
 
         AuthModule,
         DictionariesModule,
+        UserModule
     ],
     providers: [
         EmployeeProfileRepo,

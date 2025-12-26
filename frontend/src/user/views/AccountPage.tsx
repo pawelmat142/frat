@@ -12,7 +12,10 @@ import { UserPublicService } from "user/services/UserPublicService";
 import AvatarTile from "user/components/AvatarTile";
 import { Path } from "../../path";
 import { BtnModes } from "global/interface/controls.interface";
-import { FaBriefcase, FaIdCard } from "react-icons/fa";
+import { FaBriefcase, FaIdCard, FaTrash } from "react-icons/fa";
+import { useConfirm } from "global/providers/PopupProvider";
+import { UserManagementService } from "user/services/UserManagementService";
+import { FirebaseAuth } from "auth/services/FirebaseAuth";
 
 const AccountPage: React.FC = () => {
 
@@ -22,6 +25,7 @@ const AccountPage: React.FC = () => {
     const { uid } = useParams<{ uid?: string }>();
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const confirm = useConfirm()
 
     const [localLoading, setLocalLoading] = useState(true);
 
@@ -82,6 +86,29 @@ const AccountPage: React.FC = () => {
         }
     };
 
+    const deleteAccount = async () => {
+        const confirmed = await confirm({
+            title: t('account.deleteAccountConfirmTitle'),
+            message: t('account.deleteAccountConfirmMessage'),
+        });
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            setLocalLoading(true);
+            await UserManagementService.deleteAccount();
+            FirebaseAuth.getAuth().signOut()
+            toast.success(t('account.deleteAccountSuccessToast'));
+        } catch (error) {
+            console.error( error);
+            toast.error(t('account.deleteAccountFailed'));
+        } finally {
+            setLocalLoading(false);
+        }
+    }
+
     const goToMyOffers = () => {
         navigate(Path.getOffersPath(user.uid));
     };
@@ -125,6 +152,15 @@ const AccountPage: React.FC = () => {
                     >
                         <FaBriefcase className="mr-2" />
                         {t('account.offers')} ({offers?.length || 0})
+                    </Button>
+
+                    <Button
+                        fullWidth
+                        mode={BtnModes.ERROR_TXT}
+                        onClick={deleteAccount}
+                    >
+                        <FaTrash className="mr-2" />
+                        {t('account.deleteAccountConfirmTitle')}
                     </Button>
                 </div>
             )}

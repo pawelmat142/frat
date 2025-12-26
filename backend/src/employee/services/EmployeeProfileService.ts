@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { EmployeeProfileRepo } from './EmployeeProfileRepo';
 import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
 import { UserI } from '@shared/interfaces/UserI';
@@ -11,16 +11,44 @@ import { DeepPartial } from 'typeorm';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { EmployeeProfilesInitialData } from './EmployeeProfilesInitialData';
 import { PositionUtil } from '@shared/utils/PositionUtil';
+import { Subscription } from 'rxjs';
+import { UserService } from 'user/services/UserService';
 
 @Injectable()
-export class EmployeeProfileService {
+export class EmployeeProfileService implements OnModuleInit, OnModuleDestroy {
 
     private readonly logger = new Logger(this.constructor.name);
+
+    private readonly subscription = new Subscription();
 
     constructor(
         private readonly employeeProfileRepo: EmployeeProfileRepo,
         private readonly geoPointService: GeoPointService,
+        private readonly userService: UserService,
     ) { }
+
+    onModuleInit() {
+        this.startSubscription();
+    }
+
+    onModuleDestroy() {
+        this.subscription.unsubscribe();
+    }
+
+    private startSubscription() {
+        this.subscription.add(
+            this.userService.userDeletedEvent.subscribe(async (user) => {
+                if (user) {
+                    const profile = await this.getEmployeeProfile(user);
+                    if (profile) {
+                        await this.deleteProfile(profile.employeeProfileId);
+                    } else {
+                        this.logger.log(`No employee profile found for deleted user UID: ${user.uid}`);
+                    }
+                }
+            })
+        );
+    }
 
     public listProfiles(): Promise<EmployeeProfileEntity[]> {
         return this.employeeProfileRepo.findAll();

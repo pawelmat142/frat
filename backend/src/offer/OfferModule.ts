@@ -10,6 +10,7 @@ import { OffersController } from './OffersController';
 import { CreateOfferService } from './services/CreateOfferService';
 import { OffersSearchService } from './services/OffersSearchService';
 import { AdminOffersController } from './AdminOffersController';
+import { UserModule } from 'user/UserModule';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { AdminOffersController } from './AdminOffersController';
 
         AuthModule,
         DictionariesModule,
+        UserModule
     ],
     providers: [
         OffersService,

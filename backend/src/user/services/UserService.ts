@@ -62,8 +62,8 @@ export class UserService {
         }
         this.logger.log(`Deleted user: ${user.userId} / ${deleted.email}`);
         // trigger delete firebase user
-        // TODO triggers employee profile deletion
-        // TODO triggers all offers deletion
+        // triggers employee profile deletion
+        // triggers all related offers deletion
         // triggers all assets deletion from Cloudinary
         this._userDeletedEvent$.next(deleted);
     }

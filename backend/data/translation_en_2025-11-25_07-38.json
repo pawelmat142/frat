@@ -12,7 +12,11 @@
       "account": "Account",
       "showEmployeeProfile": "Show Employee Profile",
       "createEmployeeProfile": "Create Employee Profile",
-      "offers": "Offers"
+      "offers": "Offers",
+      "deleteAccountConfirmTitle": "Delete Account",
+      "deleteAccountConfirmMessage": "Are you sure you want to delete your account? This action cannot be undone.",
+      "deleteAccountSuccessToast": "Account deleted successfully",
+      "deleteAccountFailed": "Failed to delete account"
     },
     "lang": {
       "select": "Select Language",

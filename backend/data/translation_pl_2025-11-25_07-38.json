@@ -12,7 +12,11 @@
       "account": "Konto",
       "showEmployeeProfile": "Pokaż profil pracownika",
       "createEmployeeProfile": "Utwórz profil pracownika",
-      "offers": "Oferty"
+      "offers": "Oferty",
+      "deleteAccountConfirmTitle": "Usuń konto",
+      "deleteAccountConfirmMessage": "Czy na pewno chcesz usunąć swoje konto? Tej akcji nie można cofnąć.",
+      "deleteAccountSuccessToast": "Konto zostało pomyślnie usunięte",
+      "deleteAccountFailed": "Nie udało się usunąć konta"
     },
     "lang": {
       "select": "Wybierz język",
