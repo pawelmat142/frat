@@ -145,10 +145,10 @@ const EmployeeProfileFormView: React.FC = () => {
         try {
             setLoading(true);
             const result = await EmployeeProfileService.createEmployeeProfile(form);
-            initEmployeeProfile();
+            await initEmployeeProfile();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
-            navigate(Path.getEmployeeProfilePath(`${result.displayName}`));
+            navigate(Path.getEmployeeProfilePath(`${result.displayName}`), { replace: true });
         } catch (error) {
             console.error("Error creating employee profile:", error);
         } finally {
@@ -161,10 +161,11 @@ const EmployeeProfileFormView: React.FC = () => {
             setLoading(true);
             const result = await EmployeeProfileService.updateEmployeeProfile(form);
             profileCtx.updateOneProfileInResults(result);
-            initEmployeeProfile();
+            await initEmployeeProfile();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
-            navigate(Path.getEmployeeProfilePath(`${result.displayName}`));
+
+            // navigate(Path.getEmployeeProfilePath(`${result.displayName}`), { replace: true });
         } catch (error) {
             console.error("Error updating employee profile:", error);
         } finally {

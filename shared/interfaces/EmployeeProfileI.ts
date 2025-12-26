@@ -30,7 +30,7 @@ export interface EmployeeProfileI {
 	district?: string;
 	state?: string; // administrative_area_level_1
 	postcode?: string;
-	fullAddress: string;
+	fullAddress?: string;
 
   // availability dates
   availabilityOption: EmployeeProfileAvailabilityOption;

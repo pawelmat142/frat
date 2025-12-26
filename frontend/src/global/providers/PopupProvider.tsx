@@ -34,6 +34,7 @@ export interface PopupConfig {
   children?: ReactNode
   showClose?: boolean
   popupClassName?: string
+  enableHistoryManipulation?: boolean
 }
 export type PopupHandler = (options: PopupConfig) => Promise<boolean>;
 
@@ -71,6 +72,7 @@ export const PopupProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       popupClassName: 'pp-confirm-popup',
       title: options.title,
       message: options.message,
+
       buttons: [{
         text: options.cancelText || 'Anuluj',
         mode: BtnModes.ERROR_TXT,
@@ -124,6 +126,7 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config, classN
 
   // Stable popstate handler
   const popHandlerRef = React.useRef<(e: PopStateEvent) => void>();
+
   if (!popHandlerRef.current) {
     popHandlerRef.current = () => {
       // User pressed back -> close popup
@@ -133,7 +136,7 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config, classN
   }
 
   React.useEffect(() => {
-    if (open && !historyInjectedRef.current) {
+    if (open && !historyInjectedRef.current && config.enableHistoryManipulation) {
       try {
         window.history.pushState({ popup: true }, '', window.location.href);
         historyInjectedRef.current = true;
@@ -142,9 +145,11 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config, classN
     }
     return () => {
       // Cleanup listener when component unmounts or open changes
-      window.removeEventListener('popstate', popHandlerRef.current!);
+      if (config.enableHistoryManipulation) {
+        window.removeEventListener('popstate', popHandlerRef.current!);
+      }
     };
-  }, [open, onClose]);
+  }, [open, onClose, config.enableHistoryManipulation]);
 
   const { t } = useTranslation();
 
@@ -160,7 +165,7 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config, classN
         setVisible(false);
         setClosing(false);
         // Remove artificial history entry if it still exists (closed programmatically)
-        if (historyInjectedRef.current) {
+        if (historyInjectedRef.current && config.enableHistoryManipulation) {
           try {
             window.history.back();
           } catch { /* ignore */ }

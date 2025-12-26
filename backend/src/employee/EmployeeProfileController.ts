@@ -71,7 +71,6 @@ export class EmployeeProfileController {
     return this.employeeProfileService.updateEmployeeProfile(user, form);
   }
 
-
   @Get("/search/list")
   @Serialize(EmployeeProfileEntity)
   searchEmployeeProfiles(

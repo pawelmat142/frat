@@ -36,9 +36,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	React.useEffect(() => {
 		if (authCtx.me) {
 			Promise.all([
-				initEmployeeProfile(),
-				initOffers(),
-				initLocation(),
+				initEmployeeProfile(true),
+				initOffers(true),
+				initLocation(true),
 			]).then(() => {
 				setLoading(false);
 			})
@@ -49,7 +49,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		}
 	}, [authCtx.me]);
 
-	const initLocation = async () => {
+	const initLocation = async (init?: boolean) => {
 		try {
 			const status = await navigator.permissions.query({ name: 'geolocation' });
 			if (status.state === 'granted' || status.state === 'prompt') {
@@ -72,6 +72,11 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		} catch (error) {
 			locationErrorToast();
 		}
+		finally {
+			if (!init) {
+				setLoading(false);
+			}
+		}
 	}
 
 	const cleanPosition = () => {
@@ -86,7 +91,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		toast.warn('Could not fetch location');
 	}
 
-	const initEmployeeProfile = async () => {
+	const initEmployeeProfile = async (init?: boolean) => {
 		try {
 			setLoading(true);
 			const profile = await EmployeeProfileService.getEmployeeProfile();
@@ -99,9 +104,14 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		} catch (error) {
 			setEmployeeProfile(null);
 		}
+		finally {
+			if (!init) {
+				setLoading(false);
+			}
+		}
 	}
 
-	const initOffers = async () => {
+	const initOffers = async (init?: boolean) => {
 		try {
 			setLoading(true);
 			const offers = await OffersService.listMyOffers();
@@ -114,6 +124,11 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		} catch (error) {
 			setOffers([]);
 		}
+		finally {
+			if (!init) {
+				setLoading(false);
+			}
+		}
 	}
 
 	const cleanOffers = () => {
@@ -125,7 +140,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		console.log("Cleaning employee profile in UserProvider for user:", authCtx.me);
 		setEmployeeProfile(null);
 	}
-
 
 	return (
 		<UserContext.Provider value={{

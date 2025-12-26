@@ -46,7 +46,6 @@ const EmployeeProfileView: React.FC = () => {
         }
     }, [profile, me]);
 
-
     const getProfileMenuItems = (profile: EmployeeProfileI): MenuConfig => {
         const isMyProfile = me?.uid === profile.uid;
 
@@ -66,7 +65,7 @@ const EmployeeProfileView: React.FC = () => {
             })
             menu.items.push({
                 label: t('employeeProfile.deleteButton'),
-                onClick: deleteProfile
+                onClick: () => { deleteProfile() }  
             })
         } else {
             menu.items.push({
@@ -96,24 +95,27 @@ const EmployeeProfileView: React.FC = () => {
     }
 
     const deleteProfile = async () => {
+        const confirmed = await confirm({
+            title: t('employeeProfile.deleteButton'),
+            message: t('employeeProfile.deleteConfirmMessage'),
+            confirmText: t('common.deleteButton'),
+            cancelText: t('common.cancelButton'),
+        })
+        if (!confirmed) {
+            return;
+        }
+
+        setLoading(true);
         try {
-            const confirmed = await confirm({
-                title: t('employeeProfile.deleteButton'),
-                message: t('employeeProfile.deleteConfirmMessage'),
-                confirmText: t('common.deleteButton'),
-                cancelText: t('common.cancelButton'),
-            });
-            if (!confirmed) {
-                return;
-            }
-            setLoading(true);
             await EmployeeProfileService.deleteProfile();
             userCtx.initEmployeeProfile();
             toast.success(t('employeeProfile.deleteSuccessToast'));
             navigate(Path.HOME, { replace: true });
+            // Don't setLoading(false) - component will unmount after navigation
         } catch (error) {
             toast.error(t('employeeProfile.deleteErrorToast'));
-        } finally {
+        }
+        finally {
             setLoading(false);
         }
     }

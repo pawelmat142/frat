@@ -11,7 +11,7 @@ import { useUserContext } from "user/UserProvider";
 import { UserPublicService } from "user/services/UserPublicService";
 import AvatarTile from "user/components/AvatarTile";
 import { Path } from "../../path";
-import { BtnModes, BtnSizes } from "global/interface/controls.interface";
+import { BtnModes } from "global/interface/controls.interface";
 import { FaBriefcase, FaIdCard } from "react-icons/fa";
 
 const AccountPage: React.FC = () => {
@@ -20,14 +20,14 @@ const AccountPage: React.FC = () => {
     const { employeeProfile, offers } = useUserContext();
     const [user, setUser] = useState<UserI | null>(null);
     const { uid } = useParams<{ uid?: string }>();
-    const [_loading, _setLoading] = useState(false);
     const { t } = useTranslation();
     const navigate = useNavigate();
+
+    const [localLoading, setLocalLoading] = useState(true);
 
     const isMyAccount = uid === me?.uid;
 
     useEffect(() => {
-
         const initUser = async () => {
             if (uid) {
                 if (uid === me?.uid) {
@@ -42,17 +42,19 @@ const AccountPage: React.FC = () => {
         initUser();
     }, [uid, me]);
 
-    if (loading || _loading) {
+    useEffect(() => {
+        setLocalLoading(loading);
+    }, [loading]);
+
+    if (localLoading) {
         return <Loading />;
     }
 
     const sendVerificationEmail = async () => {
-        _setLoading(true);
         try {
             await AuthService.sendVerificationEmail();
             toast.success(t('signup.verificationEmailSent'));
         } catch (error) { } finally {
-            _setLoading(false);
         }
     }
 

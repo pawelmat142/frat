@@ -92,8 +92,8 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Column({ name: 'postcode', type: 'text', nullable: true })
 	postcode?: string;
 
-  @Column({ name: 'full_address', type: 'text' })
-	fullAddress: string;
+  @Column({ name: 'full_address', type: 'text', nullable: true })
+	fullAddress?: string;
 
 
   // AVAILABILITY DATES
