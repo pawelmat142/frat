@@ -54,11 +54,6 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
 
     return (
         <div className={`tile ripple${first ? " first" : ""}${last ? " last" : ""}`} onClick={() => goToProfileView(profile)}>
-
-            <div className="tile-avatar">
-                {/* TODO?? */}
-            </div>
-
             <div className="tile-content">
 
                 <div className="tile-content-row top">

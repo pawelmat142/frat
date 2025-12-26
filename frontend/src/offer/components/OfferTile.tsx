@@ -22,9 +22,6 @@ const OfferTile: React.FC<Props> = ({ offer, first, last }) => {
 
     return (
         <div className={`tile ripple${first ? " first" : ""}${last ? " last" : ""}`} onClick={() => goToOfferView(offer)}>
-            <div className="tile-avatar">
-                {/* TODO: Offer avatar or icon */}
-            </div>
             <div className="tile-content">
                 <div className="tile-content-row top">
                     <div className="tile-content-title">{offer.displayName || t('offer.noTitle')}
