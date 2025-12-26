@@ -184,7 +184,7 @@ const AdminEmployeeProfiles: React.FC = () => {
 
                                             <td className="px-6 py-3 border-b border-color primary-text">
                                                 <div className="flex gap-2 justify-end">
-                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleProfileAction(profile)} />
+                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => handleProfileAction(profile)} />
                                                 </div>
                                             </td>
                                         </tr>

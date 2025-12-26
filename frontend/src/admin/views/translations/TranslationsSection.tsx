@@ -276,7 +276,7 @@ const TranslationsSection: React.FC = () => {
                                             <td className="px-6 py-3 border-b border-color primary-text">
                                                 <div className="flex gap-2 justify-end">
                                                     <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => onShowForm(key)} />
-                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => removeTranslation(key)} />
+                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => removeTranslation(key)} />
                                                 </div>
                                             </td>
                                         </tr>

@@ -392,7 +392,16 @@
       "emailMatch": "Email and confirm email must match.",
       "firebaseError": "Registration failed. Please try again later.",
       "passwordMatch": "Password and confirm password must match.",
-      "dictionaryNotFound": "Dictionary not found"
+      "dictionaryNotFound": "Dictionary not found",
+      "invalidFileType": "Invalid file type. Allowed: {{allowed}}",
+      "fileTooLarge": "File is too large. Maximum size: {{max}} MB"
+    },
+    "error": {
+      "missingUserId": "User ID is missing",
+      "avatarUploadFailed": "Failed to upload avatar"
+    },
+    "success": {
+      "avatarUploaded": "Avatar uploaded successfully"
     },
     "employeeProfile": {
       "edit": "Edit employee profile",

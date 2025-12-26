@@ -86,7 +86,7 @@ const EmployeeProfileView: React.FC = () => {
             <div>
                 <div className="main-tiles">
 
-                    <AvatarTile />
+                    <AvatarTile editable={isMyProfile} uid={profile.uid}/>
 
                     <CallendarTile range={range}></CallendarTile>
 

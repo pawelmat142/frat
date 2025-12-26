@@ -191,7 +191,7 @@ const EmployeeProfileStep4: React.FC<Props> = ({ formRef }) => {
                                                     className="mb-1"
                                                     icon={<DeleteIcon />}
                                                     size={BtnSizes.SMALL}
-                                                    mode={BtnModes.ERROR}
+                                                    mode={BtnModes.ERROR_TXT}
                                                     onClick={() => {
                                                         removeDateRange(dateRange.id);
                                                     }}

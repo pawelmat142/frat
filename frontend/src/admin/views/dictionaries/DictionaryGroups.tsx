@@ -63,7 +63,7 @@ const DictionaryGroups: React.FC<DictionaryGroupsProps> = ({ dictionary, onRemov
                                             <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
                                                 <div className="flex gap-2 justify-end">
                                                     <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditDictionaryGroup(group)} />
-                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleRemoveDictionaryGroup(group)} />
+                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => handleRemoveDictionaryGroup(group)} />
                                                 </div>
                                             </th>
 

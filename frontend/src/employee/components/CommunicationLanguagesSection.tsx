@@ -51,7 +51,7 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
                 className=""
                 icon={<DeleteIcon />}
                 size={BtnSizes.SMALL}
-                mode={BtnModes.ERROR}
+                mode={BtnModes.ERROR_TXT}
                 onClick={() => {
                   setValue(
                     "step1.communicationLanguages",

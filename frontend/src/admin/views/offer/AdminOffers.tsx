@@ -165,7 +165,7 @@ const AdminOffers: React.FC = () => {
                                             <td className="px-6 py-3 border-b border-color primary-text">{DateUtil.displayDate(offer.createdAt)}</td>
                                             <td className="px-6 py-3 border-b border-color primary-text">
                                                 <div className="flex gap-2 justify-end">
-                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleOfferAction(offer)} />
+                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => handleOfferAction(offer)} />
                                                 </div>
                                             </td>
                                         </tr>

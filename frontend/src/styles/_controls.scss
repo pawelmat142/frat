@@ -24,6 +24,14 @@ $btnPaddingY: 0.375rem;
   align-items: center;
   justify-content: center;
 
+  &.small {
+    padding: .4rem;
+    .svg-icon,
+    .MuiSvgIcon-root {
+      font-size: $btnFont;
+    }
+  }
+
   &.primary-txt {
     background-color: transparent;
     color: $primary-color;
@@ -50,16 +58,26 @@ $btnPaddingY: 0.375rem;
     }
   }
 
+  &.success {
+    background-color: $success-color;
+    color: black;
+  }
+
   &.secondary {
     background-color: $gray-300;
     color: black;
-
+    
     &:hover {
       background-color: $gray-400;
     }
   }
-
+  
   &.error {
+    color: black;
+    background-color: $error-color;
+  }
+
+  &.error-txt {
     .svg-icon,
     .MuiSvgIcon-root {
       color: $error-color;
@@ -127,10 +145,10 @@ $btnPaddingY: 0.375rem;
   .MuiSvgIcon-root {
     font-size: $xxxlFont;
   }
-  
+
   &.small {
     font-size: $smallFont;
-    
+
     .svg-icon,
     .MuiSvgIcon-root {
       font-size: $lFont;
@@ -169,7 +187,7 @@ input {
   &:focus {
     outline: 2px solid $primary-color;
   }
-  
+
   &.focus,
   &:hover {
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color), transparent 80%);
@@ -181,11 +199,13 @@ input {
   display: flex;
   align-items: center;
 }
+
 .callendar-view-row {
   display: flex;
   align-items: center;
   width: 100%;
 }
+
 .callendar-view-input {
   padding: .5rem .75rem;
   padding-left: .25rem;
@@ -194,6 +214,7 @@ input {
   flex-grow: 2;
   width: 100%;
 }
+
 .callendar-view-label {
   padding-left: .5rem;
   flex-grow: 1;
@@ -202,19 +223,23 @@ input {
   font-size: $smallFont;
   color: $secondary-text;
 }
+
 .callendar-view-btn {
   flex-grow: 1;
   display: flex;
   justify-content: flex-end;
 }
+
 .empty {
   .callendar-view-label {
     color: $primary-text;
   }
+
   .callendar-view-input {
     color: $secondary-text;
   }
 }
+
 .callendar-view-right-inject {
   flex-grow: 1;
   border-left: 1px solid $border-color;
@@ -348,7 +373,7 @@ input {
   padding: .1rem .3rem;
   border-radius: .5rem;
   font-size: $xsFont;
-  
+
   &.primary {
     color: $primary-color;
     border: .5px solid $primary-color;
@@ -588,6 +613,7 @@ input {
   padding-top: 1.5rem;
   padding-bottom: 0.5rem;
   background-color: $secondary-bg;
+
   &.thin {
     padding-top: 1rem;
     padding-bottom: 0;

@@ -300,12 +300,24 @@ $tileRadius: 1rem;
 
 .avatar-tile {
     overflow: hidden;
+    position: relative;
 
     img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: filter 0.2s ease;
     }
+}
+
+.avatar-actions {
+    position: absolute;
+    bottom: .5rem;
+    right: .5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+    z-index: 2;
 }
 
 .offer-details-tile {

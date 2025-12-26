@@ -386,7 +386,16 @@
       "emailMatch": "Email i powtórzony email muszą się zgadzać.",
       "firebaseError": "Rejestracja nie powiodła się. Spróbuj ponownie później.",
       "passwordMatch": "Hasło i powtórone hasło muszą się zgadzać.",
-      "dictionaryNotFound": "Nie znaleziono słownika"
+      "dictionaryNotFound": "Nie znaleziono słownika",
+      "invalidFileType": "Nieprawidłowy typ pliku. Dozwolone: {{allowed}}",
+      "fileTooLarge": "Plik jest za duży. Maksymalny rozmiar: {{max}} MB"
+    },
+    "error": {
+      "missingUserId": "Brak ID użytkownika",
+      "avatarUploadFailed": "Nie udało się przesłać avatara"
+    },
+    "success": {
+      "avatarUploaded": "Avatar został przesłany"
     },
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",

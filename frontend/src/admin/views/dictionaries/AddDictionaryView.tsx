@@ -343,7 +343,7 @@ const AddDictionaryView: React.FC = () => {
 
                       <div className="flex gap-2">
                         <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditColumn(col)} />
-                        <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleRemoveColumn(col)} />
+                        <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => handleRemoveColumn(col)} />
                       </div>
 
                     </div>

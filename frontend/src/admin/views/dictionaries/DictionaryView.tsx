@@ -261,7 +261,7 @@ const DictionaryView: React.FC = () => {
                                             <td className={"px-6 py-3 border-b border-color "}>
                                                 <div className="flex gap-2 justify-end">
                                                     <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditElement(el.code)} />
-                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR} onClick={() => handleDeleteElement(el.code)} />
+                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => handleDeleteElement(el.code)} />
                                                 </div>
                                             </td>
                                         </tr>

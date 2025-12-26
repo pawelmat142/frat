@@ -8,6 +8,7 @@ export interface UserI {
     provider: UserProvider
     verified: boolean
     photoURL?: string
+    avatarRef?: AvatarRef
 }
 
 export const UserRoles = {
@@ -35,3 +36,9 @@ export const UserProviders = {
 } as const;
 
 export type UserProvider = typeof UserProviders[keyof typeof UserProviders];
+
+
+export interface AvatarRef {
+    url: string;
+    publicId: string;
+}
