@@ -31,6 +31,8 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
     const [previewSrc, setPreviewSrc] = useState<string | null>(null);
     const [pendingFile, setPendingFile] = useState<File | null>(null);
 
+    const [localSrc, setLocalSrc] = useState<string>(src);
+
     const authCtx = useAuthContext();
 
     const validateFile = (file: File): string | null => {
@@ -90,6 +92,9 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
 
             if (result) {
                 authCtx.updateMe(result);
+                if (result.avatarRef?.url) {
+                    setLocalSrc(result.avatarRef.url);
+                }
             }
 
             toast.success(t('success.avatarUploaded'));
@@ -115,7 +120,7 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
         setPendingFile(null);
     };
 
-    const displaySrc = previewSrc || src;
+    const displaySrc = previewSrc || localSrc;
 
     if (isUploading) {
         return <Loading></Loading>

@@ -4,6 +4,7 @@ import { AuthModule } from 'auth/AuthModule';
 import { UserManagementService } from './UserManagementService';
 import { UserModule } from 'user/UserModule';
 import { UserManagementController } from './UserManagementController';
+import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
 
 @Module({
     imports: [
@@ -11,7 +12,8 @@ import { UserManagementController } from './UserManagementController';
         AuthModule
     ],
     providers: [
-        UserManagementService
+        UserManagementService,
+        CloudinaryService,
     ],
     controllers: [
         UserManagementController
