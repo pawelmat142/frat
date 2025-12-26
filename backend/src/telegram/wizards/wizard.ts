@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { ServiceProvider } from './services.provider';
+import { UserI } from '@shared/interfaces/UserI';
 
 export interface WizardResponse {
   chatId: number;
@@ -60,12 +61,12 @@ export class Wizard {
     return steps[this.order];
   }
 
-  public init = async () => {
+  public init = async (user?: UserI) => {
     if (!this.initialized) {
-      await this._init();
+      await this._init(user);
       this.initialized = true;
     }
   };
 
-  protected _init = async () => {};
+  protected _init = async (user?: UserI) => {};
 }

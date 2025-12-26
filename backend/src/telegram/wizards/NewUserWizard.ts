@@ -1,7 +1,6 @@
 import { UserI } from '@shared/interfaces/UserI';
 import { ServiceProvider } from './services.provider';
 import { Wizard, WizardStep } from './wizard';
-import { ProfileWizard } from './profile.wizard';
 
 export class NewUserWizard extends Wizard {
   constructor(chatId: number, services: ServiceProvider) {
@@ -19,8 +18,6 @@ export class NewUserWizard extends Wizard {
     BYE: 2,
     ERROR: 3,
     CONFIRM: 4,
-    CREATED: 5,
-    CLOSE: 6,
   }  
   // TODO translations
   public getSteps(): WizardStep[] {
@@ -89,18 +86,6 @@ export class NewUserWizard extends Wizard {
             },
           ],
         ],
-      },
-      {
-        order: this.STEP.CREATED,
-        message: ['Registered!'],
-        buttons: [
-          [
-            {
-              text: 'Close',
-              switch: ProfileWizard.name,
-            },
-          ],
-        ],
       }
     ];
   }
@@ -109,7 +94,7 @@ export class NewUserWizard extends Wizard {
     try {
       const firebaseUser = await this.services.exportedAuthService.registerByTelegram(this.user.telegramChannelId);
       const user = await this.services.telegramUserService.createProfile(firebaseUser, this.user.telegramChannelId, this.user.displayName);
-      return this.STEP.CREATED;
+      return this.STEP.BYE;
     } catch (error) {
       this.error = error;
       this.logger.warn(error);

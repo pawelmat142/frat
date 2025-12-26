@@ -162,12 +162,11 @@ export class WizardService implements OnModuleInit {
       await this.servicesProvider.telegramUserService.findUser(
         telegramChannelId,
       );
-    console.log('user', user);
     const wizard: Wizard = user
       ? new ProfileWizard(user, this.servicesProvider)
       : new NewUserWizard(chatId, this.servicesProvider);
 
-    await wizard.init();
+    await wizard.init(user);
     const wizards = this.wizards$.value;
     wizards.push(wizard);
     this.wizards$.next(wizards);

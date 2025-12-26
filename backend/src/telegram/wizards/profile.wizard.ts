@@ -15,11 +15,17 @@ export class ProfileWizard extends Wizard {
   private error: any;
 
   private readonly STEP = {
-    START: 0,
     LOGIN: 1,
     ERROR: 2,
     DELETE: 3,
     DELETED: 4,
+  }
+
+  override _init = async (user?: UserI) => {
+    if (!this.user && user) {
+      this.user = user;
+    }
+    this.processLoginStep()
   }
 
   public getProfile(): UserI {
@@ -55,26 +61,6 @@ export class ProfileWizard extends Wizard {
     const loginUrl = this.getLoginViewUrl();
     return [
       {
-        order: this.STEP.START,
-        message: [
-          `Welcome, ${this.user?.displayName}`,
-        ],
-        buttons: [
-          [
-            {
-              text: 'Login page',
-              process: this.processLoginStep,
-            },
-          ],
-          [
-            {
-              text: 'Delete account',
-              process: async () => this.STEP.DELETE,
-            },
-          ],
-        ],
-      },
-      {
         order: this.STEP.LOGIN,
         message: [
           `PIN: ${pin ? pin.pin : this.pin}`,
@@ -88,7 +74,12 @@ export class ProfileWizard extends Wizard {
         }], [{
           text: `🌐 Open login page`,
           url: loginUrl,
-        }]]
+        }], [
+          {
+            text: 'Delete account',
+            process: async () => this.STEP.DELETE,
+          },
+        ],]
       },
       {
         order: this.STEP.ERROR,
@@ -101,7 +92,7 @@ export class ProfileWizard extends Wizard {
           [
             {
               text: `No`,
-              process: async () => this.STEP.START,
+              process: async () => this.STEP.LOGIN,
             },
             {
               text: `Yes`,

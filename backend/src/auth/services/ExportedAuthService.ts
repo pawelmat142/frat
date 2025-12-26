@@ -59,13 +59,13 @@ export class ExportedAuthService {
     }
 
     const credentials = TelegramUtil.prepareCredentials(telegramChannelId, this.getSecretKey());
-    this.deactivatePin(pin);
+    this.deactivatePin(pin, telegramChannelId);
     return credentials;
   }
 
-  private deactivatePin = (pin: string) => {
+  private deactivatePin = (pin: string, telegramChannelId: string) => {
     const existingPins = Array.from(this.pins$.getValue());
-    const filteredPins = existingPins.filter(pinObj => pinObj.pin !== pin);
+    const filteredPins = existingPins.filter(pinObj => pinObj.pin !== pin || pinObj.telegramChannelId !== telegramChannelId);
     this.pins$.next(new Set(filteredPins));
   }
 
