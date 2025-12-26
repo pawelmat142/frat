@@ -49,6 +49,8 @@ const EmployeeProfileView: React.FC = () => {
     const getProfileMenuItems = (profile: EmployeeProfileI): MenuConfig => {
         const isMyProfile = me?.uid === profile.uid;
 
+        const hasMyLike = profile.likes?.includes(me?.uid || '') || false;
+
         const menu: MenuConfig = {
             title: t('employeeProfile.profileMenu'),
             items: []
@@ -69,7 +71,7 @@ const EmployeeProfileView: React.FC = () => {
             })
         } else {
             menu.items.push({
-                label: t('employeeProfile.likeButton'),
+                label: hasMyLike ? t('employeeProfile.unlikeButton') : t('employeeProfile.likeButton'),
                 onClick: () => { likeProfile(profile) }
             })
         }
@@ -80,7 +82,7 @@ const EmployeeProfileView: React.FC = () => {
         try {
             setLoading(true);
             const likesBefore = profile.likes?.length || 0;
-            const likes = await EmployeeProfileService.notifyProfileLike(profile.uid);
+            const likes = await EmployeeProfileService.notifyProfileLike(profile.employeeProfileId);
             profile.likes = likes;
             setProfile({ ...profile });
             if (profile.likes?.length > likesBefore) {

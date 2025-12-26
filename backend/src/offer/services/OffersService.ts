@@ -139,10 +139,13 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         if (!offer) {
             throw new ToastException('employeeProfile.exists', this);
         }
+        if (offer.uid === likerUid) {
+            throw new ToastException('offer.cannotLikeOwnOffer', this);
+        }
         if (offer.likes.includes(likerUid)) {
-            this.logger.log(`Liker ${likerUid} unliked offer ${offerId}`);
             offer.likes = offer.likes.filter(uid => uid !== likerUid);
             await this.offersRepo.update(offer);
+            this.logger.log(`Liker ${likerUid} unliked offer ${offerId}`);
         } else {
             this.logger.log(`Liker ${likerUid} liked offer ${offerId}`);
             offer?.likes.push(likerUid);

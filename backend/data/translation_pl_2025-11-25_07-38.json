@@ -111,7 +111,8 @@
       "currency": "Waluta",
       "displayName": "Nazwa wyświetlana",
       "description": "Opis oferty",
-      "availableSlots": "Dostępne miejsca"
+      "availableSlots": "Dostępne miejsca",
+      "cannotLikeOwnOffer": "Nie możesz polubić własnej oferty"
     },
     "theme": {
       "dark": "Ciemny",
@@ -424,6 +425,7 @@
       "deactivateButton": "Dezaktywuj profil",
       "deleteButton": "Usuń profil",
       "likeButton": "Polub profil",
+      "unlikeButton": "Usuń polubienie",
       "activationSuccessToast": "Profil pomyślnie aktywowany",
       "deactivationSuccessToast": "Profil pomyślnie dezaktywowany",
       "likeSuccessToast": "Polubiłeś profil",
@@ -543,7 +545,8 @@
       "experience": "Doświadczenie",
       "availability": "Dostępność",
       "submitSuccess": "Profil pracownika zapisany pomyślnie.",
-      "alreadyInStatus": "Profil jest już w określonym statusie"
+      "alreadyInStatus": "Profil jest już w określonym statusie",
+      "cannotLikeOwnProfile": "Nie możesz polubić własnego profilu"
     }
   }
 }

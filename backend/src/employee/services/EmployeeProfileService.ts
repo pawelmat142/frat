@@ -138,6 +138,26 @@ export class EmployeeProfileService implements OnModuleInit, OnModuleDestroy {
             await this.employeeProfileRepo.update(profile);
         }
     }
+    
+    public async notifyProfileLike(employeeProfileId: number, likerUid: string): Promise<string[]> {
+        const profile = await this.employeeProfileRepo.getById(employeeProfileId);
+        if (!profile) {
+            throw new ToastException('employeeProfile.exists', this);
+        }
+        if (profile.uid === likerUid) {
+            throw new ToastException('employeeProfile.cannotLikeOwnProfile', this);
+        }
+        if (profile.likes.includes(likerUid)) {
+            profile.likes = profile.likes.filter(uid => uid !== likerUid);
+            await this.employeeProfileRepo.update(profile);
+            this.logger.log(`Liker ${likerUid} unliked profile ${employeeProfileId}`);
+        } else {
+            profile?.likes.push(likerUid);
+            await this.employeeProfileRepo.update(profile);
+            this.logger.log(`Liker ${likerUid} liked profile ${employeeProfileId}`);
+        }
+        return profile.likes;
+    }
 
     async deleteProfileByUid(user: UserI): Promise<void> {
         const profile = await this.employeeProfileRepo.findByUid(user.uid);

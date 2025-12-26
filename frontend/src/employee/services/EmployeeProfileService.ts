@@ -50,6 +50,10 @@ export const EmployeeProfileService = {
 		return httpClient.get<void>(`/employee-profile/notify-profile-view/${profileUid}`);
 	},
 
+	notifyProfileLike(employeeProfileId: number): Promise<string[]> {
+		return httpClient.get<string[]>(`/employee-profile/notify-profile-like/${employeeProfileId}`);
+	},
+
 	deleteProfile(): Promise<void> {
 		return httpClient.delete<void>(`/employee-profile`);
 	},
@@ -57,10 +61,5 @@ export const EmployeeProfileService = {
 	activation(): Promise<EmployeeProfileI> {
 		return httpClient.patch<EmployeeProfileI>(`/employee-profile/activation`);
 	},
-
-	// TODO
-	notifyProfileLike(profileUid: string): Promise<string[]> {
-		return httpClient.get<string[]>(`/employee-profile/notify-profile-like/${profileUid}`);
-	}
 
 };

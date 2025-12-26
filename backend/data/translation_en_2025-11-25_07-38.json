@@ -110,7 +110,8 @@
       "currency": "Currency",
       "displayName": "Display name",
       "description": "Job description",
-      "availableSlots": "Available slots"
+      "availableSlots": "Available slots",
+      "cannotLikeOwnOffer": "You cannot like your own offer"
     },
     "theme": {
       "dark": "Dark",
@@ -430,6 +431,7 @@
       "deactivateButton": "Deactivate Profile",
       "deleteButton": "Delete Profile",
       "likeButton": "Like Profile",
+      "unlikeButton": "Unlike Profile",
       "activationSuccessToast": "Profile activated successfully",
       "deactivationSuccessToast": "Profile deactivated successfully",
       "likeSuccessToast": "Liked the profile",
@@ -552,7 +554,8 @@
       "experience": "Experience",
       "availability": "Availability",
       "submitSuccess": "Worker profile saved successfully.",
-      "alreadyInStatus": "Profile is already in the specified status"
+      "alreadyInStatus": "Profile is already in the specified status",
+      "cannotLikeOwnProfile": "You cannot like your own profile"
     }
   }
 }

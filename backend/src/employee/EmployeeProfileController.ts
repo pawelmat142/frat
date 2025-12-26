@@ -89,6 +89,15 @@ export class EmployeeProfileController {
   ): Promise<void> {
     return this.employeeProfileService.notifyProfileView(profileUid, user.uid);
   }
+  
+  @Get("/notify-profile-like/:employeeProfileId")
+  @UseGuards(JwtAuthGuard)
+  notifyProfileLike(
+    @Param('employeeProfileId') employeeProfileId: string,
+    @CurrentUser() user: UserI,
+  ): Promise<string[]> {
+    return this.employeeProfileService.notifyProfileLike(Number(employeeProfileId), user.uid);
+  }
 
   @Delete()
   @UseGuards(JwtAuthGuard)

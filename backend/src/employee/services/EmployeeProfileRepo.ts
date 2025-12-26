@@ -193,6 +193,12 @@ export class EmployeeProfileRepo {
             updatedFlag = true;
         }
 
+        if (ObjUtil.arrayChanged(profile.likes, newProfile.likes || [])) {
+            this.logger.log(`Updating EmployeeProfile likes from ${profile.likes} to ${newProfile.likes}`);
+            profile.likes = newProfile.likes || [];
+            updatedFlag = true;
+        }
+
         if (this.dateRangesChanged(newProfile, profile)) {
             this.logger.log(`Updating EmployeeProfile availabilityDateRanges`);
             // Normalize DeepPartial<DateRangeEntity>[] into DateRangeEntity[] to satisfy typing.
