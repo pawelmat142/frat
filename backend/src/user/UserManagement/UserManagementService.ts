@@ -13,7 +13,6 @@ export class UserManagementService {
         private readonly userService: UserService,
     ) { }
 
-    // TODO zapis do employee profiles nie działa
     // TODO dodać optymalizacje foto - zmniejszanie rozmiaru itp
     
     public async updateAvatar(user: UserI, avatarRef: AvatarRef): Promise<UserI> {

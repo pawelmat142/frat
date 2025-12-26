@@ -13,7 +13,6 @@ interface AvatarTileProps {
     alt?: string;
     uid?: string;
     editable?: boolean;
-    onAvatarChange?: (url: string, publicId: string) => void;
 }
 
 const DEFAULT_AVATAR = "/assets/img/avatar-mock.png";
@@ -25,7 +24,6 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
     alt = "Avatar",
     uid,
     editable = false,
-    onAvatarChange,
 }) => {
     const { t } = useTranslation();
     const fileInputRef = useRef<HTMLInputElement>(null);
