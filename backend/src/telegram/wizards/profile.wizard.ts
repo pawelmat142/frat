@@ -10,6 +10,8 @@ export class ProfileWizard extends Wizard {
     this.user = profile;
   }
 
+  pin?: string
+
   private error: any;
 
   private readonly STEP = {
@@ -24,16 +26,33 @@ export class ProfileWizard extends Wizard {
     return this.user;
   }
 
+  private processLoginStep = async () => {
+    const newPin = this.services.exportedAuthService.generatePin(this.user.telegramChannelId!);
+    this.pin = newPin.pin;
+    this.logger.log(`Generated new login pin for user ${this.user.uid}: ${newPin.pin}`);
+    return this.STEP.LOGIN
+  }
+
+  private getLoginViewUrl = (): string | null => {
+    const loginViewUrl = this.services.configService.get<string>('LOGIN_BY_TELEGRAM_URL');
+    if (!loginViewUrl) {
+      return null;
+    }
+    return loginViewUrl;
+  }
+
+  private goToLoginPage = async (): Promise<number> => {
+    return this.STEP.LOGIN;
+  }
+
   public getSteps(): WizardStep[] {
     // const loginUrl = BotUtil.prepareLoginUrl();
     // if (!loginUrl) {
     //   return [BotUtil.swwStep()];
     // }
 
-    const loginViewUrl = this.services.configService.get<string>('LOGIN_BY_TELEGRAM_URL');
-    if (!loginViewUrl) {
-      throw new Error('LOGIN_BY_TELEGRAM_URL is not defined');
-    }
+    const pin = this.services.exportedAuthService.getLoginPin(this.user.telegramChannelId!);
+    const loginUrl = this.getLoginViewUrl();
     return [
       {
         order: this.STEP.START,
@@ -44,7 +63,7 @@ export class ProfileWizard extends Wizard {
           [
             {
               text: 'Login page',
-              process: async () => this.STEP.LOGIN,
+              process: this.processLoginStep,
             },
           ],
           [
@@ -56,14 +75,24 @@ export class ProfileWizard extends Wizard {
         ],
       },
       {
-        order: this.STEP.ERROR,
-        message: [this.error],
-        close: true,
+        order: this.STEP.LOGIN,
+        message: [
+          `PIN: ${pin ? pin.pin : this.pin}`,
+        ],
+        buttons: [[{
+          text: `📋 Copy PIN`,
+          copy_text: { text: pin?.pin || this.pin || '' },
+        }], [{
+          text: `🔄 New PIN`,
+          process: this.processLoginStep,
+        }], [{
+          text: `🌐 Open login page`,
+          url: loginUrl,
+        }]]
       },
       {
-        order: this.STEP.LOGIN,
-        message: ['Please use the link below to login:', loginViewUrl],
-        close: true,
+        order: this.STEP.ERROR,
+        message: [this.error],
       },
       {
         order: this.STEP.DELETE,
@@ -84,7 +113,6 @@ export class ProfileWizard extends Wizard {
       {
         order: this.STEP.DELETED,
         message: [`Your profile deleted successfully`],
-        close: true,
       },
     ];
   }

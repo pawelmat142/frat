@@ -10,17 +10,21 @@ import {
 } from '@nestjs/common';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { AuthService } from './services/AuthService';
-import { RegisterFormDto } from '@shared/dto/AuthDto';
+import { LoginFormDto, RegisterFormDto } from '@shared/dto/AuthDto';
 import { JwtAuthGuard } from './guards/JwtAuthGuard';
 import { CurrentUser } from './decorators/CurrentUserDecorator';
 import { UserI } from '@shared/interfaces/UserI';
 import { Public } from './decorators/PublicDecorator';
+import { ExportedAuthService } from './services/ExportedAuthService';
 
 @Controller('api/auth')
 @UseInterceptors(LogInterceptor)
 export class AuthController {
 
-  constructor(private readonly authService: AuthService) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly exportedAuthService: ExportedAuthService,
+  ) { }
   
   @Get('login')
   @UseGuards(JwtAuthGuard)
@@ -44,6 +48,16 @@ export class AuthController {
   @Public()
   sendPasswordResetEmail(@Param('email') email: string): Promise<void> {
     return this.authService.sendPasswordResetEmail(email);
+  }
+
+  @Get('login-telegram/:pin')
+  loginWithTelegram(@Param('pin') pin: string): Promise<LoginFormDto | null> {
+    return this.exportedAuthService.loginByPin(pin);
+  }
+
+  @Get('auto-generate/:telegramChannelId')
+  autoGenerate(@Param('telegramChannelId') telegramChannelId: string): Promise<boolean> {
+    return this.exportedAuthService.autoGenerate(telegramChannelId);
   }
 
 }

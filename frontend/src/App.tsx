@@ -30,6 +30,7 @@ import MyOffersList from 'offer/views/MyOffersList';
 import OfferView from 'offer/views/offer-view/OfferView';
 import OfferSearchView from 'offer/views/search/OfferSearchView';
 import AdminOffers from 'admin/views/offer/AdminOffers';
+import TelegramSignPage from 'auth/views/TelegramSignPage';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -81,6 +82,7 @@ const App: React.FC = () => {
 
                 <Route path={Path.SIGN_IN} element={<PageWrapper direction={1}><SignInPage /></PageWrapper>} />
                 <Route path={Path.SIGN_UP} element={<PageWrapper direction={1}><SignUpPage /></PageWrapper>} />
+                <Route path={Path.TELEGRAM_SIGN} element={<PageWrapper direction={1}><TelegramSignPage /></PageWrapper>} />
                 <Route path={Path.FORGOT_PASSWORD} element={<PageWrapper direction={1}><ForgotPassword /></PageWrapper>} />
 
                 <Route path={Path.ERROR_PAGE} element={<ErrorPage />} />

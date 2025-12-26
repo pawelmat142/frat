@@ -39,6 +39,10 @@ export class UserService {
         return this.userRepo.getActiveUserByUid(uid);
     }
 
+    public getUserByTelegramChannelId(telegramChannelId: string): Promise<UserEntity | null> {
+        return this.userRepo.getUserByTelegramChannelId(telegramChannelId);
+    }
+
     public create(createUser: CreateUser): Promise<UserEntity> {
         return this.userRepo.create(createUser);
     }

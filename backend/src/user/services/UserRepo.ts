@@ -36,6 +36,10 @@ export class UserRepo {
         return this.userRepository.findOneBy({ uid, status: UserStatuses.ACTIVE });
     }
 
+    public getUserByTelegramChannelId(telegramChannelId: string): Promise<UserEntity | null> {
+        return this.userRepository.findOneBy({ telegramChannelId });
+    }
+
     public getByTelegramChannelId(telegramChannelId: string): Promise<UserEntity | null> {
         return this.userRepository.findOneBy({ telegramChannelId });
     }

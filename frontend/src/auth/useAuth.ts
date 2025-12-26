@@ -45,6 +45,7 @@ export const useAuth = () => {
                 const newUser = await AuthService.login()
                 if (newUser) {
                     setMe(newUser)
+                    AuthService.saveTelegramLogin(newUser);
                     setFirebaseUser(newFirebaseUser)
                 } else {
                     setMe(null)

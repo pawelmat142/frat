@@ -8,7 +8,7 @@ import { AuthService } from "auth/services/AuthService";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../path";
 import Loading from "global/components/Loading";
-import { FaPlus } from "react-icons/fa";
+import { FaTelegram } from "react-icons/fa";
 import GoogleIcon from "global/components/icons/GoogleIcon";
 import FloatingInput from "global/components/controls/FloatingInput";
 import { Utils } from "global/utils/utils";
@@ -50,6 +50,10 @@ const SignInPage: React.FC = () => {
         catch (e: any) { } finally {
             setLoading(false);
         }
+    }
+
+    const handleTelegramSignIn = async () => {
+        navigate(Path.TELEGRAM_SIGN);
     }
 
     if (loading) {
@@ -126,12 +130,12 @@ const SignInPage: React.FC = () => {
 
                 <div className="square-tile p-5 col-tile" onClick={() => handleGoogleSignIn()}>
                     <GoogleIcon size={iconSize} />
-                    <div>Google</div>
+                    <div className="mt-1">Google</div>
                 </div>
 
-                <div className="square-tile p-5 col-tile">
-                    <FaPlus size={iconSize} />
-                    <div>TODO</div>
+                <div className="square-tile p-5 col-tile" onClick={() => handleTelegramSignIn()}>
+                    <FaTelegram size={iconSize} className="mb-1"/>
+                    <div>Telegram</div>
                 </div>
 
             </div>

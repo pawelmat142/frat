@@ -10,7 +10,7 @@ import {
 import { toast } from "react-toastify";
 import { t } from "global/i18n";
 import { FirebaseAuth } from "./FirebaseAuth";
-import { UserI } from "@shared/interfaces/UserI";
+import { UserI, UserProviders } from "@shared/interfaces/UserI";
 import { AuthValidators } from "@shared/validators/AuthValidator";
 
 export const AuthService = {
@@ -87,6 +87,28 @@ export const AuthService = {
 			console.error(error);
 			toast.error(String(t(msg)));
 		}
+	},
+
+	loginByPin(pin: string): Promise<LoginFormDto | null> {
+		return httpClient.get(`/auth/login-telegram/${pin}`, { skipAuth: true });
+	},
+
+	saveTelegramLogin (user: UserI) {
+		if (UserProviders.TELEGRAM === user.provider && user.telegramChannelId) {
+			localStorage.setItem('telegramChannelId', user.telegramChannelId);
+		}
+	}, 
+
+	triggerAutoGenerate() {
+		const telegramChannelId = localStorage.getItem('telegramChannelId');
+		if (!telegramChannelId) {
+			return;
+		}
+		this.autoGenerate(telegramChannelId);
+	},
+
+	autoGenerate(telegramChannelId: string): Promise<boolean> {
+		return httpClient.get(`/auth/auto-generate/${telegramChannelId}`, { skipAuth: true });
 	},
 
 	/**

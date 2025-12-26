@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 import Loading from "global/components/Loading";
 import { AuthService } from "auth/services/AuthService";
 import { toast } from "react-toastify";
-import Logo from "global/components/Logo";
-import IconButton from "global/components/controls/IconButon";
 import FloatingInput from "global/components/controls/FloatingInput";
 
 const ForgotPassword: React.FC = () => {

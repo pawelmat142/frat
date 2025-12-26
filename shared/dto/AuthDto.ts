@@ -26,3 +26,9 @@ export interface LoginFormResponse {
 export interface GoogleLoginDto {
   idToken: string;
 }
+
+export interface TelegramLoginPin {
+  pin: string;
+  telegramChannelId: string;
+  created: Date;
+}

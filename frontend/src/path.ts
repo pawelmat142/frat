@@ -4,6 +4,7 @@ export abstract class Path {
 
     public static readonly SIGN_IN = '/sign-in';
     public static readonly SIGN_UP = '/sign-up';
+    public static readonly TELEGRAM_SIGN = `${Path.SIGN_IN}/telegram`;
     public static readonly FORGOT_PASSWORD = '/forgot-password';
 
     public static readonly ACCOUNT = '/account/:uid';

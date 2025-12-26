@@ -24,6 +24,7 @@ export interface WizardButton {
   callback_data?: string;
   switch?: string;
   url?: string;
+  copy_text?: { text: string };
   process?(): Promise<number>; //returns order of next step
 }
 

@@ -1,9 +1,7 @@
+import { LoginFormDto } from '@shared/dto/AuthDto';
 import * as crypto from 'crypto';
 
-export interface Credentials {
-  email: string;
-  password: string;
-}
+export interface Credentials extends LoginFormDto {}
 
 export abstract class TelegramUtil {
   public static idByTelegram(telegramChannelId: string): string {
