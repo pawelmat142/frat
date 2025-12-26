@@ -1,5 +1,6 @@
 /** Created by Pawel Malek **/
 import { DateRangeI, EmployeeProfileAvailabilityOption, EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus, Point } from '@shared/interfaces/EmployeeProfileI';
+import { AvatarRef } from '@shared/interfaces/UserI';
 import { Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { DateRangeEntity } from './DateRangeEntity';
@@ -27,6 +28,11 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Column({ name: 'email', unique: true })
   @Expose()
   email: string;
+
+  // Duplicated from UserEntity for easier access see 02_sync_avatar_ref_trigger.sql
+  @Column({ name: 'avatar_ref', type: 'jsonb', nullable: true })
+  @Expose()
+  avatarRef?: AvatarRef;
   
   @Column({ name: 'first_name' })
   @Expose()

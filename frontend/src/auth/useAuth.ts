@@ -75,10 +75,16 @@ export const useAuth = () => {
 		return () => unsubscribe();
 	}, []);
 
+    const updateMe = (user: UserI): void => {
+        console.log('useAuth: Updating me user:', user);
+        setMe(user);
+    }
+
 	return {
 		firebaseUser,
 		loading,
         me,
 		isAuthenticated: !!firebaseUser && !!me,
+        updateMe
 	};
 };

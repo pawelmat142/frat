@@ -11,6 +11,7 @@ import { UsersAdminModule } from 'admin/users/UsersAdminModule';
 import { EmployeeProfileModule } from 'employee/EmployeeProfileModule';
 import { FeedbackModule } from 'feedback/FeedbackModule';
 import { OffersModule } from 'offer/OfferModule';
+import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { OffersModule } from 'offer/OfferModule';
     // AUTH
     AuthModule,
 
+    UserManagementModule,
     EmployeeProfileModule,
     OffersModule,
 

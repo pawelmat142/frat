@@ -1,5 +1,6 @@
-import { AvatarRef } from '@shared/interfaces/UserI';
+import { AvatarRef, UserI } from '@shared/interfaces/UserI';
 import axios from 'axios';
+import { UserManagementService } from './UserManagementService';
 
 interface CloudinaryUploadResponse {
     secure_url: string;
@@ -59,8 +60,9 @@ export const AvatarService = {
      * @param userId - User ID for organizing files
      * @returns Promise with the upload result
      */
-    uploadAvatar: async (file: File, userId: string): Promise<AvatarRef> => {
-        return AvatarService.uploadImage(file, `avatars/${userId}`);
+    uploadAvatar: async (file: File, userId: string): Promise<UserI> => {
+        const avatarRef = await AvatarService.uploadImage(file, `avatars/${userId}`);
+        return UserManagementService.updateAvatar(avatarRef);
     },
 
     /**

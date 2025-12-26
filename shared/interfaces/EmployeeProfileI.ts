@@ -1,3 +1,5 @@
+import { AvatarRef } from './UserI';
+
 export interface EmployeeProfileI {
 
   employeeProfileId: number;
@@ -7,6 +9,7 @@ export interface EmployeeProfileI {
   status: EmployeeProfileStatus;
   displayName: string;
   email: string;
+  avatarRef?: AvatarRef;
 
   // form data
   firstName: string;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Loading from "global/components/Loading";
 import { UserI } from "@shared/interfaces/UserI";
 import { useNavigate, useParams } from "react-router-dom";
-import { UserPublicService } from "user/services/UserPublicService";
 import { useAuthContext } from "auth/AuthProvider";
 import Button from "global/components/controls/Button";
 import { AuthService } from "auth/services/AuthService";
@@ -11,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { Path } from "./../../path";
 import { useUserContext } from "user/UserProvider";
 import SelectedProfile from "admin/views/employee_profiles/SelectedProfile";
+import { UserPublicService } from "user/services/UserPublicService";
 
 const ProfilePage: React.FC = () => {
 

@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { AvatarService } from "employee/services/AvatarService";
+import { AvatarService } from "user/services/AvatarService";
 import { Save, Close, Edit } from "@mui/icons-material";
 import Loading from "global/components/Loading";
 import IconButton from "global/components/controls/IconButon";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
+import { useAuthContext } from "auth/AuthProvider";
 
 interface AvatarTileProps {
     src?: string;
@@ -31,6 +32,8 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
     const [isUploading, setIsUploading] = useState(false);
     const [previewSrc, setPreviewSrc] = useState<string | null>(null);
     const [pendingFile, setPendingFile] = useState<File | null>(null);
+
+    const authCtx = useAuthContext();
 
     const validateFile = (file: File): string | null => {
         const extension = file.name.split('.').pop()?.toLowerCase();
@@ -86,7 +89,11 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
         setIsUploading(true);
         try {
             const result = await AvatarService.uploadAvatar(pendingFile, uid)
-            onAvatarChange?.(result.url, result.publicId);
+
+            if (result) {
+                authCtx.updateMe(result);
+            }
+
             toast.success(t('success.avatarUploaded'));
             clearPending();
         } catch (error) {

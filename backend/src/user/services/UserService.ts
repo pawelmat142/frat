@@ -47,6 +47,10 @@ export class UserService {
         return this.userRepo.listUsers();
     }
 
+    public async updateEntity(user: UserEntity): Promise<UserEntity> {
+        return this.userRepo.updateEntity(user);
+    }
+
     public async deleteUser(uid: string): Promise<void> {
         const user = await this.userRepo.getUserByUid(uid);
         if (!user) {
@@ -79,4 +83,5 @@ export class UserService {
         this.logger.log(`Assigned roles '${roles.join(', ')}' to user: ${user.userId} / ${user.email}`);
         return result;
     }
+
 }

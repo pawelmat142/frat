@@ -14,8 +14,10 @@ import { UserEntity } from './model/UserEntity';
 @Controller('api/user')
 @UseInterceptors(LogInterceptor)
 export class UserController {
-  
-  constructor(private readonly userPublicService: UserPublicService) { }
+
+  constructor(
+    private readonly userPublicService: UserPublicService,
+  ) { }
 
   @Get('/:uid')
   @Public()
@@ -23,5 +25,4 @@ export class UserController {
   fetchUser(uid: string): Promise<UserI> {
     return this.userPublicService.fetchUser(uid);
   }
-  
 }

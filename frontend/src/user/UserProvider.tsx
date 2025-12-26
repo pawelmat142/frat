@@ -31,10 +31,10 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const [position, setPosition] = React.useState<Position | null>(null);
 	const [positionWatchId, setPositionWatchId] = React.useState<number | null>(null);
 
-	const { me } = useAuthContext();
+	const authCtx = useAuthContext();
 
 	React.useEffect(() => {
-		if (me) {
+		if (authCtx.me) {
 			Promise.all([
 				initEmployeeProfile(),
 				initOffers(),
@@ -47,7 +47,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			cleanOffers()
 			cleanPosition()
 		}
-	}, [me]);
+	}, [authCtx.me]);
 
 	const initLocation = async () => {
 		try {
@@ -118,12 +118,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}
 
 	const cleanOffers = () => {
-		console.log("Cleaning offers in UserProvider for user:", me);
+		console.log("Cleaning offers in UserProvider for user:", authCtx.me);
 		setOffers([]);
 	}
 
 	const cleanEmployeeProfile = () => {
-		console.log("Cleaning employee profile in UserProvider for user:", me);
+		console.log("Cleaning employee profile in UserProvider for user:", authCtx.me);
 		setEmployeeProfile(null);
 	}
 
