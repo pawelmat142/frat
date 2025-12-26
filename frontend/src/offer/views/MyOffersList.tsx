@@ -22,10 +22,16 @@ const MyOffersList: React.FC = () => {
 
     const offers = profileCtx.offers;
 
+    const createBtn = <div className="mt-auto flex flex-col mb-5 px-3">
+        <Button fullWidth onClick={() => navigate(Path.OFFER_FORM)} size={BtnSizes.LARGE}>{t("offer.add")}</Button>
+    </div>
+
     if (!offers?.length) {
         return (
             <div className="flex flex-col items-center justify-center mt-20">
-                <p className="xl-font mb-4 secondary-text">{t("offer.noOffers")}</p>
+                <p className="xl-font secondary-text mb-10">{t("offer.noOffers")}</p>
+
+                {createBtn}
             </div>
         )
     }
@@ -44,10 +50,8 @@ const MyOffersList: React.FC = () => {
                 ))}
             </div>
 
-            <div className="mt-auto flex flex-col mb-5 px-3">
-                <Button fullWidth onClick={() => navigate(Path.OFFER_FORM)} size={BtnSizes.LARGE}>{t("offer.add")}</Button>
-            </div>
-
+            {createBtn}
+                
         </div>
     )
 }

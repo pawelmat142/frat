@@ -15,12 +15,12 @@ interface AvatarTileProps {
     editable?: boolean;
 }
 
-const DEFAULT_AVATAR = "/assets/img/avatar-mock.png";
+const AVATAR_MOCK = "/assets/img/default-avatar.png";
 const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 const MAX_FILE_SIZE_MB = 5;
 
 const AvatarTile: React.FC<AvatarTileProps> = ({
-    src = DEFAULT_AVATAR,
+    src = AVATAR_MOCK,
     alt = "Avatar",
     uid,
     editable = false,

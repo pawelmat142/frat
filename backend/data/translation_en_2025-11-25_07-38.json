@@ -8,6 +8,12 @@
       "offers": "Offers",
       "account": "Account"
     },
+    "account": {
+      "account": "Account",
+      "showEmployeeProfile": "Show Employee Profile",
+      "createEmployeeProfile": "Create Employee Profile",
+      "offers": "Offers"
+    },
     "lang": {
       "select": "Select Language",
       "language": "Language",
@@ -36,7 +42,7 @@
       "views": "Views",
       "likes": "Likes",
       "created": "Created",
-      "noOffers": "You have no offers yet.",
+      "noOffers": "Has no offers yet...",
       "offersList": "Offers list",
       "searchTitle": "Offers",
       "offerViewTitle": "Offer details",
@@ -193,7 +199,10 @@
       "successMessage": "Please check your email to verify your account.",
       "errorEmailMatch": "Emails do not match.",
       "errorPasswordMatch": "Passwords do not match.",
-      "verificationEmailSent": "Verification email sent. Please check your inbox."
+      "verificationEmailSent": "Verification email sent. Please check your inbox.",
+      "emailVerificationRequired": "Email verification is required.",
+      "emailVerificationMessage": "You need to verify your email address to access all features.",
+      "resendVerificationEmail": "Resend verification email"
     },
     "cookies": {
       "title": "Cookie Notice",

@@ -5,7 +5,7 @@ import Loading from "global/components/Loading";
 import { useNavigate, useParams } from "react-router-dom";
 import { EmployeeProfileI, EmployeeProfileStatuses } from "@shared/interfaces/EmployeeProfileI";
 import { useEmployeeSearch } from "../search/EmployeeSearchProvider";
-import AvatarTile from "./AvatarTile";
+import AvatarTile from "../../../user/components/AvatarTile";
 import CallendarTile from "./CallendarTile";
 import ProfileDataTile from "./ProfileDataTile";
 import AvailabilityTile from "./AvailabilityTile";

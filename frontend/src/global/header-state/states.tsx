@@ -40,6 +40,10 @@ export const STATES: { [key: string]: HeaderState } = {
         leftBtn: <HeaderBackBtn/>,
         title: 'offer.offersList',
     },
+    [Path.ACCOUNT]: {
+        leftBtn: <HeaderBackBtn/>,
+        title: 'account.account',
+    },
     [Path.ERROR_PAGE]: {
         
     }

@@ -223,7 +223,6 @@ $tileRadius: 1rem;
     gap: 1rem;
 
     .square-tile {
-        border-radius: $tileRadius;
         font-size: $btnFont;
 
         color: $primary-color;
@@ -291,6 +290,7 @@ $tileRadius: 1rem;
     align-items: center;
     aspect-ratio: 1 / 1;
     background-color: $secondary-bg;
+    border-radius: $tileRadius;
 
     &.col-tile {
         flex-direction: column;

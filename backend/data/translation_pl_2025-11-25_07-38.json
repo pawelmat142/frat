@@ -8,6 +8,12 @@
       "offers": "Oferty",
       "account": "Konto"
     },
+    "account": {
+      "account": "Konto",
+      "showEmployeeProfile": "Pokaż profil pracownika",
+      "createEmployeeProfile": "Utwórz profil pracownika",
+      "offers": "Oferty"
+    },
     "lang": {
       "select": "Wybierz język",
       "language": "Język",
@@ -36,7 +42,7 @@
       "views": "Wyświetlenia",
       "likes": "Polubienia",
       "created": "Utworzono",
-      "noOffers": "Nie masz jeszcze żadnych ofert.",
+      "noOffers": "Nie ma jeszcze żadnych ofert...",
       "myListTitle": "Moje oferty",
       "offersList": "Lista ofert",
       "searchTitle": "Oferty",
@@ -195,7 +201,10 @@
       "successMessage": "Sprawdź swój email, aby zweryfikować konto.",
       "errorEmailMatch": "Emaile się nie zgadzają.",
       "errorPasswordMatch": "Hasła się nie zgadzają.",
-      "verificationEmailSent": "Email weryfikacyjny został wysłany. Sprawdź swoją skrzynkę."
+      "verificationEmailSent": "Email weryfikacyjny został wysłany. Sprawdź swoją skrzynkę.",
+      "emailVerificationRequired": "Wymagana jest weryfikacja email.",
+      "emailVerificationMessage": "Musisz zweryfikować swój adres email, aby uzyskać dostęp do wszystkich funkcji.",
+      "resendVerificationEmail": "Wyślij ponownie email weryfikacyjny"
     },
     "cookies": {
       "title": "Informacja o plikach cookie",

@@ -16,7 +16,7 @@ import ErrorPage from 'global/views/ErrorPage';
 import SignUpPage from 'auth/views/SignUpPage';
 import AdminUsers from 'admin/views/users/AdminUsers';
 import SignInPage from 'auth/views/SignInPage';
-import ProfilePage from 'user/views/ProfilePage';
+import ProfilePage from 'user/views/AccountPage';
 import ForgotPassword from 'auth/views/ForgotPassword';
 import { ProtectedRoute } from 'auth/ProtectedRoute';
 import { UserRoles } from '@shared/interfaces/UserI';
