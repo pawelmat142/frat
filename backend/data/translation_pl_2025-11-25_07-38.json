@@ -8,6 +8,9 @@
       "offers": "Oferty",
       "account": "Konto"
     },
+    "chat": {
+      "openChat": "Otwórz czat"
+    },
     "account": {
       "account": "Konto",
       "showEmployeeProfile": "Pokaż profil pracownika",

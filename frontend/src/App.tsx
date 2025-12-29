@@ -31,6 +31,7 @@ import OfferView from 'offer/views/offer-view/OfferView';
 import OfferSearchView from 'offer/views/search/OfferSearchView';
 import AdminOffers from 'admin/views/offer/AdminOffers';
 import TelegramSignPage from 'auth/views/TelegramSignPage';
+import ChatView from 'chat/views/ChatView';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -66,6 +67,7 @@ const App: React.FC = () => {
                 <Route path={Path.HOME} element={<PageWrapper direction={-1}><HomePage /></PageWrapper>} />
 
                 <Route path={Path.ACCOUNT} element={<PageWrapper direction={1}><ProtectedRoute><ProfilePage /></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.CHAT} element={<PageWrapper direction={1}><ProtectedRoute><ChatView /></ProtectedRoute></PageWrapper>} />
 
                 {/* EMPLOYEE PROFILE */}
                 <Route path={Path.EMPLOYEE_PROFILE} element={<PageWrapper direction={1}><EmployeeProfileView /></PageWrapper>} />

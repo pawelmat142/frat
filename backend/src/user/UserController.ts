@@ -2,6 +2,7 @@
 import {
   Controller,
   Get,
+  Param,
   UseInterceptors,
 } from '@nestjs/common';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
@@ -22,7 +23,7 @@ export class UserController {
   @Get('/:uid')
   @Public()
   @Serialize(UserEntity)
-  fetchUser(uid: string): Promise<UserI> {
+  fetchUser(@Param('uid') uid: string): Promise<UserI> {
     return this.userPublicService.fetchUser(uid);
   }
 }

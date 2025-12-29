@@ -12,7 +12,7 @@ import { UserPublicService } from "user/services/UserPublicService";
 import AvatarTile from "user/components/AvatarTile";
 import { Path } from "../../path";
 import { BtnModes } from "global/interface/controls.interface";
-import { FaBriefcase, FaIdCard, FaTrash } from "react-icons/fa";
+import { FaBriefcase, FaIdCard, FaTrash, FaComments } from "react-icons/fa";
 import { useConfirm } from "global/providers/PopupProvider";
 import { UserManagementService } from "user/services/UserManagementService";
 import { FirebaseAuth } from "auth/services/FirebaseAuth";
@@ -102,7 +102,7 @@ const AccountPage: React.FC = () => {
             FirebaseAuth.getAuth().signOut()
             toast.success(t('account.deleteAccountSuccessToast'));
         } catch (error) {
-            console.error( error);
+            console.error(error);
             toast.error(t('account.deleteAccountFailed'));
         } finally {
             setLocalLoading(false);
@@ -112,6 +112,10 @@ const AccountPage: React.FC = () => {
     const goToMyOffers = () => {
         navigate(Path.getOffersPath(user.uid));
     };
+
+    const openChat = () => {
+        navigate(Path.CHAT);
+    }
 
     return (
         <div className="view-container">
@@ -131,39 +135,52 @@ const AccountPage: React.FC = () => {
                 </div>
             </div>
 
-            {isMyAccount && (
-                <div className="flex flex-col gap-3 mt-6">
-                    <Button
-                        fullWidth
-                        mode={BtnModes.SECONDARY}
-                        onClick={goToEmployeeProfile}
-                    >
-                        <FaIdCard className="mr-2" />
-                        {employeeProfile
-                            ? t('account.showEmployeeProfile')
-                            : t('account.createEmployeeProfile')
-                        }
-                    </Button>
+            <div className="flex flex-col gap-3 mt-6">
+                {isMyAccount ? (
+                    <>
+                        <Button
+                            fullWidth
+                            mode={BtnModes.SECONDARY}
+                            onClick={goToEmployeeProfile}
+                        >
+                            <FaIdCard className="mr-2" />
+                            {employeeProfile
+                                ? t('account.showEmployeeProfile')
+                                : t('account.createEmployeeProfile')
+                            }
+                        </Button>
 
-                    <Button
-                        fullWidth
-                        mode={BtnModes.SECONDARY}
-                        onClick={goToMyOffers}
-                    >
-                        <FaBriefcase className="mr-2" />
-                        {t('account.offers')} ({offers?.length || 0})
-                    </Button>
+                        <Button
+                            fullWidth
+                            mode={BtnModes.SECONDARY}
+                            onClick={goToMyOffers}
+                        >
+                            <FaBriefcase className="mr-2" />
+                            {t('account.offers')} ({offers?.length || 0})
+                        </Button>
 
-                    <Button
-                        fullWidth
-                        mode={BtnModes.ERROR_TXT}
-                        onClick={deleteAccount}
-                    >
-                        <FaTrash className="mr-2" />
-                        {t('account.deleteAccountConfirmTitle')}
-                    </Button>
-                </div>
-            )}
+                        <Button
+                            fullWidth
+                            mode={BtnModes.ERROR_TXT}
+                            onClick={deleteAccount}
+                        >
+                            <FaTrash className="mr-2" />
+                            {t('account.deleteAccountConfirmTitle')}
+                        </Button>
+                    </>
+                ) : (
+                    <>
+                        <Button
+                            fullWidth
+                            mode={BtnModes.PRIMARY}
+                            onClick={openChat}
+                        >
+                            <FaComments className="mr-2" />
+                            {t('chat.openChat')}
+                        </Button>
+                    </>
+                )}
+            </div>
 
         </div>
     );

@@ -9,6 +9,8 @@ export abstract class Path {
 
     public static readonly ACCOUNT = '/account/:uid';
 
+    public static readonly CHAT = '/chat';
+
     // EMPLOYEE PROFILES
     public static readonly EMPLOYEE_PROFILE = '/employee-profile/:displayName';
     public static readonly EMPLOYEE_PROFILE_FORM = '/employee-profile-form';
