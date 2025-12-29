@@ -13,6 +13,9 @@ import { Logger } from '@nestjs/common';
 import { ChatService } from './services/ChatService';
 import { ExportedAuthService } from 'auth/services/ExportedAuthService';
 import { UserI } from '@shared/interfaces/UserI';
+import { UserService } from 'user/services/UserService';
+import { ChatUtil } from '@shared/utils/ChatUtil';
+import { ChatEvents, ChatI, JoinChatResponse, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
 
 interface AuthenticatedSocket extends Socket {
   user: UserI;
@@ -37,6 +40,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly chatService: ChatService,
     private readonly exportedAuthService: ExportedAuthService,
+    private readonly userService: UserService,
   ) {}
 
   async handleConnection(socket: AuthenticatedSocket) {
@@ -51,7 +55,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
 
       const decodedToken = await this.exportedAuthService.verifyIdToken(token);
-      const user = await this.exportedAuthService.getUserEntity(decodedToken);
+      const user = await this.userService.getActiveUserByUid(decodedToken.uid);
 
       if (!user) {
         this.logger.warn(`Connection rejected - user not found`);
@@ -70,13 +74,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.userSockets.get(user.uid)!.add(socket.id);
 
       // Join user to their personal room for direct messages
-      socket.join(`user:${user.uid}`);
+      socket.join(ChatUtil.userRoom(user.uid));
 
       // Join user to all their chat rooms
       const userChats = await this.chatService.getUserChats(user.uid);
       for (const chat of userChats) {
         this.logger.log(`Joining user ${user.uid} to chat room chat:${chat.chatId}`);
-        socket.join(`chat:${chat.chatId}`);
+        socket.join(ChatUtil.chatRoom(chat.chatId));
       }
 
       this.logger.log(`User connected: ${user.uid} (socket: ${socket.id})`);
@@ -99,11 +103,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  @SubscribeMessage('sendMessage')
+  @SubscribeMessage(ChatEvents.SEND_MESSAGE)
   async handleSendMessage(
     @ConnectedSocket() socket: AuthenticatedSocket,
-    @MessageBody() data: { chatId: number; content: string },
-  ) {
+    @MessageBody() data: SendMessageDto,
+  ): Promise<SendMessageResponse> {
     const { chatId, content } = data;
     const senderUid = socket.user.uid;
 
@@ -119,7 +123,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const message = await this.chatService.createMessage(chatId, senderUid, content);
 
       // Broadcast message to all chat members
-      this.server.to(`chat:${chatId}`).emit('newMessage', message);
+      this.server.to(ChatUtil.chatRoom(chatId)).emit(ChatEvents.RECEIVE_MESSAGE, message);
 
       return { success: true, message };
     } catch (error) {
@@ -128,11 +132,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  @SubscribeMessage('joinChat')
+  @SubscribeMessage(ChatEvents.JOIN_CHAT)
   async handleJoinChat(
     @ConnectedSocket() socket: AuthenticatedSocket,
     @MessageBody() data: { chatId: number },
-  ) {
+  ): Promise<JoinChatResponse> {
     const { chatId } = data;
     const uid = socket.user.uid;
 
@@ -143,13 +147,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return { error: 'Not a member of this chat' };
     }
 
-    socket.join(`chat:${chatId}`);
+    socket.join(ChatUtil.chatRoom(chatId));
     return { success: true };
   }
 
   // Helper: notify user about new chat (when someone creates direct chat with them)
-  notifyUserAboutNewChat(uid: string, chat: any) {
-    this.server.to(`user:${uid}`).emit('newChat', chat);
+  notifyUserAboutNewChat(uid: string, chat: ChatI) {
+    this.server.to(ChatUtil.userRoom(uid)).emit(ChatEvents.NEW_CHAT, chat);
   }
 
   private extractToken(socket: Socket): string | null {

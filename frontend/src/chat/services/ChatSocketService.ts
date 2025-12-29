@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 import { FirebaseAuth } from 'auth/services/FirebaseAuth';
-import { ChatMessageI } from '@shared/interfaces/ChatI';
+import { ChatEvents, ChatI, ChatMessageI, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
 
 const SOCKET_URL = process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:3100';
 
@@ -29,26 +29,26 @@ class ChatSocketService {
             transports: ['websocket', 'polling'],
         });
 
-        this.socket.on('connect', () => {
+        this.socket.on(ChatEvents.CONNECT, () => {
             console.log('ChatSocket: Connected');
         });
 
-        this.socket.on('disconnect', () => {
+        this.socket.on(ChatEvents.DISCONNECT, () => {
             console.log('ChatSocket: Disconnected');
         });
 
-        this.socket.on('connect_error', (error) => {
+        this.socket.on(ChatEvents.CONNECT_ERROR, (error) => {
             console.error('ChatSocket: Connection error', error);
         });
 
-        this.socket.on('newMessage', (message: ChatMessageI) => {
-            const listener = this.messageListeners.get(message.chatId);
-            if (listener) {
-                listener(message);
+        this.socket.on(ChatEvents.RECEIVE_MESSAGE, (message: ChatMessageI) => {
+            const messageListener = this.messageListeners.get(message.chatId);
+            if (messageListener) {
+                messageListener(message);
             }
         });
 
-        this.socket.on('newChat', (chat: any) => {
+        this.socket.on(ChatEvents.NEW_CHAT, (chat: ChatI) => {
             this.newChatListeners.forEach(listener => listener(chat));
         });
     }
@@ -62,37 +62,38 @@ class ChatSocketService {
 
     joinChat(chatId: number): void {
         if (this.socket?.connected) {
-            this.socket.emit('joinChat', { chatId });
+            this.socket.emit(ChatEvents.JOIN_CHAT, { chatId });
         }
     }
 
-    sendMessage(chatId: number, content: string): Promise<{ success?: boolean; error?: string; message?: ChatMessageI }> {
+    sendMessage(msg: SendMessageDto): Promise<SendMessageResponse> {
         return new Promise((resolve) => {
             if (!this.socket?.connected) {
                 resolve({ error: 'Not connected' });
                 return;
             }
 
-            this.socket.emit('sendMessage', { chatId, content }, (response: any) => {
+            this.socket.emit(ChatEvents.SEND_MESSAGE, msg, (response: SendMessageResponse) => {
+                console.log('ChatSocket: sendMessage response', response);
                 resolve(response);
             });
         });
     }
 
-    onMessage(chatId: number, callback: (message: ChatMessageI) => void): void {
-        this.messageListeners.set(chatId, callback);
+    onMessage(chatId: number, messageListener: (message: ChatMessageI) => void): void {
+        this.messageListeners.set(chatId, messageListener);
     }
 
     offMessage(chatId: number): void {
         this.messageListeners.delete(chatId);
     }
 
-    onNewChat(callback: (chat: any) => void): void {
-        this.newChatListeners.add(callback);
+    onNewChat(newChatListener: (chat: ChatI) => void): void {
+        this.newChatListeners.add(newChatListener);
     }
 
-    offNewChat(callback: (chat: any) => void): void {
-        this.newChatListeners.delete(callback);
+    offNewChat(newChatListener: (chat: ChatI) => void): void {
+        this.newChatListeners.delete(newChatListener);
     }
 
     isConnected(): boolean {

@@ -76,10 +76,7 @@ export class ChatService {
       throw new ToastException('chat.error.emptyMessage', this);
     }
 
-    const message = await this.chatRepo.createMessage(chatId, senderUid, content.trim());
-    
-    // Load sender relation for response
-    return this.chatRepo.getMessageById(message.messageId);
+    return this.chatRepo.createMessage(chatId, senderUid, content.trim());
   }
 
   async getChatMessages(chatId: number, userUid: string, limit = 50, offset = 0): Promise<ChatMessageEntity[]> {

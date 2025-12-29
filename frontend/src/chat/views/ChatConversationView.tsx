@@ -57,7 +57,7 @@ const ChatConversationView: React.FC = () => {
             chatSocket.joinChat(numericChatId);
         });
 
-        chatSocket.onMessage(numericChatId, (message) => {
+        const messageListener = (message: ChatMessageI) => {
             setMessages(prev => {
                 // Check for duplicate using current state
                 if (prev.some(m => m.messageId === message.messageId)) {
@@ -66,7 +66,8 @@ const ChatConversationView: React.FC = () => {
                 console.log('Received message:', message);
                 return [...prev, message];
             });
-        });
+        }
+        chatSocket.onMessage(numericChatId, messageListener);
 
         return () => {
             chatSocket.offMessage(numericChatId);
@@ -86,7 +87,10 @@ const ChatConversationView: React.FC = () => {
         setSending(true);
 
         try {
-            const response = await chatSocket.sendMessage(numericChatId, newMessage.trim());
+            const response = await chatSocket.sendMessage({ 
+                chatId: numericChatId, 
+                content: newMessage.trim() 
+            });
             if (response.success && response.message) {
                 setNewMessage("");
                 inputRef.current?.focus();

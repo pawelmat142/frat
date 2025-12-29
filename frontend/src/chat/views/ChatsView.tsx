@@ -32,13 +32,18 @@ const ChatsView: React.FC = () => {
         
         chatSocket.connect();
 
-        const handleNewChat = (chat: ChatI) => {
-            setChats(prev => [chat, ...prev]);
+        const newChatListener = (chat: ChatI) => {
+            setChats(prev => {
+                if (prev.some(c => c.chatId === chat.chatId)) {
+                    return prev;
+                }
+                return [chat, ...prev];
+            });
         };
-        chatSocket.onNewChat(handleNewChat);
 
+        chatSocket.onNewChat(newChatListener);
         return () => {
-            chatSocket.offNewChat(handleNewChat);
+            chatSocket.offNewChat(newChatListener);
         };
     }, []);
 

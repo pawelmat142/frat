@@ -32,3 +32,31 @@ export const ChatTypes = {
 } as const;
 export type ChatType = typeof ChatTypes[keyof typeof ChatTypes];
 
+export const ChatEvents = {
+    SEND_MESSAGE: 'sendMessage',
+    RECEIVE_MESSAGE: 'receiveMessage',
+    NEW_CHAT: 'newChat',
+    JOIN_CHAT: 'joinChat',
+
+    CONNECT: 'connect',
+    DISCONNECT: 'disconnect',
+    CONNECT_ERROR: 'connect_error',
+} as const;
+
+export type ChatEvent = typeof ChatEvents[keyof typeof ChatEvents];
+
+export interface SendMessageDto {
+    chatId: number;
+    content: string;
+}
+
+export interface SendMessageResponse {
+    success?: boolean;
+    message?: ChatMessageI;
+    error?: string;
+}
+
+export interface JoinChatResponse {
+    success?: boolean;
+    error?: string;
+}
