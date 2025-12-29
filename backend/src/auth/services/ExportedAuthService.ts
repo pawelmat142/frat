@@ -131,7 +131,14 @@ export class ExportedAuthService {
       this.logger.warn(`User with uid ${decodedToken.uid} is not active. Cannot create or return user.`);
       return null
     }
+    return this.createUserEntity(decodedToken);
+  }
 
+  public getUserEntity(decodedToken: DecodedIdToken): Promise<UserI | null> {
+    return this.userService.getUserByUid(decodedToken.uid);
+  }
+
+  public async createUserEntity(decodedToken: DecodedIdToken): Promise<UserI | null> {
     const provider = UserUtil.findProvider(decodedToken);
     if (!provider) {
       this.logger.warn(`Cannot determine provider from decoded token for uid ${decodedToken.uid}`);

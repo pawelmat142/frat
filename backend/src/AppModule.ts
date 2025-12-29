@@ -13,6 +13,7 @@ import { FeedbackModule } from 'feedback/FeedbackModule';
 import { OffersModule } from 'offer/OfferModule';
 import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
 import { TelegramModule } from 'telegram/telegram.module';
+import { ChatModule } from 'chat/ChatModule';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { TelegramModule } from 'telegram/telegram.module';
     EmployeeProfileModule,
     OffersModule,
 
-    FeedbackModule
+    FeedbackModule,
+    ChatModule,
   ],
   controllers: [
     GlobalController,

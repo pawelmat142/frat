@@ -68,7 +68,7 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       database: this.database,
       entities: [join(__dirname, '..', '**', '*Entity{.ts,.js}')],
       synchronize: this.nodeEnv === 'development',
-      logging: this.nodeEnv === 'development',
+      // logging: this.nodeEnv === 'development',
     };
     return result;
   }

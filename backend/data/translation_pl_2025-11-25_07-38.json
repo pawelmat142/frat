@@ -9,7 +9,9 @@
       "account": "Konto"
     },
     "chat": {
-      "openChat": "Otwórz czat"
+      "openChat": "Otwórz czat",
+      "chats": "Czaty",
+      "noChats": "Brak dostępnych czatów"
     },
     "account": {
       "account": "Konto",

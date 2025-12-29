@@ -16,6 +16,7 @@ import { FaBriefcase, FaIdCard, FaTrash, FaComments } from "react-icons/fa";
 import { useConfirm } from "global/providers/PopupProvider";
 import { UserManagementService } from "user/services/UserManagementService";
 import { FirebaseAuth } from "auth/services/FirebaseAuth";
+import { ChatService } from "chat/services/ChatService";
 
 const AccountPage: React.FC = () => {
 
@@ -113,8 +114,15 @@ const AccountPage: React.FC = () => {
         navigate(Path.getOffersPath(user.uid));
     };
 
-    const openChat = () => {
-        navigate(Path.CHAT);
+    const openChat = async () => {
+        if (!user) return;
+        try {
+            const chat = await ChatService.getOrCreateDirectChat(user.uid);
+            navigate(Path.getChatPath(chat.chatId));
+        } catch (error) {
+            console.error('Failed to open chat:', error);
+            toast.error(t('chat.error.cannotOpen'));
+        }
     }
 
     return (
@@ -136,20 +144,29 @@ const AccountPage: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-3 mt-6">
+
+                {!!employeeProfile && (
+                    <Button
+                        fullWidth
+                        mode={BtnModes.SECONDARY}
+                        onClick={goToEmployeeProfile}
+                    >
+                        <FaIdCard className="mr-2" />
+                        {t('account.showEmployeeProfile')}
+                    </Button>
+                )}
                 {isMyAccount ? (
                     <>
-                        <Button
-                            fullWidth
-                            mode={BtnModes.SECONDARY}
-                            onClick={goToEmployeeProfile}
-                        >
-                            <FaIdCard className="mr-2" />
-                            {employeeProfile
-                                ? t('account.showEmployeeProfile')
-                                : t('account.createEmployeeProfile')
-                            }
-                        </Button>
-
+                        {!employeeProfile && (
+                            <Button
+                                fullWidth
+                                mode={BtnModes.SECONDARY}
+                                onClick={goToEmployeeProfile}
+                            >
+                                <FaIdCard className="mr-2" />
+                                {t('account.createEmployeeProfile')}
+                            </Button>
+                        )}
                         <Button
                             fullWidth
                             mode={BtnModes.SECONDARY}
@@ -157,6 +174,15 @@ const AccountPage: React.FC = () => {
                         >
                             <FaBriefcase className="mr-2" />
                             {t('account.offers')} ({offers?.length || 0})
+                        </Button>
+
+                        <Button
+                            fullWidth
+                            mode={BtnModes.SECONDARY}
+                            onClick={() => { navigate(Path.CHATS); }}
+                        >
+                            <FaComments className="mr-2" />
+                            {t('chat.chats')}
                         </Button>
 
                         <Button
@@ -178,6 +204,7 @@ const AccountPage: React.FC = () => {
                             <FaComments className="mr-2" />
                             {t('chat.openChat')}
                         </Button>
+
                     </>
                 )}
             </div>
