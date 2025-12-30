@@ -2,14 +2,15 @@ import MainHeaderState from "./MainHeaderState";
 import HeaderBackBtn from "./HeaderBackBtn";
 import { Path } from "../../path";
 
-export interface HeaderState {
+export interface ViewState {
     title?: string;
     leftBtn?: React.ReactNode;
     rightBtn?: React.ReactNode;
     hideFooter?: boolean;
+    stickyHeader?: boolean;
 }
 
-export const STATES: { [key: string]: HeaderState } = {
+export const STATES: { [key: string]: ViewState } = {
     [Path.HOME]: {
         leftBtn: <MainHeaderState/>,
     },

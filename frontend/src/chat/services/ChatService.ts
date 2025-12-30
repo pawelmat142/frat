@@ -21,7 +21,7 @@ export const ChatService = {
     /**
      * Get single chat by ID
      */
-    getChatById(chatId: number): Promise<ChatI> {
+    getChatById(chatId: number): Promise<ChatResponse> {
         return httpClient.get(`/chat/${chatId}`);
     },
 

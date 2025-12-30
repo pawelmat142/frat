@@ -7,11 +7,12 @@ const GlobalHeader: React.FC = () => {
     const { t } = useTranslation()
     const globalCtx = useGlobalContext();
 
+    const stickyHeader = globalCtx?.state?.stickyHeader;
     return (
-        <header className='header'>
-            <nav className='p-container h-full'>
+        <header className={`header relative`}>
+            <nav className={` h-full ${stickyHeader ? 'sticky-header' : ''}`}>
 
-                <div className="header-content">
+                <div className="header-content p-container">
 
                     <div className="header-content-left">
                         {globalCtx?.state?.leftBtn}

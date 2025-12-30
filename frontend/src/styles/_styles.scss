@@ -13,12 +13,13 @@ $headerHeight: 50px;
 $headerHeightDesktop: 60px;
 
 .header {
-    background-color: $secondary-bg;
-    height: $headerHeight;
     max-height: $headerHeight;
 
     nav {
         width: 100%;
+        height: $headerHeight;
+        background-color: $secondary-bg;
+
     }
 
     .desktop-menu {
@@ -40,6 +41,15 @@ $headerHeightDesktop: 60px;
         align-items: center;
     }
 }
+
+.sticky-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    right: 0;
+}
+
 
 // FOOTER
 .footer {
@@ -97,6 +107,17 @@ $headerHeightDesktop: 60px;
         height: 3.5rem;
         max-width: unset;
     }
+}
+
+.header {
+    .list-view-item-img {
+        img {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+        padding-right: .25rem;
+    }
+
 }
 
 .list-view-item {

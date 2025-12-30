@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChatI, ChatMessageI } from "@shared/interfaces/ChatI";
+import { ChatI, ChatMessageI, ChatResponse } from "@shared/interfaces/ChatI";
 import { ChatService } from "../services/ChatService";
 import { chatSocket } from "../services/ChatSocketService";
 import { useAuthContext } from "auth/AuthProvider";
@@ -13,6 +13,8 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { BtnModes } from "global/interface/controls.interface";
 import { DateUtil } from "@shared/utils/DateUtil";
+import ListItemImg from "global/components/ListItemImg";
+import { AVATAR_MOCK } from "user/components/AvatarTile";
 
 const ChatConversationView: React.FC = () => {
     const { t } = useTranslation();
@@ -20,7 +22,7 @@ const ChatConversationView: React.FC = () => {
     const { chatId } = useParams<{ chatId: string }>();
     const { me } = useAuthContext();
 
-    const [chat, setChat] = useState<ChatI | null>(null);
+    const [chat, setChat] = useState<ChatResponse | null>(null);
     const [messages, setMessages] = useState<ChatMessageI[]>([]);
     const [newMessage, setNewMessage] = useState("");
     const [loading, setLoading] = useState(true);
@@ -34,11 +36,26 @@ const ChatConversationView: React.FC = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
+    const getOtherMember = () => {
+        if (!me || !chat || !(chat as ChatResponse).members) return null;
+        return (chat as ChatResponse).members.find((m: any) => m.uid !== me.uid)?.user;
+    };
+
+    const otherUser = getOtherMember();
+
     const globalCtx = useGlobalContext();
     const setViewState = () => {
+
+        const chatViewHeaderContent = <div className="flex gap-2 items-center">
+            <HeaderBackBtn></HeaderBackBtn>
+            <ListItemImg imgUrl={otherUser?.avatarRef?.url || AVATAR_MOCK} />
+            <div className="x-font">{otherUser?.displayName}</div>
+        </div>
+
         globalCtx.setViewState({
-            leftBtn: <HeaderBackBtn></HeaderBackBtn>,
-            hideFooter: true
+            leftBtn: chatViewHeaderContent,
+            hideFooter: true,
+            stickyHeader: true
         })
     }
 
@@ -103,9 +120,9 @@ const ChatConversationView: React.FC = () => {
         setSending(true);
 
         try {
-            const response = await chatSocket.sendMessage({ 
-                chatId: numericChatId, 
-                content: newMessage.trim() 
+            const response = await chatSocket.sendMessage({
+                chatId: numericChatId,
+                content: newMessage.trim()
             });
             if (response.success && response.message) {
                 setNewMessage("");
@@ -118,10 +135,6 @@ const ChatConversationView: React.FC = () => {
         }
     };
 
-    const getOtherMember = () => {
-        if (!me || !chat || !(chat as any).members) return null;
-        return (chat as any).members.find((m: any) => m.uid !== me.uid)?.user;
-    };
 
 
 
@@ -129,7 +142,6 @@ const ChatConversationView: React.FC = () => {
         return <Loading />;
     }
 
-    const otherUser = getOtherMember();
 
     const iconSize = 22
     return (
@@ -152,15 +164,15 @@ const ChatConversationView: React.FC = () => {
                                 <div className={`chat-view-message ${leftSide ? 'left' : 'right'}`}>
                                     <p>{msg.content}</p>
                                     <div className={`chat-view-message-info`}>
-                                        
+
                                         {!!msg.readAt && (
                                             <span><FaSearch size={5} /></span>
                                         )}
                                         <span>{DateUtil.displayTime(msg.createdAt)}</span>
                                     </div>
-                                        {/* TODO znaczek ze przeczytane */}
-                                        
-                                    
+                                    {/* TODO znaczek ze przeczytane */}
+
+
                                 </div>
                             </div>
                         );
@@ -198,7 +210,7 @@ const ChatConversationView: React.FC = () => {
                         disabled={!newMessage.trim() || sending}
                         className="p-0"
                     >
-                        <FaPaperPlane size={iconSize*1.2} />
+                        <FaPaperPlane size={iconSize * 1.2} />
                     </Button>
                 </div>
 

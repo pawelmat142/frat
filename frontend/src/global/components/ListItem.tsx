@@ -1,4 +1,5 @@
 import React from "react";
+import ListItemImg from "./ListItemImg";
 
 interface Props {
     imgUrl?: string;
@@ -14,9 +15,7 @@ const ListItem: React.FC<Props> = ({ imgUrl, topLeft, topRight, bottomLeft, bott
 
     return (
         <div className={`list-view-item${first ? ' first' : ''}${last ? ' last' : ''}`}>
-            {imgUrl && <div className="list-view-item-img">
-                <img src={imgUrl} alt="Avatar" className="w-14 h-14 rounded-full object-cover" />
-            </div>}
+            <ListItemImg imgUrl={imgUrl} />
 
             <div className="w-full flex flex-col justify-center gap-1">
 
