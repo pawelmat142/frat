@@ -28,7 +28,7 @@ interface AuthenticatedSocket extends Socket {
   namespace: '/api/chat',
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  
+
   private readonly logger = new Logger(this.constructor.name);
 
   @WebSocketServer()
@@ -41,7 +41,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly chatService: ChatService,
     private readonly exportedAuthService: ExportedAuthService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   async handleConnection(socket: AuthenticatedSocket) {
     this.logger.warn(`New connection attempt (socket: ${socket.id})`);
@@ -96,6 +96,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       if (userSocketSet) {
         userSocketSet.delete(socket.id);
         if (userSocketSet.size === 0) {
+          this.chatService.leaveAllOpenChatsForUser(socket.user.uid);
           this.userSockets.delete(socket.user.uid);
         }
       }
@@ -119,7 +120,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         return { error: 'Not a member of this chat' };
       }
 
-      // Save message to database
       const message = await this.chatService.createMessage(chatId, senderUid, content);
 
       // Emit updated chat info to all members
@@ -136,7 +136,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  @SubscribeMessage(ChatEvents.JOIN_CHAT)
+  @SubscribeMessage(ChatEvents.OPEN_CHAT)
   async handleJoinChat(
     @ConnectedSocket() socket: AuthenticatedSocket,
     @MessageBody() data: { chatId: number },
@@ -151,10 +151,29 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return { error: 'Not a member of this chat' };
     }
 
-    const chat = await this.chatService.markMessagesReadWhenJoinChat(uid, chatId);
+    const chat = await this.chatService.openChatAndMarkMessages(uid, chatId);
     this.notifyAboutRefreshChat(chat);
     // notify read message
     socket.join(ChatUtil.chatRoom(chatId));
+    return { success: true };
+  }
+
+  @SubscribeMessage(ChatEvents.LEAVE_CHAT)
+  async handleLeaveChat(
+    @ConnectedSocket() socket: AuthenticatedSocket,
+    @MessageBody() data: { chatId: number },
+  ): Promise<JoinChatResponse> {
+    const { chatId } = data;
+    const uid = socket.user.uid;
+    this.logger.warn(`User ${uid} requests to leave chat ${chatId}`);
+
+    const isMember = await this.chatService.isUserMemberOfChat(uid, chatId);
+    if (!isMember) {
+      return { error: 'Not a member of this chat' };
+    }
+
+    const chat = await this.chatService.leaveChat(uid, chatId);
+    this.notifyAboutRefreshChat(chat);
     return { success: true };
   }
 

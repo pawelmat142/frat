@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 import { FirebaseAuth } from 'auth/services/FirebaseAuth';
-import { ChatEvents, ChatI, ChatMessageI, ChatWithMembers, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
+import { ChatEvents, ChatI, ChatMessageI, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
 
 const SOCKET_URL = process.env.REACT_APP_API_URL
 
@@ -70,7 +70,13 @@ class ChatSocketService {
 
     joinChat(chatId: number): void {
         if (this.socket?.connected) {
-            this.socket.emit(ChatEvents.JOIN_CHAT, { chatId })
+            this.socket.emit(ChatEvents.OPEN_CHAT, { chatId })
+        }
+    }
+
+    leaveChat(chatId: number): void {
+        if (this.socket?.connected) {
+            this.socket.emit(ChatEvents.LEAVE_CHAT, { chatId })
         }
     }
 

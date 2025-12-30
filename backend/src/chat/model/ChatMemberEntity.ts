@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { ChatMemberI } from '@shared/interfaces/ChatI';
+import { ChatMemberI, ChatMemberStatus, ChatMemberStatuses } from '@shared/interfaces/ChatI';
 import { Entity, PrimaryColumn, CreateDateColumn, ManyToOne, JoinColumn, Column } from 'typeorm';
 import { ChatEntity } from './ChatEntity';
 import { UserEntity } from 'user/model/UserEntity';
@@ -18,6 +18,9 @@ export class ChatMemberEntity implements ChatMemberI {
 
   @Column({ name: 'unread_count', type: 'int', default: 0 })
   unreadCount: number;
+
+  @Column({ name: 'status', type: 'varchar', length: 20, default: ChatMemberStatuses.LEFT })
+  status: ChatMemberStatus;
 
   @ManyToOne(() => ChatEntity, (chat) => chat.members, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'chat_id' })

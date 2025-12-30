@@ -6,10 +6,23 @@ import { Repository } from 'typeorm';
 import { ChatEntity } from '../model/ChatEntity';
 import { ChatMemberEntity } from '../model/ChatMemberEntity';
 import { ChatMessageEntity } from '../model/ChatMessageEntity';
-import { ChatI } from '@shared/interfaces/ChatI';
+import { ChatI, ChatMemberStatuses } from '@shared/interfaces/ChatI';
 
 @Injectable()
 export class ChatRepo {
+
+  /**
+   * Sets all member statuses from OPEN to LEFT for the given user in all chats (single query).
+   */
+  async leaveAllOpenChatsForUser(uid: string): Promise<void> {
+    await this.memberRepository
+      .createQueryBuilder()
+      .update()
+      .set({ status: ChatMemberStatuses.LEFT })
+      .where('uid = :uid', { uid })
+      .andWhere('status = :openStatus', { openStatus: ChatMemberStatuses.OPEN })
+      .execute();
+  }
 
   private readonly logger = new Logger(this.constructor.name);
 
@@ -96,12 +109,14 @@ export class ChatRepo {
  * Increments unreadCount for all members of the chat except the sender.
  */
   async incrementUnreadForMembersExceptSender(chatId: number, senderUid: string): Promise<void> {
+    // Inkrementuj unreadCount tylko dla członków ze statusem 'LEFT', poza nadawcą
     await this.memberRepository
       .createQueryBuilder()
       .update()
       .set({ unreadCount: () => 'unread_count + 1' })
       .where('chat_id = :chatId', { chatId })
       .andWhere('uid != :senderUid', { senderUid })
+      .andWhere('status = :leftStatus', { leftStatus: ChatMemberStatuses.LEFT })
       .execute();
   }
 
@@ -142,14 +157,28 @@ export class ChatRepo {
   }
 
   /**
- * Resetuje licznik nieprzeczytanych wiadomości dla użytkownika w czacie.
- */
-  async resetUnreadCount(chatId: number, uid: string): Promise<void> {
-    // Resetuj licznik nieprzeczytanych wiadomości dla użytkownika w czacie
+   * Ustawia status członka czatu na 'LEFT' gdy opuszcza czat.
+   */
+  async leaveChat(uid: string, chatId: number): Promise<void> {
     await this.memberRepository
       .createQueryBuilder()
       .update()
-      .set({ unreadCount: 0 })
+      .set({ status: ChatMemberStatuses.LEFT })
+      .where('chat_id = :chatId', { chatId })
+      .andWhere('uid = :uid', { uid })
+      .execute();
+  }
+
+  /**
+ * Resetuje licznik nieprzeczytanych wiadomości dla użytkownika w czacie.
+ */
+  async openChatAndMarkMessages(chatId: number, uid: string): Promise<void> {
+
+    // Resetuj licznik nieprzeczytanych wiadomości i ustaw status na 'OPEN' dla użytkownika w czacie
+    await this.memberRepository
+      .createQueryBuilder()
+      .update()
+      .set({ unreadCount: 0, status: ChatMemberStatuses.OPEN })
       .where('chat_id = :chatId', { chatId })
       .andWhere('uid = :uid', { uid })
       .execute();

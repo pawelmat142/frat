@@ -14,9 +14,16 @@ export interface ChatI {
 export interface ChatMemberI {
     chatId: number;
     uid: string;
+    status: ChatMemberStatus;
     joinedAt: Date;
     unreadCount: number;
 }
+
+export const ChatMemberStatuses = {
+    OPEN: 'OPEN',
+    LEFT: 'LEFT',
+} as const;
+export type ChatMemberStatus = typeof ChatMemberStatuses[keyof typeof ChatMemberStatuses];
 
 export interface ChatMessageI {
     messageId: number;
@@ -43,7 +50,8 @@ export const ChatEvents = {
     SEND_MESSAGE: 'sendMessage',
     RECEIVE_MESSAGE: 'receiveMessage',
     LOAD_CHAT: 'loadChat',
-    JOIN_CHAT: 'joinChat',
+    OPEN_CHAT: 'openChat',
+    LEAVE_CHAT: 'leaveChat',
     
     CONNECT: 'connect',
     DISCONNECT: 'disconnect',

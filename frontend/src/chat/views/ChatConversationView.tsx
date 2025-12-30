@@ -202,6 +202,7 @@ const ChatConversationView: React.FC = () => {
         return () => {
             chatSocket.unregisterMessageListener(numericChatId);
             chatSocket.unregisterChatListener(loadChatListener);
+            chatSocket.leaveChat(numericChatId);
             isInitialized.current = false;
         };
     }, [chatId]);
@@ -278,13 +279,12 @@ const ChatConversationView: React.FC = () => {
                                 <div className={`chat-view-message ${leftSide ? 'left' : 'right'}`}>
                                     <p>{msg.content}</p>
                                     <div className={`chat-view-message-info`}>
-
-                                        {!!msg.readAt && (
+                                        {/* TODO znaczek ze przeczytane */}
+                                        {/* {!!msg.readAt && (
                                             <span><FaSearch size={5} /></span>
-                                        )}
+                                        )} */}
                                         <span>{DateUtil.displayTime(msg.createdAt)}</span>
                                     </div>
-                                    {/* TODO znaczek ze przeczytane */}
 
                                 </div>
                             </div>

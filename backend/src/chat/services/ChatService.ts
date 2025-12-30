@@ -77,7 +77,7 @@ export class ChatService {
 
     const message = await this.chatRepo.createMessage(chatId, senderUid, content.trim());
     await this.chatRepo.updateLatestMessageContent(chatId, message.content);
-    // Inkrementuj unreadCount dla wszystkich poza nadawcą
+    // Inkrementuj unreadCount dla wszystkich poza nadawcą i onlineUids
     await this.chatRepo.incrementUnreadForMembersExceptSender(chatId, senderUid);
     return message;
   }
@@ -97,12 +97,22 @@ export class ChatService {
     }
   }
 
-  async markMessagesReadWhenJoinChat(uid: string, chatId: number): Promise<ChatI> {
-    await this.chatRepo.resetUnreadCount(chatId, uid);
+  async openChatAndMarkMessages(uid: string, chatId: number): Promise<ChatI> {
+    await this.chatRepo.openChatAndMarkMessages(chatId, uid);
     return this.chatRepo.findChat(chatId);
   }
 
+  async leaveChat(uid: string, chatId: number): Promise<ChatI> {
+    await this.chatRepo.leaveChat(uid, chatId);
+    return this.findChat(chatId);
+  }
 
+  /**
+ * Sets all member statuses from OPEN to LEFT for the given user in all chats (single query).
+ */
+  async leaveAllOpenChatsForUser(uid: string): Promise<void> {
+    await this.chatRepo.leaveAllOpenChatsForUser(uid);
+  }
 
   async cleanChat(uid: string, chatId: number): Promise<ChatI> {
     await this.validateMembership(uid, chatId);
@@ -137,7 +147,7 @@ export class ChatService {
     return { success: true }
   }
 
-    findChat(chatId: number): Promise<ChatI> {
+  findChat(chatId: number): Promise<ChatI> {
     return this.chatRepo.findChat(chatId);
   }
 }
