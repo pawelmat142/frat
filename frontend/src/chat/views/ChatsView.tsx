@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChatMemberI, ChatMemberWithUserI, ChatResponse } from "@shared/interfaces/ChatI";
+import { ChatI, ChatMemberWithUserI, ChatWithMembers } from "@shared/interfaces/ChatI";
 import { ChatService } from "../services/ChatService";
 import { chatSocket } from "../services/ChatSocketService";
 import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import { Path } from "../../path";
 import { FaComments } from "react-icons/fa";
-import { UserI } from "@shared/interfaces/UserI";
 import ChatListItem from "./ChatListItem";
 
 const ChatsView: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { me } = useAuthContext();
-    const [chats, setChats] = useState<ChatResponse[]>([]);
+    const [chats, setChats] = useState<ChatWithMembers[]>([]);
     const [loading, setLoading] = useState(true);
+
+    console.log(chats)
 
     useEffect(() => {
         const loadChats = async () => {
@@ -31,17 +32,34 @@ const ChatsView: React.FC = () => {
         };
 
         loadChats()
-        console.log(chats)
         chatSocket.connect();
 
-        const loadChatListener = async (chat: ChatResponse) => {
+        const loadChatListener = async (chat: ChatI) => {
             if (!chat) {
                 const data = await ChatService.getMyChats();
                 setChats(data);
-                return
+                return;
             }
+            console.log('ChatsView loadChatListener', chat);
             setChats(prev => {
-                return [...prev.filter(c => c.chatId !== chat.chatId), chat].sort((a, b) => {
+                return prev.map(c => {
+                    if (c.chatId === chat.chatId) {
+                        // Przepisz members z chat, ale zachowaj user z poprzedniego stanu jeśli istnieje
+                        const newMembers = chat.members?.map(newMember => {
+                            const oldMember = c.members!.find(m => m.uid === newMember.uid)!;
+                            // user musi być zawsze typu UserI (nie undefined)
+                            return {
+                                ...newMember,
+                                user: oldMember.user!
+                            };
+                        }) || [];
+                        return {
+                            ...chat,
+                            members: newMembers
+                        };
+                    }
+                    return c;
+                }).sort((a, b) => {
                     const dateA = new Date(a.updatedAt || a.createdAt).getTime();
                     const dateB = new Date(b.updatedAt || b.createdAt).getTime();
                     return dateB - dateA;
@@ -59,7 +77,7 @@ const ChatsView: React.FC = () => {
         navigate(Path.getChatPath(chatId));
     };
 
-    const getOtherMember = (chat: ChatResponse): ChatMemberWithUserI | null | undefined => {
+    const getOtherMember = (chat: ChatWithMembers): ChatMemberWithUserI | null | undefined => {
         if (!me || !chat.members) return null;
         return chat.members.find((m: ChatMemberWithUserI) => m.uid !== me.uid);
     };

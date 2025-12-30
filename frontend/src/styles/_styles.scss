@@ -239,6 +239,20 @@ $inputGap: .75rem;
     }
 }
 
+.unread-badge {
+    background-color: $primary-color;
+    color: white;
+    font-size: $smallFont;
+    padding: .15rem .5rem;
+    border-radius: 1rem;
+    min-width: 1.5rem;
+    text-align: center;
+    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 
 // ADMIN PANEL

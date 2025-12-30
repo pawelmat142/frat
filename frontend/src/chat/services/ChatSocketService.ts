@@ -1,13 +1,13 @@
 import { io, Socket } from 'socket.io-client';
 import { FirebaseAuth } from 'auth/services/FirebaseAuth';
-import { ChatEvents, ChatMessageI, ChatResponse, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
+import { ChatEvents, ChatI, ChatMessageI, ChatWithMembers, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
 
 const SOCKET_URL = process.env.REACT_APP_API_URL
 
 class ChatSocketService {
     private socket: Socket | null = null;
     private messageListeners: Map<number, (message: ChatMessageI) => void> = new Map()
-    private loadChatListeners: Set<(chat: ChatResponse) => void> = new Set()
+    private loadChatListeners: Set<(chat: ChatI) => void> = new Set()
 
     async connect(): Promise<void> {
         if (!SOCKET_URL) {
@@ -55,7 +55,7 @@ class ChatSocketService {
             }
         });
 
-        this.socket.on(ChatEvents.LOAD_CHAT, (chat: ChatResponse) => {
+        this.socket.on(ChatEvents.LOAD_CHAT, (chat: ChatI) => {
             console.log('on(ChatEvents.LOAD_CHAT', chat)
             this.loadChatListeners.forEach(listener => listener(chat))
         });
@@ -96,11 +96,11 @@ class ChatSocketService {
         this.messageListeners.delete(chatId)
     }
 
-    registerChatListener(loadChatListener: (chat: ChatResponse) => void): void {
+    registerChatListener(loadChatListener: (chat: ChatI) => void): void {
         this.loadChatListeners.add(loadChatListener)
     }
 
-    unregisterChatListener(loadChatListener: (chat: ChatResponse) => void): void {
+    unregisterChatListener(loadChatListener: (chat: ChatI) => void): void {
         this.loadChatListeners.delete(loadChatListener)
     }
 

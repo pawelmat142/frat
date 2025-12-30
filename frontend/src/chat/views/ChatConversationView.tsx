@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChatMessageI, ChatResponse } from "@shared/interfaces/ChatI";
+import { ChatI, ChatMemberWithUserI, ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
 import { ChatService } from "../services/ChatService";
 import { chatSocket } from "../services/ChatSocketService";
 import { useAuthContext } from "auth/AuthProvider";
@@ -25,7 +25,7 @@ const ChatConversationView: React.FC = () => {
     const { chatId } = useParams<{ chatId: string }>();
     const { me } = useAuthContext();
 
-    const [chat, setChat] = useState<ChatResponse | null>(null);
+    const [chat, setChat] = useState<ChatWithMembers | null>(null);
     const [messages, setMessages] = useState<ChatMessageI[]>([]);
     const [newMessage, setNewMessage] = useState("");
     const [loading, setLoading] = useState(true);
@@ -40,8 +40,8 @@ const ChatConversationView: React.FC = () => {
     };
 
     const getOtherMember = () => {
-        if (!me || !chat || !(chat as ChatResponse).members) return null;
-        return (chat as ChatResponse).members.find((m: any) => m.uid !== me.uid)?.user;
+        if (!me || !chat || !(chat as ChatWithMembers).members) return null;
+        return (chat as ChatWithMembers).members.find((m: ChatMemberWithUserI) => m.uid !== me.uid)?.user;
     };
 
     const otherUser = getOtherMember();
@@ -49,15 +49,9 @@ const ChatConversationView: React.FC = () => {
     const menuCtx = useMenuContext();
     const confirm = useConfirm();
 
-    const refreshChat = async () => {
-        if (chat?.chatId) {
-            const newChat = await ChatService.getChatById(chat?.chatId)
-            setChat(newChat);
-        }
-    }
     const blockedByMe = chat?.blockedByUid === me?.uid;
 
-    const prepareChatMenu = (chat: ChatResponse): MenuItem[] => {
+    const prepareChatMenu = (chat: ChatWithMembers): MenuItem[] => {
         const items: MenuItem[] = [];
         if (!chat?.blockedByUid) {
             if (messages.length) {
@@ -129,7 +123,7 @@ const ChatConversationView: React.FC = () => {
         return items;
     }
 
-    const setViewState = (chat: ChatResponse) => {
+    const setViewState = (chat: ChatWithMembers) => {
         const chatViewHeaderContent = <div className="flex gap-2 items-center">
             <HeaderBackBtn></HeaderBackBtn>
             <ListItemImg imgUrl={otherUser?.avatarRef?.url || AVATAR_MOCK} />
@@ -188,7 +182,7 @@ const ChatConversationView: React.FC = () => {
             });
         }
 
-        const loadChatListener = (chatEvent: ChatResponse) => {
+        const loadChatListener = (chatEvent: ChatI) => {
             if (!chatEvent) {
                 navigate(Path.CHATS, { replace: true });
                 toast.warn(t('chat.chatDeleted'));
@@ -197,7 +191,9 @@ const ChatConversationView: React.FC = () => {
             if (numericChatId !== chatEvent.chatId) {
                 return
             }
-            setChat(chatEvent);
+            setChat(prev => prev ? ({ ...chatEvent,
+                members: prev.members
+            }) : null);
         };
 
         chatSocket.registerMessageListener(numericChatId, messageListener);
@@ -221,7 +217,7 @@ const ChatConversationView: React.FC = () => {
         scrollToBottom();
     }, [messages]);
 
-    const refreshMessages = async (chat: ChatResponse) => {
+    const refreshMessages = async (chat: ChatWithMembers) => {
         if (chat?.chatId) {
             const messagesData = await ChatService.getChatMessages(chat.chatId);
             setMessages(messagesData);

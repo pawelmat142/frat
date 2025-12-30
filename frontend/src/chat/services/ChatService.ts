@@ -1,6 +1,5 @@
 import { httpClient } from "global/services/http";
-import { ChatI, ChatMessageI, ChatResponse } from "@shared/interfaces/ChatI";
-import { ApiResponse } from "@shared/dto/dtos";
+import { ChatI, ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
 
 export const ChatService = {
 
@@ -8,7 +7,7 @@ export const ChatService = {
      * Get all chats for current user
      */
     // TODO refactor to initial load
-    getMyChats(): Promise<ChatResponse[]> {
+    getMyChats(): Promise<ChatWithMembers[]> {
         return httpClient.get('/chat');
     },
 
@@ -22,7 +21,7 @@ export const ChatService = {
     /**
      * Get single chat by ID
      */
-    getChatById(chatId: number): Promise<ChatResponse> {
+    getChatById(chatId: number): Promise<ChatWithMembers> {
         return httpClient.get(`/chat/${chatId}`);
     },
 
@@ -38,28 +37,28 @@ export const ChatService = {
     /**
      * Clean chat history
      */
-    cleanChat(chatId: number): Promise<ChatResponse> {
+    cleanChat(chatId: number): Promise<ChatI> {
         return httpClient.delete(`/chat/${chatId}/messages/clean`);
     },
 
     /**
      * Clean chat history
      */
-    blockChat(chatId: number): Promise<ChatResponse> {
+    blockChat(chatId: number): Promise<ChatI> {
         return httpClient.post(`/chat/${chatId}/block`);
     },
 
     /**
      * Unblock chat
      */
-    unblockChat(chatId: number): Promise<ChatResponse> {
+    unblockChat(chatId: number): Promise<ChatI> {
         return httpClient.post(`/chat/${chatId}/unblock`);
     },
 
     /**
      * Delete chat
     */
-    deleteChat(chatId: number): Promise<ChatResponse> {
+    deleteChat(chatId: number): Promise<ChatI> {
         return httpClient.delete(`/chat/${chatId}`);
     }
 

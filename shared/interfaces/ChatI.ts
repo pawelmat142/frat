@@ -8,12 +8,14 @@ export interface ChatI {
     createdAt: Date;
     updatedAt: Date;
     latestMessageContent?: string;
+    members: ChatMemberI[];
 }
 
 export interface ChatMemberI {
     chatId: number;
     uid: string;
     joinedAt: Date;
+    unreadCount: number;
 }
 
 export interface ChatMessageI {
@@ -66,7 +68,7 @@ export interface JoinChatResponse {
     error?: string;
 }
 
-export interface ChatResponse extends ChatI {
+export interface ChatWithMembers extends ChatI {
     members: ChatMemberWithUserI[];
 }
 

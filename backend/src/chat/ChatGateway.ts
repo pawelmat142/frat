@@ -15,7 +15,7 @@ import { ExportedAuthService } from 'auth/services/ExportedAuthService';
 import { UserI } from '@shared/interfaces/UserI';
 import { UserService } from 'user/services/UserService';
 import { ChatUtil } from '@shared/utils/ChatUtil';
-import { ChatEvents, ChatResponse, JoinChatResponse, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
+import { ChatEvents, ChatI, JoinChatResponse, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
 
 interface AuthenticatedSocket extends Socket {
   user: UserI;
@@ -122,6 +122,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // Save message to database
       const message = await this.chatService.createMessage(chatId, senderUid, content);
 
+      // Emit updated chat info to all members
+      const chat = await this.chatService.findChat(chatId);
+      this.notifyAboutRefreshChat(chat);
+
       // Broadcast message to all chat members
       this.server.to(ChatUtil.chatRoom(chatId)).emit(ChatEvents.RECEIVE_MESSAGE, message);
 
@@ -147,16 +151,19 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return { error: 'Not a member of this chat' };
     }
 
+    const chat = await this.chatService.markMessagesReadWhenJoinChat(uid, chatId);
+    this.notifyAboutRefreshChat(chat);
+    // notify read message
     socket.join(ChatUtil.chatRoom(chatId));
     return { success: true };
   }
 
   // Helper: notify user about new chat (when someone creates direct chat with them)
-  notifyUserAboutNewChat(uid: string, chat: ChatResponse): void {
+  notifyUserAboutNewChat(uid: string, chat: ChatI): void {
     this.server.to(ChatUtil.userRoom(uid)).emit(ChatEvents.LOAD_CHAT, chat);
   }
 
-  notifyAboutRefreshChat(chat: ChatResponse): void {
+  notifyAboutRefreshChat(chat: ChatI): void {
     this.server.to(ChatUtil.chatRoom(chat.chatId)).emit(ChatEvents.LOAD_CHAT, chat);
   }
 

@@ -5,7 +5,7 @@ import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
 import { UserI } from '@shared/interfaces/UserI';
 import { ChatGateway } from './ChatGateway';
-import { ChatResponse } from '@shared/interfaces/ChatI';
+import { ChatI, ChatWithMembers } from '@shared/interfaces/ChatI';
 import { ApiResponse } from '@shared/dto/dtos';
 
 @Controller('api/chat')
@@ -21,7 +21,7 @@ export class ChatController {
    * Get all chats for current user
    */
   @Get()
-  getMyChats(@CurrentUser() user: UserI): Promise<ChatResponse[]> {
+  getMyChats(@CurrentUser() user: UserI): Promise<ChatWithMembers[]> {
     return this.chatService.getUserChats(user.uid);
   }
 
@@ -48,8 +48,8 @@ export class ChatController {
   getChatById(
     @CurrentUser() user: UserI,
     @Param('chatId') chatId: number,
-  ) {
-    return this.chatService.getChatById(chatId, user.uid);
+  ): Promise<ChatWithMembers> {
+    return this.chatService.getChatWithMembersWithUsers(chatId, user.uid);
   }
 
   /**
@@ -78,7 +78,7 @@ export class ChatController {
   async cleanChat(
     @CurrentUser() user: UserI,
     @Param('chatId') chatId: string,
-  ): Promise<ChatResponse> {
+  ): Promise<ChatI> {
     const result = await this.chatService.cleanChat(user.uid, Number(chatId));
     this.chatGateway.notifyAboutRefreshChat(result);
     return result;
@@ -91,7 +91,7 @@ export class ChatController {
   async blockChat(
     @CurrentUser() user: UserI,
     @Param('chatId') chatId: string,
-  ): Promise<ChatResponse> {
+  ): Promise<ChatI> {
     const result = await this.chatService.blockChat(user.uid, Number(chatId));
     this.chatGateway.notifyAboutRefreshChat(result);
     return result;
@@ -104,7 +104,7 @@ export class ChatController {
   async unblockChat(
     @CurrentUser() user: UserI,
     @Param('chatId') chatId: string,
-  ): Promise<ChatResponse> {
+  ): Promise<ChatI> {
     const result = await this.chatService.unblockChat(user.uid, Number(chatId));
     this.chatGateway.notifyAboutRefreshChat(result);
     return result;

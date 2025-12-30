@@ -1,3 +1,4 @@
+
 /** Created by Pawel Malek **/
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -5,6 +6,7 @@ import { Repository } from 'typeorm';
 import { ChatEntity } from '../model/ChatEntity';
 import { ChatMemberEntity } from '../model/ChatMemberEntity';
 import { ChatMessageEntity } from '../model/ChatMessageEntity';
+import { ChatI } from '@shared/interfaces/ChatI';
 
 @Injectable()
 export class ChatRepo {
@@ -21,24 +23,28 @@ export class ChatRepo {
   ) { }
 
   // Chat operations
-  async createChat(type: string): Promise<ChatEntity> {
+  async createChat(type: string): Promise<ChatI> {
     const chat = this.chatRepository.create({ type } as ChatEntity);
-    return this.chatRepository.save(chat) as Promise<ChatEntity>;
+    return this.chatRepository.save(chat);
   }
 
-  async findChatById(chatId: number): Promise<ChatEntity | null> {
+  async findChat(chatId: number): Promise<ChatI | null> {
+    return this.chatRepository.findOne({
+      where: { chatId },
+      relations: ['members'],
+    });
+  }
+
+  async getChatWithMembersWithUsers(chatId: number): Promise<ChatEntity | null> {
     return this.chatRepository.findOne({
       where: { chatId },
       relations: ['members', 'members.user'],
     });
   }
 
-  async findDirectChatBetweenUsers(uid1: string, uid2: string): Promise<ChatEntity | null> {
-    // Find a DIRECT chat where both users are members
+  async findDirectChatBetweenUsers(uid1: string, uid2: string): Promise<ChatI | null> {
     const result = await this.chatRepository
       .createQueryBuilder('chat')
-      .innerJoin('chat.members', 'm1', 'm1.uid = :uid1', { uid1 })
-      .innerJoin('chat.members', 'm2', 'm2.uid = :uid2', { uid2 })
       .where('chat.type = :type', { type: 'DIRECT' })
       .getOne();
 
@@ -54,6 +60,14 @@ export class ChatRepo {
       .orderBy('chat.createdAt', 'DESC')
       .getMany();
   }
+
+  async getUserChatsWithoutJoins(uid: string): Promise<ChatI[]> {
+    return this.chatRepository
+      .createQueryBuilder('chat')
+      .orderBy('chat.createdAt', 'DESC')
+      .getMany();
+  }
+
 
   // Member operations
   async addMember(chatId: number, uid: string): Promise<ChatMemberEntity> {
@@ -78,6 +92,19 @@ export class ChatRepo {
     return this.messageRepository.save(message);
   }
 
+  /**
+ * Increments unreadCount for all members of the chat except the sender.
+ */
+  async incrementUnreadForMembersExceptSender(chatId: number, senderUid: string): Promise<void> {
+    await this.memberRepository
+      .createQueryBuilder()
+      .update()
+      .set({ unreadCount: () => 'unread_count + 1' })
+      .where('chat_id = :chatId', { chatId })
+      .andWhere('uid != :senderUid', { senderUid })
+      .execute();
+  }
+
   updateLatestMessageContent(chatId: number, content: string): Promise<void> {
     return this.chatRepository
       .createQueryBuilder()
@@ -85,13 +112,12 @@ export class ChatRepo {
       .set({ latestMessageContent: content })
       .where("chatId = :chatId", { chatId })
       .execute()
-      .then(() => {});
+      .then(() => { });
   }
 
   async getChatMessages(chatId: number, limit = 50, offset = 0): Promise<ChatMessageEntity[]> {
     return this.messageRepository.find({
       where: { chatId },
-      relations: ['sender'],
       order: { createdAt: 'DESC' },
       take: limit,
       skip: offset,
@@ -113,6 +139,29 @@ export class ChatRepo {
       .where('chatId = :chatId', { chatId })
       .execute()
       .then(() => { });
+  }
+
+  /**
+ * Resetuje licznik nieprzeczytanych wiadomości dla użytkownika w czacie.
+ */
+  async resetUnreadCount(chatId: number, uid: string): Promise<void> {
+    // Resetuj licznik nieprzeczytanych wiadomości dla użytkownika w czacie
+    await this.memberRepository
+      .createQueryBuilder()
+      .update()
+      .set({ unreadCount: 0 })
+      .where('chat_id = :chatId', { chatId })
+      .andWhere('uid = :uid', { uid })
+      .execute();
+
+    // Oznacz wszystkie wiadomości w czacie jako przeczytane (readAt = now), jeśli nie były przeczytane
+    await this.messageRepository
+      .createQueryBuilder()
+      .update()
+      .set({ readAt: () => 'CURRENT_TIMESTAMP' })
+      .where('chat_id = :chatId', { chatId })
+      .andWhere('read_at IS NULL')
+      .execute();
   }
 
   async blockChat(chatId: number, blockedByUid: string): Promise<void> {

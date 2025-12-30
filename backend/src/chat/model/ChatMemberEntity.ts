@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
 import { ChatMemberI } from '@shared/interfaces/ChatI';
-import { Entity, PrimaryColumn, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, CreateDateColumn, ManyToOne, JoinColumn, Column } from 'typeorm';
 import { ChatEntity } from './ChatEntity';
 import { UserEntity } from 'user/model/UserEntity';
 
@@ -15,6 +15,9 @@ export class ChatMemberEntity implements ChatMemberI {
 
   @CreateDateColumn({ name: 'joined_at' })
   joinedAt: Date;
+
+  @Column({ name: 'unread_count', type: 'int', default: 0 })
+  unreadCount: number;
 
   @ManyToOne(() => ChatEntity, (chat) => chat.members, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'chat_id' })

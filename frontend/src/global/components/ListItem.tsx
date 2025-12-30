@@ -17,7 +17,7 @@ const ListItem: React.FC<Props> = ({ imgUrl, topLeft, topRight, bottomLeft, bott
         <div className={`list-view-item${first ? ' first' : ''}${last ? ' last' : ''}`}>
             <ListItemImg imgUrl={imgUrl} />
 
-            <div className="w-full flex flex-col justify-center gap-1">
+            <div className="w-full flex flex-col justify-center">
 
                 {/* TODP */}
                 <div className="flex justify-between ">
@@ -27,7 +27,7 @@ const ListItem: React.FC<Props> = ({ imgUrl, topLeft, topRight, bottomLeft, bott
 
                 {/* BOTTOM */}
                 <div className="flex justify-between">
-                    <div className="small-font secondary-text">{bottomLeft}</div>
+                    <div className="small-font secondary-text mt-1">{bottomLeft}</div>
                     {bottomRight}
                 </div>
 
