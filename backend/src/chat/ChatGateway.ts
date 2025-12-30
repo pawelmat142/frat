@@ -153,7 +153,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   // Helper: notify user about new chat (when someone creates direct chat with them)
   notifyUserAboutNewChat(uid: string, chat: ChatResponse): void {
-    this.server.to(ChatUtil.userRoom(uid)).emit(ChatEvents.NEW_CHAT, chat);
+    this.server.to(ChatUtil.userRoom(uid)).emit(ChatEvents.LOAD_CHAT, chat);
+  }
+
+  notifyAboutRefreshChat(chat: ChatResponse): void {
+    this.server.to(ChatUtil.chatRoom(chat.chatId)).emit(ChatEvents.LOAD_CHAT, chat);
+  }
+
+  notifyAboutDeleteChat(chatId: number): void {
+    this.server.to(ChatUtil.chatRoom(chatId)).emit(ChatEvents.LOAD_CHAT, null);
   }
 
   private extractToken(socket: Socket): string | null {

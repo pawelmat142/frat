@@ -35,18 +35,19 @@ const ChatsView: React.FC = () => {
         console.log(chats)
         chatSocket.connect();
 
-        const newChatListener = (chat: ChatResponse) => {
+        const loadChatListener = (chat: ChatResponse) => {
             setChats(prev => {
-                if (prev.some(c => c.chatId === chat.chatId)) {
-                    return prev;
-                }
-                return [chat, ...prev];
+                return [...prev.filter(c => c.chatId !== chat.chatId), chat].sort((a, b) => {
+                    const dateA = new Date(a.updatedAt || a.createdAt).getTime();
+                    const dateB = new Date(b.updatedAt || b.createdAt).getTime();
+                    return dateB - dateA;
+                });
             });
         };
 
-        chatSocket.registerChatListener(newChatListener);
+        chatSocket.registerChatListener(loadChatListener);
         return () => {
-            chatSocket.unregisterChatListener(newChatListener);
+            chatSocket.unregisterChatListener(loadChatListener);
         };
     }, []);
 
@@ -80,7 +81,7 @@ const ChatsView: React.FC = () => {
                         // TODO dodaj znaczek ze przeczytane/dostarczone
                         const topRight = <div className="small-font">{Utils.prepareDisplayShortDate(t, date)}</div>
 
-                        return <div onClick={() => openChat(chat.chatId)}>
+                        return <div onClick={() => openChat(chat.chatId)} key={chat.chatId}>
                             <ListItem
                                 imgUrl={otherUser?.avatarRef?.url || AVATAR_MOCK}
                                 topLeft={otherUser?.displayName || t('chat.unknownUser')}

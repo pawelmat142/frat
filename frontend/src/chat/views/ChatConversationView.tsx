@@ -72,7 +72,6 @@ const ChatConversationView: React.FC = () => {
                         }
                         setLoading(true);
                         await ChatService.cleanChat(chat.chatId);
-                        setMessages([]);
                         setLoading(false);
                         toast.success(t('chat.cleanChatSuccess'));
                     }
@@ -90,7 +89,6 @@ const ChatConversationView: React.FC = () => {
                     }
                     setLoading(true);
                     await ChatService.blockChat(chat.chatId);
-                    await refreshChat();
                     setLoading(false);
                     toast.success(t('chat.blockUserSuccess'));
                 }
@@ -107,7 +105,6 @@ const ChatConversationView: React.FC = () => {
                     }
                     setLoading(true);
                     await ChatService.unblockChat(chat.chatId);
-                    await refreshChat();
                     setLoading(false);
                     toast.success(t('chat.unblockUserSuccess'));
                 }
@@ -126,8 +123,6 @@ const ChatConversationView: React.FC = () => {
                     setLoading(true);
                     await ChatService.deleteChat(chat.chatId);
                     setLoading(false);
-                    toast.success(t('chat.deleteChatSuccess'));
-                    navigate(-1)
                 }
             });
         }
@@ -192,11 +187,25 @@ const ChatConversationView: React.FC = () => {
                 return [...prev, message];
             });
         }
-        chatSocket.registerMessageListener(numericChatId, messageListener);
 
+        const loadChatListener = (chatEvent: ChatResponse) => {
+            if (!chatEvent) {
+                navigate(Path.CHATS, { replace: true });
+                toast.warn(t('chat.chatDeleted'));
+                return
+            }
+            if (numericChatId !== chatEvent.chatId) {
+                return
+            }
+            setChat(chatEvent);
+        };
+
+        chatSocket.registerMessageListener(numericChatId, messageListener);
+        chatSocket.registerChatListener(loadChatListener);
 
         return () => {
             chatSocket.unregisterMessageListener(numericChatId);
+            chatSocket.unregisterChatListener(loadChatListener);
             isInitialized.current = false;
         };
     }, [chatId]);
@@ -204,12 +213,20 @@ const ChatConversationView: React.FC = () => {
     useEffect(() => {
         if (chat) {
             setViewState(chat);
+            refreshMessages(chat);
         }
     }, [chat]);
 
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    const refreshMessages = async (chat: ChatResponse) => {
+        if (chat?.chatId) {
+            const messagesData = await ChatService.getChatMessages(chat.chatId);
+            setMessages(messagesData);
+        }
+    }
 
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -233,8 +250,6 @@ const ChatConversationView: React.FC = () => {
             setSending(false);
         }
     };
-
-
 
 
     if (loading) {

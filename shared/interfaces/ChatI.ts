@@ -39,9 +39,9 @@ export type ChatType = typeof ChatTypes[keyof typeof ChatTypes];
 export const ChatEvents = {
     SEND_MESSAGE: 'sendMessage',
     RECEIVE_MESSAGE: 'receiveMessage',
-    NEW_CHAT: 'newChat',
+    LOAD_CHAT: 'loadChat',
     JOIN_CHAT: 'joinChat',
-
+    
     CONNECT: 'connect',
     DISCONNECT: 'disconnect',
     CONNECT_ERROR: 'connect_error',

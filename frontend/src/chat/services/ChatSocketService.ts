@@ -7,7 +7,7 @@ const SOCKET_URL = process.env.REACT_APP_API_URL
 class ChatSocketService {
     private socket: Socket | null = null;
     private messageListeners: Map<number, (message: ChatMessageI) => void> = new Map()
-    private newChatListeners: Set<(chat: ChatResponse) => void> = new Set()
+    private loadChatListeners: Set<(chat: ChatResponse) => void> = new Set()
 
     async connect(): Promise<void> {
         if (!SOCKET_URL) {
@@ -55,9 +55,9 @@ class ChatSocketService {
             }
         });
 
-        this.socket.on(ChatEvents.NEW_CHAT, (chat: ChatResponse) => {
-            console.log('on(ChatEvents.NEW_CHAT', chat)
-            this.newChatListeners.forEach(listener => listener(chat))
+        this.socket.on(ChatEvents.LOAD_CHAT, (chat: ChatResponse) => {
+            console.log('on(ChatEvents.LOAD_CHAT', chat)
+            this.loadChatListeners.forEach(listener => listener(chat))
         });
     }
 
@@ -96,12 +96,12 @@ class ChatSocketService {
         this.messageListeners.delete(chatId)
     }
 
-    registerChatListener(newChatListener: (chat: ChatResponse) => void): void {
-        this.newChatListeners.add(newChatListener)
+    registerChatListener(loadChatListener: (chat: ChatResponse) => void): void {
+        this.loadChatListeners.add(loadChatListener)
     }
 
-    unregisterChatListener(newChatListener: (chat: ChatResponse) => void): void {
-        this.newChatListeners.delete(newChatListener)
+    unregisterChatListener(loadChatListener: (chat: ChatResponse) => void): void {
+        this.loadChatListeners.delete(loadChatListener)
     }
 
     isConnected(): boolean {

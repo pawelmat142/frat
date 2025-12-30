@@ -38,28 +38,28 @@ export const ChatService = {
     /**
      * Clean chat history
      */
-    cleanChat(chatId: number): Promise<ApiResponse> {
+    cleanChat(chatId: number): Promise<ChatResponse> {
         return httpClient.delete(`/chat/${chatId}/messages/clean`);
     },
 
     /**
      * Clean chat history
      */
-    blockChat(chatId: number) {
+    blockChat(chatId: number): Promise<ChatResponse> {
         return httpClient.post(`/chat/${chatId}/block`);
     },
 
     /**
      * Unblock chat
      */
-    unblockChat(chatId: number): Promise<ApiResponse> {
+    unblockChat(chatId: number): Promise<ChatResponse> {
         return httpClient.post(`/chat/${chatId}/unblock`);
     },
 
     /**
      * Delete chat
     */
-    deleteChat(chatId: number): Promise<ApiResponse> {
+    deleteChat(chatId: number): Promise<ChatResponse> {
         return httpClient.delete(`/chat/${chatId}`);
     }
 

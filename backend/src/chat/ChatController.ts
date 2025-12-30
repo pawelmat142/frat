@@ -75,43 +75,51 @@ export class ChatController {
    * Clean chat history
    */
   @Delete(':chatId/messages/clean')
-  cleanChat(
+  async cleanChat(
     @CurrentUser() user: UserI,
     @Param('chatId') chatId: string,
-  ): Promise<ApiResponse> {
-    return this.chatService.cleanChat(user.uid, Number(chatId));
+  ): Promise<ChatResponse> {
+    const result = await this.chatService.cleanChat(user.uid, Number(chatId));
+    this.chatGateway.notifyAboutRefreshChat(result);
+    return result;
   }
 
   /**
    * Clean chat history
    */
   @Post(':chatId/block')
-  blockChat(
+  async blockChat(
     @CurrentUser() user: UserI,
     @Param('chatId') chatId: string,
-  ): Promise<ApiResponse> {
-    return this.chatService.blockChat(user.uid, Number(chatId));
+  ): Promise<ChatResponse> {
+    const result = await this.chatService.blockChat(user.uid, Number(chatId));
+    this.chatGateway.notifyAboutRefreshChat(result);
+    return result;
   }
 
   /**
    * Unblock chat
    */
   @Post(':chatId/unblock')
-  unblockChat(
+  async unblockChat(
     @CurrentUser() user: UserI,
     @Param('chatId') chatId: string,
-  ): Promise<ApiResponse> {
-    return this.chatService.unblockChat(user.uid, Number(chatId));
+  ): Promise<ChatResponse> {
+    const result = await this.chatService.unblockChat(user.uid, Number(chatId));
+    this.chatGateway.notifyAboutRefreshChat(result);
+    return result;
   }
 
   /**
    * Delete chat
    */
   @Delete(':chatId')
-  deleteChat(
+  async deleteChat(
     @CurrentUser() user: UserI,
     @Param('chatId') chatId: string,
   ): Promise<ApiResponse> {
-    return this.chatService.deleteChat(user.uid, Number(chatId));
+    await this.chatService.deleteChat(user.uid, Number(chatId));
+    this.chatGateway.notifyAboutDeleteChat(Number(chatId));
+    return { success: true };
   }
 }

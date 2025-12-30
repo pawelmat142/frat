@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ChatRepo } from './ChatRepo';
 import { ChatEntity } from '../model/ChatEntity';
 import { ChatMessageEntity } from '../model/ChatMessageEntity';
-import { ChatTypes } from '@shared/interfaces/ChatI';
+import { ChatResponse, ChatTypes } from '@shared/interfaces/ChatI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { UserService } from 'user/services/UserService';
 import { ApiResponse } from '@shared/dto/dtos';
@@ -95,28 +95,28 @@ export class ChatService {
     }
   }
 
-  async cleanChat(uid: string, chatId: number): Promise<ApiResponse> {
+  async cleanChat(uid: string, chatId: number): Promise<ChatResponse> {
     await this.validateMembership(uid, chatId);
     // Usuń wszystkie wiadomości z chatu
     await this.chatRepo.deleteAllMessagesFromChat(chatId);
     this.logger.log(`User ${uid} cleaned chat history for chat ${chatId}`);
-    return { success: true };
+    return this.chatRepo.findChatById(chatId);
   }
 
-  async blockChat(uid: string, chatId: number): Promise<ApiResponse> {
+  async blockChat(uid: string, chatId: number): Promise<ChatResponse> {
     await this.validateMembership(uid, chatId);
     // Set blocked flag and blockedByUid in chat entity
     await this.chatRepo.blockChat(chatId, uid);
     this.logger.log(`User ${uid} blocked chat ${chatId}`);
-    return { success: true };
+    return this.chatRepo.findChatById(chatId);
   }
 
-  async unblockChat(uid: string, chatId: number): Promise<ApiResponse> {
+  async unblockChat(uid: string, chatId: number): Promise<ChatResponse> {
     await this.validateMembership(uid, chatId);
     // Remove blocked flag and blockedByUid in chat entity
     await this.chatRepo.blockChat(chatId, null);
     this.logger.log(`User ${uid} unblocked chat ${chatId}`);
-    return { success: true };
+    return this.chatRepo.findChatById(chatId);
   }
 
   async deleteChat(uid: string, chatId: number): Promise<ApiResponse> {
@@ -124,6 +124,6 @@ export class ChatService {
     // Delete chat itself
     await this.chatRepo.deleteChat(chatId);
     this.logger.log(`User ${uid} deleted chat ${chatId}`);
-    return { success: true };
+    return { success: true }
   }
 }
