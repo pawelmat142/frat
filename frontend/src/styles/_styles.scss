@@ -90,6 +90,7 @@ $headerHeightDesktop: 60px;
 
 .list-view-item-img {
     padding-right: 1rem;
+
     img {
         aspect-ratio: 1/1;
         width: 3.5rem;
@@ -106,6 +107,116 @@ $headerHeightDesktop: 60px;
         border-bottom: 1px solid $secondary-bg;
     }
 }
+
+
+
+// CHAT
+$chatPadding: .5rem;
+$inputGap: .75rem;
+
+.chat-view {
+    padding-left: $chatPadding;
+    padding-right: $chatPadding;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+
+.chat-view-input {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 $inputGap;
+    z-index: 10;
+
+    display: flex;
+    height: 54px;
+    border-radius: 16px;
+    background-color: $secondary-bg;
+}
+
+.chat-view-input-content {
+    flex: 1;
+    padding: 0 $inputGap;
+
+}
+
+.chat-view-input-content-control {
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.chat-view-input-left {
+    display: flex;
+    align-items: center;
+    gap: $inputGap;
+}
+
+.chat-view-input-right {
+    display: flex;
+    align-items: center;
+    gap: $inputGap;
+    justify-content: flex-end;
+}
+
+.chat-view-message {
+    max-width: 80%;
+    padding: .35rem $inputGap;
+    border-radius: $inputGap;
+    background-color: $secondary-bg;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    color: $primary-text;
+    margin-top: .2rem;
+
+    .chat-view-message-info {
+        white-space: nowrap;
+        color: $secondary-text;
+        font-size: $smallFont;
+        text-align: right;
+        flex: 1;
+        // margin-left: auto;
+    }
+
+    &.left {
+        flex-direction: row-reverse;
+        border-top-left-radius: 0;
+
+        .chat-view-message-info {
+            text-align: left;
+            align-self: flex-end;
+            margin-right: .5rem;
+
+        }
+    }
+
+    &.right {
+        border-bottom-right-radius: 0;
+
+        .chat-view-message-info {
+            text-align: right;
+            align-self: flex-end;
+            margin-left: .5rem;
+        }
+    }
+
+    p {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow-wrap: anywhere;
+        margin: 0;
+    }
+}
+
+
 
 // ADMIN PANEL
 .admin-panel {
@@ -581,6 +692,7 @@ $cellRadiusBig: 1rem;
     width: 100%;
     z-index: 4;
 }
+
 .form-wizard-buttons {
     background-color: $primary-bg;
     display: flex;
@@ -651,4 +763,3 @@ $cellRadiusBig: 1rem;
     padding-top: .5rem;
     z-index: 2;
 }
-

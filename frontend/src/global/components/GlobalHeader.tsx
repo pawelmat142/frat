@@ -14,18 +14,18 @@ const GlobalHeader: React.FC = () => {
                 <div className="header-content">
 
                     <div className="header-content-left">
-                        {globalCtx?.header?.leftBtn}
+                        {globalCtx?.state?.leftBtn}
 
-                        {globalCtx?.header?.title && (
+                        {globalCtx?.state?.title && (
                             <div className="header-title ml-2 btn-font pri-text">
-                                {t(globalCtx?.header?.title)}
+                                {t(globalCtx?.state?.title)}
                             </div>
                         )}
                     </div>
 
                     <div className='flex items-center'>
                         {!!globalCtx.isDesktop && (<DesktopMenu />)}
-                        {globalCtx?.header?.rightBtn}
+                        {globalCtx?.state?.rightBtn}
                     </div>
                 </div>
 

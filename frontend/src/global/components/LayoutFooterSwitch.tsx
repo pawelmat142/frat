@@ -8,6 +8,10 @@ const LayoutFooterSwitch: React.FC = () => {
   if (globalCtx.isDesktop) {
     return <Footer />;
   }
+
+  if (globalCtx.state.hideFooter) {
+    return null;
+  }
   return <MobileBottomNav />;
 };
 

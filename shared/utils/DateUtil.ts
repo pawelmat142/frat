@@ -11,6 +11,9 @@ export abstract class DateUtil {
         return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
     }
 
+    public static displayTime = (date: Date) => {
+        return new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
 
 
     public static isBefore(date1: Date, date2: Date): boolean {

@@ -8,7 +8,11 @@ import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import Button from "global/components/controls/Button";
 import { Path } from "../../path";
-import { FaArrowLeft, FaPaperPlane } from "react-icons/fa";
+import { FaBriefcase, FaPaperPlane, FaSearch } from "react-icons/fa";
+import { useGlobalContext } from "global/providers/GlobalProvider";
+import HeaderBackBtn from "global/header-state/HeaderBackBtn";
+import { BtnModes } from "global/interface/controls.interface";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 const ChatConversationView: React.FC = () => {
     const { t } = useTranslation();
@@ -30,7 +34,19 @@ const ChatConversationView: React.FC = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
+    const globalCtx = useGlobalContext();
+    const setViewState = () => {
+        globalCtx.setViewState({
+            leftBtn: <HeaderBackBtn></HeaderBackBtn>,
+            hideFooter: true
+        })
+    }
+
+    console.log(chat)
+    console.log(messages)
+
     useEffect(() => {
+        setViewState();
         if (!chatId || isInitialized.current) return;
         isInitialized.current = true;
 
@@ -107,9 +123,7 @@ const ChatConversationView: React.FC = () => {
         return (chat as any).members.find((m: any) => m.uid !== me.uid)?.user;
     };
 
-    const formatTime = (date: Date) => {
-        return new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    };
+
 
     if (loading) {
         return <Loading />;
@@ -117,51 +131,36 @@ const ChatConversationView: React.FC = () => {
 
     const otherUser = getOtherMember();
 
+    const iconSize = 22
     return (
-        <div className="flex flex-col h-full">
-            {/* Header */}
-            <div className="flex items-center gap-3 p-4 border-b">
-                <button
-                    onClick={() => navigate(Path.CHATS)}
-                    className="p-2 rounded-full hover:bg-opacity-80"
-                >
-                    <FaArrowLeft />
-                </button>
-                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
-                    {otherUser?.displayName?.charAt(0)?.toUpperCase() || '?'}
-                </div>
-                <div>
-                    <div className="font-semibold">
-                        {otherUser?.displayName || t('chat.unknownUser')}
-                    </div>
-                </div>
-            </div>
+        <div className="chat-view">
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            <div className="flex-1 overflow-y-auto pb-5">
                 {messages.length === 0 ? (
                     <div className="text-center secondary-text py-8">
                         {t('chat.noMessages')}
                     </div>
                 ) : (
                     messages.map((msg) => {
-                        const isMe = msg.senderUid === me?.uid;
+                        const leftSide = msg.senderUid !== me?.uid;
                         return (
                             <div
                                 key={msg.messageId}
-                                className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
+                                className={`flex ${leftSide ? 'justify-start' : 'justify-end'}`}
                             >
-                                <div
-                                    className={`max-w-[70%] p-3 rounded-lg ${
-                                        isMe
-                                            ? 'bg-primary text-white rounded-br-none'
-                                            : 'card-bg rounded-bl-none'
-                                    }`}
-                                >
-                                    <p className="break-words">{msg.content}</p>
-                                    <div className={`text-xs mt-1 ${isMe ? 'text-white/70' : 'secondary-text'}`}>
-                                        {formatTime(msg.createdAt)}
+                                <div className={`chat-view-message ${leftSide ? 'left' : 'right'}`}>
+                                    <p>{msg.content}</p>
+                                    <div className={`chat-view-message-info`}>
+                                        
+                                        {!!msg.readAt && (
+                                            <span><FaSearch size={5} /></span>
+                                        )}
+                                        <span>{DateUtil.displayTime(msg.createdAt)}</span>
                                     </div>
+                                        {/* TODO znaczek ze przeczytane */}
+                                        
+                                    
                                 </div>
                             </div>
                         );
@@ -171,25 +170,38 @@ const ChatConversationView: React.FC = () => {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSendMessage} className="p-4 border-t">
-                <div className="flex gap-2">
+            <form onSubmit={handleSendMessage} className="chat-view-input">
+
+                <div className="chat-view-input-left">
+                    <FaSearch size={iconSize} />
+                    <FaBriefcase size={iconSize} />
+                </div>
+
+                <div className="chat-view-input-content">
                     <input
                         ref={inputRef}
                         type="text"
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         placeholder={t('chat.typeMessage')}
-                        className="flex-1 px-4 py-2 rounded-full input-field"
+                        className="chat-view-input-content-control"
                         disabled={sending}
                     />
+                </div>
+
+                <div className="chat-view-input-left">
+                    {/* <FaBriefcase size={iconSize} /> */}
+                    {/* <FaSearch size={iconSize} /> */}
                     <Button
+                        mode={BtnModes.PRIMARY_TXT}
                         type="submit"
                         disabled={!newMessage.trim() || sending}
-                        className="rounded-full px-4"
+                        className="p-0"
                     >
-                        <FaPaperPlane />
+                        <FaPaperPlane size={iconSize*1.2} />
                     </Button>
                 </div>
+
             </form>
         </div>
     );

@@ -6,6 +6,7 @@ export interface HeaderState {
     title?: string;
     leftBtn?: React.ReactNode;
     rightBtn?: React.ReactNode;
+    hideFooter?: boolean;
 }
 
 export const STATES: { [key: string]: HeaderState } = {
