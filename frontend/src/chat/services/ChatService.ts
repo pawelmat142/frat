@@ -1,5 +1,6 @@
 import { httpClient } from "global/services/http";
 import { ChatI, ChatMessageI, ChatResponse } from "@shared/interfaces/ChatI";
+import { ApiResponse } from "@shared/dto/dtos";
 
 export const ChatService = {
 
@@ -34,4 +35,32 @@ export const ChatService = {
         });
     },
 
-};
+    /**
+     * Clean chat history
+     */
+    cleanChat(chatId: number): Promise<ApiResponse> {
+        return httpClient.delete(`/chat/${chatId}/messages/clean`);
+    },
+
+    /**
+     * Clean chat history
+     */
+    blockChat(chatId: number) {
+        return httpClient.post(`/chat/${chatId}/block`);
+    },
+
+    /**
+     * Unblock chat
+     */
+    unblockChat(chatId: number): Promise<ApiResponse> {
+        return httpClient.post(`/chat/${chatId}/unblock`);
+    },
+
+    /**
+     * Delete chat
+    */
+    deleteChat(chatId: number): Promise<ApiResponse> {
+        return httpClient.delete(`/chat/${chatId}`);
+    }
+
+}

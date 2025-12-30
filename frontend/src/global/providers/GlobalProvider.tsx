@@ -64,10 +64,10 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }, [location.pathname])
 
     const setHeaderMenu = (menu: React.ReactNode): void => {
-        setState({
+        setState(state => ({
             ...state,
             rightBtn: menu,
-        })  
+        }))  
     }
 
     const setViewState = (state: ViewState): void => {

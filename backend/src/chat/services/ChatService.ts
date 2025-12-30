@@ -6,6 +6,7 @@ import { ChatMessageEntity } from '../model/ChatMessageEntity';
 import { ChatTypes } from '@shared/interfaces/ChatI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { UserService } from 'user/services/UserService';
+import { ApiResponse } from '@shared/dto/dtos';
 
 @Injectable()
 export class ChatService {
@@ -15,7 +16,7 @@ export class ChatService {
   constructor(
     private readonly chatRepo: ChatRepo,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   async getOrCreateDirectChat(initiatorUid: string, recipientUid: string): Promise<ChatEntity> {
     // Validate recipient exists
@@ -37,7 +38,7 @@ export class ChatService {
 
     // Create new direct chat
     const chat = await this.chatRepo.createChat(ChatTypes.DIRECT);
-    
+
     // Add both users as members
     await this.chatRepo.addMember(chat.chatId, initiatorUid);
     await this.chatRepo.addMember(chat.chatId, recipientUid);
@@ -80,14 +81,49 @@ export class ChatService {
   }
 
   async getChatMessages(chatId: number, userUid: string, limit = 50, offset = 0): Promise<ChatMessageEntity[]> {
-    // Verify user is member
-    const isMember = await this.chatRepo.isMember(chatId, userUid);
-    if (!isMember) {
-      throw new ToastException('chat.error.notMember', this);
-    }
+    await this.validateMembership(userUid, chatId);
 
     const messages = await this.chatRepo.getChatMessages(chatId, limit, offset);
     // Reverse to get chronological order (oldest first)
     return messages.reverse();
+  }
+
+  private async validateMembership(uid: string, chatId: number) {
+    const isMember = await this.chatRepo.isMember(chatId, uid);
+    if (!isMember) {
+      throw new ToastException('chat.error.notMember', this);
+    }
+  }
+
+  async cleanChat(uid: string, chatId: number): Promise<ApiResponse> {
+    await this.validateMembership(uid, chatId);
+    // Usuń wszystkie wiadomości z chatu
+    await this.chatRepo.deleteAllMessagesFromChat(chatId);
+    this.logger.log(`User ${uid} cleaned chat history for chat ${chatId}`);
+    return { success: true };
+  }
+
+  async blockChat(uid: string, chatId: number): Promise<ApiResponse> {
+    await this.validateMembership(uid, chatId);
+    // Set blocked flag and blockedByUid in chat entity
+    await this.chatRepo.blockChat(chatId, uid);
+    this.logger.log(`User ${uid} blocked chat ${chatId}`);
+    return { success: true };
+  }
+
+  async unblockChat(uid: string, chatId: number): Promise<ApiResponse> {
+    await this.validateMembership(uid, chatId);
+    // Remove blocked flag and blockedByUid in chat entity
+    await this.chatRepo.blockChat(chatId, null);
+    this.logger.log(`User ${uid} unblocked chat ${chatId}`);
+    return { success: true };
+  }
+
+  async deleteChat(uid: string, chatId: number): Promise<ApiResponse> {
+    await this.validateMembership(uid, chatId);
+    // Delete chat itself
+    await this.chatRepo.deleteChat(chatId);
+    this.logger.log(`User ${uid} deleted chat ${chatId}`);
+    return { success: true };
   }
 }

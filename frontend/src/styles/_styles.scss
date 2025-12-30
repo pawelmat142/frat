@@ -136,6 +136,8 @@ $chatPadding: .5rem;
 $inputGap: .75rem;
 
 .chat-view {
+    margin-top: $headerHeight;
+    padding-top: .5rem;
     padding-left: $chatPadding;
     padding-right: $chatPadding;
     flex: 1;

@@ -13,6 +13,9 @@ export class ChatEntity implements ChatI {
   @Column({ name: 'type', default: ChatTypes.DIRECT })
   type: ChatType;
 
+  @Column({ name: 'blocked_by_uid', type: 'varchar', nullable: true })
+  blockedByUid?: string | null;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

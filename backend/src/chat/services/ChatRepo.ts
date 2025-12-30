@@ -8,7 +8,7 @@ import { ChatMessageEntity } from '../model/ChatMessageEntity';
 
 @Injectable()
 export class ChatRepo {
-  
+
   private readonly logger = new Logger(this.constructor.name);
 
   constructor(
@@ -18,7 +18,7 @@ export class ChatRepo {
     private readonly memberRepository: Repository<ChatMemberEntity>,
     @InjectRepository(ChatMessageEntity)
     private readonly messageRepository: Repository<ChatMessageEntity>,
-  ) {}
+  ) { }
 
   // Chat operations
   async createChat(type: string): Promise<ChatEntity> {
@@ -93,5 +93,26 @@ export class ChatRepo {
       where: { messageId },
       relations: ['sender'],
     });
+  }
+
+  deleteAllMessagesFromChat(chatId: number): Promise<void> {
+    return this.messageRepository
+      .createQueryBuilder()
+      .delete()
+      .from(ChatMessageEntity)
+      .where('chatId = :chatId', { chatId })
+      .execute()
+      .then(() => { });
+  }
+
+  async blockChat(chatId: number, blockedByUid: string): Promise<void> {
+    await this.chatRepository.update(
+      { chatId },
+      { blockedByUid }
+    );
+  }
+
+  async deleteChat(chatId: number): Promise<void> {
+    await this.chatRepository.delete({ chatId });
   }
 }

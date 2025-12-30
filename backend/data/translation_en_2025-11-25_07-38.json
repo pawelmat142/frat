@@ -12,7 +12,22 @@
       "fratChat": "FRAT Chat",
       "openChat": "Open chat",
       "chats": "Chats",
-      "noChats": "No chats available"
+      "noChats": "No chats available",
+      "chatMenu": "Chat menu",
+      "cleanChat": "Clean chat",
+      "blockUser": "Block user",
+      "deleteChat": "Delete chat",
+      "blockedByMe": "Blocked by you",
+      "blockedByOther": "Blocked by ",
+      "noMessages": "No messages",
+      "cleanChatConfirm": "Are you sure you want to clean the chat history? This action cannot be undone.",
+      "cleanChatSuccess": "Chat history cleaned successfully",
+      "blockUserConfirm": "Are you sure you want to block this user? You will no longer be able to send or receive messages from them.",
+      "blockUserSuccess": "User blocked successfully",
+      "unblockUserConfirm": "Are you sure you want to unblock this user? You will be able to send and receive messages from them again.",
+      "unblockUserSuccess": "User unblocked successfully",
+      "deleteChatConfirm": "Are you sure you want to delete this chat? This action cannot be undone.",
+      "deleteChatSuccess": "Chat deleted successfully"
     },
     "account": {
       "account": "Account",

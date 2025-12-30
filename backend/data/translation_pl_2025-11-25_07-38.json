@@ -11,7 +11,14 @@
     "chat": {
       "openChat": "Otwórz czat",
       "chats": "Czaty",
-      "noChats": "Brak dostępnych czatów"
+      "noChats": "Brak dostępnych czatów",
+      "chatMenu": "Menu czatu",
+      "cleanChat": "Wyczyść czat",
+      "blockUser": "Zablokuj użytkownika",
+      "deleteChat": "Usuń czat",
+      "blockedByMe": "Zablokowane przez Ciebie",
+      "blockedByOther": "Zablokowane przez ",
+      "noMessages": "Brak wiadomości"
     },
     "account": {
       "account": "Konto",

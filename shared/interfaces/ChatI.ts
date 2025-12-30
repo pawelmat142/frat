@@ -4,6 +4,7 @@ export interface ChatI {
     chatId: number;
     type: ChatType;
 
+    blockedByUid?: string;
     createdAt: Date;
     updatedAt: Date;
 }

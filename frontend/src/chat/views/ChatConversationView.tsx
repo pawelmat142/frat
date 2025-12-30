@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChatI, ChatMessageI, ChatResponse } from "@shared/interfaces/ChatI";
+import { ChatMessageI, ChatResponse } from "@shared/interfaces/ChatI";
 import { ChatService } from "../services/ChatService";
 import { chatSocket } from "../services/ChatSocketService";
 import { useAuthContext } from "auth/AuthProvider";
@@ -11,10 +11,13 @@ import { Path } from "../../path";
 import { FaBriefcase, FaPaperPlane, FaSearch } from "react-icons/fa";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
-import { BtnModes } from "global/interface/controls.interface";
+import { BtnModes, MenuItem } from "global/interface/controls.interface";
 import { DateUtil } from "@shared/utils/DateUtil";
 import ListItemImg from "global/components/ListItemImg";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
+import { useMenuContext } from "global/providers/MenuProvider";
+import { useConfirm } from "global/providers/PopupProvider";
+import { toast } from "react-toastify";
 
 const ChatConversationView: React.FC = () => {
     const { t } = useTranslation();
@@ -42,10 +45,96 @@ const ChatConversationView: React.FC = () => {
     };
 
     const otherUser = getOtherMember();
-
     const globalCtx = useGlobalContext();
-    const setViewState = () => {
+    const menuCtx = useMenuContext();
+    const confirm = useConfirm();
 
+    const refreshChat = async () => {
+        if (chat?.chatId) {
+            const newChat = await ChatService.getChatById(chat?.chatId)
+            setChat(newChat);
+        }
+    }
+    const blockedByMe = chat?.blockedByUid === me?.uid;
+
+    const prepareChatMenu = (chat: ChatResponse): MenuItem[] => {
+        const items: MenuItem[] = [];
+        if (!chat?.blockedByUid) {
+            if (messages.length) {
+                items.push({
+                    label: t('chat.cleanChat'),
+                    onClick: async () => {
+                        const confirmed = await confirm({
+                            message: t('chat.cleanChatConfirm'),
+                        });
+                        if (!confirmed) {
+                            return
+                        }
+                        setLoading(true);
+                        await ChatService.cleanChat(chat.chatId);
+                        setMessages([]);
+                        setLoading(false);
+                        toast.success(t('chat.cleanChatSuccess'));
+                    }
+                })
+            }
+
+            items.push({
+                label: t('chat.blockUser'),
+                onClick: async () => {
+                    const confirmed = await confirm({
+                        message: t('chat.blockUserConfirm'),
+                    });
+                    if (!confirmed) {
+                        return
+                    }
+                    setLoading(true);
+                    await ChatService.blockChat(chat.chatId);
+                    await refreshChat();
+                    setLoading(false);
+                    toast.success(t('chat.blockUserSuccess'));
+                }
+            });
+        } else if (chat.blockedByUid === me?.uid) {
+            items.push({
+                label: t('chat.unblockUser'),
+                onClick: async () => {
+                    const confirmed = await confirm({
+                        message: t('chat.unblockUserConfirm'),
+                    });
+                    if (!confirmed) {
+                        return
+                    }
+                    setLoading(true);
+                    await ChatService.unblockChat(chat.chatId);
+                    await refreshChat();
+                    setLoading(false);
+                    toast.success(t('chat.unblockUserSuccess'));
+                }
+            });
+        }
+        if (chat?.blockedByUid !== me?.uid) {
+            items.push({
+                label: t('chat.deleteChat'),
+                onClick: async () => {
+                    const confirmed = await confirm({
+                        message: t('chat.deleteChatConfirm'),
+                    });
+                    if (!confirmed) {
+                        return
+                    }
+                    setLoading(true);
+                    await ChatService.deleteChat(chat.chatId);
+                    setLoading(false);
+                    toast.success(t('chat.deleteChatSuccess'));
+                    navigate(-1)
+                }
+            });
+        }
+        return items;
+    }
+
+    const setViewState = (chat: ChatResponse) => {
         const chatViewHeaderContent = <div className="flex gap-2 items-center">
             <HeaderBackBtn></HeaderBackBtn>
             <ListItemImg imgUrl={otherUser?.avatarRef?.url || AVATAR_MOCK} />
@@ -55,7 +144,11 @@ const ChatConversationView: React.FC = () => {
         globalCtx.setViewState({
             leftBtn: chatViewHeaderContent,
             hideFooter: true,
-            stickyHeader: true
+            stickyHeader: true,
+        })
+        menuCtx.setupHeaderMenu({
+            title: t('chat.chatMenu'),
+            items: prepareChatMenu(chat)
         })
     }
 
@@ -63,7 +156,6 @@ const ChatConversationView: React.FC = () => {
     console.log(messages)
 
     useEffect(() => {
-        setViewState();
         if (!chatId || isInitialized.current) return;
         isInitialized.current = true;
 
@@ -102,11 +194,18 @@ const ChatConversationView: React.FC = () => {
         }
         chatSocket.registerMessageListener(numericChatId, messageListener);
 
+
         return () => {
             chatSocket.unregisterMessageListener(numericChatId);
             isInitialized.current = false;
         };
     }, [chatId]);
+
+    useEffect(() => {
+        if (chat) {
+            setViewState(chat);
+        }
+    }, [chat]);
 
     useEffect(() => {
         scrollToBottom();
@@ -144,14 +243,20 @@ const ChatConversationView: React.FC = () => {
 
 
     const iconSize = 22
+
+
     return (
         <div className="chat-view">
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto pb-5">
-                {messages.length === 0 ? (
+
+
+                {(!messages.length || chat?.blockedByUid) ? (
                     <div className="text-center secondary-text py-8">
-                        {t('chat.noMessages')}
+                        {blockedByMe ? t('chat.blockedByMe')
+                            : chat?.blockedByUid ? t('chat.blockedByOther') + ` ${otherUser?.displayName}`
+                                : t('chat.noMessages')}
                     </div>
                 ) : (
                     messages.map((msg) => {
@@ -197,7 +302,7 @@ const ChatConversationView: React.FC = () => {
                         onChange={(e) => setNewMessage(e.target.value)}
                         placeholder={t('chat.typeMessage')}
                         className="chat-view-input-content-control"
-                        disabled={sending}
+                        disabled={sending || !!chat?.blockedByUid}
                     />
                 </div>
 
