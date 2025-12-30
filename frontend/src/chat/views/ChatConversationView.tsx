@@ -141,9 +141,6 @@ const ChatConversationView: React.FC = () => {
         })
     }
 
-    console.log(chat)
-    console.log(messages)
-
     useEffect(() => {
         if (!chatId || isInitialized.current) return;
         isInitialized.current = true;
@@ -177,7 +174,6 @@ const ChatConversationView: React.FC = () => {
                 if (prev.some(m => m.messageId === message.messageId)) {
                     return prev;
                 }
-                console.log('Received message:', message);
                 return [...prev, message];
             });
         }

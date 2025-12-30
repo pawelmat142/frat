@@ -98,7 +98,8 @@ export class ChatService {
   }
 
   async openChatAndMarkMessages(uid: string, chatId: number): Promise<ChatI> {
-    await this.chatRepo.openChatAndMarkMessages(chatId, uid);
+    await this.chatRepo.openChatAnd(chatId, uid);
+    await this.chatRepo.markMessageAsRead(chatId);
     return this.chatRepo.findChat(chatId);
   }
 

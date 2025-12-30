@@ -2,7 +2,7 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ChatEntity } from '../model/ChatEntity';
 import { ChatMemberEntity } from '../model/ChatMemberEntity';
 import { ChatMessageEntity } from '../model/ChatMessageEntity';
@@ -59,6 +59,8 @@ export class ChatRepo {
     const result = await this.chatRepository
       .createQueryBuilder('chat')
       .where('chat.type = :type', { type: 'DIRECT' })
+      .innerJoin('chat.members', 'member1', 'member1.uid = :uid1', { uid1 })
+      .innerJoin('chat.members', 'member2', 'member2.uid = :uid2', { uid2 })
       .getOne();
 
     return result;
@@ -106,11 +108,11 @@ export class ChatRepo {
   }
 
   /**
- * Increments unreadCount for all members of the chat except the sender.
- */
-  async incrementUnreadForMembersExceptSender(chatId: number, senderUid: string): Promise<void> {
+   * Increments unreadCount for all members of the chat except the sender.
+   */
+  incrementUnreadForMembersExceptSender(chatId: number, senderUid: string): Promise<UpdateResult> {
     // Inkrementuj unreadCount tylko dla członków ze statusem 'LEFT', poza nadawcą
-    await this.memberRepository
+    return this.memberRepository
       .createQueryBuilder()
       .update()
       .set({ unreadCount: () => 'unread_count + 1' })
@@ -120,14 +122,22 @@ export class ChatRepo {
       .execute();
   }
 
-  updateLatestMessageContent(chatId: number, content: string): Promise<void> {
+  updateLatestMessageContent(chatId: number, content: string): Promise<UpdateResult> {
     return this.chatRepository
       .createQueryBuilder()
       .update(ChatEntity)
       .set({ latestMessageContent: content })
       .where("chatId = :chatId", { chatId })
       .execute()
-      .then(() => { });
+  }
+
+  resetUnreadCountForMembers(chatId: number): Promise<UpdateResult> {
+    return this.memberRepository
+      .createQueryBuilder()
+      .update()
+      .set({ unreadCount: 0 })
+      .where('chat_id = :chatId', { chatId })
+      .execute();
   }
 
   async getChatMessages(chatId: number, limit = 50, offset = 0): Promise<ChatMessageEntity[]> {
@@ -146,21 +156,20 @@ export class ChatRepo {
     });
   }
 
-  deleteAllMessagesFromChat(chatId: number): Promise<void> {
+  deleteAllMessagesFromChat(chatId: number): Promise<DeleteResult> {
     return this.messageRepository
       .createQueryBuilder()
       .delete()
       .from(ChatMessageEntity)
       .where('chatId = :chatId', { chatId })
       .execute()
-      .then(() => { });
   }
 
   /**
    * Ustawia status członka czatu na 'LEFT' gdy opuszcza czat.
    */
-  async leaveChat(uid: string, chatId: number): Promise<void> {
-    await this.memberRepository
+  leaveChat(uid: string, chatId: number): Promise<UpdateResult> {
+    return this.memberRepository
       .createQueryBuilder()
       .update()
       .set({ status: ChatMemberStatuses.LEFT })
@@ -170,21 +179,23 @@ export class ChatRepo {
   }
 
   /**
- * Resetuje licznik nieprzeczytanych wiadomości dla użytkownika w czacie.
- */
-  async openChatAndMarkMessages(chatId: number, uid: string): Promise<void> {
-
-    // Resetuj licznik nieprzeczytanych wiadomości i ustaw status na 'OPEN' dla użytkownika w czacie
-    await this.memberRepository
+   * Resetuje licznik nieprzeczytanych wiadomości dla użytkownika w czacie.
+   */
+  openChatAnd(chatId: number, uid: string): Promise<UpdateResult> {
+    return this.memberRepository
       .createQueryBuilder()
       .update()
       .set({ unreadCount: 0, status: ChatMemberStatuses.OPEN })
       .where('chat_id = :chatId', { chatId })
       .andWhere('uid = :uid', { uid })
       .execute();
+  }
 
-    // Oznacz wszystkie wiadomości w czacie jako przeczytane (readAt = now), jeśli nie były przeczytane
-    await this.messageRepository
+  /**
+   * Ustawia readAt dla wszystkich wiadomości w czacie.
+   */
+  markMessageAsRead(chatId: number): Promise<UpdateResult> {
+     return this.messageRepository
       .createQueryBuilder()
       .update()
       .set({ readAt: () => 'CURRENT_TIMESTAMP' })
@@ -193,14 +204,14 @@ export class ChatRepo {
       .execute();
   }
 
-  async blockChat(chatId: number, blockedByUid: string): Promise<void> {
-    await this.chatRepository.update(
+  blockChat(chatId: number, blockedByUid: string): Promise<UpdateResult> {
+    return this.chatRepository.update(
       { chatId },
       { blockedByUid }
     );
   }
 
-  async deleteChat(chatId: number): Promise<void> {
-    await this.chatRepository.delete({ chatId });
+  deleteChat(chatId: number): Promise<DeleteResult> {
+    return this.chatRepository.delete({ chatId });
   }
 }

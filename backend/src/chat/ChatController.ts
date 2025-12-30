@@ -32,7 +32,7 @@ export class ChatController {
   async getOrCreateDirectChat(
     @CurrentUser() user: UserI,
     @Param('recipientUid') recipientUid: string,
-  ) {
+  ): Promise<ChatI> {
     const chat = await this.chatService.getOrCreateDirectChat(user.uid, recipientUid);
 
     // Notify recipient about new chat via WebSocket

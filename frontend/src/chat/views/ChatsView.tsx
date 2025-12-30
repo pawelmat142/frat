@@ -17,8 +17,6 @@ const ChatsView: React.FC = () => {
     const [chats, setChats] = useState<ChatWithMembers[]>([]);
     const [loading, setLoading] = useState(true);
 
-    console.log(chats)
-
     useEffect(() => {
         const loadChats = async () => {
             try {
@@ -40,7 +38,6 @@ const ChatsView: React.FC = () => {
                 setChats(data);
                 return;
             }
-            console.log('ChatsView loadChatListener', chat);
             setChats(prev => {
                 return prev.map(c => {
                     if (c.chatId === chat.chatId) {

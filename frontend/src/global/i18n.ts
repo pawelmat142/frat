@@ -9,7 +9,6 @@ class CustomBackend {
   read(language: string, namespace: string, callback: (err: any, data: any) => void) {
     TranslationService.getTranslation(language)
       .then((response) => {
-        console.log('Loaded translations:', response);
         // i18next expects the translation object, not the whole response
         callback(null, response.data);
       })
