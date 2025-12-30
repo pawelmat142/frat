@@ -15,7 +15,7 @@ import { ExportedAuthService } from 'auth/services/ExportedAuthService';
 import { UserI } from '@shared/interfaces/UserI';
 import { UserService } from 'user/services/UserService';
 import { ChatUtil } from '@shared/utils/ChatUtil';
-import { ChatEvents, ChatI, JoinChatResponse, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
+import { ChatEvents, ChatResponse, JoinChatResponse, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
 
 interface AuthenticatedSocket extends Socket {
   user: UserI;
@@ -25,7 +25,7 @@ interface AuthenticatedSocket extends Socket {
   cors: {
     origin: '*', // TODO: Configure for production
   },
-  namespace: '/chat',
+  namespace: '/api/chat',
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   
@@ -44,7 +44,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {}
 
   async handleConnection(socket: AuthenticatedSocket) {
-
     this.logger.warn(`New connection attempt (socket: ${socket.id})`);
     try {
       const token = this.extractToken(socket);
@@ -89,6 +88,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       socket.disconnect();
     }
   }
+
 
   handleDisconnect(socket: AuthenticatedSocket) {
     if (socket.user) {
@@ -152,7 +152,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   // Helper: notify user about new chat (when someone creates direct chat with them)
-  notifyUserAboutNewChat(uid: string, chat: ChatI) {
+  notifyUserAboutNewChat(uid: string, chat: ChatResponse): void {
     this.server.to(ChatUtil.userRoom(uid)).emit(ChatEvents.NEW_CHAT, chat);
   }
 

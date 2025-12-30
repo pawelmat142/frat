@@ -1,3 +1,5 @@
+import { UserI } from "./UserI";
+
 export interface ChatI {
     chatId: number;
     type: ChatType;
@@ -59,4 +61,12 @@ export interface SendMessageResponse {
 export interface JoinChatResponse {
     success?: boolean;
     error?: string;
+}
+
+export interface ChatResponse extends ChatI {
+    members: ChatMemberWithUserI[];
+}
+
+export interface ChatMemberWithUserI extends ChatMemberI {
+    user: UserI;
 }

@@ -22,8 +22,6 @@ export const useAuth = () => {
     const { t } = useTranslation()
 
 	useEffect(() => {
-
-        console.log('useAuth: Initializing Firebase Auth listener');
 		// Inicjalizuj Firebase przy pierwszym renderze
 		if (!FirebaseAuth.isInitialized()) {
 			FirebaseAuth.initialize();
@@ -31,11 +29,8 @@ export const useAuth = () => {
 
 		// Subskrybuj zmiany stanu autoryzacji
 		const unsubscribe = AuthService.onAuthStateChanged(async (newFirebaseUser) => {
-            console.log('useAuth: Auth state changed', newFirebaseUser);
-            console.log('prev firebaseUser: ', firebaseUser)
 
             // AUTH_HOOK
-            
             if (!newFirebaseUser) {
                 setFirebaseUser(null)
                 setMe(null)
@@ -59,7 +54,6 @@ export const useAuth = () => {
 			setLoading(false);
 
             if (firstLoadRef.current) {
-                console.log('First load - skipping setting state to avoid flicker');
                 firstLoadRef.current = false;
                 return;
             }
@@ -77,7 +71,6 @@ export const useAuth = () => {
 	}, []);
 
     const updateMe = (user: UserI): void => {
-        console.log('useAuth: Updating me user:', user);
         setMe(user);
     }
 

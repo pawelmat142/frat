@@ -67,10 +67,10 @@ const ChatConversationView: React.FC = () => {
                 return [...prev, message];
             });
         }
-        chatSocket.onMessage(numericChatId, messageListener);
+        chatSocket.registerMessageListener(numericChatId, messageListener);
 
         return () => {
-            chatSocket.offMessage(numericChatId);
+            chatSocket.unregisterMessageListener(numericChatId);
             isInitialized.current = false;
         };
     }, [chatId]);

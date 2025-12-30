@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { EmployeeProfileI, Position } from '@shared/interfaces/EmployeeProfileI';
 import { EmployeeProfileService } from 'employee/services/EmployeeProfileService';
 import { useAuthContext } from 'auth/AuthProvider';
@@ -132,12 +132,10 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}
 
 	const cleanOffers = () => {
-		console.log("Cleaning offers in UserProvider for user:", authCtx.me);
 		setOffers([]);
 	}
 
 	const cleanEmployeeProfile = () => {
-		console.log("Cleaning employee profile in UserProvider for user:", authCtx.me);
 		setEmployeeProfile(null);
 	}
 

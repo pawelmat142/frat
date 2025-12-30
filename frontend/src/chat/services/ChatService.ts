@@ -1,5 +1,5 @@
 import { httpClient } from "global/services/http";
-import { ChatI, ChatMessageI } from "@shared/interfaces/ChatI";
+import { ChatI, ChatMessageI, ChatResponse } from "@shared/interfaces/ChatI";
 
 export const ChatService = {
 
@@ -7,7 +7,7 @@ export const ChatService = {
      * Get all chats for current user
      */
     // TODO refactor to initial load
-    getMyChats(): Promise<ChatI[]> {
+    getMyChats(): Promise<ChatResponse[]> {
         return httpClient.get('/chat');
     },
 

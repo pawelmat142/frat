@@ -5,6 +5,7 @@ import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
 import { UserI } from '@shared/interfaces/UserI';
 import { ChatGateway } from './ChatGateway';
+import { ChatResponse } from '@shared/interfaces/ChatI';
 
 @Controller('api/chat')
 @UseGuards(JwtAuthGuard)
@@ -19,7 +20,7 @@ export class ChatController {
    * Get all chats for current user
    */
   @Get()
-  async getMyChats(@CurrentUser() user: UserI) {
+  async getMyChats(@CurrentUser() user: UserI): Promise<ChatResponse[]> {
     return this.chatService.getUserChats(user.uid);
   }
 

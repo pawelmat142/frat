@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChatI } from "@shared/interfaces/ChatI";
+import { ChatMemberI, ChatResponse } from "@shared/interfaces/ChatI";
 import { ChatService } from "../services/ChatService";
 import { chatSocket } from "../services/ChatSocketService";
 import { useAuthContext } from "auth/AuthProvider";
@@ -13,7 +13,7 @@ const ChatsView: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { me } = useAuthContext();
-    const [chats, setChats] = useState<ChatI[]>([]);
+    const [chats, setChats] = useState<ChatResponse[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -28,11 +28,11 @@ const ChatsView: React.FC = () => {
             }
         };
 
-        loadChats();
-        
+        loadChats()
+        console.log(chats)
         chatSocket.connect();
 
-        const newChatListener = (chat: ChatI) => {
+        const newChatListener = (chat: ChatResponse) => {
             setChats(prev => {
                 if (prev.some(c => c.chatId === chat.chatId)) {
                     return prev;
@@ -41,9 +41,9 @@ const ChatsView: React.FC = () => {
             });
         };
 
-        chatSocket.onNewChat(newChatListener);
+        chatSocket.registerChatListener(newChatListener);
         return () => {
-            chatSocket.offNewChat(newChatListener);
+            chatSocket.unregisterChatListener(newChatListener);
         };
     }, []);
 
@@ -51,17 +51,14 @@ const ChatsView: React.FC = () => {
         navigate(Path.getChatPath(chatId));
     };
 
-    const getOtherMember = (chat: any) => {
+    const getOtherMember = (chat: ChatResponse) => {
         if (!me || !chat.members) return null;
-        return chat.members.find((m: any) => m.uid !== me.uid)?.user;
+        return chat.members.find((m: ChatMemberI) => m.uid !== me.uid)?.user;
     };
 
     if (loading) {
         return <Loading />;
     }
-
-    console.log(chats)
-
 
     return (
         <div className="view-container">
