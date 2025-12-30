@@ -5,6 +5,7 @@ export interface ChatI {
     type: ChatType;
 
     createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface ChatMemberI {

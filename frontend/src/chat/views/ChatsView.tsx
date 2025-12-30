@@ -8,6 +8,9 @@ import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import { Path } from "../../path";
 import { FaComments } from "react-icons/fa";
+import ListItem from "global/components/ListItem";
+import { AVATAR_MOCK } from "user/components/AvatarTile";
+import { Utils } from "global/utils/utils";
 
 const ChatsView: React.FC = () => {
     const { t } = useTranslation();
@@ -61,39 +64,56 @@ const ChatsView: React.FC = () => {
     }
 
     return (
-        <div className="view-container">
-            <h1 className="text-xl font-bold mb-4">{t('chat.myChats')}</h1>
-
+        <div className="list-view">
             {chats.length === 0 ? (
                 <div className="text-center secondary-text py-8">
                     <FaComments className="mx-auto text-4xl mb-2 opacity-50" />
                     <p>{t('chat.noChats')}</p>
                 </div>
             ) : (
-                <div className="flex flex-col gap-2">
-                    {chats.map((chat) => {
+                <div className="flex flex-col">
+                    {chats.map((chat, index) => {
                         const otherUser = getOtherMember(chat);
-                        return (
-                            <div
-                                key={chat.chatId}
-                                onClick={() => openChat(chat.chatId)}
-                                className="p-4 rounded-lg cursor-pointer hover:bg-opacity-80 transition-colors card-bg"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
-                                        {otherUser?.displayName?.charAt(0)?.toUpperCase() || '?'}
-                                    </div>
-                                    <div>
-                                        <div className="font-semibold">
-                                            {otherUser?.displayName || t('chat.unknownUser')}
-                                        </div>
-                                        <div className="text-sm secondary-text">
-                                            {otherUser?.email}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        );
+
+                        const date = new Date(chat.updatedAt || chat.createdAt) 
+
+                        // TODO dodaj znaczek ze przeczytane/dostarczone
+                        const topRight = <div className="small-font">{Utils.prepareDisplayShortDate(t, date)}</div>
+
+                        return <div onClick={() => openChat(chat.chatId)}>
+                            <ListItem
+                                imgUrl={otherUser?.avatarRef?.url || AVATAR_MOCK}
+                                topLeft={otherUser?.displayName || t('chat.unknownUser')}
+                                topRight={topRight}
+                                bottomLeft={'TODO latest message'}
+                                first={index === 0}
+                                last={index === chats.length - 1}
+                            ></ListItem>
+                        </div>
+
+
+
+                        // return (
+                        //     <div
+                        //         key={chat.chatId}
+                        //         onClick={() => openChat(chat.chatId)}
+                        //         className="p-4 rounded-lg cursor-pointer hover:bg-opacity-80 transition-colors card-bg"
+                        //     >
+                        //         <div className="flex items-center gap-3">
+                        //             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
+                        //                 {otherUser?.displayName?.charAt(0)?.toUpperCase() || '?'}
+                        //             </div>
+                        //             <div>
+                        //                 <div className="font-semibold">
+                        //                     {otherUser?.displayName || t('chat.unknownUser')}
+                        //                 </div>
+                        //                 <div className="text-sm secondary-text">
+                        //                     {otherUser?.email}
+                        //                 </div>
+                        //             </div>
+                        //         </div>
+                        //     </div>
+                        // );
                     })}
                 </div>
             )}

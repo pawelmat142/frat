@@ -58,5 +58,9 @@ export const STATES: { [key: string]: HeaderState } = {
     },
     [Path.ERROR_PAGE]: {
         
+    },
+    [Path.CHATS]: {
+        leftBtn: <HeaderBackBtn/>,
+        title: 'FRAT Chat',
     }
 }

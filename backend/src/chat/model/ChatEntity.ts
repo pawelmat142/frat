@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
 import { ChatI, ChatType, ChatTypes } from '@shared/interfaces/ChatI';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, UpdateDateColumn } from 'typeorm';
 import { ChatMemberEntity } from './ChatMemberEntity';
 import { ChatMessageEntity } from './ChatMessageEntity';
 
@@ -15,6 +15,9 @@ export class ChatEntity implements ChatI {
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 
   @OneToMany(() => ChatMemberEntity, (member) => member.chat)
   members: ChatMemberEntity[];

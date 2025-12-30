@@ -15,7 +15,7 @@ interface AvatarTileProps {
     editable?: boolean;
 }
 
-const AVATAR_MOCK = "/assets/img/default-avatar.png";
+export const AVATAR_MOCK = "/assets/img/default-avatar.png";
 const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 const MAX_FILE_SIZE_MB = 5;
 

@@ -9,6 +9,7 @@
       "account": "Account"
     },
     "chat": {
+      "fratChat": "FRAT Chat",
       "openChat": "Open chat",
       "chats": "Chats",
       "noChats": "No chats available"

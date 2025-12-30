@@ -79,6 +79,34 @@ $headerHeightDesktop: 60px;
 }
 
 
+
+// LIST VIEW
+.list-view {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    max-width: $mobile;
+}
+
+.list-view-item-img {
+    padding-right: 1rem;
+    img {
+        aspect-ratio: 1/1;
+        width: 3.5rem;
+        height: 3.5rem;
+        max-width: unset;
+    }
+}
+
+.list-view-item {
+    display: flex;
+    padding: .5rem 1rem;
+
+    &:not(.last) {
+        border-bottom: 1px solid $secondary-bg;
+    }
+}
+
 // ADMIN PANEL
 .admin-panel {
     display: grid;
@@ -465,8 +493,6 @@ $cellRadiusBig: 1rem;
     background-color: $primary-bg;
 }
 
-
-
 .callendars-view-fullscreen {
     overflow-y: auto;
     flex-grow: 1;
@@ -495,12 +521,6 @@ $cellRadiusBig: 1rem;
     flex-grow: 1;
 }
 
-
-.list-view {
-    padding: .5rem;
-    width: 100%;
-    max-width: $mobile;
-}
 
 // FORMS
 .form-view {
