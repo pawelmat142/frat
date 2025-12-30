@@ -78,6 +78,16 @@ export class ChatRepo {
     return this.messageRepository.save(message);
   }
 
+  updateLatestMessageContent(chatId: number, content: string): Promise<void> {
+    return this.chatRepository
+      .createQueryBuilder()
+      .update(ChatEntity)
+      .set({ latestMessageContent: content })
+      .where("chatId = :chatId", { chatId })
+      .execute()
+      .then(() => {});
+  }
+
   async getChatMessages(chatId: number, limit = 50, offset = 0): Promise<ChatMessageEntity[]> {
     return this.messageRepository.find({
       where: { chatId },

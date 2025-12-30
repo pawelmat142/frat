@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChatMemberI, ChatResponse } from "@shared/interfaces/ChatI";
+import { ChatMemberI, ChatMemberWithUserI, ChatResponse } from "@shared/interfaces/ChatI";
 import { ChatService } from "../services/ChatService";
 import { chatSocket } from "../services/ChatSocketService";
 import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import { Path } from "../../path";
 import { FaComments } from "react-icons/fa";
-import ListItem from "global/components/ListItem";
-import { AVATAR_MOCK } from "user/components/AvatarTile";
-import { Utils } from "global/utils/utils";
+import { UserI } from "@shared/interfaces/UserI";
+import ChatListItem from "./ChatListItem";
 
 const ChatsView: React.FC = () => {
     const { t } = useTranslation();
@@ -60,9 +59,9 @@ const ChatsView: React.FC = () => {
         navigate(Path.getChatPath(chatId));
     };
 
-    const getOtherMember = (chat: ChatResponse) => {
+    const getOtherMember = (chat: ChatResponse): ChatMemberWithUserI | null | undefined => {
         if (!me || !chat.members) return null;
-        return chat.members.find((m: ChatMemberI) => m.uid !== me.uid)?.user;
+        return chat.members.find((m: ChatMemberWithUserI) => m.uid !== me.uid);
     };
 
     if (loading) {
@@ -79,47 +78,16 @@ const ChatsView: React.FC = () => {
             ) : (
                 <div className="flex flex-col">
                     {chats.map((chat, index) => {
-                        const otherUser = getOtherMember(chat);
-
-                        const date = new Date(chat.updatedAt || chat.createdAt) 
-
-                        // TODO dodaj znaczek ze przeczytane/dostarczone
-                        const topRight = <div className="small-font">{Utils.prepareDisplayShortDate(t, date)}</div>
-
+                        const otherMember = getOtherMember(chat);
+                        if (!otherMember) return null;
                         return <div onClick={() => openChat(chat.chatId)} key={chat.chatId}>
-                            <ListItem
-                                imgUrl={otherUser?.avatarRef?.url || AVATAR_MOCK}
-                                topLeft={otherUser?.displayName || t('chat.unknownUser')}
-                                topRight={topRight}
-                                bottomLeft={'TODO latest message'}
+                            <ChatListItem
+                                chat={chat}
+                                otherMember={otherMember}
                                 first={index === 0}
                                 last={index === chats.length - 1}
-                            ></ListItem>
+                            ></ChatListItem>
                         </div>
-
-
-
-                        // return (
-                        //     <div
-                        //         key={chat.chatId}
-                        //         onClick={() => openChat(chat.chatId)}
-                        //         className="p-4 rounded-lg cursor-pointer hover:bg-opacity-80 transition-colors card-bg"
-                        //     >
-                        //         <div className="flex items-center gap-3">
-                        //             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
-                        //                 {otherUser?.displayName?.charAt(0)?.toUpperCase() || '?'}
-                        //             </div>
-                        //             <div>
-                        //                 <div className="font-semibold">
-                        //                     {otherUser?.displayName || t('chat.unknownUser')}
-                        //                 </div>
-                        //                 <div className="text-sm secondary-text">
-                        //                     {otherUser?.email}
-                        //                 </div>
-                        //             </div>
-                        //         </div>
-                        //     </div>
-                        // );
                     })}
                 </div>
             )}

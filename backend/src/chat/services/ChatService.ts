@@ -77,8 +77,11 @@ export class ChatService {
       throw new ToastException('chat.error.emptyMessage', this);
     }
 
-    return this.chatRepo.createMessage(chatId, senderUid, content.trim());
+    const message = await this.chatRepo.createMessage(chatId, senderUid, content.trim());
+    await this.chatRepo.updateLatestMessageContent(chatId, message.content);
+    return message;
   }
+
 
   async getChatMessages(chatId: number, userUid: string, limit = 50, offset = 0): Promise<ChatMessageEntity[]> {
     await this.validateMembership(userUid, chatId);
@@ -99,6 +102,7 @@ export class ChatService {
     await this.validateMembership(uid, chatId);
     // Usuń wszystkie wiadomości z chatu
     await this.chatRepo.deleteAllMessagesFromChat(chatId);
+    await this.chatRepo.updateLatestMessageContent(chatId, null);
     this.logger.log(`User ${uid} cleaned chat history for chat ${chatId}`);
     return this.chatRepo.findChatById(chatId);
   }

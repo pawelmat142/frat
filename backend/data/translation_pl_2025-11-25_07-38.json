@@ -18,7 +18,16 @@
       "deleteChat": "Usuń czat",
       "blockedByMe": "Zablokowane przez Ciebie",
       "blockedByOther": "Zablokowane przez ",
-      "noMessages": "Brak wiadomości"
+      "noMessages": "Brak wiadomości",
+      "cleanChatConfirm": "Czy na pewno chcesz wyczyścić historię czatu? Tej akcji nie można cofnąć.",
+      "cleanChatSuccess": "Historia czatu została pomyślnie wyczyszczona",
+      "blockUserConfirm": "Czy na pewno chcesz zablokować tego użytkownika? Nie będziesz mógł wysyłać ani odbierać od niego wiadomości.",
+      "blockUserSuccess": "Użytkownik został pomyślnie zablokowany",
+      "unblockUserConfirm": "Czy na pewno chcesz odblokować tego użytkownika? Będziesz mógł ponownie wysyłać i odbierać od niego wiadomości.",
+      "unblockUserSuccess": "Użytkownik został pomyślnie odblokowany",
+      "deleteChatConfirm": "Czy na pewno chcesz usunąć ten czat? Tej akcji nie można cofnąć.",
+      "deleteChatSuccess": "Czat został pomyślnie usunięty",
+      "joinedAt": "Dołączono: {{date}}"
     },
     "account": {
       "account": "Konto",

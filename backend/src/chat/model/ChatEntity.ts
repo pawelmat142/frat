@@ -22,6 +22,9 @@ export class ChatEntity implements ChatI {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
+  @Column({ name: 'latest_message_content', type: 'text', nullable: true })
+  latestMessageContent?: string;
+
   @OneToMany(() => ChatMemberEntity, (member) => member.chat)
   members: ChatMemberEntity[];
 

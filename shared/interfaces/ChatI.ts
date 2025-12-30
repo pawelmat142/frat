@@ -7,6 +7,7 @@ export interface ChatI {
     blockedByUid?: string;
     createdAt: Date;
     updatedAt: Date;
+    latestMessageContent?: string;
 }
 
 export interface ChatMemberI {
