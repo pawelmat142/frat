@@ -35,7 +35,12 @@ const ChatsView: React.FC = () => {
         console.log(chats)
         chatSocket.connect();
 
-        const loadChatListener = (chat: ChatResponse) => {
+        const loadChatListener = async (chat: ChatResponse) => {
+            if (!chat) {
+                const data = await ChatService.getMyChats();
+                setChats(data);
+                return
+            }
             setChats(prev => {
                 return [...prev.filter(c => c.chatId !== chat.chatId), chat].sort((a, b) => {
                     const dateA = new Date(a.updatedAt || a.createdAt).getTime();

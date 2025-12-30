@@ -256,9 +256,7 @@ const ChatConversationView: React.FC = () => {
         return <Loading />;
     }
 
-
     const iconSize = 22
-
 
     return (
         <div className="chat-view">
@@ -291,7 +289,6 @@ const ChatConversationView: React.FC = () => {
                                         <span>{DateUtil.displayTime(msg.createdAt)}</span>
                                     </div>
                                     {/* TODO znaczek ze przeczytane */}
-
 
                                 </div>
                             </div>
