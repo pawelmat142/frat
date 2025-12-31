@@ -9,6 +9,7 @@
       "account": "Konto"
     },
     "chat": {
+      "typeMessage": "Pisz wiadomość...",
       "openChat": "Otwórz czat",
       "chats": "Czaty",
       "noChats": "Brak dostępnych czatów",

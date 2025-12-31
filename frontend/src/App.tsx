@@ -26,7 +26,7 @@ import EmployeeSearchView from 'employee/views/search/EmployeeSearchView';
 import AdminEmployeeProfiles from 'admin/views/employee_profiles/AdminEmployeeProfiles';
 import EmployeeProfileView from 'employee/views/profile/EmployeeProfileView';
 import OfferFormView from 'offer/views/form/OfferFormView';
-import MyOffersList from 'offer/views/MyOffersList';
+import UserOffersList from 'offer/views/UserOffersList';
 import OfferView from 'offer/views/offer-view/OfferView';
 import OfferSearchView from 'offer/views/search/OfferSearchView';
 import AdminOffers from 'admin/views/offer/AdminOffers';
@@ -79,7 +79,7 @@ const App: React.FC = () => {
                 {/* OFFERS */}
                 <Route path={Path.OFFER_FORM} element={<PageWrapper direction={1}><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.OFFER_FORM_EDIT} element={<PageWrapper direction={1}><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.USER_OFFERS} element={<PageWrapper direction={1}><ProtectedRoute><MyOffersList/></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.USER_OFFERS} element={<PageWrapper direction={1}><ProtectedRoute><UserOffersList/></ProtectedRoute></PageWrapper>} />
                 {/* unprotected */}
                 <Route path={Path.OFFER} element={<PageWrapper direction={1}><OfferView/></PageWrapper>} />
                 <Route path={Path.OFFERS_SEARCH} element={<PageWrapper direction={1}><OfferSearchView/></PageWrapper>} />

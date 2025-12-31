@@ -3,26 +3,54 @@ import Loading from "global/components/Loading";
 import OfferTile from "offer/components/OfferTile";
 import { Path } from "../../path"
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { BtnSizes } from "global/interface/controls.interface";
+import { useEffect, useState } from "react";
+import { OfferI } from "@shared/interfaces/OfferI";
+import { useAuthContext } from "auth/AuthProvider";
+import { OffersService } from "offer/services/OffersService";
 
-const MyOffersList: React.FC = () => {
+const UserOffersList: React.FC = () => {
+
+    const params = useParams<{ uid?: string }>()
+    const uid = params.uid || '';
+
+    const [offers, setOffers] = useState<OfferI[]>([]);
 
     const profileCtx = useUserContext();
+    const { me } = useAuthContext();
+
+    const [loading, setLoading] = useState(true);
 
     const { t } = useTranslation();
     const navigate = useNavigate();
     const globalCtx = useGlobalContext();
 
-    if (globalCtx.loading || profileCtx.loading || !globalCtx.dics.languages) {
+    useEffect(() => {   
+        const initOffers = async () => {
+            if (uid) {
+                if (me?.uid === uid) {
+                    setOffers(profileCtx.offers);
+                    return;
+                }
+                const userOffers = await OffersService.listUsersOffers(uid);
+                setOffers(userOffers);
+            }
+        }
+        initOffers().then(() => {setLoading(false);});
+    }, [uid])
+    
+    const _loading = globalCtx.loading || profileCtx.loading || !globalCtx.dics.languages || loading;
+
+    if (_loading) {
         return (<Loading></Loading>);
     }
 
-    const offers = profileCtx.offers;
+    const isMyOffers = me?.uid === uid;
 
-    const createBtn = <div className="mt-auto flex flex-col mb-5 px-3">
+    const createBtn = !isMyOffers ? null : <div className="mt-auto flex flex-col mb-5 px-3">
         <Button fullWidth onClick={() => navigate(Path.OFFER_FORM)} size={BtnSizes.LARGE}>{t("offer.add")}</Button>
     </div>
 
@@ -56,4 +84,4 @@ const MyOffersList: React.FC = () => {
     )
 }
 
-export default MyOffersList;
+export default UserOffersList;

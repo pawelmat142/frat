@@ -27,8 +27,6 @@ import { set } from "react-hook-form";
 const AccountView: React.FC = () => {
 
     const { me, loading, firebaseUser } = useAuthContext()
-    // TODO pobrać profil w kontekscie obecnego usera
-    // TODO pobreać oferty w kontekscie obecnego usera
     const userCtx = useUserContext()
     const [user, setUser] = useState<UserI | null>(null)
     const { uid } = useParams<{ uid?: string }>()
@@ -38,10 +36,11 @@ const AccountView: React.FC = () => {
 
     const [localLoading, setLocalLoading] = useState(true);
     const [employeeProfile, setEmployeeProfile] = useState<EmployeeProfileI | null>(null)
-    const [ offers, setOffers] = useState<OfferI[]>([])
+    const [offers, setOffers] = useState<OfferI[]>([])
 
     const isMyAccount = uid === me?.uid
 
+    console.log(offers)
     useEffect(() => {
         setLocalLoading(true);
         const initUser = async () => {
@@ -146,7 +145,7 @@ const AccountView: React.FC = () => {
         }
     }
 
-    const goToMyOffers = () => {
+    const goToUserOffers = () => {
         navigate(Path.getOffersPath(user.uid));
     };
 
@@ -206,7 +205,7 @@ const AccountView: React.FC = () => {
                         <Button
                             fullWidth
                             mode={BtnModes.SECONDARY}
-                            onClick={goToMyOffers}
+                            onClick={goToUserOffers}
                         >
                             <FaBriefcase className="mr-2" />
                             {t('account.offers')} ({offers?.length || 0})
@@ -232,6 +231,14 @@ const AccountView: React.FC = () => {
                     </>
                 ) : (
                     <>
+             {!!offers.length && (           <Button
+                            fullWidth
+                            mode={BtnModes.SECONDARY}
+                            onClick={goToUserOffers}
+                        >
+                            <FaBriefcase className="mr-2" />
+                            {t('account.offers')} ({offers?.length || 0})
+                        </Button>)}
                         <Button
                             fullWidth
                             mode={BtnModes.PRIMARY}

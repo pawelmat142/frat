@@ -124,9 +124,10 @@ const ChatConversationView: React.FC = () => {
     }
 
     const setViewState = (chat: ChatWithMembers) => {
+        if (!otherUser) return;
         const chatViewHeaderContent = <div className="flex gap-2 items-center">
             <HeaderBackBtn></HeaderBackBtn>
-            <span className="ripple flex gap-2 items-center" >
+            <span className="ripple flex gap-2 items-center" onClick={() => {navigate(Path.getAccountPath(otherUser?.uid))}}>
                 <ListItemImg imgUrl={otherUser?.avatarRef?.url || AVATAR_MOCK} />
                 <div className="x-font">{otherUser?.displayName}</div>
             </span>
@@ -295,11 +296,11 @@ const ChatConversationView: React.FC = () => {
 
             {/* Input */}
             <form onSubmit={handleSendMessage} className="chat-view-input">
-
+{/* 
                 <div className="chat-view-input-left">
                     <FaSearch size={iconSize} />
                     <FaBriefcase size={iconSize} />
-                </div>
+                </div> */}
 
                 <div className="chat-view-input-content">
                     <input

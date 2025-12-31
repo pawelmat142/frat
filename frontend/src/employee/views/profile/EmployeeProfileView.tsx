@@ -40,6 +40,25 @@ const EmployeeProfileView: React.FC = () => {
     const profileCtx = useEmployeeSearch();
     const globalCtx = useGlobalContext();
 
+    useEffect(() => {
+        const initEmployeeProfile = async () => {
+            if (displayName) {
+                const p = profileCtx.results?.find(p => p.displayName === displayName)
+                if (p) {
+                    _setProfile(p)
+                    return
+                }
+                try {
+                    setLoading(true)
+                    const result = await EmployeeProfileService.getEmployeeProfileByDisplayName(displayName)
+                    _setProfile(result)
+                } finally {
+                    setLoading(false)
+                }
+            }
+        }
+        initEmployeeProfile()
+    }, []);
 
     useEffect(() => {
         if (profile && me) {
@@ -158,25 +177,7 @@ const EmployeeProfileView: React.FC = () => {
         }
     }
 
-    useEffect(() => {
-        const initEmployeeProfile = async () => {
-            if (displayName) {
-                const p = profileCtx.results?.find(p => p.displayName === displayName)
-                if (p) {
-                    _setProfile(p)
-                    return
-                }
-                try {
-                    setLoading(true)
-                    const result = await EmployeeProfileService.getEmployeeProfileByDisplayName(displayName)
-                    _setProfile(result)
-                } finally {
-                    setLoading(false)
-                }
-            }
-        }
-        initEmployeeProfile()
-    }, []);
+
 
     const notifyProfileView = async (profile: EmployeeProfileI) => {
         if (profile?.uid) {
