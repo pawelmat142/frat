@@ -42,7 +42,15 @@ export class OffersController {
     listMyOffers(
         @CurrentUser() user: UserI
     ): Promise<OfferI[]> {
-        return this.offersService.listOffersByUser(user);
+        return this.offersService.listOffersByUid(user.uid);
+    }
+
+    @Get('user/:uid')
+    @Serialize(OfferEntity)
+    listUsersOffers(
+        @Param('uid') uid: string
+    ): Promise<OfferI[]> {
+        return this.offersService.listOffersByUid(uid);
     }
 
     @Patch(':offerId/activation')

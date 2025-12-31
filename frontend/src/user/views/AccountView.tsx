@@ -17,35 +17,71 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { UserManagementService } from "user/services/UserManagementService";
 import { FirebaseAuth } from "auth/services/FirebaseAuth";
 import { ChatService } from "chat/services/ChatService";
+import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
+import { OfferI } from "@shared/interfaces/OfferI";
+import { m } from "framer-motion";
+import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
+import { OffersService } from "offer/services/OffersService";
+import { set } from "react-hook-form";
 
-const AccountPage: React.FC = () => {
+const AccountView: React.FC = () => {
 
-    const { me, loading, firebaseUser } = useAuthContext();
-    const { employeeProfile, offers } = useUserContext();
-    const [user, setUser] = useState<UserI | null>(null);
-    const { uid } = useParams<{ uid?: string }>();
-    const { t } = useTranslation();
-    const navigate = useNavigate();
+    const { me, loading, firebaseUser } = useAuthContext()
+    // TODO pobrać profil w kontekscie obecnego usera
+    // TODO pobreać oferty w kontekscie obecnego usera
+    const userCtx = useUserContext()
+    const [user, setUser] = useState<UserI | null>(null)
+    const { uid } = useParams<{ uid?: string }>()
+    const { t } = useTranslation()
+    const navigate = useNavigate()
     const confirm = useConfirm()
 
     const [localLoading, setLocalLoading] = useState(true);
+    const [employeeProfile, setEmployeeProfile] = useState<EmployeeProfileI | null>(null)
+    const [ offers, setOffers] = useState<OfferI[]>([])
 
-    const isMyAccount = uid === me?.uid;
+    const isMyAccount = uid === me?.uid
 
     useEffect(() => {
+        setLocalLoading(true);
         const initUser = async () => {
             if (uid) {
                 if (uid === me?.uid) {
-                    setUser(me);
+                    setUser(me)
                 } else {
-                    const _user = await UserPublicService.fetchUser(uid);
-                    setUser(_user);
+                    const _user = await UserPublicService.fetchUser(uid)
+                    setUser(_user)
                 }
             }
         }
 
         initUser();
     }, [uid, me]);
+
+    useEffect(() => {
+        if (!user) {
+            return
+        }
+
+        if (user.uid === me?.uid) {
+            setOffers(userCtx.offers)
+            setEmployeeProfile(userCtx.employeeProfile)
+            setLocalLoading(false);
+        } else {
+            initUserData(user);
+        }
+    }, [user]);
+
+
+    const initUserData = async (user: UserI) => {
+        const [userEmployeeProfile, userOffers] = await Promise.all([
+            EmployeeProfileService.getEmployeeProfileByDisplayName(user.displayName),
+            OffersService.listUsersOffers(user.uid)
+        ])
+        setEmployeeProfile(userEmployeeProfile)
+        setOffers(userOffers)
+        setLocalLoading(false);
+    }
 
     useEffect(() => {
         setLocalLoading(loading);
@@ -213,4 +249,4 @@ const AccountPage: React.FC = () => {
     );
 };
 
-export default AccountPage;
+export default AccountView;

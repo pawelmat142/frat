@@ -20,6 +20,7 @@ import { MenuConfig } from "global/components/selector/MenuItems";
 import { toast } from "react-toastify";
 import { useConfirm } from "global/providers/PopupProvider";
 import { useUserContext } from "user/UserProvider";
+import { ChatService } from "chat/services/ChatService";
 
 const EmployeeProfileView: React.FC = () => {
 
@@ -67,15 +68,30 @@ const EmployeeProfileView: React.FC = () => {
             })
             menu.items.push({
                 label: t('employeeProfile.deleteButton'),
-                onClick: () => { deleteProfile() }  
+                onClick: () => { deleteProfile() }
             })
         } else {
             menu.items.push({
                 label: hasMyLike ? t('employeeProfile.unlikeButton') : t('employeeProfile.likeButton'),
                 onClick: () => { likeProfile(profile) }
             })
+            menu.items.push({
+                label: t('chat.openChat'),
+                onClick: openChat
+            })
         }
         return menu;
+    }
+
+    const openChat = async () => {
+        if (!profile) return;
+        try {
+            const chat = await ChatService.getOrCreateDirectChat(profile.uid)
+            navigate(Path.getChatPath(chat.chatId))
+        } catch (error) {
+            console.error('Failed to open chat:', error)
+            toast.error(t('chat.error.cannotOpen'))
+        }
     }
 
     const likeProfile = async (profile: EmployeeProfileI) => {

@@ -34,7 +34,7 @@ export class OffersRepo {
         await this.offerRepository.clear();
     }
 
-    public listOffersByUser(uid: string): Promise<OfferEntity[]> {
+    public listOffersByUid(uid: string): Promise<OfferEntity[]> {
         return this.offerRepository.find({ where: { uid } });
     }
 

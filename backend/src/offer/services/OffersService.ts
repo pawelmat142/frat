@@ -34,7 +34,7 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         this.subscription.add(
             this.userService.userDeletedEvent.subscribe(async (user) => {
                 if (user) {
-                    const offers = await this.listOffersByUser(user);
+                    const offers = await this.listOffersByUid(user.uid);
                     if (offers?.length) {
                         for (const offer of offers) {
                             await this.deleteOfferFn(offer.offerId, user.uid);
@@ -51,8 +51,8 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         return this.offersRepo.getById(offerId);
     }
 
-    public listOffersByUser(user: UserI): Promise<OfferI[]> {
-        return this.offersRepo.listOffersByUser(user.uid);
+    public listOffersByUid(uid: string): Promise<OfferI[]> {
+        return this.offersRepo.listOffersByUid(uid);
     }
 
     public async activation(user: UserI, offerId: number): Promise<OfferI> {

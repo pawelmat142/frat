@@ -15,6 +15,10 @@ export const OffersService = {
         return httpClient.get<OfferI[]>(`/offers`);
     },
 
+    listUsersOffers(userId: string): Promise<OfferI[]> {
+        return httpClient.get<OfferI[]>(`/offers/user/${userId}`);
+    },
+
     activation(offerId: number): Promise<OfferI> {
         return httpClient.patch<OfferI>(`/offers/${offerId}/activation`, {});
     },
