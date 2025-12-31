@@ -126,8 +126,10 @@ const ChatConversationView: React.FC = () => {
     const setViewState = (chat: ChatWithMembers) => {
         const chatViewHeaderContent = <div className="flex gap-2 items-center">
             <HeaderBackBtn></HeaderBackBtn>
-            <ListItemImg imgUrl={otherUser?.avatarRef?.url || AVATAR_MOCK} />
-            <div className="x-font">{otherUser?.displayName}</div>
+            <span className="ripple flex gap-2 items-center" >
+                <ListItemImg imgUrl={otherUser?.avatarRef?.url || AVATAR_MOCK} />
+                <div className="x-font">{otherUser?.displayName}</div>
+            </span>
         </div>
 
         globalCtx.setViewState({
@@ -187,7 +189,8 @@ const ChatConversationView: React.FC = () => {
             if (numericChatId !== chatEvent.chatId) {
                 return
             }
-            setChat(prev => prev ? ({ ...chatEvent,
+            setChat(prev => prev ? ({
+                ...chatEvent,
                 members: prev.members
             }) : null);
         };

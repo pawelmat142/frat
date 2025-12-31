@@ -215,7 +215,9 @@ $paddingSmall: .5rem;
 
 
 
-$rippleBg: rgba(0, 0, 0, 0.15);
+$rippleBg: white;
+$rippleBg: rgba(255, 255, 255, 0.20);
+
 $rippleBgLight: color-mix(in srgb, $primary-color, transparent 85%);
 
 // RIPPLE EFFECT 
@@ -235,7 +237,7 @@ $rippleBgLight: color-mix(in srgb, $primary-color, transparent 85%);
     background: $rippleBg;
     border-radius: 50%;
     transform: translate(-50%, -50%) scale(0);
-    animation: ripple-effect 0.1s linear;
+    animation: ripple-effect .1s linear;
     pointer-events: none;
     z-index: 1;
   }
@@ -255,6 +257,7 @@ $rippleBgLight: color-mix(in srgb, $primary-color, transparent 85%);
 @media screen and (min-width: $desktop) {
   .ripple::after {
     transition: $transition;
+    // transition: transform 30s ease-out;
     content: '';
     position: absolute;
     left: 50%;
