@@ -1,0 +1,29 @@
+import { UserI } from "@shared/interfaces/UserI";
+import { useNavigate } from "react-router-dom";
+import { AVATAR_MOCK } from "./AvatarTile";
+import { Path } from "../../path";
+import ListItemImg from "global/components/ListItemImg";
+
+interface Props {
+    user: UserI
+    size?: number //rem
+    showNumber?: boolean
+
+}
+
+const UserItem: React.FC<Props> = ({ user, size = 3.5, showNumber = false }) => {
+    
+    const navigate = useNavigate();
+
+    return (
+        <span className="ripple flex gap-2 items-center w-full" onClick={() => { navigate(Path.getAccountPath(user?.uid)) }}>
+            <ListItemImg imgUrl={user?.avatarRef?.url || AVATAR_MOCK} size={size} />
+            <div>
+                <div className="x-font">{user?.displayName}</div>
+                {showNumber && <div className="small-font secondary-text">{user?.email}</div>}
+            </div>
+        </span>
+    )
+}
+
+export default UserItem;

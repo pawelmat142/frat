@@ -8,16 +8,15 @@ import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import Button from "global/components/controls/Button";
 import { Path } from "../../path";
-import { FaBriefcase, FaPaperPlane, FaSearch } from "react-icons/fa";
+import {  FaPaperPlane } from "react-icons/fa";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { BtnModes, MenuItem } from "global/interface/controls.interface";
 import { DateUtil } from "@shared/utils/DateUtil";
-import ListItemImg from "global/components/ListItemImg";
-import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { useMenuContext } from "global/providers/MenuProvider";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
+import UserItem from "user/components/UserItem";
 
 const ChatConversationView: React.FC = () => {
     const { t } = useTranslation();
@@ -127,10 +126,7 @@ const ChatConversationView: React.FC = () => {
         if (!otherUser) return;
         const chatViewHeaderContent = <div className="flex gap-2 items-center">
             <HeaderBackBtn></HeaderBackBtn>
-            <span className="ripple flex gap-2 items-center" onClick={() => {navigate(Path.getAccountPath(otherUser?.uid))}}>
-                <ListItemImg imgUrl={otherUser?.avatarRef?.url || AVATAR_MOCK} />
-                <div className="x-font">{otherUser?.displayName}</div>
-            </span>
+            <UserItem user={otherUser} size={2.5}></UserItem>
         </div>
 
         globalCtx.setViewState({

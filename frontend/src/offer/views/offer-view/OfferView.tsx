@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { useConfirm } from "global/providers/PopupProvider";
 import { Path } from "../../../path";
 import { Utils } from "global/utils/utils";
+import UserItemTile from "user/components/UserItemTile";
 
 const OfferView: React.FC = () => {
 
@@ -170,10 +171,15 @@ const OfferView: React.FC = () => {
     const isMyOffer = me?.uid === offer.uid;
 
     return (
-        <div className="view-container">
+        <div className="view-container-two">
 
             <div>
+                <div className="my-2">
+                    <UserItemTile uid={offer.uid} size={2.5} showNumber={true} showChat={true}></UserItemTile>
+                </div>
+
                 <div className="main-tiles">
+
 
                     <OfferDetailsTile offer={offer} />
 

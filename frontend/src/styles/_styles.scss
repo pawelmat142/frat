@@ -88,6 +88,11 @@ $headerHeightDesktop: 60px;
     padding: 1rem;
 }
 
+.view-container-two {
+    @extend .view-container;
+    padding-top: 0;
+}
+
 
 
 // LIST VIEW
@@ -99,30 +104,16 @@ $headerHeightDesktop: 60px;
 }
 
 .list-view-item-img {
-    padding-right: 1rem;
-
     img {
         aspect-ratio: 1/1;
-        width: 3.5rem;
-        height: 3.5rem;
         max-width: unset;
     }
-}
-
-.header {
-    .list-view-item-img {
-        img {
-            width: 2.5rem;
-            height: 2.5rem;
-        }
-        padding-right: .25rem;
-    }
-
 }
 
 .list-view-item {
     display: flex;
     padding: .5rem 1rem;
+    gap: 1rem;
 
     &:not(.last) {
         border-bottom: 1px solid $secondary-bg;
@@ -283,6 +274,8 @@ $inputGap: .75rem;
 
 $tile-edge-radius: 1rem;
 
+$tilePadding: .5rem 1rem;
+
 .tile {
     width: 100%;
     background-color: $secondary-bg;
@@ -422,6 +415,16 @@ $tileRadius: 1rem;
 }
 
 
+// USER ITEM TILE
+.user-item-tile {
+    background-color: $secondary-bg;
+    border-radius: $tileRadius;
+    padding: $tilePadding;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
 .sec-tiles {
     padding-top: 1rem;
     display: grid;
@@ -497,7 +500,7 @@ $tileRadius: 1rem;
 }
 
 .offer-details-tile {
-    padding: .5rem 1rem;
+    padding: $tilePadding;
     align-items: flex-start;
     gap: unset;
 }
