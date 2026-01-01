@@ -790,3 +790,51 @@ $topLabelOffset: 0.3rem;
     }
   }
 }
+
+// Avatar Upload Field
+.avatar-upload-field {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .avatar-upload-tile {
+    width: 45%;
+    aspect-ratio: 1/1;
+    border-radius: $tile-radius;
+    background-color: $secondary-bg;
+    overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $primary-color;
+    }
+
+    &.avatar-upload-error {
+      border-color: $error-color;
+    }
+
+    .avatar-upload-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-upload-loading {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .avatar-upload-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .form-control-error-msg {
+      margin-left: 0;
+    }
+  }
+}

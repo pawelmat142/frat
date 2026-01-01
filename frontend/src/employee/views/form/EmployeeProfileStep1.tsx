@@ -7,8 +7,9 @@ import {
     EmployeeProfileForm
 } from "@shared/interfaces/EmployeeProfileI";
 import CommunicationLanguagesSection from "../../components/CommunicationLanguagesSection";
-import AvatarTile from "user/components/AvatarTile";
+import AvatarUploadField from "global/components/controls/AvatarUploadField";
 import PhoneNumberFloatingInput from "global/components/controls/PhoneNumberFloatingInput";
+import { useAuthContext } from "auth/AuthProvider";
 
 interface Props {
     formRef: UseFormReturn<EmployeeProfileForm>;
@@ -16,6 +17,7 @@ interface Props {
 
 const EmployeeProfileStep1: React.FC<Props> = ({ formRef }) => {
     const { t } = useTranslation();
+    const { me } = useAuthContext();
     const required = FormValidator.required(t);
     const { control, setValue, watch, formState } = formRef;
 
@@ -81,7 +83,20 @@ const EmployeeProfileStep1: React.FC<Props> = ({ formRef }) => {
                     formState={formState}
                 />
 
-                <AvatarTile></AvatarTile>
+                <Controller
+                    name="step1.avatarRef"
+                    control={control}
+                    rules={required}
+                    render={({ field }) => (
+                        <AvatarUploadField
+                            value={field.value}
+                            onChange={field.onChange}
+                            uid={me?.uid}
+                            error={formState.errors.step1?.avatarRef}
+                            required
+                        />
+                    )}
+                />
             </div>
         </>
     );

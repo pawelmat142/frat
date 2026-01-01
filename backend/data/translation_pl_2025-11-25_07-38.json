@@ -500,6 +500,7 @@
         "certificates": "Certyfikaty",
         "locationPoint": "Dokładna lokalizacja [lat lng]",
         "submitSuccess": "Profil został zapisany pomyślnie",
+        "uploadAvatar": "Prześlij avatar",
         "locationOption": {
           "DISTANCE": {
             "msg": "Wybierz lokalizację i maksymalną odległość, z której chcesz otrzymywać oferty.",

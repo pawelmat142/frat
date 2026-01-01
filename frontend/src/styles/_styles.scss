@@ -383,8 +383,6 @@ $tilePadding: .5rem 1rem;
 }
 
 
-$tileRadius: 1rem;
-
 .main-tiles {
     width: 100%;
     display: grid;
@@ -418,7 +416,7 @@ $tileRadius: 1rem;
 // USER ITEM TILE
 .user-item-tile {
     background-color: $secondary-bg;
-    border-radius: $tileRadius;
+    border-radius: $tile-radius;
     padding: $tilePadding;
     display: flex;
     justify-content: space-around;
@@ -469,7 +467,7 @@ $tileRadius: 1rem;
     align-items: center;
     aspect-ratio: 1 / 1;
     background-color: $secondary-bg;
-    border-radius: $tileRadius;
+    border-radius: $tile-radius;
 
     &.col-tile {
         flex-direction: column;
@@ -524,7 +522,7 @@ $tileRadius: 1rem;
 .month-tile-wrapper {
     width: 100%;
     overflow: hidden;
-    border-radius: calc($tileRadius - .35rem);
+    border-radius: calc($tile-radius - .35rem);
 }
 
 .square-tile.month-tile {

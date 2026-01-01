@@ -61,6 +61,7 @@ $secondary-text: var(--secondary-text);
 $success-color: var(--success-color);
 
 $border-color: var(--border-color);
+$tile-radius: 1rem;
 
 $box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 
@@ -286,7 +287,6 @@ $rippleBgLight: white;
 
 .duration-slider {
   color: $primary-color;
-  -webkit-appearance: none;
   width: 100%;
   height: 6px;
   border-radius: 4px;
