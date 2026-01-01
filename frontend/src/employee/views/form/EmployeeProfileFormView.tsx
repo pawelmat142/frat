@@ -2,7 +2,7 @@ import Button from "global/components/controls/Button";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import React from "react";
-import { DateRange, EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileI, EmployeeProfileLocationOptions, GeocodedPosition } from "@shared/interfaces/EmployeeProfileI";
 import { toast } from "react-toastify";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import Loading from "global/components/Loading";
@@ -19,6 +19,9 @@ import EmployeeProfileStep4 from "./EmployeeProfileStep4";
 import { Utils } from "global/utils/utils";
 import { useConfirm } from "global/providers/PopupProvider";
 import FormWizard from "global/components/FormWizard/FormWizard";
+import { useAuthContext } from "auth/AuthProvider";
+import { GoogleMapService } from "global/services/GoogleMapService";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -30,21 +33,25 @@ const EmployeeProfileFormView: React.FC = () => {
 
     const { t } = useTranslation();
     const [loading, setLoading] = React.useState<boolean>(false);
-    const { employeeProfile, initEmployeeProfile } = useUserContext();
+    const userCtx = useUserContext();
     const navigate = useNavigate();
     const profileCtx = useEmployeeSearch();
     const isDevMode = Utils.isDevMode();
     const confirm = useConfirm();
+    const { me } = useAuthContext();
+    const globalCtx = useGlobalContext();
 
     const [step, setStep] = React.useState<StepKey>(STEPS_ORDER[0]);
+    const [geolocatedPosition, setGeolocatedPosition] = React.useState<GeocodedPosition | null>(null);
+
+    const employeeProfile: EmployeeProfileI | null = userCtx.employeeProfile || null;
 
     const formRef = useForm<EmployeeProfileForm>({
         defaultValues: {
             step1: {
                 fullName: "",
-                phoneNumber: "",
+                phoneNumber: { prefix: "+00", phoneNumber: "" },
                 email: "",
-                // residenceCountry: "",
                 communicationLanguages: [""]
             },
             step2: {
@@ -64,6 +71,45 @@ const EmployeeProfileFormView: React.FC = () => {
         },
     });
 
+    const initPostion = async (): Promise<GeocodedPosition | null> => {
+        if (userCtx.position) {
+            // Use backend geocoding to avoid API key restrictions
+            const position = await GoogleMapService.reverseGeocodeViaBackend({
+                lat: userCtx.position.lat,
+                lng: userCtx.position.lng,
+            });
+            if (position) {
+                setGeolocatedPosition(position);
+                return position;
+            }
+        }
+        return null;
+    }
+
+    const initFormWithUserData = async () => {
+        if (!me) return;
+        setLoading(true);
+        const position = await initPostion();
+
+        formRef.setValue("step1.fullName", me.displayName)
+        formRef.setValue("step1.email", me.email)
+        if (me.avatarRef) {
+            formRef.setValue("step1.avatarRef", me.avatarRef);
+        }
+        if (position) {
+            const element = globalCtx.dics.languages?.elements.find(lang => lang.values.COUNTRY_CODE === position.country?.toLocaleLowerCase());
+
+            if (element) {
+
+                console.log("element:", element);
+
+                formRef.setValue("step1.phoneNumber.prefix", element.values.PHONE_PREFIX);
+                formRef.setValue("step1.communicationLanguages", [element.code]);
+            }
+        }
+        setLoading(false);      
+    }
+
     React.useEffect(() => {
         // Load from localStorage if no employeeProfile exists
         if (!employeeProfile) {
@@ -76,6 +122,8 @@ const EmployeeProfileFormView: React.FC = () => {
                 } catch (error) {
                     console.error("Error loading form from localStorage:", error);
                 }
+            } else {
+                initFormWithUserData();
             }
             return;
         }
@@ -95,7 +143,7 @@ const EmployeeProfileFormView: React.FC = () => {
         formRef.reset({
             step1: {
                 fullName: employeeProfile.fullName || "",
-                phoneNumber: employeeProfile.phoneNumber || "",
+                phoneNumber: employeeProfile.phoneNumber || { prefix: "+48", phoneNumber: "" },
                 email: employeeProfile.email || "",
                 communicationLanguages: employeeProfile.communicationLanguages || [""],
                 avatarRef: employeeProfile.avatarRef,
@@ -125,7 +173,11 @@ const EmployeeProfileFormView: React.FC = () => {
                 availabilityDateRanges: availabilityDateRanges
             }
         });
+
+        initFormWithUserData()
     }, [employeeProfile, formRef]);
+
+
 
     const onSubmit = async (validateFn: () => Promise<boolean>) => {
         const confirmed = await confirm({
@@ -149,7 +201,7 @@ const EmployeeProfileFormView: React.FC = () => {
         try {
             setLoading(true);
             const result = await EmployeeProfileService.createEmployeeProfile(form);
-            await initEmployeeProfile();
+            userCtx.initEmployeeProfile();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
             navigate(Path.getEmployeeProfilePath(`${result.displayName}`), { replace: true });
@@ -165,7 +217,7 @@ const EmployeeProfileFormView: React.FC = () => {
             setLoading(true);
             const result = await EmployeeProfileService.updateEmployeeProfile(form);
             profileCtx.updateOneProfileInResults(result);
-            await initEmployeeProfile();
+            userCtx.initEmployeeProfile();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
 

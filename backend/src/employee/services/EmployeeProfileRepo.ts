@@ -126,9 +126,11 @@ export class EmployeeProfileRepo {
             updatedFlag = true;
         }
 
-        if (profile.phoneNumber !== newProfile.phoneNumber) {
-            this.logger.log(`Updating EmployeeProfile phoneNumber from ${profile.phoneNumber} to ${newProfile.phoneNumber}`);
-            profile.phoneNumber = newProfile.phoneNumber;
+        const phoneChanged = profile.phoneNumber?.prefix !== newProfile.phoneNumber?.prefix
+            || profile.phoneNumber?.phoneNumber !== newProfile.phoneNumber?.phoneNumber;
+        if (phoneChanged) {
+            this.logger.log(`Updating EmployeeProfile phoneNumber from ${JSON.stringify(profile.phoneNumber)} to ${JSON.stringify(newProfile.phoneNumber)}`);
+            profile.phoneNumber = newProfile.phoneNumber as any;
             updatedFlag = true;
         }
 

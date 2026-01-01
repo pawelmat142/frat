@@ -1,5 +1,10 @@
 import { AvatarRef } from './UserI';
 
+export interface ParsedPhoneNumber {
+  prefix: string;
+  phoneNumber: string;
+}
+
 export interface EmployeeProfileI {
 
   employeeProfileId: number;
@@ -10,7 +15,7 @@ export interface EmployeeProfileI {
   displayName: string;
 
   fullName: string;
-  phoneNumber: string;
+  phoneNumber: ParsedPhoneNumber;
   email: string;
   communicationLanguages: string[];
   // TODO usunac wszystkie inne avatary z clouda od tego uid przy submicie forma
@@ -67,7 +72,7 @@ export type EmployeeProfileAvailabilityOption = typeof EmployeeProfileAvailabili
 
 export interface EmployeeProfileFormStep1 {
   fullName: string;
-  phoneNumber: string;
+  phoneNumber: ParsedPhoneNumber;
   email: string;
   communicationLanguages: string[];
   avatarRef: AvatarRef;
@@ -102,7 +107,7 @@ export interface EmployeeProfileForm {
 export interface EmployeeProfileFormDto {
 
   fullName: string;
-  phoneNumber: string;
+  phoneNumber: ParsedPhoneNumber;
   email: string;
   communicationLanguages: string[];
   avatarRef: AvatarRef;

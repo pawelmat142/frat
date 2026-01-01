@@ -22,6 +22,7 @@ export abstract class Util {
         }
         return[UserRoles.ADMIN, UserRoles.SUPERADMIN].some(role => user.roles.includes(role));
     }
+
 }
 
 export const isOneOf = (list: any[], item: any): boolean => {

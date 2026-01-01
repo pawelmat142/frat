@@ -65,6 +65,11 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 					(error) => {
 						locationErrorToast();
 						console.error("Error fetching position:", error);
+					},
+					{
+						enableHighAccuracy: true, // Use GPS for higher precision
+						timeout: 10000,           // Max wait time 10s
+						maximumAge: 0             // Don't use cached position
 					}
 				);
 				setPositionWatchId(watchId);

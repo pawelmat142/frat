@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseInterceptors } from "@nestjs/common";
+import { Controller, Get, Param, Query, UseInterceptors } from "@nestjs/common";
 import { TranslationI } from "@shared/interfaces/TranslationI";
 import { LogInterceptor } from "global/interceptors/LogInterceptor";
 import { TranslationPublicService } from "admin/translation/TranslationPublicService";
@@ -8,6 +8,8 @@ import { Serialize } from "./decorators/Serialize";
 import { TranslationEntity } from "admin/dictionaries/model/TranslationEntity";
 import { DictionaryEntity } from "admin/dictionaries/model/DictionaryEntity";
 import { SWWException } from "./exceptions/SWWException";
+import { GeocodingService } from "./services/GeocodingService";
+import { GeocodedPosition } from "@shared/interfaces/EmployeeProfileI";
 
 @Controller('api')
 @UseInterceptors(LogInterceptor)
@@ -16,6 +18,7 @@ export class GlobalController {
     constructor(
         private readonly translationPublicService: TranslationPublicService,
         private readonly dictionariesPublicService: DictionariesPublicService,
+        private readonly geocodingService: GeocodingService,
     ) {}
 
     @Get('/test')
@@ -50,6 +53,21 @@ export class GlobalController {
     @Get('/test-sww')
     testSww() {
         throw new SWWException(`Test SWW Exception`, this);
+    }
+
+    @Get('geocode/reverse')
+    async reverseGeocode(
+        @Query('lat') lat: string,
+        @Query('lng') lng: string,
+    ): Promise<GeocodedPosition | null> {
+        const latNum = parseFloat(lat);
+        const lngNum = parseFloat(lng);
+        
+        if (isNaN(latNum) || isNaN(lngNum)) {
+            return null;
+        }
+        
+        return this.geocodingService.reverseGeocode(latNum, lngNum);
     }
 
 }

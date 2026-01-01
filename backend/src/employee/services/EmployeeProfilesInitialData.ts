@@ -263,7 +263,11 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
 
         const adress = generateRandomAddress(location)
 
-        const phoneNumber = `+${randomInt(10, 99)} ${randomInt(100, 999)} ${randomInt(100, 999)} ${randomInt(100, 999)}`;
+        const phonePrefixes = ['+48', '+49', '+44', '+33', '+34', '+39', '+31', '+420', '+421'];
+        const phoneNumber = {
+            prefix: phonePrefixes[randomInt(0, phonePrefixes.length - 1)],
+            phoneNumber: `${randomInt(100, 999)}${randomInt(100, 999)}${randomInt(100, 999)}`
+        };
         
         const profile: DeepPartial<EmployeeProfileEntity> = {
             uid,

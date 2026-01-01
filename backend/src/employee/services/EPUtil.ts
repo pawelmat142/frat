@@ -85,7 +85,7 @@ export abstract class EPUtil {
         if (!profile?.fullName) {
             throw new ToastException('employeeProfile.error.fullNameRequired', this);
         }
-        if (!profile?.phoneNumber) {
+        if (!profile?.phoneNumber || !profile.phoneNumber.phoneNumber) {
             throw new ToastException('employeeProfile.error.phoneNumberRequired', this);
         }
         if (!profile?.email) {

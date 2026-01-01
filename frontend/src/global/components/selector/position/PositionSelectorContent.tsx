@@ -4,9 +4,9 @@ import { toast } from 'react-toastify';
 import { GeocodedPosition, Position } from '@shared/interfaces/EmployeeProfileI';
 import Button from '../../controls/Button';
 import { BtnModes } from 'global/interface/controls.interface';
-import { MapUtil } from 'global/utils/MapUtil';
 import PositionSelectorSearchbar from './PositionSelectorSearchbar';
 import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
+import { GoogleMapService } from 'global/services/GoogleMapService';
 
 interface PositionSelectorContentProps {
     initialPosition?: Position;
@@ -47,7 +47,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         await GoogleMapsLoader.load(apiKey);
 
         if (initialPosition) {
-            const geoPosition = await MapUtil.getGeocodedLocationn({
+            const geoPosition = await GoogleMapService.getGeocodedLocationn({
                 lat: initialPosition.lat,
                 lng: initialPosition.lng,
             }, apiKey);
@@ -104,7 +104,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         mapInstanceRef.current?.panTo(new google.maps.LatLng(position.lat, position.lng));
         markerRef.current?.setPosition(new google.maps.LatLng(position.lat, position.lng));
         try {
-            const geoPosition = await MapUtil.getGeocodedLocationn(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
+            const geoPosition = await GoogleMapService.getGeocodedLocationn(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
             setSelectedPosition(geoPosition);
         } catch (error) {
             console.error('Geocoding error:', error);

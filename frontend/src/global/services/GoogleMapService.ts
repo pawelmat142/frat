@@ -1,22 +1,49 @@
 import { GeocodedPosition } from "@shared/interfaces/EmployeeProfileI";
+import GoogleMapsLoader from "global/utils/GoogleMapsLoader";
+import { httpClient } from "./http";
 
 
-export abstract class MapUtil {
+export abstract class GoogleMapService {
+
+	/**
+	 * Reverse geocode coordinates using the backend API.
+	 * This avoids API key restrictions on the frontend.
+	 */
+	static async reverseGeocodeViaBackend(coords: { lat: number; lng: number }): Promise<GeocodedPosition | null> {
+		try {
+			const result = await httpClient.get<GeocodedPosition | null>(
+				`/geocode/reverse?lat=${encodeURIComponent(coords.lat)}&lng=${encodeURIComponent(coords.lng)}`,
+				{ skipAuth: true }
+			);
+			return result;
+		} catch (e) {
+			console.warn('[GoogleMapService] Backend geocoding failed:', e);
+			return null;
+		}
+	}
 
 	static async getGeocodedLocationn(coords: { lat: number; lng: number }, apiKey: string): Promise<GeocodedPosition | null> {
-		let geoPosition = null as any;
+		if (!apiKey) return null;
+
+		// Always load Google Maps JS first to use JS Geocoder (supports referrer restrictions)
+		try {
+			await GoogleMapsLoader.load(apiKey);
+		} catch (e) {
+			console.warn('[GoogleMapService] Failed to load Google Maps JS:', e);
+		}
+
 		const win: any = window;
 		if (win?.google?.maps && typeof win.google.maps.Geocoder === 'function') {
 			try {
-				geoPosition = await MapUtil.getGeocodedLocation(coords, new win.google.maps.Geocoder());
+				return await GoogleMapService.getGeocodedLocation(coords, new win.google.maps.Geocoder());
 			} catch (e) {
-				// fallback to REST geocoding
-				geoPosition = await MapUtil.getGeocodedLocationUsingApiKey(coords, apiKey);
+				console.warn('[GoogleMapService] JS Geocoder failed:', e);
+				return null;
 			}
-		} else {
-			geoPosition = await MapUtil.getGeocodedLocationUsingApiKey(coords, apiKey);
 		}
-		return geoPosition;
+
+		// Fallback to REST API only if JS API unavailable (will fail with referrer restrictions)
+		return await GoogleMapService.getGeocodedLocationUsingApiKey(coords, apiKey);
 	}
 
 	static async getGeocodedLocation(position: { lat: number; lng: number }, geocoder: google.maps.Geocoder): Promise<GeocodedPosition | null> {
@@ -29,7 +56,7 @@ export abstract class MapUtil {
 						return resolve(null);
 					}
 					const response: google.maps.GeocoderResponse = { results, status } as any;
-					const geoPosition = MapUtil.parseGeocoderResponse(response);
+					const geoPosition = GoogleMapService.parseGeocoderResponse(response);
 					resolve(geoPosition);
 				});
 			} catch (err) {
@@ -41,16 +68,28 @@ export abstract class MapUtil {
 	static async getGeocodedLocationUsingApiKey(position: { lat: number; lng: number }, apiKey: string): Promise<GeocodedPosition | null> {
 		if (!apiKey) return null;
 		try {
+			await GoogleMapsLoader.load(apiKey);
+		} catch (e) {
+			console.warn('[GoogleMapService] Failed to load Google Maps JS:', e);
+		}
+		try {
 			const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${encodeURIComponent(position.lat + ',' + position.lng)}&key=${encodeURIComponent(apiKey)}`;
 			const res = await fetch(url);
 			if (!res.ok) return null;
 			const json = await res.json();
+
+			// Handle API errors
+			if (json.status !== 'OK') {
+				console.warn('[GoogleMapService] Geocoding API error:', json.status, json.error_message || '');
+				return null;
+			}
+
 			// json has shape similar to google.maps.GeocoderResponse
 			const responseLike: any = {
 				results: json.results || [],
 				status: json.status
 			};
-			return MapUtil.parseGeocoderResponse(responseLike as any);
+			return GoogleMapService.parseGeocoderResponse(responseLike as any);
 		} catch (e) {
 			console.error('MapUtil.getGeocodedLocationUsingApiKey error', e);
 			return null;

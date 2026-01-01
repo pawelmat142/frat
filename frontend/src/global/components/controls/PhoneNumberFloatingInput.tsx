@@ -5,8 +5,8 @@ import FloatingLabel from './FloatingLabel';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import { DictionaryService } from 'global/services/DictionaryService';
 import { DictionaryElement, DictionaryI } from '@shared/interfaces/DictionaryI';
-import ArrowIcon from './ArrowIcon';
 import { useTranslation } from 'react-i18next';
+import { ParsedPhoneNumber } from '@shared/interfaces/EmployeeProfileI';
 
 interface PhoneNumberFloatingInputProps {
     id?: string;
@@ -19,14 +19,9 @@ interface PhoneNumberFloatingInputProps {
     center?: boolean;
     error?: { message?: string } | null;
     mode?: typeof FloatingInputModes[keyof typeof FloatingInputModes];
-    value: string;
-    onChange: (value: string) => void;
+    value: ParsedPhoneNumber;
+    onChange: (value: ParsedPhoneNumber) => void;
     autoComplete?: string;
-}
-
-interface ParsedPhoneNumber {
-    prefix: string;
-    phoneNumber: string;
 }
 
 const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatingInputProps>(
@@ -59,35 +54,8 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
             initDictionary();
         }, []);
 
-        // Parse string value like "+48123456789" into prefix and number
-        const parsePhoneNumber = (phoneStr: string): ParsedPhoneNumber => {
-            if (!phoneStr || !dictionary) {
-                return { prefix: '+48', phoneNumber: '' };
-            }
-            
-            // Sort prefixes by length (longest first) to match correctly
-            const sortedElements = [...(dictionary?.elements || [])].sort(
-                (a, b) => b.values.PHONE_PREFIX.length - a.values.PHONE_PREFIX.length
-            );
-            
-            for (const element of sortedElements) {
-                const prefix = element.values.PHONE_PREFIX;
-                if (phoneStr.startsWith(prefix)) {
-                    return {
-                        prefix,
-                        phoneNumber: phoneStr.slice(prefix.length)
-                    };
-                }
-            }
-            
-            // Default fallback
-            return { prefix: '+48', phoneNumber: phoneStr.replace(/^\+\d+/, '') };
-        };
-
-        const parsed = parsePhoneNumber(value || '');
-
         const getSelectedElement = (): DictionaryElement | undefined => {
-            return dictionary?.elements.find(el => el.values.PHONE_PREFIX === parsed.prefix);
+            return dictionary?.elements.find(el => el.values.PHONE_PREFIX === value?.prefix);
         };
 
         const selectedElement = getSelectedElement();
@@ -104,14 +72,20 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
             if (newPhoneNumber.length > MAX_PHONE_DIGITS) {
                 newPhoneNumber = newPhoneNumber.slice(0, MAX_PHONE_DIGITS);
             }
-            onChange(`${parsed.prefix}${newPhoneNumber}`);
+            onChange({
+                prefix: value?.prefix || '+48',
+                phoneNumber: newPhoneNumber
+            });
         };
 
         const handlePrefixSelect = (countryCode: string) => {
             const element = dictionary?.elements.find(el => el.code === countryCode);
             if (element) {
                 const newPrefix = element.values.PHONE_PREFIX;
-                onChange(`${newPrefix}${parsed.phoneNumber}`);
+                onChange({
+                    prefix: newPrefix,
+                    phoneNumber: value?.phoneNumber || ''
+                });
             }
         };
 
@@ -137,7 +111,7 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
         };
 
         const hasValue = () => {
-            return !!parsed.phoneNumber || !!parsed.prefix;
+            return !!value?.phoneNumber || !!value?.prefix;
         };
 
         const isLabelFloating = isFocused || hasValue();
@@ -166,7 +140,7 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
                             tabIndex={disabled ? -1 : 0}
                         >
                             <span className="pp-phone-prefix">
-                                {parsed.prefix || '+48'}
+                                {value?.prefix || '+48'}
                             </span>
                         </div>
 
@@ -176,7 +150,7 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
                             id={id}
                             name={name || id}
                             type="tel"
-                            value={parsed.phoneNumber || ''}
+                            value={value?.phoneNumber || ''}
                             onChange={handlePhoneNumberChange}
                             onFocus={() => setIsFocused(true)}
                             onBlur={() => setIsFocused(false)}

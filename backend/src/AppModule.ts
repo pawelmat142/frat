@@ -14,6 +14,7 @@ import { OffersModule } from 'offer/OfferModule';
 import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
 import { TelegramModule } from 'telegram/telegram.module';
 import { ChatModule } from 'chat/ChatModule';
+import { GeocodingService } from 'global/services/GeocodingService';
 
 @Module({
   imports: [
@@ -42,6 +43,9 @@ import { ChatModule } from 'chat/ChatModule';
   ],
   controllers: [
     GlobalController,
-  ]
+  ],
+  providers: [
+    GeocodingService,
+  ],
 })
 export class AppModule {}

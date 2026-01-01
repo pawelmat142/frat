@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { DateRangeI, EmployeeProfileAvailabilityOption, EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus, Point } from '@shared/interfaces/EmployeeProfileI';
+import { DateRangeI, EmployeeProfileAvailabilityOption, EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus, ParsedPhoneNumber, Point } from '@shared/interfaces/EmployeeProfileI';
 import { AvatarRef } from '@shared/interfaces/UserI';
 import { Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
@@ -31,9 +31,9 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Expose()
   fullName: string;
   
-  @Column({ name: 'phone_number' })
+  @Column({ name: 'phone_number', type: 'jsonb' })
   @Expose()
-  phoneNumber: string;
+  phoneNumber: ParsedPhoneNumber;
 
   @Column({ name: 'email', unique: true })
   @Expose()

@@ -16,8 +16,8 @@ export const PositionService = {
         }
         const data = await resp.json();
         // Nominatim returns lowercase ISO 3166-1 alpha-2 code under address.country_code
+
         const code = data?.address?.country_code;
         return code || null;
-    }
-
+    },
 }

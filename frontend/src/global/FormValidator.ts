@@ -54,18 +54,17 @@ export abstract class FormValidator {
 
     public static phoneNumber = (t: any) => {
         return {
-            validate: (value: string) => {
-                if (!value) return true;
-                // Remove prefix and check digits only
-                const digitsOnly = value.replace(/^\+\d{1,4}/, '');
+            validate: (value: { prefix: string; phoneNumber: string } | null | undefined) => {
+                if (!value || !value.phoneNumber) return true;
+                const digitsOnly = value.phoneNumber.replace(/\D/g, '');
                 if (digitsOnly.length < 6) {
                     return t('validation.form.phoneNumberTooShort');
                 }
                 if (digitsOnly.length > 15) {
                     return t('validation.form.phoneNumberTooLong');
                 }
-                // Check if valid format: +prefix followed by digits
-                if (!/^\+\d{1,4}\d{6,15}$/.test(value)) {
+                // Check if phoneNumber contains only digits
+                if (!/^\d+$/.test(value.phoneNumber)) {
                     return t('validation.form.phoneNumberInvalid');
                 }
                 return true;
