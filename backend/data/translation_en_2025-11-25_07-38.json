@@ -412,7 +412,10 @@
         "required": "This field is required.",
         "dateRangeRequired": "Start and end dates are required.",
         "dateRangeStartRequired": "Start date is required.",
-        "positiveInteger": "Value must be a positive integer."
+        "positiveInteger": "Value must be a positive integer.",
+        "phoneNumberTooShort": "Phone number is too short (min. 6 digits).",
+        "phoneNumberTooLong": "Phone number is too long (max. 15 digits).",
+        "phoneNumberInvalid": "Invalid phone number format."
       },
       "view": {
         "title": "Something went wrong!",

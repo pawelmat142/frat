@@ -8,6 +8,7 @@ import {
 } from "@shared/interfaces/EmployeeProfileI";
 import CommunicationLanguagesSection from "../../components/CommunicationLanguagesSection";
 import AvatarTile from "user/components/AvatarTile";
+import PhoneNumberFloatingInput from "global/components/controls/PhoneNumberFloatingInput";
 
 interface Props {
     formRef: UseFormReturn<EmployeeProfileForm>;
@@ -43,9 +44,12 @@ const EmployeeProfileStep1: React.FC<Props> = ({ formRef }) => {
                 <Controller
                     name="step1.phoneNumber"
                     control={control}
-                    rules={required}
+                    rules={{
+                        ...required,
+                        ...FormValidator.phoneNumber(t)
+                    }}
                     render={({ field }) => (
-                        <FloatingInput
+                        <PhoneNumberFloatingInput
                             {...field}
                             label={t("employeeProfile.form.phoneNumber")}
                             fullWidth

@@ -620,6 +620,66 @@ input {
   }
 }
 
+// Phone Number Input
+.pp-phone-input {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+
+  .pp-phone-country-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1.5rem 0.5rem 0.5rem 0.75rem;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .pp-phone-prefix {
+      font-size: $btnFont;
+      min-width: 2.5rem;
+      text-align: left;
+    }
+
+    .pp-arrow-icon {
+      font-size: 1rem;
+    }
+  }
+
+  .pp-phone-number-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 1.5rem 0.75rem 0.5rem 0.5rem;
+    font-size: $btnFont;
+    min-width: 0;
+
+    &::placeholder {
+      color: transparent;
+    }
+  }
+}
+
+.pp-phone-input.thin {
+  .pp-phone-country-selector {
+    padding-top: 1rem;
+    padding-bottom: 0;
+  }
+
+  .pp-phone-number-input {
+    padding-top: 1rem;
+    padding-bottom: 0;
+  }
+}
+
 $topLabelOffset: 0.3rem;
 
 .pp-textarea {

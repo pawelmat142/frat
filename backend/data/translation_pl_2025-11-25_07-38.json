@@ -405,7 +405,10 @@
         "required": "To pole jest wymagane.",
         "dateRangeRequired": "Daty rozpoczęcia i zakończenia są wymagane.",
         "dateRangeStartRequired": "Data rozpoczęcia jest wymagana.",
-        "positiveInteger": "Wartość musi być dodatnią liczbą całkowitą."
+        "positiveInteger": "Wartość musi być dodatnią liczbą całkowitą.",
+        "phoneNumberTooShort": "Numer telefonu jest za krótki (min. 6 cyfr).",
+        "phoneNumberTooLong": "Numer telefonu jest za długi (maks. 15 cyfr).",
+        "phoneNumberInvalid": "Nieprawidłowy format numeru telefonu."
       },
       "view": {
         "title": "Coś poszło nie tak!",
