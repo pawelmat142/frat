@@ -16,13 +16,14 @@ export abstract class EPUtil {
             displayName: user.displayName,
             email: user.email,
 
-            firstName: form.firstName,
-            lastName: form.lastName,
-            // residenceCountry: form.residenceCountry,
+            fullName: form.fullName,
+            phoneNumber: form.phoneNumber,
+            communicationLanguages: form.communicationLanguages || [],
+            avatarRef: form.avatarRef,
+            bio: form.bio,
 
             skills: form.skills || [],
             certificates: form.certificates || [],
-            communicationLanguages: form.communicationLanguages || [],
 
             locationOption: form.locationOption,
         }
@@ -80,17 +81,21 @@ export abstract class EPUtil {
         if (!profile.status) {
             throw new ToastException('employeeProfile.error.statusRequired', this);
         }
+
+        if (!profile?.fullName) {
+            throw new ToastException('employeeProfile.error.fullNameRequired', this);
+        }
+        if (!profile?.phoneNumber) {
+            throw new ToastException('employeeProfile.error.phoneNumberRequired', this);
+        }
         if (!profile?.email) {
             throw new ToastException('employeeProfile.error.emailRequired', this);
         }
-        if (!profile?.firstName) {
-            throw new ToastException('employeeProfile.error.firstNameRequired', this);
-        }
-        if (!profile?.lastName) {
-            throw new ToastException('employeeProfile.error.lastNameRequired', this);
-        }
         if (!profile?.communicationLanguages.length) {
             throw new ToastException('employeeProfile.error.communicationLanguagesRequired', this);
+        }
+        if (!profile?.avatarRef) {
+            throw new ToastException('employeeProfile.error.avatarRefRequired', this);
         }
 
         // Availability validation

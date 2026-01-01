@@ -257,17 +257,20 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
         const createdAt = getRandomizedCreatedAt(globalIndex);
 
         const displayName = `${firstName} ${lastName}`;
+        const fullName = `${firstName} ${lastName}`;
         const email = `${firstName}.${lastName}${globalIndex}@example.com`.toLowerCase();
         const uid = `seed-employee-${globalIndex.toString().padStart(3, "0")}`;
 
         const adress = generateRandomAddress(location)
 
+        const phoneNumber = `+${randomInt(10, 99)} ${randomInt(100, 999)} ${randomInt(100, 999)} ${randomInt(100, 999)}`;
+        
         const profile: DeepPartial<EmployeeProfileEntity> = {
             uid,
             displayName,
+            fullName,
             email,
-            firstName,
-            lastName,
+            phoneNumber,
             communicationLanguages: languages,
             locationOption,
             status,

@@ -8,18 +8,18 @@ export interface EmployeeProfileI {
   uid: string;
   status: EmployeeProfileStatus;
   displayName: string;
-  email: string;
-  avatarRef?: AvatarRef;
 
-  // form data
-  firstName: string;
-  lastName: string;
-  // residenceCountry: string;
+  fullName: string;
+  phoneNumber: string;
+  email: string;
+  communicationLanguages: string[];
+  // TODO usunac wszystkie inne avatary z clouda od tego uid przy submicie forma
+  avatarRef: AvatarRef;
+  bio?: string;
 
   skills?: string[];
   certificates?: string[];
 
-  communicationLanguages: string[];
 
   locationOption: EmployeeProfileLocationOption;
   locationCountries?: string[];
@@ -66,10 +66,12 @@ export const EmployeeProfileAvailabilityOptions = {
 export type EmployeeProfileAvailabilityOption = typeof EmployeeProfileAvailabilityOptions[keyof typeof EmployeeProfileAvailabilityOptions];
 
 export interface EmployeeProfileFormStep1 {
-  firstName: string;
-  lastName: string;
+  fullName: string;
+  phoneNumber: string;
+  email: string;
   communicationLanguages: string[];
-  // residenceCountry: string;
+  avatarRef: AvatarRef;
+  bio?: string;
 }
 
 export interface EmployeeProfileFormStep2 {
@@ -98,10 +100,14 @@ export interface EmployeeProfileForm {
 
 // Flat API structure for backend communication
 export interface EmployeeProfileFormDto {
-  firstName: string;
-  lastName: string;
+
+  fullName: string;
+  phoneNumber: string;
+  email: string;
   communicationLanguages: string[];
-  // residenceCountry: string;
+  avatarRef: AvatarRef;
+
+  bio?: string;
 
   skills?: string[];
   certificates?: string[];

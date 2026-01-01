@@ -24,27 +24,32 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Column({ name: 'display_name' })
   @Expose()
   displayName: string;
+
+
+  // GENERAL INFO
+  @Column({ name: 'full_name' })
+  @Expose()
+  fullName: string;
   
+  @Column({ name: 'phone_number' })
+  @Expose()
+  phoneNumber: string;
+
   @Column({ name: 'email', unique: true })
   @Expose()
   email: string;
 
-  // Duplicated from UserEntity for easier access see 02_sync_avatar_ref_trigger.sql
+  @Column({ name: 'communication_languages', type: 'text', array: true })
+  @Expose() 
+  communicationLanguages: string[];
+  
   @Column({ name: 'avatar_ref', type: 'jsonb', nullable: true })
   @Expose()
-  avatarRef?: AvatarRef;
+  avatarRef: AvatarRef;
   
-  @Column({ name: 'first_name' })
+  @Column({ name: 'bio', type: 'text', nullable: true })
   @Expose()
-  firstName: string;
-  
-  @Column({ name: 'last_name' })
-  @Expose()
-  lastName: string;
-  
-  // @Column({ name: 'residence_country' })
-  // @Expose()
-  // residenceCountry: string;
+  bio?: string;
 
   
   // DICTIONARY FIELDS
@@ -55,9 +60,6 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   certificates: string[];
   
   
-  @Column({ name: 'communication_languages', type: 'text', array: true })
-  communicationLanguages: string[];
-
 
   // LOCATION FIELDS
   @Column({ name: 'location_option' })

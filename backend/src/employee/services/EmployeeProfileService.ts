@@ -176,14 +176,13 @@ export class EmployeeProfileService implements OnModuleInit, OnModuleDestroy {
             status: status,
             displayName: user.displayName,
             email: user.email,
-
-            firstName: form.firstName,
-            lastName: form.lastName,
-            // residenceCountry: form.residenceCountry,
+            phoneNumber: form.phoneNumber,
+            fullName: form.fullName,
+            bio: form.bio,
+            communicationLanguages: form.communicationLanguages || [],
 
             skills: form.skills || [],
             certificates: form.certificates || [],
-            communicationLanguages: form.communicationLanguages || [],
 
             locationOption: form.locationOption,
 

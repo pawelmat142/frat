@@ -7,6 +7,7 @@ import {
     EmployeeProfileForm
 } from "@shared/interfaces/EmployeeProfileI";
 import CommunicationLanguagesSection from "../../components/CommunicationLanguagesSection";
+import AvatarTile from "user/components/AvatarTile";
 
 interface Props {
     formRef: UseFormReturn<EmployeeProfileForm>;
@@ -25,31 +26,46 @@ const EmployeeProfileStep1: React.FC<Props> = ({ formRef }) => {
             <div className="flex flex-col gap-5 md:gap-5">
 
                 <Controller
-                    name="step1.firstName"
+                    name="step1.fullName"
                     control={control}
                     rules={required}
                     render={({ field }) => (
                         <FloatingInput
                             {...field}
-                            label={t("employeeProfile.form.firstName")}
+                            label={t("employeeProfile.form.fullName")}
                             fullWidth
                             required
-                            error={formState.errors.step1?.firstName}
+                            error={formState.errors.step1?.fullName}
                         />
                     )}
                 />
 
                 <Controller
-                    name="step1.lastName"
+                    name="step1.phoneNumber"
                     control={control}
                     rules={required}
                     render={({ field }) => (
                         <FloatingInput
                             {...field}
-                            label={t("employeeProfile.form.lastName")}
+                            label={t("employeeProfile.form.phoneNumber")}
                             fullWidth
                             required
-                            error={formState.errors.step1?.lastName}
+                            error={formState.errors.step1?.phoneNumber}
+                        />
+                    )}
+                />
+
+                <Controller
+                    name="step1.email"
+                    control={control}
+                    rules={required}
+                    render={({ field }) => (
+                        <FloatingInput
+                            {...field}
+                            label={t("employeeProfile.form.email")}
+                            fullWidth
+                            required
+                            error={formState.errors.step1?.email}
                         />
                     )}
                 />
@@ -60,6 +76,8 @@ const EmployeeProfileStep1: React.FC<Props> = ({ formRef }) => {
                     watch={watch}
                     formState={formState}
                 />
+
+                <AvatarTile></AvatarTile>
             </div>
         </>
     );

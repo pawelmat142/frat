@@ -120,9 +120,24 @@ export class EmployeeProfileRepo {
             updatedFlag = true;
         }
 
-        if (profile.firstName !== newProfile.firstName) {
-            this.logger.log(`Updating EmployeeProfile firstName from ${profile.firstName} to ${newProfile.firstName}`);
-            profile.firstName = newProfile.firstName;
+        if (profile.fullName !== newProfile.fullName) {
+            this.logger.log(`Updating EmployeeProfile fullName from ${profile.fullName} to ${newProfile.fullName}`);
+            profile.fullName = newProfile.fullName;
+            updatedFlag = true;
+        }
+
+        if (profile.phoneNumber !== newProfile.phoneNumber) {
+            this.logger.log(`Updating EmployeeProfile phoneNumber from ${profile.phoneNumber} to ${newProfile.phoneNumber}`);
+            profile.phoneNumber = newProfile.phoneNumber;
+            updatedFlag = true;
+        }
+
+        if (profile.avatarRef?.publicId !== newProfile.avatarRef?.publicId) {
+            this.logger.log(`Updating EmployeeProfile avatarRef from ${JSON.stringify(profile.avatarRef)} to ${JSON.stringify(newProfile.avatarRef)}`);
+            profile.avatarRef = {
+                publicId: newProfile.avatarRef?.publicId || '',
+                url: newProfile.avatarRef?.url || ''
+            };
             updatedFlag = true;
         }
 

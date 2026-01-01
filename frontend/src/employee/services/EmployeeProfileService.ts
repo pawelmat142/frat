@@ -4,10 +4,12 @@ import { EmployeeProfileForm, EmployeeProfileFormDto, EmployeeProfileI, Employee
 // Mapper to convert nested form structure to flat API structure
 const mapFormToApi = (form: EmployeeProfileForm): EmployeeProfileFormDto => {
 	return {
-		firstName: form.step1.firstName,
-		lastName: form.step1.lastName,
-		// residenceCountry: form.step1.residenceCountry,
+		fullName: form.step1.fullName,
+		phoneNumber: form.step1.phoneNumber,
+		email: form.step1.email,
 		communicationLanguages: form.step1.communicationLanguages,
+		avatarRef: form.step1.avatarRef,
+		bio: form.step1.bio,
 
 		skills: form.step2.skills,
 		certificates: form.step2.certificates,

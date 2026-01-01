@@ -8,10 +8,10 @@ interface Props {
     user: UserI
     size?: number //rem
     showNumber?: boolean
-
+    allowNavigate?: boolean
 }
 
-const UserItem: React.FC<Props> = ({ user, size = 3.5, showNumber = false }) => {
+const UserItem: React.FC<Props> = ({ user, size = 3.5, showNumber = false, allowNavigate = true }) => {
     
     const navigate = useNavigate();
 

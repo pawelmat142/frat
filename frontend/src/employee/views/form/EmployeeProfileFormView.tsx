@@ -41,8 +41,10 @@ const EmployeeProfileFormView: React.FC = () => {
     const formRef = useForm<EmployeeProfileForm>({
         defaultValues: {
             step1: {
-                firstName: "",
-                lastName: "",
+                fullName: "",
+                phoneNumber: "",
+                email: "",
+                // residenceCountry: "",
                 communicationLanguages: [""]
             },
             step2: {
@@ -92,10 +94,12 @@ const EmployeeProfileFormView: React.FC = () => {
 
         formRef.reset({
             step1: {
-                firstName: employeeProfile.firstName || "",
-                lastName: employeeProfile.lastName || "",
-                // residenceCountry: employeeProfile.residenceCountry || "",
-                communicationLanguages: employeeProfile.communicationLanguages || [""]
+                fullName: employeeProfile.fullName || "",
+                phoneNumber: employeeProfile.phoneNumber || "",
+                email: employeeProfile.email || "",
+                communicationLanguages: employeeProfile.communicationLanguages || [""],
+                avatarRef: employeeProfile.avatarRef,
+                bio: employeeProfile.bio || ''
             },
             step2: {
                 skills: employeeProfile.skills || [],
@@ -174,8 +178,7 @@ const EmployeeProfileFormView: React.FC = () => {
     }
 
     const handleDevFill = () => {
-        formRef.setValue("step1.firstName", "Pawel");
-        formRef.setValue("step1.lastName", "Mat");
+        formRef.setValue("step1.fullName", "Pawel Malek");
         formRef.setValue("step2.skills", ["ONE", "TWO"]);
         formRef.setValue("step2.certificates", ["ONE"]);
         formRef.setValue("step1.communicationLanguages", ["en", "pl"]);

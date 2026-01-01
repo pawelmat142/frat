@@ -73,8 +73,8 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
           <div><span className="font-semibold secondary-text">Status:</span> <span className="primary-text">{localProfile.status}</span></div>
           <div><span className="font-semibold secondary-text">Display Name:</span> <span className="primary-text">{localProfile.displayName}</span></div>
           <div><span className="font-semibold secondary-text">Email:</span> <span className="primary-text">{localProfile.email}</span></div>
-          <div><span className="font-semibold secondary-text">First Name:</span> <span className="primary-text">{localProfile.firstName}</span></div>
-          <div><span className="font-semibold secondary-text">Last Name:</span> <span className="primary-text">{localProfile.lastName}</span></div>
+          <div><span className="font-semibold secondary-text">Full Name:</span> <span className="primary-text">{localProfile.fullName}</span></div>
+          <div><span className="font-semibold secondary-text">Phone Number:</span> <span className="primary-text">{localProfile.phoneNumber}</span></div>
           {/* <div><span className="font-semibold secondary-text">Residence Country:</span> <span className="primary-text">{localProfile.residenceCountry}</span></div> */}
         </div>
         <div className="flex flex-col gap-2">
