@@ -518,7 +518,8 @@
         "locationCountry": "Kraj lokalizacji",
         "validationError": "Proszę wypełnić wszystkie wymagane pola w tym kroku",
         "residenceCountry": "Kraj zamieszkania",
-        "locationCountries": "Kraje lokalizacji",
+        "city": "Miasto",
+        "locationCountries": "Kraje",
         "availabilityOption": {
           "ANYTIME": {
             "msg": "Szukam pracy od zaraz",

@@ -1,6 +1,6 @@
-import { GeocodedPosition } from "@shared/interfaces/EmployeeProfileI";
 import GoogleMapsLoader from "global/utils/GoogleMapsLoader";
 import { httpClient } from "./http";
+import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 
 
 export abstract class GoogleMapService {
@@ -164,6 +164,9 @@ export abstract class GoogleMapService {
 		const countryComponent = (result.address_components || []).find(ac => ac.types && ac.types.includes('country'));
 		const country = countryComponent?.short_name || countryComponent?.long_name;
 
+		if (!city) {
+			throw new Error('City not found in geocoding result');
+		}
 		const out: GeocodedPosition = {
 			lat,
 			lng,

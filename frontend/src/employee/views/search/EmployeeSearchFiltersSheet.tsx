@@ -6,12 +6,13 @@ import DictionarySelector from "global/components/selector/DictionarySelector";
 import Button from "global/components/controls/Button";
 import { BtnModes, SelectorItem } from "global/interface/controls.interface";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
-import { DateRange, EmmployeeProfileSearchSortOption, EmmployeeProfileSearchSortOptions, EmployeeProfileSearchFilters, Position, PROFILE_DEFAULT_SORT_OPTION } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, EmmployeeProfileSearchSortOption, EmmployeeProfileSearchSortOptions, EmployeeProfileSearchFilters, PROFILE_DEFAULT_SORT_OPTION } from "@shared/interfaces/EmployeeProfileI";
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import { useLocation } from "react-router-dom";
 import { EPUtil } from "@shared/utils/EPUtil";
 import { FaSearch } from "react-icons/fa";
 import FloatingSelector from "global/components/selector/FloatingSelector";
+import { Position } from "@shared/interfaces/MapsInterfaces";
 
 const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps, position?: Position | null }> = ({ ctx, position }) => {
 

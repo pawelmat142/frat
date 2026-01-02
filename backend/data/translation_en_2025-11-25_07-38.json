@@ -528,6 +528,7 @@
         "locationCountry": "Location country",
         "validationError": "Please fill in all required fields in this step",
         "residenceCountry": "Country of residence",
+        "city": "City",
         "locationCountries": "Location countries",
         "availabilityOption": {
           "ANYTIME": {

@@ -6,13 +6,13 @@ import DictionarySelector from "global/components/selector/DictionarySelector";
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import DateRangeInput from "global/components/callendar/DateRangeInputViewSelector";
 import { useRef } from "react";
-import { Position } from "@shared/interfaces/EmployeeProfileI";
 import { useState } from "react";
 import { PositionService } from "global/services/PositionService";
 import { DictionaryService } from "global/services/DictionaryService";
 import Loading from "global/components/Loading";
 import FloatingInput from "global/components/controls/FloatingInput";
 import { useUserContext } from "user/UserProvider";
+import { Position } from "@shared/interfaces/MapsInterfaces";
 
 const OfferFormStepOne: React.FC = () => {
 

@@ -1,10 +1,11 @@
-import React, { createContext, useContext, ReactNode, useState } from 'react';
-import { EmployeeProfileI, Position } from '@shared/interfaces/EmployeeProfileI';
+import React, { createContext, useContext, ReactNode } from 'react';
+import { EmployeeProfileI } from '@shared/interfaces/EmployeeProfileI';
 import { EmployeeProfileService } from 'employee/services/EmployeeProfileService';
 import { useAuthContext } from 'auth/AuthProvider';
 import { OfferI } from '@shared/interfaces/OfferI';
 import { OffersService } from 'offer/services/OffersService';
 import { toast } from 'react-toastify';
+import { Position } from '@shared/interfaces/MapsInterfaces';
 
 interface UserContextType {
 	employeeProfile: EmployeeProfileI | null;

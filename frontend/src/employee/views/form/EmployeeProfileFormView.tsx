@@ -2,7 +2,7 @@ import Button from "global/components/controls/Button";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import React from "react";
-import { DateRange, EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileI, EmployeeProfileLocationOptions, GeocodedPosition } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileI, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
 import { toast } from "react-toastify";
 import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
 import Loading from "global/components/Loading";
@@ -22,6 +22,7 @@ import FormWizard from "global/components/FormWizard/FormWizard";
 import { useAuthContext } from "auth/AuthProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -55,6 +56,10 @@ const EmployeeProfileFormView: React.FC = () => {
                 communicationLanguages: [""]
             },
             step2: {
+                countryCode: undefined,
+                geocodedPosition: null,
+
+                // TODO remove:
                 skills: [],
                 certificates: []
             },
@@ -105,6 +110,10 @@ const EmployeeProfileFormView: React.FC = () => {
 
                 formRef.setValue("step1.phoneNumber.prefix", element.values.PHONE_PREFIX);
                 formRef.setValue("step1.communicationLanguages", [element.code]);
+                
+                // Auto-fill step2 country and city based on geolocation
+                formRef.setValue("step2.countryCode", element.code);
+                formRef.setValue("step2.geocodedPosition", position);
             }
         }
         setLoading(false);      
@@ -150,6 +159,17 @@ const EmployeeProfileFormView: React.FC = () => {
                 bio: employeeProfile.bio || ''
             },
             step2: {
+                countryCode: undefined,
+                geocodedPosition: {
+                    lat: locationDistancePosition?.lat || NaN,
+                    lng: locationDistancePosition?.lng || NaN,
+                    street: employeeProfile.street || '',
+                    city: employeeProfile.city || '',
+                    district: employeeProfile.district || '',
+                    state: employeeProfile.state || '',
+                    postcode: employeeProfile.postcode || '',
+                    fullAddress: employeeProfile.fullAddress || '',
+                },
                 skills: employeeProfile.skills || [],
                 certificates: employeeProfile.certificates || []
             },

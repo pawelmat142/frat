@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { GeocodedPosition, Position } from '@shared/interfaces/EmployeeProfileI';
 import Button from '../../controls/Button';
 import { BtnModes } from 'global/interface/controls.interface';
 import PositionSelectorSearchbar from './PositionSelectorSearchbar';
 import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
 import { GoogleMapService } from 'global/services/GoogleMapService';
+import { Position, GeocodedPosition } from '@shared/interfaces/MapsInterfaces';
 
 interface PositionSelectorContentProps {
     initialPosition?: Position;
@@ -76,7 +76,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
             draggable: true,
         });
         markerRef.current = marker;
-        setCurrentPosition(position);
+        setCurrentPosition({ lat: position.lat, lng: position.lng } as GeocodedPosition);
 
         map.addListener('click', (e: google.maps.MapMouseEvent) => {
             if (e.latLng) {

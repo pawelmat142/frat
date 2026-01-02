@@ -2,10 +2,10 @@ import { useState, useEffect, forwardRef } from 'react';
 import { InputInterface } from '../../../interface/controls.interface';
 import FloatingLabel from '../../controls/FloatingLabel';
 import FormError from '../../controls/FormError';
-import { GeocodedPosition, Position } from '@shared/interfaces/EmployeeProfileI';
 import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import PositionSelectorContent from './PositionSelectorContent';
 import { PositionUtil } from '@shared/utils/PositionUtil';
+import { GeocodedPosition, Position } from '@shared/interfaces/MapsInterfaces';
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: GeocodedPosition | null;

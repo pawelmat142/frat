@@ -3,11 +3,12 @@ import { Controller, UseFormSetValue, UseFormWatch, Control, FormState, UseFormR
 import { useTranslation } from "react-i18next";
 import TabSwitcher, { TabSwitcherOption } from "../../components/TabSwitcher";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileLocationOptions, EmployeeProfileLocationOption, EmployeeProfileForm, Position } from "@shared/interfaces/EmployeeProfileI";
+import { EmployeeProfileLocationOptions, EmployeeProfileLocationOption, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import FloatingInput from "global/components/controls/FloatingInput";
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import { useUserContext } from "user/UserProvider";
+import { Position } from "@shared/interfaces/MapsInterfaces";
 
 interface Props {
     formRef: UseFormReturn<EmployeeProfileForm>;

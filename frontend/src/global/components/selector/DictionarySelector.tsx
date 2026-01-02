@@ -12,6 +12,7 @@ interface DictionarySelectorProps<T extends SelectorValue = SelectorValue> exten
     disabledValues?: string[];
     elementLabelTranslationKey?: string
     showLabel?: boolean
+    emitValueCode?: string;
 }
 const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -30,6 +31,7 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         onSelectMulti,
         disabledValues = [],
         elementLabelTranslationKey = 'NAME',
+        emitValueCode,
         error,
         enableSearchText = true,
         showLabel

@@ -1,3 +1,4 @@
+import { GeocodedPosition, Position } from './MapsInterfaces';
 import { AvatarRef } from './UserI';
 
 export interface ParsedPhoneNumber {
@@ -80,8 +81,10 @@ export interface EmployeeProfileFormStep1 {
 }
 
 export interface EmployeeProfileFormStep2 {
-  skills: string[];
-  certificates: string[];
+  countryCode?: string;
+  geocodedPosition?: GeocodedPosition | null;
+  skills?: string[];
+  certificates?: string[];
 }
 
 export interface EmployeeProfileFormStep3 {
@@ -151,11 +154,7 @@ export interface EmployeeProfileSearchResponse {
   count: number;
 }
 
-export interface Position {
-  lat: number;
-  lng: number;
-  address?: string;
-}
+
 
 export interface Point {
   type: 'Point';
@@ -171,18 +170,6 @@ export interface DateRange {
   start?: Date | null
   end?: Date | null
   id?: number
-}
-
-export interface GeocodedPosition {
-	lat: number;
-	lng: number;
-	street?: string;
-	city?: string;
-	district?: string;
-	state?: string; // administrative_area_level_1
-	postcode?: string;
-	country?: string;
-	fullAddress?: string;
 }
 
 export const EmmployeeProfileSearchSortOptions = {
