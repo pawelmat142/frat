@@ -484,13 +484,13 @@
         },
         "step4": {
           "label": "Krok 4",
-          "title": "Umiejętności i certyfikaty"
+          "title": "Certyfikaty i doświadczenie"
         },
         "title": "Formularz profilu pracownika",
         "confirmTitle": "Potwierdź zapisanie profilu",
         "confirmSubmit": "Czy na pewno chcesz zapisać profil pracownika?",
         "radius": "Promień",
-        "skills": "Umiejętności",
+        "experience": "Doświadczenie",
         "address": "Adres",
         "freeText": "Szukaj...",
         "location": "Lokalizacja",

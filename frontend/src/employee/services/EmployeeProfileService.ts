@@ -19,8 +19,8 @@ const mapFormToApi = (form: EmployeeProfileForm): EmployeeProfileFormDto => {
 		geocodedPosition: form.step3.geocodedPosition || undefined,
 		locationDistanceRadius: form.step3.locationDistanceRadius,
 
-		availabilityOption: form.step4.availabilityOption,
-		availabilityDateRanges: form.step4.availabilityDateRanges
+		availabilityOption: form.step3.availabilityOption,
+		availabilityDateRanges: form.step3.availabilityDateRanges
 	};
 };
 

@@ -490,13 +490,13 @@
         },
         "step4": {
           "label": "Step 4",
-          "title": "Skills and Certificates"
+          "title": "Certificates and Experience"
         },
         "title": "Employee Profile Form",
         "confirmTitle": "Confirm submission",
         "confirmSubmit": "Are you sure you want to save the employee profile?",
         "radius": "Radius",
-        "skills": "Skills",
+        "experience": "Experience",
         "address": "Address",
         "freeText": "Search...",
         "fullName": "Full name",

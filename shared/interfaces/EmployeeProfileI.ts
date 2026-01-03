@@ -112,12 +112,8 @@ export interface EmployeeProfileFormStep3 {
 }
 
 export interface EmployeeProfileFormStep4 {
-  skills?: string[];
   certificates?: string[];
-
-  // TODO remove
-  availabilityOption: EmployeeProfileAvailabilityOption;
-  availabilityDateRanges?: DateRange[];
+  experience?: string[];
 }
 
 export interface EmployeeProfileForm {

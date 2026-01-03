@@ -60,9 +60,7 @@ const EmployeeProfileFormView: React.FC = () => {
                 countryCode: undefined,
                 geocodedPosition: null,
 
-                // TODO remove:
-                skills: [],
-                certificates: []
+
             },
             step3: {
                 availabilityOption: EmployeeProfileAvailabilityOptions.FROM_DATE,
@@ -70,8 +68,8 @@ const EmployeeProfileFormView: React.FC = () => {
                 startDate: null,
             },
             step4: {
-                availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,
-                availabilityDateRanges: []
+                experience: [],
+                certificates: []
             }
         },
     });
