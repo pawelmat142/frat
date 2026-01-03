@@ -77,13 +77,12 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
           <div><span className="font-semibold secondary-text">Phone Number:</span> <span className="primary-text">{localProfile.phoneNumber.prefix} {localProfile.phoneNumber.phoneNumber}</span></div>
         </div>
         <div className="flex flex-col gap-2">
-          <div><span className="font-semibold secondary-text">Skills:</span> <span className="primary-text">{localProfile.skills?.join(", ") || '-'}</span></div>
+          <div><span className="font-semibold secondary-text">Experience:</span> <span className="primary-text">{localProfile.experience?.join(", ") || '-'}</span></div>
           <div><span className="font-semibold secondary-text">Certificates:</span> <span className="primary-text">{localProfile.certificates?.join(", ") || '-'}</span></div>
           <div><span className="font-semibold secondary-text">Languages:</span> <span className="primary-text">{localProfile.communicationLanguages?.join(", ") || '-'}</span></div>
           <div><span className="font-semibold secondary-text">Location Option:</span> <span className="primary-text">{localProfile.locationOption}</span></div>
           <div><span className="font-semibold secondary-text">Location Countries:</span> <span className="primary-text">{localProfile.locationCountries?.join(", ") || '-'}</span></div>
           <div><span className="font-semibold secondary-text">Address:</span> <span className="primary-text">{localProfile.fullAddress || '-'}</span></div>
-          <div><span className="font-semibold secondary-text">Point Radius:</span> <span className="primary-text">{localProfile.pointRadius ?? '-'} km</span></div>
           <div><span className="font-semibold secondary-text">Availability Option:</span> <span className="primary-text">{localProfile.availabilityOption}</span></div>
         </div>
       </div>

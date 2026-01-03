@@ -1,9 +1,10 @@
 /** Created by Pawel Malek **/
-import { DateRangeI, EmployeeProfileAvailabilityOption, EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus, ParsedPhoneNumber, Point } from '@shared/interfaces/EmployeeProfileI';
+import { DateRangeI, EmployeeProfileAvailabilityOption, EmployeeProfileFormRangesOption, EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus, ParsedPhoneNumber, Point } from '@shared/interfaces/EmployeeProfileI';
 import { AvatarRef } from '@shared/interfaces/UserI';
 import { Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { DateRangeEntity } from './DateRangeEntity';
+import { GeocodedPosition } from '@shared/interfaces/MapsInterfaces';
 
 
 @Entity('jh_employee_profiles')
@@ -24,7 +25,6 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Column({ name: 'display_name' })
   @Expose()
   displayName: string;
-
 
   // GENERAL INFO
   @Column({ name: 'full_name' })
@@ -51,17 +51,8 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   @Expose()
   bio?: string;
 
-  
-  // DICTIONARY FIELDS
-  @Column({ name: 'skills', type: 'text', array: true })
-  skills: string[];
-  
-  @Column({ name: 'certificates', type: 'text', array: true })
-  certificates: string[];
-  
-  
 
-  // LOCATION FIELDS
+
   @Column({ name: 'location_option' })
   locationOption: EmployeeProfileLocationOption;
 
@@ -76,34 +67,17 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   })
   point?: Point
 
-  @Column({ name: 'point_radius', type: 'int', nullable: true })
-  pointRadius?: number;
-
-  @Column({ name: 'street', type: 'text', nullable: true })
-  street?: string;
-
-  @Column({ name: 'city', type: 'text', nullable: true })
-	city?: string;
-
-  @Column({ name: 'district', type: 'text', nullable: true })
-	district?: string;
-
-  @Column({ name: 'state', type: 'text', nullable: true })
-	state?: string; // administrative_area_level_1
-
-  @Column({ name: 'postcode', type: 'text', nullable: true })
-	postcode?: string;
-
   @Column({ name: 'full_address', type: 'text', nullable: true })
-	fullAddress?: string;
+  fullAddress?: string;
+
+  @Column({ name: 'geocoded_position', type: 'jsonb', nullable: true })
+  geocodedPosition?: GeocodedPosition;
 
 
-  // AVAILABILITY DATES
-  @Expose()
+
   @Column({ name: 'availability_option' })
   availabilityOption: EmployeeProfileAvailabilityOption;
-  
-  @Expose()
+
   @OneToMany(
     () => DateRangeEntity,
     (range) => range.employeeProfile,
@@ -111,7 +85,19 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   )
   availabilityDateRanges?: DateRangeI[];
 
+  @Column({ name: 'ranges_option', nullable: true })
+  rangesOption?: EmployeeProfileFormRangesOption;
 
+  @Column({ name: 'start_date', type: 'timestamp' })
+  startDate: Date;
+  
+  @Column({ name: 'experience', type: 'text', array: true })
+  experience: string[];
+  
+  @Column({ name: 'certificates', type: 'text', array: true })
+  certificates: string[];
+  
+  
 
   // STATS
   @Expose()

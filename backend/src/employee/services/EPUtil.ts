@@ -1,5 +1,4 @@
 import { DateRangeI, EmployeeProfileAvailabilityOptions, EmployeeProfileFormDto, EmployeeProfileLocationOptions, EmployeeProfileStatus } from "@shared/interfaces/EmployeeProfileI";
-import { UserI } from "@shared/interfaces/UserI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
@@ -8,68 +7,28 @@ import { DeepPartial } from "typeorm";
 
 export abstract class EPUtil {
 
-    public static buildEmployeeProfileFromForm(user: UserI, form: EmployeeProfileFormDto, status: EmployeeProfileStatus): DeepPartial<EmployeeProfileEntity> {
-        let profile: DeepPartial<EmployeeProfileEntity> = {
-            employeeProfileId: 0,
-            uid: user.uid,
-            status: status,
-            displayName: user.displayName,
-            email: user.email,
-
-            fullName: form.fullName,
-            phoneNumber: form.phoneNumber,
-            communicationLanguages: form.communicationLanguages || [],
-            avatarRef: form.avatarRef,
-            bio: form.bio,
-
-            skills: form.skills || [],
-            certificates: form.certificates || [],
-
-            locationOption: form.locationOption,
-        }
-
-        EPUtil.fillLocationData(profile, form);
-        return profile;
-    }
-
     public static fillLocationData(profile: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): void {
+        profile.locationOption = form.locationOption;
+        if (form.geocodedPosition) {
+            profile.geocodedPosition = form.geocodedPosition;
+            profile.point = PositionUtil.toGeoPoint({
+                lat: form.geocodedPosition.lat,
+                lng: form.geocodedPosition.lng,
+            });
+            profile.fullAddress = form.geocodedPosition.fullAddress || '';
+        }
+        
         if (form.locationOption === EmployeeProfileLocationOptions.ALL_EUROPE) {
             profile.locationCountries = []
-            EPUtil.cleanLocationDataDistance(profile);
         }
-        if (form.locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE) {
+        if (form.locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES) {
             profile.locationCountries = form.locationCountries || []
-            EPUtil.cleanLocationDataDistance(profile);
         }
-        if (form.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
-            EPUtil.fillLocationDataDistance(profile, form);
+        if (form.locationOption === EmployeeProfileLocationOptions.POSITION) {
+            profile.locationCountries = [form.countryCode]
         }
     }
 
-    public static cleanLocationDataDistance(profile: DeepPartial<EmployeeProfileEntity>): void {
-        delete profile.point;
-        delete profile.pointRadius;
-        delete profile.street;
-        delete profile.city
-        delete profile.fullAddress
-        delete profile.district
-        delete profile.postcode
-        delete profile.state
-    }
-
-    private static fillLocationDataDistance(profile: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): void {
-        profile.point = PositionUtil.toGeoPoint({
-            lat: form.geocodedPosition!.lat,
-            lng: form.geocodedPosition!.lng,
-        });
-        profile.pointRadius = form.locationDistanceRadius;
-        profile.street = form.geocodedPosition?.street;
-        profile.city = form.geocodedPosition?.city;
-        profile.district = form.geocodedPosition?.district;
-        profile.state = form.geocodedPosition?.state;
-        profile.postcode = form.geocodedPosition?.postcode;
-        profile.fullAddress = form.geocodedPosition?.fullAddress || '';
-    }
 
     public static validateProfile(profile: DeepPartial<EmployeeProfileEntity>): void {
         if (!profile) {
@@ -132,17 +91,14 @@ export abstract class EPUtil {
             }
         }
         // Additional location validation
-        if (profile.locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE) {
+        if (profile.locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES) {
             if (!profile.locationCountries || profile.locationCountries.length === 0) {
                 throw new ToastException('employeeProfile.error.locationCountryRequired', this);
             }
         }
-        if (profile.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
+        if (profile.locationOption === EmployeeProfileLocationOptions.POSITION) {
             if (!profile.point) {
                 throw new ToastException('employeeProfile.error.locationPositionRequired', this);
-            }
-            if (!profile.pointRadius || isNaN(profile.pointRadius) || profile.pointRadius <= 0) {
-                throw new ToastException('employeeProfile.error.locationRadiusRequired', this);
             }
         }
 
@@ -154,15 +110,12 @@ export abstract class EPUtil {
         if (!profile.locationOption) {
             throw new ToastException('employeeProfile.error.locationOptionRequired', this);
         }
-        if (profile.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
+        if (profile.locationOption === EmployeeProfileLocationOptions.POSITION) {
             if (!profile.point) {
                 throw new ToastException('employeeProfile.error.locationPositionRequired', this);
             }
-            if (!profile.pointRadius || isNaN(profile.pointRadius) || profile.pointRadius <= 0) {
-                throw new ToastException('employeeProfile.error.locationRadiusRequired', this);
-            }
         }
-        if (profile.locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE) {
+        if (profile.locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES) {
             if (!profile.locationCountries?.length) {
                 throw new ToastException('employeeProfile.error.locationCountryRequired', this);
             }

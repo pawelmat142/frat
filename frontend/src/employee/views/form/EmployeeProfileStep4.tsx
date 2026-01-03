@@ -10,7 +10,7 @@ interface Props {
 }
 
 const EmployeeProfileStep4: React.FC<Props> = ({ formRef }) => {
-    const { control, setValue, watch, formState } = formRef;
+    const { control, formState } = formRef;
     const { t } = useTranslation();
     const requiredArray = FormValidator.requiredArray(t);
 
@@ -31,12 +31,12 @@ const EmployeeProfileStep4: React.FC<Props> = ({ formRef }) => {
                             type="multi"
                             className="w-full"
                             valueInput={field.value}
-                            onSelectMulti={items => field.onChange(items.map(i => String(i)))}
+                            onSelectMulti={items => field.onChange(items)}
                             label={t("employeeProfile.form.certificates")}
                             code="CERTIFICATES"
                             fullWidth
                             required
-                            error={formState.errors.step2?.certificates}
+                            error={formState.errors.step4?.certificates}
                         />
                     )}
                 />
@@ -49,16 +49,18 @@ const EmployeeProfileStep4: React.FC<Props> = ({ formRef }) => {
                             type="multi"
                             className="w-full"
                             valueInput={field.value}
-                            onSelectMulti={items => field.onChange(items.map(i => String(i)))}
+                            onSelectMulti={items => {
+                                
+                                console.log(items);
+                                field.onChange(items)}}
                             label={t("employeeProfile.form.experience")}
                             code="SKILLS"
                             fullWidth
                             required
-                            error={formState.errors.step2?.skills}
+                            error={formState.errors.step4?.experience}
                         />
                     )}
                 />
-
 
             </div>
         </>

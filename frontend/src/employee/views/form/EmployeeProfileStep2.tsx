@@ -88,7 +88,7 @@ const EmployeeProfileStep2: React.FC<Props> = ({ formRef, initPosition }) => {
                                             elementLabelTranslationKey="COUNTRY_NAME"
                                             fullWidth
                                             required
-                                            error={formState?.errors.step3?.locationCountries}
+                                            error={formState?.errors.step2?.locationCountries}
                                         />
                                     )}
                                 />

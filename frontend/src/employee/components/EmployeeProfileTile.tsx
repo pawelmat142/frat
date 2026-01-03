@@ -69,7 +69,7 @@ const EmployeeProfileTile: React.FC<Props> = ({ profile, languagesDictionary, fi
 
                 <div className="tile-content-row bottom">
                     <div className="flex">
-                        <Chips chips={profile.skills || []} mode={ChipModes.TERTIARY}></Chips>
+                        <Chips chips={profile.experience || []} mode={ChipModes.TERTIARY}></Chips>
                         <Chips className="ml-5" chips={profile.certificates || []} mode={ChipModes.SECONDARY}></Chips>
                     </div>
 

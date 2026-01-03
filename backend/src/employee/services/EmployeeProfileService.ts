@@ -10,7 +10,6 @@ import { GeoPointService } from './GeoPointService';
 import { DeepPartial } from 'typeorm';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { EmployeeProfilesInitialData } from './EmployeeProfilesInitialData';
-import { PositionUtil } from '@shared/utils/PositionUtil';
 import { Subscription } from 'rxjs';
 import { UserService } from 'user/services/UserService';
 
@@ -83,12 +82,7 @@ export class EmployeeProfileService implements OnModuleInit, OnModuleDestroy {
     public async initialLoad(): Promise<void> {
         try {
             const profiles = EmployeeProfilesInitialData()
-            for (const profile of profiles) {
 
-                if (profile.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
-                    await this.fillLocationCountries(profile as EmployeeProfileEntity);
-                }
-            }
             return await this.employeeProfileRepo.initialLoad(profiles as EmployeeProfileI[]);
         } catch (e) {
             console.error(e)
@@ -167,33 +161,25 @@ export class EmployeeProfileService implements OnModuleInit, OnModuleDestroy {
         return this.deleteProfile(profile.employeeProfileId);
     }
 
+    // TODO update user avatar upon profile update
     private async prepareProfile(user: UserI, form: EmployeeProfileFormDto): Promise<DeepPartial<EmployeeProfileEntity>> {
         const status = this.getProfileStatus(user, form);
 
         const result: DeepPartial<EmployeeProfileEntity> = {
-            employeeProfileId: 0,
             uid: user.uid,
             status: status,
-            displayName: user.displayName,
-            email: user.email,
-            phoneNumber: form.phoneNumber,
+            displayName: form.fullName,
             fullName: form.fullName,
-            bio: form.bio,
+            phoneNumber: form.phoneNumber,
+            email: user.email,
             communicationLanguages: form.communicationLanguages || [],
-
-            skills: form.skills || [],
+            avatarRef: user.avatarRef,
+            bio: form.bio,
+            experience: form.experience || [],
             certificates: form.certificates || [],
-
-            locationOption: form.locationOption,
-
-            availabilityOption: form.availabilityOption,
         };
 
-        if (user.avatarRef) {
-            result.avatarRef = user.avatarRef;
-        }
-
-        await this.fillLocationData(result, form);
+        this.fillLocationData(result, form);
         this.fillAvailabilityData(result, form);
 
         EPUtil.validateProfile(result);
@@ -201,44 +187,27 @@ export class EmployeeProfileService implements OnModuleInit, OnModuleDestroy {
     }
 
     private fillAvailabilityData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): void {
+        result.availabilityOption = form.availabilityOption;
         if (result.availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES) {
             const ranges = form.availabilityDateRanges.map(dateRange => DateRangeUtil.fromDateRange([], dateRange))
-            result.availabilityDateRanges = ranges;
-        } else if (result.availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE) {
-            const rangeInput = form.availabilityDateRanges[0];
-            if (!rangeInput) {
-                throw new ToastException("employeeProfile.error.startDate", this);
-            }
-            result.availabilityDateRanges = [DateRangeUtil.fromDateRange([], rangeInput)];
-
-        } else {
-            delete result.availabilityDateRanges
+            result.availabilityDateRanges = ranges
+            result.startDate = DateRangeUtil.findEarliestDate(ranges)
+            result.rangesOption = form.rangesOption;
+        } 
+        else {
+            result.rangesOption = undefined;
+            result.availabilityDateRanges = undefined;
+        }
+        if (result.availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE) {
+            result.startDate = form.startDate
+        }
+        if (result.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME) {
+            result.startDate = new Date();
         }
     }
 
-    // TODO optimize this method 
-    private async fillLocationData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): Promise<void> {
+    private fillLocationData(result: DeepPartial<EmployeeProfileEntity>, form: EmployeeProfileFormDto): void {
         EPUtil.fillLocationData(result, form)
-
-        if (result.locationOption === EmployeeProfileLocationOptions.DISTANCE) {
-            result.locationCountries = await this.geoPointService.getCountriesInRadius(
-                form.geocodedPosition!.lat,
-                form.geocodedPosition!.lng,
-                form.locationDistanceRadius || 0
-            );
-        } else {
-            EPUtil.cleanLocationDataDistance(result);
-        }
-    }
-
-    private async fillLocationCountries(profile: EmployeeProfileEntity) {
-        const position = PositionUtil.fromGeoPoint(profile.point);
-        const countires = await this.geoPointService.getCountriesInRadius(
-            position.lat,
-            position.lng,
-            profile.pointRadius || 0
-        )
-        profile.locationCountries = countires;
     }
 
     private getProfileStatus(user: UserI, form: EmployeeProfileFormDto): EmployeeProfileStatus {

@@ -57,6 +57,19 @@ export abstract class DateRangeUtil {
         }
     }
 
+    public static findEarliestDate = (ranges: DateRangeI[]): Date => {
+        let earliest: Date | null = null;
+        for (const rangeI of ranges) {
+            const range = this.toDateRange(rangeI);
+            if (range?.start) {
+                if (!earliest || range.start < earliest) {
+                    earliest = range.start;
+                }
+            }
+        }
+        return earliest || new Date();
+    }
+
 
     public static getFirstRange = (profile: EmployeeProfileI): DateRange | null => {
         const rangeI = profile.availabilityDateRanges?.[0];

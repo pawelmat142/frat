@@ -224,8 +224,8 @@ const EmployeeProfileView: React.FC = () => {
                 </div>
 
 
-                <div className="mt-5 mb-1">{t('employeeProfile.form.skills')}: </div>
-                <Chips chips={profile.skills || []} mode={ChipModes.TERTIARY}></Chips>
+                <div className="mt-5 mb-1">{t('employeeProfile.form.experience')}: </div>
+                <Chips chips={profile.experience || []} mode={ChipModes.TERTIARY}></Chips>
 
                 <div className="mt-5 mb-1">{t('employeeProfile.form.certificates')}: </div>
                 <Chips chips={profile.certificates || []} mode={ChipModes.SECONDARY}></Chips>

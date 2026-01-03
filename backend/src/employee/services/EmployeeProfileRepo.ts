@@ -143,9 +143,9 @@ export class EmployeeProfileRepo {
             updatedFlag = true;
         }
 
-        if (ObjUtil.arrayChanged(profile.skills, newProfile.skills || [])) {
-            this.logger.log(`Updating EmployeeProfile skills from ${profile.skills} to ${newProfile.skills}`);
-            profile.skills = newProfile.skills || [];
+        if (ObjUtil.arrayChanged(profile.experience, newProfile.experience || [])) {
+            this.logger.log(`Updating EmployeeProfile experience from ${profile.experience} to ${newProfile.experience}`);
+            profile.experience = newProfile.experience || [];
             updatedFlag = true;
         }
 
@@ -192,11 +192,6 @@ export class EmployeeProfileRepo {
                 coordinates: (newProfile.point?.coordinates || profile.point?.coordinates || []) as [number, number],
             };
             profile.point = normalizedPoint;
-            updatedFlag = true;
-        }
-        if (profile.pointRadius !== newProfile.pointRadius) {
-            this.logger.log(`Updating EmployeeProfile pointRadius from ${profile.pointRadius} to ${newProfile.pointRadius}`);
-            profile.pointRadius = newProfile.pointRadius;
             updatedFlag = true;
         }
 

@@ -148,6 +148,11 @@ const EmployeeProfileFormView: React.FC = () => {
             }
             return;
         }
+        initFormFromProfile();
+    }, [employeeProfile, formRef]);
+
+    const initFormFromProfile = async () => {
+        if (!employeeProfile) return;
 
         // TODO verify edit profile option!!!
         // Load from employeeProfile if it exists
@@ -158,6 +163,9 @@ const EmployeeProfileFormView: React.FC = () => {
                 lng: employeeProfile.point.coordinates[0],
             };
         }
+
+        const geoPosition: GeocodedPosition | null = employeeProfile?.geocodedPosition || await initPosition();
+
         const availabilityDateRanges: DateRange[] = (employeeProfile.availabilityDateRanges || [])
             .map(r => DateRangeUtil.toDateRange(r))
             .filter((r): r is DateRange => r != null);
@@ -173,37 +181,31 @@ const EmployeeProfileFormView: React.FC = () => {
             },
             step2: {
                 locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.POSITION,
-                // TODO
-                // countryCode: employeeProfile.countryCode || undefined,
-                geocodedPosition: {
-                    lat: locationDistancePosition?.lat || NaN,
-                    lng: locationDistancePosition?.lng || NaN,
-                    street: employeeProfile.street || '',
-                    city: employeeProfile.city || '',
-                    district: employeeProfile.district || '',
-                    state: employeeProfile.state || '',
-                    postcode: employeeProfile.postcode || '',
-                    fullAddress: employeeProfile.fullAddress || '',
-                },
+                countryCode: employeeProfile.locationCountries?.[0],
+                geocodedPosition: geoPosition,
                 locationCountries: employeeProfile.locationCountries || [],
             },
             step3: {
                 availabilityOption: employeeProfile.availabilityOption || EmployeeProfileAvailabilityOptions.ANYTIME,
                 availabilityDateRanges: availabilityDateRanges,
-                // TODO
-                // rangesOption?: EmployeeProfileFormRangesOption
-                // startDate: new Date(employeeProfile.startDate),
+                rangesOption: employeeProfile.rangesOption,
+                startDate: employeeProfile.startDate ? new Date(employeeProfile.startDate) : null,
             },
             step4: {
+                experience: employeeProfile.experience || [],
+                certificates: employeeProfile.certificates || []
             }
         });
-
-        initFormWithUserData()
-    }, [employeeProfile, formRef]);
-
+    }
 
 
     const onSubmit = async (validateFn: () => Promise<boolean>) => {
+        const valid = await validateFn();
+        if (!valid) {
+            toast.error(t("employeeProfile.form.validationError"));
+            return;
+        }
+
         const confirmed = await confirm({
             title: 'employeeProfile.form.confirmTitle',
             message: 'employeeProfile.form.confirmSubmit',
@@ -212,11 +214,7 @@ const EmployeeProfileFormView: React.FC = () => {
         });
         if (!confirmed) return;
 
-        const valid = await validateFn();
-        if (!valid) {
-            toast.error(t("employeeProfile.form.validationError"));
-            return;
-        }
+
         const form = formRef.watch();
         if (employeeProfile) {
             await updateEmployeeProfile(form);
@@ -255,8 +253,8 @@ const EmployeeProfileFormView: React.FC = () => {
 
     const handleDevFill = () => {
         formRef.setValue("step1.fullName", "Pawel Malek");
-        formRef.setValue("step2.skills", ["ONE", "TWO"]);
-        formRef.setValue("step2.certificates", ["ONE"]);
+        formRef.setValue("step4.certificates", ["ONE"]);
+        formRef.setValue("step4.experience", ["ONE", "TWO"]);
         formRef.setValue("step1.communicationLanguages", ["en", "pl"]);
     };
 

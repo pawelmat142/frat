@@ -11,16 +11,18 @@ const mapFormToApi = (form: EmployeeProfileForm): EmployeeProfileFormDto => {
 		avatarRef: form.step1.avatarRef,
 		bio: form.step1.bio,
 
-		skills: form.step2.skills,
-		certificates: form.step2.certificates,
-
-		locationOption: form.step3.locationOption,
-		locationCountries: form.step3.locationCountries,
-		geocodedPosition: form.step3.geocodedPosition || undefined,
-		locationDistanceRadius: form.step3.locationDistanceRadius,
+		locationOption: form.step2.locationOption,
+		countryCode: form.step2.countryCode,
+		geocodedPosition: form.step2.geocodedPosition || undefined,
+		locationCountries: form.step2.locationCountries,
 
 		availabilityOption: form.step3.availabilityOption,
-		availabilityDateRanges: form.step3.availabilityDateRanges
+		availabilityDateRanges: form.step3.availabilityDateRanges,
+		rangesOption: form.step3.rangesOption,
+		startDate: form.step3.startDate || undefined,
+
+		experience: form.step4.experience,
+		certificates: form.step4.certificates,
 	};
 };
 

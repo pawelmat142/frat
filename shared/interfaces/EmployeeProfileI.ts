@@ -23,24 +23,23 @@ export interface EmployeeProfileI {
   avatarRef: AvatarRef;
   bio?: string;
 
-  skills?: string[];
-  certificates?: string[];
-
-
+  // 
   locationOption: EmployeeProfileLocationOption;
   locationCountries?: string[];
-  point?: Point
-  pointRadius?: number; // [km]
-  street?: string;
-	city?: string;
-	district?: string;
-	state?: string; // administrative_area_level_1
-	postcode?: string;
+  point?: Point;
 	fullAddress?: string;
+  geocodedPosition?: GeocodedPosition;
 
-  // availability dates
+  // 
   availabilityOption: EmployeeProfileAvailabilityOption;
   availabilityDateRanges?: DateRangeI[];
+  rangesOption?: EmployeeProfileFormRangesOption;
+  startDate: Date | null;
+
+// 
+  experience?: string[];
+  certificates?: string[];
+
 
   views: string[];
   jobs: string[];
@@ -91,24 +90,13 @@ export interface EmployeeProfileFormStep2 {
   countryCode?: string;
   geocodedPosition?: GeocodedPosition | null;
   locationCountries?: string[];
-
-  // TODO remove
-  skills?: string[];
-  certificates?: string[];
 }
 
 export interface EmployeeProfileFormStep3 {
-
   availabilityOption: EmployeeProfileAvailabilityOption;
   availabilityDateRanges?: DateRange[];
   rangesOption?: EmployeeProfileFormRangesOption;
   startDate?: Date | null;
-
-  // TODO TODO remove
-  locationOption: EmployeeProfileLocationOption;
-  locationCountries?: string[];
-  geocodedPosition?: GeocodedPosition | null;
-  locationDistanceRadius?: number; // [km]
 }
 
 export interface EmployeeProfileFormStep4 {
@@ -125,25 +113,28 @@ export interface EmployeeProfileForm {
 
 // Flat API structure for backend communication
 export interface EmployeeProfileFormDto {
-
   fullName: string;
   phoneNumber: ParsedPhoneNumber;
   email: string;
   communicationLanguages: string[];
   avatarRef: AvatarRef;
-
+  // TODO dodac do forma
   bio?: string;
 
-  skills?: string[];
-  certificates?: string[];
-
   locationOption: EmployeeProfileLocationOption;
-  locationCountries?: string[];
+// EmployeeProfileLocationOptions.POSITION
+  countryCode?: string;
   geocodedPosition?: GeocodedPosition;
-  locationDistanceRadius?: number; // [km]
+// EmployeeProfileLocationOptions.SELECTED_COUNTRIES
+  locationCountries?: string[];
 
   availabilityOption: EmployeeProfileAvailabilityOption;
   availabilityDateRanges?: DateRange[];
+  rangesOption?: EmployeeProfileFormRangesOption;
+  startDate?: Date | null;
+
+  experience?: string[];
+  certificates?: string[];
 }
 
 export interface EmployeeProfileSearchFilters {

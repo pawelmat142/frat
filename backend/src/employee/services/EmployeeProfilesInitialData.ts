@@ -1,4 +1,4 @@
-import { DateRangeI, EmployeeProfileAvailabilityOptions, EmployeeProfileI, EmployeeProfileLocationOptions, EmployeeProfileStatuses } from "@shared/interfaces/EmployeeProfileI";
+import { DateRangeI, EmployeeProfileAvailabilityOptions, EmployeeProfileFormRangesOptions, EmployeeProfileI, EmployeeProfileLocationOptions, EmployeeProfileStatuses } from "@shared/interfaces/EmployeeProfileI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { AdminUtil } from "admin/AdminUtil";
 import { EmployeeProfileEntity } from "employee/model/EmployeeProfileEntity";
@@ -151,8 +151,8 @@ const locationEntries = [
 
 const locationOptionsCycle = [
     EmployeeProfileLocationOptions.ALL_EUROPE,
-    EmployeeProfileLocationOptions.DISTANCE,
-    EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE,
+    EmployeeProfileLocationOptions.POSITION,
+    EmployeeProfileLocationOptions.SELECTED_COUNTRIES,
 ];
 
 // Algorytm: rozrzucenie dat po pierwszych 7 dniach kolejnych 24 miesięcy od dziś
@@ -247,12 +247,18 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
         const firstName = pickFromCycle(firstNamePool, index);
         const lastName = pickFromCycle(lastNamePool, index + 3);
         const languages = pickFromCycle(languagePool, index + 5);
-        const skills = pickFromCycle(skillPool, index + 7);
+        const experience = pickFromCycle(skillPool, index + 7);
         const certificates = pickFromCycle(certificatePool, index + 9);
         const locationOption = pickFromCycle(locationOptionsCycle, index);
-        const availabilityOption = index % 2 === 0
-            ? EmployeeProfileAvailabilityOptions.DATE_RANGES
-            : EmployeeProfileAvailabilityOptions.ANYTIME;
+        const availabilityOptions = [
+            EmployeeProfileAvailabilityOptions.DATE_RANGES,
+            EmployeeProfileAvailabilityOptions.ANYTIME,
+            EmployeeProfileAvailabilityOptions.FROM_DATE,
+        ];
+        const availabilityOption = pickFromCycle(availabilityOptions, index);
+        const rangesOption = index % 2 === 0
+            ? EmployeeProfileFormRangesOptions.AVAILABLE_ON
+            : EmployeeProfileFormRangesOptions.NOT_AVAILABLE_ON;
         const status = index % 12 === 0 ? EmployeeProfileStatuses.INACTIVE : EmployeeProfileStatuses.ACTIVE;
         const createdAt = getRandomizedCreatedAt(globalIndex);
 
@@ -269,6 +275,10 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
             phoneNumber: `${randomInt(100, 999)}${randomInt(100, 999)}${randomInt(100, 999)}`
         };
         
+        // Generate startDate for FROM_DATE option
+        const startDate = new Date(createdAt);
+        startDate.setMonth(startDate.getMonth() + randomInt(1, 6));
+
         const profile: DeepPartial<EmployeeProfileEntity> = {
             uid,
             displayName,
@@ -280,26 +290,28 @@ export const EmployeeProfilesInitialData = (): DeepPartial<EmployeeProfileEntity
             status,
             employeeProfileId: globalIndex,
             createdAt,
-            skills,
+            experience,
             certificates,
             availabilityOption,
             availabilityDateRanges: availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES ? [] : undefined,
+            rangesOption: availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES ? rangesOption : undefined,
+            startDate: availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE ? startDate : null,
             jobs: numberToStringList(getRandomNumberFromTo(0, 20, globalIndex)).map(n => `job-${n}`),
             views: numberToStringList(getRandomNumberFromTo(30, 100, globalIndex)).map(n => `view-${n}`),
             fullAddress: adress.fullAddress,
-            street: adress.street,
-            postcode: adress.postcode,
-            city: location.label,
         };
 
-        if (locationOption === EmployeeProfileLocationOptions.DISTANCE) {
+        if (locationOption === EmployeeProfileLocationOptions.POSITION) {
             profile.point = { type: 'Point', coordinates: randomizeCoordinates((location.coordinates) as [number, number], 0.1) };
-            profile.pointRadius = location.radius;
-            profile.city = location.label;
-            profile.fullAddress = `${location.label}, ${location.country.toUpperCase()}`;
+            profile.geocodedPosition = {
+                lat: location.coordinates[1],
+                lng: location.coordinates[0],
+                countryCode: location.country,
+            };
+            profile.fullAddress = `${adress.street}, ${location.label}, ${location.country.toUpperCase()} ${adress.postcode}`;
         }
 
-        if (locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE) {
+        if (locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES) {
             profile.locationCountries = location.selectedCountries;
         }
 
