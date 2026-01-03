@@ -15,7 +15,6 @@ const EmployeeProfileStep2: React.FC<Props> = ({ formRef }) => {
     const { control, formState, watch, setValue } = formRef;
     const { t } = useTranslation();
     const required = FormValidator.required(t);
-    const requiredArray = FormValidator.requiredArray(t);
 
     const countryCode = watch("step2.countryCode");
 

@@ -408,7 +408,9 @@
         "positiveInteger": "Wartość musi być dodatnią liczbą całkowitą.",
         "phoneNumberTooShort": "Numer telefonu jest za krótki (min. 6 cyfr).",
         "phoneNumberTooLong": "Numer telefonu jest za długi (maks. 15 cyfr).",
-        "phoneNumberInvalid": "Nieprawidłowy format numeru telefonu."
+        "phoneNumberInvalid": "Nieprawidłowy format numeru telefonu.",
+        "phoneNumberRequired": "Numer telefonu jest wymagany."
+        
       },
       "view": {
         "title": "Coś poszło nie tak!",

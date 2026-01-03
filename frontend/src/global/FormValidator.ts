@@ -55,7 +55,9 @@ export abstract class FormValidator {
     public static phoneNumber = (t: any) => {
         return {
             validate: (value: { prefix: string; phoneNumber: string } | null | undefined) => {
-                if (!value || !value.phoneNumber) return true;
+                if (!value || !value.phoneNumber) {
+                    return t('validation.form.phoneNumberRequired');
+                }
                 const digitsOnly = value.phoneNumber.replace(/\D/g, '');
                 if (digitsOnly.length < 6) {
                     return t('validation.form.phoneNumberTooShort');

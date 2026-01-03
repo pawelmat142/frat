@@ -415,7 +415,8 @@
         "positiveInteger": "Value must be a positive integer.",
         "phoneNumberTooShort": "Phone number is too short (min. 6 digits).",
         "phoneNumberTooLong": "Phone number is too long (max. 15 digits).",
-        "phoneNumberInvalid": "Invalid phone number format."
+        "phoneNumberInvalid": "Invalid phone number format.",
+        "phoneNumberRequired": "Phone number is required."
       },
       "view": {
         "title": "Something went wrong!",

@@ -98,7 +98,6 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
                 src: element.values.SRC,
             }));
 
-            console.log('Opening country selector with items:', items);
             bottomSheet.openSelector({
                 items,
                 selectedValues: selectedElement ? [selectedElement.code] : [],
