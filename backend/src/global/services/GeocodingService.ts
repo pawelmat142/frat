@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GeocodedPosition } from '@shared/interfaces/EmployeeProfileI';
+import { GeocodedPosition } from '@shared/interfaces/MapsInterfaces';
 
 interface GeocoderAddressComponent {
     long_name: string;

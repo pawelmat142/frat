@@ -9,7 +9,7 @@ import { TranslationEntity } from "admin/dictionaries/model/TranslationEntity";
 import { DictionaryEntity } from "admin/dictionaries/model/DictionaryEntity";
 import { SWWException } from "./exceptions/SWWException";
 import { GeocodingService } from "./services/GeocodingService";
-import { GeocodedPosition } from "@shared/interfaces/EmployeeProfileI";
+import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 
 @Controller('api')
 @UseInterceptors(LogInterceptor)
