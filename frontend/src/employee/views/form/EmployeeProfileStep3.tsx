@@ -4,15 +4,13 @@ import { useTranslation } from "react-i18next";
 import { DateRange, EmployeeProfileAvailabilityOption, EmployeeProfileAvailabilityOptions, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
 import { FormValidator } from "global/FormValidator";
 import TabSwitcher, { TabSwitcherOption } from "../../components/TabSwitcher";
-import DateRangeInput from "global/components/callendar/DateRangeInput";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
-import FloatingDateInput from "global/components/controls/FloatingDateInput";
-import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 import DateInputViewSelector from "global/components/callendar/DateInputViewSelector";
+import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 
 interface Props {
     formRef: UseFormReturn<EmployeeProfileForm>;
@@ -28,11 +26,8 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
     const startDateRequired = FormValidator.required(t);
 
     const getDefaultDateRange = (): DateRange => {
-        const end = new Date();
-        end.setDate(end.getDate() + 7);
         return {
             start: new Date(),
-            end,
             id: DateRangeUtil.newId(availabilityDateRanges)
         }
     }
@@ -63,9 +58,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
         } else {
             start = new Date();
         }
-        const end = new Date(start);
-        end.setDate(end.getDate() + 7);
-        const newRange: DateRange = { start, end, id: DateRangeUtil.newId(availabilityDateRanges) };
+        const newRange: DateRange = { start, id: DateRangeUtil.newId(availabilityDateRanges) };
         const newRanges = [
             ...availabilityDateRanges,
             newRange
@@ -126,10 +119,8 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
                                         control={control}
                                         rules={startDateRequired}
                                         render={({ field }) => {
-                                            // Extract string message for this specific range error (RHF stores errors by index/key)
                                             const fieldError = (formState?.errors?.step4?.availabilityDateRanges as any)?.[0];
                                             const errorMessage = fieldError?.message as string | undefined;
-                                            console.log('field.value', field.value);
                                             return (
                                                 <DateInputViewSelector
                                                     label={t("employeeProfile.form.availabilityOption.FROM_DATE.startLabel")}
@@ -140,17 +131,6 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
                                                     }}
                                                     error={errorMessage}
                                                 />
-
-                                                // <FloatingDateInput
-                                                //     className="w-full mt-5"
-                                                //     value={field.value}
-                                                //     label={t("employeeProfile.form.availabilityOption.FROM_DATE.startLabel")}
-                                                //     onChange={(date) => {
-                                                //         field.onChange(date)
-                                                //     }}
-                                                //     name={field.name}
-                                                //     error={errorMessage ? { message: errorMessage } : undefined}
-                                                // />
                                             )
                                         }}
                                     />
@@ -163,7 +143,6 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
                                     {t("employeeProfile.form.availabilityOption.DATE_RANGES.msg")}
                                 </div>
                                 {availabilityDateRanges.map((dateRange, idx) => {
-
                                     return (
                                         <div key={dateRange?.id ?? idx} className="flex gap-2 items-end mt-4">
                                             <Controller
@@ -175,18 +154,28 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
                                                     const fieldError = (formState?.errors?.step3?.availabilityDateRanges as any)?.[idx];
                                                     const errorMessage = fieldError?.message as string | undefined;
                                                     return (
-                                                        <DateRangeInput
+                                                        <DateRangeInputViewSelector
                                                             label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label") + (availabilityDateRanges.length ? ` #${idx + 1}` : "")}
                                                             className="w-full"
                                                             value={field.value || getDefaultDateRange()}
                                                             onChange={(dateRange) => {
-                                                                if (dateRange) {
-                                                                    field.onChange(dateRange)
-                                                                }
+                                                                field.onChange(dateRange)
                                                             }}
-                                                            name={field.name}
                                                             error={errorMessage}
                                                         />
+
+                                                        // <DateRangeInput
+                                                        //     label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label") + (availabilityDateRanges.length ? ` #${idx + 1}` : "")}
+                                                        //     className="w-full"
+                                                        //     value={field.value || getDefaultDateRange()}
+                                                        //     onChange={(dateRange) => {
+                                                        //         if (dateRange) {
+                                                        //             field.onChange(dateRange)
+                                                        //         }
+                                                        //     }}
+                                                        //     name={field.name}
+                                                        //     error={errorMessage}
+                                                        // />
                                                     )
                                                 }}
                                             />

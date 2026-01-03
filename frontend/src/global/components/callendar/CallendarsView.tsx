@@ -1,5 +1,5 @@
 import { DateRange } from "@shared/interfaces/EmployeeProfileI";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from "global/components/controls/Button";
 import { useTranslation } from "react-i18next";
 import MonthCallendar from "./MonthCallendar";
@@ -30,29 +30,51 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
 
     const [currentRange, setCurrentRange] = useState<DateRange | null>(range || {start: null, end: null});
     
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const initialScrollDone = useRef(false);
+
+    // Scroll to start date month on initial mount
+    useEffect(() => {
+        if (initialScrollDone.current) return;
+        
+        const targetDate = range?.start;
+        if (targetDate && scrollContainerRef.current) {
+            const monthId = `month-${targetDate.getFullYear()}-${targetDate.getMonth()}`;
+            const targetElement = document.getElementById(monthId);
+            if (targetElement) {
+                // Small delay to ensure DOM is ready and allow smooth animation to be visible
+                setTimeout(() => {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    initialScrollDone.current = true;
+                }, 100);
+            }
+        }
+    }, [range?.start]);
+
     const prepareMonthsArray = (range: DateRange): Date[] => {
         const months: Date[] = [];
-        if (selectorMode || !range.end) {
-            return prepareMonthArrayForTwelveMonths(range.start || new Date());
+        const now = new Date();
+        // Always start from current month
+        const start = new Date(now.getFullYear(), now.getMonth(), 1);
+        
+        // Find the furthest selected date
+        let furthestDate: Date | null = null;
+        if (range.start && range.end) {
+            furthestDate = range.start > range.end ? range.start : range.end;
+        } else if (range.start) {
+            furthestDate = range.start;
+        } else if (range.end) {
+            furthestDate = range.end;
         }
-        if (!range.start || !range.end) return months;
-        // Start one month before range.start
-        let current = new Date(range.start.getFullYear(), range.start.getMonth() - 1, 1);
-        // End five months after range.end
-        const end = new Date(range.end.getFullYear(), range.end.getMonth() + 5, 1);
+        
+        // End at furthest date + 12 months, or current month + 12 if no date selected
+        const endBase = furthestDate || now;
+        const end = new Date(endBase.getFullYear(), endBase.getMonth() + 12, 1);
+        
+        let current = new Date(start);
         while (current <= end) {
             months.push(new Date(current));
             current.setMonth(current.getMonth() + 1);
-        }
-        return months;
-    }
-
-    const prepareMonthArrayForTwelveMonths = (date: Date): Date[] => {
-        const months: Date[] = [];
-        const start = new Date(date.getFullYear(), date.getMonth(), 1);
-        for (let i = 0; i < 12; i++) {
-            const monthDate = new Date(start.getFullYear(), start.getMonth() + i, 1);
-            months.push(monthDate);
         }
         return months;
     }
@@ -105,7 +127,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
 
         <div className="callendars-view-wrapper">
 
-            <div className="callendars-view-header flex flex-col gap-2 px-3">
+            <div className="callendars-view-header flex flex-col gap-1 px-3">
                 {selectorMode && (<>
 
                     <CallendarsViewControl
@@ -169,11 +191,12 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
                 </div>
             </div>
 
-            <div className="w-full flex flex-col items-center gap-4 h-full justify-center p-2 callendars-view-fullscreen">
+            <div ref={scrollContainerRef} className="w-full flex flex-col items-center gap-4 h-full justify-center p-2 callendars-view-fullscreen">
 
                 {months.map((monthDate) => {
                     return (<div
                         key={`${monthDate.getFullYear()}-${monthDate.getMonth()}`}
+                        id={`month-${monthDate.getFullYear()}-${monthDate.getMonth()}`}
                         className="callendars-view-item"
                     >
                         <MonthCallendar
@@ -192,14 +215,14 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
             </div>
             {selectorMode && (
                 <div className="flex gap-4 bottom-sheet-footer callendars-view-footer w-full py-2">
-                    <Button onClick={onCancel} size={BtnSizes.LARGE} mode={BtnModes.ERROR_TXT} fullWidth={true}>
+                    <Button onClick={onCancel} mode={BtnModes.ERROR_TXT} fullWidth={true}>
                         {t("common.reset")}
                     </Button>
 
                     <Button
                         disabled={!currentRange.start}
                         onClick={() => onSubmit?.(currentRange)}
-                        size={BtnSizes.LARGE} mode={BtnModes.PRIMARY} fullWidth={true}>
+                        mode={BtnModes.PRIMARY} fullWidth={true}>
                         {t("common.confirm")}
                     </Button>
                 </div>

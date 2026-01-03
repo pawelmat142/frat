@@ -130,6 +130,12 @@ const MonthCallendar: React.FC<MonthCallendarProps> = ({
     const prevMonthBase = useMemo(() => new Date(month === 0 ? year - 1 : year, month === 0 ? 11 : month - 1, 1).getTime(), [year, month]);
     const nextMonthBase = useMemo(() => new Date(month === 11 ? year + 1 : year, month === 11 ? 0 : month + 1, 1).getTime(), [year, month]);
 
+    // Today's midnight time for highlighting
+    const todayMid = useMemo(() => {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    }, []);
+
     return (
         <>
             <div className="w-full">
@@ -175,10 +181,12 @@ const MonthCallendar: React.FC<MonthCallendarProps> = ({
                         isEndingOnly = cellTime === singleEndMid;
                     }
 
+                    const isToday = cellTime === todayMid;
+
                     return (
                         <div
                             key={idx}
-                            className={`month-callendar-cell month-callendar-day${disabled ? ' disabled' : ''}${isSelected ? ' selected' : ''}${isFirst ? ' first' : ''}${isLast ? ' last' : ''}${isStartingOnly ? ' starting' : ''}${isEndingOnly ? ' ending' : ''}`}
+                            className={`month-callendar-cell month-callendar-day${disabled ? ' disabled' : ''}${isSelected ? ' selected' : ''}${isFirst ? ' first' : ''}${isLast ? ' last' : ''}${isStartingOnly ? ' starting' : ''}${isEndingOnly ? ' ending' : ''}${isToday ? ' today' : ''}`}
                             onClick={() => {
                                 if (!disabled && cell.day !== null) {
                                     const clickedDate = new Date(year, month, cell.day);

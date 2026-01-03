@@ -33,7 +33,6 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
     singleDateMode = false,
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
-    const popupCtx = usePopup();
     const bottomSheetCtx = useBottomSheet();
     const fullScreenDialogCtx = useFullScreenDialog();
     const { t } = useTranslation();
@@ -43,6 +42,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
         if (disabled) return;
 
         fullScreenDialogCtx.open({
+            title: label,
             children: <CallendarsView
                 range={value}
                 selectorMode={true}

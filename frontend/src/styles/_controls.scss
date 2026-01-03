@@ -175,6 +175,7 @@ input {
   background-color: $secondary-bg;
 }
 
+
 .pp-control {
   background-color: $secondary-bg;
   transition: $transition;
@@ -185,12 +186,12 @@ input {
 
   &.focus,
   &:focus {
-    outline: 2px solid $primary-color;
+    outline: $focus-outline
   }
 
   &.focus,
   &:hover {
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color), transparent 80%);
+    box-shadow: $focus-ring;
   }
 }
 
@@ -207,7 +208,7 @@ input {
 }
 
 .callendar-view-input {
-  padding: .5rem .75rem;
+  padding: .25rem .75rem;
   padding-left: .25rem;
   background-color: $secondary-bg;
   display: flex;
