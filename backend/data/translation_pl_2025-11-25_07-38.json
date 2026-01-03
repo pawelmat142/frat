@@ -534,9 +534,18 @@
           },
           "DATE_RANGES": {
             "add": "Dodaj termin",
-            "msg": "Wybierz daty, w których jesteś dostępny/a do pracy.",
             "tab": "Terminy",
             "label": "Termin"
+          }
+        },
+        "rangesOption": {
+          "AVAILABLE_ON": {
+            "tab": "Dostępny",
+            "msg": "Wybierz daty, w których jesteś dostępny/a do pracy."
+          },
+          "NOT_AVAILABLE_ON": {
+            "tab": "Niedostępny",
+            "msg": "Wybierz daty, w których nie jesteś dostępny/a do pracy."
           }
         },
         "communicationLanguage": "Język komunikacji",

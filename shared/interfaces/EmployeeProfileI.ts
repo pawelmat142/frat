@@ -71,6 +71,12 @@ export const EmployeeProfileAvailabilityOptions = {
 } as const;
 export type EmployeeProfileAvailabilityOption = typeof EmployeeProfileAvailabilityOptions[keyof typeof EmployeeProfileAvailabilityOptions];
 
+export const EmployeeProfileFormRangesOptions = {
+  AVAILABLE_ON: 'AVAILABLE_ON',
+  NOT_AVAILABLE_ON: 'NOT_AVAILABLE_ON',
+} as const;
+export type EmployeeProfileFormRangesOption = typeof EmployeeProfileFormRangesOptions[keyof typeof EmployeeProfileFormRangesOptions];
+
 export interface EmployeeProfileFormStep1 {
   fullName: string;
   phoneNumber: ParsedPhoneNumber;
@@ -95,6 +101,7 @@ export interface EmployeeProfileFormStep3 {
 
   availabilityOption: EmployeeProfileAvailabilityOption;
   availabilityDateRanges?: DateRange[];
+  rangesOption?: EmployeeProfileFormRangesOption;
   startDate?: Date | null;
 
   // TODO TODO remove

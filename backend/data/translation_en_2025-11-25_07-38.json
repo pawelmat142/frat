@@ -540,9 +540,18 @@
           },
           "DATE_RANGES": {
             "add": "Add date range",
-            "msg": "Choose the dates you are available to work.",
             "tab": "Date ranges",
             "label": "Date range"
+          }
+        },
+        "rangesOption": {
+          "AVAILABLE_ON": {
+            "tab": "Available",
+            "msg": "Select the dates you are available to work."
+          },
+          "NOT_AVAILABLE_ON": {
+            "tab": "Not available",
+            "msg": "Select the dates you are not available to work."
           }
         },
         "communicationLanguage": "Communication language",

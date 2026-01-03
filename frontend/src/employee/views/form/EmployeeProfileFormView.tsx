@@ -151,6 +151,7 @@ const EmployeeProfileFormView: React.FC = () => {
             return;
         }
 
+        // TODO verify edit profile option!!!
         // Load from employeeProfile if it exists
         let locationDistancePosition: any = undefined;
         if (employeeProfile.point && Array.isArray(employeeProfile.point.coordinates)) {
@@ -173,7 +174,9 @@ const EmployeeProfileFormView: React.FC = () => {
                 bio: employeeProfile.bio || ''
             },
             step2: {
-                countryCode: undefined,
+                locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.POSITION,
+                // TODO
+                // countryCode: employeeProfile.countryCode || undefined,
                 geocodedPosition: {
                     lat: locationDistancePosition?.lat || NaN,
                     lng: locationDistancePosition?.lng || NaN,
@@ -184,27 +187,16 @@ const EmployeeProfileFormView: React.FC = () => {
                     postcode: employeeProfile.postcode || '',
                     fullAddress: employeeProfile.fullAddress || '',
                 },
-                skills: employeeProfile.skills || [],
-                certificates: employeeProfile.certificates || []
+                locationCountries: employeeProfile.locationCountries || [],
             },
             step3: {
-                locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.POSITION,
-                locationCountries: employeeProfile.locationCountries || [],
-                geocodedPosition: {
-                    lat: locationDistancePosition?.lat || NaN,
-                    lng: locationDistancePosition?.lng || NaN,
-                    street: employeeProfile.street || '',
-                    city: employeeProfile.city || '',
-                    district: employeeProfile.district || '',
-                    state: employeeProfile.state || '',
-                    postcode: employeeProfile.postcode || '',
-                    fullAddress: employeeProfile.fullAddress || '',
-                },
-                locationDistanceRadius: employeeProfile.pointRadius ?? NaN
+                availabilityOption: employeeProfile.availabilityOption || EmployeeProfileAvailabilityOptions.ANYTIME,
+                availabilityDateRanges: availabilityDateRanges,
+                // TODO
+                // rangesOption?: EmployeeProfileFormRangesOption
+                // startDate: new Date(employeeProfile.startDate),
             },
             step4: {
-                availabilityOption: employeeProfile.availabilityOption || EmployeeProfileAvailabilityOptions.ANYTIME,
-                availabilityDateRanges: availabilityDateRanges
             }
         });
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { DateRange, EmployeeProfileAvailabilityOption, EmployeeProfileAvailabilityOptions, EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, EmployeeProfileAvailabilityOption, EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileFormRangesOption, EmployeeProfileFormRangesOptions } from "@shared/interfaces/EmployeeProfileI";
 import { FormValidator } from "global/FormValidator";
 import TabSwitcher, { TabSwitcherOption } from "../../components/TabSwitcher";
 import IconButton from "global/components/controls/IconButon";
@@ -17,10 +17,11 @@ interface Props {
 }
 
 const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
-    const { control, setValue, watch, formState } = formRef;
+    const { control, setValue, watch, getValues, formState } = formRef;
     const { t } = useTranslation();
     const availabilityOption = watch("step3.availabilityOption");
     const availabilityDateRanges = watch("step3.availabilityDateRanges") || [];
+    const rangesOption = watch("step3.rangesOption");
 
     const required = FormValidator.dateRangeRequired(t);
     const startDateRequired = FormValidator.required(t);
@@ -71,7 +72,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
         setValue("step3.availabilityDateRanges", (ranges || []).filter(Boolean));
     }
 
-    const msgClass = "secondary-text mb-5"
+    const msgClass = "secondary-text mb-5 mt-4"
 
     const tabOptions: TabSwitcherOption[] = [
         {
@@ -88,20 +89,35 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
         },
     ];
 
+    const rangesOptions: TabSwitcherOption[] = [{
+        label: t(`employeeProfile.form.rangesOption.${EmployeeProfileFormRangesOptions.AVAILABLE_ON}.tab`),
+        code: EmployeeProfileFormRangesOptions.AVAILABLE_ON,
+    }, {
+        label: t(`employeeProfile.form.rangesOption.${EmployeeProfileFormRangesOptions.NOT_AVAILABLE_ON}.tab`),
+        code: EmployeeProfileFormRangesOptions.NOT_AVAILABLE_ON,
+    }]
+
+
+    const setAvailabilityOption = (option: EmployeeProfileAvailabilityOption) => {
+        setValue("step3.availabilityOption", option);
+        if (option === EmployeeProfileAvailabilityOptions.DATE_RANGES && !rangesOption) {
+            setValue("step3.rangesOption", EmployeeProfileFormRangesOptions.AVAILABLE_ON);
+        }
+    }
+
     return (
         <>
             <h3 className="form-subheader">
                 {t("employeeProfile.form.step3.title")}
             </h3>
 
-            <div className="flex flex-col gap-5 md:gap-5">
+            <div className="flex flex-col gap-3 md:gap-3">
                 <TabSwitcher
                     options={tabOptions}
                     value={availabilityOption}
-                    onChange={code => setValue("step3.availabilityOption", code as EmployeeProfileAvailabilityOption)}
+                    onChange={code => setAvailabilityOption(code as EmployeeProfileAvailabilityOption)}
                 />
-
-                <div className="w-full flex mt-4">
+                <div className="w-full flex">
                     <div className="primary-text w-full">
                         {availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && (
                             <div className={msgClass}>
@@ -139,9 +155,18 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
                         )}
                         {availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES && (
                             <div className="w-full">
+
+                                <TabSwitcher
+                                    options={rangesOptions}
+                                    value={rangesOption!}
+                                    onChange={code => setValue("step3.rangesOption", code as EmployeeProfileFormRangesOption)}
+                                />
+
                                 <div className={msgClass}>
-                                    {t("employeeProfile.form.availabilityOption.DATE_RANGES.msg")}
+                                    {t(`employeeProfile.form.rangesOption.${rangesOption}.msg`)}
                                 </div>
+                                <div className="mb-5"></div>
+
                                 {availabilityDateRanges.map((dateRange, idx) => {
                                     return (
                                         <div key={dateRange?.id ?? idx} className="flex gap-2 items-end mt-4">

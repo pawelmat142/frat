@@ -37,6 +37,12 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
     const fullScreenDialogCtx = useFullScreenDialog();
     const { t } = useTranslation();
 
+    const _value = {
+        start: value?.start ? new Date(value.start) : null,
+        end: value?.end ? new Date(value.end) : null,
+        id: value?.id || undefined,
+    }
+
     const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (disabled) return;
@@ -44,7 +50,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
         fullScreenDialogCtx.open({
             title: label,
             children: <CallendarsView
-                range={value}
+                range={_value}
                 selectorMode={true}
                 singleDateMode={singleDateMode}
                 bottomSheetCtx={bottomSheetCtx}
@@ -68,7 +74,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
         myClass += ' pp-control-error';
     }
 
-    const hasValue = !!(value?.start || value?.end);
+    const hasValue = !!(_value?.start || _value?.end);
     const isLabelFloating = hasValue;
 
     const formatDateRange = (range?: DateRange | null, placeholder?: string): string => {
@@ -104,7 +110,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
                             id={name}
                             name={name ? `${name}_start` : undefined}
                             type="text"
-                            value={formatDateRange(value)}
+                            value={formatDateRange(_value)}
                             onClick={handleClick}
                             className="floating-input primary-text flex-1 cursor-pointer"
                             disabled={disabled}
