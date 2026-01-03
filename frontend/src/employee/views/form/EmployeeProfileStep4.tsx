@@ -221,3 +221,41 @@ const EmployeeProfileStep4: React.FC<Props> = ({ formRef }) => {
 };
 
 export default EmployeeProfileStep4;
+
+                {/* <Controller TODO Other step
+                    name="step2.skills"
+                    control={control}
+                    rules={requiredArray}
+                    render={({ field }) => (
+                        <DictionarySelector
+                            type="multi"
+                            className="w-full"
+                            valueInput={field.value}
+                            onSelectMulti={items => field.onChange(items.map(i => String(i)))}
+                            label={t("employeeProfile.form.skills")}
+                            code="SKILLS"
+                            fullWidth
+                            required
+                            error={formState.errors.step2?.skills}
+                        />
+                    )}
+                />
+
+                <Controller
+                    name="step2.certificates"
+                    control={control}
+                    rules={requiredArray}
+                    render={({ field }) => (
+                        <DictionarySelector
+                            type="multi"
+                            className="w-full"
+                            valueInput={field.value}
+                            onSelectMulti={items => field.onChange(items.map(i => String(i)))}
+                            label={t("employeeProfile.form.certificates")}
+                            code="CERTIFICATES"
+                            fullWidth
+                            required
+                            error={formState.errors.step2?.certificates}
+                        />
+                    )}
+                />  */}

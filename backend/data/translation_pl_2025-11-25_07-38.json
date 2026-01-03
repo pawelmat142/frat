@@ -476,11 +476,11 @@
         },
         "step2": {
           "label": "Krok 2",
-          "title": "Umiejętności i certyfikaty"
+          "title": "Gdzie chcesz pracować?"
         },
         "step3": {
           "label": "Krok 3",
-          "title": "Gdzie chcesz pracować?"
+          "title": "Umiejętności i certyfikaty"
         },
         "step4": {
           "label": "Krok 4",
@@ -504,8 +504,8 @@
         "submitSuccess": "Profil został zapisany pomyślnie",
         "uploadAvatar": "Prześlij avatar",
         "locationOption": {
-          "DISTANCE": {
-            "msg": "Wybierz lokalizację i maksymalną odległość, z której chcesz otrzymywać oferty.",
+          "POSITION": {
+            "msg": "Wybierz lokalizację, na podstawie której będą trafiać do Ciebie oferty.",
             "tab": "Lokalizacja"
           },
           "ALL_EUROPE": {
@@ -518,8 +518,8 @@
           }
         },
         "locationCountry": "Kraj lokalizacji",
+        "resetLocation": "Resetuj lokalizację",
         "validationError": "Proszę wypełnić wszystkie wymagane pola w tym kroku",
-        "residenceCountry": "Kraj zamieszkania",
         "city": "Miasto",
         "locationCountries": "Kraje",
         "availabilityOption": {

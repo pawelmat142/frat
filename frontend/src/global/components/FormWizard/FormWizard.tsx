@@ -74,11 +74,11 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
             onSelectStep(step);
         }
     };
-    
+
     const selectStep = async (targetStep: TStep) => {
         const targetIndex = stepsOrder.indexOf(targetStep);
         const currentIndex = stepsOrder.indexOf(currentStep);
-            if (targetIndex < currentIndex) {
+        if (targetIndex < currentIndex) {
             onSelectStep?.(targetStep);
             return;
         }
@@ -92,8 +92,8 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
     };
 
     return (
-        <div className="form-view relative">
-            <form
+        <div className="form-view relative flex flex-col">
+            <form className='flex flex-col flex-1'
                 onSubmit={formRef.handleSubmit(() => { }, (errors) => {
                     console.log('Form errors', errors);
                     toast.error('Form submit error');
@@ -101,13 +101,16 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
                 noValidate
             >
 
-                <div className="form-wizard-top-wrapper">
-                    <div className="form-wizard-top">
-                        {t(`${labelKeyPrefix}.${currentStep}.label`)}
 
+                <div className="flex-1">
+                    <div className="form-wizard-top-wrapper">
+                        <div className="form-wizard-top">
+                            {t(`${labelKeyPrefix}.${currentStep}.label`)}
+
+                        </div>
                     </div>
+                    {children}
                 </div>
-                {children}
                 <div className="form-wizard-buttons-wrapper">
                     <div className="form-wizard-buttons">
                         <Button

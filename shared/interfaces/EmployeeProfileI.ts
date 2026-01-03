@@ -58,8 +58,8 @@ export type EmployeeProfileStatus = typeof EmployeeProfileStatuses[keyof typeof 
 
 export const EmployeeProfileLocationOptions = {
   ALL_EUROPE: 'ALL_EUROPE',
-  SELECTED_COUNTRIES_EUROPE: 'SELECTED_COUNTRIES_EUROPE',
-  DISTANCE: 'DISTANCE',
+  SELECTED_COUNTRIES: 'SELECTED_COUNTRIES',
+  POSITION: 'POSITION',
 } as const;
 export type EmployeeProfileLocationOption = typeof EmployeeProfileLocationOptions[keyof typeof EmployeeProfileLocationOptions];
 
@@ -81,13 +81,19 @@ export interface EmployeeProfileFormStep1 {
 }
 
 export interface EmployeeProfileFormStep2 {
+  locationOption: EmployeeProfileLocationOption;
   countryCode?: string;
   geocodedPosition?: GeocodedPosition | null;
+  locationCountries?: string[];
+
+
+  // TODO remove
   skills?: string[];
   certificates?: string[];
 }
 
 export interface EmployeeProfileFormStep3 {
+  // TODO datepickers step
   locationOption: EmployeeProfileLocationOption;
   locationCountries?: string[];
   geocodedPosition?: GeocodedPosition | null;

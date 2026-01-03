@@ -56,6 +56,7 @@ const EmployeeProfileFormView: React.FC = () => {
                 communicationLanguages: [""]
             },
             step2: {
+                locationOption: EmployeeProfileLocationOptions.POSITION,
                 countryCode: undefined,
                 geocodedPosition: null,
 
@@ -76,7 +77,7 @@ const EmployeeProfileFormView: React.FC = () => {
         },
     });
 
-    const initPostion = async (): Promise<GeocodedPosition | null> => {
+    const initPosition = async (): Promise<GeocodedPosition | null> => {
         if (userCtx.position) {
             // Use backend geocoding to avoid API key restrictions
             const position = await GoogleMapService.reverseGeocodeViaBackend({
@@ -94,7 +95,7 @@ const EmployeeProfileFormView: React.FC = () => {
     const initFormWithUserData = async () => {
         if (!me) return;
         setLoading(true);
-        const position = await initPostion();
+        const position = await initPosition();
 
         formRef.setValue("step1.fullName", me.displayName)
         formRef.setValue("step1.email", me.email)
@@ -107,14 +108,31 @@ const EmployeeProfileFormView: React.FC = () => {
             if (element) {
                 formRef.setValue("step1.phoneNumber.prefix", element.values.PHONE_PREFIX);
                 formRef.setValue("step1.communicationLanguages", [element.code]);
-                
-                // Auto-fill step2 country and city based on geolocation
-                formRef.setValue("step2.countryCode", element.code);
-                formRef.setValue("step2.geocodedPosition", position);
+                setPositionFormDataByLocation(position);
             }
         }
-        setLoading(false);      
+        setLoading(false);
     }
+
+    const resetPositionFormData = async () => {
+        const position = await initPosition();
+        if (position) {
+            setPositionFormDataByLocation(position);
+        }
+    }
+
+    const getDictionaryElementByPosition = (position: GeocodedPosition) => {
+        return globalCtx.dics.languages?.elements.find(lang => lang.values.COUNTRY_CODE === position.country?.toLocaleLowerCase());
+    }
+
+    const setPositionFormDataByLocation = (position: GeocodedPosition) => {
+        const element = getDictionaryElementByPosition(position);
+        if (element) {
+            formRef.setValue("step2.countryCode", element.code);
+            formRef.setValue("step2.geocodedPosition", position);
+        }
+    }
+
 
     React.useEffect(() => {
         // Load from localStorage if no employeeProfile exists
@@ -171,7 +189,7 @@ const EmployeeProfileFormView: React.FC = () => {
                 certificates: employeeProfile.certificates || []
             },
             step3: {
-                locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.DISTANCE,
+                locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.POSITION,
                 locationCountries: employeeProfile.locationCountries || [],
                 geocodedPosition: {
                     lat: locationDistancePosition?.lat || NaN,
@@ -262,7 +280,7 @@ const EmployeeProfileFormView: React.FC = () => {
             case 'step1':
                 return <EmployeeProfileStep1 formRef={formRef} />;
             case 'step2':
-                return <EmployeeProfileStep2 formRef={formRef} />;
+                return <EmployeeProfileStep2 formRef={formRef} initPosition={resetPositionFormData} />;
             case 'step3':
                 return <EmployeeProfileStep3 formRef={formRef} />;
             case 'step4':

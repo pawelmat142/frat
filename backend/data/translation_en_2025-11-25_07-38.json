@@ -482,11 +482,11 @@
         },
         "step2": {
           "label": "Step 2",
-          "title": "Skills and Certificates"
+          "title": "Where you want to work?"
         },
         "step3": {
           "label": "Step 3",
-          "title": "Where you want to work?"
+          "title": "Skills and Certificates"
         },
         "step4": {
           "tab1": "Immediately",
@@ -513,8 +513,8 @@
         "submitSuccess": "Profile saved successfully",
         "uploadAvatar": "Upload avatar",
         "locationOption": {
-          "DISTANCE": {
-            "msg": "Choose a location and the maximum distance from which you want to receive offers.",
+          "POSITION": {
+            "msg": "Choose a location to receive offers based on it.",
             "tab": "Location"
           },
           "ALL_EUROPE": {
@@ -527,8 +527,8 @@
           }
         },
         "locationCountry": "Location country",
+        "resetLocation": "Reset location",
         "validationError": "Please fill in all required fields in this step",
-        "residenceCountry": "Country of residence",
         "city": "City",
         "locationCountries": "Location countries",
         "availabilityOption": {

@@ -28,15 +28,15 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
     const required = FormValidator.required(t);
     const tabOptions: TabSwitcherOption[] = [
         {
-            label: t("employeeProfile.form.locationOption.DISTANCE.tab"),
-            code: EmployeeProfileLocationOptions.DISTANCE,
+            label: t(`employeeProfile.form.locationOption.${EmployeeProfileLocationOptions.POSITION}.tab`),
+            code: EmployeeProfileLocationOptions.POSITION,
         },
         {
-            label: t("employeeProfile.form.locationOption.SELECTED_COUNTRIES.tab"),
-            code: EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE,
+            label: t(`employeeProfile.form.locationOption.${EmployeeProfileLocationOptions.SELECTED_COUNTRIES}.tab`),
+            code: EmployeeProfileLocationOptions.SELECTED_COUNTRIES,
         },
         {
-            label: t("employeeProfile.form.locationOption.ALL_EUROPE.tab"),
+            label: t(`employeeProfile.form.locationOption.${EmployeeProfileLocationOptions.ALL_EUROPE}.tab`),
             code: EmployeeProfileLocationOptions.ALL_EUROPE,
         },
     ];
@@ -63,7 +63,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
                                 {t("employeeProfile.form.locationOption.ALL_EUROPE.msg")}
                             </div>
                         )}
-                        {locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES_EUROPE && (
+                        {locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES && (
                             <div className="w-full">
                                 <div className={msgClass}>
                                     {t("employeeProfile.form.locationOption.SELECTED_COUNTRIES.msg")}
@@ -89,7 +89,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
                                 />
                             </div>
                         )}
-                        {locationOption === EmployeeProfileLocationOptions.DISTANCE && (
+                        {locationOption === EmployeeProfileLocationOptions.POSITION && (
                             <div className="flex flex-col gap-3">
                                 <div className={msgClass}>
                                     {t("employeeProfile.form.locationOption.DISTANCE.msg")}
