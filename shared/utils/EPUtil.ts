@@ -1,4 +1,4 @@
-import { EmmployeeProfileSearchSortOption, EmployeeProfileI, EmployeeProfileSearchFilters, Position } from "@shared/interfaces/EmployeeProfileI";
+import { EmmployeeProfileSearchSortOption, EmployeeProfileI, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { FilterUtil } from "@shared/utils/FilterUtil";
 
@@ -11,9 +11,6 @@ export abstract class EPUtil {
     private static readonly LOCATION_COUNTRY = 'country';
     private static readonly START_DATE = 'startDate';
     private static readonly END_DATE = 'endDate';
-    private static readonly LAT = 'lat';
-    private static readonly LNG = 'lng';
-
 
     private static readonly PAGE = 'page';
     private static readonly LIMIT = 'limit';
@@ -22,7 +19,7 @@ export abstract class EPUtil {
     public static prepareUrlParams = (f: EmployeeProfileSearchFilters, defaultFilters: EmployeeProfileSearchFilters): string => {
         const params = new URLSearchParams();
         if (f.freeText) params.set(EPUtil.FREE_TEXT, f.freeText);
-        if (f.skills?.length) params.set(EPUtil.SKILLS, f.skills.join(','));
+        if (f.experience?.length) params.set(EPUtil.SKILLS, f.experience.join(','));
         if (f.certificates?.length) params.set(EPUtil.CERTIFICATES, f.certificates.join(','));
         if (f.communicationLanguages?.length) params.set(EPUtil.COMMUNICATION_LANGUAGES, f.communicationLanguages.join(','));
         if (f.locationCountry) params.set(EPUtil.LOCATION_COUNTRY, f.locationCountry);
@@ -35,10 +32,6 @@ export abstract class EPUtil {
         const page = Math.floor(f.skip / f.limit) + 1;
         if (page > 1) params.set(EPUtil.PAGE, String(page));
         if (f.limit !== defaultFilters.limit) params.set(EPUtil.LIMIT, String(f.limit));
-        if (f.position) {
-            params.set(EPUtil.LAT, String(f.position.lat));
-            params.set(EPUtil.LNG, String(f.position.lng));
-        }
         if (f.sortBy) params.set(EPUtil.SORT_BY, f.sortBy);
         const searchStr = params.toString();
         return searchStr;
@@ -60,7 +53,7 @@ export abstract class EPUtil {
         const sortBy = params.get(EPUtil.SORT_BY) as EmmployeeProfileSearchSortOption || defaultFilters.sortBy;
         return {
             freeText,
-            skills,
+            experience: skills,
             certificates,
             communicationLanguages,
             locationCountry,
@@ -69,22 +62,17 @@ export abstract class EPUtil {
             startDate: startDate,
             endDate: endDate,
             sortBy,
-            position: FilterUtil.preparePositionParam(params, EPUtil.LAT, EPUtil.LNG)
         };
     }
 
-    public static displayName = (employeeProfile: EmployeeProfileI) => {
-        let result = ``
-        if (employeeProfile.firstName) {
-            result += employeeProfile.firstName
+    public static displayName = (employeeProfile: EmployeeProfileI): string => {
+        if (employeeProfile.displayName) {
+            return employeeProfile.displayName
         }
-        if (employeeProfile.lastName) {
-            if (employeeProfile.firstName) {
-                result += ` `
-            }
-            result += `${employeeProfile.lastName}`
+        if (employeeProfile.fullName) {
+            return employeeProfile.fullName
         }
-        return `, (${result})`
+        throw new Error('EmployeeProfile has no displayName or fullName');
     }
 
     public static filtersEquals = (f1: EmployeeProfileSearchFilters, f2: EmployeeProfileSearchFilters): boolean => {
@@ -92,19 +80,12 @@ export abstract class EPUtil {
         if (f1.locationCountry !== f2.locationCountry) return false;
         if (f1.startDate?.toISOString() !== f2.startDate?.toISOString()) return false;
         if (f1.endDate?.toISOString() !== f2.endDate?.toISOString()) return false;
-        if (ObjUtil.arrayChanged(f1.skills, f2.skills)) return false;
+        if (ObjUtil.arrayChanged(f1.experience, f2.experience)) return false;
         if (ObjUtil.arrayChanged(f1.certificates, f2.certificates)) return false;
         if (ObjUtil.arrayChanged(f1.communicationLanguages, f2.communicationLanguages)) return false;
-        if (!this.positionEquals(f1.position, f2.position)) return false;
         if (f1.skip !== f2.skip) return false;
         if (f1.limit !== f2.limit) return false;
         if (f1.sortBy !== f2.sortBy) return false;
-        return true;
-    }
-
-    private static positionEquals = (p1?: Position | null, p2?: Position | null): boolean => {
-        if (p1?.lat !== p2?.lat) return false;
-        if (p1?.lng !== p2?.lng) return false;
         return true;
     }
 }

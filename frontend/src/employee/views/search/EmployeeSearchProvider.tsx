@@ -9,7 +9,7 @@ import { useUserContext } from "user/UserProvider";
 export interface EmployeeSearchContextProps {
     filters: EmployeeProfileSearchFilters;
     defaultFilters: EmployeeProfileSearchFilters;
-    setFilters: (filters: EmployeeProfileSearchFilters) => void;
+    setFiltersWithSearchAndNavigate: (filters: EmployeeProfileSearchFilters) => void;
     resetFilters: () => void;
     results: EmployeeProfileI[];
     loading: boolean;
@@ -21,31 +21,22 @@ export interface EmployeeSearchContextProps {
 }
 
 export const EPDefaultFilters: EmployeeProfileSearchFilters = {
-    freeText: '',
-    skills: [],
-    certificates: [],
-    communicationLanguages: [],
-    locationCountry: null,
     startDate: null,
     endDate: null,
-    sortBy: PROFILE_DEFAULT_SORT_OPTION,
+
+    locationCountry: null,
+    freeText: '',
+
+    communicationLanguages: [],
+    certificates: [],
+    experience: [],
+
     skip: 0,
     limit: PROFILES_INITIAL_SEARCH_LIMIT,
-    position: null
 };
 
 const EmployeeSearchContext = createContext<EmployeeSearchContextProps | undefined>(undefined)
 
-const fillPositionAddressIfMissing = (oldFilters: EmployeeProfileSearchFilters, newFilters: EmployeeProfileSearchFilters): void => {
-    if (newFilters.position 
-        && !newFilters.position.address 
-        && oldFilters.position?.address
-        && newFilters.position?.lat === oldFilters.position?.lat
-    ) {
-        newFilters.position.address = oldFilters.position.address;
-    }
-
-}
 
 export const useEmployeeSearch = () => {
     const ctx = useContext(EmployeeSearchContext);
@@ -77,9 +68,6 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
 
         try {
-            
-            const filters = await applyLocationFilterIfNotSelected(searchFilters);
-
             const result = await EmployeeProfileService.searchEmployeeProfiles(filters);
             if (requestId !== requestIdRef.current) {
                 return;
@@ -114,25 +102,8 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     }, [userCtx.position]);
 
-    const applyLocationFilterIfNotSelected = async (searchFilters: EmployeeProfileSearchFilters): Promise<EmployeeProfileSearchFilters> => {
-        if (!searchFilters.position) {
-            const position = userCtx.position;
-            if (position) {
-                return {
-                    ...searchFilters,
-                    position: {
-                        lat: position.lat,
-                        lng: position.lng,
-                        address: position.address,
-                    }
-                };
-            }
-        }
-        return searchFilters;
-    }
-
     useEffect(() => {
-        if (!location.pathname.includes(Path.EMPLOYEE_SEARCH)) {
+        if (!location.pathname.includes(Path.TECH_SEARCH)) {
             return
         }
         const newFilters = {
@@ -140,8 +111,6 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
             skip: 0, // Always start from beginning for new search
             limit: PROFILES_INITIAL_SEARCH_LIMIT,
         };
-
-        fillPositionAddressIfMissing(filters, newFilters);
 
         setFiltersState(newFilters);
         setResults([]);
@@ -151,15 +120,10 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         executeSearch(newFilters, false);
     }, [location.search]);
 
-    
 
-    const handleSetFilters = (newFilters: EmployeeProfileSearchFilters) => {
-        if (EPUtil.filtersEquals(newFilters, filters) && results.length) {
-            return;
-        }
+    const setFiltersWithSearchAndNavigate = (newFilters: EmployeeProfileSearchFilters) => {
 
         setFiltersState(newFilters);
-        setResults([]);
         resultsLengthRef.current = 0;
         hasMoreRef.current = false;
 
@@ -167,9 +131,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const newUrl = searchStr ? `?${searchStr}` : ''
 
         if (newUrl !== location.search) {
-            navigate({ pathname: location.pathname, search: newUrl }, { replace: true })
-        } else {
-            executeSearch(newFilters, false);
+            navigate({ pathname: Path.TECH_SEARCH, search: newUrl })
         }
     }
 
@@ -188,7 +150,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
 
     const resetFilters = () => {
-        handleSetFilters(EPDefaultFilters);
+        setFiltersState(EPDefaultFilters);
     };
 
     const updateOneProfileInResults = (updatedProfile: EmployeeProfileI) => {
@@ -202,7 +164,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return (
         <EmployeeSearchContext.Provider value={{
             filters,
-            setFilters: handleSetFilters,
+            setFiltersWithSearchAndNavigate,
             hasMore: hasMoreRef.current,
             results,
             loading,

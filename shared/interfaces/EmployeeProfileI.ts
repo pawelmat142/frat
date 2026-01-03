@@ -138,21 +138,17 @@ export interface EmployeeProfileFormDto {
 }
 
 export interface EmployeeProfileSearchFilters {
+  startDate?: Date | null;
+  endDate?: Date | null;
+  
+  locationCountry?: string | null;
   freeText: string;
 
   communicationLanguages?: string[];
-  skills?: string[];
   certificates?: string[];
+  experience?: string[];
 
-  locationCountry?: string | null;
-  locationPosition?: Position;
-
-  startDate?: Date | null;
-  endDate?: Date | null;
-
-  position?: Position | null;
-
-  sortBy: EmmployeeProfileSearchSortOption
+  sortBy?: EmmployeeProfileSearchSortOption
   skip: number;
   limit: number;
 }
@@ -188,7 +184,6 @@ export const EmmployeeProfileSearchSortOptions = {
   DISTANCE_ASC: 'DISTANCE_ASC',
   POPULARITY: 'POPULARITY',
 } as const;
-
 export type EmmployeeProfileSearchSortOption = typeof EmmployeeProfileSearchSortOptions[keyof typeof EmmployeeProfileSearchSortOptions];
 
 export const PROFILE_DEFAULT_SORT_OPTION: EmmployeeProfileSearchSortOption = EmmployeeProfileSearchSortOptions.START_FROM_DESC;

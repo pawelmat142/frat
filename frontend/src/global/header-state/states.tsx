@@ -12,57 +12,61 @@ export interface ViewState {
 
 export const STATES: { [key: string]: ViewState } = {
     [Path.HOME]: {
-        leftBtn: <MainHeaderState/>,
+        leftBtn: <MainHeaderState />,
     },
     [Path.EMPLOYEE_PROFILE_FORM]: {
-        leftBtn: <HeaderBackBtn/>,
+        leftBtn: <HeaderBackBtn />,
         title: 'employeeProfile.form.title',
     },
     [Path.SIGN_IN]: {
-        leftBtn: <HeaderBackBtn/>,
+        leftBtn: <HeaderBackBtn />,
         title: 'signin.title',
     },
     [Path.SIGN_UP]: {
-        leftBtn: <HeaderBackBtn/>,
+        leftBtn: <HeaderBackBtn />,
         title: 'signup.title',
     },
     [Path.FORGOT_PASSWORD]: {
-        leftBtn: <HeaderBackBtn/>,
+        leftBtn: <HeaderBackBtn />,
         title: 'signin.forgotPasswordTitle',
     },
-    [Path.EMPLOYEE_SEARCH]: {
-        leftBtn: <HeaderBackBtn/>,
+    [Path.TECH_SEARCH]: {
+        leftBtn: <HeaderBackBtn />,
+        title: 'employeeProfile.searchTitle',
+    },
+    [Path.TECH_FILTERS_SEARCH]: {
+        leftBtn: <HeaderBackBtn />,
         title: 'employeeProfile.searchTitle',
     },
     [Path.EMPLOYEE_PROFILE]: {
-        leftBtn: <HeaderBackBtn/>,
+        leftBtn: <HeaderBackBtn />,
         title: 'employeeProfile.title',
     },
     [Path.OFFER_FORM]: {
-        leftBtn: <HeaderBackBtn/>,
+        leftBtn: <HeaderBackBtn />,
         title: 'offer.form.title',
     },
     [Path.OFFERS_SEARCH]: {
-        leftBtn: <HeaderBackBtn/>,
+        leftBtn: <HeaderBackBtn />,
         title: 'offer.searchTitle',
     },
     [Path.OFFER]: {
-        leftBtn: <HeaderBackBtn/>,
-        title: 'offer.offerViewTitle',   
+        leftBtn: <HeaderBackBtn />,
+        title: 'offer.offerViewTitle',
     },
     [Path.USER_OFFERS]: {
-        leftBtn: <HeaderBackBtn/>,
+        leftBtn: <HeaderBackBtn />,
         title: 'offer.offersList',
     },
     [Path.ACCOUNT]: {
-        leftBtn: <HeaderBackBtn/>,
+        leftBtn: <HeaderBackBtn />,
         title: 'account.account',
     },
     [Path.ERROR_PAGE]: {
-        
+
     },
     [Path.CHATS]: {
-        leftBtn: <HeaderBackBtn/>,
+        leftBtn: <HeaderBackBtn />,
         title: 'FRAT Chat',
     }
 }

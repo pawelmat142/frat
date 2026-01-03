@@ -15,7 +15,8 @@ export abstract class Path {
     // EMPLOYEE PROFILES
     public static readonly EMPLOYEE_PROFILE = '/employee-profile/:displayName';
     public static readonly EMPLOYEE_PROFILE_FORM = '/employee-profile-form';
-    public static readonly EMPLOYEE_SEARCH = '/employee-search';    
+    public static readonly TECH_SEARCH = '/tech-search';    
+    public static readonly TECH_FILTERS_SEARCH = `/tech-filters-search`;
 
     // OFFERS
     public static readonly OFFER_FORM = '/offer-form';

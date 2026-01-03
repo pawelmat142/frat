@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Search from '@mui/icons-material/Search';
 import FilterList from '@mui/icons-material/FilterList';
-import Place from '@mui/icons-material/Place';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import FloatingInput from "global/components/controls/FloatingInput";
 import IconButton from "global/components/controls/IconButon";
@@ -15,9 +14,7 @@ import { useDebouncedValue } from "global/utils/useDebouncedValue";
 import { FaLanguage } from "react-icons/fa";
 import { Utils } from "global/utils/utils";
 import { DateRange } from "@shared/interfaces/EmployeeProfileI";
-import { PositionUtil } from "@shared/utils/PositionUtil";
 import { useUserContext } from "user/UserProvider";
-import Flags from "global/components/Flags";
 
 const EmployeeSearchFilters: React.FC = () => {
 
@@ -32,7 +29,7 @@ const EmployeeSearchFilters: React.FC = () => {
     const debouncedFreeTextInput = useDebouncedValue(freeTextInput, 500);
 
     useEffect(() => {
-        ctx.setFilters({ ...ctx.filters, freeText: debouncedFreeTextInput });
+        ctx.setFiltersWithSearchAndNavigate({ ...ctx.filters, freeText: debouncedFreeTextInput });
     }, [debouncedFreeTextInput]);
 
     const openDrawer = () => {
@@ -95,7 +92,8 @@ const EmployeeSearchFilters: React.FC = () => {
                         </span>
                     </div>)}
 
-                {(!!(ctx.filters.position) || !!ctx.filters.locationCountry) && (
+{/* TODO */}
+                {/* {(!!(ctx.filters.position) || !!ctx.filters.locationCountry) && (
                     <div className="ml-2 mt-1 flex items-center gap-1">
                         <Place fontSize="inherit" className="secondary-text" />
                         {!! ctx.filters.locationCountry && (<Flags languages={[ctx.filters.locationCountry!]} size={12} />)}
@@ -103,10 +101,10 @@ const EmployeeSearchFilters: React.FC = () => {
                             <span className="xs-font">{PositionUtil.formatPosition(ctx.filters.position)}</span>
                         )}
                     </div>
-                )}
-                {(!!ctx.filters.skills?.length) && (
+                )} */}
+                {(!!ctx.filters.experience?.length) && (
                     <div className="chip-container ml-2 mt-1">
-                        {(ctx.filters.skills || []).map(skill => (
+                        {(ctx.filters.experience || []).map(skill => (
                             <div key={skill} className="search-chip tertiary">
                                 {skill}
                             </div>

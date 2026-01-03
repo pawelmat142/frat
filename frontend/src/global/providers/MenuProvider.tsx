@@ -54,8 +54,8 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         icon: <FaHome size={iconSize} />
     }, {
         label: t('nav.employees'),
-        active: !!matchPath({ path: Path.EMPLOYEE_SEARCH, end: true }, location.pathname),
-        onClick: () => navigate(Path.EMPLOYEE_SEARCH),
+        active: !!matchPath({ path: Path.TECH_FILTERS_SEARCH, end: true }, location.pathname),
+        onClick: () => navigate(Path.TECH_FILTERS_SEARCH),
         icon: <FaSearch size={iconSize} />
     }, {
         label: t('nav.offers'),

@@ -33,6 +33,7 @@ import AdminOffers from 'admin/views/offer/AdminOffers';
 import TelegramSignPage from 'auth/views/TelegramSignPage';
 import ChatsView from 'chat/views/ChatsView';
 import ChatConversationView from 'chat/views/ChatConversationView';
+import EmployeeSearchFiltersView from 'employee/views/search/EmployeeSearchFiltersView';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -73,7 +74,8 @@ const App: React.FC = () => {
 
                 {/* EMPLOYEE PROFILE */}
                 <Route path={Path.EMPLOYEE_PROFILE} element={<PageWrapper direction={1}><EmployeeProfileView /></PageWrapper>} />
-                <Route path={Path.EMPLOYEE_SEARCH} element={<PageWrapper direction={1}><EmployeeSearchView /></PageWrapper>} />
+                <Route path={Path.TECH_SEARCH} element={<PageWrapper direction={1}><EmployeeSearchView /></PageWrapper>} />
+                <Route path={Path.TECH_FILTERS_SEARCH} element={<PageWrapper direction={1}><EmployeeSearchFiltersView /></PageWrapper>} />
                 <Route path={Path.EMPLOYEE_PROFILE_FORM} element={<PageWrapper direction={1}><ProtectedRoute><EmployeeProfileFormView /></ProtectedRoute></PageWrapper>} />
 
                 {/* OFFERS */}

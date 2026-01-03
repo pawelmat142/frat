@@ -95,8 +95,9 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
         <div className="form-view relative flex flex-col">
             <form className='flex flex-col flex-1'
                 onSubmit={formRef.handleSubmit(() => { }, (errors) => {
-                    console.log('Form errors', errors);
-                    toast.error('Form submit error');
+                    console.log('Form errors', errors)
+                    // TODO translation
+                    toast.error('Form submit error')
                 })}
                 noValidate
             >

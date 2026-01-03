@@ -33,7 +33,7 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps, po
     }
 
     const search = () => {
-        ctx.setFilters(localFilters);
+        ctx.setFiltersWithSearchAndNavigate(localFilters);
         drawerCtx.close();
     }
 
@@ -47,24 +47,11 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps, po
         }
     }
 
-    const preparePosition = (): Position => {
-        if (localFilters.position) {
-            return {
-                lat: localFilters.position.lat,
-                lng: localFilters.position.lng,
-                address: localFilters.position.address
-            }
-        }
-        return position || { lat: 52.2297, lng: 21.0122 }
-    }
-
     const sortOptionItems: SelectorItem<string>[] = Object.keys(EmmployeeProfileSearchSortOptions).map((option: string) => ({
         value: option,
         label: t('employeeProfile.form.sortOptions.' + option)
     }))
 
-    const initialPosition = preparePosition();
-    
     return (
         <div className="flex flex-col px-3 pt-5 gap-1">
 
@@ -97,33 +84,10 @@ const EmployeeSearchFiltersSheet: React.FC<{ ctx: EmployeeSearchContextProps, po
                 fullWidth
             />
 
-            <PositionSelector
-                label={t("employeeProfile.form.locationPoint")}
-                className="w-full"
-                value={localFilters.position ? {
-                    lat: localFilters.position.lat || 0,
-                    lng: localFilters.position.lng || 0,
-                    fullAddress: localFilters.position.address
-                } : undefined}
-                initialPosition={initialPosition}
-                name={""}
-                onChange={(position) => {
-                    const filters = {
-                        ...localFilters,
-                        position: position ? {
-                            lat: position.lat,
-                            lng: position.lng,
-                            address: position.fullAddress
-                        } : null
-                    };
-                    setLocalFilters(filters);
-                }}
-            ></PositionSelector>
-
             <DictionarySelector
                 type="multi"
                 className="w-full"
-                valueInput={localFilters.skills}
+                valueInput={localFilters.experience}
                 onSelectMulti={items => {
                     const filters = { ...localFilters, skills: items.map(i => String(i)) };
                     setLocalFilters(filters);
