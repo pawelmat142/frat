@@ -3,7 +3,7 @@ import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
 import { EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
-import DictionarySelector from "global/components/selector/DictionarySelector";
+import CountrySelector from "global/components/selector/CountrySelector";
 import FloatingCitySearch from "global/components/controls/FloatingCitySearch";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 
@@ -12,11 +12,11 @@ interface Props {
 }
 
 const EmployeeProfileStep2: React.FC<Props> = ({ formRef }) => {
-    const { control, formState, watch, setValue } = formRef;
+    const { control, formState, setValue } = formRef;
     const { t } = useTranslation();
     const required = FormValidator.required(t);
 
-    const countryCode = watch("step2.countryCode");
+    const [countryCode, setCountryCode] = React.useState<string | null>(formRef.getValues("step2.countryCode") || null);
 
     const handleCountryChange = (newCountryCode: string | null) => {
         setValue("step2.countryCode", newCountryCode || undefined);
@@ -36,16 +36,14 @@ const EmployeeProfileStep2: React.FC<Props> = ({ formRef }) => {
                     control={control}
                     rules={required}
                     render={({ field }) => (
-                        <DictionarySelector
+                        <CountrySelector
                             className="w-full"
-                            valueInput={field.value ?? ""}
-                            onSelect={(item, el) => {
-                                const countryCode = el?.values.COUNTRY_CODE
-                                handleCountryChange(countryCode ?? null)
+                            value={field.value ?? ""}
+                            onSelect={(countryCode) => {
+                                setCountryCode(countryCode);
+                                handleCountryChange(countryCode);
                             }}
                             label={t("employeeProfile.form.residenceCountry")}
-                            code="LANGUAGES"
-                            elementLabelTranslationKey="COUNTRY_NAME"
                             fullWidth
                             required
                             error={formState.errors.step2?.countryCode}
@@ -58,18 +56,19 @@ const EmployeeProfileStep2: React.FC<Props> = ({ formRef }) => {
                     name="step2.geocodedPosition"
                     control={control}
                     rules={required}
-                    render={({ field }) => (
+                    render={({ field }) => {
+                        return (
                         <FloatingCitySearch
                             id="city"
                             label={t("employeeProfile.form.city")}
                             value={field.value}
                             onChange={(position: GeocodedPosition | null) => field.onChange(position)}
-                            countryCode={countryCode}
+                            countryCode={countryCode ?? ''}
                             fullWidth
                             required
                             error={formState.errors.step2?.geocodedPosition}
                         />
-                    )}
+                    )}}
                 />
 
                 {/* <Controller TODO Other step

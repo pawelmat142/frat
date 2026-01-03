@@ -105,9 +105,6 @@ const EmployeeProfileFormView: React.FC = () => {
             const element = globalCtx.dics.languages?.elements.find(lang => lang.values.COUNTRY_CODE === position.country?.toLocaleLowerCase());
 
             if (element) {
-
-                console.log("element:", element);
-
                 formRef.setValue("step1.phoneNumber.prefix", element.values.PHONE_PREFIX);
                 formRef.setValue("step1.communicationLanguages", [element.code]);
                 

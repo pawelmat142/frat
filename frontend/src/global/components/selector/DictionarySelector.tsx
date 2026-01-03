@@ -1,6 +1,6 @@
 
 import { useState, useEffect, forwardRef } from 'react';
-import { SelectorValue, DictionarySelectorInterface, SelectorItem } from 'global/interface/controls.interface';
+import { DictionarySelectorInterface, SelectorItem, SelectorValue } from 'global/interface/controls.interface';
 import { DictionaryI } from '@shared/interfaces/DictionaryI';
 import { DictionaryService } from 'global/services/DictionaryService';
 import Loading from '../Loading';
@@ -8,13 +8,13 @@ import { useTranslation } from 'react-i18next';
 import FloatingSelector from '../selector/FloatingSelector';
 import FloatingSelectorMulti from './FloatingSelectorMulti';
 
-interface DictionarySelectorProps<T extends SelectorValue = SelectorValue> extends DictionarySelectorInterface<T> {
+interface DictionarySelectorProps extends DictionarySelectorInterface<string> {
     disabledValues?: string[];
     elementLabelTranslationKey?: string
     showLabel?: boolean
     emitValueCode?: string;
 }
-const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
+const DictionarySelector = forwardRef((
     {
         onSelect,
         id,
@@ -31,11 +31,10 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         onSelectMulti,
         disabledValues = [],
         elementLabelTranslationKey = 'NAME',
-        emitValueCode,
         error,
         enableSearchText = true,
         showLabel
-    }: DictionarySelectorProps<T>,
+    }: DictionarySelectorProps,
     ref: React.Ref<any>
 ) => {
 
@@ -72,14 +71,14 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         return <div>{t('validation.dictionaryNotFound')}</div>;
     }
 
-    const handleSelect = (item: SelectorValue | null): void => {
+    const handleSelect = (item: string | null): void => {
         if (onSelect) {
-            const element = dictionary.elements.find(el => String(el.code) === String(item));
-            onSelect(item as T | null, element);
+            const element = dictionary.elements.find(el => el.code === item);
+            onSelect(item, element);
         }
     }
 
-    const items: SelectorItem<string & { disabled?: boolean }>[] = dictionary.elements.map(element => {
+    const items: SelectorItem<string>[] = dictionary.elements.map(element => {
         const translationKey = `dictionary.${dictionary.code}.${elementLabelTranslationKey}.${element.code}`;
         const translatedLabel = t(translationKey);
         const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
@@ -104,7 +103,7 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             center={center}
             className={className}
             value={selectedItem}
-            onSelect={handleSelect}
+            onSelect={handleSelect as (item: SelectorValue | null) => void}
             error={error}
             enableSearchText={enableSearchText}
             showLabel={showLabel}
@@ -113,12 +112,12 @@ const DictionarySelector = forwardRef(<T extends SelectorValue = SelectorValue>(
 
     if (type === 'multi') {
         // valueInput is array of selected values
-        const selectedItems: SelectorItem<T>[] = Array.isArray(valueInput)
-            ? items.filter(item => valueInput.includes(item.value)) as SelectorItem<T>[]
+        const selectedItems: SelectorItem<string>[] = Array.isArray(valueInput)
+            ? items.filter(item => valueInput.includes(item.value))
             : [];
         const handleSelectMulti = onSelectMulti ?? (() => {});
         return <FloatingSelectorMulti
-            items={items as SelectorItem<T>[]}
+            items={items}
             values={selectedItems}
             onSelect={handleSelectMulti}
             id={id}

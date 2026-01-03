@@ -25,7 +25,7 @@ export abstract class TelegramUtil {
   }
 
   private static emailByTelegram(telegramChannelId: string): string {
-    return `${telegramChannelId}@book-agency-telegram.com`;
+    return `${telegramChannelId}@telegram-frat.com`;
   }
 
   private static passwordByTelegram(telegramChannelId: string, secretKey: string): string {

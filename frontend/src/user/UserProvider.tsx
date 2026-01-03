@@ -55,6 +55,25 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			const status = await navigator.permissions.query({ name: 'geolocation' });
 			if (status.state === 'granted' || status.state === 'prompt') {
 
+				// First, try to get a quick position (low accuracy, allow cache)
+				navigator.geolocation.getCurrentPosition(
+					(p) => {
+						setPosition({
+							lat: p.coords.latitude,
+							lng: p.coords.longitude,
+						});
+					},
+					(error) => { 
+						console.error("Geolocation error:", error.message);
+					},
+					{
+						enableHighAccuracy: false,
+						timeout: 5000,
+						maximumAge: 300000, // Accept 5 min old cached position for quick start
+					}
+				);
+
+				// Then watch for more accurate updates
 				const watchId = navigator.geolocation.watchPosition(
 					(p) => {
 						const _position = {
@@ -64,13 +83,15 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 						setPosition(_position)
 					},
 					(error) => {
-						locationErrorToast();
-						console.error("Error fetching position:", error);
+						if (error.code === 1) {
+							locationErrorToast();
+						}
+						console.warn("Geolocation error:", error.message);
 					},
 					{
-						enableHighAccuracy: true, // Use GPS for higher precision
-						timeout: 10000,           // Max wait time 10s
-						maximumAge: 0             // Don't use cached position
+						enableHighAccuracy: true,
+						timeout: 30000,           // Increased to 30s for high accuracy
+						maximumAge: 60000         // Accept 1 min old position while waiting for fresh one
 					}
 				);
 				setPositionWatchId(watchId);

@@ -1,11 +1,9 @@
 import React, { useState, useRef, useEffect, forwardRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import FloatingLabel from './FloatingLabel';
 import FormError from './FormError';
 import { FloatingInputMode, FloatingInputModes } from 'global/interface/controls.interface';
 import { useDebouncedValue } from 'global/utils/useDebouncedValue';
 import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
-import { GoogleMapService } from 'global/services/GoogleMapService';
 import { GeocodedPosition } from '@shared/interfaces/MapsInterfaces';
 
 interface FloatingCitySearchProps {
@@ -24,6 +22,15 @@ interface FloatingCitySearchProps {
     countryCode?: string; // ISO country code to restrict search
 }
 
+// Prediction type for the new Places API
+interface CityPrediction {
+    placeId: string;
+    mainText: string;
+    secondaryText: string;
+    fullText: string;
+    toPlace: () => google.maps.places.Place;
+}
+
 const FloatingCitySearch = forwardRef<HTMLInputElement, FloatingCitySearchProps>(
     ({
         id,
@@ -40,18 +47,20 @@ const FloatingCitySearch = forwardRef<HTMLInputElement, FloatingCitySearchProps>
         mode = FloatingInputModes.DEFAULT,
         countryCode,
     }, ref) => {
-        const { t } = useTranslation();
         const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '';
 
         // Disable input if no country code is provided
         const isDisabled = disabled || !countryCode;
 
-        const [inputValue, setInputValue] = useState('');
-        const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
+        const [inputValue, setInputValue] = useState(value?.city || '');
+        const [predictions, setPredictions] = useState<CityPrediction[]>([]);
         const [showPredictions, setShowPredictions] = useState(false);
         const [isFocused, setIsFocused] = useState(false);
         const [isLoading, setIsLoading] = useState(false);
-        const [selectedPrediction, setSelectedPrediction] = useState<google.maps.places.AutocompletePrediction | null>(null);
+        const [selectedPrediction, setSelectedPrediction] = useState<CityPrediction | null>(null);
+        
+        // Session token for billing optimization
+        const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null);
         
         const containerRef = useRef<HTMLDivElement>(null);
         const debouncedInputValue = useDebouncedValue(inputValue, 500);
@@ -71,19 +80,36 @@ const FloatingCitySearch = forwardRef<HTMLInputElement, FloatingCitySearchProps>
 
         // Search for city predictions when debounced input changes
         useEffect(() => {
-            if (debouncedInputValue === selectedPrediction?.description) {
+            if (!isFocused 
+                || [selectedPrediction?.fullText.toLocaleLowerCase(),
+                 selectedPrediction?.mainText.toLocaleLowerCase()
+                ].includes(debouncedInputValue?.toLocaleLowerCase() || '')) {
                 return;
             }
 
             const input = debouncedInputValue?.trim();
-            if (!input || input.length < 3) {
+            if (!input || input.length < 2) {
                 setPredictions([]);
                 setShowPredictions(false);
                 return;
             }
 
             searchCities(input);
-        }, [debouncedInputValue, countryCode]);
+        }, [debouncedInputValue]);
+
+        useEffect(() => {
+            const cleanInputValue = ![
+                value?.countryCode?.toLocaleLowerCase(),
+                value?.country?.toLocaleLowerCase()
+            ].includes(countryCode?.toLocaleLowerCase())
+
+            if (cleanInputValue) {
+                setInputValue('');
+            }
+            setPredictions([]);
+            setShowPredictions(false);
+            setSelectedPrediction(null);
+        }, [countryCode]);
 
         // Close predictions on outside click
         useEffect(() => {
@@ -117,45 +143,59 @@ const FloatingCitySearch = forwardRef<HTMLInputElement, FloatingCitySearchProps>
 
             setIsLoading(true);
 
-            const places = google.maps.places as any;
-            const ServiceCtor = places.AutocompleteService;
+            try {
+                // Import the places library to access the new API
+                const { AutocompleteSuggestion, AutocompleteSessionToken } = 
+                    await google.maps.importLibrary('places') as google.maps.PlacesLibrary;
 
-            if (!ServiceCtor) {
-                setIsLoading(false);
-                return;
-            }
-
-            const service = new ServiceCtor();
-            const request: google.maps.places.AutocompletionRequest = {
-                input,
-                types: ['(cities)'], // Restrict to cities only
-            };
-
-            // Add country restriction if provided
-            if (countryCode) {
-                request.componentRestrictions = { country: countryCode };
-            }
-
-            service.getPlacePredictions(request, (
-                preds: google.maps.places.AutocompletePrediction[] | null,
-                status: google.maps.places.PlacesServiceStatus
-            ) => {
-                setIsLoading(false);
-                if (status === google.maps.places.PlacesServiceStatus.OK && preds) {
-                    setPredictions(preds);
-                    setShowPredictions(true);
-                } else {
-                    setPredictions([]);
-                    setShowPredictions(false);
+                // Create a new session token if one doesn't exist
+                if (!sessionTokenRef.current) {
+                    sessionTokenRef.current = new AutocompleteSessionToken();
                 }
-            });
+
+                // Build request using the new AutocompleteSuggestion API
+                const request: google.maps.places.AutocompleteRequest = {
+                    input,
+                    includedPrimaryTypes: ['locality', 'administrative_area_level_3', 'administrative_area_level_2'], // Cities and similar
+                    sessionToken: sessionTokenRef.current,
+                };
+
+                // Add country restriction if provided
+                if (countryCode) {
+                    request.includedRegionCodes = [countryCode.toUpperCase()];
+                }
+
+                const { suggestions } = await AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+
+                const cityPredictions: CityPrediction[] = suggestions
+                    .filter(s => s.placePrediction)
+                    .map(s => {
+                        const pred = s.placePrediction!;
+                        return {
+                            placeId: pred.placeId,
+                            mainText: pred.mainText?.text || pred.text?.text || '',
+                            secondaryText: pred.secondaryText?.text || '',
+                            fullText: pred.text?.text || '',
+                            toPlace: () => pred.toPlace(),
+                        };
+                    });
+
+                setPredictions(cityPredictions);
+                setShowPredictions(cityPredictions.length > 0);
+            } catch (error) {
+                console.error('Error fetching autocomplete suggestions:', error);
+                setPredictions([]);
+                setShowPredictions(false);
+            } finally {
+                setIsLoading(false);
+            }
         };
 
-        const selectPrediction = async (prediction: google.maps.places.AutocompletePrediction) => {
+        const selectPrediction = async (prediction: CityPrediction) => {
             if (!apiKey) return;
 
             setSelectedPrediction(prediction);
-            setInputValue(prediction.structured_formatting?.main_text || prediction.description);
+            setInputValue(prediction.mainText);
             setPredictions([]);
             setShowPredictions(false);
             setIsLoading(true);
@@ -163,50 +203,55 @@ const FloatingCitySearch = forwardRef<HTMLInputElement, FloatingCitySearchProps>
             try {
                 await GoogleMapsLoader.load(apiKey);
 
-                const placesService = new google.maps.places.PlacesService(document.createElement('div'));
+                // Use the new Place API - get the Place object from prediction
+                const place = prediction.toPlace();
                 
-                placesService.getDetails(
-                    { 
-                        placeId: prediction.place_id,
-                        fields: ['geometry', 'address_components', 'formatted_address', 'name']
-                    },
-                    async (place: google.maps.places.PlaceResult | null, status: google.maps.places.PlacesServiceStatus) => {
-                        setIsLoading(false);
-                        
-                        if (status === google.maps.places.PlacesServiceStatus.OK && place?.geometry?.location) {
-                            const lat = place.geometry.location.lat();
-                            const lng = place.geometry.location.lng();
+                // Fetch the required fields
+                await place.fetchFields({
+                    fields: ['location', 'addressComponents', 'formattedAddress', 'displayName']
+                });
 
-                            // Use GoogleMapService to parse the response into GeocodedPosition
-                            const geoPosition = GoogleMapService.parseGeocoderResponse({
-                                results: [{
-                                    ...place as any,
-                                    geometry: {
-                                        ...place.geometry,
-                                        location: { lat: () => lat, lng: () => lng }
-                                    }
-                                }]
-                            } as google.maps.GeocoderResponse);
+                // Reset session token after selection (session is complete)
+                sessionTokenRef.current = null;
 
-                            if (geoPosition) {
-                                onChange(geoPosition);
-                            } else {
-                                // Fallback: create basic position
-                                onChange({
-                                    lat,
-                                    lng,
-                                    city: prediction.structured_formatting?.main_text || prediction.description,
-                                    fullAddress: place.formatted_address,
-                                });
+                if (place.location) {
+                    const lat = place.location.lat();
+                    const lng = place.location.lng();
+
+                    // Parse address components to get city and country
+                    let city = prediction.mainText;
+                    let countryName: string | undefined;
+
+                    if (place.addressComponents) {
+                        for (const component of place.addressComponents) {
+                            if (component.types.includes('locality')) {
+                                city = component.longText || city;
                             }
-                        } else {
-                            console.error('Failed to get place details:', status);
+                            if (component.types.includes('country')) {
+                                countryName = component.longText || undefined;
+                            }
                         }
                     }
-                );
+
+                    const geoPosition: GeocodedPosition = {
+                        lat,
+                        lng,
+                        city,
+                        fullAddress: place.formattedAddress || prediction.fullText,
+                        country: countryName,
+                        countryCode: countryCode || undefined,
+                    };
+
+                    onChange(geoPosition);
+                } else {
+                    console.error('Failed to get place location');
+                }
             } catch (error) {
-                setIsLoading(false);
                 console.error('Error selecting prediction:', error);
+                // Reset session token on error too
+                sessionTokenRef.current = null;
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -299,15 +344,15 @@ const FloatingCitySearch = forwardRef<HTMLInputElement, FloatingCitySearchProps>
                     <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                         {predictions.map((prediction) => (
                             <div
-                                key={prediction.place_id}
+                                key={prediction.placeId}
                                 onClick={() => selectPrediction(prediction)}
                                 className="px-4 py-3 hover:bg-gray-100 cursor-pointer text-sm border-b border-gray-100 last:border-b-0"
                             >
                                 <div className="font-medium">
-                                    {prediction.structured_formatting?.main_text}
+                                    {prediction.mainText}
                                 </div>
                                 <div className="text-gray-500 text-xs">
-                                    {prediction.structured_formatting?.secondary_text}
+                                    {prediction.secondaryText}
                                 </div>
                             </div>
                         ))}

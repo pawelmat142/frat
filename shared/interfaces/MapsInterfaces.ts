@@ -7,6 +7,7 @@ export interface GeocodedPosition {
 	state?: string; // administrative_area_level_1
 	postcode?: string;
 	country?: string;
+	countryCode?: string;
 	fullAddress?: string;
 }
 
