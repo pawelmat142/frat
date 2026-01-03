@@ -86,14 +86,18 @@ export interface EmployeeProfileFormStep2 {
   geocodedPosition?: GeocodedPosition | null;
   locationCountries?: string[];
 
-
   // TODO remove
   skills?: string[];
   certificates?: string[];
 }
 
 export interface EmployeeProfileFormStep3 {
-  // TODO datepickers step
+
+  availabilityOption: EmployeeProfileAvailabilityOption;
+  availabilityDateRanges?: DateRange[];
+  startDate?: Date | null;
+
+  // TODO TODO remove
   locationOption: EmployeeProfileLocationOption;
   locationCountries?: string[];
   geocodedPosition?: GeocodedPosition | null;
@@ -101,6 +105,10 @@ export interface EmployeeProfileFormStep3 {
 }
 
 export interface EmployeeProfileFormStep4 {
+  skills?: string[];
+  certificates?: string[];
+
+  // TODO remove
   availabilityOption: EmployeeProfileAvailabilityOption;
   availabilityDateRanges?: DateRange[];
 }

@@ -14,10 +14,12 @@ interface CallendarsViewProps {
     onSubmit?: (result?: DateRange | null) => void;
     onCancel?: () => void;
     selectorMode?: boolean;
+    /** When true, only single date selection is allowed (end date is ignored) */
+    singleDateMode?: boolean;
     bottomSheetCtx: BottomSheetContextType;
 }
 
-const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCancel, selectorMode, bottomSheetCtx }) => {
+const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCancel, selectorMode, singleDateMode, bottomSheetCtx }) => {
 
     const { t } = useTranslation();
 
@@ -57,6 +59,12 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
 
     const handleClickDay = (day: Date) => {
         if (!selectorMode) return;
+
+        // In single date mode, only set start date
+        if (singleDateMode) {
+            setCurrentRange({ start: day, end: null });
+            return;
+        }
 
         let newRange: DateRange = { ...currentRange };
 
@@ -103,7 +111,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
                     <CallendarsViewControl
                         onFocus={() => setActiveControl('start')}
                         onRemove={() => {
-                            setCurrentRange({ start: null, end: currentRange.end || null });
+                            setCurrentRange({ start: null, end: singleDateMode ? null : (currentRange.end || null) });
                             setActiveControl('start');
                         }}
                         selected={activeControl === 'start'}
@@ -115,42 +123,44 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
                         id="start-date"
                     ></CallendarsViewControl>
 
-                    <CallendarsViewControl
-                        onFocus={() => setActiveControl('end')}
-                        onRemove={() => {
-                            setCurrentRange({ start: currentRange.start || null, end: null });
-                            if (currentRange.start) {
-                                setActiveControl('end');
-                            } else {
-                                setActiveControl('start');
+                    {!singleDateMode && (
+                        <CallendarsViewControl
+                            onFocus={() => setActiveControl('end')}
+                            onRemove={() => {
+                                setCurrentRange({ start: currentRange.start || null, end: null });
+                                if (currentRange.start) {
+                                    setActiveControl('end');
+                                } else {
+                                    setActiveControl('start');
+                                }
+                            }}
+                            selected={activeControl === 'end'}
+                            date={currentRange.end}
+                            placeholder={activeControl === 'end'
+                                ? t("callendar.control.rangeEndPlaceholder")
+                                : t('callendar.control.anytime')}
+                            label={t("callendar.control.rangeEndLabel")}
+                            id="end-date"
+                            injectRightComponent={!!currentRange.start &&
+                                <CallendarViewDurationSelector
+                                    bottomSheetCtx={bottomSheetCtx}
+                                    initial={currentRange.end ?
+                                        Math.max(1,
+                                            (currentRange.end.getFullYear() - currentRange.start.getFullYear()) * 12 +
+                                            (currentRange.end.getMonth() - currentRange.start.getMonth()))
+                                        : 1}
+                                    onSubmit={(value) => {
+                                        if (!value) {
+                                            setCurrentRange({ start: currentRange.start || null, end: null });
+                                        } else {
+                                            const endDate = new Date(currentRange.start!);
+                                            endDate.setMonth(endDate.getMonth() + value);
+                                            setCurrentRange({ start: currentRange.start || null, end: endDate });
+                                        }
+                                    }}></CallendarViewDurationSelector>
                             }
-                        }}
-                        selected={activeControl === 'end'}
-                        date={currentRange.end}
-                        placeholder={activeControl === 'end'
-                            ? t("callendar.control.rangeEndPlaceholder")
-                            : t('callendar.control.anytime')}
-                        label={t("callendar.control.rangeEndLabel")}
-                        id="end-date"
-                        injectRightComponent={!!currentRange.start &&
-                            <CallendarViewDurationSelector
-                                bottomSheetCtx={bottomSheetCtx}
-                                initial={currentRange.end ?
-                                    Math.max(1,
-                                        (currentRange.end.getFullYear() - currentRange.start.getFullYear()) * 12 +
-                                        (currentRange.end.getMonth() - currentRange.start.getMonth()))
-                                    : 1}
-                                onSubmit={(value) => {
-                                    if (!value) {
-                                        setCurrentRange({ start: currentRange.start || null, end: null });
-                                    } else {
-                                        const endDate = new Date(currentRange.start!);
-                                        endDate.setMonth(endDate.getMonth() + value);
-                                        setCurrentRange({ start: currentRange.start || null, end: endDate });
-                                    }
-                                }}></CallendarViewDurationSelector>
-                        }
-                    ></CallendarsViewControl>
+                        ></CallendarsViewControl>
+                    )}
 
                 </>)}
 

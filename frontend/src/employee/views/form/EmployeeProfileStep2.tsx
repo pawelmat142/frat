@@ -17,6 +17,7 @@ interface Props {
     initPosition?: () => void;
 }
 
+
 const EmployeeProfileStep2: React.FC<Props> = ({ formRef, initPosition }) => {
     const { control, formState, setValue, watch } = formRef;
     const { t } = useTranslation();
@@ -25,7 +26,6 @@ const EmployeeProfileStep2: React.FC<Props> = ({ formRef, initPosition }) => {
 
     const locationOption = watch("step2.locationOption");
 
-    // residenceCountry
     const tabOptions: TabSwitcherOption[] = [
         {
             label: t(`employeeProfile.form.locationOption.${EmployeeProfileLocationOptions.POSITION}.tab`),

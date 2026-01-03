@@ -269,8 +269,8 @@
       },
       "control": {
         "anytime": "Anytime",
-        "rangeEndLabel": "End",
-        "rangeStartLabel": "Start",
+        "rangeEndLabel": "to",
+        "rangeStartLabel": "from",
         "rangeEndPlaceholder": "Select end date",
         "rangeStartPlaceholder": "Select start date"
       },
@@ -486,14 +486,11 @@
         },
         "step3": {
           "label": "Step 3",
-          "title": "Skills and Certificates"
+          "title": "Availability"
         },
         "step4": {
-          "tab1": "Immediately",
-          "tab2": "From date",
-          "tab3": "Dates",
           "label": "Step 4",
-          "title": "Availability"
+          "title": "Skills and Certificates"
         },
         "title": "Employee Profile Form",
         "confirmTitle": "Confirm submission",

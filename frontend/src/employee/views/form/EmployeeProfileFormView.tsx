@@ -14,8 +14,6 @@ import { Path } from "../../../path";
 import { useEmployeeSearch } from "../search/EmployeeSearchProvider";
 import EmployeeProfileStep1 from "./EmployeeProfileStep1";
 import EmployeeProfileStep2 from "./EmployeeProfileStep2";
-import EmployeeProfileStep3 from "./EmployeeProfileStep3";
-import EmployeeProfileStep4 from "./EmployeeProfileStep4";
 import { Utils } from "global/utils/utils";
 import { useConfirm } from "global/providers/PopupProvider";
 import FormWizard from "global/components/FormWizard/FormWizard";
@@ -23,6 +21,8 @@ import { useAuthContext } from "auth/AuthProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
+import EmployeeProfileStep3 from "./EmployeeProfileStep3";
+import EmployeeProfileStep4 from "./EmployeeProfileStep4";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -65,10 +65,9 @@ const EmployeeProfileFormView: React.FC = () => {
                 certificates: []
             },
             step3: {
-                locationOption: EmployeeProfileLocationOptions.ALL_EUROPE,
-                locationCountries: [],
-                geocodedPosition: undefined,
-                locationDistanceRadius: NaN
+                availabilityOption: EmployeeProfileAvailabilityOptions.FROM_DATE,
+                availabilityDateRanges: [],
+                startDate: null,
             },
             step4: {
                 availabilityOption: EmployeeProfileAvailabilityOptions.ANYTIME,

@@ -270,8 +270,8 @@
       },
       "control": {
         "anytime": "Kiedykolwiek",
-        "rangeEndLabel": "Koniec",
-        "rangeStartLabel": "Początek",
+        "rangeEndLabel": "do",
+        "rangeStartLabel": "od",
         "rangeEndPlaceholder": "Wybierz datę zakończenia",
         "rangeStartPlaceholder": "Wybierz datę rozpoczęcia"
       },
@@ -480,11 +480,11 @@
         },
         "step3": {
           "label": "Krok 3",
-          "title": "Umiejętności i certyfikaty"
+          "title": "Dostępność"
         },
         "step4": {
           "label": "Krok 4",
-          "title": "Dostępność"
+          "title": "Umiejętności i certyfikaty"
         },
         "title": "Formularz profilu pracownika",
         "confirmTitle": "Potwierdź zapisanie profilu",

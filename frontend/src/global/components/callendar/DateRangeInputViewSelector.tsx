@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import CallendarsView from './CallendarsView';
-import { Utils } from 'global/utils/utils';
 
 interface DateRangeProps {
     value?: DateRange | null;
@@ -18,9 +17,11 @@ interface DateRangeProps {
     disabled?: boolean;
     name?: string;
     className?: string;
+    /** When true, only single date selection is allowed (end date is ignored) */
+    singleDateMode?: boolean;
 }
 
-const DateRangeInput: React.FC<DateRangeProps> = ({
+const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
     value,
     onChange,
     label,
@@ -29,6 +30,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     disabled,
     name,
     className = '',
+    singleDateMode = false,
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const popupCtx = usePopup();
@@ -44,6 +46,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
             children: <CallendarsView
                 range={value}
                 selectorMode={true}
+                singleDateMode={singleDateMode}
                 bottomSheetCtx={bottomSheetCtx}
                 onSubmit={(dateRange) => {
                     onChange?.(dateRange);
@@ -74,6 +77,13 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
         const startMonth = t(`callendar.monthShort.${range.start.getMonth()}`);
         const startDayNumber = range.start.getDate();
         let result = `${startDayNumber} ${startMonth}`;
+        
+        // In single date mode, just show the date with year
+        if (singleDateMode) {
+            result += ` ${range.start.getFullYear()}`;
+            return result;
+        }
+        
         if (range.end) {
             const endMonth = t(`callendar.monthShort.${range.end.getMonth()}`);
             const endDayNumber = range.end.getDate();
@@ -117,4 +127,4 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     );
 };
 
-export default DateRangeInput;
+export default DateRangeInputViewSelector;
