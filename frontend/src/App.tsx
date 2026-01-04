@@ -20,9 +20,9 @@ import ProfilePage from 'user/views/AccountView';
 import ForgotPassword from 'auth/views/ForgotPassword';
 import { ProtectedRoute } from 'auth/ProtectedRoute';
 import { UserRoles } from '@shared/interfaces/UserI';
-import EmployeeProfileFormView from 'employee/views/form/EmployeeProfileFormView';
+import WorkerFormView from 'employee/views/form/WorkerFormView';
 import AdminFeedbacks from 'admin/views/feedback/AdminFeedbacks';
-import EmployeeSearchView from 'employee/views/search/EmployeeSearchView';
+import WorkersSearchView from 'employee/views/search/WorkersSearchView';
 import AdminEmployeeProfiles from 'admin/views/employee_profiles/AdminEmployeeProfiles';
 import EmployeeProfileView from 'employee/views/profile/EmployeeProfileView';
 import OfferFormView from 'offer/views/form/OfferFormView';
@@ -33,7 +33,7 @@ import AdminOffers from 'admin/views/offer/AdminOffers';
 import TelegramSignPage from 'auth/views/TelegramSignPage';
 import ChatsView from 'chat/views/ChatsView';
 import ChatConversationView from 'chat/views/ChatConversationView';
-import EmployeeSearchFiltersView from 'employee/views/search/EmployeeSearchFiltersView';
+import WorkersSearchFiltersView from 'employee/views/search/WorkersSearchFiltersView';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -73,10 +73,10 @@ const App: React.FC = () => {
                 <Route path={Path.CHAT_CONVERSATION} element={<PageWrapper direction={1}><ProtectedRoute><ChatConversationView /></ProtectedRoute></PageWrapper>} />
 
                 {/* EMPLOYEE PROFILE */}
-                <Route path={Path.EMPLOYEE_PROFILE} element={<PageWrapper direction={1}><EmployeeProfileView /></PageWrapper>} />
-                <Route path={Path.TECH_SEARCH} element={<PageWrapper direction={1}><EmployeeSearchView /></PageWrapper>} />
-                <Route path={Path.TECH_FILTERS_SEARCH} element={<PageWrapper direction={1}><EmployeeSearchFiltersView /></PageWrapper>} />
-                <Route path={Path.EMPLOYEE_PROFILE_FORM} element={<PageWrapper direction={1}><ProtectedRoute><EmployeeProfileFormView /></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.WORKER} element={<PageWrapper direction={1}><EmployeeProfileView /></PageWrapper>} />
+                <Route path={Path.WORKERS_SEARCH} element={<PageWrapper direction={1}><WorkersSearchView /></PageWrapper>} />
+                <Route path={Path.WORKERS_FILTERS_SEARCH} element={<PageWrapper direction={1}><WorkersSearchFiltersView /></PageWrapper>} />
+                <Route path={Path.WORKER_FORM} element={<PageWrapper direction={1}><ProtectedRoute><WorkerFormView /></ProtectedRoute></PageWrapper>} />
 
                 {/* OFFERS */}
                 <Route path={Path.OFFER_FORM} element={<PageWrapper direction={1}><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />

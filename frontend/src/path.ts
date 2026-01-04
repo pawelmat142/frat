@@ -13,10 +13,10 @@ export abstract class Path {
     public static readonly CHAT_CONVERSATION = '/chat/:chatId';
 
     // EMPLOYEE PROFILES
-    public static readonly EMPLOYEE_PROFILE = '/employee-profile/:displayName';
-    public static readonly EMPLOYEE_PROFILE_FORM = '/employee-profile-form';
-    public static readonly TECH_SEARCH = '/tech-search';    
-    public static readonly TECH_FILTERS_SEARCH = `/tech-filters-search`;
+    public static readonly WORKER = '/worker/:displayName';
+    public static readonly WORKER_FORM = '/worker-form';
+    public static readonly WORKERS_SEARCH = '/workers-search';    
+    public static readonly WORKERS_FILTERS_SEARCH = `/workers-filters-search`;
 
     // OFFERS
     public static readonly OFFER_FORM = '/offer-form';
@@ -46,7 +46,7 @@ export abstract class Path {
     public static getEditDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES_EDIT.replace(':code', code)}`;
     public static getDictionaryGroupFormPath = (dictionaryCode: string, groupCode: string) => `${Path.ADMIN_DICTIONARIES_GROUP.replace(':dictionaryCode', dictionaryCode).replace(':groupCode', groupCode)}`;
     public static getAccountPath = (uid: string) => `${Path.ACCOUNT.replace(':uid', uid)}`;
-    public static getEmployeeProfilePath = (displayName: string) => `${Path.EMPLOYEE_PROFILE.replace(':displayName', displayName)}`;
+    public static getEmployeeProfilePath = (displayName: string) => `${Path.WORKER.replace(':displayName', displayName)}`;
     public static getOfferPath = (offerId: number) => `${Path.OFFER.replace(':offerId', `${offerId}`)}`;
     public static getOffersPath = (uid: string) => `${Path.USER_OFFERS.replace(':uid', uid)}`;
     public static getOfferFormEditPath = (offerId: number) => `${Path.OFFER_FORM_EDIT.replace(':offerId', `${offerId}`)}`;

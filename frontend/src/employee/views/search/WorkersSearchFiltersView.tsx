@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import Loading from "global/components/Loading";
 import { EmployeeSearchContextProps, EPDefaultFilters, useEmployeeSearch } from "./EmployeeSearchProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import { DateRange, EmmployeeProfileSearchSortOptions, EmployeeProfileSearchFilters, PROFILE_DEFAULT_SORT_OPTION } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, EmmployeeProfileSearchSortOptions, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
 import { BtnModes, BtnSizes, SelectorItem } from "global/interface/controls.interface";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 import { Controller, useForm } from "react-hook-form";
@@ -13,7 +13,7 @@ import CountrySelector from "global/components/selector/CountrySelector";
 import FloatingInput from "global/components/controls/FloatingInput";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 
-const EmployeeSearchFiltersView: React.FC = () => {
+const WorkersSearchFiltersView: React.FC = () => {
 
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
@@ -221,4 +221,4 @@ const EmployeeSearchFiltersView: React.FC = () => {
 }
 
 
-export default EmployeeSearchFiltersView;
+export default WorkersSearchFiltersView;

@@ -14,7 +14,7 @@ export const STATES: { [key: string]: ViewState } = {
     [Path.HOME]: {
         leftBtn: <MainHeaderState />,
     },
-    [Path.EMPLOYEE_PROFILE_FORM]: {
+    [Path.WORKER_FORM]: {
         leftBtn: <HeaderBackBtn />,
         title: 'employeeProfile.form.title',
     },
@@ -30,15 +30,15 @@ export const STATES: { [key: string]: ViewState } = {
         leftBtn: <HeaderBackBtn />,
         title: 'signin.forgotPasswordTitle',
     },
-    [Path.TECH_SEARCH]: {
+    [Path.WORKERS_SEARCH]: {
         leftBtn: <HeaderBackBtn />,
         title: 'employeeProfile.searchTitle',
     },
-    [Path.TECH_FILTERS_SEARCH]: {
+    [Path.WORKERS_FILTERS_SEARCH]: {
         leftBtn: <HeaderBackBtn />,
         title: 'employeeProfile.searchTitle',
     },
-    [Path.EMPLOYEE_PROFILE]: {
+    [Path.WORKER]: {
         leftBtn: <HeaderBackBtn />,
         title: 'employeeProfile.title',
     },

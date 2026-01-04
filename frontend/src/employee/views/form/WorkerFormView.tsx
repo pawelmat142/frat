@@ -30,7 +30,7 @@ type StepKey = 'step1' | 'step2' | 'step3' | 'step4';
 
 const STEPS_ORDER: StepKey[] = ['step1', 'step2', 'step3', 'step4'];
 
-const EmployeeProfileFormView: React.FC = () => {
+const WorkerFormView: React.FC = () => {
 
     const { t } = useTranslation();
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -302,4 +302,4 @@ const EmployeeProfileFormView: React.FC = () => {
     );
 }
 
-export default EmployeeProfileFormView;
+export default WorkerFormView;

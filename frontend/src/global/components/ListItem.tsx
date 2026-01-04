@@ -5,13 +5,24 @@ interface Props {
     imgUrl?: string;
     topLeft: string
     topRight?: React.ReactNode
-    bottomLeft: string
+    bottomLeft: React.ReactNode
     bottomRight?: React.ReactNode
     first?: boolean
     last?: boolean
+
+    rightSection?: React.ReactNode
 }
 
-const ListItem: React.FC<Props> = ({ imgUrl, topLeft, topRight, bottomLeft, bottomRight, first, last }) => {
+const ListItem: React.FC<Props> = ({
+    imgUrl,
+    topLeft,
+    topRight,
+    bottomLeft,
+    bottomRight,
+    first,
+    last,
+    rightSection
+}) => {
 
     return (
         <div className={`list-view-item${first ? ' first' : ''}${last ? ' last' : ''}`}>
@@ -27,11 +38,12 @@ const ListItem: React.FC<Props> = ({ imgUrl, topLeft, topRight, bottomLeft, bott
 
                 {/* BOTTOM */}
                 <div className="flex justify-between">
-                    <div className="small-font secondary-text mt-1">{bottomLeft}</div>
+                    {bottomLeft}
                     {bottomRight}
                 </div>
 
             </div>
+            {rightSection}
         </div>
     )
 }

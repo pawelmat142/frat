@@ -43,7 +43,7 @@ const EmployeeSearchFilters: React.FC = () => {
 
     const setupHeaderMenu = () => {
         globalCtx.setHeaderMenu(<IconButton icon={<FilterList onClick={() => {
-            navigate(Path.TECH_FILTERS_SEARCH)
+            navigate(Path.WORKERS_FILTERS_SEARCH)
         }} />} />);
     }
     useEffect(() => {

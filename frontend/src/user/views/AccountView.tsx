@@ -118,7 +118,7 @@ const AccountView: React.FC = () => {
         if (employeeProfile) {
             navigate(Path.getEmployeeProfilePath(employeeProfile.displayName));
         } else {
-            navigate(Path.EMPLOYEE_PROFILE_FORM);
+            navigate(Path.WORKER_FORM);
         }
     };
 

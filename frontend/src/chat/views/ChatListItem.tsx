@@ -36,13 +36,15 @@ const ChatListItem: React.FC<Props> = ({ chat, otherMember: otherMember, first, 
         return null;
     }
 
+    const bottomLeft = <div className="small-font secondary-text mt-1">
+        {chat.latestMessageContent || t('chat.joinedAt', {date: DateUtil.displayDate(otherMember?.joinedAt || chat.createdAt)})}
+    </div>
+
     return (<ListItem
         imgUrl={otherMember?.user.avatarRef?.url || AVATAR_MOCK}
         topLeft={otherMember?.user.displayName || t('chat.unknownUser')}
         topRight={topRight}
-        bottomLeft={chat.latestMessageContent || t('chat.joinedAt', {
-            date: DateUtil.displayDate(otherMember?.joinedAt || chat.createdAt)
-        })}
+        bottomLeft={bottomLeft}
         bottomRight={getReadStatusBadge()}
         first={first}
         last={last}

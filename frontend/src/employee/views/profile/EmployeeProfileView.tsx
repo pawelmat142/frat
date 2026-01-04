@@ -200,7 +200,7 @@ const EmployeeProfileView: React.FC = () => {
     }
 
     const goToEditForm = () => {
-        navigate(Path.EMPLOYEE_PROFILE_FORM);
+        navigate(Path.WORKER_FORM);
     }
 
     const range = DateRangeUtil.getFirstRange(profile);

@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
-import EmployeeProfileTile from "employee/components/EmployeeProfileTile";
 import Loading from "global/components/Loading";
 import { useEmployeeSearch } from "./EmployeeSearchProvider";
 import EmployeeSearchFilters from "./EmployeeSearchFilters";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
+import { FaUserSlash } from "react-icons/fa";
+import WorkerListItem from "employee/components/WorkerListItem";
 
 const EmployeeSearchView: React.FC = () => {
 
@@ -24,7 +25,7 @@ const EmployeeSearchView: React.FC = () => {
     const initialLoading = ctx.loading && ctx.results.length === 0;
     const noResults = !initialLoading && ctx.results.length === 0;
     const showEndOfResults = !initialLoading && !ctx.loadingMore && !ctx.hasMore && ctx.results.length > 0;
-    
+
     return (
         <div className="list-view pt-0">
 
@@ -38,21 +39,21 @@ const EmployeeSearchView: React.FC = () => {
                 </div>
             ) : noResults ? (
                 <div className="flex flex-col items-center justify-center mt-20">
+                    <FaUserSlash className="mx-auto text-4xl mb-2 opacity-50" />
                     <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
                 </div>
             ) : (
                 <div className="results flex flex-col gap-1">
                     {(ctx.results ?? []).map((profile, index) => (
-                        <EmployeeProfileTile
-                            // key={profile.employeeProfileId}
+                        <WorkerListItem
                             key={index}
                             profile={profile}
                             languagesDictionary={globalCtx.dics.languages!}
                             first={index === 0}
                             last={index === (ctx.results?.length ?? 0) - 1}
-                        />
+                        ></WorkerListItem>
                     ))}
-                    <InfiniteScrollEventEmitter emitEvent={ctx.loadMore}/>
+                    <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} />
                 </div>
             )}
 

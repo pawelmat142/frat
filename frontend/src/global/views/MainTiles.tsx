@@ -30,7 +30,7 @@ const MainTiles: React.FC = () => {
                         <div>{t("signin.submit")}</div>
                     </div>
                 )}
-                <div className="square-tile col-tile" onClick={() => navigate(Path.TECH_FILTERS_SEARCH)}>
+                <div className="square-tile col-tile" onClick={() => navigate(Path.WORKERS_FILTERS_SEARCH)}>
                     <FaSearch size={iconSize} />
                     <div>{t("employeeProfile.search")}</div>
                 </div>
@@ -47,7 +47,7 @@ const MainTiles: React.FC = () => {
                                 <div>{t("profile.tile")}</div>
                             </div>
                         ) : (
-                            <div className="square-tile col-tile" onClick={() => navigate(Path.EMPLOYEE_PROFILE_FORM)}>
+                            <div className="square-tile col-tile" onClick={() => navigate(Path.WORKER_FORM)}>
                                 <FaUserPlus size={iconSize} />
                                 <div>{t("profile.add")}</div>
                             </div>

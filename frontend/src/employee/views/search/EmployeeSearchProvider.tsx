@@ -103,7 +103,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }, [userCtx.position]);
 
     useEffect(() => {
-        if (!location.pathname.includes(Path.TECH_SEARCH)) {
+        if (!location.pathname.includes(Path.WORKERS_SEARCH)) {
             return
         }
         const newFilters = {
@@ -131,7 +131,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const newUrl = searchStr ? `?${searchStr}` : ''
 
         if (newUrl !== location.search) {
-            navigate({ pathname: Path.TECH_SEARCH, search: newUrl })
+            navigate({ pathname: Path.WORKERS_SEARCH, search: newUrl })
         }
     }
 
