@@ -24,7 +24,6 @@ export class SearchWorkersService {
         let hasFilter = false;
 
         this.addBasicFilters(baseQueryBuilder, filters, hasFilter);
-        // this.addFuzzySearchFilter(baseQueryBuilder, filters, hasFilter);
         this.addDateRangeFilter(baseQueryBuilder, filters, hasFilter);
         this.addPositionFilter(baseQueryBuilder, filters, hasFilter);
 
@@ -40,7 +39,7 @@ export class SearchWorkersService {
             .select('profile.worker_id', 'id')
             .groupBy('profile.worker_id');
 
-        this.addSortingForIds(idsQueryBuilder, filters);
+        // this.addSortingForIds(idsQueryBuilder, filters);
         this.addPagination(idsQueryBuilder, filters);
 
         const idsResult = await idsQueryBuilder.getRawMany();
@@ -51,7 +50,7 @@ export class SearchWorkersService {
             .leftJoinAndSelect('profile.availabilityDateRanges', 'ranges')
             .whereInIds(profileIds);
 
-        this.addSortingById(resultsQueryBuilder, profileIds);
+        // this.addSortingById(resultsQueryBuilder, profileIds);
 
         const results = await resultsQueryBuilder.getMany();
 
@@ -113,7 +112,8 @@ export class SearchWorkersService {
         } else if (filters.startDate) {
             // Only startDate provided - compare with worker's start_date only
             baseQueryBuilder.andWhere(`(
-                profile.start_date IS NULL
+                profile.availability_option = '${WorkerAvailabilityOptions.ANYTIME}'
+                OR profile.start_date IS NULL
                 OR profile.start_date <= :startDate::date
             )`, {
                 startDate: filters.startDate
@@ -122,7 +122,6 @@ export class SearchWorkersService {
         }
     }
 
-    // TODO sortowanie po start date jakoś koślawo działa
     private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters) {
         switch (filters.sortBy) {
             case WorkerSearchSortOptions.START_FROM_ASC:
@@ -147,21 +146,6 @@ export class SearchWorkersService {
                     .addSelect('MIN(profile.created_at)', 'sort_created_at')
                     .addOrderBy('sort_created_at', SearchUtil.ASC);
                 break;
-
-            // case EmmployeeProfileSearchSortOptions.DISTANCE_ASC:
-            //     if (filters.position) {
-            //         idsQueryBuilder
-            //             .addSelect(`
-            //                 ST_Distance(
-            //                     profile.point::geography,
-            //                     ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography
-            //                 )
-            //             `, 'distance_meters')
-            //             .addOrderBy('distance_meters', SearchUtil.ASC, 'NULLS FIRST')
-            //             .setParameter('lng', filters.position.lng)
-            //             .setParameter('lat', filters.position.lat);
-            //     }
-            //     break;
         }
 
         // add views count sorting
@@ -197,8 +181,6 @@ export class SearchWorkersService {
     }
 
     private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
-        // Location country filter: ALL_EUROPE or country in locationCountries array
-        // TODO fuzzy po full adress dodać
         if (filters.locationCountry) {
             baseQueryBuilder.andWhere(`(
                 profile.location_option = '${WorkerLocationOptions.ALL_EUROPE}'
@@ -208,19 +190,12 @@ export class SearchWorkersService {
             });
             hasFilter = true;
         }
-    }
-
-
-    private addFuzzySearchFilter(queryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
-        // Free text fuzzy search
-        if (filters.freeText && filters.freeText.trim().length > 1) {
+        if (filters.freeText) {
             const freeText = `%${filters.freeText.trim().toLowerCase()}%`;
-            queryBuilder.andWhere(`(
+            baseQueryBuilder.andWhere(`(
                 LOWER(profile.full_address) ILIKE :freeText
             )`, { freeText });
-            hasFilter = true;
         }
     }
-
 
 }

@@ -153,8 +153,6 @@ const WorkerFormView: React.FC = () => {
 
     const initFormFromProfile = async () => {
         if (!worker) return;
-
-        // TODO verify edit profile option!!!
         // Load from employeeProfile if it exists
         let locationDistancePosition: any = undefined;
         if (worker.point && Array.isArray(worker.point.coordinates)) {
@@ -242,6 +240,7 @@ const WorkerFormView: React.FC = () => {
             userCtx.initWorker();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
+            navigate(-1)
         } catch (error) {
             console.error("Error updating employee profile:", error);
         } finally {
