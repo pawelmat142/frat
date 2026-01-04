@@ -28,7 +28,7 @@ const TranslationsSection: React.FC = () => {
     const confirm = useConfirm();
     const ctx = userAdminPanelContext();
     const translation = ctx?.translation;
-    
+
     const itemsPerPage = 15;
 
     if (!translation?.translations) {
@@ -100,7 +100,7 @@ const TranslationsSection: React.FC = () => {
         }
     }
 
- 
+
     const removeTranslation = async (key: string) => {
         const confirmed = await confirm({
             title: 'Confirm Deletion',
@@ -146,8 +146,8 @@ const TranslationsSection: React.FC = () => {
         if (!searchText) return true;
         const value = ObjUtil.getValueFromNestedJsonByPath(selectedTranslation?.data, key);
         const lowerSearch = searchText.toLowerCase();
-        return key.toLowerCase().includes(lowerSearch) || 
-               (typeof value === 'string' && value.toLowerCase().includes(lowerSearch));
+        return key.toLowerCase().includes(lowerSearch) ||
+            (typeof value === 'string' && value.toLowerCase().includes(lowerSearch));
     });
 
     // Pagination
@@ -200,9 +200,9 @@ const TranslationsSection: React.FC = () => {
             {/* Search input and Pagination in one row */}
             <div className="flex gap-4 mb-4 items-center">
                 <div className="flex-[1]">
-                    <Input 
-                        name="search" 
-                        label="Search translations" 
+                    <Input
+                        name="search"
+                        label="Search translations"
                         fullWidth
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
@@ -210,8 +210,8 @@ const TranslationsSection: React.FC = () => {
                 </div>
                 {totalPages > 1 && (
                     <div className="flex-[2] flex justify-end items-center gap-4">
-                        <Button 
-                            mode={BtnModes.PRIMARY_TXT} 
+                        <Button
+                            mode={BtnModes.PRIMARY_TXT}
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                         >
@@ -220,8 +220,8 @@ const TranslationsSection: React.FC = () => {
                         <span className="secondary-text whitespace-nowrap">
                             Page {currentPage} of {totalPages} ({filteredKeys.length} {searchText ? 'filtered' : 'total'} items)
                         </span>
-                        <Button 
-                            mode={BtnModes.PRIMARY_TXT} 
+                        <Button
+                            mode={BtnModes.PRIMARY_TXT}
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
                         >
@@ -280,8 +280,9 @@ const TranslationsSection: React.FC = () => {
                                                 </div>
                                             </td>
                                         </tr>
+
                                         {isEditing && (
-                                            <tr>
+                                            <tr className='border-b-2'>
                                                 <td colSpan={isDefaultLangSelected ? 3 : 4}>
                                                     <div className="flex gap-5 mb-2 mt-2 px-6 py-3 items-center">
                                                         <Input name="key" label="Key" className="flex-1" fullWidth

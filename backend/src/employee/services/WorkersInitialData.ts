@@ -232,6 +232,7 @@ const fillAvailabilityRanges = (profile: DeepPartial<WorkerI>) => {
             rangesJ.push(dr);
         }
         profile.availabilityDateRanges = rangesI;
+        profile.startDate = DateRangeUtil.findEarliestDate(rangesI)
     }
 }
 
@@ -295,7 +296,10 @@ export const WorkersInitialData = (): DeepPartial<WorkerEntity>[] => {
             availabilityOption,
             availabilityDateRanges: availabilityOption === WorkerAvailabilityOptions.DATE_RANGES ? [] : undefined,
             rangesOption: availabilityOption === WorkerAvailabilityOptions.DATE_RANGES ? rangesOption : undefined,
-            startDate: availabilityOption === WorkerAvailabilityOptions.FROM_DATE ? startDate : null,
+            startDate: availabilityOption === WorkerAvailabilityOptions.FROM_DATE 
+            ? startDate 
+            : availabilityOption === WorkerAvailabilityOptions.ANYTIME 
+            ? new Date() : undefined,
             jobs: numberToStringList(getRandomNumberFromTo(0, 20, globalIndex)).map(n => `job-${n}`),
             views: numberToStringList(getRandomNumberFromTo(30, 100, globalIndex)).map(n => `view-${n}`),
             fullAddress: adress.fullAddress,
@@ -317,8 +321,6 @@ export const WorkersInitialData = (): DeepPartial<WorkerEntity>[] => {
 
         return profile;
     };
-
-    
 
     const generatedProfiles = Array.from({ length: 50 }, (_, index) => createGeneratedProfile(index));
     result.push(...generatedProfiles);

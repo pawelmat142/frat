@@ -60,10 +60,11 @@ function clearCache() {
 
 export const TranslationService = {
     async getTranslation(langCode: string): Promise<TranslationI> {
-        const cached = getCachedTranslation(langCode);
-        if (cached) {
-            return Promise.resolve(cached);
-        }
+        // TODO switch on caching translations
+        // const cached = getCachedTranslation(langCode);
+        // if (cached) {
+        //     return Promise.resolve(cached);
+        // }
         const response = await httpClient.get<TranslationI>(`/get-translations/${langCode}`, { skipAuth: true });
         setCachedTranslation(langCode, response);
         return response;

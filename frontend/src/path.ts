@@ -39,7 +39,7 @@ export abstract class Path {
     public static readonly ADMIN_TRANSLATIONS = `${Path.ADMIN_PANEL}/translations`;
     public static readonly ADMIN_USERS = `${Path.ADMIN_PANEL}/users`;
     public static readonly ADMIN_FEEDBACKS = `${Path.ADMIN_PANEL}/feedbacks`;
-    public static readonly ADMIN_EMPLOYEE_PROFILES = `${Path.ADMIN_PANEL}/employee-profiles`;
+    public static readonly ADMIN_EMPLOYEE_PROFILES = `${Path.ADMIN_PANEL}/workers`;
     public static readonly ADMIN_OFFERS = `${Path.ADMIN_PANEL}/offers`;
 
     public static getDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES}/${code}`;

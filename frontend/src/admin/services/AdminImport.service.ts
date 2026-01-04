@@ -15,7 +15,7 @@ export const AdminImportService = {
 	},
 
 	exportEmployeeProfilesJson(): Promise<void> {
-		const url = `/admin/import/employee-profiles/export`
+		const url = `/admin/import/workers/export`
 		let defaultFilename = `employee_profiles.json`;
 		return this.exportJson(url, defaultFilename);
 	},
