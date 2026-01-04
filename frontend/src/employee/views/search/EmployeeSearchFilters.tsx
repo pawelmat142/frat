@@ -1,53 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import Search from '@mui/icons-material/Search';
 import FilterList from '@mui/icons-material/FilterList';
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import FloatingInput from "global/components/controls/FloatingInput";
 import IconButton from "global/components/controls/IconButon";
-import { BtnModes, FloatingInputModes } from "global/interface/controls.interface";
 import { useEmployeeSearch } from "./EmployeeSearchProvider";
-import { useDrawer } from "global/providers/DrawerProvider";
-import EmployeeSearchFiltersSheet from "./EmployeeSearchFiltersSheet";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import { useDebouncedValue } from "global/utils/useDebouncedValue";
 import { FaLanguage } from "react-icons/fa";
 import { Utils } from "global/utils/utils";
 import { DateRange } from "@shared/interfaces/EmployeeProfileI";
-import { useUserContext } from "user/UserProvider";
+import { Place } from "@mui/icons-material";
+import Flags from "global/components/Flags";
+import { useNavigate } from "react-router-dom";
+import { Path } from "../../../path";
 
 const EmployeeSearchFilters: React.FC = () => {
 
     const globalCtx = useGlobalContext();
     const languagesDictionary = globalCtx.dics.languages;
     const { t } = useTranslation();
-    const [freeTextInput, setFreeTextInput] = useState('');
     const ctx = useEmployeeSearch();
-    const userCtx = useUserContext();
-    const { open } = useDrawer();
-
-    const debouncedFreeTextInput = useDebouncedValue(freeTextInput, 500);
-
-    useEffect(() => {
-        ctx.setFiltersWithSearchAndNavigate({ ...ctx.filters, freeText: debouncedFreeTextInput });
-    }, [debouncedFreeTextInput]);
-
-    const openDrawer = () => {
-        open({
-            title: t("common.filters"),
-            children: <EmployeeSearchFiltersSheet ctx={ctx} position={userCtx.position} />,
-            showClose: true,
-        });
-    }
+    const navigate = useNavigate();
 
     const flags = languagesDictionary
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.communicationLanguages || [], languagesDictionary))
         : [];
 
-    const countryFlagSrc = ctx.filters.locationCountry
-        ? languagesDictionary?.elements.find(el => el.code === ctx.filters.locationCountry)?.values.SRC
-        : null;
-
+    const locationCountryDictionaryCode = languagesDictionary?.elements.find(e => e.values.COUNTRY_CODE === ctx.filters.locationCountry)?.code;
 
     const formatFromTo = (range?: DateRange | null): string | null => {
         if (!range?.start) return null;
@@ -63,72 +41,69 @@ const EmployeeSearchFilters: React.FC = () => {
         return result;
     }
 
+    const setupHeaderMenu = () => {
+        globalCtx.setHeaderMenu(<IconButton icon={<FilterList onClick={() => {
+            navigate(Path.TECH_FILTERS_SEARCH)
+        }} />} />);
+    }
+    useEffect(() => {
+        setupHeaderMenu();
+    }, [])
+
     return (
         <div className="filters-container">
-            <div className="flex justify-between gap-5 w-full">
-                <FloatingInput
-                    mode={FloatingInputModes.THIN}
-                    name="freeText"
-                    value={freeTextInput}
-                    onChange={e => {
-                        setFreeTextInput(e.target.value);
-                    }}
-                    label={t("employeeProfile.form.freeText")}
-                    fullWidth
-                    icon={<Search />}
-                />
+            <div className="flex gap-3 w-full px-2 pb-1 flex-wrap">
 
-                <div className="flex items-center">
-                    <IconButton mode={BtnModes.PRIMARY} icon={<FilterList />} aria-label="Filters" onClick={openDrawer} />
-                </div>
-            </div>
-
-            <div className="flex gap-x-3 flex-wrap items-center">
                 {!!ctx.filters.startDate && (
-                    <div className="ml-2 mt-1 flex items-center gap-1">
+                    <div className="flex items-center gap-1">
                         <DateRangeIcon fontSize="inherit" className="secondary-text" />
                         <span className="xs-font">
                             {formatFromTo({ start: ctx.filters.startDate, end: ctx.filters.endDate })}
                         </span>
                     </div>)}
 
-{/* TODO */}
-                {/* {(!!(ctx.filters.position) || !!ctx.filters.locationCountry) && (
-                    <div className="ml-2 mt-1 flex items-center gap-1">
+                {(!!ctx.filters.locationCountry) && (
+                    <div className="flex items-center gap-1">
                         <Place fontSize="inherit" className="secondary-text" />
-                        {!! ctx.filters.locationCountry && (<Flags languages={[ctx.filters.locationCountry!]} size={12} />)}
-                        {!!(ctx.filters.position) && (
-                            <span className="xs-font">{PositionUtil.formatPosition(ctx.filters.position)}</span>
+                        {!!ctx.filters.locationCountry && (<Flags languages={[locationCountryDictionaryCode!]} size={12} />)}
+                        {!!(ctx.filters.freeText) && (
+                            <span className="xs-font">{ctx.filters.freeText}</span>
                         )}
-                    </div>
-                )} */}
-                {(!!ctx.filters.experience?.length) && (
-                    <div className="chip-container ml-2 mt-1">
-                        {(ctx.filters.experience || []).map(skill => (
-                            <div key={skill} className="search-chip tertiary">
-                                {skill}
-                            </div>
-                        ))}
                     </div>
                 )}
 
-                {(!!ctx.filters.certificates?.length) && (
-                    <div className="chip-container ml-2 mt-1">
-                        {(ctx.filters.certificates || []).map(cert => (
-                            <div key={cert} className="search-chip secondary">
-                                {cert}
-                            </div>
-                        ))}
-                    </div>
-                )}
                 {!!flags?.length && (
-                    <div className="chip-container mt-1 ml-2">
+                    <div className="chip-container">
                         <FaLanguage className="secondary-text" />
                         {(flags).map((src, index) => (
                             <img key={index} className="filters-flag-chip pl-1" src={src} alt={"flag-" + index} />
                         ))}
                     </div>
                 )}
+                <div className="flex items-center">
+                    {(!!ctx.filters.experience?.length) && (
+                        <div className="chip-container">
+                            {(ctx.filters.experience || []).map(skill => (
+                                <div key={skill} className="search-chip tertiary">
+                                    {skill}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex items-center">
+                    {(!!ctx.filters.certificates?.length) && (
+                        <div className="chip-container">
+                            {(ctx.filters.certificates || []).map(cert => (
+                                <div key={cert} className="search-chip secondary">
+                                    {cert}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                </div>
             </div>
 
         </div>

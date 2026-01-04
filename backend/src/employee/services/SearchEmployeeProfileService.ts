@@ -25,9 +25,9 @@ export class SearchEmployeeProfileService {
         let hasFilter = false;
 
         this.addBasicFilters(baseQueryBuilder, filters, hasFilter);
-        this.addFuzzySearchFilter(baseQueryBuilder, filters, hasFilter);
+        // this.addFuzzySearchFilter(baseQueryBuilder, filters, hasFilter);
         this.addDateRangeFilter(baseQueryBuilder, filters, hasFilter);
-        this.addPositionFilter(baseQueryBuilder, filters, hasFilter);
+        // this.addPositionFilter(baseQueryBuilder, filters, hasFilter);
 
         const count: number = await this.getCount(baseQueryBuilder);
 
@@ -89,20 +89,20 @@ export class SearchEmployeeProfileService {
                     .addOrderBy('sort_created_at', SearchUtil.ASC);
                 break;
 
-            case EmmployeeProfileSearchSortOptions.DISTANCE_ASC:
-                if (filters.position) {
-                    idsQueryBuilder
-                        .addSelect(`
-                            ST_Distance(
-                                profile.point::geography,
-                                ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography
-                            )
-                        `, 'distance_meters')
-                        .addOrderBy('distance_meters', SearchUtil.ASC, 'NULLS FIRST')
-                        .setParameter('lng', filters.position.lng)
-                        .setParameter('lat', filters.position.lat);
-                }
-                break;
+            // case EmmployeeProfileSearchSortOptions.DISTANCE_ASC:
+            //     if (filters.position) {
+            //         idsQueryBuilder
+            //             .addSelect(`
+            //                 ST_Distance(
+            //                     profile.point::geography,
+            //                     ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography
+            //                 )
+            //             `, 'distance_meters')
+            //             .addOrderBy('distance_meters', SearchUtil.ASC, 'NULLS FIRST')
+            //             .setParameter('lng', filters.position.lng)
+            //             .setParameter('lat', filters.position.lat);
+            //     }
+            //     break;
         }
 
         // add views count sorting
@@ -137,23 +137,23 @@ export class SearchEmployeeProfileService {
         queryBuilder.offset(skip).limit(limit);
     }
 
-    private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
-        // Position-based filtering: within 1000km radius OR ALL_EUROPE option
-        if (filters.position) {
-            baseQueryBuilder.andWhere(`(
-                profile.location_option = '${EmployeeProfileLocationOptions.ALL_EUROPE}'
-                OR ST_DWithin(
-                    profile.point,
-                    ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography,
-                    ${DEFAULT_SEARCH_DISTANCE_M}
-                )
-            )`, {
-                lat: filters.position.lat,
-                lng: filters.position.lng
-            });
-            hasFilter = true;
-        }
-    }
+    // private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
+    //     // Position-based filtering: within 1000km radius OR ALL_EUROPE option
+    //     if (filters.position) {
+    //         baseQueryBuilder.andWhere(`(
+    //             profile.location_option = '${EmployeeProfileLocationOptions.ALL_EUROPE}'
+    //             OR ST_DWithin(
+    //                 profile.point,
+    //                 ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography,
+    //                 ${DEFAULT_SEARCH_DISTANCE_M}
+    //             )
+    //         )`, {
+    //             lat: filters.position.lat,
+    //             lng: filters.position.lng
+    //         });
+    //         hasFilter = true;
+    //     }
+    // }
 
     private addDateRangeFilter(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
         // Date range filter - use already joined ranges
@@ -186,25 +186,25 @@ export class SearchEmployeeProfileService {
         }
     }
 
-    private addFuzzySearchFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
-        // Free text fuzzy search
-        if (filters.freeText && filters.freeText.trim().length > 1) {
-            const freeText = `%${filters.freeText.trim().toLowerCase()}%`;
-            queryBuilder.andWhere(`(
-                LOWER(profile.display_name) ILIKE :freeText OR
-                LOWER(profile.email) ILIKE :freeText OR
-                LOWER(profile.first_name) ILIKE :freeText OR
-                LOWER(profile.last_name) ILIKE :freeText OR
-                LOWER(profile.full_address) ILIKE :freeText OR
-                array_to_string(profile.skills, ',') ILIKE :freeText OR
-                array_to_string(profile.certificates, ',') ILIKE :freeText
-            )`, { freeText });
-            hasFilter = true;
-        }
-    }
+    // private addFuzzySearchFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
+    //     // Free text fuzzy search
+    //     if (filters.freeText && filters.freeText.trim().length > 1) {
+    //         const freeText = `%${filters.freeText.trim().toLowerCase()}%`;
+    //         queryBuilder.andWhere(`(
+    //             LOWER(profile.display_name) ILIKE :freeText OR
+    //             LOWER(profile.email) ILIKE :freeText OR
+    //             LOWER(profile.first_name) ILIKE :freeText OR
+    //             LOWER(profile.last_name) ILIKE :freeText OR
+    //             LOWER(profile.full_address) ILIKE :freeText OR
+    //             array_to_string(profile.experience, ',') ILIKE :freeText OR
+    //             array_to_string(profile.certificates, ',') ILIKE :freeText
+    //         )`, { freeText });
+    //         hasFilter = true;
+    //     }
+    // }
 
     private addBasicFilters(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
-        const skills = SearchUtil.parseArray(filters.skills);
+        const experience = SearchUtil.parseArray(filters.experience);
         const certificates = SearchUtil.parseArray(filters.certificates);
         const communicationLanguages = SearchUtil.parseArray(filters.communicationLanguages);
         // Base condition - only ACTIVE profiles
@@ -218,8 +218,8 @@ export class SearchEmployeeProfileService {
             baseQueryBuilder.andWhere('profile.certificates @> :certificates', { certificates });
             hasFilter = true;
         }
-        if (skills?.length) {
-            baseQueryBuilder.andWhere('profile.skills @> :skills', { skills });
+        if (experience?.length) {
+            baseQueryBuilder.andWhere('profile.experience @> :experience', { experience });
             hasFilter = true;
         }
 

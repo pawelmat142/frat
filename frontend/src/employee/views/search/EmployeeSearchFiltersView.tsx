@@ -12,7 +12,6 @@ import { FaSearch } from "react-icons/fa";
 import CountrySelector from "global/components/selector/CountrySelector";
 import FloatingInput from "global/components/controls/FloatingInput";
 import DictionarySelector from "global/components/selector/DictionarySelector";
-import FloatingSelector from "global/components/selector/FloatingSelector";
 
 const EmployeeSearchFiltersView: React.FC = () => {
 
@@ -33,7 +32,7 @@ const EmployeeSearchFiltersView: React.FC = () => {
             </div>
         )
     }
-    const formState = f.getValues()
+    const formState = f.watch()
 
     const startDateRequired = FormValidator.required(t);
     const required = FormValidator.required(t);
@@ -41,7 +40,7 @@ const EmployeeSearchFiltersView: React.FC = () => {
 
     const submit = async () => {
         ctx.setFiltersWithSearchAndNavigate(formState);
-        console.log('Submitting form with values:', f.getValues());
+        console.log('Submitting form with values:', formState);
     }
 
     const sortOptionItems: SelectorItem<string>[] = Object.keys(EmmployeeProfileSearchSortOptions).map((option: string) => ({

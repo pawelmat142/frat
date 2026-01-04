@@ -68,7 +68,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
 
         try {
-            const result = await EmployeeProfileService.searchEmployeeProfiles(filters);
+            const result = await EmployeeProfileService.searchEmployeeProfiles(searchFilters);
             if (requestId !== requestIdRef.current) {
                 return;
             }
