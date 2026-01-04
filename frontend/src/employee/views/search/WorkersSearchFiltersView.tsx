@@ -117,7 +117,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                         <FloatingInput
                             {...field}
                             fullWidth
-                            value={DateUtil.parseDateFromStringLocalDate(field.value)}
+                            value={field.value || ''}
                             label={t("employeeProfile.form.city")}
                             className="w-full mt-2"
                             error={f.formState.errors.freeText}

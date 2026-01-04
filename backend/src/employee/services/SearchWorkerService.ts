@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { WorkerRepo } from './WorkerRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchFilters, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT } from '@shared/interfaces/WorkerProfileI';
+import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchFilters, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT, WorkerLocationOptions } from '@shared/interfaces/WorkerProfileI';
 import { SelectQueryBuilder } from 'typeorm';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { SearchUtil } from 'global/utils/SearchUtil';
@@ -26,7 +26,7 @@ export class SearchWorkersService {
         this.addBasicFilters(baseQueryBuilder, filters, hasFilter);
         // this.addFuzzySearchFilter(baseQueryBuilder, filters, hasFilter);
         this.addDateRangeFilter(baseQueryBuilder, filters, hasFilter);
-        // this.addPositionFilter(baseQueryBuilder, filters, hasFilter);
+        this.addPositionFilter(baseQueryBuilder, filters, hasFilter);
 
         const count: number = await this.getCount(baseQueryBuilder);
 
@@ -62,7 +62,6 @@ export class SearchWorkersService {
     }
 
     // TODO sortowanie po start date jakoś koślawo działa
-
     private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters) {
         switch (filters.sortBy) {
             case WorkerSearchSortOptions.START_FROM_ASC:
@@ -136,34 +135,31 @@ export class SearchWorkersService {
         queryBuilder.offset(skip).limit(limit);
     }
 
-    // private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
-    //     // Position-based filtering: within 1000km radius OR ALL_EUROPE option
-    //     if (filters.position) {
-    //         baseQueryBuilder.andWhere(`(
-    //             profile.location_option = '${EmployeeProfileLocationOptions.ALL_EUROPE}'
-    //             OR ST_DWithin(
-    //                 profile.point,
-    //                 ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography,
-    //                 ${DEFAULT_SEARCH_DISTANCE_M}
-    //             )
-    //         )`, {
-    //             lat: filters.position.lat,
-    //             lng: filters.position.lng
-    //         });
-    //         hasFilter = true;
-    //     }
-    // }
+    private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
+        // Location country filter: ALL_EUROPE or country in locationCountries array
+        // TODO fuzzy po full adress dodać
+        if (filters.locationCountry) {
+            baseQueryBuilder.andWhere(`(
+                profile.location_option = '${WorkerLocationOptions.ALL_EUROPE}'
+                OR LOWER(:locationCountry) = ANY(profile.location_countries)
+            )`, {
+                locationCountry: filters.locationCountry.toLowerCase()
+            });
+            hasFilter = true;
+        }
+    }
 
     private addDateRangeFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
         // Date range filter - use already joined ranges
         // filters.startDate and endDate are strings in YYYY-MM-DD format
+        // TODO obsluga ranges
         if (filters.startDate && filters.endDate) {
             baseQueryBuilder.andWhere(`(
                 profile.availability_option = '${WorkerAvailabilityOptions.ANYTIME}'
                 OR ranges.date_range @> daterange(:startDate, :endDate, '[]')
                 OR (
                     profile.availability_option = '${WorkerAvailabilityOptions.FROM_DATE}'
-                    AND lower(ranges.date_range) <= :startDate::date
+                    AND profile.start_date <= :startDate::date
                 )
             )`, {
                 startDate: filters.startDate,
@@ -177,7 +173,7 @@ export class SearchWorkersService {
                 OR ranges.date_range @> :startDate::date
                 OR (
                     profile.availability_option = '${WorkerAvailabilityOptions.FROM_DATE}'
-                    AND lower(ranges.date_range) <= :startDate::date
+                    AND profile.start_date <= :startDate::date
                 )
             )`, {
                 startDate: filters.startDate
@@ -186,22 +182,16 @@ export class SearchWorkersService {
         }
     }
 
-    // private addFuzzySearchFilter(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
-    //     // Free text fuzzy search
-    //     if (filters.freeText && filters.freeText.trim().length > 1) {
-    //         const freeText = `%${filters.freeText.trim().toLowerCase()}%`;
-    //         queryBuilder.andWhere(`(
-    //             LOWER(profile.display_name) ILIKE :freeText OR
-    //             LOWER(profile.email) ILIKE :freeText OR
-    //             LOWER(profile.first_name) ILIKE :freeText OR
-    //             LOWER(profile.last_name) ILIKE :freeText OR
-    //             LOWER(profile.full_address) ILIKE :freeText OR
-    //             array_to_string(profile.experience, ',') ILIKE :freeText OR
-    //             array_to_string(profile.certificates, ',') ILIKE :freeText
-    //         )`, { freeText });
-    //         hasFilter = true;
-    //     }
-    // }
+    private addFuzzySearchFilter(queryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
+        // Free text fuzzy search
+        if (filters.freeText && filters.freeText.trim().length > 1) {
+            const freeText = `%${filters.freeText.trim().toLowerCase()}%`;
+            queryBuilder.andWhere(`(
+                LOWER(profile.full_address) ILIKE :freeText
+            )`, { freeText });
+            hasFilter = true;
+        }
+    }
 
     private addBasicFilters(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
         const experience = SearchUtil.parseArray(filters.experience);
@@ -222,7 +212,6 @@ export class SearchWorkersService {
             baseQueryBuilder.andWhere('profile.experience @> :experience', { experience });
             hasFilter = true;
         }
-
     }
 
 }

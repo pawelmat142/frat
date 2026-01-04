@@ -84,8 +84,8 @@ export class WorkerRepo {
     public async deleteAllProfiles(): Promise<void> {
         // Use raw SQL DELETE to avoid empty criteria error and respect FK constraints
         const manager = this.woerkersRepository.manager;
-        await manager.query('DELETE FROM jh_employee_profile_availability_date_ranges');
-        await manager.query('DELETE FROM jh_employee_profiles');
+        await manager.query('DELETE FROM jh_workers_date_ranges');
+        await manager.query('DELETE FROM jh_workers');
         this.logger.log('All employee profiles and related date ranges deleted');
     }
 

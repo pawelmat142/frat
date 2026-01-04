@@ -4,7 +4,7 @@ import FilterList from '@mui/icons-material/FilterList';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import IconButton from "global/components/controls/IconButon";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import { FaLanguage } from "react-icons/fa";
+import { FaGlobe } from "react-icons/fa";
 import { Utils } from "global/utils/utils";
 import { DateRange } from "@shared/interfaces/WorkerProfileI";
 import { Place } from "@mui/icons-material";
@@ -75,12 +75,10 @@ const WorkersSearchFilters: React.FC = () => {
                     </div>
                 )}
 
-                {!!flags?.length && (
+                {!!ctx.filters.communicationLanguages?.length && (
                     <div className="chip-container">
-                        <FaLanguage className="secondary-text" />
-                        {(flags).map((src, index) => (
-                            <img key={index} className="filters-flag-chip pl-1" src={src} alt={"flag-" + index} />
-                        ))}
+                        <FaGlobe className="secondary-text" />
+                        <Flags languages={ctx.filters.communicationLanguages!} size={12} />
                     </div>
                 )}
                 <div className="flex items-center">
