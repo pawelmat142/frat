@@ -12,6 +12,7 @@ import { FaSearch } from "react-icons/fa";
 import CountrySelector from "global/components/selector/CountrySelector";
 import FloatingInput from "global/components/controls/FloatingInput";
 import DictionarySelector from "global/components/selector/DictionarySelector";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 const WorkersSearchFiltersView: React.FC = () => {
 
@@ -22,8 +23,6 @@ const WorkersSearchFiltersView: React.FC = () => {
     const f = useForm<WorkerSearchFilters>({
         defaultValues: ctx.filters
     })
-
-    console.log('ctx.filters: ', ctx.filters)
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return (
@@ -59,12 +58,10 @@ const WorkersSearchFiltersView: React.FC = () => {
             return null
         }
         return {
-            start: localFilters.startDate,
-            end: localFilters.endDate
+            start: DateUtil.parseDateFromStringLocalDate(localFilters.startDate),
+            end: DateUtil.parseDateFromStringLocalDate(localFilters.endDate)
         }
     }
-
-    console.log(formState)
 
     return (
         <div className="form-view relative flex flex-col">
@@ -85,8 +82,8 @@ const WorkersSearchFiltersView: React.FC = () => {
                             onChange={(dateRange) => {
                                 const filters: WorkerSearchFilters = {
                                     ...formState,
-                                    startDate: dateRange?.start || null,
-                                    endDate: dateRange?.end || null
+                                    startDate: DateUtil.toLocalDateString(dateRange?.start) || null,
+                                    endDate: DateUtil.toLocalDateString(dateRange?.end) || null
                                 };
                                 f.reset(filters)
                             }}
@@ -120,7 +117,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                         <FloatingInput
                             {...field}
                             fullWidth
-                            value={field.value}
+                            value={DateUtil.parseDateFromStringLocalDate(field.value)}
                             label={t("employeeProfile.form.city")}
                             className="w-full mt-2"
                             error={f.formState.errors.freeText}

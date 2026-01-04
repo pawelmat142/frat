@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import FilterList from '@mui/icons-material/FilterList';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import IconButton from "global/components/controls/IconButon";
-import { useWorkersSearch } from "./WorkersSearchProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { FaLanguage } from "react-icons/fa";
 import { Utils } from "global/utils/utils";
@@ -12,6 +11,8 @@ import { Place } from "@mui/icons-material";
 import Flags from "global/components/Flags";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path";
+import { useWorkersSearch } from "./WorkersSearchProvider";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 const WorkersSearchFilters: React.FC = () => {
 
@@ -58,7 +59,9 @@ const WorkersSearchFilters: React.FC = () => {
                     <div className="flex items-center gap-1">
                         <DateRangeIcon fontSize="inherit" className="secondary-text" />
                         <span className="xs-font">
-                            {formatFromTo({ start: ctx.filters.startDate, end: ctx.filters.endDate })}
+                            {formatFromTo({ 
+                                start: DateUtil.parseDateFromStringLocalDate(ctx.filters.startDate),
+                                end: DateUtil.parseDateFromStringLocalDate(ctx.filters.endDate) })}
                         </span>
                     </div>)}
 
@@ -83,9 +86,9 @@ const WorkersSearchFilters: React.FC = () => {
                 <div className="flex items-center">
                     {(!!ctx.filters.experience?.length) && (
                         <div className="chip-container">
-                            {(ctx.filters.experience || []).map(skill => (
-                                <div key={skill} className="search-chip tertiary">
-                                    {skill}
+                            {(ctx.filters.experience || []).map(ex => (
+                                <div key={ex} className="search-chip tertiary">
+                                    {ex}
                                 </div>
                             ))}
                         </div>

@@ -3,7 +3,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { WorkerRepo } from './WorkerRepo';
 import { UserI } from '@shared/interfaces/UserI';
 import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchFilters, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT } from '@shared/interfaces/WorkerProfileI';
-import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { SelectQueryBuilder } from 'typeorm';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { SearchUtil } from 'global/utils/SearchUtil';
@@ -157,6 +156,7 @@ export class SearchWorkersService {
 
     private addDateRangeFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
         // Date range filter - use already joined ranges
+        // filters.startDate and endDate are strings in YYYY-MM-DD format
         if (filters.startDate && filters.endDate) {
             baseQueryBuilder.andWhere(`(
                 profile.availability_option = '${WorkerAvailabilityOptions.ANYTIME}'
@@ -166,8 +166,8 @@ export class SearchWorkersService {
                     AND lower(ranges.date_range) <= :startDate::date
                 )
             )`, {
-                startDate: DateRangeUtil.displayLocalDate(filters.startDate),
-                endDate: DateRangeUtil.displayLocalDate(filters.endDate)
+                startDate: filters.startDate,
+                endDate: filters.endDate
             });
             hasFilter = true;
         } else if (filters.startDate) {
@@ -180,7 +180,7 @@ export class SearchWorkersService {
                     AND lower(ranges.date_range) <= :startDate::date
                 )
             )`, {
-                startDate: DateRangeUtil.displayLocalDate(filters.startDate)
+                startDate: filters.startDate
             });
             hasFilter = true;
         }

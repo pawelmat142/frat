@@ -6,6 +6,7 @@ import { userAdminPanelContext } from "../AdminPanelProvider";
 import Loading from "global/components/Loading";
 import { BtnModes } from "global/interface/controls.interface";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface SelectedProfileProps {
   profile: WorkerI | null;
@@ -95,9 +96,9 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
               const parsed = DateRangeUtil.toDateRange(range);
               return (
                 <div key={range.id} className="primary-text text-sm">
-                  • {parsed?.start ? DateRangeUtil.displayLocalDate(parsed.start) : '-'}
+                  • {parsed?.start ? DateUtil.toLocalDateString(parsed.start) : '-'}
                   {' → '}
-                  {parsed?.end ? DateRangeUtil.displayLocalDate(parsed.end) : 'open-ended'}
+                  {parsed?.end ? DateUtil.toLocalDateString(parsed.end) : 'open-ended'}
                 </div>
               );
             })}

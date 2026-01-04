@@ -6,6 +6,7 @@ import { UsersAdminService } from "admin/services/UsersAdmin.service";
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
 import SelectorMulti from "global/components/selector/SelectorMulti";
+import { useAuthContext } from "auth/AuthProvider";
 
 interface SelectedUserProps {
     user: UserI | null;
@@ -17,6 +18,7 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
     const [assignRoleForm, setAssignRoleForm] = useState(false)
     const [assignRolesValue, setAssignRolesValue] = useState<UserRole[]>([])
     const [loading, setLoading] = useState(false)
+    const { me } = useAuthContext();
 
     useEffect(() => {
         // user changes
@@ -65,6 +67,12 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
     }
 
     const items: SelectorItem<UserRole>[] = Object.values(UserRoles)
+        .filter(role => {
+            if (role === UserRoles.SUPERADMIN)  {
+                return me?.roles.includes(UserRoles.SUPERADMIN)
+            }
+            return true;
+        })
         .map(role => ({
             label: role,
             value: role

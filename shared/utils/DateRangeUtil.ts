@@ -20,11 +20,11 @@ export abstract class DateRangeUtil {
         if (adjustEndDate && end) {
             let endDate = DateUtil.newLocalDate(new Date(end));
             endDate.setDate(endDate.getDate() - 1);
-            end = DateRangeUtil.displayLocalDate(endDate);
+            end = DateUtil.toLocalDateString(endDate);
         }
         return {
             start: start,
-            end: end || DateRangeUtil.displayLocalDate(DateUtil.newLocalDate()),
+            end: end || DateUtil.toLocalDateString(DateUtil.newLocalDate()),
         }
     }
 
@@ -51,8 +51,8 @@ export abstract class DateRangeUtil {
         return {
             id: dateRange?.id || this.newId(ranges),
             dateRange: this.formatDateRangeForDb({
-                start: DateRangeUtil.displayLocalDate(dateRange.start),
-                end: dateRange.end ? DateRangeUtil.displayLocalDate(dateRange.end) : undefined,
+                start: DateUtil.toLocalDateString(dateRange.start),
+                end: dateRange.end ? DateUtil.toLocalDateString(dateRange.end) : undefined,
             }),
         }
     }
@@ -79,9 +79,7 @@ export abstract class DateRangeUtil {
         return DateRangeUtil.toDateRange(rangeI);
     }
 
-    public static displayLocalDate = (date: Date): string => {
-        return DateUtil.newLocalDate(date).toISOString().split('T')[0];
-    }
+
 
     public static newId = (dateRanges: (DateRangeI | DateRange)[]): number => {
         let maxId = 0;

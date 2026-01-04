@@ -138,17 +138,17 @@ export interface WorkerFormDto {
 }
 
 export interface WorkerSearchFilters {
-  startDate?: Date | null;
-  endDate?: Date | null;
+  startDate?: string | null;
+  endDate?: string | null;
   
   locationCountry?: string | null;
-  freeText: string;
+  freeText?: string;
 
   communicationLanguages?: string[];
   certificates?: string[];
   experience?: string[];
 
-  sortBy?: WorkerSearchSortOption
+  sortBy?: WorkerSearchSortOption;
   skip: number;
   limit: number;
 }

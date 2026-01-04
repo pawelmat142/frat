@@ -66,4 +66,16 @@ export abstract class DateUtil {
         return value instanceof Date ? value : null;
     }
 
+    /** Parse YYYY-MM-DD string to Date object (local time, midnight) */
+    public static parseDateFromStringLocalDate = (dateStr: string | null | undefined): Date | null => {
+        if (!dateStr) return null;
+        const [year, month, day] = dateStr.split('-').map(Number);
+        if (!year || !month || !day) return null;
+        return new Date(year, month - 1, day);
+    }
+
+    public static toLocalDateString = (date?: Date | null): string => {
+        if (!date) return '';
+        return DateUtil.newLocalDate(date).toISOString().split('T')[0];
+    }
 }
