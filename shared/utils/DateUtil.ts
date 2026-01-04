@@ -74,8 +74,28 @@ export abstract class DateUtil {
         return new Date(year, month - 1, day);
     }
 
-    public static toLocalDateString = (date?: Date | null): string => {
-        if (!date) return '';
-        return DateUtil.newLocalDate(date).toISOString().split('T')[0];
+    /** Parses local date string (YYYY-MM-DD) to Date object */
+    public static parseLocalDateString = (dateStr: string): Date => {
+        const [year, month, day] = dateStr.split('-').map(Number);
+        return new Date(year, month - 1, day);
+    }
+
+    /** Converts Date to local date string in YYYY-MM-DD format */
+    public static toLocalDateString = (date?: Date | null): string | null => {
+        if (!date) return null;
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    public static getMonth(localDateString: string): number | null {
+        const date = this.parseLocalDateString(localDateString);
+        return isNaN(date.getTime()) ? null : date.getMonth() + 1;
+    }
+
+    public static getDay(localDateString: string): number | null {
+        const date = this.parseLocalDateString(localDateString);
+        return isNaN(date.getTime()) ? null : date.getDate();
     }
 }

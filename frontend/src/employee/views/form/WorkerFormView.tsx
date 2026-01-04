@@ -189,7 +189,7 @@ const WorkerFormView: React.FC = () => {
                 availabilityOption: worker.availabilityOption || WorkerAvailabilityOptions.ANYTIME,
                 availabilityDateRanges: availabilityDateRanges,
                 rangesOption: worker.rangesOption,
-                startDate: worker.startDate ? new Date(worker.startDate) : null,
+                startDate: worker.startDate || null,
             },
             step4: {
                 experience: worker.experience || [],

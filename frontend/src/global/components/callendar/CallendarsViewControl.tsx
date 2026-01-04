@@ -1,11 +1,15 @@
+import { DateUtil } from "@shared/utils/DateUtil";
 import RemoveButton from "../buttons/RemoveButton";
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
+
+
 interface CallendarsViewControlProps {
     onFocus?: () => void;
     selected?: boolean;
-    date?: Date | null;
+    /** Local date string in YYYY-MM-DD format */
+    date?: string | null;
     placeholder: string;
     label: string;
     id: string;
@@ -34,8 +38,9 @@ const CallendarsViewControl: React.FC<CallendarsViewControlProps> = ({
         }
     }, [selected]);
 
-    const formatDate = (date?: Date | null, placeholder?: string): string => {
-        if (!date) return placeholder || '';
+    const formatDate = (dateStr?: string | null, placeholder?: string): string => {
+        if (!dateStr) return placeholder || '';
+        const date = DateUtil.parseLocalDateString(dateStr);
         const dayFull = t(`callendar.dayOfWeekFull.${date.getDay()}`);
         const dayNumber = date.getDate();
         const monthFull = t(`callendar.monthShort.${date.getMonth()}`);

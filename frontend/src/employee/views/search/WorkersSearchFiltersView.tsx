@@ -58,8 +58,8 @@ const WorkersSearchFiltersView: React.FC = () => {
             return null
         }
         return {
-            start: DateUtil.parseDateFromStringLocalDate(localFilters.startDate),
-            end: DateUtil.parseDateFromStringLocalDate(localFilters.endDate)
+            start: localFilters.startDate,
+            end: localFilters.endDate
         }
     }
 
@@ -82,8 +82,8 @@ const WorkersSearchFiltersView: React.FC = () => {
                             onChange={(dateRange) => {
                                 const filters: WorkerSearchFilters = {
                                     ...formState,
-                                    startDate: DateUtil.toLocalDateString(dateRange?.start) || null,
-                                    endDate: DateUtil.toLocalDateString(dateRange?.end) || null
+                                    startDate: dateRange?.start || null,
+                                    endDate: dateRange?.end || null
                                 };
                                 f.reset(filters)
                             }}

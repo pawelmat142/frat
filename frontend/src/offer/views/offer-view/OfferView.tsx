@@ -19,6 +19,7 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { Path } from "../../../path";
 import { Utils } from "global/utils/utils";
 import UserItemTile from "user/components/UserItemTile";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 const OfferView: React.FC = () => {
 
@@ -186,7 +187,7 @@ const OfferView: React.FC = () => {
 
                     <OfferDetailsTile offer={offer} />
 
-                    <CallendarTile range={{ start: offer.startDate, end: offer.endDate }}></CallendarTile>
+                    <CallendarTile range={{ start: DateUtil.toLocalDateString(offer.startDate), end: DateUtil.toLocalDateString(offer.endDate) }}></CallendarTile>
 
                     <div className="square-tile col-tile"></div>
 

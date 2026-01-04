@@ -20,11 +20,11 @@ export abstract class DateRangeUtil {
         if (adjustEndDate && end) {
             let endDate = DateUtil.newLocalDate(new Date(end));
             endDate.setDate(endDate.getDate() - 1);
-            end = DateUtil.toLocalDateString(endDate);
+            end = DateUtil.toLocalDateString(endDate) ?? end;
         }
         return {
             start: start,
-            end: end || DateUtil.toLocalDateString(DateUtil.newLocalDate()),
+            end: end || (DateUtil.toLocalDateString(DateUtil.newLocalDate()) ?? start),
         }
     }
 
@@ -33,13 +33,17 @@ export abstract class DateRangeUtil {
             return null
         }
         const parsed = this.parseDateRangeFromDb(dateRangeI.dateRange);
-        const end = DateUtil.newLocalDate(new Date(parsed.end));
+        let endStr = parsed.end;
         if (params?.adjustEndDate) {
-            end.setDate(end.getDate() - 1); // Adjust end date to be inclusive
+            const endDate = DateUtil.parseDateFromStringLocalDate(parsed.end);
+            if (endDate) {
+                endDate.setDate(endDate.getDate() - 1); // Adjust end date to be inclusive
+                endStr = DateUtil.toLocalDateString(endDate) ?? parsed.end;
+            }
         }
         return {
-            start: DateUtil.newLocalDate(new Date(parsed.start)),
-            end: end,
+            start: parsed.start,
+            end: endStr,
             id: dateRangeI.id,
         };
     }
@@ -51,14 +55,14 @@ export abstract class DateRangeUtil {
         return {
             id: dateRange?.id || this.newId(ranges),
             dateRange: this.formatDateRangeForDb({
-                start: DateUtil.toLocalDateString(dateRange.start),
-                end: dateRange.end ? DateUtil.toLocalDateString(dateRange.end) : undefined,
+                start: dateRange.start,
+                end: dateRange.end || undefined,
             }),
         }
     }
 
-    public static findEarliestDate = (ranges: DateRangeI[]): Date => {
-        let earliest: Date | null = null;
+    public static findEarliestDate = (ranges: DateRangeI[]): string => {
+        let earliest: string | null = null;
         for (const rangeI of ranges) {
             const range = this.toDateRange(rangeI);
             if (range?.start) {
@@ -67,7 +71,7 @@ export abstract class DateRangeUtil {
                 }
             }
         }
-        return earliest || new Date();
+        return earliest ?? DateUtil.toLocalDateString(new Date()) ?? new Date().toISOString().split('T')[0];
     }
 
 

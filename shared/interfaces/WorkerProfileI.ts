@@ -34,7 +34,8 @@ export interface WorkerI {
   availabilityOption: WorkerAvailabilityOption;
   availabilityDateRanges?: DateRangeI[];
   rangesOption?: WorkerFormRangesOption;
-  startDate: Date | null;
+  /** Local date string in YYYY-MM-DD format */
+  startDate: string | null;
 
 // 
   experience?: string[];
@@ -96,7 +97,8 @@ export interface WorkerFormStep3 {
   availabilityOption: WorkerAvailabilityOption;
   availabilityDateRanges?: DateRange[];
   rangesOption?: WorkerFormRangesOption;
-  startDate?: Date | null;
+  /** Local date string in YYYY-MM-DD format */
+  startDate?: string | null;
 }
 
 export interface WorkerFormStep4 {
@@ -131,7 +133,8 @@ export interface WorkerFormDto {
   availabilityOption: WorkerAvailabilityOption;
   availabilityDateRanges?: DateRange[];
   rangesOption?: WorkerFormRangesOption;
-  startDate?: Date | null;
+  /** Local date string in YYYY-MM-DD format */
+  startDate?: string | null;
 
   experience?: string[];
   certificates?: string[];
@@ -170,9 +173,12 @@ export interface DateRangeI {
   dateRange: string;
 }
 
+/** Date range with local date strings in YYYY-MM-DD format */
 export interface DateRange {
-  start?: Date | null
-  end?: Date | null
+  /** Local date string in YYYY-MM-DD format */
+  start?: string | null
+  /** Local date string in YYYY-MM-DD format */
+  end?: string | null
   id?: number
 }
 

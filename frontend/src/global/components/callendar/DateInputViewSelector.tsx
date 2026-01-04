@@ -2,8 +2,9 @@ import React from 'react';
 import DateRangeInputViewSelector from './DateRangeInputViewSelector';
 
 interface DateInputProps {
-    value?: Date | null;
-    onChange?: (date: Date | null) => void;
+    /** Local date string in YYYY-MM-DD format */
+    value?: string | null;
+    onChange?: (date: string | null) => void;
     label?: string;
     required?: boolean;
     error?: string;
@@ -15,6 +16,7 @@ interface DateInputProps {
 /**
  * Single date selector component.
  * Wrapper around DateRangeInputViewSelector with singleDateMode enabled.
+ * Works with local date strings in YYYY-MM-DD format.
  */
 const DateInputViewSelector: React.FC<DateInputProps> = ({
     value,

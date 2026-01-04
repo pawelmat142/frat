@@ -8,6 +8,8 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import CallendarsViewControl from "./CallendarsViewControl";
 import CallendarViewDurationSelector from "./CallendarViewDurationSelector";
 import { BottomSheetContextType } from "global/providers/BottomSheetProvider";
+import { DateUtil } from "@shared/utils/DateUtil";
+
 
 interface CallendarsViewProps {
     range?: DateRange | null;
@@ -23,7 +25,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
 
     const { t } = useTranslation();
 
-    const date = range?.start || null;
+    const date = range?.start ? DateUtil.parseLocalDateString(range.start) : null;
 
     // activeControl determines which control is currently selected/focused
     const [activeControl, setActiveControl] = useState<'start' | 'end'>('start');
@@ -37,7 +39,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
     useEffect(() => {
         if (initialScrollDone.current) return;
         
-        const targetDate = range?.start;
+        const targetDate = range?.start ? DateUtil.parseLocalDateString(range.start) : null;
         if (targetDate && scrollContainerRef.current) {
             const monthId = `month-${targetDate.getFullYear()}-${targetDate.getMonth()}`;
             const targetElement = document.getElementById(monthId);
@@ -59,12 +61,15 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
         
         // Find the furthest selected date
         let furthestDate: Date | null = null;
-        if (range.start && range.end) {
-            furthestDate = range.start > range.end ? range.start : range.end;
-        } else if (range.start) {
-            furthestDate = range.start;
-        } else if (range.end) {
-            furthestDate = range.end;
+        const rangeStart = range.start ? DateUtil.parseLocalDateString(range.start) : null;
+        const rangeEnd = range.end ? DateUtil.parseLocalDateString(range.end) : null;
+        
+        if (rangeStart && rangeEnd) {
+            furthestDate = rangeStart > rangeEnd ? rangeStart : rangeEnd;
+        } else if (rangeStart) {
+            furthestDate = rangeStart;
+        } else if (rangeEnd) {
+            furthestDate = rangeEnd;
         }
         
         // End at furthest date + 12 months, or current month + 12 if no date selected
@@ -82,18 +87,20 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
     const handleClickDay = (day: Date) => {
         if (!selectorMode) return;
 
+        const dayStr = DateUtil.toLocalDateString(day);
+
         // In single date mode, only set start date
         if (singleDateMode) {
-            setCurrentRange({ start: day, end: null });
+            setCurrentRange({ start: dayStr, end: null });
             return;
         }
 
         let newRange: DateRange = { ...currentRange };
 
         if (activeControl === 'start') {
-            newRange.start = day;
+            newRange.start = dayStr;
         } else {
-            newRange.end = day;
+            newRange.end = dayStr;
         }
 
         // Normalize ordering if both set and start > end
@@ -166,18 +173,22 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
                             injectRightComponent={!!currentRange.start &&
                                 <CallendarViewDurationSelector
                                     bottomSheetCtx={bottomSheetCtx}
-                                    initial={currentRange.end ?
-                                        Math.max(1,
-                                            (currentRange.end.getFullYear() - currentRange.start.getFullYear()) * 12 +
-                                            (currentRange.end.getMonth() - currentRange.start.getMonth()))
+                                    initial={currentRange.end && currentRange.start ?
+                                        (() => {
+                                            const startDate = DateUtil.parseLocalDateString(currentRange.start);
+                                            const endDate = DateUtil.parseLocalDateString(currentRange.end);
+                                            return Math.max(1,
+                                                (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+                                                (endDate.getMonth() - startDate.getMonth()));
+                                        })()
                                         : 1}
                                     onSubmit={(value) => {
                                         if (!value) {
                                             setCurrentRange({ start: currentRange.start || null, end: null });
                                         } else {
-                                            const endDate = new Date(currentRange.start!);
-                                            endDate.setMonth(endDate.getMonth() + value);
-                                            setCurrentRange({ start: currentRange.start || null, end: endDate });
+                                            const startDate = DateUtil.parseLocalDateString(currentRange.start!);
+                                            startDate.setMonth(startDate.getMonth() + value);
+                                            setCurrentRange({ start: currentRange.start || null, end: DateUtil.toLocalDateString(startDate) });
                                         }
                                     }}></CallendarViewDurationSelector>
                             }

@@ -1,5 +1,6 @@
 import { DateRangeI, WorkerAvailabilityOptions, WorkerFormRangesOptions, WorkerI, WorkerLocationOptions, WorkerStatuses } from "@shared/interfaces/WorkerProfileI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
+import { DateUtil } from "@shared/utils/DateUtil";
 import { AdminUtil } from "admin/AdminUtil";
 import { WorkerEntity } from "employee/model/WorkerEntity";
 import { DeepPartial } from "typeorm";
@@ -200,7 +201,7 @@ const generateRandomAddress = (location: { label: string; country: string }) => 
 const fillAvailabilityRanges = (profile: DeepPartial<WorkerI>) => {
     if (profile.availabilityOption === WorkerAvailabilityOptions.DATE_RANGES && profile.createdAt) {
         const n = Math.floor(Math.random() * 4) + 1; // 1-4 przedziały
-        const ranges: { start: Date; end: Date }[] = [];
+        const ranges: { start: string; end: string }[] = [];
 
         let currentStartOffset = 0;
 
@@ -219,7 +220,7 @@ const fillAvailabilityRanges = (profile: DeepPartial<WorkerI>) => {
             const endDate = new Date(startDate.getTime());
             endDate.setMonth(endDate.getMonth() + l);
 
-            ranges.push({ start: startDate, end: endDate });
+            ranges.push({ start: DateUtil.toLocalDateString(startDate), end: DateUtil.toLocalDateString(endDate) });
 
             // Przesunięcie dla następnego przedziału: dodaj długość obecnego + min 1 miesiąc przerwy
             currentStartOffset += l + 1;
@@ -279,6 +280,7 @@ export const WorkersInitialData = (): DeepPartial<WorkerEntity>[] => {
         // Generate startDate for FROM_DATE option
         const startDate = new Date(createdAt);
         startDate.setMonth(startDate.getMonth() + randomInt(1, 6));
+        const startDateStr = DateUtil.toLocalDateString(startDate);
 
         const profile: DeepPartial<WorkerEntity> = {
             uid,
@@ -297,9 +299,9 @@ export const WorkersInitialData = (): DeepPartial<WorkerEntity>[] => {
             availabilityDateRanges: availabilityOption === WorkerAvailabilityOptions.DATE_RANGES ? [] : undefined,
             rangesOption: availabilityOption === WorkerAvailabilityOptions.DATE_RANGES ? rangesOption : undefined,
             startDate: availabilityOption === WorkerAvailabilityOptions.FROM_DATE 
-            ? startDate 
+            ? startDateStr 
             : availabilityOption === WorkerAvailabilityOptions.ANYTIME 
-            ? new Date() : undefined,
+            ? DateUtil.toLocalDateString(new Date()) : undefined,
             jobs: numberToStringList(getRandomNumberFromTo(0, 20, globalIndex)).map(n => `job-${n}`),
             views: numberToStringList(getRandomNumberFromTo(30, 100, globalIndex)).map(n => `view-${n}`),
             fullAddress: adress.fullAddress,

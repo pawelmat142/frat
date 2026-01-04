@@ -17,6 +17,7 @@ import { useUserContext } from "user/UserProvider";
 import { OfferUtil } from "@shared/utils/OfferUtil";
 import { Utils } from "global/utils/utils";
 import FormWizard from "global/components/FormWizard/FormWizard";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 const OfferFormContent: React.FC = () => {
 
@@ -106,7 +107,7 @@ const OfferFormContent: React.FC = () => {
     const handleDevFill = () => {
         ctx.formCtx.setValue("STEP_ONE.category", "SCAFFOLD");
         ctx.formCtx.setValue("STEP_ONE.locationCountry", "pl");
-        ctx.formCtx.setValue("STEP_ONE.dateRange", { start: new Date(), end: null });
+        ctx.formCtx.setValue("STEP_ONE.dateRange", { start: DateUtil.toLocalDateString(new Date()), end: null });
         ctx.formCtx.setValue("STEP_ONE.availableSlots", 5);
 
         ctx.formCtx.setValue("STEP_TWO.skillsRequired", ["ONE", "TWO"]);

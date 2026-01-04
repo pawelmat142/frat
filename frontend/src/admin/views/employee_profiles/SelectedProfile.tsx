@@ -96,9 +96,9 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
               const parsed = DateRangeUtil.toDateRange(range);
               return (
                 <div key={range.id} className="primary-text text-sm">
-                  • {parsed?.start ? DateUtil.toLocalDateString(parsed.start) : '-'}
+                  • {parsed?.start ? parsed.start : '-'}
                   {' → '}
-                  {parsed?.end ? DateUtil.toLocalDateString(parsed.end) : 'open-ended'}
+                  {parsed?.end ? parsed.end : 'open-ended'}
                 </div>
               );
             })}

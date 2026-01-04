@@ -88,8 +88,9 @@ export class WorkerEntity implements WorkerI {
   @Column({ name: 'ranges_option', nullable: true })
   rangesOption?: WorkerFormRangesOption;
 
-  @Column({ name: 'start_date', type: 'timestamp' })
-  startDate: Date;
+  /** Local date string in YYYY-MM-DD format */
+  @Column({ name: 'start_date', type: 'date', nullable: true })
+  startDate: string | null;
   
   @Column({ name: 'experience', type: 'text', array: true })
   experience: string[];

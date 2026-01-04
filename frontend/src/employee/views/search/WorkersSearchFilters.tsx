@@ -31,12 +31,12 @@ const WorkersSearchFilters: React.FC = () => {
     const formatFromTo = (range?: DateRange | null): string | null => {
         if (!range?.start) return null;
 
-        const startMonth = t(`callendar.monthShort.${range.start.getMonth()}`);
-        const startDayNumber = range.start.getDate();
+        const startMonth = t(`callendar.monthShort.${DateUtil.getMonth(range.start)}`);
+        const startDayNumber = DateUtil.getDay(range.start);
         let result = `${t("common.from")} ${startDayNumber} ${startMonth}`;
         if (range.end) {
-            const endMonth = t(`callendar.monthShort.${range.end.getMonth()}`);
-            const endDayNumber = range.end.getDate();
+            const endMonth = t(`callendar.monthShort.${DateUtil.getMonth(range.end)}`);
+            const endDayNumber = DateUtil.getDay(range.end);
             result += ` ${t("common.to")} ${endDayNumber} ${endMonth}`;
         }
         return result;
@@ -60,8 +60,8 @@ const WorkersSearchFilters: React.FC = () => {
                         <DateRangeIcon fontSize="inherit" className="secondary-text" />
                         <span className="xs-font">
                             {formatFromTo({ 
-                                start: DateUtil.parseDateFromStringLocalDate(ctx.filters.startDate),
-                                end: DateUtil.parseDateFromStringLocalDate(ctx.filters.endDate) })}
+                                start: ctx.filters.startDate,
+                                end: ctx.filters.endDate })}
                         </span>
                     </div>)}
 

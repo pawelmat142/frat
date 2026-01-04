@@ -8,7 +8,14 @@ import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import CallendarsView from './CallendarsView';
 
+/** Parses local date string (YYYY-MM-DD) to Date object */
+const parseLocalDateString = (dateStr: string): Date => {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+};
+
 interface DateRangeProps {
+    /** DateRange with start/end as local date strings in YYYY-MM-DD format */
     value?: DateRange | null;
     onChange?: (range?: DateRange | null) => void;
     label?: string;
@@ -37,9 +44,10 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
     const fullScreenDialogCtx = useFullScreenDialog();
     const { t } = useTranslation();
 
-    const _value = {
-        start: value?.start ? new Date(value.start) : null,
-        end: value?.end ? new Date(value.end) : null,
+    // Value is already in string format (YYYY-MM-DD), pass through directly
+    const _value: DateRange = {
+        start: value?.start || null,
+        end: value?.end || null,
         id: value?.id || undefined,
     }
 
@@ -80,22 +88,24 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
     const formatDateRange = (range?: DateRange | null, placeholder?: string): string => {
         if (!range?.start) return placeholder || '';
 
-        const startMonth = t(`callendar.monthShort.${range.start.getMonth()}`);
-        const startDayNumber = range.start.getDate();
+        const startDate = parseLocalDateString(range.start);
+        const startMonth = t(`callendar.monthShort.${startDate.getMonth()}`);
+        const startDayNumber = startDate.getDate();
         let result = `${startDayNumber} ${startMonth}`;
         
         // In single date mode, just show the date with year
         if (singleDateMode) {
-            result += ` ${range.start.getFullYear()}`;
+            result += ` ${startDate.getFullYear()}`;
             return result;
         }
         
         if (range.end) {
-            const endMonth = t(`callendar.monthShort.${range.end.getMonth()}`);
-            const endDayNumber = range.end.getDate();
-            result += ` - ${endDayNumber} ${endMonth} ${range.end.getFullYear()}`;
+            const endDate = parseLocalDateString(range.end);
+            const endMonth = t(`callendar.monthShort.${endDate.getMonth()}`);
+            const endDayNumber = endDate.getDate();
+            result += ` - ${endDayNumber} ${endMonth} ${endDate.getFullYear()}`;
         } else {
-            result += ` ${range.start.getFullYear()}`;
+            result += ` ${startDate.getFullYear()}`;
         }
         return result;
     }

@@ -11,6 +11,7 @@ import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import DateInputViewSelector from "global/components/callendar/DateInputViewSelector";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -28,7 +29,7 @@ const WorkerFormStep3: React.FC<Props> = ({ formRef }) => {
 
     const getDefaultDateRange = (): DateRange => {
         return {
-            start: new Date(),
+            start: DateUtil.toLocalDateString(new Date()),
             id: DateRangeUtil.newId(availabilityDateRanges)
         }
     }
@@ -46,18 +47,23 @@ const WorkerFormStep3: React.FC<Props> = ({ formRef }) => {
     }, [availabilityOption]);
 
     const addRateRange = () => {
-        let start: Date;
+        let start: string;
         if (availabilityDateRanges?.length) {
             // Find the latest end date among existing ranges
             const lastRange = availabilityDateRanges[availabilityDateRanges.length - 1];
             if (lastRange?.end) {
-                start = new Date(lastRange.end);
-                start.setDate(start.getDate() + 1); // next day after previous end
+                const endDate = DateUtil.parseDateFromStringLocalDate(lastRange.end);
+                if (endDate) {
+                    endDate.setDate(endDate.getDate() + 1); // next day after previous end
+                    start = DateUtil.toLocalDateString(endDate)!;
+                } else {
+                    start = DateUtil.toLocalDateString(new Date())!;
+                }
             } else {
-                start = new Date();
+                start = DateUtil.toLocalDateString(new Date())!;
             }
         } else {
-            start = new Date();
+            start = DateUtil.toLocalDateString(new Date())!;
         }
         const newRange: DateRange = { start, id: DateRangeUtil.newId(availabilityDateRanges) };
         const newRanges = [

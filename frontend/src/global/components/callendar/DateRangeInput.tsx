@@ -6,6 +6,7 @@ import { DateRange } from '@shared/interfaces/WorkerProfileI';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import DateRangePickerSheet from './DateRangePickerSheet';
 import { useTranslation } from 'react-i18next';
+import { DateUtil } from '@shared/utils/DateUtil';
 
 interface DateRangeProps {
     value?: DateRange | null;
@@ -41,16 +42,16 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
             showClose: true,
             children: (
                 <DateRangePickerSheet
-                    value={value?.start}
+                    value={value?.start ? DateUtil.parseLocalDateString(value.start) : undefined}
                     onChange={(startDate) => {
                         if (onChange) {
-                            onChange({ start: startDate, end: value?.end });
+                            onChange({ start: DateUtil.toLocalDateString(startDate) ?? undefined, end: value?.end });
                         }
                         bottomSheetCtx.close();
                     }}
                     disabled={disabled}
-                    startDate={value?.start}
-                    endDate={value?.end}
+                    startDate={value?.start ? DateUtil.parseLocalDateString(value.start) : undefined}
+                    endDate={value?.end ? DateUtil.parseLocalDateString(value.end) : undefined}
                 />
             )
         });
@@ -65,17 +66,17 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
             showClose: true,
             children: (
                 <DateRangePickerSheet
-                    value={value?.end}
+                    value={value?.end ? DateUtil.parseLocalDateString(value.end) : undefined}
                     onChange={(endDate) => {
                         if (onChange) {
-                            onChange({ start: value?.start, end: endDate });
+                            onChange({ start: value?.start, end: DateUtil.toLocalDateString(endDate) ?? undefined });
                         }
                         bottomSheetCtx.close();
                     }}
                     disabled={disabled}
-                    minDate={value?.start}
-                    startDate={value?.start}
-                    endDate={value?.end}
+                    minDate={value?.start ? DateUtil.parseLocalDateString(value.start) : undefined}
+                    startDate={value?.start ? DateUtil.parseLocalDateString(value.start) : undefined}
+                    endDate={value?.end ? DateUtil.parseLocalDateString(value.end) : undefined}
                 />
             )
         });
@@ -102,7 +103,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                             id={name}
                             name={name ? `${name}_start` : undefined}
                             type="text"
-                            value={value?.start ? new Date(value.start).toLocaleDateString() : ''}
+                            value={value?.start ? DateUtil.parseLocalDateString(value.start).toLocaleDateString() : ''}
                             onClick={handleStartDateClick}
                             className="floating-input primary-text flex-1 cursor-pointer"
                             disabled={disabled}
@@ -115,7 +116,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
                             id={name ? `${name}_end` : undefined}
                             name={name ? `${name}_end` : undefined}
                             type="text"
-                            value={value?.end?.toLocaleDateString() || ''}
+                            value={value?.end ? DateUtil.parseLocalDateString(value.end).toLocaleDateString() : ''}
                             onClick={handleEndDateClick}
                             className="floating-input primary-text flex-1 cursor-pointer"
                             disabled={disabled}

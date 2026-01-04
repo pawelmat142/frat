@@ -2,6 +2,7 @@ import { DateRange } from "@shared/interfaces/WorkerProfileI";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import CallendarDaysHeader from "./CallendarDaysHeader";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface MonthCallendarProps {
     date: Date;
@@ -99,8 +100,8 @@ const MonthCallendar: React.FC<MonthCallendarProps> = ({
     // Normalize selected range boundaries (inclusive)
     const rangeBoundaries = useMemo(() => {
         if (!selectedRange?.start || !selectedRange?.end) return null;
-        const startDate = selectedRange.start instanceof Date ? selectedRange.start : new Date(selectedRange.start as any);
-        const endDate = selectedRange.end instanceof Date ? selectedRange.end : new Date(selectedRange.end as any);
+        const startDate = DateUtil.parseLocalDateString(selectedRange.start);
+        const endDate = DateUtil.parseLocalDateString(selectedRange.end);
         // Normalize to midnight to avoid issues with timezones
         const startMid = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).getTime();
         const endMid = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()).getTime();
@@ -110,7 +111,7 @@ const MonthCallendar: React.FC<MonthCallendarProps> = ({
     // Single start day (no end) highlight
     const singleStartMid = useMemo(() => {
         if (selectedRange?.start && !selectedRange?.end) {
-            const s = selectedRange.start instanceof Date ? selectedRange.start : new Date(selectedRange.start as any);
+            const s = DateUtil.parseLocalDateString(selectedRange.start);
             return new Date(s.getFullYear(), s.getMonth(), s.getDate()).getTime();
         }
         return null;
@@ -119,7 +120,7 @@ const MonthCallendar: React.FC<MonthCallendarProps> = ({
     // Single end day (no start) highlight
     const singleEndMid = useMemo(() => {
         if (selectedRange?.end && !selectedRange?.start) {
-            const e = selectedRange.end instanceof Date ? selectedRange.end : new Date(selectedRange.end as any);
+            const e = DateUtil.parseLocalDateString(selectedRange.end);
             return new Date(e.getFullYear(), e.getMonth(), e.getDate()).getTime();
         }
         return null;

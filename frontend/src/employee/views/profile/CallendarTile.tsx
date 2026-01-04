@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useFullScreenDialog } from "global/providers/FullScreenDialogProvider";
 import CallendarsView from "global/components/callendar/CallendarsView";
 import { useBottomSheet } from "global/providers/BottomSheetProvider";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface CallendarTileProps {
     range: DateRange | null;
@@ -14,9 +15,9 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ range }) => {
 
     const { t } = useTranslation();
 
-    const date = range?.start || null;
+    const dateStr = range?.start || null;
 
-    if (!date) {
+    if (!dateStr) {
         return (
             <div className="square-tile col-tile px-5">
                 {t("others.availableAnytime")}
@@ -24,6 +25,7 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ range }) => {
         )
     }
 
+    const date = DateUtil.parseLocalDateString(dateStr);
     const month = date.getMonth();
     const year = date.getFullYear();
 

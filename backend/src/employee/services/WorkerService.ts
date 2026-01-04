@@ -8,6 +8,7 @@ import { ToastException } from 'global/exceptions/ToastException';
 import { WorkerUtil } from './WorkerUtil';
 import { DeepPartial } from 'typeorm';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
+import { DateUtil } from '@shared/utils/DateUtil';
 import { WorkersInitialData } from './WorkersInitialData';
 import { Subscription } from 'rxjs';
 import { UserService } from 'user/services/UserService';
@@ -200,7 +201,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
             result.startDate = form.startDate
         }
         if (result.availabilityOption === WorkerAvailabilityOptions.ANYTIME) {
-            result.startDate = new Date();
+            result.startDate = DateUtil.toLocalDateString(new Date());
         }
     }
 
