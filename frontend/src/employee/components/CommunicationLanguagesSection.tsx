@@ -6,14 +6,14 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileForm, EmployeeProfileFormStep1 } from "@shared/interfaces/EmployeeProfileI";
+import { WorkerForm, WorkerFormStep1 } from "@shared/interfaces/WorkerProfileI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 
 interface Props {
   control: Control<any>;
   setValue: UseFormSetValue<any>;
   watch: UseFormWatch<any>;
-  formState?: FormState<EmployeeProfileForm>;
+  formState?: FormState<WorkerForm>;
 }
 
 const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, watch, formState }) => {

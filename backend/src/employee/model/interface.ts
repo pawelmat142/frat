@@ -1,5 +1,3 @@
-import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
-
 export interface CountryFeature {
     type: 'Feature';
     properties: {
@@ -14,4 +12,3 @@ export interface CountryFeature {
     };
 }
 
-export type EmployeeProfileParams = Partial<EmployeeProfileI>;

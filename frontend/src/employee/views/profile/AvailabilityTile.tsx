@@ -1,11 +1,11 @@
-import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
+import { WorkerI } from "@shared/interfaces/WorkerProfileI";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import Loading from "global/components/Loading";
 
 interface AvailabilityTileProps {
-    profile: EmployeeProfileI
+    profile: WorkerI
     languagesDictionary?: DictionaryI | null
 }
 

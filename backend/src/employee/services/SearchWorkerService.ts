@@ -1,25 +1,25 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger } from '@nestjs/common';
-import { EmployeeProfileRepo } from './EmployeeProfileRepo';
+import { WorkerRepo } from './WorkerRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { DEFAULT_SEARCH_DISTANCE_M, EmmployeeProfileSearchSortOptions, EmployeeProfileAvailabilityOptions, EmployeeProfileLocationOptions, EmployeeProfileSearchFilters, EmployeeProfileSearchResponse, EmployeeProfileStatuses, PROFILES_INITIAL_SEARCH_LIMIT } from '@shared/interfaces/EmployeeProfileI';
+import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchFilters, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT } from '@shared/interfaces/WorkerProfileI';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { SelectQueryBuilder } from 'typeorm';
-import { EmployeeProfileEntity } from 'employee/model/EmployeeProfileEntity';
+import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { SearchUtil } from 'global/utils/SearchUtil';
 
 @Injectable()
-export class SearchEmployeeProfileService {
+export class SearchWorkersService {
 
     private readonly logger = new Logger(this.constructor.name);
 
     constructor(
-        private readonly employeeProfileRepo: EmployeeProfileRepo,
+        private readonly workerRepo: WorkerRepo,
     ) { }
 
-    async searchEmployeeProfiles(user: UserI, filters: EmployeeProfileSearchFilters): Promise<EmployeeProfileSearchResponse> {
+    async searchWorkers(user: UserI, filters: WorkerSearchFilters): Promise<WorkerSearchResponse> {
         // Step 1: Build base query for filtering (without eagerly loading relations to avoid row multiplication)
-        const baseQueryBuilder = this.employeeProfileRepo.getQueryBuilder()
+        const baseQueryBuilder = this.workerRepo.getQueryBuilder()
             .leftJoin('profile.availabilityDateRanges', 'ranges');
 
         let hasFilter = false;
@@ -38,8 +38,8 @@ export class SearchEmployeeProfileService {
         // Step 3: Get paginated profile IDs (distinct, with sorting)
         // Using subquery approach to avoid DISTINCT + ORDER BY column mismatch
         const idsQueryBuilder = baseQueryBuilder.clone()
-            .select('profile.employee_profile_id', 'id')
-            .groupBy('profile.employee_profile_id');
+            .select('profile.worker_id', 'id')
+            .groupBy('profile.worker_id');
 
         this.addSortingForIds(idsQueryBuilder, filters);
         this.addPagination(idsQueryBuilder, filters);
@@ -48,7 +48,7 @@ export class SearchEmployeeProfileService {
         const profileIds = idsResult.map(row => row.id);
 
         // Step 4: Load full profiles with relations using the IDs
-        const resultsQueryBuilder = this.employeeProfileRepo.getQueryBuilder()
+        const resultsQueryBuilder = this.workerRepo.getQueryBuilder()
             .leftJoinAndSelect('profile.availabilityDateRanges', 'ranges')
             .whereInIds(profileIds);
 
@@ -64,26 +64,26 @@ export class SearchEmployeeProfileService {
 
     // TODO sortowanie po start date jakoś koślawo działa
 
-    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
+    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters) {
         switch (filters.sortBy) {
-            case EmmployeeProfileSearchSortOptions.START_FROM_ASC:
+            case WorkerSearchSortOptions.START_FROM_ASC:
                 idsQueryBuilder
                     .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
                     .addOrderBy('earliest_date', SearchUtil.ASC, 'NULLS LAST');
                 break;
 
-            case EmmployeeProfileSearchSortOptions.START_FROM_DESC:
+            case WorkerSearchSortOptions.START_FROM_DESC:
                 idsQueryBuilder
                     .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
                     .addOrderBy('earliest_date', SearchUtil.DESC, 'NULLS FIRST');
                 break;
 
-            case EmmployeeProfileSearchSortOptions.CREATED_AT_DESC:
+            case WorkerSearchSortOptions.CREATED_AT_DESC:
                 idsQueryBuilder
                     .addSelect('MAX(profile.created_at)', 'sort_created_at')
                     .addOrderBy('sort_created_at', SearchUtil.DESC);
                 break;
-            case EmmployeeProfileSearchSortOptions.CREATED_AT_ASC:
+            case WorkerSearchSortOptions.CREATED_AT_ASC:
                 idsQueryBuilder
                     .addSelect('MIN(profile.created_at)', 'sort_created_at')
                     .addOrderBy('sort_created_at', SearchUtil.ASC);
@@ -111,27 +111,27 @@ export class SearchEmployeeProfileService {
     }
 
     /** Preserve order from paginated IDs query using CASE expression */
-    private addSortingById(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, profileIds: number[]) {
+    private addSortingById(queryBuilder: SelectQueryBuilder<WorkerEntity>, profileIds: number[]) {
         if (profileIds.length === 0) return;
 
         // Preserve original order using CASE WHEN
         const orderCase = profileIds
-            .map((id, index) => `WHEN profile.employee_profile_id = ${id} THEN ${index}`)
+            .map((id, index) => `WHEN profile.worker_id = ${id} THEN ${index}`)
             .join(' ');
 
         queryBuilder.orderBy(`CASE ${orderCase} END`, 'ASC');
     }
 
     
-    private getCount(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>): Promise<number> {
+    private getCount(queryBuilder: SelectQueryBuilder<WorkerEntity>): Promise<number> {
         const countQuery = queryBuilder.clone()
-            .select('profile.employee_profile_id')
+            .select('profile.worker_id')
             .distinct(true)
             .orderBy();
         return countQuery.getCount();
     }
 
-    private addPagination(queryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters) {
+    private addPagination(queryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters) {
         const skip = Number(filters.skip) || 0;
         const limit = Number(filters.limit) || PROFILES_INITIAL_SEARCH_LIMIT;
         queryBuilder.offset(skip).limit(limit);
@@ -155,14 +155,14 @@ export class SearchEmployeeProfileService {
     //     }
     // }
 
-    private addDateRangeFilter(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
+    private addDateRangeFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
         // Date range filter - use already joined ranges
         if (filters.startDate && filters.endDate) {
             baseQueryBuilder.andWhere(`(
-                profile.availability_option = '${EmployeeProfileAvailabilityOptions.ANYTIME}'
+                profile.availability_option = '${WorkerAvailabilityOptions.ANYTIME}'
                 OR ranges.date_range @> daterange(:startDate, :endDate, '[]')
                 OR (
-                    profile.availability_option = '${EmployeeProfileAvailabilityOptions.FROM_DATE}'
+                    profile.availability_option = '${WorkerAvailabilityOptions.FROM_DATE}'
                     AND lower(ranges.date_range) <= :startDate::date
                 )
             )`, {
@@ -173,10 +173,10 @@ export class SearchEmployeeProfileService {
         } else if (filters.startDate) {
             // znajdz profile, gdzie start miesci sie w którymś z przedziałów tego profilu 
             baseQueryBuilder.andWhere(`(
-                profile.availability_option = '${EmployeeProfileAvailabilityOptions.ANYTIME}'
+                profile.availability_option = '${WorkerAvailabilityOptions.ANYTIME}'
                 OR ranges.date_range @> :startDate::date
                 OR (
-                    profile.availability_option = '${EmployeeProfileAvailabilityOptions.FROM_DATE}'
+                    profile.availability_option = '${WorkerAvailabilityOptions.FROM_DATE}'
                     AND lower(ranges.date_range) <= :startDate::date
                 )
             )`, {
@@ -203,12 +203,12 @@ export class SearchEmployeeProfileService {
     //     }
     // }
 
-    private addBasicFilters(baseQueryBuilder: SelectQueryBuilder<EmployeeProfileEntity>, filters: EmployeeProfileSearchFilters, hasFilter: boolean) {
+    private addBasicFilters(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
         const experience = SearchUtil.parseArray(filters.experience);
         const certificates = SearchUtil.parseArray(filters.certificates);
         const communicationLanguages = SearchUtil.parseArray(filters.communicationLanguages);
         // Base condition - only ACTIVE profiles
-        baseQueryBuilder.where('profile.status = :status', { status: EmployeeProfileStatuses.ACTIVE });
+        baseQueryBuilder.where('profile.status = :status', { status: WorkerStatuses.ACTIVE });
 
         if (communicationLanguages?.length) {
             baseQueryBuilder.andWhere('profile.communication_languages @> :languages', { languages: communicationLanguages });

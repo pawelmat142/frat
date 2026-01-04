@@ -1,26 +1,26 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
-import { EmployeeProfileI, EmployeeProfileSearchFilters, PROFILE_DEFAULT_SORT_OPTION, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT } from "@shared/interfaces/EmployeeProfileI";
-import { EPUtil } from "@shared/utils/EPUtil";
+import { WorkerService } from "employee/services/WorkerService";
+import { WorkerI, WorkerSearchFilters, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT } from "@shared/interfaces/WorkerProfileI";
+import { WorkerUtil } from "@shared/utils/WorkerUtil";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
 
-export interface EmployeeSearchContextProps {
-    filters: EmployeeProfileSearchFilters;
-    defaultFilters: EmployeeProfileSearchFilters;
-    setFiltersWithSearchAndNavigate: (filters: EmployeeProfileSearchFilters) => void;
+export interface WorkersSearchContextProps {
+    filters: WorkerSearchFilters;
+    defaultFilters: WorkerSearchFilters;
+    setFiltersWithSearchAndNavigate: (filters: WorkerSearchFilters) => void;
     resetFilters: () => void;
-    results: EmployeeProfileI[];
+    results: WorkerI[];
     loading: boolean;
     loadingMore: boolean;
     hasMore: boolean;
     loadMore: () => void;
     setLoading: (loading: boolean) => void;
-    updateOneProfileInResults: (updatedProfile: EmployeeProfileI) => void;
+    updateOneProfileInResults: (updatedProfile: WorkerI) => void;
 }
 
-export const EPDefaultFilters: EmployeeProfileSearchFilters = {
+export const WorkerDefaultFilters: WorkerSearchFilters = {
     startDate: null,
     endDate: null,
 
@@ -35,23 +35,23 @@ export const EPDefaultFilters: EmployeeProfileSearchFilters = {
     limit: PROFILES_INITIAL_SEARCH_LIMIT,
 };
 
-const EmployeeSearchContext = createContext<EmployeeSearchContextProps | undefined>(undefined)
+const WorkersSearchContext = createContext<WorkersSearchContextProps | undefined>(undefined)
 
 
-export const useEmployeeSearch = () => {
-    const ctx = useContext(EmployeeSearchContext);
+export const useWorkersSearch = () => {
+    const ctx = useContext(WorkersSearchContext);
     if (!ctx) throw new Error("useEmployeeSearch must be used within EmployeeSearchProvider");
     return ctx;
 };
 
-const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const userCtx = useUserContext();
 
-    const [filters, setFiltersState] = useState<EmployeeProfileSearchFilters>(EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters))
+    const [filters, setFiltersState] = useState<WorkerSearchFilters>(WorkerUtil.parseFiltersFromSearch(location.search, WorkerDefaultFilters))
 
-    const [results, setResults] = useState<EmployeeProfileI[]>([]);
+    const [results, setResults] = useState<WorkerI[]>([]);
     const [loading, setLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
 
@@ -59,7 +59,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const resultsLengthRef = useRef(0);
     const hasMoreRef = useRef(false);
 
-    const executeSearch = useCallback(async (searchFilters: EmployeeProfileSearchFilters, loadMore: boolean) => {
+    const executeSearch = useCallback(async (searchFilters: WorkerSearchFilters, loadMore: boolean) => {
         const requestId = ++requestIdRef.current;
         if (loadMore) {
             setLoadingMore(true);
@@ -68,7 +68,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
 
         try {
-            const result = await EmployeeProfileService.searchEmployeeProfiles(searchFilters);
+            const result = await WorkerService.searchWorkers(searchFilters);
             if (requestId !== requestIdRef.current) {
                 return;
             }
@@ -107,7 +107,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
             return
         }
         const newFilters = {
-            ...EPUtil.parseFiltersFromSearch(location.search, EPDefaultFilters),
+            ...WorkerUtil.parseFiltersFromSearch(location.search, WorkerDefaultFilters),
             skip: 0, // Always start from beginning for new search
             limit: PROFILES_INITIAL_SEARCH_LIMIT,
         };
@@ -121,13 +121,13 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }, [location.search]);
 
 
-    const setFiltersWithSearchAndNavigate = (newFilters: EmployeeProfileSearchFilters) => {
+    const setFiltersWithSearchAndNavigate = (newFilters: WorkerSearchFilters) => {
 
         setFiltersState(newFilters);
         resultsLengthRef.current = 0;
         hasMoreRef.current = false;
 
-        const searchStr = EPUtil.prepareUrlParams(newFilters, EPDefaultFilters)
+        const searchStr = WorkerUtil.prepareUrlParams(newFilters, WorkerDefaultFilters)
         const newUrl = searchStr ? `?${searchStr}` : ''
 
         if (newUrl !== location.search) {
@@ -150,10 +150,10 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
 
     const resetFilters = () => {
-        setFiltersState(EPDefaultFilters);
+        setFiltersState(WorkerDefaultFilters);
     };
 
-    const updateOneProfileInResults = (updatedProfile: EmployeeProfileI) => {
+    const updateOneProfileInResults = (updatedProfile: WorkerI) => {
         if (results.map(profile => profile.uid).includes(updatedProfile.uid)) {
             setResults(profiles => {
                 return profiles.map(profile => profile.uid === updatedProfile.uid ? updatedProfile : profile);
@@ -162,7 +162,7 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
 
     return (
-        <EmployeeSearchContext.Provider value={{
+        <WorkersSearchContext.Provider value={{
             filters,
             setFiltersWithSearchAndNavigate,
             hasMore: hasMoreRef.current,
@@ -172,12 +172,12 @@ const EmployeeSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
             loadMore,
             setLoading,
             resetFilters,
-            defaultFilters: EPDefaultFilters,
+            defaultFilters: WorkerDefaultFilters,
             updateOneProfileInResults
         }}>
             {children}
-        </EmployeeSearchContext.Provider>
+        </WorkersSearchContext.Provider>
     );
 };
 
-export default EmployeeSearchProvider;
+export default WorkersSearchProvider;

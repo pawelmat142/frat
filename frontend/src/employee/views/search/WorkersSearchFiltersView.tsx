@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import Loading from "global/components/Loading";
-import { EmployeeSearchContextProps, EPDefaultFilters, useEmployeeSearch } from "./EmployeeSearchProvider";
+import { WorkersSearchContextProps, WorkerDefaultFilters, useWorkersSearch } from "./WorkersSearchProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import { DateRange, EmmployeeProfileSearchSortOptions, EmployeeProfileSearchFilters } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, WorkerSearchSortOptions, WorkerSearchFilters } from "@shared/interfaces/WorkerProfileI";
 import { BtnModes, BtnSizes, SelectorItem } from "global/interface/controls.interface";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 import { Controller, useForm } from "react-hook-form";
@@ -17,9 +17,9 @@ const WorkersSearchFiltersView: React.FC = () => {
 
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
-    const ctx: EmployeeSearchContextProps = useEmployeeSearch()
+    const ctx: WorkersSearchContextProps = useWorkersSearch()
 
-    const f = useForm<EmployeeProfileSearchFilters>({
+    const f = useForm<WorkerSearchFilters>({
         defaultValues: ctx.filters
     })
 
@@ -43,13 +43,13 @@ const WorkersSearchFiltersView: React.FC = () => {
         console.log('Submitting form with values:', formState);
     }
 
-    const sortOptionItems: SelectorItem<string>[] = Object.keys(EmmployeeProfileSearchSortOptions).map((option: string) => ({
+    const sortOptionItems: SelectorItem<string>[] = Object.keys(WorkerSearchSortOptions).map((option: string) => ({
         value: option,
         label: t('employeeProfile.form.sortOptions.' + option)
     }))
 
     const resetFilters = () => {
-        f.reset(EPDefaultFilters);
+        f.reset(WorkerDefaultFilters);
         ctx.resetFilters()
     }
 
@@ -83,7 +83,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                             value={prepareDateRange()}
                             error={f.formState.errors.startDate?.message}
                             onChange={(dateRange) => {
-                                const filters: EmployeeProfileSearchFilters = {
+                                const filters: WorkerSearchFilters = {
                                     ...formState,
                                     startDate: dateRange?.start || null,
                                     endDate: dateRange?.end || null

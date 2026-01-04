@@ -1,4 +1,4 @@
-import { DateRange, DateRangeI, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, DateRangeI, WorkerI } from "@shared/interfaces/WorkerProfileI";
 import { DateUtil } from "./DateUtil";
 
 export abstract class DateRangeUtil {
@@ -71,7 +71,7 @@ export abstract class DateRangeUtil {
     }
 
 
-    public static getFirstRange = (profile: EmployeeProfileI): DateRange | null => {
+    public static getFirstRange = (profile: WorkerI): DateRange | null => {
         const rangeI = profile.availabilityDateRanges?.[0];
         if (!rangeI) {
             return null;

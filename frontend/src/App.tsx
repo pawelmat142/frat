@@ -24,7 +24,7 @@ import WorkerFormView from 'employee/views/form/WorkerFormView';
 import AdminFeedbacks from 'admin/views/feedback/AdminFeedbacks';
 import WorkersSearchView from 'employee/views/search/WorkersSearchView';
 import AdminEmployeeProfiles from 'admin/views/employee_profiles/AdminEmployeeProfiles';
-import EmployeeProfileView from 'employee/views/profile/EmployeeProfileView';
+import WorkerView from 'employee/views/profile/WorkerView';
 import OfferFormView from 'offer/views/form/OfferFormView';
 import UserOffersList from 'offer/views/UserOffersList';
 import OfferView from 'offer/views/offer-view/OfferView';
@@ -73,7 +73,7 @@ const App: React.FC = () => {
                 <Route path={Path.CHAT_CONVERSATION} element={<PageWrapper direction={1}><ProtectedRoute><ChatConversationView /></ProtectedRoute></PageWrapper>} />
 
                 {/* EMPLOYEE PROFILE */}
-                <Route path={Path.WORKER} element={<PageWrapper direction={1}><EmployeeProfileView /></PageWrapper>} />
+                <Route path={Path.WORKER} element={<PageWrapper direction={1}><WorkerView /></PageWrapper>} />
                 <Route path={Path.WORKERS_SEARCH} element={<PageWrapper direction={1}><WorkersSearchView /></PageWrapper>} />
                 <Route path={Path.WORKERS_FILTERS_SEARCH} element={<PageWrapper direction={1}><WorkersSearchFiltersView /></PageWrapper>} />
                 <Route path={Path.WORKER_FORM} element={<PageWrapper direction={1}><ProtectedRoute><WorkerFormView /></ProtectedRoute></PageWrapper>} />

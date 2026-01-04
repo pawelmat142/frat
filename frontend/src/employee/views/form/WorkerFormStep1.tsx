@@ -4,18 +4,18 @@ import { useTranslation } from "react-i18next";
 import FloatingInput from "global/components/controls/FloatingInput";
 import { FormValidator } from "global/FormValidator";
 import {
-    EmployeeProfileForm
-} from "@shared/interfaces/EmployeeProfileI";
+    WorkerForm
+} from "@shared/interfaces/WorkerProfileI";
 import CommunicationLanguagesSection from "../../components/CommunicationLanguagesSection";
 import AvatarUploadField from "global/components/controls/AvatarUploadField";
 import PhoneNumberFloatingInput from "global/components/controls/PhoneNumberFloatingInput";
 import { useAuthContext } from "auth/AuthProvider";
 
 interface Props {
-    formRef: UseFormReturn<EmployeeProfileForm>;
+    formRef: UseFormReturn<WorkerForm>;
 }
 
-const EmployeeProfileStep1: React.FC<Props> = ({ formRef }) => {
+const WorkerFormStep1: React.FC<Props> = ({ formRef }) => {
     const { t } = useTranslation();
     const { me } = useAuthContext();
     const required = FormValidator.required(t);
@@ -102,4 +102,4 @@ const EmployeeProfileStep1: React.FC<Props> = ({ formRef }) => {
     );
 };
 
-export default EmployeeProfileStep1;
+export default WorkerFormStep1;

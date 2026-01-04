@@ -16,7 +16,7 @@ const MainTiles: React.FC = () => {
     const navigate = useNavigate()
     const { t } = useTranslation()
     const { me } = useAuthContext()
-    const { employeeProfile, offers } = useUserContext()
+    const { worker: employeeProfile, offers } = useUserContext()
 
     const hasSomeOffers = !!offers?.length
 
@@ -42,7 +42,7 @@ const MainTiles: React.FC = () => {
                 {!!me && (
                     <>
                         {employeeProfile ? (
-                            <div className="square-tile col-tile" onClick={() => navigate(Path.getEmployeeProfilePath(me!.displayName))}>
+                            <div className="square-tile col-tile" onClick={() => navigate(Path.getWorkerProfilePath(me!.displayName))}>
                                 <FaUser size={iconSize} />
                                 <div>{t("profile.tile")}</div>
                             </div>

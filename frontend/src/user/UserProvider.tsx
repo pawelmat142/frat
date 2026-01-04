@@ -1,6 +1,6 @@
 import React, { createContext, useContext, ReactNode } from 'react';
-import { EmployeeProfileI } from '@shared/interfaces/EmployeeProfileI';
-import { EmployeeProfileService } from 'employee/services/EmployeeProfileService';
+import { WorkerI } from '@shared/interfaces/WorkerProfileI';
+import { WorkerService } from 'employee/services/WorkerService';
 import { useAuthContext } from 'auth/AuthProvider';
 import { OfferI } from '@shared/interfaces/OfferI';
 import { OffersService } from 'offer/services/OffersService';
@@ -8,10 +8,10 @@ import { toast } from 'react-toastify';
 import { Position } from '@shared/interfaces/MapsInterfaces';
 
 interface UserContextType {
-	employeeProfile: EmployeeProfileI | null;
+	worker: WorkerI | null;
 	position: Position | null;
-	initEmployeeProfile: () => void;
-	cleanEmployeeProfile: () => void;
+	initWorker: () => void;
+	cleanWorker: () => void;
 	offers: OfferI[];
 	initOffers: () => void;
 	cleanOffers: () => void;
@@ -23,7 +23,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
-	const [employeeProfile, setEmployeeProfile] = React.useState<EmployeeProfileI | null>(null);
+	const [worker, setWorker] = React.useState<WorkerI | null>(null);
 
 	const [offers, setOffers] = React.useState<OfferI[]>([]);
 
@@ -37,14 +37,14 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	React.useEffect(() => {
 		if (authCtx.me) {
 			Promise.all([
-				initEmployeeProfile(true),
+				initWorker(true),
 				initOffers(true),
 				initLocation(true),
 			]).then(() => {
 				setLoading(false);
 			})
 		} else {
-			cleanEmployeeProfile()
+			cleanWorker()
 			cleanOffers()
 			cleanPosition()
 		}
@@ -118,18 +118,18 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		toast.warn('Could not fetch location');
 	}
 
-	const initEmployeeProfile = async (init?: boolean) => {
+	const initWorker = async (init?: boolean) => {
 		try {
 			setLoading(true);
-			const profile = await EmployeeProfileService.getEmployeeProfile();
+			const profile = await WorkerService.getWorker();
 			console.log("Fetched employee profile:", profile);
 			if (profile) {
-				setEmployeeProfile(profile);
+				setWorker(profile);
 			} else {
-				setEmployeeProfile(null);
+				setWorker(null);
 			}
 		} catch (error) {
-			setEmployeeProfile(null);
+			setWorker(null);
 		}
 		finally {
 			if (!init) {
@@ -162,15 +162,15 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		setOffers([]);
 	}
 
-	const cleanEmployeeProfile = () => {
-		setEmployeeProfile(null);
+	const cleanWorker = () => {
+		setWorker(null);
 	}
 
 	return (
 		<UserContext.Provider value={{
-			employeeProfile: employeeProfile,
-			initEmployeeProfile: initEmployeeProfile,
-			cleanEmployeeProfile: cleanEmployeeProfile,
+			worker: worker,
+			initWorker: initWorker,
+			cleanWorker: cleanWorker,
 			offers: offers,
 			initOffers: initOffers,
 			cleanOffers: cleanOffers,

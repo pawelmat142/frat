@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { DateRange, EmployeeProfileAvailabilityOption, EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileFormRangesOption, EmployeeProfileFormRangesOptions } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, WorkerAvailabilityOption, WorkerAvailabilityOptions, WorkerForm, WorkerFormRangesOption, WorkerFormRangesOptions } from "@shared/interfaces/WorkerProfileI";
 import { FormValidator } from "global/FormValidator";
 import TabSwitcher, { TabSwitcherOption } from "../../components/TabSwitcher";
 import IconButton from "global/components/controls/IconButon";
@@ -13,10 +13,10 @@ import DateInputViewSelector from "global/components/callendar/DateInputViewSele
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 
 interface Props {
-    formRef: UseFormReturn<EmployeeProfileForm>;
+    formRef: UseFormReturn<WorkerForm>;
 }
 
-const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
+const WorkerFormStep3: React.FC<Props> = ({ formRef }) => {
     const { control, setValue, watch, getValues, formState } = formRef;
     const { t } = useTranslation();
     const availabilityOption = watch("step3.availabilityOption");
@@ -35,7 +35,7 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
 
     useEffect(() => {
         if (
-            availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES &&
+            availabilityOption === WorkerAvailabilityOptions.DATE_RANGES &&
             (!availabilityDateRanges?.length)
         ) {
             const range = getDefaultDateRange()
@@ -76,32 +76,32 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
 
     const tabOptions: TabSwitcherOption[] = [
         {
-            label: t(`employeeProfile.form.availabilityOption.${EmployeeProfileAvailabilityOptions.FROM_DATE}.tab`),
-            code: EmployeeProfileAvailabilityOptions.FROM_DATE,
+            label: t(`employeeProfile.form.availabilityOption.${WorkerAvailabilityOptions.FROM_DATE}.tab`),
+            code: WorkerAvailabilityOptions.FROM_DATE,
         },
         {
-            label: t(`employeeProfile.form.availabilityOption.${EmployeeProfileAvailabilityOptions.DATE_RANGES}.tab`),
-            code: EmployeeProfileAvailabilityOptions.DATE_RANGES,
+            label: t(`employeeProfile.form.availabilityOption.${WorkerAvailabilityOptions.DATE_RANGES}.tab`),
+            code: WorkerAvailabilityOptions.DATE_RANGES,
         },
         {
-            label: t(`employeeProfile.form.availabilityOption.${EmployeeProfileAvailabilityOptions.ANYTIME}.tab`),
-            code: EmployeeProfileAvailabilityOptions.ANYTIME,
+            label: t(`employeeProfile.form.availabilityOption.${WorkerAvailabilityOptions.ANYTIME}.tab`),
+            code: WorkerAvailabilityOptions.ANYTIME,
         },
     ];
 
     const rangesOptions: TabSwitcherOption[] = [{
-        label: t(`employeeProfile.form.rangesOption.${EmployeeProfileFormRangesOptions.AVAILABLE_ON}.tab`),
-        code: EmployeeProfileFormRangesOptions.AVAILABLE_ON,
+        label: t(`employeeProfile.form.rangesOption.${WorkerFormRangesOptions.AVAILABLE_ON}.tab`),
+        code: WorkerFormRangesOptions.AVAILABLE_ON,
     }, {
-        label: t(`employeeProfile.form.rangesOption.${EmployeeProfileFormRangesOptions.NOT_AVAILABLE_ON}.tab`),
-        code: EmployeeProfileFormRangesOptions.NOT_AVAILABLE_ON,
+        label: t(`employeeProfile.form.rangesOption.${WorkerFormRangesOptions.NOT_AVAILABLE_ON}.tab`),
+        code: WorkerFormRangesOptions.NOT_AVAILABLE_ON,
     }]
 
 
-    const setAvailabilityOption = (option: EmployeeProfileAvailabilityOption) => {
+    const setAvailabilityOption = (option: WorkerAvailabilityOption) => {
         setValue("step3.availabilityOption", option);
-        if (option === EmployeeProfileAvailabilityOptions.DATE_RANGES && !rangesOption) {
-            setValue("step3.rangesOption", EmployeeProfileFormRangesOptions.AVAILABLE_ON);
+        if (option === WorkerAvailabilityOptions.DATE_RANGES && !rangesOption) {
+            setValue("step3.rangesOption", WorkerFormRangesOptions.AVAILABLE_ON);
         }
     }
 
@@ -115,16 +115,16 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
                 <TabSwitcher
                     options={tabOptions}
                     value={availabilityOption}
-                    onChange={code => setAvailabilityOption(code as EmployeeProfileAvailabilityOption)}
+                    onChange={code => setAvailabilityOption(code as WorkerAvailabilityOption)}
                 />
                 <div className="w-full flex">
                     <div className="primary-text w-full">
-                        {availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME && (
+                        {availabilityOption === WorkerAvailabilityOptions.ANYTIME && (
                             <div className={msgClass}>
                                 {t("employeeProfile.form.availabilityOption.ANYTIME.msg")}
                             </div>
                         )}
-                        {availabilityOption === EmployeeProfileAvailabilityOptions.FROM_DATE && (
+                        {availabilityOption === WorkerAvailabilityOptions.FROM_DATE && (
                             <>
                                 <div className={msgClass}>
                                     {t("employeeProfile.form.availabilityOption.FROM_DATE.msg")}
@@ -153,13 +153,13 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
                                 </div>
                             </>
                         )}
-                        {availabilityOption === EmployeeProfileAvailabilityOptions.DATE_RANGES && (
+                        {availabilityOption === WorkerAvailabilityOptions.DATE_RANGES && (
                             <div className="w-full">
 
                                 <TabSwitcher
                                     options={rangesOptions}
                                     value={rangesOption!}
-                                    onChange={code => setValue("step3.rangesOption", code as EmployeeProfileFormRangesOption)}
+                                    onChange={code => setValue("step3.rangesOption", code as WorkerFormRangesOption)}
                                 />
 
                                 <div className={msgClass}>
@@ -225,4 +225,4 @@ const EmployeeProfileStep3: React.FC<Props> = ({ formRef }) => {
     );
 };
 
-export default EmployeeProfileStep3;
+export default WorkerFormStep3;

@@ -1,4 +1,4 @@
-SELECT employee_profile_id,
+SELECT worker_id,
              uid,
              status,
              display_name,
@@ -21,7 +21,7 @@ LIMIT 1000;
 -- Wynik jako JSON (każdy wiersz jako obiekt)
 SELECT row_to_json(t)
 FROM (
-    SELECT employee_profile_id,
+    SELECT worker_id,
                  uid,
                  status,
                  display_name,
@@ -45,7 +45,7 @@ FROM (
 -- Lub cała tablica JSON:
 SELECT json_agg(t)
 FROM (
-    SELECT employee_profile_id,
+    SELECT worker_id,
                  uid,
                  status,
                  display_name,

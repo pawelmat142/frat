@@ -1,4 +1,4 @@
-import { DateRange } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange } from "@shared/interfaces/WorkerProfileI";
 import MonthCallendar from "global/components/callendar/MonthCallendar";
 import React from "react";
 import { useTranslation } from "react-i18next";

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import Loading from "global/components/Loading";
-import { useEmployeeSearch } from "./EmployeeSearchProvider";
-import EmployeeSearchFilters from "./EmployeeSearchFilters";
+import { useWorkersSearch } from "./WorkersSearchProvider";
+import WorkersSearchFilters from "./WorkersSearchFilters";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
@@ -10,7 +10,7 @@ import WorkerListItem from "employee/components/WorkerListItem";
 
 const EmployeeSearchView: React.FC = () => {
 
-    const ctx = useEmployeeSearch()
+    const ctx = useWorkersSearch()
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
 
@@ -30,7 +30,7 @@ const EmployeeSearchView: React.FC = () => {
         <div className="list-view pt-0">
 
             <div className="infinite-scroll-filters">
-                <EmployeeSearchFilters />
+                <WorkersSearchFilters />
             </div>
 
             {initialLoading ? (

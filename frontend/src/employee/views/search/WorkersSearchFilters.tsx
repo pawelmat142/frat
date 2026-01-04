@@ -3,22 +3,22 @@ import { useTranslation } from "react-i18next";
 import FilterList from '@mui/icons-material/FilterList';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import IconButton from "global/components/controls/IconButon";
-import { useEmployeeSearch } from "./EmployeeSearchProvider";
+import { useWorkersSearch } from "./WorkersSearchProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { FaLanguage } from "react-icons/fa";
 import { Utils } from "global/utils/utils";
-import { DateRange } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange } from "@shared/interfaces/WorkerProfileI";
 import { Place } from "@mui/icons-material";
 import Flags from "global/components/Flags";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path";
 
-const EmployeeSearchFilters: React.FC = () => {
+const WorkersSearchFilters: React.FC = () => {
 
     const globalCtx = useGlobalContext();
     const languagesDictionary = globalCtx.dics.languages;
     const { t } = useTranslation();
-    const ctx = useEmployeeSearch();
+    const ctx = useWorkersSearch();
     const navigate = useNavigate();
 
     const flags = languagesDictionary
@@ -110,4 +110,4 @@ const EmployeeSearchFilters: React.FC = () => {
     );
 };
 
-export default EmployeeSearchFilters;
+export default WorkersSearchFilters;

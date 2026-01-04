@@ -1,6 +1,6 @@
-import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
+import { WorkerI } from "@shared/interfaces/WorkerProfileI";
 import React from "react";
-import { EPUtil } from "@shared/utils/EPUtil";
+import { WorkerUtil } from "@shared/utils/WorkerUtil";
 import { useTranslation } from "react-i18next";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import Loading from "global/components/Loading";
@@ -9,7 +9,7 @@ import { Utils } from "global/utils/utils";
 import { DateUtil } from "@shared/utils/DateUtil";
 
 interface ProfileDataTileProps {
-    profile: EmployeeProfileI
+    profile: WorkerI
     languagesDictionary?: DictionaryI | null
 }
 
@@ -29,7 +29,7 @@ const ProfileDataTile: React.FC<ProfileDataTileProps> = ({ profile, languagesDic
             <div>
                 <div>
                     <span className="tile-content-title">{profile.displayName}</span>
-                    <span>{EPUtil.displayName(profile)}</span>
+                    <span>{WorkerUtil.displayName(profile)}</span>
                 </div>
                 <div className="xs-font secondary-text">{profile.email}</div>
             </div>

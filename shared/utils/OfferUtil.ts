@@ -1,4 +1,4 @@
-import { DateRange, Position } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, Position } from "@shared/interfaces/WorkerProfileI";
 import { Currency, OfferForm, OfferFormSteps, OfferI, OfferSearchFilters } from "@shared/interfaces/OfferI";
 import { FilterUtil } from "@shared/utils/FilterUtil";
 import { PositionUtil } from "./PositionUtil";

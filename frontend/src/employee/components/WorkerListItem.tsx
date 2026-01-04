@@ -1,5 +1,5 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
-import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI"
+import { WorkerI } from "@shared/interfaces/WorkerProfileI"
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -15,7 +15,7 @@ import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { useAuthContext } from "auth/AuthProvider";
 
 interface Props {
-    profile: EmployeeProfileI,
+    profile: WorkerI,
     languagesDictionary: DictionaryI
     first?: boolean,
     last?: boolean,
@@ -31,7 +31,7 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
     const isMyProfile = me?.uid === profile.uid;
 
     const goToProfileView = () => {
-        navigate(Path.getEmployeeProfilePath(profile.displayName!));
+        navigate(Path.getWorkerProfilePath(profile.displayName!));
     }
 
     const openChat = async () => {

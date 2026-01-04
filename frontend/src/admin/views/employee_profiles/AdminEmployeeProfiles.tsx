@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
-import { EmployeeProfileAvailabilityOptions, EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
+import { WorkerAvailabilityOptions, WorkerI } from "@shared/interfaces/WorkerProfileI";
 import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdmin.service";
 import SelectedProfile from "./SelectedProfile";
 import { userAdminPanelContext } from "../AdminPanelProvider";
@@ -18,18 +18,18 @@ const AdminEmployeeProfiles: React.FC = () => {
     // TODO paginacja profili - admin panel
 
     const [loading, setLoading] = useState(false);
-    const [selectedEmployeeProfile, setSelectedEmployeeProfile] = useState<EmployeeProfileI | null>(null);
+    const [selectedWorker, setSelectedWorker] = useState<WorkerI | null>(null);
 
     const adminPanelCtx = userAdminPanelContext();
-    const employeeProfiles = adminPanelCtx?.employeeProfiles;
+    const workers = adminPanelCtx?.workers;
 
     const confirm = useConfirm();
 
-    const _initEmployeeProfiles = async () => {
+    const _initWorkers = async () => {
         try {
             setLoading(true);
-            await employeeProfiles?.initProfiles();
-            setSelectedEmployeeProfile(null);
+            await workers?.initWorkers();
+            setSelectedWorker(null);
         }
         finally {
             setLoading(false);
@@ -38,13 +38,13 @@ const AdminEmployeeProfiles: React.FC = () => {
 
 
     useEffect(() => {
-        _initEmployeeProfiles();
+        _initWorkers();
     }, []);
 
     // Escape key handler to clear selected profile
     const handleEscape = useCallback((e: KeyboardEvent) => {
         if (e.key === 'Escape') {
-            setSelectedEmployeeProfile(null);
+            setSelectedWorker(null);
         }
     }, []);
 
@@ -57,8 +57,8 @@ const AdminEmployeeProfiles: React.FC = () => {
         return <Loading />;
     }
 
-    const onSelectEmployeeProfile = (profile: EmployeeProfileI) => {
-        setSelectedEmployeeProfile(profile)
+    const onSelectEmployeeProfile = (profile: WorkerI) => {
+        setSelectedWorker(profile)
     }
 
     const handleCleanAll = async () => {
@@ -70,7 +70,7 @@ const AdminEmployeeProfiles: React.FC = () => {
         try {
             setLoading(true);
             await EmployeeProfilesAdminService.deleteAllProfiles();
-            await _initEmployeeProfiles();
+            await _initWorkers();
             toast.success('All employee profiles have been deleted.');
         } catch (e) { } finally {
             setLoading(false);
@@ -81,7 +81,7 @@ const AdminEmployeeProfiles: React.FC = () => {
         try {
             setLoading(true);
             await EmployeeProfilesAdminService.initialLoad();
-            await _initEmployeeProfiles();
+            await _initWorkers();
         } catch (e) {
             console.error(e);
             toast.error('Failed to perform initial load of employee profiles.');
@@ -90,7 +90,7 @@ const AdminEmployeeProfiles: React.FC = () => {
         }
     }
 
-    const handleProfileAction = async (profile: EmployeeProfileI) => {
+    const handleProfileAction = async (profile: WorkerI) => {
         const confirmed = await confirm({
             title: "Are you sure?",
             message: "Are you sure you want to delete this employee profile? This action cannot be undone.",
@@ -99,15 +99,15 @@ const AdminEmployeeProfiles: React.FC = () => {
 
         try {
             setLoading(true);
-            await EmployeeProfilesAdminService.deleteProfile(profile.employeeProfileId);
-            await _initEmployeeProfiles();
+            await EmployeeProfilesAdminService.deleteProfile(profile.workerId);
+            await _initWorkers();
             toast.success('Employee profile has been deleted.');
         } catch (e) { } finally {
             setLoading(false);
         }
     }
 
-    const getStartDate = (profile: EmployeeProfileI): string => {
+    const getStartDate = (profile: WorkerI): string => {
         const rangeI = profile.availabilityDateRanges?.[0];
         if (!rangeI) {
             return ''
@@ -128,7 +128,7 @@ const AdminEmployeeProfiles: React.FC = () => {
 
                 <div className="flex gap-2 mb-10 mt-5">
 
-                    {!!employeeProfiles?.profiles?.length && (
+                    {!!workers?.workers?.length && (
                         <Button
                             mode={BtnModes.PRIMARY_TXT}
                             onClick={handleCleanAll}
@@ -158,13 +158,13 @@ const AdminEmployeeProfiles: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {employeeProfiles?.profiles?.length === 0 ? (
+                            {workers?.workers?.length === 0 ? (
                                 <tr>
                                     <td colSpan={3} className="px-6 py-6 secondary-text text-center">No employee profiles found.</td>
                                 </tr>
                             ) : (
-                                employeeProfiles?.profiles?.map((profile, idx) => {
-                                    const isSelected = selectedEmployeeProfile?.employeeProfileId === profile.employeeProfileId;
+                                workers?.workers?.map((profile, idx) => {
+                                    const isSelected = selectedWorker?.workerId === profile.workerId;
                                     return (
                                         <tr
                                             key={idx}
@@ -172,12 +172,12 @@ const AdminEmployeeProfiles: React.FC = () => {
                                             style={{ userSelect: 'none' }}
                                             onClick={() => onSelectEmployeeProfile(profile)}
                                         >
-                                            <td className="px-6 py-3 border-b border-color font-mono text-base primary-text">{profile.employeeProfileId}</td>
+                                            <td className="px-6 py-3 border-b border-color font-mono text-base primary-text">{profile.workerId}</td>
                                             <td className="px-6 py-3 border-b border-color primary-text">{profile.status}</td>
                                             <td className="px-6 py-3 border-b border-color primary-text">{profile.displayName}</td>
                                             <td className="px-6 py-3 border-b border-color primary-text">{profile.locationOption}</td>
-                                            <td className="px-6 py-3 border-b border-color primary-text">{profile.availabilityOption === EmployeeProfileAvailabilityOptions.ANYTIME
-                                                ? EmployeeProfileAvailabilityOptions.ANYTIME
+                                            <td className="px-6 py-3 border-b border-color primary-text">{profile.availabilityOption === WorkerAvailabilityOptions.ANYTIME
+                                                ? WorkerAvailabilityOptions.ANYTIME
                                                 : getStartDate(profile)}
                                             </td>
                                             <td className="px-6 py-3 border-b border-color primary-text">{DateUtil.displayDate(profile.createdAt)}</td>
@@ -196,7 +196,7 @@ const AdminEmployeeProfiles: React.FC = () => {
 
                 </div>
 
-                <SelectedProfile profile={selectedEmployeeProfile} />
+                <SelectedProfile profile={selectedWorker} />
 
             </div>
         </div>

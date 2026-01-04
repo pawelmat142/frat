@@ -46,7 +46,7 @@ export abstract class Path {
     public static getEditDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES_EDIT.replace(':code', code)}`;
     public static getDictionaryGroupFormPath = (dictionaryCode: string, groupCode: string) => `${Path.ADMIN_DICTIONARIES_GROUP.replace(':dictionaryCode', dictionaryCode).replace(':groupCode', groupCode)}`;
     public static getAccountPath = (uid: string) => `${Path.ACCOUNT.replace(':uid', uid)}`;
-    public static getEmployeeProfilePath = (displayName: string) => `${Path.WORKER.replace(':displayName', displayName)}`;
+    public static getWorkerProfilePath = (displayName: string) => `${Path.WORKER.replace(':displayName', displayName)}`;
     public static getOfferPath = (offerId: number) => `${Path.OFFER.replace(':offerId', `${offerId}`)}`;
     public static getOffersPath = (uid: string) => `${Path.USER_OFFERS.replace(':uid', uid)}`;
     public static getOfferFormEditPath = (offerId: number) => `${Path.OFFER_FORM_EDIT.replace(':offerId', `${offerId}`)}`;

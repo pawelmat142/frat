@@ -17,10 +17,10 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { UserManagementService } from "user/services/UserManagementService";
 import { FirebaseAuth } from "auth/services/FirebaseAuth";
 import { ChatService } from "chat/services/ChatService";
-import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
+import { WorkerI } from "@shared/interfaces/WorkerProfileI";
 import { OfferI } from "@shared/interfaces/OfferI";
 import { m } from "framer-motion";
-import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
+import { WorkerService } from "employee/services/WorkerService";
 import { OffersService } from "offer/services/OffersService";
 import { set } from "react-hook-form";
 
@@ -35,7 +35,7 @@ const AccountView: React.FC = () => {
     const confirm = useConfirm()
 
     const [localLoading, setLocalLoading] = useState(true);
-    const [employeeProfile, setEmployeeProfile] = useState<EmployeeProfileI | null>(null)
+    const [worker, setWorker] = useState<WorkerI | null>(null)
     const [offers, setOffers] = useState<OfferI[]>([])
 
     const isMyAccount = uid === me?.uid
@@ -64,7 +64,7 @@ const AccountView: React.FC = () => {
 
         if (user.uid === me?.uid) {
             setOffers(userCtx.offers)
-            setEmployeeProfile(userCtx.employeeProfile)
+            setWorker(userCtx.worker)
             setLocalLoading(false);
         } else {
             initUserData(user);
@@ -74,10 +74,10 @@ const AccountView: React.FC = () => {
 
     const initUserData = async (user: UserI) => {
         const [userEmployeeProfile, userOffers] = await Promise.all([
-            EmployeeProfileService.getEmployeeProfileByDisplayName(user.displayName),
+            WorkerService.fetchWorkerByDisplayName(user.displayName),
             OffersService.listUsersOffers(user.uid)
         ])
-        setEmployeeProfile(userEmployeeProfile)
+        setWorker(userEmployeeProfile)
         setOffers(userOffers)
         setLocalLoading(false);
     }
@@ -114,9 +114,9 @@ const AccountView: React.FC = () => {
         return <div className="p-5 text-center secondary-text">{t('user.error.notFound')}</div>;
     }
 
-    const goToEmployeeProfile = () => {
-        if (employeeProfile) {
-            navigate(Path.getEmployeeProfilePath(employeeProfile.displayName));
+    const openWorkerProfileOrForm = () => {
+        if (worker) {
+            navigate(Path.getWorkerProfilePath(worker.displayName));
         } else {
             navigate(Path.WORKER_FORM);
         }
@@ -180,11 +180,11 @@ const AccountView: React.FC = () => {
 
             <div className="flex flex-col gap-3 mt-6">
 
-                {!!employeeProfile && (
+                {!!worker && (
                     <Button
                         fullWidth
                         mode={BtnModes.SECONDARY}
-                        onClick={goToEmployeeProfile}
+                        onClick={openWorkerProfileOrForm}
                     >
                         <FaIdCard className="mr-2" />
                         {t('account.showEmployeeProfile')}
@@ -192,11 +192,11 @@ const AccountView: React.FC = () => {
                 )}
                 {isMyAccount ? (
                     <>
-                        {!employeeProfile && (
+                        {!worker && (
                             <Button
                                 fullWidth
                                 mode={BtnModes.SECONDARY}
-                                onClick={goToEmployeeProfile}
+                                onClick={openWorkerProfileOrForm}
                             >
                                 <FaIdCard className="mr-2" />
                                 {t('account.createEmployeeProfile')}

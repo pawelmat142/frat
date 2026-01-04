@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { DateRangeI, EmployeeProfileAvailabilityOption, EmployeeProfileFormRangesOption, EmployeeProfileI, EmployeeProfileLocationOption, EmployeeProfileStatus, ParsedPhoneNumber, Point } from '@shared/interfaces/EmployeeProfileI';
+import { DateRangeI, WorkerAvailabilityOption, WorkerFormRangesOption, WorkerI, WorkerLocationOption, WorkerStatus, ParsedPhoneNumber, Point } from '@shared/interfaces/WorkerProfileI';
 import { AvatarRef } from '@shared/interfaces/UserI';
 import { Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
@@ -7,12 +7,12 @@ import { DateRangeEntity } from './DateRangeEntity';
 import { GeocodedPosition } from '@shared/interfaces/MapsInterfaces';
 
 
-@Entity('jh_employee_profiles')
-export class EmployeeProfileEntity implements EmployeeProfileI {
+@Entity('jh_workers')
+export class WorkerEntity implements WorkerI {
 
-  @PrimaryGeneratedColumn({ name: 'employee_profile_id' })
+  @PrimaryGeneratedColumn({ name: 'worker_id' })
   @Expose()
-  employeeProfileId: number;
+  workerId: number;
 
   @Column({ name: 'uid' })
   @Expose()
@@ -20,7 +20,7 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
   
   @Column({ name: 'status' })
   @Expose()
-  status: EmployeeProfileStatus;
+  status: WorkerStatus;
   
   @Column({ name: 'display_name' })
   @Expose()
@@ -54,7 +54,7 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
 
 
   @Column({ name: 'location_option' })
-  locationOption: EmployeeProfileLocationOption;
+  locationOption: WorkerLocationOption;
 
   @Column({ name: 'location_countries', type: 'text', array: true, nullable: true })
   locationCountries?: string[];
@@ -76,17 +76,17 @@ export class EmployeeProfileEntity implements EmployeeProfileI {
 
 
   @Column({ name: 'availability_option' })
-  availabilityOption: EmployeeProfileAvailabilityOption;
+  availabilityOption: WorkerAvailabilityOption;
 
   @OneToMany(
     () => DateRangeEntity,
-    (range) => range.employeeProfile,
+    (range) => range.worker,
     { cascade: true, eager: true }
   )
   availabilityDateRanges?: DateRangeI[];
 
   @Column({ name: 'ranges_option', nullable: true })
-  rangesOption?: EmployeeProfileFormRangesOption;
+  rangesOption?: WorkerFormRangesOption;
 
   @Column({ name: 'start_date', type: 'timestamp' })
   startDate: Date;

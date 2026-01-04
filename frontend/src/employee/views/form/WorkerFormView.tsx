@@ -2,18 +2,18 @@ import Button from "global/components/controls/Button";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import React from "react";
-import { DateRange, EmployeeProfileAvailabilityOptions, EmployeeProfileForm, EmployeeProfileI, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
+import { DateRange, WorkerAvailabilityOptions, WorkerForm, WorkerI, WorkerLocationOptions } from "@shared/interfaces/WorkerProfileI";
 import { toast } from "react-toastify";
-import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
+import { WorkerService } from "employee/services/WorkerService";
 import Loading from "global/components/Loading";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
 import { useNavigate } from "react-router-dom";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { Path } from "../../../path";
-import { useEmployeeSearch } from "../search/EmployeeSearchProvider";
-import EmployeeProfileStep1 from "./EmployeeProfileStep1";
-import EmployeeProfileStep2 from "./EmployeeProfileStep2";
+import { useWorkersSearch } from "../search/WorkersSearchProvider";
+import WorkerFormStep1 from "./WorkerFormStep1";
+import WorkerFormStep2 from "./WorkerFormStep2";
 import { Utils } from "global/utils/utils";
 import { useConfirm } from "global/providers/PopupProvider";
 import FormWizard from "global/components/FormWizard/FormWizard";
@@ -21,8 +21,8 @@ import { useAuthContext } from "auth/AuthProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
-import EmployeeProfileStep3 from "./EmployeeProfileStep3";
-import EmployeeProfileStep4 from "./EmployeeProfileStep4";
+import WorkerFormStep3 from "./WorkerFormStep3";
+import WorkerFormStep4 from "./WorkerFormStep4";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -36,7 +36,7 @@ const WorkerFormView: React.FC = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
     const userCtx = useUserContext();
     const navigate = useNavigate();
-    const profileCtx = useEmployeeSearch();
+    const profileCtx = useWorkersSearch();
     const isDevMode = Utils.isDevMode();
     const confirm = useConfirm();
     const { me } = useAuthContext();
@@ -45,9 +45,9 @@ const WorkerFormView: React.FC = () => {
     const [step, setStep] = React.useState<StepKey>(STEPS_ORDER[0]);
     const [geolocatedPosition, setGeolocatedPosition] = React.useState<GeocodedPosition | null>(null);
 
-    const employeeProfile: EmployeeProfileI | null = userCtx.employeeProfile || null;
+    const worker: WorkerI | null = userCtx.worker || null;
 
-    const formRef = useForm<EmployeeProfileForm>({
+    const formRef = useForm<WorkerForm>({
         defaultValues: {
             step1: {
                 fullName: "",
@@ -56,14 +56,14 @@ const WorkerFormView: React.FC = () => {
                 communicationLanguages: [""]
             },
             step2: {
-                locationOption: EmployeeProfileLocationOptions.POSITION,
+                locationOption: WorkerLocationOptions.POSITION,
                 countryCode: undefined,
                 geocodedPosition: null,
 
 
             },
             step3: {
-                availabilityOption: EmployeeProfileAvailabilityOptions.FROM_DATE,
+                availabilityOption: WorkerAvailabilityOptions.FROM_DATE,
                 availabilityDateRanges: [],
                 startDate: null,
             },
@@ -133,12 +133,12 @@ const WorkerFormView: React.FC = () => {
 
     React.useEffect(() => {
         // Load from localStorage if no employeeProfile exists
-        if (!employeeProfile) {
+        if (!worker) {
             const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
 
             if (savedData) {
                 try {
-                    const parsedData: EmployeeProfileForm = JSON.parse(savedData);
+                    const parsedData: WorkerForm = JSON.parse(savedData);
                     formRef.reset(parsedData);
                 } catch (error) {
                     console.error("Error loading form from localStorage:", error);
@@ -149,51 +149,51 @@ const WorkerFormView: React.FC = () => {
             return;
         }
         initFormFromProfile();
-    }, [employeeProfile, formRef]);
+    }, [worker, formRef]);
 
     const initFormFromProfile = async () => {
-        if (!employeeProfile) return;
+        if (!worker) return;
 
         // TODO verify edit profile option!!!
         // Load from employeeProfile if it exists
         let locationDistancePosition: any = undefined;
-        if (employeeProfile.point && Array.isArray(employeeProfile.point.coordinates)) {
+        if (worker.point && Array.isArray(worker.point.coordinates)) {
             locationDistancePosition = {
-                lat: employeeProfile.point.coordinates[1],
-                lng: employeeProfile.point.coordinates[0],
+                lat: worker.point.coordinates[1],
+                lng: worker.point.coordinates[0],
             };
         }
 
-        const geoPosition: GeocodedPosition | null = employeeProfile?.geocodedPosition || await initPosition();
+        const geoPosition: GeocodedPosition | null = worker?.geocodedPosition || await initPosition();
 
-        const availabilityDateRanges: DateRange[] = (employeeProfile.availabilityDateRanges || [])
+        const availabilityDateRanges: DateRange[] = (worker.availabilityDateRanges || [])
             .map(r => DateRangeUtil.toDateRange(r))
             .filter((r): r is DateRange => r != null);
 
         formRef.reset({
             step1: {
-                fullName: employeeProfile.fullName || "",
-                phoneNumber: employeeProfile.phoneNumber || { prefix: "+48", phoneNumber: "" },
-                email: employeeProfile.email || "",
-                communicationLanguages: employeeProfile.communicationLanguages || [""],
-                avatarRef: employeeProfile.avatarRef,
-                bio: employeeProfile.bio || ''
+                fullName: worker.fullName || "",
+                phoneNumber: worker.phoneNumber || { prefix: "+48", phoneNumber: "" },
+                email: worker.email || "",
+                communicationLanguages: worker.communicationLanguages || [""],
+                avatarRef: worker.avatarRef,
+                bio: worker.bio || ''
             },
             step2: {
-                locationOption: employeeProfile.locationOption || EmployeeProfileLocationOptions.POSITION,
-                countryCode: employeeProfile.locationCountries?.[0],
+                locationOption: worker.locationOption || WorkerLocationOptions.POSITION,
+                countryCode: worker.locationCountries?.[0],
                 geocodedPosition: geoPosition,
-                locationCountries: employeeProfile.locationCountries || [],
+                locationCountries: worker.locationCountries || [],
             },
             step3: {
-                availabilityOption: employeeProfile.availabilityOption || EmployeeProfileAvailabilityOptions.ANYTIME,
+                availabilityOption: worker.availabilityOption || WorkerAvailabilityOptions.ANYTIME,
                 availabilityDateRanges: availabilityDateRanges,
-                rangesOption: employeeProfile.rangesOption,
-                startDate: employeeProfile.startDate ? new Date(employeeProfile.startDate) : null,
+                rangesOption: worker.rangesOption,
+                startDate: worker.startDate ? new Date(worker.startDate) : null,
             },
             step4: {
-                experience: employeeProfile.experience || [],
-                certificates: employeeProfile.certificates || []
+                experience: worker.experience || [],
+                certificates: worker.certificates || []
             }
         });
     }
@@ -216,17 +216,17 @@ const WorkerFormView: React.FC = () => {
 
 
         const form = formRef.watch();
-        if (employeeProfile) {
-            await updateEmployeeProfile(form);
+        if (worker) {
+            await updateWorker(form);
             return;
         }
         try {
             setLoading(true);
-            const result = await EmployeeProfileService.createEmployeeProfile(form);
-            userCtx.initEmployeeProfile();
+            const result = await WorkerService.createWorker(form);
+            userCtx.initWorker();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
-            navigate(Path.getEmployeeProfilePath(`${result.displayName}`), { replace: true });
+            navigate(Path.getWorkerProfilePath(`${result.displayName}`), { replace: true });
         } catch (error) {
             console.error("Error creating employee profile:", error);
         } finally {
@@ -234,16 +234,14 @@ const WorkerFormView: React.FC = () => {
         }
     };
 
-    const updateEmployeeProfile = async (form: EmployeeProfileForm) => {
+    const updateWorker = async (form: WorkerForm) => {
         try {
             setLoading(true);
-            const result = await EmployeeProfileService.updateEmployeeProfile(form);
+            const result = await WorkerService.updateWorker(form);
             profileCtx.updateOneProfileInResults(result);
-            userCtx.initEmployeeProfile();
+            userCtx.initWorker();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
-
-            // navigate(Path.getEmployeeProfilePath(`${result.displayName}`), { replace: true });
         } catch (error) {
             console.error("Error updating employee profile:", error);
         } finally {
@@ -265,13 +263,13 @@ const WorkerFormView: React.FC = () => {
     const renderStepByKey = (stepKey: StepKey) => {
         switch (stepKey) {
             case 'step1':
-                return <EmployeeProfileStep1 formRef={formRef} />;
+                return <WorkerFormStep1 formRef={formRef} />;
             case 'step2':
-                return <EmployeeProfileStep2 formRef={formRef} initPosition={resetPositionFormData} />;
+                return <WorkerFormStep2 formRef={formRef} initPosition={resetPositionFormData} />;
             case 'step3':
-                return <EmployeeProfileStep3 formRef={formRef} />;
+                return <WorkerFormStep3 formRef={formRef} />;
             case 'step4':
-                return <EmployeeProfileStep4 formRef={formRef} />;
+                return <WorkerFormStep4 formRef={formRef} />;
             default:
                 return null;
         }

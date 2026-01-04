@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TranslationListDto } from "@shared/dto/TranslationListDto";
 import { TranslationAdminService } from "admin/services/TranslationAdmin.service";
 import { TranslationI } from "@shared/interfaces/TranslationI";
-import { EmployeeProfileI } from "@shared/interfaces/EmployeeProfileI";
+import { WorkerI } from "@shared/interfaces/WorkerProfileI";
 import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdmin.service";
 import { OfferI } from "@shared/interfaces/OfferI";
 import { OffersAdminService } from "admin/services/OffersAdmin.service";
@@ -18,9 +18,9 @@ export interface AdminPanelTranslations {
     loadLanguage?: (langCode: string) => Promise<void>; // fetch translation and update context state
 }
 
-export interface AdminPanelEmployeeProfiles {
-    profiles?: EmployeeProfileI[]
-    initProfiles: () => Promise<void>;
+export interface AdminPanelWorkers {
+    workers?: WorkerI[]
+    initWorkers: () => Promise<void>;
 }
 
 export interface AdminPanelOffers {
@@ -30,7 +30,7 @@ export interface AdminPanelOffers {
 
 interface AdminPanelContextType {
     translation?: AdminPanelTranslations
-    employeeProfiles?: AdminPanelEmployeeProfiles
+    workers?: AdminPanelWorkers
     offers?: AdminPanelOffers
 }
 
@@ -45,7 +45,7 @@ export const AdminPanelProvider: React.FC<AdminPanelProviderProps> = ({ children
     const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>(undefined);
     const [translations, setTranslations] = useState<TranslationI[]>([]);
 
-    const [employeeProfiles, setEmployeeProfiles] = useState<EmployeeProfileI[]>([])
+    const [employeeProfiles, setEmployeeProfiles] = useState<WorkerI[]>([])
     const [offers, setOffers] = useState<OfferI[]>([])
 
     const initTranslations = async () => {
@@ -102,9 +102,9 @@ export const AdminPanelProvider: React.FC<AdminPanelProviderProps> = ({ children
         setOffers(offers);
     }
 
-    value.employeeProfiles = { 
-        profiles: employeeProfiles,
-        initProfiles: initProfiles
+    value.workers = { 
+        workers: employeeProfiles,
+        initWorkers: initProfiles
     };
 
     value.offers = {

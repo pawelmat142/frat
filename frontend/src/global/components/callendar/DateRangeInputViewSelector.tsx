@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import FormError from '../controls/FormError';
 import FloatingLabel from '../controls/FloatingLabel';
-import { DateRange } from '@shared/interfaces/EmployeeProfileI';
+import { DateRange } from '@shared/interfaces/WorkerProfileI';
 import { usePopup } from 'global/providers/PopupProvider';
 import { useTranslation } from 'react-i18next';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';

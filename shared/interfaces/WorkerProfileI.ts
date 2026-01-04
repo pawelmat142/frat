@@ -6,13 +6,13 @@ export interface ParsedPhoneNumber {
   phoneNumber: string;
 }
 
-export interface EmployeeProfileI {
+export interface WorkerI {
 
-  employeeProfileId: number;
+  workerId: number;
 
   // user data
   uid: string;
-  status: EmployeeProfileStatus;
+  status: WorkerStatus;
   displayName: string;
 
   fullName: string;
@@ -24,16 +24,16 @@ export interface EmployeeProfileI {
   bio?: string;
 
   // 
-  locationOption: EmployeeProfileLocationOption;
+  locationOption: WorkerLocationOption;
   locationCountries?: string[];
   point?: Point;
 	fullAddress?: string;
   geocodedPosition?: GeocodedPosition;
 
   // 
-  availabilityOption: EmployeeProfileAvailabilityOption;
+  availabilityOption: WorkerAvailabilityOption;
   availabilityDateRanges?: DateRangeI[];
-  rangesOption?: EmployeeProfileFormRangesOption;
+  rangesOption?: WorkerFormRangesOption;
   startDate: Date | null;
 
 // 
@@ -48,35 +48,35 @@ export interface EmployeeProfileI {
   createdAt: Date;
 }
 
-export const EmployeeProfileStatuses = {
+export const WorkerStatuses = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE'
 } as const;
-export type EmployeeProfileStatus = typeof EmployeeProfileStatuses[keyof typeof EmployeeProfileStatuses];
+export type WorkerStatus = typeof WorkerStatuses[keyof typeof WorkerStatuses];
 
 
-export const EmployeeProfileLocationOptions = {
+export const WorkerLocationOptions = {
   ALL_EUROPE: 'ALL_EUROPE',
   SELECTED_COUNTRIES: 'SELECTED_COUNTRIES',
   POSITION: 'POSITION',
 } as const;
-export type EmployeeProfileLocationOption = typeof EmployeeProfileLocationOptions[keyof typeof EmployeeProfileLocationOptions];
+export type WorkerLocationOption = typeof WorkerLocationOptions[keyof typeof WorkerLocationOptions];
 
 
-export const EmployeeProfileAvailabilityOptions = {
+export const WorkerAvailabilityOptions = {
   ANYTIME: 'ANYTIME',
   FROM_DATE: 'FROM_DATE',
   DATE_RANGES: 'DATE_RANGES',
 } as const;
-export type EmployeeProfileAvailabilityOption = typeof EmployeeProfileAvailabilityOptions[keyof typeof EmployeeProfileAvailabilityOptions];
+export type WorkerAvailabilityOption = typeof WorkerAvailabilityOptions[keyof typeof WorkerAvailabilityOptions];
 
-export const EmployeeProfileFormRangesOptions = {
+export const WorkerFormRangesOptions = {
   AVAILABLE_ON: 'AVAILABLE_ON',
   NOT_AVAILABLE_ON: 'NOT_AVAILABLE_ON',
 } as const;
-export type EmployeeProfileFormRangesOption = typeof EmployeeProfileFormRangesOptions[keyof typeof EmployeeProfileFormRangesOptions];
+export type WorkerFormRangesOption = typeof WorkerFormRangesOptions[keyof typeof WorkerFormRangesOptions];
 
-export interface EmployeeProfileFormStep1 {
+export interface WorkerFormStep1 {
   fullName: string;
   phoneNumber: ParsedPhoneNumber;
   email: string;
@@ -85,34 +85,34 @@ export interface EmployeeProfileFormStep1 {
   bio?: string;
 }
 
-export interface EmployeeProfileFormStep2 {
-  locationOption: EmployeeProfileLocationOption;
+export interface WorkerFormStep2 {
+  locationOption: WorkerLocationOption;
   countryCode?: string;
   geocodedPosition?: GeocodedPosition | null;
   locationCountries?: string[];
 }
 
-export interface EmployeeProfileFormStep3 {
-  availabilityOption: EmployeeProfileAvailabilityOption;
+export interface WorkerFormStep3 {
+  availabilityOption: WorkerAvailabilityOption;
   availabilityDateRanges?: DateRange[];
-  rangesOption?: EmployeeProfileFormRangesOption;
+  rangesOption?: WorkerFormRangesOption;
   startDate?: Date | null;
 }
 
-export interface EmployeeProfileFormStep4 {
+export interface WorkerFormStep4 {
   certificates?: string[];
   experience?: string[];
 }
 
-export interface EmployeeProfileForm {
-  step1: EmployeeProfileFormStep1;
-  step2: EmployeeProfileFormStep2;
-  step3: EmployeeProfileFormStep3;
-  step4: EmployeeProfileFormStep4;
+export interface WorkerForm {
+  step1: WorkerFormStep1;
+  step2: WorkerFormStep2;
+  step3: WorkerFormStep3;
+  step4: WorkerFormStep4;
 }
 
 // Flat API structure for backend communication
-export interface EmployeeProfileFormDto {
+export interface WorkerFormDto {
   fullName: string;
   phoneNumber: ParsedPhoneNumber;
   email: string;
@@ -121,23 +121,23 @@ export interface EmployeeProfileFormDto {
   // TODO dodac do forma
   bio?: string;
 
-  locationOption: EmployeeProfileLocationOption;
-// EmployeeProfileLocationOptions.POSITION
+  locationOption: WorkerLocationOption;
+// WorkerLocationOptions.POSITION
   countryCode?: string;
   geocodedPosition?: GeocodedPosition;
-// EmployeeProfileLocationOptions.SELECTED_COUNTRIES
+// WorkerLocationOptions.SELECTED_COUNTRIES
   locationCountries?: string[];
 
-  availabilityOption: EmployeeProfileAvailabilityOption;
+  availabilityOption: WorkerAvailabilityOption;
   availabilityDateRanges?: DateRange[];
-  rangesOption?: EmployeeProfileFormRangesOption;
+  rangesOption?: WorkerFormRangesOption;
   startDate?: Date | null;
 
   experience?: string[];
   certificates?: string[];
 }
 
-export interface EmployeeProfileSearchFilters {
+export interface WorkerSearchFilters {
   startDate?: Date | null;
   endDate?: Date | null;
   
@@ -148,13 +148,13 @@ export interface EmployeeProfileSearchFilters {
   certificates?: string[];
   experience?: string[];
 
-  sortBy?: EmmployeeProfileSearchSortOption
+  sortBy?: WorkerSearchSortOption
   skip: number;
   limit: number;
 }
 
-export interface EmployeeProfileSearchResponse {
-  profiles: EmployeeProfileI[];
+export interface WorkerSearchResponse {
+  profiles: WorkerI[];
   count: number;
 }
 
@@ -176,7 +176,7 @@ export interface DateRange {
   id?: number
 }
 
-export const EmmployeeProfileSearchSortOptions = {
+export const WorkerSearchSortOptions = {
   START_FROM_DESC: 'START_FROM_DESC',
   START_FROM_ASC: 'START_FROM_ASC',
   CREATED_AT_DESC: 'CREATED_AT_DESC',
@@ -184,9 +184,9 @@ export const EmmployeeProfileSearchSortOptions = {
   DISTANCE_ASC: 'DISTANCE_ASC',
   POPULARITY: 'POPULARITY',
 } as const;
-export type EmmployeeProfileSearchSortOption = typeof EmmployeeProfileSearchSortOptions[keyof typeof EmmployeeProfileSearchSortOptions];
+export type WorkerSearchSortOption = typeof WorkerSearchSortOptions[keyof typeof WorkerSearchSortOptions];
 
-export const PROFILE_DEFAULT_SORT_OPTION: EmmployeeProfileSearchSortOption = EmmployeeProfileSearchSortOptions.START_FROM_DESC;
+export const PROFILE_DEFAULT_SORT_OPTION: WorkerSearchSortOption = WorkerSearchSortOptions.START_FROM_DESC;
 
 export const PROFILES_INITIAL_SEARCH_LIMIT = 12;
 export const PROFILES_LOAD_MORE_SEARCH_LIMIT = 4;

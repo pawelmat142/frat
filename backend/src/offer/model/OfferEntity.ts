@@ -1,4 +1,4 @@
-import { Point } from "@shared/interfaces/EmployeeProfileI";
+import { Point } from "@shared/interfaces/WorkerProfileI";
 import { Currency, OfferI, OfferStatus } from "@shared/interfaces/OfferI";
 import { Expose } from "class-transformer";
 import { Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";

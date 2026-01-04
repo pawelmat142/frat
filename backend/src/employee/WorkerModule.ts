@@ -1,21 +1,21 @@
 /** Created by Pawel Malek **/
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
-import { EmployeeProfileEntity } from './model/EmployeeProfileEntity';
-import { EmployeeProfileRepo } from './services/EmployeeProfileRepo';
-import { EmployeeProfileService } from './services/EmployeeProfileService';
-import { EmployeeProfileController } from './EmployeeProfileController';
+import { WorkerEntity } from './model/WorkerEntity';
+import { WorkerRepo } from './services/WorkerRepo';
+import { WorkersService } from './services/WorkerService';
+import { WorkersController } from './WorkersController';
 import { AuthModule } from 'auth/AuthModule';
 import { DictionariesModule } from 'admin/dictionaries/DictionariesModule';
 import { GeoPointService } from './services/GeoPointService';
-import { SearchEmployeeProfileService } from './services/SearchEmployeeProfileService';
+import { SearchWorkersService } from './services/SearchWorkerService';
 import { DateRangeEntity } from './model/DateRangeEntity';
 import { UserModule } from 'user/UserModule';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
-            EmployeeProfileEntity,
+            WorkerEntity,
             DateRangeEntity
         ]),
 
@@ -24,15 +24,15 @@ import { UserModule } from 'user/UserModule';
         UserModule
     ],
     providers: [
-        EmployeeProfileRepo,
-        EmployeeProfileService,
-        SearchEmployeeProfileService,
+        WorkerRepo,
+        WorkersService,
+        SearchWorkersService,
         GeoPointService
     ],
     controllers: [
-        EmployeeProfileController
+        WorkersController
     ],
     exports: [
     ],
 })
-export class EmployeeProfileModule { }
+export class WorkerModule { }

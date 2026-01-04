@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { EmployeeProfileService } from "employee/services/EmployeeProfileService";
+import { WorkerService } from "employee/services/WorkerService";
 import Loading from "global/components/Loading";
 import { useNavigate, useParams } from "react-router-dom";
-import { EmployeeProfileI, EmployeeProfileStatuses } from "@shared/interfaces/EmployeeProfileI";
-import { useEmployeeSearch } from "../search/EmployeeSearchProvider";
+import { WorkerI, WorkerStatuses } from "@shared/interfaces/WorkerProfileI";
+import { useWorkersSearch } from "../search/WorkersSearchProvider";
 import AvatarTile from "../../../user/components/AvatarTile";
 import CallendarTile from "./CallendarTile";
 import ProfileDataTile from "./ProfileDataTile";
@@ -22,13 +22,13 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { useUserContext } from "user/UserProvider";
 import { ChatService } from "chat/services/ChatService";
 
-const EmployeeProfileView: React.FC = () => {
+const WorkerView: React.FC = () => {
 
     const params = useParams<{ displayName?: string }>()
     const displayName = params.displayName
 
     const [loading, setLoading] = useState(false)
-    const [profile, setProfile] = useState<EmployeeProfileI | null>(null)
+    const [profile, setProfile] = useState<WorkerI | null>(null)
 
     const { t } = useTranslation();
     const { me } = useAuthContext();
@@ -37,11 +37,11 @@ const EmployeeProfileView: React.FC = () => {
     const confirm = useConfirm();
     const userCtx = useUserContext();
 
-    const profileCtx = useEmployeeSearch();
+    const profileCtx = useWorkersSearch();
     const globalCtx = useGlobalContext();
 
     useEffect(() => {
-        const initEmployeeProfile = async () => {
+        const initWorker = async () => {
             if (displayName) {
                 const p = profileCtx.results?.find(p => p.displayName === displayName)
                 if (p) {
@@ -50,14 +50,14 @@ const EmployeeProfileView: React.FC = () => {
                 }
                 try {
                     setLoading(true)
-                    const result = await EmployeeProfileService.getEmployeeProfileByDisplayName(displayName)
+                    const result = await WorkerService.fetchWorkerByDisplayName(displayName)
                     _setProfile(result)
                 } finally {
                     setLoading(false)
                 }
             }
         }
-        initEmployeeProfile()
+        initWorker()
     }, []);
 
     useEffect(() => {
@@ -66,7 +66,7 @@ const EmployeeProfileView: React.FC = () => {
         }
     }, [profile, me]);
 
-    const getProfileMenuItems = (profile: EmployeeProfileI): MenuConfig => {
+    const getProfileMenuItems = (profile: WorkerI): MenuConfig => {
         const isMyProfile = me?.uid === profile.uid;
 
         const hasMyLike = profile.likes?.includes(me?.uid || '') || false;
@@ -82,7 +82,7 @@ const EmployeeProfileView: React.FC = () => {
                 onClick: () => { goToEditForm() }
             })
             menu.items.push({
-                label: profile.status === EmployeeProfileStatuses.ACTIVE ? t('employeeProfile.deactivateButton') : t('employeeProfile.activateButton'),
+                label: profile.status === WorkerStatuses.ACTIVE ? t('employeeProfile.deactivateButton') : t('employeeProfile.activateButton'),
                 onClick: () => { profileActivation(profile) }
             })
             menu.items.push({
@@ -113,11 +113,11 @@ const EmployeeProfileView: React.FC = () => {
         }
     }
 
-    const likeProfile = async (profile: EmployeeProfileI) => {
+    const likeProfile = async (profile: WorkerI) => {
         try {
             setLoading(true);
             const likesBefore = profile.likes?.length || 0;
-            const likes = await EmployeeProfileService.notifyProfileLike(profile.employeeProfileId);
+            const likes = await WorkerService.notifyWorkerLike(profile.workerId);
             profile.likes = likes;
             setProfile({ ...profile });
             if (profile.likes?.length > likesBefore) {
@@ -144,8 +144,8 @@ const EmployeeProfileView: React.FC = () => {
 
         setLoading(true);
         try {
-            await EmployeeProfileService.deleteProfile();
-            userCtx.initEmployeeProfile();
+            await WorkerService.deleteProfile();
+            userCtx.initWorker();
             toast.success(t('employeeProfile.deleteSuccessToast'));
             navigate(Path.HOME, { replace: true });
             // Don't setLoading(false) - component will unmount after navigation
@@ -157,12 +157,12 @@ const EmployeeProfileView: React.FC = () => {
         }
     }
 
-    const profileActivation = async (profile: EmployeeProfileI) => {
+    const profileActivation = async (profile: WorkerI) => {
         try {
             setLoading(true);
-            const result = await EmployeeProfileService.activation()
+            const result = await WorkerService.activation()
             setProfile(result);
-            if (EmployeeProfileStatuses.ACTIVE === result.status) {
+            if (WorkerStatuses.ACTIVE === result.status) {
                 toast.success(t('employeeProfile.activationSuccessToast'));
             } else {
                 toast.success(t('employeeProfile.deactivationSuccessToast'));
@@ -179,13 +179,13 @@ const EmployeeProfileView: React.FC = () => {
 
 
 
-    const notifyProfileView = async (profile: EmployeeProfileI) => {
+    const notifyProfileView = async (profile: WorkerI) => {
         if (profile?.uid) {
-            await EmployeeProfileService.notifyProfileView(profile.uid)
+            await WorkerService.notifyWorkerView(profile.uid)
         }
     }
 
-    const _setProfile = (profile: EmployeeProfileI | null) => {
+    const _setProfile = (profile: WorkerI | null) => {
         setProfile(profile)
         if (profile) {
             notifyProfileView(profile)
@@ -237,4 +237,4 @@ const EmployeeProfileView: React.FC = () => {
     );
 }
 
-export default EmployeeProfileView;
+export default WorkerView;

@@ -6,7 +6,7 @@ import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import { DictionaryService } from 'global/services/DictionaryService';
 import { DictionaryElement, DictionaryI } from '@shared/interfaces/DictionaryI';
 import { useTranslation } from 'react-i18next';
-import { ParsedPhoneNumber } from '@shared/interfaces/EmployeeProfileI';
+import { ParsedPhoneNumber } from '@shared/interfaces/WorkerProfileI';
 
 interface PhoneNumberFloatingInputProps {
     id?: string;

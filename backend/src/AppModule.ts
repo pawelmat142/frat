@@ -8,7 +8,7 @@ import { TranslationModule } from 'admin/translation/TranslationModule';
 import { AuthModule } from 'auth/AuthModule';
 import { GlobalController } from 'global/GlobalController';
 import { UsersAdminModule } from 'admin/users/UsersAdminModule';
-import { EmployeeProfileModule } from 'employee/EmployeeProfileModule';
+import { WorkerModule } from 'employee/WorkerModule';
 import { FeedbackModule } from 'feedback/FeedbackModule';
 import { OffersModule } from 'offer/OfferModule';
 import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
@@ -35,7 +35,7 @@ import { GeocodingService } from 'global/services/GeocodingService';
     TelegramModule,
 
     UserManagementModule,
-    EmployeeProfileModule,
+    WorkerModule,
     OffersModule,
 
     FeedbackModule,

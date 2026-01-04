@@ -1,4 +1,4 @@
-import { DateRange, Point } from "./EmployeeProfileI";
+import { DateRange, Point } from "./WorkerProfileI";
 import { Position } from "./MapsInterfaces";
 
 export interface OfferI {

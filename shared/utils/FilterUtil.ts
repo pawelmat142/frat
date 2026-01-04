@@ -1,4 +1,4 @@
-import { Position } from "@shared/interfaces/EmployeeProfileI"
+import { Position } from "@shared/interfaces/WorkerProfileI"
 
 export abstract class FilterUtil {
 

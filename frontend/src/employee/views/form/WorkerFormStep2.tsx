@@ -2,23 +2,22 @@ import React, { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileForm, EmployeeProfileLocationOption, EmployeeProfileLocationOptions } from "@shared/interfaces/EmployeeProfileI";
+import { WorkerForm, WorkerLocationOption, WorkerLocationOptions } from "@shared/interfaces/WorkerProfileI";
 import CountrySelector from "global/components/selector/CountrySelector";
 import FloatingCitySearch from "global/components/controls/FloatingCitySearch";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 import TabSwitcher, { TabSwitcherOption } from "employee/components/TabSwitcher";
 import DictionarySelector from "global/components/selector/DictionarySelector";
-import PositionSelector from "global/components/selector/position/PositionSelector";
 import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
 
 interface Props {
-    formRef: UseFormReturn<EmployeeProfileForm>;
+    formRef: UseFormReturn<WorkerForm>;
     initPosition?: () => void;
 }
 
 
-const EmployeeProfileStep2: React.FC<Props> = ({ formRef, initPosition }) => {
+const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
     const { control, formState, setValue, watch } = formRef;
     const { t } = useTranslation();
     const required = FormValidator.required(t);
@@ -28,16 +27,16 @@ const EmployeeProfileStep2: React.FC<Props> = ({ formRef, initPosition }) => {
 
     const tabOptions: TabSwitcherOption[] = [
         {
-            label: t(`employeeProfile.form.locationOption.${EmployeeProfileLocationOptions.POSITION}.tab`),
-            code: EmployeeProfileLocationOptions.POSITION,
+            label: t(`employeeProfile.form.locationOption.${WorkerLocationOptions.POSITION}.tab`),
+            code: WorkerLocationOptions.POSITION,
         },
         {
-            label: t(`employeeProfile.form.locationOption.${EmployeeProfileLocationOptions.SELECTED_COUNTRIES}.tab`),
-            code: EmployeeProfileLocationOptions.SELECTED_COUNTRIES,
+            label: t(`employeeProfile.form.locationOption.${WorkerLocationOptions.SELECTED_COUNTRIES}.tab`),
+            code: WorkerLocationOptions.SELECTED_COUNTRIES,
         },
         {
-            label: t(`employeeProfile.form.locationOption.${EmployeeProfileLocationOptions.ALL_EUROPE}.tab`),
-            code: EmployeeProfileLocationOptions.ALL_EUROPE,
+            label: t(`employeeProfile.form.locationOption.${WorkerLocationOptions.ALL_EUROPE}.tab`),
+            code: WorkerLocationOptions.ALL_EUROPE,
         },
     ];
     const msgClass = "secondary-text mb-5"
@@ -58,17 +57,17 @@ const EmployeeProfileStep2: React.FC<Props> = ({ formRef, initPosition }) => {
                 <TabSwitcher
                     options={tabOptions}
                     value={locationOption}
-                    onChange={code => setValue("step2.locationOption", code as EmployeeProfileLocationOption)}
+                    onChange={code => setValue("step2.locationOption", code as WorkerLocationOption)}
                 />
 
                 <div className="w-full flex mt-4">
                     <div className="primary-text w-full">
-                        {locationOption === EmployeeProfileLocationOptions.ALL_EUROPE && (
+                        {locationOption === WorkerLocationOptions.ALL_EUROPE && (
                             <div className={msgClass}>
                                 {t("employeeProfile.form.locationOption.ALL_EUROPE.msg")}
                             </div>
                         )}
-                        {locationOption === EmployeeProfileLocationOptions.SELECTED_COUNTRIES && (
+                        {locationOption === WorkerLocationOptions.SELECTED_COUNTRIES && (
                             <div className="w-full">
                                 <div className={msgClass}>
                                     {t("employeeProfile.form.locationOption.SELECTED_COUNTRIES.msg")}
@@ -94,7 +93,7 @@ const EmployeeProfileStep2: React.FC<Props> = ({ formRef, initPosition }) => {
                                 />
                             </div>
                         )}
-                        {locationOption === EmployeeProfileLocationOptions.POSITION && (
+                        {locationOption === WorkerLocationOptions.POSITION && (
                             <div className="flex flex-col gap-3">
                                 <div className={msgClass}>
                                     {t("employeeProfile.form.locationOption.POSITION.msg")}
@@ -164,4 +163,4 @@ const EmployeeProfileStep2: React.FC<Props> = ({ formRef, initPosition }) => {
     );
 };
 
-export default EmployeeProfileStep2;
+export default WorkerFormStep2;

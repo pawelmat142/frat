@@ -2,14 +2,14 @@ import React from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
-import { EmployeeProfileForm } from "@shared/interfaces/EmployeeProfileI";
+import { WorkerForm } from "@shared/interfaces/WorkerProfileI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 
 interface Props {
-    formRef: UseFormReturn<EmployeeProfileForm>;
+    formRef: UseFormReturn<WorkerForm>;
 }
 
-const EmployeeProfileStep4: React.FC<Props> = ({ formRef }) => {
+const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
     const { control, formState } = formRef;
     const { t } = useTranslation();
     const requiredArray = FormValidator.requiredArray(t);
@@ -67,4 +67,4 @@ const EmployeeProfileStep4: React.FC<Props> = ({ formRef }) => {
     );
 };
 
-export default EmployeeProfileStep4;
+export default WorkerFormStep4;
