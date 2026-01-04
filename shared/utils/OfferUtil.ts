@@ -1,7 +1,9 @@
-import { DateRange, Position } from "@shared/interfaces/WorkerProfileI";
-import { Currency, OfferForm, OfferFormSteps, OfferI, OfferSearchFilters } from "@shared/interfaces/OfferI";
-import { FilterUtil } from "@shared/utils/FilterUtil";
 import { PositionUtil } from "./PositionUtil";
+import { FilterUtil } from "./FilterUtil";
+import { DateUtil } from "./DateUtil";
+import { Position } from "../interfaces/MapsInterfaces";
+import { OfferSearchFilters, Currency, OfferI, OfferForm, OfferFormSteps } from "../interfaces/OfferI";
+import { DateRange } from "../interfaces/WorkerProfileI";
 
 export abstract class OfferUtil {
 
@@ -77,8 +79,8 @@ export abstract class OfferUtil {
         public static convertToForm(offer: OfferI): OfferForm {
         const position: Position | null = offer.point ? PositionUtil.fromGeoPoint(offer.point, offer.displayAddress) : null;
         const dateRange: DateRange | null = {
-            start: offer.startDate ?? null,
-            end: offer.endDate ?? null,
+            start: DateUtil.toLocalDateString(offer.startDate),
+            end: DateUtil.toLocalDateString(offer.endDate),
         };
 
         return {

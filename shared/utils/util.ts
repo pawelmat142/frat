@@ -1,4 +1,4 @@
-import { UserI, UserRole, UserRoles } from "@shared/interfaces/UserI";
+import { UserI, UserRole, UserRoles } from "../interfaces/UserI";
 
 export abstract class Util {
 

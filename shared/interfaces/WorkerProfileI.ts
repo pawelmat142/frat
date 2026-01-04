@@ -1,4 +1,4 @@
-import { GeocodedPosition, Position } from './MapsInterfaces';
+import { GeocodedPosition } from './MapsInterfaces';
 import { AvatarRef } from './UserI';
 
 export interface ParsedPhoneNumber {

@@ -1,5 +1,5 @@
-import { Point } from "@shared/interfaces/WorkerProfileI";
-import { Position } from "@shared/interfaces/MapsInterfaces";
+import { Position } from "../interfaces/MapsInterfaces";
+import { Point } from "../interfaces/WorkerProfileI";
 
 export abstract class PositionUtil {
 

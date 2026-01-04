@@ -1,4 +1,4 @@
-import { DictionaryI } from "@shared/interfaces/DictionaryI";
+import { DictionaryI } from "../interfaces/DictionaryI";
 
 export abstract class DictionaryValidators {
 

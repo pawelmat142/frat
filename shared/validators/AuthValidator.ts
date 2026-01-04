@@ -1,5 +1,4 @@
-
-import { RegisterFormDto } from "@shared/dto/AuthDto";
+import { RegisterFormDto } from "../dto/AuthDto";
 
 export abstract class AuthValidators {
     public static validateRegisterForm(dto: RegisterFormDto): string | null {

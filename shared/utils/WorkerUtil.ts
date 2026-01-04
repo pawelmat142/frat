@@ -1,5 +1,5 @@
-import { WorkerSearchSortOption, WorkerI, WorkerSearchFilters } from "@shared/interfaces/WorkerProfileI";
-import { ObjUtil } from "@shared/utils/ObjUtil";
+import { WorkerI, WorkerSearchFilters, WorkerSearchSortOption } from "../interfaces/WorkerProfileI";
+import { ObjUtil } from "./ObjUtil";
 
 export abstract class WorkerUtil {
 

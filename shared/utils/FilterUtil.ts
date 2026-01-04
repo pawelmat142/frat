@@ -1,4 +1,4 @@
-import { Position } from "@shared/interfaces/MapsInterfaces"
+import { Position } from "../interfaces/MapsInterfaces"
 
 export abstract class FilterUtil {
 

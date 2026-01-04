@@ -1,4 +1,4 @@
-import { OfferForm } from "@shared/interfaces/OfferI";
+import { OfferForm } from "../interfaces/OfferI";
 
 export abstract class OfferValidator {
 
