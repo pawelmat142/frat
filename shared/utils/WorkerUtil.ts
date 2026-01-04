@@ -49,7 +49,7 @@ export abstract class WorkerUtil {
     public static parseFiltersFromSearch = (search: string, defaultFilters: WorkerSearchFilters): WorkerSearchFilters => {
         const params = new URLSearchParams(search);
 
-        const freeText = params.get(WorkerUtil.FREE_TEXT) || '';
+        const freeText = params.get(WorkerUtil.FREE_TEXT) || undefined;
         const skills = WorkerUtil.getArray(WorkerUtil.SKILLS, params);
         const certificates = WorkerUtil.getArray(WorkerUtil.CERTIFICATES, params);
         const communicationLanguages = WorkerUtil.getArray(WorkerUtil.COMMUNICATION_LANGUAGES, params);
