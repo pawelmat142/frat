@@ -11,9 +11,6 @@ import { DictionaryListItem } from "@shared/interfaces/DictionaryI";
 import { DateUtil } from "@shared/utils/DateUtil";
 
 const AdminDictionaries: React.FC = () => {
-
-    // TODO paginacja jak w translacjach
-    
     const navigate = useNavigate();
     const [dictionaries, setDictionaries] = useState<DictionaryListItem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);

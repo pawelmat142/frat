@@ -26,18 +26,13 @@ export class UserManagementService implements OnModuleInit, OnModuleDestroy {
         this.subscription.unsubscribe();
     }
 
-    public async updateAvatar(user: UserI, avatarRef: AvatarRef): Promise<UserI> {
-        const userBefore = await this.userService.getUserByUid(user.uid);
-
-        // Delete old avatar from Cloudinary if exists
-        if (userBefore.avatarRef?.publicId) {
-            await this.cloudinaryService.deleteImage(userBefore.avatarRef.publicId);
-        }
-
-        userBefore.avatarRef = avatarRef;
-        const result = await this.userService.updateEntity(userBefore);
-        this.logger.log(`Updated avatar for user: ${userBefore.userId}`);
-        return result;
+    /**
+     * Central method for updating user avatar.
+     * - Deletes old avatar assets from Cloudinary (with uid + user-avatar tags)
+     * - Updates User entity (DB trigger syncs to Worker automatically)
+     */
+    public async updateUserAvatar(user: UserI, newAvatarRef: AvatarRef): Promise<UserI> {
+        return this.performUpdateUserAvatar(user, newAvatarRef);
     }
 
     public async deleteAccount(user: UserI): Promise<boolean> {
@@ -46,6 +41,7 @@ export class UserManagementService implements OnModuleInit, OnModuleDestroy {
     }
 
     private startSubscription() {
+        // Handle user deletion - cleanup all Cloudinary assets
         this.subscription.add(
             this.userService.userDeletedEvent.subscribe(async (user) => {
                 if (user) {
@@ -53,7 +49,43 @@ export class UserManagementService implements OnModuleInit, OnModuleDestroy {
                 }
             })
         );
+
+        // Handle avatar update requests from any service
+        this.subscription.add(
+            this.userService.avatarUpdateRequest.subscribe(async ({ user, newAvatarRef }) => {
+                try {
+                    await this.performUpdateUserAvatar(user, newAvatarRef);
+                } catch (error) {
+                    this.logger.error(`Failed to update avatar for user ${user.uid}`, error);
+                }
+            })
+        );
     }
 
+    private async performUpdateUserAvatar(user: UserI, newAvatarRef: AvatarRef): Promise<UserI> {
+        if (!user) {
+            throw new Error('User is required to update avatar');
+        }
+        
+        const userEntity = await this.userService.getUserByUid(user.uid);
+        const oldPublicId = userEntity.avatarRef?.publicId;
+        const newPublicId = newAvatarRef?.publicId;
+        
+        // No change - skip update
+        if (oldPublicId === newPublicId) {
+            this.logger.log(`Avatar unchanged for user ${user.uid}, skipping update`);
+            return userEntity;
+        }
+        
+        // Delete old avatar assets from Cloudinary, keeping the new one
+        await this.cloudinaryService.deleteUserAvatarAssets(user.uid, newPublicId);
+        
+        // Update user entity - DB trigger will sync to jh_workers automatically
+        userEntity.avatarRef = newAvatarRef;
+        const updatedUser = await this.userService.updateEntity(userEntity);
+        
+        this.logger.log(`Updated avatar for user ${user.uid}: ${oldPublicId || 'none'} -> ${newPublicId || 'none'}`);
+        return updatedUser;
+    }
 
 }

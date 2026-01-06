@@ -105,12 +105,15 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
 
         const profile = await this.prepareProfile(user, form);
         const result = await this.workerRepo.create(profile);
+        await this.userService.updateAvatarIfChanges(user, form.avatarRef);
         return result;
     }
 
     public async updateWorker(user: UserI, form: WorkerFormDto): Promise<WorkerEntity> {
         const profile = await this.prepareProfile(user, form);
-        return this.workerRepo.update(profile);
+        const result = await this.workerRepo.update(profile);
+        await this.userService.updateAvatarIfChanges(user, form.avatarRef);
+        return result;
     }
 
     public async notifyWorkerView(uid: string, viewerUid: string): Promise<void> {
@@ -160,7 +163,6 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         return this.deleteProfile(profile.workerId);
     }
 
-    // TODO update user avatar upon profile update
     private async prepareProfile(user: UserI, form: WorkerFormDto): Promise<DeepPartial<WorkerEntity>> {
         const status = this.getProfileStatus(user, form);
 

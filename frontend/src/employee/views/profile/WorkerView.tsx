@@ -205,15 +205,13 @@ const WorkerView: React.FC = () => {
 
     const range = DateRangeUtil.getFirstRange(profile);
 
-    const isMyProfile = me?.uid === profile.uid;
-
     return (
         <div className="view-container">
 
             <div>
                 <div className="main-tiles">
 
-                    <AvatarTile editable={isMyProfile} uid={profile.uid} src={profile.avatarRef?.url} />
+                    <AvatarTile uid={profile.uid} src={profile.avatarRef?.url} />
 
                     <CallendarTile range={range}></CallendarTile>
 

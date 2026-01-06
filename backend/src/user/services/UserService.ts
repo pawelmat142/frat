@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserRepo } from './UserRepo';
 import { UserEntity } from 'user/model/UserEntity';
 import { CreateUser } from 'user/model/UserInterface';
-import { UserI, UserRole, UserRoles } from '@shared/interfaces/UserI';
+import { AvatarRef, UserI, UserRole, UserRoles } from '@shared/interfaces/UserI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { Subject } from 'rxjs';
 
@@ -18,9 +18,17 @@ export class UserService {
     ) { }
 
     private _userDeletedEvent$ = new Subject<UserI>()
-
     public get userDeletedEvent() {
         return this._userDeletedEvent$.asObservable()
+    }
+
+    private _avatarUpdateRequest$ = new Subject<{ user: UserI; newAvatarRef: AvatarRef }>()
+    /** 
+     * Subscribe to this event to handle avatar updates centrally.
+     * UserManagementService listens to this and handles Cloudinary cleanup + DB update.
+     */
+    public get avatarUpdateRequest() {
+        return this._avatarUpdateRequest$.asObservable()
     }
 
     public async existsByUid(uid: string): Promise<boolean> {
@@ -90,6 +98,15 @@ export class UserService {
         const result = await this.userRepo.updateEntity(user);
         this.logger.log(`Assigned roles '${roles.join(', ')}' to user: ${user.userId} / ${user.email}`);
         return result;
+    }
+
+    public async updateAvatarIfChanges(user: UserI, avatarRef: AvatarRef): Promise<void> {
+        if (user.avatarRef?.publicId === avatarRef?.publicId) {
+            return
+        }
+        // Emit event for UserManagementService to handle the update
+        // This avoids circular dependency and centralizes avatar logic
+        this._avatarUpdateRequest$.next({ user, newAvatarRef: avatarRef });
     }
 
 }

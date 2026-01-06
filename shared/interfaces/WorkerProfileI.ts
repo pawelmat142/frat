@@ -19,7 +19,6 @@ export interface WorkerI {
   phoneNumber: ParsedPhoneNumber;
   email: string;
   communicationLanguages: string[];
-  // TODO usunac wszystkie inne avatary z clouda od tego uid przy submicie forma
   avatarRef: AvatarRef;
   bio?: string;
 

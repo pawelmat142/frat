@@ -12,9 +12,6 @@ import { OffersAdminService } from "admin/services/OffersAdmin.service";
 import { DateUtil } from "@shared/utils/DateUtil";
 
 const AdminOffers: React.FC = () => {
-
-    // TODO paginacja ofert - admin panel
-
     const [loading, setLoading] = useState(false);
     const [selectedOffer, setSelectedOffer] = useState<OfferI | null>(null);
 

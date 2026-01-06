@@ -53,6 +53,73 @@ export class CloudinaryService {
     }
 
     /**
+     * Deletes all user avatar assets for a specific UID
+     * Targets assets with both `uid:${uid}` and `user-avatar` tags
+     * @param uid - User UID
+     * @param exceptPublicId - Optional publicId to exclude from deletion (e.g. the new avatar)
+     */
+    public async deleteUserAvatarAssets(uid: string, exceptPublicId?: string): Promise<void> {
+        this.validateConfig();
+        const auth = Buffer.from(`${this.apiKey}:${this.apiSecret}`).toString('base64');
+
+        try {
+            // Search for assets with both tags using Cloudinary Search API
+            // Tags with special characters (like colon) must be quoted
+            const searchResponse = await axios.post(
+                `https://api.cloudinary.com/v1_1/${this.cloudName}/resources/search`,
+                {
+                    expression: `tags="uid:${uid}" AND tags="user-avatar"`,
+                    max_results: 100,
+                },
+                {
+                    headers: {
+                        Authorization: `Basic ${auth}`,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+
+            const resources = searchResponse.data.resources || [];
+            if (resources.length === 0) {
+                this.logger.log(`No user avatar assets found for UID: ${uid}`);
+                return;
+            }
+
+            // Extract public_ids, excluding the one we want to keep
+            const publicIds: string[] = resources
+                .map((r: { public_id: string }) => r.public_id)
+                .filter((id: string) => id !== exceptPublicId);
+
+            if (publicIds.length === 0) {
+                this.logger.log(`No old avatar assets to delete for UID: ${uid} (keeping ${exceptPublicId})`);
+                return;
+            }
+            
+            const deleteResponse = await axios.delete(
+                `https://api.cloudinary.com/v1_1/${this.cloudName}/resources/image/upload`,
+                {
+                    headers: {
+                        Authorization: `Basic ${auth}`,
+                        'Content-Type': 'application/json',
+                    },
+                    data: {
+                        public_ids: publicIds,
+                    }
+                }
+            );
+
+            this.logger.log(`Deleted ${publicIds.length} user avatar assets for UID: ${uid}${exceptPublicId ? ` (kept ${exceptPublicId})` : ''}, result: ${JSON.stringify(deleteResponse.data)}`);
+        } catch (error: any) {
+            if (error.response?.status === 404) {
+                this.logger.log(`No user avatar assets found for UID: ${uid}`);
+                return;
+            }
+            this.logger.error(`Error deleting user avatar assets for UID: ${uid}`, error);
+            throw new ToastException('cloudinary.deletionFailed', this);
+        }
+    }
+
+    /**
      * Deletes an image from Cloudinary by public ID
      * @param publicId - The public ID of the image to delete
      */

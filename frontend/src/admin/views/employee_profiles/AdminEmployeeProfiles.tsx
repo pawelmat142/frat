@@ -14,9 +14,6 @@ import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { DateUtil } from "@shared/utils/DateUtil";
 
 const AdminEmployeeProfiles: React.FC = () => {
-
-    // TODO paginacja profili - admin panel
-
     const [loading, setLoading] = useState(false);
     const [selectedWorker, setSelectedWorker] = useState<WorkerI | null>(null);
 

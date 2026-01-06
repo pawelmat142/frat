@@ -31,7 +31,7 @@ export class UserManagementController {
     @CurrentUser() user: UserI,
     @Body() avatarRef?: AvatarRef
   ): Promise<UserI> {
-    return this.userManagementService.updateAvatar(user, avatarRef);
+    return this.userManagementService.updateUserAvatar(user, avatarRef);
   }
 
 
