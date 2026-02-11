@@ -14,6 +14,7 @@ import { OffersModule } from 'offer/OfferModule';
 import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
 import { TelegramModule } from 'telegram/telegram.module';
 import { ChatModule } from 'chat/ChatModule';
+import { FriendsModule } from 'friends/FriendsModule';
 import { GeocodingService } from 'global/services/GeocodingService';
 
 @Module({
@@ -40,6 +41,7 @@ import { GeocodingService } from 'global/services/GeocodingService';
 
     FeedbackModule,
     ChatModule,
+    FriendsModule,
   ],
   controllers: [
     GlobalController,
