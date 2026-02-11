@@ -34,6 +34,7 @@ import TelegramSignPage from 'auth/views/TelegramSignPage';
 import ChatsView from 'chat/views/ChatsView';
 import ChatConversationView from 'chat/views/ChatConversationView';
 import WorkersSearchFiltersView from 'employee/views/search/WorkersSearchFiltersView';
+import FriendsListView from 'friends/views/FriendsListView';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -69,6 +70,7 @@ const App: React.FC = () => {
                 <Route path={Path.HOME} element={<PageWrapper direction={-1}><HomePage /></PageWrapper>} />
 
                 <Route path={Path.ACCOUNT} element={<PageWrapper direction={1}><ProtectedRoute><ProfilePage /></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.FRIENDS} element={<PageWrapper direction={1}><ProtectedRoute><FriendsListView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.CHATS} element={<PageWrapper direction={1}><ProtectedRoute><ChatsView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.CHAT_CONVERSATION} element={<PageWrapper direction={1}><ProtectedRoute><ChatConversationView /></ProtectedRoute></PageWrapper>} />
 

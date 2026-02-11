@@ -12,17 +12,15 @@ import { UserPublicService } from "user/services/UserPublicService";
 import AvatarTile from "user/components/AvatarTile";
 import { Path } from "../../path";
 import { BtnModes } from "global/interface/controls.interface";
-import { FaBriefcase, FaIdCard, FaTrash, FaComments } from "react-icons/fa";
+import { FaBriefcase, FaIdCard, FaTrash, FaComments, FaUsers } from "react-icons/fa";
 import { useConfirm } from "global/providers/PopupProvider";
 import { UserManagementService } from "user/services/UserManagementService";
 import { FirebaseAuth } from "auth/services/FirebaseAuth";
 import { ChatService } from "chat/services/ChatService";
 import { WorkerI } from "@shared/interfaces/WorkerProfileI";
 import { OfferI } from "@shared/interfaces/OfferI";
-import { m } from "framer-motion";
 import { WorkerService } from "employee/services/WorkerService";
 import { OffersService } from "offer/services/OffersService";
-import { set } from "react-hook-form";
 
 const AccountView: React.FC = () => {
 
@@ -40,7 +38,6 @@ const AccountView: React.FC = () => {
 
     const isMyAccount = uid === me?.uid
 
-    console.log(offers)
     useEffect(() => {
         setLocalLoading(true);
         const initUser = async () => {
@@ -220,6 +217,16 @@ const AccountView: React.FC = () => {
                             {t('chat.chats')}
                         </Button>
 
+{/* TODO show this button only if it's my account or a friend */}
+                        <Button
+                            fullWidth
+                            mode={BtnModes.SECONDARY}
+                            onClick={() => { navigate(Path.getFriendsPath(user.uid)); }}
+                        >
+                            <FaUsers className="mr-2" />
+                            {t('account.friends')}
+                        </Button>
+
                         <Button
                             fullWidth
                             mode={BtnModes.ERROR_TXT}
@@ -228,6 +235,7 @@ const AccountView: React.FC = () => {
                             <FaTrash className="mr-2" />
                             {t('account.deleteAccountConfirmTitle')}
                         </Button>
+
                     </>
                 ) : (
                     <>

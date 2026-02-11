@@ -8,9 +8,9 @@ export abstract class Path {
     public static readonly FORGOT_PASSWORD = '/forgot-password';
 
     public static readonly ACCOUNT = '/account/:uid';
-
     public static readonly CHATS = '/chat';
     public static readonly CHAT_CONVERSATION = '/chat/:chatId';
+    public static readonly FRIENDS = '/friends/:uid';
 
     // EMPLOYEE PROFILES
     public static readonly WORKER = '/worker/:displayName';
@@ -51,4 +51,5 @@ export abstract class Path {
     public static getOffersPath = (uid: string) => `${Path.USER_OFFERS.replace(':uid', uid)}`;
     public static getOfferFormEditPath = (offerId: number) => `${Path.OFFER_FORM_EDIT.replace(':offerId', `${offerId}`)}`;
     public static getChatPath = (chatId: number) => `${Path.CHAT_CONVERSATION.replace(':chatId', `${chatId}`)}`;
+    public static getFriendsPath = (uid: string) => `${Path.FRIENDS.replace(':uid', uid)}`;
 }
