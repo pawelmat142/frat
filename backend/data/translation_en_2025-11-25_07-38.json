@@ -44,7 +44,10 @@
     },
     "friends": {
       "search": "Search friends",
-      "invitationSent": "Invitation sent"
+      "invitationSent": "Invitation sent",
+      "friend": "Friend",
+      "invited": "Invited",
+      "accept": "Accept invitation"
     },
     "lang": {
       "select": "Select Language",

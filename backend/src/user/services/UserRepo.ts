@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserI, UserRoles, UserStatuses } from "@shared/interfaces/UserI";
-import { Repository } from "typeorm";
+import { Repository, In } from "typeorm";
 import { UserEntity } from "user/model/UserEntity";
 import { CreateUser } from "user/model/UserInterface";
 
@@ -46,6 +46,10 @@ export class UserRepo {
 
     public getUserByUid(uid: string): Promise<UserEntity | null> {
         return this.userRepository.findOneBy({ uid });
+    }
+
+    public getUsersByUids(uids: string[]): Promise<UserEntity[]> {
+        return this.userRepository.findBy({ uid: In(uids) });
     }
 
     public findUserByEmail(email: string): Promise<UserEntity | null> {

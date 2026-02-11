@@ -6,6 +6,8 @@ import { OfferI } from '@shared/interfaces/OfferI';
 import { OffersService } from 'offer/services/OffersService';
 import { toast } from 'react-toastify';
 import { Position } from '@shared/interfaces/MapsInterfaces';
+import { FriendshipI } from '@shared/interfaces/FriendshipI';
+import { FriendsService } from 'friends/services/FriendsService';
 
 interface UserContextType {
 	worker: WorkerI | null;
@@ -15,6 +17,9 @@ interface UserContextType {
 	offers: OfferI[];
 	initOffers: () => void;
 	cleanOffers: () => void;
+	friendships: FriendshipI[];
+	initFriendships: () => void;
+	cleanFriendships: () => void;
 	loading: boolean;
 	setLoading: (loading: boolean) => void;
 }
@@ -26,6 +31,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const [worker, setWorker] = React.useState<WorkerI | null>(null);
 
 	const [offers, setOffers] = React.useState<OfferI[]>([]);
+
+	const [friendships, setFriendships] = React.useState<FriendshipI[]>([]);
 
 	const [loading, setLoading] = React.useState(false);
 
@@ -40,6 +47,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				initWorker(true),
 				initOffers(true),
 				initLocation(true),
+				initFriendships(true),
 			]).then(() => {
 				setLoading(false);
 			})
@@ -158,12 +166,35 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		}
 	}
 
+	const initFriendships = async (init?: boolean) => {
+		try {
+			setLoading(true);
+			const friendships = await FriendsService.getFriendships();
+			console.log("Fetched user friendships:", friendships);
+			if (friendships) {
+				setFriendships(friendships);
+			} else {
+				setFriendships([]);
+			}
+		} catch (error) {
+			setFriendships([]);
+		} finally {
+			if (!init) {
+				setLoading(false);
+			}
+		}
+	}
+
 	const cleanOffers = () => {
 		setOffers([]);
 	}
 
 	const cleanWorker = () => {
 		setWorker(null);
+	}
+
+	const cleanFriendships = () => {
+		setFriendships([]);
 	}
 
 	return (
@@ -174,6 +205,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			offers: offers,
 			initOffers: initOffers,
 			cleanOffers: cleanOffers,
+			friendships: friendships,
+			initFriendships: initFriendships,
+			cleanFriendships: cleanFriendships,
 			loading: loading,
 			setLoading: setLoading,
 			position

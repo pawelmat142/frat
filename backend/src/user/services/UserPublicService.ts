@@ -24,4 +24,8 @@ export class UserPublicService {
             count,
         };
     }
+
+    public fetchUsers(uids: string[]): Promise<UserI[]> {
+        return this.userRepo.getUsersByUids(uids);
+    }
 }

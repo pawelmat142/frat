@@ -58,8 +58,8 @@ export class FriendsController {
     }
 
     @Get()
-    getFriends(@CurrentUser() user: UserI): Promise<FriendshipI[]> {
-        return this.friendshipService.getFriends(user.uid);
+    getFriendships(@CurrentUser() user: UserI): Promise<FriendshipI[]> {
+        return this.friendshipService.getFriendships(user.uid);
     }
 
     @Get('/pending/received')

@@ -75,7 +75,7 @@ export class FriendshipService {
         this.logger.log(`Removed friendship: ${friendship.requesterUid} <-> ${friendship.addresseeUid}`);
     }
 
-    async getFriends(uid: string): Promise<FriendshipEntity[]> {
+    async getFriendships(uid: string): Promise<FriendshipEntity[]> {
         return this.friendshipRepo.findFriendsByUid(uid);
     }
 

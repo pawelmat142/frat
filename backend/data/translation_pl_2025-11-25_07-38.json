@@ -43,7 +43,10 @@
     },
     "friends": {
       "search": "Szukaj znajomych",
-      "invitationSent": "Zaproszenie wysłane"
+      "invitationSent": "Zaproszenie wysłane",
+      "friend": "Znajomy",
+      "invited": "Zaproszony",
+      "accept": "Zaakceptuj zaproszenie"
     },
     "lang": {
       "select": "Wybierz język",

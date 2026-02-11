@@ -7,4 +7,8 @@ export const UserPublicService = {
 		return httpClient.get(`/user/${uid}`, { skipAuth: true });
 	},
 
+	fetchUsers(uids: string[]): Promise<UserI[]> {
+		return httpClient.post(`/user/batch`, { uids }, { skipAuth: true });
+	}
+
 };

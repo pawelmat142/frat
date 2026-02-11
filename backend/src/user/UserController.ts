@@ -1,9 +1,11 @@
 /** Created by Pawel Malek **/
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   Param,
+  Post,
   Query,
   UseInterceptors,
 } from '@nestjs/common';
@@ -42,5 +44,12 @@ export class UserController {
   @Serialize(UserEntity)
   fetchUser(@Param('uid') uid: string): Promise<UserI> {
     return this.userPublicService.fetchUser(uid);
+  }
+
+  @Post('/batch')
+  @Public()
+  @Serialize(UserEntity)
+  fetchUsers(@Body('uids') uids: string[]): Promise<UserI[]> {
+    return this.userPublicService.fetchUsers(uids);
   }
 }

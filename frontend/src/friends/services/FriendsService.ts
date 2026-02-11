@@ -10,5 +10,9 @@ export const FriendsService = {
 
     sendInvite(addresseeUid: string): Promise<FriendshipI> {
         return httpClient.post<FriendshipI>(`/friends/invite/${addresseeUid}`);
+    },
+
+    getFriendships(): Promise<FriendshipI[]> {
+        return httpClient.get<FriendshipI[]>(`/friends`);
     }
 }

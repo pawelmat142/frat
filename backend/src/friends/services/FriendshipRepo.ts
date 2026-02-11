@@ -50,8 +50,8 @@ export class FriendshipRepo {
     public findFriendsByUid(uid: string): Promise<FriendshipEntity[]> {
         return this.friendshipRepository.find({
             where: [
-                { requesterUid: uid, status: FriendshipStatuses.ACCEPTED },
-                { addresseeUid: uid, status: FriendshipStatuses.ACCEPTED },
+                { requesterUid: uid },
+                { addresseeUid: uid },
             ],
         });
     }
