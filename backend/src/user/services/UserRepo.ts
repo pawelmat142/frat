@@ -65,6 +65,21 @@ export class UserRepo {
         return this.userRepository.save(user)
     }
 
+    public async searchUsers(query: string, skip: number, limit: number): Promise<{ users: UserEntity[]; count: number }> {
+        const qb = this.userRepository.createQueryBuilder('user')
+            .where('user.status = :status', { status: UserStatuses.ACTIVE })
+            .andWhere(
+                '(user.display_name ILIKE :query OR user.email ILIKE :query)',
+                { query: `%${query}%` },
+            )
+            .orderBy('user.display_name', 'ASC')
+            .skip(skip)
+            .take(limit);
+
+        const [users, count] = await qb.getManyAndCount();
+        return { users, count };
+    }
+
     // admin panel purpose
     public listUsers(): Promise<UserI[]> {
         return this.userRepository.find({

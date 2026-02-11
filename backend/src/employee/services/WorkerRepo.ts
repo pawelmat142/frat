@@ -36,7 +36,7 @@ export class WorkerRepo {
     public async findByDisplayName(displayName: string): Promise<WorkerEntity | null> {
         const result = await this.woerkersRepository.findOne({ where: { displayName } });
         if (!result) {
-            throw new ToastException("validation.notFound", this);
+            return null;
         }
         if (result?.availabilityDateRanges) {
             this.sortRanges([result]);

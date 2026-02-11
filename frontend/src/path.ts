@@ -11,6 +11,7 @@ export abstract class Path {
     public static readonly CHATS = '/chat';
     public static readonly CHAT_CONVERSATION = '/chat/:chatId';
     public static readonly FRIENDS = '/friends/:uid';
+    public static readonly FRIENDS_SEARCH = '/friends-search';
 
     // EMPLOYEE PROFILES
     public static readonly WORKER = '/worker/:displayName';

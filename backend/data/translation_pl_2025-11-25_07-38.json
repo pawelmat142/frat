@@ -41,6 +41,10 @@
       "deleteAccountFailed": "Nie udało się usunąć konta",
       "friends": "Znajomi"
     },
+    "friends": {
+      "search": "Szukaj znajomych",
+      "invitationSent": "Zaproszenie wysłane"
+    },
     "lang": {
       "select": "Wybierz język",
       "language": "Język",

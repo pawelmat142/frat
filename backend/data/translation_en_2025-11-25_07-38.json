@@ -42,6 +42,10 @@
       "deleteAccountFailed": "Failed to delete account",
       "friends": "Friends"
     },
+    "friends": {
+      "search": "Search friends",
+      "invitationSent": "Invitation sent"
+    },
     "lang": {
       "select": "Select Language",
       "language": "Language",

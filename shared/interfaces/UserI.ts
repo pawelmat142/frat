@@ -42,3 +42,14 @@ export interface AvatarRef {
     url: string;
     publicId: string;
 }
+
+export interface UserSearchFilters {
+    query: string;
+    skip: number;
+    limit: number;
+}
+
+export interface UserSearchResponse {
+    users: UserI[];
+    count: number;
+}
