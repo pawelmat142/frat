@@ -104,9 +104,8 @@ const FriendsSearchView: React.FC = () => {
             ) : (
                 <div className="px-2 flex flex-col gap-1">
                     {users.map(user => (
-                        <div className="list-view-item">
+                        <div className="list-view-item" key={user.uid}>
                             <UserInvitationListItem
-                                key={user.uid}
                                 user={user}
                             />
                         </div>
@@ -123,7 +122,7 @@ const FriendsSearchView: React.FC = () => {
 
             {showEndOfResults && (
                 <div className="flex justify-center py-4">
-                    <span className="secondary-text small-font">{t('common.endOfResults', { defaultValue: 'No more results to display.' })}</span>
+                    <span className="secondary-text small-font">{t('common.endOfResults')}</span>
                 </div>
             )}
 

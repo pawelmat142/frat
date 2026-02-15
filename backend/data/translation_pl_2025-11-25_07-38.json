@@ -46,7 +46,14 @@
       "invitationSent": "Zaproszenie wysłane",
       "friend": "Znajomy",
       "invited": "Zaproszony",
-      "accept": "Zaakceptuj zaproszenie"
+      "accept": "Zaakceptuj zaproszenie",
+      "endOfResults": "Brak więcej wyników do wyświetlenia.",
+      "invitationReceived": "Otrzymane zaproszenie",
+      "cancel": "Anuluj",
+      "cancelInvitation": "Anuluj zaproszenie",
+      "cancelInvitationConfirm": "Czy na pewno chcesz anulować to zaproszenie?",
+      "cancelInvitationSuccess": "Zaproszenie zostało odrzucone",
+      "noFriends": "Nie masz jeszcze żadnych znajomych. Wyszukaj i dodaj kilku!"
     },
     "lang": {
       "select": "Wybierz język",

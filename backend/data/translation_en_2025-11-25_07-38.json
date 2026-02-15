@@ -47,7 +47,14 @@
       "invitationSent": "Invitation sent",
       "friend": "Friend",
       "invited": "Invited",
-      "accept": "Accept invitation"
+      "accept": "Accept invitation",
+      "endOfResults": "No more results to display.",
+      "invitationReceived": "Invitation received",
+      "cancel": "Cancel invitation",
+      "cancelInvitation": "Cancel Invitation",
+      "cancelInvitationConfirm": "Are you sure you want to cancel this invitation?",
+      "cancelInvitationSuccess": "Invitation rejected successfully",
+      "noFriends": "You have no friends yet. Search and add some!"
     },
     "lang": {
       "select": "Select Language",

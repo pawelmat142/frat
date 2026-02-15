@@ -12,6 +12,10 @@ export const FriendsService = {
         return httpClient.post<FriendshipI>(`/friends/invite/${addresseeUid}`);
     },
 
+    rejectInvite(friendshipId: number): Promise<FriendshipI> {
+        return httpClient.patch<FriendshipI>(`/friends/reject/${friendshipId}`);
+    },
+
     getFriendships(): Promise<FriendshipI[]> {
         return httpClient.get<FriendshipI[]>(`/friends`);
     }

@@ -38,6 +38,7 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
             await FriendsService.sendInvite(user.uid);
             userCtx.initFriendships();
             toast.success(t('friends.invitationSent'));
+            navigate(-1)
         } finally {
             setLoading(false);
         }

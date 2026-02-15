@@ -46,7 +46,10 @@ export class FriendshipService {
 
     async acceptInvite(user: UserI, friendshipId: number): Promise<FriendshipEntity> {
         const friendship = await this.getAndValidatePendingInvite(user, friendshipId);
-
+        // Only the addressee can accept
+        if (friendship.addresseeUid !== user.uid) {
+            throw new ToastException('friendship.error.notAuthorized', this);
+        }
         const updated = await this.friendshipRepo.updateStatus(friendship, FriendshipStatuses.ACCEPTED);
         this.logger.log(`Accepted friendship: ${friendship.requesterUid} <-> ${friendship.addresseeUid}`);
         return updated;
@@ -54,7 +57,10 @@ export class FriendshipService {
 
     async rejectInvite(user: UserI, friendshipId: number): Promise<FriendshipEntity> {
         const friendship = await this.getAndValidatePendingInvite(user, friendshipId);
-
+        // Only the addressee and requester can reject
+        if (friendship.addresseeUid !== user.uid && friendship.requesterUid !== user.uid) {
+            throw new ToastException('friendship.error.notAuthorized', this);
+        }
         const updated = await this.friendshipRepo.updateStatus(friendship, FriendshipStatuses.REJECTED);
         this.logger.log(`Rejected friendship: ${friendship.requesterUid} -> ${friendship.addresseeUid}`);
         return updated;
@@ -91,10 +97,6 @@ export class FriendshipService {
         const friendship = await this.friendshipRepo.findById(friendshipId);
         if (!friendship) {
             throw new ToastException('friendship.error.notFound', this);
-        }
-        // Only the addressee can accept/reject
-        if (friendship.addresseeUid !== user.uid) {
-            throw new ToastException('friendship.error.notAuthorized', this);
         }
         if (friendship.status !== FriendshipStatuses.PENDING) {
             throw new ToastException('friendship.error.notPending', this);

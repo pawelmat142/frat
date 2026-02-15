@@ -9,21 +9,26 @@ interface Props {
     size?: number //rem
     showNumber?: boolean
     allowNavigate?: boolean
+    bottomRow?: React.ReactNode
 }
 
-const UserItem: React.FC<Props> = ({ user, size = 3.5, showNumber = false, allowNavigate = true }) => {
-    
+const UserItem: React.FC<Props> = ({ user, size = 3.5, showNumber = false, allowNavigate = true, bottomRow }) => {
+
     const navigate = useNavigate();
 
     return (
-        <span className="ripple flex gap-2 items-center w-full" onClick={() => { 
+        <span className="ripple flex gap-2 items-center w-full" onClick={() => {
             if (!allowNavigate) return;
-            navigate(Path.getAccountPath(user?.uid)) 
+            navigate(Path.getAccountPath(user?.uid))
         }}>
             <ListItemImg imgUrl={user?.avatarRef?.url || AVATAR_MOCK} size={size} />
             <div>
                 <div className="x-font">{user?.displayName}</div>
-                {showNumber && <div className="small-font secondary-text">{user?.email}</div>}
+                {bottomRow ? (
+                    bottomRow
+                ) : (
+                    showNumber && <div className="small-font secondary-text">{user?.email}</div>
+                )}
             </div>
         </span>
     )

@@ -3,7 +3,7 @@ import Button from "global/components/controls/Button"
 import { BtnModes } from "global/interface/controls.interface"
 import { Path } from "../../path"
 import { FaIdCard } from "react-icons/fa"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useUserContext } from "user/UserProvider"
 import { useEffect, useState } from "react"
@@ -31,7 +31,7 @@ const FriendsListView: React.FC = () => {
 
         const users = await UserPublicService.fetchUsers(uids)
 
-        const friends = userCtx.friendships.map(friendship => {
+        const friends = userCtx.friendships.filter(f => f.status !== FriendshipStatuses.REJECTED).map(friendship => {
             const friendUid = friendship.requesterUid === me?.uid ? friendship.addresseeUid : friendship.requesterUid;
             const user = users.find(u => u.uid === friendUid)!;
             return { user, friendship }
@@ -61,12 +61,19 @@ const FriendsListView: React.FC = () => {
 
     return (
         <div className="list-view">
-
+            
             <div className="px-2 flex flex-col gap-1 mt-2">
+
+                {!friends.length && (
+                    <div className="flex flex-col items-center gap-3 mt-10">
+                        <FaIdCard size={48} className="secondary-text" />
+                        <div className="secondary-text">{t('friends.noFriends')}</div>
+                    </div>
+                )}
+
                 {friends.map(({ user, friendship }) => (
-                    <div className="list-view-item">
+                    <div className="list-view-item" key={user.uid}>
                         <FriendshipListItem
-                            key={user.uid}
                             user={user}
                             friendship={friendship}
                         />
