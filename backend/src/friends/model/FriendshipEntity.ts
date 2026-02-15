@@ -6,6 +6,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Unique(['requesterUid', 'addresseeUid'])
 export class FriendshipEntity implements FriendshipI {
 
+
     @PrimaryGeneratedColumn({ name: 'friendship_id' })
     friendshipId: number;
 
@@ -14,6 +15,12 @@ export class FriendshipEntity implements FriendshipI {
 
     @Column({ name: 'addressee_uid' })
     addresseeUid: string;
+
+    @Column({ name: 'requester_name' })
+    requesterName: string;
+
+    @Column({ name: 'addressee_name' })
+    addresseeName: string;
 
     @Column({ name: 'status', default: FriendshipStatuses.PENDING })
     status: FriendshipStatus;

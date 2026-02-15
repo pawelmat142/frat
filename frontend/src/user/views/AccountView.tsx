@@ -12,7 +12,7 @@ import { UserPublicService } from "user/services/UserPublicService";
 import AvatarTile from "user/components/AvatarTile";
 import { Path } from "../../path";
 import { BtnModes } from "global/interface/controls.interface";
-import { FaBriefcase, FaIdCard, FaTrash, FaComments, FaUsers } from "react-icons/fa";
+import { FaBriefcase, FaIdCard, FaTrash, FaComments, FaUsers, FaTimes } from "react-icons/fa";
 import { useConfirm } from "global/providers/PopupProvider";
 import { UserManagementService } from "user/services/UserManagementService";
 import { FirebaseAuth } from "auth/services/FirebaseAuth";
@@ -204,14 +204,24 @@ const AccountView: React.FC = () => {
         }
         if (friendship.status === FriendshipStatuses.PENDING) {
             if (friendship.addresseeUid === me?.uid) {
-                return <Button
-                    fullWidth
-                    mode={BtnModes.SECONDARY}
-                    onClick={async () => { acceptInvitation(friendship); }}
-                >
-                    <FaUsers className="mr-2" />
-                    {t('friends.accept')}
-                </Button>
+                return (<>
+                    <Button
+                        fullWidth
+                        mode={BtnModes.SECONDARY}
+                        onClick={async () => { acceptInvitation(friendship); }}
+                    >
+                        <FaUsers className="mr-2" />
+                        {t('friends.accept')}
+                    </Button>
+                    <Button
+                        fullWidth
+                        mode={BtnModes.ERROR_TXT}
+                        onClick={async () => { rejectInvitation(friendship); }}
+                    >
+                        <FaTimes className="mr-2" />
+                        {t('friends.reject')}
+                    </Button>
+                </>)
             }
         }
     }
@@ -241,7 +251,19 @@ const AccountView: React.FC = () => {
             setLocalLoading(true);
             const result = await FriendsService.acceptInvite(friendship.friendshipId)
             userCtx.initFriendships();
-            toast.success(t('friends.accept'));
+            toast.success(t('friends.acceptedToast'));
+        }
+        finally {
+            setLocalLoading(false);
+        }
+    }
+
+    const rejectInvitation = async (friendship: FriendshipI) => {
+        try {
+            setLocalLoading(true);
+            const result = await FriendsService.rejectInvite(friendship.friendshipId)
+            userCtx.initFriendships();
+            toast.success(t('friends.rejectedToast'));
         }
         finally {
             setLocalLoading(false);

@@ -1,7 +1,7 @@
 import { FriendshipEvents, FriendshipI } from '@shared/interfaces/FriendshipI';
 import WebSocketService from 'global/web-socket/WebSocketService';
 
-class FriendsSocketService {
+export class FriendsSocketService {
     private webSocket: WebSocketService;
     private inviteListeners: Set<(friendship: FriendshipI) => void> = new Set();
     private acceptListeners: Set<(friendship: FriendshipI) => void> = new Set();

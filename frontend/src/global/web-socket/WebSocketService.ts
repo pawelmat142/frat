@@ -26,9 +26,6 @@ class WebSocketService {
     }
 
     async connect(): Promise<void> {
-
-        console.log('SOCKET_URL');
-        console.log(SOCKET_URL);
         if (!SOCKET_URL) {
             throw new Error('WebSocket: SOCKET_URL is not defined');
         }

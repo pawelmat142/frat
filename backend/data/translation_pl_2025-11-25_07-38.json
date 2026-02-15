@@ -47,7 +47,10 @@
       "invitationSent": "Zaproszenie wysłane",
       "friend": "Znajomy",
       "invited": "Zaproszony",
-      "accept": "Zaakceptuj zaproszenie",
+      "accept": "Zaakceptuj",
+      "acceptedToast": "Zaproszenie zaakceptowane",
+      "reject": "Odrzuć zaproszenie",
+      "rejectedToast": "Zaproszenie odrzucone",
       "endOfResults": "Brak więcej wyników do wyświetlenia.",
       "invitationReceived": "Otrzymane zaproszenie",
       "cancel": "Anuluj",
@@ -58,7 +61,8 @@
       "remove": "Usuń znajomego",
       "removeConfirm": "Czy na pewno chcesz usunąć tego znajomego?",
       "removeSuccess": "Znajomy został pomyślnie usunięty",
-      "removeFailed": "Nie udało się usunąć znajomego"
+      "removeFailed": "Nie udało się usunąć znajomego",
+      "inviteReceivedToast": "Użytkownik {{name}} wysłał Ci zaproszenie."
     },
     "lang": {
       "select": "Wybierz język",

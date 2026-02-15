@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FriendshipEntity } from 'friends/model/FriendshipEntity';
 import { FriendshipStatus, FriendshipStatuses } from '@shared/interfaces/FriendshipI';
+import { UserI } from '@shared/interfaces/UserI';
 
 @Injectable()
 export class FriendshipRepo {
@@ -15,10 +16,12 @@ export class FriendshipRepo {
         private readonly friendshipRepository: Repository<FriendshipEntity>,
     ) { }
 
-    public create(requesterUid: string, addresseeUid: string): Promise<FriendshipEntity> {
+    public create(requester: UserI, addressee: UserI): Promise<FriendshipEntity> {
         const entity = this.friendshipRepository.create({
-            requesterUid,
-            addresseeUid,
+            requesterUid: requester.uid,
+            addresseeUid: addressee.uid,
+            requesterName: requester.displayName,
+            addresseeName: addressee.displayName,
             status: FriendshipStatuses.PENDING,
         });
         return this.friendshipRepository.save(entity);

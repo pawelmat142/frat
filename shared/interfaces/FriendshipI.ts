@@ -2,6 +2,8 @@ export interface FriendshipI {
     friendshipId: number;
     requesterUid: string;
     addresseeUid: string;
+    requesterName: string;
+    addresseeName: string;
     status: FriendshipStatus;
     createdAt: Date;
     updatedAt: Date;
@@ -12,8 +14,8 @@ export const FriendshipStatuses = {
     ACCEPTED: 'ACCEPTED',
     REJECTED: 'REJECTED',
 } as const;
-
 export type FriendshipStatus = typeof FriendshipStatuses[keyof typeof FriendshipStatuses];
+
 
 export const FriendshipEvents = {
     INVITE_RECEIVED: 'inviteReceived',
@@ -21,5 +23,4 @@ export const FriendshipEvents = {
     INVITE_REJECTED: 'inviteRejected',
     FRIEND_REMOVED: 'friendRemoved',
 } as const;
-
 export type FriendshipEvent = typeof FriendshipEvents[keyof typeof FriendshipEvents];

@@ -6,6 +6,8 @@ import { FriendshipRepo } from './services/FriendshipRepo';
 import { FriendshipService } from './services/FriendshipService';
 import { FriendsController } from './FriendsController';
 import { AuthModule } from 'auth/AuthModule';
+import { UserModule } from 'user/UserModule';
+import { FriendshipSocketHandler } from './services/FriendshipSocketHandler';
 
 @Module({
     imports: [
@@ -13,17 +15,19 @@ import { AuthModule } from 'auth/AuthModule';
             FriendshipEntity,
         ]),
         AuthModule,
+        UserModule,
     ],
     providers: [
         FriendshipRepo,
         FriendshipService,
+        FriendshipSocketHandler
     ],
     controllers: [
         FriendsController,
     ],
     exports: [
         FriendshipService,
-        FriendshipRepo,
+        FriendshipSocketHandler
     ],
 })
 export class FriendsModule { }

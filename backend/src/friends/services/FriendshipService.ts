@@ -5,6 +5,8 @@ import { FriendshipEntity } from 'friends/model/FriendshipEntity';
 import { FriendshipStatuses } from '@shared/interfaces/FriendshipI';
 import { UserI } from '@shared/interfaces/UserI';
 import { ToastException } from 'global/exceptions/ToastException';
+import { UserService } from 'user/services/UserService';
+import { FriendshipSocketHandler } from './FriendshipSocketHandler';
 
 @Injectable()
 export class FriendshipService {
@@ -13,14 +15,17 @@ export class FriendshipService {
 
     constructor(
         private readonly friendshipRepo: FriendshipRepo,
+        private readonly userService: UserService,
+        private readonly friendshipSocketHandler: FriendshipSocketHandler,
     ) { }
 
-    async sendInvite(user: UserI, addresseeUid: string): Promise<FriendshipEntity> {
-        if (user.uid === addresseeUid) {
+    async sendInvite(requester: UserI, addresseeUid: string): Promise<FriendshipEntity> {
+        if (requester.uid === addresseeUid) {
             throw new ToastException('friendship.error.cannotInviteSelf', this);
         }
 
-        const existing = await this.friendshipRepo.findByUids(user.uid, addresseeUid);
+        const existing = await this.friendshipRepo.findByUids(requester.uid, addresseeUid);
+        const addressee: UserI = await this.userService.getUserByUid(addresseeUid);
 
         if (existing) {
             if (existing.status === FriendshipStatuses.ACCEPTED) {
@@ -31,16 +36,16 @@ export class FriendshipService {
             }
             // REJECTED — allow re-sending by updating status back to PENDING
             if (existing.status === FriendshipStatuses.REJECTED) {
-                existing.requesterUid = user.uid;
-                existing.addresseeUid = addresseeUid;
                 const updated = await this.friendshipRepo.updateStatus(existing, FriendshipStatuses.PENDING);
-                this.logger.log(`Re-sent friendship invite: ${user.uid} -> ${addresseeUid}`);
+                this.logger.log(`Re-sent friendship invite: ${requester.uid} -> ${addressee.uid}`);
+                this.friendshipSocketHandler.notifyInviteReceived(updated);
                 return updated;
             }
         }
 
-        const friendship = await this.friendshipRepo.create(user.uid, addresseeUid);
-        this.logger.log(`Sent friendship invite: ${user.uid} -> ${addresseeUid}`);
+        const friendship = await this.friendshipRepo.create(requester, addressee);
+        this.logger.log(`Sent friendship invite: ${requester.uid} -> ${addressee.uid}`);
+        this.friendshipSocketHandler.notifyInviteReceived(friendship);
         return friendship;
     }
 

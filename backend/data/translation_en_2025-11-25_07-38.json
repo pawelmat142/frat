@@ -49,6 +49,9 @@
       "friend": "Friend",
       "invited": "Invited",
       "accept": "Accept invitation",
+      "acceptedToast": "Invitation accepted",
+      "reject": "Reject invitation",
+      "rejectedToast": "Invitation rejected",
       "endOfResults": "No more results to display.",
       "invitationReceived": "Invitation received",
       "cancel": "Cancel invitation",
@@ -59,7 +62,8 @@
       "remove": "Remove friend",
       "removeConfirm": "Are you sure you want to remove this friend?",
       "removeSuccess": "Friend removed successfully",
-      "removeFailed": "Failed to remove friend"
+      "removeFailed": "Failed to remove friend",
+      "inviteReceivedToast": "User {{name}} sent you an invitation."
     },
     "lang": {
       "select": "Select Language",

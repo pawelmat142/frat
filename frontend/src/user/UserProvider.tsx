@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 import { Position } from '@shared/interfaces/MapsInterfaces';
 import { FriendshipI } from '@shared/interfaces/FriendshipI';
 import { FriendsService } from 'friends/services/FriendsService';
+import { friendsSocket } from 'friends/services/FriendsSocketService';
+import { useTranslation } from 'react-i18next';
 
 interface UserContextType {
 	worker: WorkerI | null;
@@ -40,6 +42,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const [positionWatchId, setPositionWatchId] = React.useState<number | null>(null);
 
 	const authCtx = useAuthContext();
+	const { t } = useTranslation()
 
 	React.useEffect(() => {
 		if (authCtx.me) {
@@ -173,6 +176,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			} else {
 				setFriendships([]);
 			}
+			initFriendshipSocketListeners();
 		} catch (error) {
 			setFriendships([]);
 		} finally {
@@ -180,6 +184,19 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				setLoading(false);
 			}
 		}
+	}
+
+	const initFriendshipSocketListeners = () => {
+		friendsSocket.registerInviteListener((friendship) => {
+			const exists = friendships.find(f => f.friendshipId === friendship.friendshipId);
+			if (!exists) {
+				setFriendships(prev => [...prev, friendship]);
+			} else {
+				setFriendships(prev => prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f));
+			}
+			// TODO notifications feature
+			toast.info(t('friends.inviteReceivedToast', { name: friendship.requesterName })); 
+		})
 	}
 
 	const cleanOffers = () => {
