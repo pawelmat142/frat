@@ -37,7 +37,7 @@ export class FriendshipSocketHandler implements SocketHandler, OnModuleInit {
   }
 
   notifyInviteReceived(friendship: FriendshipI): void {
-    this.socketGateway.emitToUser(friendship.addresseeUid, FriendshipEvents.INVITE_RECEIVED, friendship);
+    this.socketGateway.emitToUser(friendship.addresseeUid, FriendshipEvents.INVITE_RECEIVED, friendship)
   }
 
   notifyInviteRejected(friendship: FriendshipI): void {
@@ -45,4 +45,14 @@ export class FriendshipSocketHandler implements SocketHandler, OnModuleInit {
     this.socketGateway.emitToUser(friendship.addresseeUid , FriendshipEvents.INVITE_REJECTED, friendship)
   }
 
+  notifyInviteAccepted(friendship: FriendshipI): void {
+    this.socketGateway.emitToUser(friendship.requesterUid, FriendshipEvents.INVITE_ACCEPTED, friendship)
+    this.socketGateway.emitToUser(friendship.addresseeUid, FriendshipEvents.INVITE_ACCEPTED, friendship)
+  }
+
+  notifyFriendRemoved(friendship: FriendshipI): void {
+    this.socketGateway.emitToUser(friendship.requesterUid, FriendshipEvents.FRIEND_REMOVED, friendship.friendshipId)
+    this.socketGateway.emitToUser(friendship.addresseeUid, FriendshipEvents.FRIEND_REMOVED, friendship.friendshipId)
+  }
+  
 }

@@ -40,7 +40,6 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
         try {
             setLoading(true);
             const result = await FriendsService.acceptInvite(friendship.friendshipId)
-            userCtx.initFriendships();
             toast.success(t('friends.accept'));
         }
         finally {
@@ -61,7 +60,6 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
             setLoading(true);
             await FriendsService.rejectInvite(friendship.friendshipId)
             toast.info(t('friends.cancelInvitationSuccess'));
-
         }
         finally {
             setLoading(false);

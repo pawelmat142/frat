@@ -23,6 +23,7 @@ interface UserContextType {
 	friendships: FriendshipI[];
 	initFriendships: () => void;
 	cleanFriendships: () => void;
+	putFriendship: (friendship: FriendshipI) => void;
 	loading: boolean;
 	setLoading: (loading: boolean) => void;
 }
@@ -57,6 +58,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				WebSocketService.getInstance().connect();
 			})
 		} else {
+			unregisterFriendshipListeners();
 			cleanWorker()
 			cleanOffers()
 			cleanPosition()
@@ -76,7 +78,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 							lng: p.coords.longitude,
 						});
 					},
-					(error) => { 
+					(error) => {
 						console.error("Geolocation error:", error.message);
 					},
 					{
@@ -178,7 +180,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			} else {
 				setFriendships([]);
 			}
-			initFriendshipSocketListeners();
+			registerFriendshipListeners();
 		} catch (error) {
 			setFriendships([]);
 		} finally {
@@ -188,27 +190,62 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		}
 	}
 
-	const initFriendshipSocketListeners = () => {
-		friendsSocket.registerInviteListener((friendship) => {
-			const exists = friendships.find(f => f.friendshipId === friendship.friendshipId);
-			if (!exists) {
-				setFriendships(prev => [...prev, friendship]);
-			} else {
-				setFriendships(prev => prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f));
+	const registerFriendshipListeners = () => {
+		friendsSocket.registerInviteListener(onInviteFriend);
+		friendsSocket.registerRejectListener(onRejectInvite);
+		friendsSocket.registerAcceptListener(onAcceptInvite);
+		friendsSocket.registerRemoveListener(onRemoveFriend);
+	}
+
+	const unregisterFriendshipListeners = () => {
+		friendsSocket.unregisterInviteListener(onInviteFriend);
+		friendsSocket.unregisterRejectListener(onRejectInvite);
+		friendsSocket.unregisterAcceptListener(onAcceptInvite);
+		friendsSocket.unregisterRemoveListener(onRemoveFriend);
+	}
+
+	const onInviteFriend = (friendship: FriendshipI) => {
+		const exists = friendships.find(f => f.friendshipId === friendship.friendshipId);
+		if (!exists) {
+			setFriendships(prev => [...prev, friendship]);
+		} else {
+			setFriendships(prev => prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f));
+		}
+		// TODO notifications feature
+		toast.info(t('friends.inviteReceivedToast', { name: friendship.requesterName }));
+	}
+
+	const onRejectInvite = (friendship: FriendshipI) => {
+		const newFriendships = friendships.map(f => {
+			if (f.friendshipId === friendship.friendshipId) {
+				return friendship;
 			}
-			// TODO notifications feature
-			toast.info(t('friends.inviteReceivedToast', { name: friendship.requesterName })); 
+			return f
 		})
-		
-		friendsSocket.registerRejectListener((friendship) => {
-			const newFriendships = friendships.map(f => {
-				if (f.friendshipId === friendship.friendshipId) {
-					return friendship;
-				}
-				return f
-			})
-			setFriendships(newFriendships)
-		})
+		setFriendships(newFriendships)
+	}
+
+	const onAcceptInvite = (friendship: FriendshipI) => {
+		const newFriendships = friendships.filter(f => f.friendshipId !== friendship.friendshipId);
+		newFriendships.push(friendship);
+		setFriendships(newFriendships)
+		if (friendship.requesterUid === authCtx.me!.uid) {
+			toast.info(t('friends.inviteAcceptedToast', { name: friendship.addresseeName }));
+		}
+	}
+
+	const putFriendship = (friendship: FriendshipI) => {
+		const exists = friendships.find(f => f.friendshipId === friendship.friendshipId);
+		if (exists) {
+			setFriendships(prev => prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f));
+		} else {
+			setFriendships(prev => [...prev, friendship]);
+		}
+	}
+
+	const onRemoveFriend = (friendship: FriendshipI) => {
+		const newFriendships = friendships.filter(f => f.friendshipId !== friendship.friendshipId);
+		setFriendships(newFriendships)
 	}
 
 	const cleanOffers = () => {
@@ -234,6 +271,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			friendships: friendships,
 			initFriendships: initFriendships,
 			cleanFriendships: cleanFriendships,
+			putFriendship: putFriendship,
 			loading: loading,
 			setLoading: setLoading,
 			position

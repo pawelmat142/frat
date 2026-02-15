@@ -99,10 +99,10 @@ const AccountView: React.FC = () => {
 
     const sendInvite = async () => {
         try {
-            setLocalLoading(true);
-            await FriendsService.sendInvite(user!.uid);
-            toast.success(t('friends.invitationSent'));
-            userCtx.initFriendships();
+            setLocalLoading(true)
+            const result = await FriendsService.sendInvite(user!.uid)
+            toast.success(t('friends.invitationSent'))
+            userCtx.putFriendship(result);
         }
         finally {
             setLocalLoading(false);
@@ -236,7 +236,6 @@ const AccountView: React.FC = () => {
         try {
             setLocalLoading(true);
             await FriendsService.removeFriend(friendship.friendshipId);
-            userCtx.initFriendships();
             toast.success(t('friends.removeSuccess'));
         } catch (error) {
             console.error(error);
@@ -250,7 +249,6 @@ const AccountView: React.FC = () => {
         try {
             setLocalLoading(true);
             const result = await FriendsService.acceptInvite(friendship.friendshipId)
-            userCtx.initFriendships();
             toast.success(t('friends.acceptedToast'));
         }
         finally {
@@ -262,7 +260,6 @@ const AccountView: React.FC = () => {
         try {
             setLocalLoading(true);
             const result = await FriendsService.rejectInvite(friendship.friendshipId)
-            userCtx.initFriendships();
             toast.success(t('friends.rejectedToast'));
         }
         finally {

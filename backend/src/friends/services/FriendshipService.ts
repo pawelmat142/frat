@@ -34,8 +34,11 @@ export class FriendshipService {
             if (existing.status === FriendshipStatuses.PENDING) {
                 throw new ToastException('friendship.error.invitationAlreadySent', this);
             }
-            // REJECTED — allow re-sending by updating status back to PENDING
             if (existing.status === FriendshipStatuses.REJECTED) {
+                existing.requesterName = requester.displayName;
+                existing.addresseeName = addressee.displayName;
+                existing.requesterUid = requester.uid;
+                existing.addresseeUid = addressee.uid;
                 const updated = await this.friendshipRepo.updateStatus(existing, FriendshipStatuses.PENDING);
                 this.logger.log(`Re-sent friendship invite: ${requester.uid} -> ${addressee.uid}`);
                 this.friendshipSocketHandler.notifyInviteReceived(updated);
@@ -55,8 +58,9 @@ export class FriendshipService {
         if (friendship.addresseeUid !== user.uid) {
             throw new ToastException('friendship.error.notAuthorized', this);
         }
-        const updated = await this.friendshipRepo.updateStatus(friendship, FriendshipStatuses.ACCEPTED);
-        this.logger.log(`Accepted friendship: ${friendship.requesterUid} <-> ${friendship.addresseeUid}`);
+        const updated = await this.friendshipRepo.updateStatus(friendship, FriendshipStatuses.ACCEPTED)
+        this.friendshipSocketHandler.notifyInviteAccepted(updated)
+        this.logger.log(`Accepted friendship: ${friendship.requesterUid} <-> ${friendship.addresseeUid}`)
         return updated;
     }
 
@@ -83,7 +87,8 @@ export class FriendshipService {
             throw new ToastException('friendship.error.notAuthorized', this);
         }
 
-        await this.friendshipRepo.delete(friendship);
+        const result = await this.friendshipRepo.delete(friendship);
+        this.friendshipSocketHandler.notifyFriendRemoved(result)
         this.logger.log(`Removed friendship: ${friendship.requesterUid} <-> ${friendship.addresseeUid}`);
     }
 

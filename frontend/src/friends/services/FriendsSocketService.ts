@@ -6,7 +6,7 @@ export class FriendsSocketService {
     private inviteListeners: Set<(friendship: FriendshipI) => void> = new Set();
     private acceptListeners: Set<(friendship: FriendshipI) => void> = new Set();
     private rejectListeners: Set<(friendship: FriendshipI) => void> = new Set();
-    private removeListeners: Set<(friendshipId: number) => void> = new Set();
+    private removeListeners: Set<(friendship: FriendshipI) => void> = new Set();
 
     constructor() {
         // Use the same WebSocketService singleton instance as ChatSocketService
@@ -30,9 +30,9 @@ export class FriendsSocketService {
             this.rejectListeners.forEach(listener => listener(friendship));
         });
 
-        this.webSocket.on(FriendshipEvents.FRIEND_REMOVED, (friendshipId: number) => {
-            console.log('on(FriendshipEvents.FRIEND_REMOVED)', friendshipId);
-            this.removeListeners.forEach(listener => listener(friendshipId));
+        this.webSocket.on(FriendshipEvents.FRIEND_REMOVED, (friendship: FriendshipI) => {
+            console.log('on(FriendshipEvents.FRIEND_REMOVED)', friendship);
+            this.removeListeners.forEach(listener => listener(friendship));
         });
     }
 
@@ -69,11 +69,11 @@ export class FriendsSocketService {
         this.rejectListeners.delete(listener);
     }
 
-    registerRemoveListener(listener: (friendshipId: number) => void): void {
+    registerRemoveListener(listener: (friendship: FriendshipI) => void): void {
         this.removeListeners.add(listener);
     }
 
-    unregisterRemoveListener(listener: (friendshipId: number) => void): void {
+    unregisterRemoveListener(listener: (friendship: FriendshipI) => void): void {
         this.removeListeners.delete(listener);
     }
 
