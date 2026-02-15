@@ -37,7 +37,12 @@ export class FriendshipSocketHandler implements SocketHandler, OnModuleInit {
   }
 
   notifyInviteReceived(friendship: FriendshipI): void {
-    console.log('Notifying invite received', friendship);
     this.socketGateway.emitToUser(friendship.addresseeUid, FriendshipEvents.INVITE_RECEIVED, friendship);
   }
+
+  notifyInviteRejected(friendship: FriendshipI): void {
+    this.socketGateway.emitToUser(friendship.requesterUid, FriendshipEvents.INVITE_REJECTED, friendship)
+    this.socketGateway.emitToUser(friendship.addresseeUid , FriendshipEvents.INVITE_REJECTED, friendship)
+  }
+
 }

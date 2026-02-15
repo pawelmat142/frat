@@ -59,8 +59,7 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
         if (!confirmed) return;
         try {
             setLoading(true);
-            const result = await FriendsService.rejectInvite(friendship.friendshipId)
-            userCtx.initFriendships();
+            await FriendsService.rejectInvite(friendship.friendshipId)
             toast.info(t('friends.cancelInvitationSuccess'));
 
         }

@@ -67,6 +67,7 @@ export class FriendshipService {
             throw new ToastException('friendship.error.notAuthorized', this);
         }
         const updated = await this.friendshipRepo.updateStatus(friendship, FriendshipStatuses.REJECTED);
+        this.friendshipSocketHandler.notifyInviteRejected(updated);
         this.logger.log(`Rejected friendship: ${friendship.requesterUid} -> ${friendship.addresseeUid}`);
         return updated;
     }

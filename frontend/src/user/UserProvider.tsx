@@ -10,6 +10,7 @@ import { FriendshipI } from '@shared/interfaces/FriendshipI';
 import { FriendsService } from 'friends/services/FriendsService';
 import { friendsSocket } from 'friends/services/FriendsSocketService';
 import { useTranslation } from 'react-i18next';
+import WebSocketService from 'global/web-socket/WebSocketService';
 
 interface UserContextType {
 	worker: WorkerI | null;
@@ -53,6 +54,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				initFriendships(true),
 			]).then(() => {
 				setLoading(false);
+				WebSocketService.getInstance().connect();
 			})
 		} else {
 			cleanWorker()
@@ -196,6 +198,16 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			}
 			// TODO notifications feature
 			toast.info(t('friends.inviteReceivedToast', { name: friendship.requesterName })); 
+		})
+		
+		friendsSocket.registerRejectListener((friendship) => {
+			const newFriendships = friendships.map(f => {
+				if (f.friendshipId === friendship.friendshipId) {
+					return friendship;
+				}
+				return f
+			})
+			setFriendships(newFriendships)
 		})
 	}
 
