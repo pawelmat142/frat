@@ -14,3 +14,12 @@ export const FriendshipStatuses = {
 } as const;
 
 export type FriendshipStatus = typeof FriendshipStatuses[keyof typeof FriendshipStatuses];
+
+export const FriendshipEvents = {
+    INVITE_RECEIVED: 'inviteReceived',
+    INVITE_ACCEPTED: 'inviteAccepted',
+    INVITE_REJECTED: 'inviteRejected',
+    FRIEND_REMOVED: 'friendRemoved',
+} as const;
+
+export type FriendshipEvent = typeof FriendshipEvents[keyof typeof FriendshipEvents];

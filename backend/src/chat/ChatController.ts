@@ -4,7 +4,7 @@ import { ChatService } from './services/ChatService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
 import { UserI } from '@shared/interfaces/UserI';
-import { ChatGateway } from './ChatGateway';
+import { ChatSocketHandler } from './services/ChatSocketHandler';
 import { ChatI, ChatWithMembers } from '@shared/interfaces/ChatI';
 import { ApiResponse } from '@shared/dto/dtos';
 
@@ -14,7 +14,7 @@ export class ChatController {
 
   constructor(
     private readonly chatService: ChatService,
-    private readonly chatGateway: ChatGateway,
+    private readonly chatGateway: ChatSocketHandler,
   ) { }
 
   /**

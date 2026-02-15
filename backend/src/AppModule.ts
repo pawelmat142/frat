@@ -15,6 +15,7 @@ import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
 import { TelegramModule } from 'telegram/telegram.module';
 import { ChatModule } from 'chat/ChatModule';
 import { FriendsModule } from 'friends/FriendsModule';
+import { SocketModule } from 'global/web-socket/SocketModule';
 import { GeocodingService } from 'global/services/GeocodingService';
 
 @Module({
@@ -40,6 +41,7 @@ import { GeocodingService } from 'global/services/GeocodingService';
     OffersModule,
 
     FeedbackModule,
+    SocketModule,
     ChatModule,
     FriendsModule,
   ],

@@ -4,8 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatEntity } from './model/ChatEntity';
 import { ChatMemberEntity } from './model/ChatMemberEntity';
 import { ChatMessageEntity } from './model/ChatMessageEntity';
-import { ChatGateway } from './ChatGateway';
 import { ChatService } from './services/ChatService';
+import { ChatSocketHandler } from './services/ChatSocketHandler';
 import { ChatRepo } from './services/ChatRepo';
 import { AuthModule } from 'auth/AuthModule';
 import { UserModule } from 'user/UserModule';
@@ -25,12 +25,13 @@ import { ChatController } from './ChatController';
     ChatController,
   ],
   providers: [
-    ChatGateway,
+    ChatSocketHandler,
     ChatService,
     ChatRepo,
   ],
   exports: [
     ChatService,
+    ChatSocketHandler,
   ],
 })
 export class ChatModule {}
