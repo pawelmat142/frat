@@ -3,7 +3,6 @@ import { WorkerI } from "@shared/interfaces/WorkerProfileI"
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useUserContext } from "user/UserProvider";
 import { ThumbUp, Visibility, Work } from "@mui/icons-material";
 import ListItem from "global/components/ListItem";
 import IconButton from "global/components/controls/IconButon";
@@ -58,18 +57,17 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
         window.location.href = `tel:${profile.phoneNumber.prefix}${profile.phoneNumber.phoneNumber}`;
     }
 
-    const rightSection = <div className="flex justify-end items-center gap-2">
+    const rightSection = isMyProfile ? null : <div className="flex justify-end items-center gap-2">
         <IconButton onClick={(e) => {
             e.stopPropagation();
             openPhoneCall();
         }}
-            disabled={isMyProfile}
             icon={<FaPhone size={20} />}
         ></IconButton>
         <IconButton onClick={(e) => {
             e.stopPropagation();
             openChat();
-        }} disabled={isMyProfile}
+        }}
             icon={<FaPaperPlane size={20} />}
         ></IconButton>
     </div>

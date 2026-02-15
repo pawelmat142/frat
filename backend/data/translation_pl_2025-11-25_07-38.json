@@ -42,6 +42,7 @@
       "friends": "Znajomi"
     },
     "friends": {
+      "invite": "Zaproś do znajomych",
       "search": "Szukaj znajomych",
       "invitationSent": "Zaproszenie wysłane",
       "friend": "Znajomy",
@@ -53,7 +54,11 @@
       "cancelInvitation": "Anuluj zaproszenie",
       "cancelInvitationConfirm": "Czy na pewno chcesz anulować to zaproszenie?",
       "cancelInvitationSuccess": "Zaproszenie zostało odrzucone",
-      "noFriends": "Nie masz jeszcze żadnych znajomych. Wyszukaj i dodaj kilku!"
+      "noFriends": "Nie masz jeszcze żadnych znajomych. Wyszukaj i dodaj kilku!",
+      "remove": "Usuń znajomego",
+      "removeConfirm": "Czy na pewno chcesz usunąć tego znajomego?",
+      "removeSuccess": "Znajomy został pomyślnie usunięty",
+      "removeFailed": "Nie udało się usunąć znajomego"
     },
     "lang": {
       "select": "Wybierz język",

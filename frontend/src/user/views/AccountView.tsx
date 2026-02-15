@@ -21,6 +21,8 @@ import { WorkerI } from "@shared/interfaces/WorkerProfileI";
 import { OfferI } from "@shared/interfaces/OfferI";
 import { WorkerService } from "employee/services/WorkerService";
 import { OffersService } from "offer/services/OffersService";
+import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
+import { FriendsService } from "friends/services/FriendsService";
 
 const AccountView: React.FC = () => {
 
@@ -95,6 +97,18 @@ const AccountView: React.FC = () => {
         }
     }
 
+    const sendInvite = async () => {
+        try {
+            setLocalLoading(true);
+            await FriendsService.sendInvite(user!.uid);
+            toast.success(t('friends.invitationSent'));
+            userCtx.initFriendships();
+        }
+        finally {
+            setLocalLoading(false);
+        }
+    }
+
     // Show warning if email not verified
     const emailNotVerifiedWarning = isMyAccount && !firebaseUser?.emailVerified ? (
         <div className="mb-6 p-4 rounded border error-color text-center flex flex-col items-center">
@@ -110,6 +124,12 @@ const AccountView: React.FC = () => {
     if (!user) {
         return <div className="p-5 text-center secondary-text">{t('user.error.notFound')}</div>;
     }
+
+    const getFriendship = (): FriendshipI | undefined => {
+        return userCtx.friendships.find(f => [f.addresseeUid, f.requesterUid].includes(user?.uid));
+    }
+
+    const isFriend = getFriendship()?.status === FriendshipStatuses.ACCEPTED;
 
     const openWorkerProfileOrForm = () => {
         if (worker) {
@@ -157,6 +177,77 @@ const AccountView: React.FC = () => {
         }
     }
 
+    const getFriendshipButton = () => {
+        if (isMyAccount) {
+            return null;
+        }
+        const friendship = getFriendship();
+        if (!friendship || friendship.status === FriendshipStatuses.REJECTED) {
+            return <Button
+                fullWidth
+                mode={BtnModes.SECONDARY}
+                onClick={sendInvite}
+            >
+                <FaUsers className="mr-2" />
+                {t('account.invite')}
+            </Button>
+        }
+        if (friendship.status === FriendshipStatuses.ACCEPTED) {
+            return <Button
+                fullWidth
+                mode={BtnModes.ERROR_TXT}
+                onClick={() => removeFriend(friendship)}
+            >
+                <FaTrash className="mr-2" />
+                {t('friends.remove')}
+            </Button>
+        }
+        if (friendship.status === FriendshipStatuses.PENDING) {
+            if (friendship.addresseeUid === me?.uid) {
+                return <Button
+                    fullWidth
+                    mode={BtnModes.SECONDARY}
+                    onClick={async () => { acceptInvitation(friendship); }}
+                >
+                    <FaUsers className="mr-2" />
+                    {t('friends.accept')}
+                </Button>
+            }
+        }
+    }
+
+    const removeFriend = async (friendship: FriendshipI) => {
+        const confirmed = await confirm({
+            title: t('friends.remove'),
+            message: t('friends.removeConfirm'),
+        });
+        if (!confirmed) return;
+
+        try {
+            setLocalLoading(true);
+            await FriendsService.removeFriend(friendship.friendshipId);
+            userCtx.initFriendships();
+            toast.success(t('friends.removeSuccess'));
+        } catch (error) {
+            console.error(error);
+            toast.error(t('friends.removeFailed'));
+        } finally {
+            setLocalLoading(false);
+        }
+    }
+
+    const acceptInvitation = async (friendship: FriendshipI) => {
+        try {
+            setLocalLoading(true);
+            const result = await FriendsService.acceptInvite(friendship.friendshipId)
+            userCtx.initFriendships();
+            toast.success(t('friends.accept'));
+        }
+        finally {
+            setLocalLoading(false);
+        }
+    }
+
     return (
         <div className="view-container">
 
@@ -177,37 +268,19 @@ const AccountView: React.FC = () => {
 
             <div className="flex flex-col gap-3 mt-6">
 
-                {!!worker && (
+                {isFriend || isMyAccount && (
                     <Button
                         fullWidth
                         mode={BtnModes.SECONDARY}
-                        onClick={openWorkerProfileOrForm}
+                        onClick={() => { navigate(Path.getFriendsPath(user.uid)); }}
                     >
-                        <FaIdCard className="mr-2" />
-                        {t('account.showEmployeeProfile')}
+                        <FaUsers className="mr-2" />
+                        {t('account.friends')}
                     </Button>
                 )}
+
                 {isMyAccount ? (
                     <>
-                        {!worker && (
-                            <Button
-                                fullWidth
-                                mode={BtnModes.SECONDARY}
-                                onClick={openWorkerProfileOrForm}
-                            >
-                                <FaIdCard className="mr-2" />
-                                {t('account.createEmployeeProfile')}
-                            </Button>
-                        )}
-                        <Button
-                            fullWidth
-                            mode={BtnModes.SECONDARY}
-                            onClick={goToUserOffers}
-                        >
-                            <FaBriefcase className="mr-2" />
-                            {t('account.offers')} ({offers?.length || 0})
-                        </Button>
-
                         <Button
                             fullWidth
                             mode={BtnModes.SECONDARY}
@@ -216,17 +289,34 @@ const AccountView: React.FC = () => {
                             <FaComments className="mr-2" />
                             {t('chat.chats')}
                         </Button>
-
-{/* TODO show this button only if it's my account or a friend */}
                         <Button
                             fullWidth
                             mode={BtnModes.SECONDARY}
-                            onClick={() => { navigate(Path.getFriendsPath(user.uid)); }}
+                            onClick={goToUserOffers}
                         >
-                            <FaUsers className="mr-2" />
-                            {t('account.friends')}
+                            <FaBriefcase className="mr-2" />
+                            {t('account.offers')} ({offers?.length || 0})
                         </Button>
 
+                        {!worker ? (
+                            <Button
+                                fullWidth
+                                mode={BtnModes.SECONDARY}
+                                onClick={openWorkerProfileOrForm}
+                            >
+                                <FaIdCard className="mr-2" />
+                                {t('account.createEmployeeProfile')}
+                            </Button>
+                        ) : (
+                            <Button
+                                fullWidth
+                                mode={BtnModes.SECONDARY}
+                                onClick={openWorkerProfileOrForm}
+                            >
+                                <FaIdCard className="mr-2" />
+                                {t('account.showEmployeeProfile')}
+                            </Button>
+                        )}
                         <Button
                             fullWidth
                             mode={BtnModes.ERROR_TXT}
@@ -235,18 +325,19 @@ const AccountView: React.FC = () => {
                             <FaTrash className="mr-2" />
                             {t('account.deleteAccountConfirmTitle')}
                         </Button>
-
                     </>
                 ) : (
                     <>
-             {!!offers.length && (           <Button
-                            fullWidth
-                            mode={BtnModes.SECONDARY}
-                            onClick={goToUserOffers}
-                        >
-                            <FaBriefcase className="mr-2" />
-                            {t('account.offers')} ({offers?.length || 0})
-                        </Button>)}
+                        {!!offers.length && (
+                            <Button
+                                fullWidth
+                                mode={BtnModes.SECONDARY}
+                                onClick={goToUserOffers}
+                            >
+                                <FaBriefcase className="mr-2" />
+                                {t('account.offers')} ({offers?.length || 0})
+                            </Button>)}
+
                         <Button
                             fullWidth
                             mode={BtnModes.PRIMARY}
@@ -258,6 +349,9 @@ const AccountView: React.FC = () => {
 
                     </>
                 )}
+
+                {getFriendshipButton()}
+
             </div>
 
         </div>

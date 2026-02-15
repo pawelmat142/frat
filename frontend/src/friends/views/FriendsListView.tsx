@@ -3,7 +3,7 @@ import Button from "global/components/controls/Button"
 import { BtnModes } from "global/interface/controls.interface"
 import { Path } from "../../path"
 import { FaIdCard } from "react-icons/fa"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useUserContext } from "user/UserProvider"
 import { useEffect, useState } from "react"
@@ -11,57 +11,94 @@ import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI"
 import { UserI } from "@shared/interfaces/UserI"
 import { UserPublicService } from "user/services/UserPublicService"
 import FriendshipListItem from "friends/components/FriendshipListItem"
+import { FriendsService } from "friends/services/FriendsService"
+import Loading from "global/components/Loading"
 
 const FriendsListView: React.FC = () => {
+
+    const { uid } = useParams<{ uid?: string }>()
     const { me } = useAuthContext()
-
-    const navigate = useNavigate()
     const { t } = useTranslation()
-    const userCtx = useUserContext();
+    const navigate = useNavigate()
+    const userCtx = useUserContext()
+    const isMyAccount = uid === me?.uid
 
-    const [friends, setFriends] = useState<{ user: UserI, friendship: FriendshipI }[]>([]);
+    const [friendships, setFriendships] = useState<FriendshipI[]>([])
+    const [friends, setFriends] = useState<{ user: UserI, friendship: FriendshipI }[]>([])
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        initFriends();
-    }, [userCtx.friendships]);
+        if (!uid) return
+        initFriendships()
+    }, [uid])
+
+    useEffect(() => {
+        if (isMyAccount) {
+            setFriendships(userCtx.friendships)
+        }
+    }, [userCtx.friendships])
+
+    useEffect(() => {
+        initFriends()
+    }, [friendships])
+
+    const initFriendships = async () => {
+        if (isMyAccount) {
+            setFriendships(userCtx.friendships)
+            return
+        }
+        try {
+            setLoading(true)
+            const result = await FriendsService.getFriendships(uid!)
+            setFriendships(result)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const initFriends = async () => {
-        const uids = Array.from(new Set(userCtx.friendships.flatMap(f => [f.requesterUid, f.addresseeUid])))
-            .filter(id => id !== me?.uid);
+        const uids = Array.from(new Set(friendships.flatMap(f => [f.requesterUid, f.addresseeUid])))
+            .filter(id => id !== uid)
 
+        if (!uids.length) {
+            setFriends([])
+            return;
+        }
         const users = await UserPublicService.fetchUsers(uids)
 
-        const friends = userCtx.friendships.filter(f => f.status !== FriendshipStatuses.REJECTED).map(friendship => {
-            const friendUid = friendship.requesterUid === me?.uid ? friendship.addresseeUid : friendship.requesterUid;
-            const user = users.find(u => u.uid === friendUid)!;
+        const friends = friendships.filter(f => f.status !== FriendshipStatuses.REJECTED).map(friendship => {
+            const friendUid = friendship.requesterUid === uid ? friendship.addresseeUid : friendship.requesterUid
+            const user = users.find(u => u.uid === friendUid)!
             return { user, friendship }
         })
-        
+
         // Sort: received invitations first, friends in middle, sent invitations last
         friends.sort((a, b) => {
-            const isAReceived = a.friendship.status === FriendshipStatuses.PENDING && a.friendship.addresseeUid === me?.uid;
-            const isBReceived = b.friendship.status === FriendshipStatuses.PENDING && b.friendship.addresseeUid === me?.uid;
-            const isAAccepted = a.friendship.status === FriendshipStatuses.ACCEPTED;
-            const isBAccepted = b.friendship.status === FriendshipStatuses.ACCEPTED;
-            
-            if (isAReceived && !isBReceived) return -1;
-            if (!isAReceived && isBReceived) return 1;
+            const isAReceived = a.friendship.status === FriendshipStatuses.PENDING && a.friendship.addresseeUid === uid
+            const isBReceived = b.friendship.status === FriendshipStatuses.PENDING && b.friendship.addresseeUid === uid
+            const isAAccepted = a.friendship.status === FriendshipStatuses.ACCEPTED
+            const isBAccepted = b.friendship.status === FriendshipStatuses.ACCEPTED
+
+            if (isAReceived && !isBReceived) return -1
+            if (!isAReceived && isBReceived) return 1
             if (isAAccepted && !isBAccepted && !isBReceived) return -1;
             if (!isAAccepted && isBAccepted && !isAReceived) return 1;
-            
+
             return 0;
         });
-        
+
         setFriends(friends);
     }
 
     // TODO this view should be not permitted if not my account or not friend
-
     // TODO szukanie przerobic na floating button albo do headera
 
+    if (loading) {
+        return <Loading></Loading>
+    }
     return (
         <div className="list-view">
-            
+
             <div className="px-2 flex flex-col gap-1 mt-2">
 
                 {!friends.length && (

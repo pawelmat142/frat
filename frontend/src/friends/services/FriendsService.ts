@@ -12,11 +12,19 @@ export const FriendsService = {
         return httpClient.post<FriendshipI>(`/friends/invite/${addresseeUid}`);
     },
 
+    acceptInvite(friendshipId: number): Promise<FriendshipI> {
+        return httpClient.patch<FriendshipI>(`/friends/accept/${friendshipId}`);
+    },
+
     rejectInvite(friendshipId: number): Promise<FriendshipI> {
         return httpClient.patch<FriendshipI>(`/friends/reject/${friendshipId}`);
     },
 
-    getFriendships(): Promise<FriendshipI[]> {
-        return httpClient.get<FriendshipI[]>(`/friends`);
+    removeFriend(friendshipId: number): Promise<void> {
+        return httpClient.delete(`/friends/${friendshipId}`);
+    },
+
+    getFriendships(uid: string): Promise<FriendshipI[]> {
+        return httpClient.get<FriendshipI[]>(`/friends/${uid}`);
     }
 }

@@ -130,7 +130,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		try {
 			setLoading(true);
 			const profile = await WorkerService.getWorker();
-			console.log("Fetched employee profile:", profile);
 			if (profile) {
 				setWorker(profile);
 			} else {
@@ -150,7 +149,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		try {
 			setLoading(true);
 			const offers = await OffersService.listMyOffers();
-			console.log("Fetched user offers:", offers);
 			if (offers) {
 				setOffers(offers);
 			} else {
@@ -169,8 +167,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const initFriendships = async (init?: boolean) => {
 		try {
 			setLoading(true);
-			const friendships = await FriendsService.getFriendships();
-			console.log("Fetched user friendships:", friendships);
+			const friendships = await FriendsService.getFriendships(authCtx.me!.uid);
 			if (friendships) {
 				setFriendships(friendships);
 			} else {

@@ -57,9 +57,9 @@ export class FriendsController {
         return this.friendshipService.removeFriend(user, Number(friendshipId));
     }
 
-    @Get()
-    getFriendships(@CurrentUser() user: UserI): Promise<FriendshipI[]> {
-        return this.friendshipService.getFriendships(user.uid);
+    @Get('/:uid')
+    getFriendships(@Param('uid') uid: string): Promise<FriendshipI[]> {
+        return this.friendshipService.getFriendships(uid);
     }
 
     @Get('/pending/received')

@@ -13,6 +13,9 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { FriendsService } from "friends/services/FriendsService";
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
+import { ChatService } from "chat/services/ChatService";
+import IconButton from "global/components/controls/IconButon";
+import { FaPaperPlane } from "react-icons/fa";
 
 interface Props {
     user: UserI,
@@ -30,7 +33,20 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
     const [loading, setLoading] = useState(false);
     const friendships = userCtx.friendships;
 
-    useEffect(() => {{}}, [friendships]);
+    useEffect(() => { { } }, [friendships]);
+
+    const acceptInvitation = async (e?: React.MouseEvent<HTMLButtonElement>) => {
+        e?.stopPropagation();
+        try {
+            setLoading(true);
+            const result = await FriendsService.acceptInvite(friendship.friendshipId)
+            userCtx.initFriendships();
+            toast.success(t('friends.accept'));
+        }
+        finally {
+            setLoading(false);
+        }
+    }
 
     const cancelInvitation = async (e?: React.MouseEvent<HTMLButtonElement>) => {
         e?.stopPropagation();
@@ -53,6 +69,17 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
         }
     }
 
+
+    const openChat = async () => {
+        try {
+            const chat = await ChatService.getOrCreateDirectChat(user.uid)
+            navigate(Path.getChatPath(chat.chatId))
+        } catch (error) {
+            console.error('Failed to open chat:', error)
+            toast.error(t('chat.error.cannotOpen'))
+        }
+    }
+
     if (loading) {
         return <Loading></Loading>
     }
@@ -60,24 +87,22 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
     const isFriend = friendship?.status === FriendshipStatuses.ACCEPTED;
     const isInvited = friendship?.status === FriendshipStatuses.PENDING && friendship.requesterUid === me?.uid;
     const isInvitationReceived = friendship?.status === FriendshipStatuses.PENDING && friendship.addresseeUid === me?.uid;
-    
+
     return (
         <div className="flex justify-between items-center w-full" onClick={() => navigate(Path.getAccountPath(user.uid))}>
             <UserItem
-             user={user}
-              allowNavigate={false}
+                user={user}
+                allowNavigate={false}
                 bottomRow={
                     (isFriend && <div className="primary-color small-font">{t('friends.friend')}</div>)
                     || (isInvited && <div className="secondary-text small-font">{t('friends.invited')}</div>)
                     || (isInvitationReceived && <div className="secondary-text small-font">{t('friends.invitationReceived')}</div>)
                 }
-              ></UserItem>
+            ></UserItem>
 
             {isInvitationReceived && <Button
                 size={BtnSizes.SMALL}
-                onClick={(e) => {
-                    // todo accept invitation
-                }}
+                onClick={acceptInvitation}
             >{t('friends.accept')}</Button>}
 
             {isInvited && <Button
@@ -86,6 +111,12 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
                 onClick={cancelInvitation}
             >{t('friends.cancel')}</Button>}
 
+            {isFriend && user.uid !== me?.uid && <IconButton onClick={(e) => {
+                e.stopPropagation();
+                openChat();
+            }}
+                icon={<FaPaperPlane size={20} />}
+            ></IconButton>}
 
         </div>
     )

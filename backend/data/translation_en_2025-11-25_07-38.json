@@ -43,6 +43,7 @@
       "friends": "Friends"
     },
     "friends": {
+      "invite": "Invite to friends",
       "search": "Search friends",
       "invitationSent": "Invitation sent",
       "friend": "Friend",
@@ -54,7 +55,11 @@
       "cancelInvitation": "Cancel Invitation",
       "cancelInvitationConfirm": "Are you sure you want to cancel this invitation?",
       "cancelInvitationSuccess": "Invitation rejected successfully",
-      "noFriends": "You have no friends yet. Search and add some!"
+      "noFriends": "You have no friends yet. Search and add some!",
+      "remove": "Remove friend",
+      "removeConfirm": "Are you sure you want to remove this friend?",
+      "removeSuccess": "Friend removed successfully",
+      "removeFailed": "Failed to remove friend"
     },
     "lang": {
       "select": "Select Language",
