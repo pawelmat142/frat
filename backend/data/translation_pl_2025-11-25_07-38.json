@@ -62,7 +62,8 @@
       "removeConfirm": "Czy na pewno chcesz usunąć tego znajomego?",
       "removeSuccess": "Znajomy został pomyślnie usunięty",
       "removeFailed": "Nie udało się usunąć znajomego",
-      "inviteReceivedToast": "Użytkownik {{name}} wysłał Ci zaproszenie."
+      "inviteReceivedToast": "Użytkownik {{name}} wysłał Ci zaproszenie.",
+      "invitationNotification": "Masz nowe zaproszenie"
     },
     "lang": {
       "select": "Wybierz język",

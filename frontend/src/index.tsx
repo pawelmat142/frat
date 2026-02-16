@@ -20,6 +20,7 @@ import { FullScreenDialogProvider } from 'global/providers/FullScreenDialogProvi
 import { GlobalProvider } from 'global/providers/GlobalProvider';
 import GlobalHeader from 'global/components/GlobalHeader';
 import OfferSearchProvider from 'offer/views/search/OfferSearchProvider';
+import NotificationsGlobalBar from 'notification/components/NotificationsGlobalBar';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -41,6 +42,7 @@ root.render(
                             <MenuProvider>
                               <div className="min-h-screen flex flex-col overflow-clip">
                                 <GlobalHeader />
+                                <NotificationsGlobalBar />
                                 <main className="flex-1 flex flex-col items-center w-full">
                                   <App />
                                 </main>

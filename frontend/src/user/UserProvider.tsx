@@ -32,16 +32,16 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
-	const [worker, setWorker] = React.useState<WorkerI | null>(null);
+	const [worker, setWorker] = React.useState<WorkerI | null>(null)
 
-	const [offers, setOffers] = React.useState<OfferI[]>([]);
+	const [offers, setOffers] = React.useState<OfferI[]>([])
 
-	const [friendships, setFriendships] = React.useState<FriendshipI[]>([]);
+	const [friendships, setFriendships] = React.useState<FriendshipI[]>([])
 
-	const [loading, setLoading] = React.useState(false);
+	const [loading, setLoading] = React.useState(false)
 
-	const [position, setPosition] = React.useState<Position | null>(null);
-	const [positionWatchId, setPositionWatchId] = React.useState<number | null>(null);
+	const [position, setPosition] = React.useState<Position | null>(null)
+	const [positionWatchId, setPositionWatchId] = React.useState<number | null>(null)
 
 	const authCtx = useAuthContext();
 	const { t } = useTranslation()
@@ -205,14 +205,14 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}
 
 	const onInviteFriend = (friendship: FriendshipI) => {
-		const exists = friendships.find(f => f.friendshipId === friendship.friendshipId);
+		const exists = friendships.find(f => f.friendshipId === friendship.friendshipId)
 		if (!exists) {
-			setFriendships(prev => [...prev, friendship]);
+			setFriendships(prev => [...prev, friendship])
 		} else {
-			setFriendships(prev => prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f));
+			setFriendships(prev => prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f))
 		}
 		// TODO notifications feature
-		toast.info(t('friends.inviteReceivedToast', { name: friendship.requesterName }));
+		toast.info(t('friends.inviteReceivedToast', { name: friendship.requesterName }))
 	}
 
 	const onRejectInvite = (friendship: FriendshipI) => {
@@ -274,7 +274,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			putFriendship: putFriendship,
 			loading: loading,
 			setLoading: setLoading,
-			position
+			position,
 		}}>
 			{children}
 		</UserContext.Provider>

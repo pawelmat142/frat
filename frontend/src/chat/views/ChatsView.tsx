@@ -11,21 +11,21 @@ import { FaComments } from "react-icons/fa";
 import ChatListItem from "./ChatListItem";
 
 const ChatsView: React.FC = () => {
-    const { t } = useTranslation();
-    const navigate = useNavigate();
-    const { me } = useAuthContext();
-    const [chats, setChats] = useState<ChatWithMembers[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { t } = useTranslation()
+    const navigate = useNavigate()
+    const { me } = useAuthContext()
+    const [chats, setChats] = useState<ChatWithMembers[]>([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const loadChats = async () => {
             try {
-                const data = await ChatService.getMyChats();
-                setChats(data);
+                const data = await ChatService.getMyChats()
+                setChats(data)
             } catch (error) {
-                console.error('Failed to load chats:', error);
+                console.error('Failed to load chats:', error)
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
         };
 

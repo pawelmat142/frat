@@ -63,7 +63,8 @@
       "removeConfirm": "Are you sure you want to remove this friend?",
       "removeSuccess": "Friend removed successfully",
       "removeFailed": "Failed to remove friend",
-      "inviteReceivedToast": "User {{name}} sent you an invitation."
+      "inviteReceivedToast": "User {{name}} sent you an invitation.",
+      "invitationNotification": "You have new invitation"
     },
     "lang": {
       "select": "Select Language",
