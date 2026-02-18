@@ -27,20 +27,8 @@ export class NotificationSocketHandler implements SocketHandler, OnModuleInit {
     if (!uid) {
       throw new Error('Authenticated socket missing user UID');
     }
-
     // Join user to their personal notification room
     socket.join(SocketUtil.userRoom(uid));
-
-    // Register notification-specific socket event listeners
-    socket.on(NotificationEvents.NOTIFICATION_READ, async (data: { notificationId: string }, callback) => {
-      try {
-        // TODO
-        // handle notification read event
-        callback({ success: true });
-      } catch (error) {
-        callback({ error: 'Failed to mark notification as read' });
-      }
-    });
   }
 
   async onFullDisconnect(uid: string): Promise<void> {

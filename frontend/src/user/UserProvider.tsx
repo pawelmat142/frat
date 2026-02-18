@@ -211,8 +211,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		} else {
 			setFriendships(prev => prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f))
 		}
-		// TODO notifications feature
-		toast.info(t('friends.inviteReceivedToast', { name: friendship.requesterName }))
 	}
 
 	const onRejectInvite = (friendship: FriendshipI) => {
@@ -229,9 +227,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		const newFriendships = friendships.filter(f => f.friendshipId !== friendship.friendshipId);
 		newFriendships.push(friendship);
 		setFriendships(newFriendships)
-		if (friendship.requesterUid === authCtx.me!.uid) {
-			toast.info(t('friends.inviteAcceptedToast', { name: friendship.addresseeName }));
-		}
 	}
 
 	const putFriendship = (friendship: FriendshipI) => {

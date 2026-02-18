@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { NotificationI, NotificationTypes, NotificationIcons } from '@shared/interfaces/NotificationI';
 import { FriendshipI } from '@shared/interfaces/FriendshipI';
 import { NotificationEntity } from 'notification/model/NotificationEntity';
+import { ToastException } from 'global/exceptions/ToastException';
+import { UserI } from '@shared/interfaces/UserI';
 
 @Injectable()
 export class NotificationService {
@@ -68,6 +70,25 @@ export class NotificationService {
       take: limit,
       skip: offset,
     });
+  }
+
+  /**
+   * Marks a notification as read by its ID
+   */
+  async markAsRead(user: UserI, notificationId: string): Promise<void> {
+    const notification = await this.notificationRepository.findOne({
+      where: {
+        notificationId,
+        recipientUid: user.uid,
+      },
+    });
+    if (!notification) {
+      // TODO translation
+      throw new ToastException('Nie można znaleźć powiadomienia o podanym ID', this);
+    }
+    notification.readAt = new Date();
+    await this.notificationRepository.save(notification);
+    this.logger.log(`Marked notification ${notificationId} as read for user ${user.uid}`);
   }
 
 //   TODO

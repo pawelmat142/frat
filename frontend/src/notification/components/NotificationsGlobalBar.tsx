@@ -5,16 +5,27 @@ import { notificationSocket } from "notification/services/NotificationSocketServ
 
 const NotificationsGlobalBar: React.FC = () => {
 
-    const userCtx = useUserContext();
-
     const [notifications, setNotifications] = useState<NotificationI[]>([]);
 
-    const socket = notificationSocket
-    
     useEffect(() => {
-        console.log('NotificationsGlobalBar xxx:')
-
+        notificationSocket.registerReceivedListener(notificationReceived);
+        notificationSocket.registerDeletedListener(notificationDeleted);
     }, [])
+
+    const notificationReceived = (notification: NotificationI) => {
+        const exists = notifications.find(n => n.notificationId === notification.notificationId);
+        if (exists) {
+            setNotifications(prev => prev.map(n => n.notificationId === notification.notificationId ? notification : n));
+            return;
+        }
+        setNotifications(prev => [...prev, notification]);
+    }
+
+    const notificationDeleted = (notificationId: string) => {
+        setNotifications(prev => prev.filter(n => n.notificationId !== notificationId));
+    }
+
+    console.log('notifications:', notifications);
 
     if (!notifications.length) {
         return null;

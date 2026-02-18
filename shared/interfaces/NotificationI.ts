@@ -43,7 +43,6 @@ export type NotificationType = typeof NotificationTypes[keyof typeof Notificatio
  */
 export const NotificationEvents = {
     NOTIFICATION_RECEIVED: 'notification:received',
-    NOTIFICATION_READ: 'notification:read',
     NOTIFICATION_DELETED: 'notification:deleted',
 } as const;
 
