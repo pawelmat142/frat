@@ -7,6 +7,7 @@ import { NotificationService } from './NotificationService';
 import { NotificationEvents } from '@shared/interfaces/NotificationI';
 import { FriendshipI } from '@shared/interfaces/FriendshipI';
 import { SocketUtil } from '@shared/utils/SocketUtil';
+import { UserI } from '@shared/interfaces/UserI';
 
 @Injectable()
 export class NotificationSocketHandler implements SocketHandler, OnModuleInit {
@@ -45,6 +46,23 @@ export class NotificationSocketHandler implements SocketHandler, OnModuleInit {
   }
 
   /**
+   * Notifies the user that a friend invitation was accepted
+   */
+  async notifyFriendshipAccepted(friendship: FriendshipI): Promise<void> {
+    const notification = await this.notificationService.createFriendshipAcceptedNotification(friendship);
+    this.socketGateway.emitToUser(friendship.requesterUid, NotificationEvents.NOTIFICATION_RECEIVED, notification);
+  }
+
+  /**
+   * Notifies the user that a friend was removed
+   */
+  async notifyFriendshipRemoved(user: UserI, friendship: FriendshipI): Promise<void> {
+    const otherUserUid = friendship.requesterUid === user.uid ? friendship.addresseeUid : friendship.requesterUid;
+    const notification = await this.notificationService.createFriendshipRemovedNotification(otherUserUid, friendship);
+    this.socketGateway.emitToUser(otherUserUid, NotificationEvents.NOTIFICATION_RECEIVED, notification);
+  }
+
+  /**
    * Notifies the user that a friend invitation was rejected
    */
   async deleteFriendshipInvitationNotification(friendship: FriendshipI): Promise<void> {
@@ -53,4 +71,5 @@ export class NotificationSocketHandler implements SocketHandler, OnModuleInit {
       this.socketGateway.emitToUser(friendship.addresseeUid, NotificationEvents.NOTIFICATION_DELETED, notification.notificationId );
     }
   }
+
 }

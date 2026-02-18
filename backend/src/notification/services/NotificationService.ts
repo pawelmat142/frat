@@ -30,14 +30,47 @@ export class NotificationService {
       title: 'Nowe zaproszenie',
       message: `${friendship.requesterName} wysłał Ci zaproszenie do znajomych`,
       icon: NotificationIcons.FRIEND,
-      metadata: {
-        requesterUid: friendship.requesterUid,
-        requesterName: friendship.requesterName,
-      }
     });
 
     const saved = await this.notificationRepository.save(notification);
     this.logger.log(`Created friend invite notification ${saved.notificationId} for user ${recipientUid}`);
+    return saved;
+  }
+
+  /**
+   * Creates a notification for an accepted friend invitation
+   */
+  // TODO translacje
+  async createFriendshipAcceptedNotification(friendship: FriendshipI): Promise<NotificationI> {
+    const notification = this.notificationRepository.create({
+      recipientUid: friendship.requesterUid,
+      type: NotificationTypes.FRIEND_ACCEPTED,
+      targetId: friendship.friendshipId.toString(),
+      title: 'Zaproszenie zaakceptowane',
+      message: `${friendship.addresseeName} zaakceptował Twoje zaproszenie do znajomych`,
+      icon: NotificationIcons.FRIEND,
+    });
+    const saved = await this.notificationRepository.save(notification);
+    this.logger.log(`Created friendship accepted notification ${saved.notificationId} for user ${friendship.requesterUid}`);
+    return saved;
+  }
+
+  /**
+   * Creates a notification for a removed friend
+   */
+  // TODO translacje
+  async createFriendshipRemovedNotification(otherUserUid: string, friendship: FriendshipI): Promise<NotificationI> {
+    const userDisplayName = friendship.requesterUid === otherUserUid ? friendship.requesterName : friendship.addresseeName;
+    const notification = this.notificationRepository.create({
+      recipientUid: otherUserUid,
+      type: NotificationTypes.FRIEND_REMOVED,
+      targetId: friendship.friendshipId.toString(),
+      title: 'Znajomy usunięty',
+      message: `${userDisplayName} usunął Cię ze znajomych`,
+      icon: NotificationIcons.FRIEND,
+    });
+    const saved = await this.notificationRepository.save(notification);
+    this.logger.log(`Created friendship removed notification ${saved.notificationId} for user ${otherUserUid}`);
     return saved;
   }
 
@@ -61,7 +94,7 @@ export class NotificationService {
   }
 
   /**
-     * Retrieves the list of notifications for a user (with pagination)
+   * Retrieves the list of notifications for a user (with pagination)
    */
   async getUserNotifications(recipientUid: string, limit = 20, offset = 0): Promise<NotificationI[]> {
     return await this.notificationRepository.find({

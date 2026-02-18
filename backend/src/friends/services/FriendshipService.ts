@@ -50,6 +50,7 @@ export class FriendshipService {
         }
 
         const friendship = await this.friendshipRepo.create(requester, addressee);
+
         this.logger.log(`Sent friendship invite: ${requester.uid} -> ${addressee.uid}`);
         this.friendshipSocketHandler.notifyInviteReceived(friendship);
         this.notificationSocketHandler.notifyFriendshipInvite(addresseeUid, friendship);    
@@ -63,8 +64,10 @@ export class FriendshipService {
             throw new ToastException('friendship.error.notAuthorized', this);
         }
         const updated = await this.friendshipRepo.updateStatus(friendship, FriendshipStatuses.ACCEPTED)
-        this.friendshipSocketHandler.notifyInviteAccepted(updated)
+
         this.logger.log(`Accepted friendship: ${friendship.requesterUid} <-> ${friendship.addresseeUid}`)
+        this.friendshipSocketHandler.notifyInviteAccepted(updated)
+        this.notificationSocketHandler.notifyFriendshipAccepted(updated)
         return updated;
     }
 
@@ -94,8 +97,10 @@ export class FriendshipService {
         }
 
         const result = await this.friendshipRepo.delete(friendship);
-        this.friendshipSocketHandler.notifyFriendRemoved(result)
+
         this.logger.log(`Removed friendship: ${friendship.requesterUid} <-> ${friendship.addresseeUid}`);
+        this.friendshipSocketHandler.notifyFriendRemoved(friendship)
+        this.notificationSocketHandler.notifyFriendshipRemoved(user, friendship);
     }
 
     async getFriendships(uid: string): Promise<FriendshipEntity[]> {

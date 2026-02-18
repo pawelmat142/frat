@@ -3,6 +3,10 @@ import { httpClient } from "global/services/http";
 
 export const NotificationService = {
 
+    getNotifications(): Promise<NotificationI[]> {
+        return httpClient.get('/notifications');
+    },
+
     // TODO
     markAsRead(notification: NotificationI): Promise<void> {
         return httpClient.patch(`/notifications/mark-as-read/${notification.notificationId}`);

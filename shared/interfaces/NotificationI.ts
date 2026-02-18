@@ -33,6 +33,7 @@ export interface NotificationI {
 export const NotificationTypes = {
     FRIEND_INVITE: 'FRIEND_INVITE',
     FRIEND_ACCEPTED: 'FRIEND_ACCEPTED',
+    FRIEND_REMOVED: 'FRIEND_REMOVED',
     NEW_MESSAGE: 'NEW_MESSAGE',
 } as const;
 

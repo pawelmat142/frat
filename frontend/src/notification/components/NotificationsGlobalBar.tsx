@@ -1,16 +1,31 @@
 import { useEffect, useState } from "react";
-import { useUserContext } from "user/UserProvider";
 import { NotificationI } from "@shared/interfaces/NotificationI";
 import { notificationSocket } from "notification/services/NotificationSocketService";
+import { NotificationService } from "notification/services/NotificationService";
+import { useAuthContext } from "auth/AuthProvider";
 
 const NotificationsGlobalBar: React.FC = () => {
+
+    const { me } = useAuthContext();
 
     const [notifications, setNotifications] = useState<NotificationI[]>([]);
 
     useEffect(() => {
-        notificationSocket.registerReceivedListener(notificationReceived);
-        notificationSocket.registerDeletedListener(notificationDeleted);
-    }, [])
+        if (me) {
+            initNotifications();
+            notificationSocket.registerReceivedListener(notificationReceived);
+            notificationSocket.registerDeletedListener(notificationDeleted);
+        } else {
+            setNotifications([]);
+            notificationSocket.unregisterReceivedListener(notificationReceived);
+            notificationSocket.unregisterDeletedListener(notificationDeleted);
+        }
+    }, [me])
+
+    const initNotifications = async () => {
+        const initialNotifications = await NotificationService.getNotifications();
+        setNotifications(initialNotifications);
+    }
 
     const notificationReceived = (notification: NotificationI) => {
         const exists = notifications.find(n => n.notificationId === notification.notificationId);
