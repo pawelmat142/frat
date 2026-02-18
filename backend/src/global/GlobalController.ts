@@ -1,3 +1,4 @@
+/** Created by Pawel Malek **/
 import { Controller, Get, Param, Query, UseInterceptors } from "@nestjs/common";
 import { TranslationI } from "@shared/interfaces/TranslationI";
 import { LogInterceptor } from "global/interceptors/LogInterceptor";

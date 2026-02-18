@@ -287,7 +287,7 @@ const AccountView: React.FC = () => {
 
             <div className="flex flex-col gap-3 mt-6">
 
-                {isFriend || isMyAccount && (
+                {(isFriend || isMyAccount) && 
                     <Button
                         fullWidth
                         mode={BtnModes.SECONDARY}
@@ -296,7 +296,7 @@ const AccountView: React.FC = () => {
                         <FaUsers className="mr-2" />
                         {t('account.friends')}
                     </Button>
-                )}
+                }
 
                 {isMyAccount ? (
                     <>

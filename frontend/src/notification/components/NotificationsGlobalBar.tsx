@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUserContext } from "user/UserProvider";
 import { NotificationI } from "@shared/interfaces/NotificationI";
+import { notificationSocket } from "notification/services/NotificationSocketService";
 
 const NotificationsGlobalBar: React.FC = () => {
 
@@ -8,8 +9,11 @@ const NotificationsGlobalBar: React.FC = () => {
 
     const [notifications, setNotifications] = useState<NotificationI[]>([]);
 
+    const socket = notificationSocket
+    
     useEffect(() => {
         console.log('NotificationsGlobalBar xxx:')
+
     }, [])
 
     if (!notifications.length) {

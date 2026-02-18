@@ -8,6 +8,7 @@ import { FriendsController } from './FriendsController';
 import { AuthModule } from 'auth/AuthModule';
 import { UserModule } from 'user/UserModule';
 import { FriendshipSocketHandler } from './services/FriendshipSocketHandler';
+import { NotificationModule } from 'notification/NotificationModule';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { FriendshipSocketHandler } from './services/FriendshipSocketHandler';
         ]),
         AuthModule,
         UserModule,
+        NotificationModule,
     ],
     providers: [
         FriendshipRepo,

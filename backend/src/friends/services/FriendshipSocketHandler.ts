@@ -29,11 +29,6 @@ export class FriendshipSocketHandler implements SocketHandler, OnModuleInit {
       throw new Error('Authenticated socket missing user UID');
     }
     socket.join(SocketUtil.userRoom(uid));
-    // const userChats = await this.chatService.getUserChats(uid);
-    // for (const chat of userChats) {
-    //   this.logger.log(`Joining user ${uid} to chat room chat:${chat.chatId}`);
-    //   socket.join(ChatUtil.chatRoom(chat.chatId));
-    // }
   }
 
   notifyInviteReceived(friendship: FriendshipI): void {

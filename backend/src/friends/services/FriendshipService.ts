@@ -7,6 +7,7 @@ import { UserI } from '@shared/interfaces/UserI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { UserService } from 'user/services/UserService';
 import { FriendshipSocketHandler } from './FriendshipSocketHandler';
+import { NotificationSocketHandler } from 'notification/services/NotificationSocketHandler';
 
 @Injectable()
 export class FriendshipService {
@@ -17,6 +18,7 @@ export class FriendshipService {
         private readonly friendshipRepo: FriendshipRepo,
         private readonly userService: UserService,
         private readonly friendshipSocketHandler: FriendshipSocketHandler,
+        private readonly notificationSocketHandler: NotificationSocketHandler,
     ) { }
 
     async sendInvite(requester: UserI, addresseeUid: string): Promise<FriendshipEntity> {
@@ -42,6 +44,7 @@ export class FriendshipService {
                 const updated = await this.friendshipRepo.updateStatus(existing, FriendshipStatuses.PENDING);
                 this.logger.log(`Re-sent friendship invite: ${requester.uid} -> ${addressee.uid}`);
                 this.friendshipSocketHandler.notifyInviteReceived(updated);
+                this.notificationSocketHandler.notifyFriendshipInvite(addresseeUid, updated);
                 return updated;
             }
         }
@@ -49,6 +52,7 @@ export class FriendshipService {
         const friendship = await this.friendshipRepo.create(requester, addressee);
         this.logger.log(`Sent friendship invite: ${requester.uid} -> ${addressee.uid}`);
         this.friendshipSocketHandler.notifyInviteReceived(friendship);
+        this.notificationSocketHandler.notifyFriendshipInvite(addresseeUid, friendship);    
         return friendship;
     }
 

@@ -1,3 +1,31 @@
+/** Created by Pawel Malek **/
+
+/**
+ * Database entity dla powiadomienia
+ */
+export interface NotificationI {
+    notificationId: string;
+    recipientUid: string;
+    type: NotificationType;
+
+    // Referencia do źródła powiadomienia
+    targetId: string | number; // chatId, friendshipId, offerId, etc.
+
+    // Dane do wyświetlenia na belce
+    title: string;
+    message: string;
+    messageParams?: Record<string, string>
+    icon: NotificationIcon
+
+    // Timestamp
+    createdAt: Date;
+    readAt: Date | null;
+
+    // Metadane dla elastyczności (np. sender info, preview tekstu, etc.)
+    metadata?: Record<string, any>;
+}
+
+
 /**
  * Enum dla typów powiadomień
  * Rozszerzalny dla nowych typów: job offers, system alerts, etc.
@@ -19,29 +47,6 @@ export const NotificationEvents = {
     NOTIFICATION_DELETED: 'notification:deleted',
 } as const;
 
-/**
- * Database entity dla powiadomienia
- */
-export interface NotificationI {
-    notificationId: string;
-    recipientUid: string;
-    type: NotificationType;
-
-    // Referencia do źródła powiadomienia
-    targetId: string | number; // chatId, friendshipId, offerId, etc.
-
-    // Dane do wyświetlenia na belce
-    title: string;
-    message: string;
-    icon: NotificationIcon
-
-    // Timestamp
-    createdAt: Date;
-    readAt: Date | null;
-
-    // Metadane dla elastyczności (np. sender info, preview tekstu, etc.)
-    metadata?: Record<string, any>;
-}
 
 export const NotificationIcons = {
     CHAT: 'chat',

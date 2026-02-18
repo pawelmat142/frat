@@ -15,6 +15,7 @@ import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
 import { TelegramModule } from 'telegram/telegram.module';
 import { ChatModule } from 'chat/ChatModule';
 import { FriendsModule } from 'friends/FriendsModule';
+import { NotificationModule } from 'notification/NotificationModule';
 import { SocketModule } from 'global/web-socket/SocketModule';
 import { GeocodingService } from 'global/services/GeocodingService';
 
@@ -44,6 +45,7 @@ import { GeocodingService } from 'global/services/GeocodingService';
     SocketModule,
     ChatModule,
     FriendsModule,
+    NotificationModule,
   ],
   controllers: [
     GlobalController,
