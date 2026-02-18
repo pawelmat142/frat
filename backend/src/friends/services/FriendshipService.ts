@@ -69,19 +69,21 @@ export class FriendshipService {
     }
 
     async rejectInvite(user: UserI, friendshipId: number): Promise<FriendshipEntity> {
-        const friendship = await this.getAndValidatePendingInvite(user, friendshipId);
+        const friendship = await this.getAndValidatePendingInvite(user, friendshipId)
         // Only the addressee and requester can reject
         if (friendship.addresseeUid !== user.uid && friendship.requesterUid !== user.uid) {
             throw new ToastException('friendship.error.notAuthorized', this);
         }
-        const updated = await this.friendshipRepo.updateStatus(friendship, FriendshipStatuses.REJECTED);
-        this.friendshipSocketHandler.notifyInviteRejected(updated);
-        this.logger.log(`Rejected friendship: ${friendship.requesterUid} -> ${friendship.addresseeUid}`);
-        return updated;
+        const updated = await this.friendshipRepo.updateStatus(friendship, FriendshipStatuses.REJECTED)
+        this.logger.log(`Rejected friendship: ${friendship.requesterUid} -> ${friendship.addresseeUid}`)
+
+        this.friendshipSocketHandler.notifyInviteRejected(updated)
+        this.notificationSocketHandler.deleteFriendshipInvitationNotification(updated)
+        return updated
     }
 
     async removeFriend(user: UserI, friendshipId: number): Promise<void> {
-        const friendship = await this.friendshipRepo.findById(friendshipId);
+        const friendship = await this.friendshipRepo.findById(friendshipId)
         if (!friendship) {
             throw new ToastException('friendship.error.notFound', this);
         }

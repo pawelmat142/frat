@@ -55,4 +55,14 @@ export class NotificationSocketHandler implements SocketHandler, OnModuleInit {
     const notification = await this.notificationService.createFriendInviteNotification(recipientUid, friendship);
     this.socketGateway.emitToUser(recipientUid, NotificationEvents.NOTIFICATION_RECEIVED, notification);
   }
+
+  /**
+   * Notifies the user that a friend invitation was rejected
+   */
+  async deleteFriendshipInvitationNotification(friendship: FriendshipI): Promise<void> {
+    const notification = await this.notificationService.deleteFriendInviteNotification(friendship);
+    if (notification) {
+      this.socketGateway.emitToUser(friendship.addresseeUid, NotificationEvents.NOTIFICATION_DELETED, notification.notificationId );
+    }
+  }
 }

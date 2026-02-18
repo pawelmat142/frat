@@ -1,11 +1,11 @@
-import { NotificationEvents, NotificationI, NotificationTypes } from '@shared/interfaces/NotificationI';
+import { NotificationEvents, NotificationI } from '@shared/interfaces/NotificationI';
 import WebSocketService from 'global/web-socket/WebSocketService';
 
 export class NotificationSocketService {
     private webSocket: WebSocketService;
-    private inviteListeners: Set<(notification: NotificationI) => void> = new Set();
-    private acceptListeners: Set<(notification: NotificationI) => void> = new Set();
-    private messageListeners: Set<(notification: NotificationI) => void> = new Set();
+    private receivedListeners: Set<(notification: NotificationI) => void> = new Set();
+    private readListeners: Set<(notificationId: string) => void> = new Set();
+    private deletedListeners: Set<(notificationId: string) => void> = new Set();
 
     constructor() {
         // Use the same WebSocketService singleton instance as ChatSocketService
@@ -17,17 +17,19 @@ export class NotificationSocketService {
     private setupEventListeners(): void {
         this.webSocket.on(NotificationEvents.NOTIFICATION_RECEIVED, (notification: NotificationI) => {
             console.log('on(NotificationEvents.NOTIFICATION_RECEIVED)', notification);
-            this.inviteListeners.forEach(listener => listener(notification));
+            this.receivedListeners.forEach(listener => listener(notification));
         });
-
-        this.webSocket.on(NotificationEvents.NOTIFICATION_READ, (notification: NotificationI) => {
-            console.log('on(NotificationEvents.NOTIFICATION_READ)', notification);
-            this.acceptListeners.forEach(listener => listener(notification));
+        
+        // TODO wystarczy id
+        this.webSocket.on(NotificationEvents.NOTIFICATION_READ, (notificationId: string) => {
+            console.log('on(NotificationEvents.NOTIFICATION_READ)', notificationId);
+            this.readListeners.forEach(listener => listener(notificationId));
         });
-
-        this.webSocket.on(NotificationEvents.NOTIFICATION_DELETED, (notification: NotificationI) => {
-            console.log('on(NotificationEvents.NOTIFICATION_DELETED)', notification);
-            this.messageListeners.forEach(listener => listener(notification));
+        
+        // TODO wystarczy id
+        this.webSocket.on(NotificationEvents.NOTIFICATION_DELETED, (notificationId: string) => {
+            console.log('on(NotificationEvents.NOTIFICATION_DELETED)', notificationId);
+            this.deletedListeners.forEach(listener => listener(notificationId));
         });
     }
 
@@ -42,27 +44,27 @@ export class NotificationSocketService {
     }
 
     registerInviteListener(listener: (notification: NotificationI) => void): void {
-        this.inviteListeners.add(listener);
+        this.receivedListeners.add(listener);
     }
 
     unregisterInviteListener(listener: (notification: NotificationI) => void): void {
-        this.inviteListeners.delete(listener);
+        this.receivedListeners.delete(listener);
     }
 
-    registerAcceptListener(listener: (notification: NotificationI) => void): void {
-        this.acceptListeners.add(listener);
+    registerReadListener(listener: (notificationId: string) => void): void {
+        this.readListeners.add(listener);
     }
 
-    unregisterAcceptListener(listener: (notification: NotificationI) => void): void {
-        this.acceptListeners.delete(listener);
+    unregisterReadListener(listener: (notificationId: string) => void): void {
+        this.readListeners.delete(listener);
     }
 
-    registerMessageListener(listener: (notification: NotificationI) => void): void {
-        this.messageListeners.add(listener);
+    registerDeletedListener(listener: (notificationId: string) => void): void {
+        this.deletedListeners.add(listener);
     }
 
-    unregisterMessageListener(listener: (notification: NotificationI) => void): void {
-        this.messageListeners.delete(listener);
+    unregisterDeletedListener(listener: (notificationId: string) => void): void {
+        this.deletedListeners.delete(listener);
     }
 
     isConnected(): boolean {

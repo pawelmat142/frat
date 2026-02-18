@@ -17,9 +17,10 @@ export class NotificationService {
   ) {}
 
   /**
-   * Tworzy powiadomienie o nowym zaproszeniu do znajomych
+     * Creates a notification for a new friend invitation
    */
   async createFriendInviteNotification(recipientUid: string, friendship: FriendshipI): Promise<NotificationI> {
+    // TODO translacje
     const notification = this.notificationRepository.create({
       recipientUid,
       type: NotificationTypes.FRIEND_INVITE,
@@ -39,7 +40,26 @@ export class NotificationService {
   }
 
   /**
-   * Pobiera listę powiadomień dla użytkownika (z paginacją)
+   * Deletes a notification by its ID
+   */
+  async deleteFriendInviteNotification(friendship: FriendshipI): Promise<NotificationI> {
+    const notification = await this.notificationRepository.findOne({
+      where: {
+        type: NotificationTypes.FRIEND_INVITE,
+        recipientUid: friendship.addresseeUid,
+      }
+    });
+    if (!notification) {
+      this.logger.error(`No notification found for friendship invite ${friendship.friendshipId} and user ${friendship.addresseeUid}`);
+      return null;
+    }
+    await this.notificationRepository.delete(notification.notificationId);
+    this.logger.log(`Deleted friend invite notification ${notification.notificationId} for user ${friendship.addresseeUid}`);
+    return notification;
+  }
+
+  /**
+     * Retrieves the list of notifications for a user (with pagination)
    */
   async getUserNotifications(recipientUid: string, limit = 20, offset = 0): Promise<NotificationI[]> {
     return await this.notificationRepository.find({

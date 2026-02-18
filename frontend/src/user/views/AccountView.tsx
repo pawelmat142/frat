@@ -182,6 +182,7 @@ const AccountView: React.FC = () => {
             return null;
         }
         const friendship = getFriendship();
+
         if (!friendship || friendship.status === FriendshipStatuses.REJECTED) {
             return <Button
                 fullWidth
@@ -192,6 +193,18 @@ const AccountView: React.FC = () => {
                 {t('account.invite')}
             </Button>
         }
+
+        const rejectInvitationBtn = friendship.status === FriendshipStatuses.PENDING ? (
+            <Button
+                fullWidth
+                mode={BtnModes.ERROR_TXT}
+                onClick={async () => { rejectInvitation(friendship); }}
+            >
+                <FaTimes className="mr-2" />
+                {t('friends.reject')}
+            </Button>
+        ) : null
+
         if (friendship.status === FriendshipStatuses.ACCEPTED) {
             return <Button
                 fullWidth
@@ -213,16 +226,10 @@ const AccountView: React.FC = () => {
                         <FaUsers className="mr-2" />
                         {t('friends.accept')}
                     </Button>
-                    <Button
-                        fullWidth
-                        mode={BtnModes.ERROR_TXT}
-                        onClick={async () => { rejectInvitation(friendship); }}
-                    >
-                        <FaTimes className="mr-2" />
-                        {t('friends.reject')}
-                    </Button>
+                    {rejectInvitationBtn}
                 </>)
             }
+            return (rejectInvitationBtn)
         }
     }
 
@@ -287,7 +294,7 @@ const AccountView: React.FC = () => {
 
             <div className="flex flex-col gap-3 mt-6">
 
-                {(isFriend || isMyAccount) && 
+                {(isFriend || isMyAccount) &&
                     <Button
                         fullWidth
                         mode={BtnModes.SECONDARY}
