@@ -39,7 +39,6 @@ const WorkersSearchFiltersView: React.FC = () => {
 
     const submit = async () => {
         ctx.setFiltersWithSearchAndNavigate(formState);
-        console.log('Submitting form with values:', formState);
     }
 
     const sortOptionItems: SelectorItem<string>[] = Object.keys(WorkerSearchSortOptions).map((option: string) => ({

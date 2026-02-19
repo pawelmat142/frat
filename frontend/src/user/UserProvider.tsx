@@ -11,6 +11,9 @@ import { FriendsService } from 'friends/services/FriendsService';
 import { friendsSocket } from 'friends/services/FriendsSocketService';
 import { useTranslation } from 'react-i18next';
 import WebSocketService from 'global/web-socket/WebSocketService';
+import { NotificationI } from '@shared/interfaces/NotificationI';
+import { NotificationService } from 'notification/services/NotificationService';
+import { notificationSocket } from 'notification/services/NotificationSocketService';
 
 interface UserContextType {
 	worker: WorkerI | null;
@@ -26,6 +29,7 @@ interface UserContextType {
 	putFriendship: (friendship: FriendshipI) => void;
 	loading: boolean;
 	setLoading: (loading: boolean) => void;
+	notifications: NotificationI[];
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -37,6 +41,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const [offers, setOffers] = React.useState<OfferI[]>([])
 
 	const [friendships, setFriendships] = React.useState<FriendshipI[]>([])
+	const [notifications, setNotifications] = React.useState<NotificationI[]>([])
 
 	const [loading, setLoading] = React.useState(false)
 
@@ -53,17 +58,28 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				initOffers(true),
 				initLocation(true),
 				initFriendships(true),
+				initNotifications(true),
 			]).then(() => {
 				setLoading(false);
 				WebSocketService.getInstance().connect();
 			})
 		} else {
-			unregisterFriendshipListeners();
-			cleanWorker()
-			cleanOffers()
-			cleanPosition()
+
+			onDestroy();
+		}
+		return () => {
+			onDestroy();
 		}
 	}, [authCtx.me]);
+
+	const onDestroy = () => {
+		unregisterFriendshipListeners();
+		unregisterNotificationListeners();
+		cleanWorker()
+		cleanOffers()
+		cleanPosition()
+		cleanNotifications()
+	}
 
 	const initLocation = async (init?: boolean) => {
 		try {
@@ -128,6 +144,10 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		}
 	}
 
+	const cleanNotifications = () => {
+		setNotifications([]);
+	}
+
 	const locationErrorToast = () => {
 		// TODO transaltion
 		toast.warn('Could not fetch location');
@@ -188,6 +208,44 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				setLoading(false);
 			}
 		}
+	}
+
+	const initNotifications = async (init?: boolean) => {
+		try {
+			setLoading(true);
+			const initialNotifications = await NotificationService.getNotifications()
+			setNotifications(initialNotifications)
+			registerNotificationListeners();
+		} catch (error) {
+			setNotifications([]);
+		} finally {
+			if (!init) {
+				setLoading(false);
+			}
+		}
+	}
+
+	const registerNotificationListeners = () => {
+		notificationSocket.registerReceivedListener(notificationReceived)
+		notificationSocket.registerDeletedListener(notificationDeleted)
+	}
+	
+	const unregisterNotificationListeners = () => {
+		notificationSocket.unregisterReceivedListener(notificationReceived)
+		notificationSocket.unregisterDeletedListener(notificationDeleted)
+	}
+
+	const notificationReceived = (notification: NotificationI) => {
+		const exists = notifications.find(n => n.notificationId === notification.notificationId)
+		if (exists) {
+			setNotifications(prev => prev.map(n => n.notificationId === notification.notificationId ? notification : n))
+			return;
+		}
+		setNotifications(prev => [...prev, notification])
+	}
+
+	const notificationDeleted = (notificationId: string) => {
+		setNotifications(prev => prev.filter(n => n.notificationId !== notificationId))
 	}
 
 	const registerFriendshipListeners = () => {
@@ -270,6 +328,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			loading: loading,
 			setLoading: setLoading,
 			position,
+			notifications
 		}}>
 			{children}
 		</UserContext.Provider>

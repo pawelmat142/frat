@@ -12,6 +12,8 @@ export abstract class Path {
     public static readonly CHAT_CONVERSATION = '/chat/:chatId';
     public static readonly FRIENDS = '/friends/:uid';
     public static readonly FRIENDS_SEARCH = '/friends-search';
+    public static readonly NOTIFICATIONS = '/notifications';
+    public static readonly NOTIFICATION = '/notifications/:notificationId';
 
     // EMPLOYEE PROFILES
     public static readonly WORKER = '/worker/:displayName';
@@ -53,4 +55,5 @@ export abstract class Path {
     public static getOfferFormEditPath = (offerId: number) => `${Path.OFFER_FORM_EDIT.replace(':offerId', `${offerId}`)}`;
     public static getChatPath = (chatId: number) => `${Path.CHAT_CONVERSATION.replace(':chatId', `${chatId}`)}`;
     public static getFriendsPath = (uid: string) => `${Path.FRIENDS.replace(':uid', uid)}`;
+    public static getNotificationPath = (notificationId: string) => `${Path.NOTIFICATION.replace(':notificationId', notificationId)}`;
 }

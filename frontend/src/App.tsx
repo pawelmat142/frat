@@ -36,6 +36,8 @@ import ChatConversationView from 'chat/views/ChatConversationView';
 import WorkersSearchFiltersView from 'employee/views/search/WorkersSearchFiltersView';
 import FriendsListView from 'friends/views/FriendsListView';
 import FriendsSearchView from 'friends/views/FriendsSearchView';
+import SingleNotificationView from 'notification/views/SingleNotificationView';
+import NotificationsView from 'notification/views/NotificationsView';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -75,6 +77,8 @@ const App: React.FC = () => {
                 <Route path={Path.CHAT_CONVERSATION} element={<PageWrapper direction={1}><ProtectedRoute><ChatConversationView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.FRIENDS} element={<PageWrapper direction={1}><ProtectedRoute><FriendsListView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.FRIENDS_SEARCH} element={<PageWrapper direction={1}><ProtectedRoute><FriendsSearchView /></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.NOTIFICATIONS} element={<PageWrapper direction={1}><ProtectedRoute><NotificationsView /></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.NOTIFICATION} element={<PageWrapper direction={1}><ProtectedRoute><SingleNotificationView /></ProtectedRoute></PageWrapper>} />
 
                 {/* EMPLOYEE PROFILE */}
                 <Route path={Path.WORKER} element={<PageWrapper direction={1}><WorkerView /></PageWrapper>} />

@@ -1,54 +1,36 @@
 import { useEffect, useState } from "react";
 import { NotificationI } from "@shared/interfaces/NotificationI";
-import { notificationSocket } from "notification/services/NotificationSocketService";
-import { NotificationService } from "notification/services/NotificationService";
-import { useAuthContext } from "auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
+import { Path } from "../../path";
+import { useUserContext } from "user/UserProvider";
 
 const NotificationsGlobalBar: React.FC = () => {
 
-    const { me } = useAuthContext();
+    const userCtx = useUserContext();
+    const navigate = useNavigate()
 
-    const [notifications, setNotifications] = useState<NotificationI[]>([]);
+    const [notifications, setNotifications] = useState<NotificationI[]>([])
+
+    // TODO notifications list view
+    // TODO notification single view
+    // TODO if 1 notification - show it on global bar, if more
+    // TODO mark as read, delete, etc
+    // TODO notifications counter global state
+    // TODO notification appear animation
 
     useEffect(() => {
-        if (me) {
-            initNotifications();
-            notificationSocket.registerReceivedListener(notificationReceived);
-            notificationSocket.registerDeletedListener(notificationDeleted);
-        } else {
-            setNotifications([]);
-            notificationSocket.unregisterReceivedListener(notificationReceived);
-            notificationSocket.unregisterDeletedListener(notificationDeleted);
-        }
-    }, [me])
+        setNotifications(userCtx.notifications)
+    }, [userCtx.notifications])
 
-    const initNotifications = async () => {
-        const initialNotifications = await NotificationService.getNotifications();
-        setNotifications(initialNotifications);
-    }
-
-    const notificationReceived = (notification: NotificationI) => {
-        const exists = notifications.find(n => n.notificationId === notification.notificationId);
-        if (exists) {
-            setNotifications(prev => prev.map(n => n.notificationId === notification.notificationId ? notification : n));
-            return;
-        }
-        setNotifications(prev => [...prev, notification]);
-    }
-
-    const notificationDeleted = (notificationId: string) => {
-        setNotifications(prev => prev.filter(n => n.notificationId !== notificationId));
-    }
-
-    console.log('notifications:', notifications);
+    console.log('notifications:', notifications)
 
     if (!notifications.length) {
         return null;
     }
 
-    return <div className="my-1 mx-2 px-2 py-1 secondary-bg">
+    return <div className="my-1 mx-2 px-2 py-1 secondary-bg rippple" onClick={() => navigate(Path.NOTIFICATIONS)}>
         <h2 className="text-xl font-bold">{notifications.length} notifications</h2>
     </div>
-} 
+}
 
 export default NotificationsGlobalBar;
