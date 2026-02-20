@@ -5,7 +5,6 @@ import Loading from "global/components/Loading";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { BtnModes } from "global/interface/controls.interface";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
 import { NotificationService } from "notification/services/NotificationService";
 import { Path } from "../../path";
 import { useEffect, useState } from "react";
@@ -13,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
 import { useAuthContext } from "auth/AuthProvider";
+import AvatarTile from "user/components/AvatarTile";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -71,10 +71,13 @@ const SingleNotificationView: React.FC = () => {
         })
     }
 
-    // TODO remove
-    console.log('notification:', notification)
-
     const getActions = (): React.ReactNode => {
+
+        const deleteButton = <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={() => {
+            // TODO delete notification from db, update global state, etc
+        }}>{t('common.delete')}</Button>
+
+
         if (NotificationTypes.FRIEND_INVITE === notification?.type) {
             const friendshipId = Number(notification.targetId)
 
@@ -99,34 +102,41 @@ const SingleNotificationView: React.FC = () => {
                         setLoading(false)
                     }
                 }}>{t('friends.reject')}</Button>
+
+                {deleteButton}
+
             </div>
-
-
         }
-        return null
+        return <>{deleteButton}</>
     }
 
     if (loading || !notification) {
         return <Loading></Loading>
     }
 
-    return <div className="view-container">
+    return (<div className="view-container">
 
         <div className="flex flex-col justify-center  gap-4 mb-6">
 
-            <div className="notification-icon flex justify-center mt-5 mb-5">
-                {NotificationFrontUtil.getIcon(notification)}
-            </div>
+                <div className="notification-avatar-wrapper">
+                    <AvatarTile
+                        src={notification.avatarRef?.url}
+                        editable={false}
+                        uid={""}
+                    />
+                </div>
 
             <div className="text-center">
                 <h2 className="text-xl font-bold">{t(notification.title)}</h2>
                 <p className="secondary-text mt-10 mb-5 mx-10">{t(notification.message, notification.messageParams)}</p>
             </div>
 
-            {getActions()}
+            <div className="flex flex-col gap-3 mt-6">
+                {getActions()}
+            </div>
         </div>
 
-    </div>
+    </div>)
 }
 
 export default SingleNotificationView;

@@ -40,8 +40,8 @@ export class NotificationSocketHandler implements SocketHandler, OnModuleInit {
   /**
    * Notifies the user about a new friend invitation
    */
-  async notifyFriendshipInvite(recipientUid: string, friendship: FriendshipI): Promise<void> {
-    const notification = await this.notificationService.createFriendInviteNotification(recipientUid, friendship);
+  async notifyFriendshipInvite(requester: UserI, recipientUid: string, friendship: FriendshipI): Promise<void> {
+    const notification = await this.notificationService.createFriendInviteNotification(requester, recipientUid, friendship);
     this.socketGateway.emitToUser(recipientUid, NotificationEvents.NOTIFICATION_RECEIVED, notification);
   }
 
@@ -56,9 +56,9 @@ export class NotificationSocketHandler implements SocketHandler, OnModuleInit {
   /**
    * Notifies the user that a friend was removed
    */
-  async notifyFriendshipRemoved(user: UserI, friendship: FriendshipI): Promise<void> {
+  async notifyFriendshipRemoved(user: UserI, friendship: FriendshipI, removedFriendshipId: number): Promise<void> {
     const otherUserUid = friendship.requesterUid === user.uid ? friendship.addresseeUid : friendship.requesterUid;
-    const notification = await this.notificationService.createFriendshipRemovedNotification(otherUserUid, friendship);
+    const notification = await this.notificationService.createFriendshipRemovedNotification(otherUserUid, friendship, removedFriendshipId);
     this.socketGateway.emitToUser(otherUserUid, NotificationEvents.NOTIFICATION_RECEIVED, notification);
   }
 

@@ -11,8 +11,6 @@ const NotificationsGlobalBar: React.FC = () => {
 
     const [notifications, setNotifications] = useState<NotificationI[]>([])
 
-    // TODO notifications list view
-    // TODO notification single view
     // TODO if 1 notification - show it on global bar, if more
     // TODO mark as read, delete, etc
     // TODO notifications counter global state

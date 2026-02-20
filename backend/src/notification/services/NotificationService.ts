@@ -7,6 +7,7 @@ import { FriendshipI } from '@shared/interfaces/FriendshipI';
 import { NotificationEntity } from 'notification/model/NotificationEntity';
 import { ToastException } from 'global/exceptions/ToastException';
 import { UserI } from '@shared/interfaces/UserI';
+import { UserService } from 'user/services/UserService';
 
 @Injectable()
 export class NotificationService {
@@ -16,12 +17,13 @@ export class NotificationService {
   constructor(
     @InjectRepository(NotificationEntity)
     private readonly notificationRepository: Repository<NotificationEntity>,
+    private readonly userService: UserService,
   ) {}
 
   /**
      * Creates a notification for a new friend invitation
    */
-  async createFriendInviteNotification(recipientUid: string, friendship: FriendshipI): Promise<NotificationI> {
+  async createFriendInviteNotification(requester: UserI, recipientUid: string, friendship: FriendshipI): Promise<NotificationI> {
     const notification = this.notificationRepository.create({
       recipientUid,
       type: NotificationTypes.FRIEND_INVITE,
@@ -30,6 +32,7 @@ export class NotificationService {
       message: `notification.newInvitationMessage`,
       messageParams: { name: friendship.requesterName },
       icon: NotificationIcons.FRIEND,
+      avatarRef: requester.avatarRef
     });
 
     const saved = await this.notificationRepository.save(notification);
@@ -41,6 +44,7 @@ export class NotificationService {
    * Creates a notification for an accepted friend invitation
    */
   async createFriendshipAcceptedNotification(friendship: FriendshipI): Promise<NotificationI> {
+    const addressee = await this.userService.getUserByUid(friendship.addresseeUid);
     const notification = this.notificationRepository.create({
       recipientUid: friendship.requesterUid,
       type: NotificationTypes.FRIEND_ACCEPTED,
@@ -49,6 +53,7 @@ export class NotificationService {
       message: 'notification.acceptInvitationMessage',
       messageParams: { name: friendship.addresseeName },
       icon: NotificationIcons.FRIEND,
+      avatarRef: addressee.avatarRef,
     });
     const saved = await this.notificationRepository.save(notification);
     this.logger.log(`Created friendship accepted notification ${saved.notificationId} for user ${friendship.requesterUid}`);
@@ -58,16 +63,18 @@ export class NotificationService {
   /**
    * Creates a notification for a removed friend
    */
-  async createFriendshipRemovedNotification(otherUserUid: string, friendship: FriendshipI): Promise<NotificationI> {
+  async createFriendshipRemovedNotification(otherUserUid: string, friendship: FriendshipI, removedFriendshipId: number): Promise<NotificationI> {
     const userDisplayName = friendship.requesterUid === otherUserUid ? friendship.requesterName : friendship.addresseeName;
+    const otherUser = await this.userService.getUserByUid(otherUserUid);
     const notification = this.notificationRepository.create({
       recipientUid: otherUserUid,
       type: NotificationTypes.FRIEND_REMOVED,
-      targetId: friendship.friendshipId.toString(),
+      targetId: removedFriendshipId.toString(),
       title: 'notification.friendRemovedTitle',
       message: 'notification.friendRemovedMessage',
       messageParams: { name: userDisplayName },
       icon: NotificationIcons.FRIEND,
+      avatarRef: otherUser.avatarRef,
     });
     const saved = await this.notificationRepository.save(notification);
     this.logger.log(`Created friendship removed notification ${saved.notificationId} for user ${otherUserUid}`);

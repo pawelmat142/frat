@@ -44,7 +44,7 @@ export class FriendshipService {
                 const updated = await this.friendshipRepo.updateStatus(existing, FriendshipStatuses.PENDING);
                 this.logger.log(`Re-sent friendship invite: ${requester.uid} -> ${addressee.uid}`);
                 this.friendshipSocketHandler.notifyInviteReceived(updated);
-                this.notificationSocketHandler.notifyFriendshipInvite(addresseeUid, updated);
+                this.notificationSocketHandler.notifyFriendshipInvite(requester, addresseeUid, updated);
                 return updated;
             }
         }
@@ -53,7 +53,7 @@ export class FriendshipService {
 
         this.logger.log(`Sent friendship invite: ${requester.uid} -> ${addressee.uid}`);
         this.friendshipSocketHandler.notifyInviteReceived(friendship);
-        this.notificationSocketHandler.notifyFriendshipInvite(addresseeUid, friendship);    
+        this.notificationSocketHandler.notifyFriendshipInvite(requester, addresseeUid, friendship);    
         return friendship;
     }
 
@@ -68,6 +68,7 @@ export class FriendshipService {
         this.logger.log(`Accepted friendship: ${friendship.requesterUid} <-> ${friendship.addresseeUid}`)
         this.friendshipSocketHandler.notifyInviteAccepted(updated)
         this.notificationSocketHandler.notifyFriendshipAccepted(updated)
+        this.notificationSocketHandler.deleteFriendshipInvitationNotification(updated)
         return updated;
     }
 
@@ -96,11 +97,14 @@ export class FriendshipService {
             throw new ToastException('friendship.error.notAuthorized', this);
         }
 
+        // repo.delete removes id from entity object
+        const removedFriendshipId = friendship.friendshipId;
+
         const result = await this.friendshipRepo.delete(friendship);
 
         this.logger.log(`Removed friendship: ${friendship.requesterUid} <-> ${friendship.addresseeUid}`);
-        this.friendshipSocketHandler.notifyFriendRemoved(friendship)
-        this.notificationSocketHandler.notifyFriendshipRemoved(user, friendship);
+        this.friendshipSocketHandler.notifyFriendRemoved(friendship, removedFriendshipId)
+        this.notificationSocketHandler.notifyFriendshipRemoved(user, friendship, removedFriendshipId);
     }
 
     async getFriendships(uid: string): Promise<FriendshipEntity[]> {

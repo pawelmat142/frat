@@ -38,7 +38,7 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
     return (
         <div onClick={goToNotification}>
             <ListItem
-                imgComponent={getIcon()}
+                imgUrl={notification.avatarRef?.url}
                 topLeft={t(notification.title)}
                 bottomLeft={t(notification.message, notification.messageParams)}
                 first={first}

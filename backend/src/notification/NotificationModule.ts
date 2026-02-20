@@ -6,11 +6,13 @@ import { NotificationSocketHandler } from './services/NotificationSocketHandler'
 import { NotificationEntity } from './model/NotificationEntity';
 import { NotificationsController } from './NotificationController';
 import { AuthModule } from 'auth/AuthModule';
+import { UserModule } from 'user/UserModule';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([NotificationEntity]),
     AuthModule,
+    UserModule,
   ],
   controllers: [
     NotificationsController
