@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NotificationI } from "@shared/interfaces/NotificationI";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Path } from "../../path";
 import { useUserContext } from "user/UserProvider";
 
@@ -8,8 +8,10 @@ const NotificationsGlobalBar: React.FC = () => {
 
     const userCtx = useUserContext();
     const navigate = useNavigate()
+    const location = useLocation();
 
     const [notifications, setNotifications] = useState<NotificationI[]>([])
+    const [hideSection, setHideSection] = useState(false)
 
     // TODO if 1 notification - show it on global bar, if more
     // TODO mark as read, delete, etc
@@ -20,9 +22,19 @@ const NotificationsGlobalBar: React.FC = () => {
         setNotifications(userCtx.notifications)
     }, [userCtx.notifications])
 
-    console.log('notifications:', notifications)
+    useEffect(() => {
+        if (hideSection) {
+            if (!location.pathname.includes(Path.NOTIFICATIONS)) {
+                setHideSection(false)
+            }
+        } else {
+            if (location.pathname.includes(Path.NOTIFICATIONS)) {
+                setHideSection(true)
+            }
+        }
+    }, [location.pathname])
 
-    if (!notifications.length) {
+    if (!notifications.length || hideSection) {
         return null;
     }
 

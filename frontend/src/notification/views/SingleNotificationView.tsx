@@ -118,7 +118,7 @@ const SingleNotificationView: React.FC = () => {
 
         <div className="flex flex-col justify-center  gap-4 mb-6">
 
-                <div className="notification-avatar-wrapper">
+                <div className="notification-avatar-wrapper mt-5">
                     <AvatarTile
                         src={notification.avatarRef?.url}
                         editable={false}
@@ -127,8 +127,8 @@ const SingleNotificationView: React.FC = () => {
                 </div>
 
             <div className="text-center">
-                <h2 className="text-xl font-bold">{t(notification.title)}</h2>
-                <p className="secondary-text mt-10 mb-5 mx-10">{t(notification.message, notification.messageParams)}</p>
+                <h2 className="text-xl font-bold mt-10">{t(notification.title)}</h2>
+                <p className="secondary-text mt-5 mb-5 mx-10">{t(notification.message, notification.messageParams)}</p>
             </div>
 
             <div className="flex flex-col gap-3 mt-6">
