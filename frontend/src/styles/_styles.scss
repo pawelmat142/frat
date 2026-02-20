@@ -820,3 +820,14 @@ $cellRadiusBig: 1rem;
     z-index: 2;
     background-color: $secondary-bg;
 }
+
+
+
+// NOTIFICATION
+
+.notification-icon {
+    svg {
+        width: 4rem;
+        height: 4rem;
+    }
+}

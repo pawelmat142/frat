@@ -9,7 +9,7 @@ export interface NotificationI {
     type: NotificationType;
 
     // Referencia do źródła powiadomienia
-    targetId: string | number; // chatId, friendshipId, offerId, etc.
+    targetId: string; // chatId, friendshipId, offerId, etc.
 
     // Dane do wyświetlenia na belce
     title: string;

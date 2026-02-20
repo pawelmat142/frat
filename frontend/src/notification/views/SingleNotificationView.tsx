@@ -1,18 +1,26 @@
-import { NotificationI } from "@shared/interfaces/NotificationI";
+import { NotificationI, NotificationTypes } from "@shared/interfaces/NotificationI";
+import { FriendsService } from "friends/services/FriendsService";
+import Button from "global/components/controls/Button";
 import Loading from "global/components/Loading";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
+import { BtnModes } from "global/interface/controls.interface";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
 import { NotificationService } from "notification/services/NotificationService";
+import { Path } from "../../path";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
+import { useAuthContext } from "auth/AuthProvider";
 
 const SingleNotificationView: React.FC = () => {
 
     const globalCtx = useGlobalContext();
     const userCtx = useUserContext();
+    const navigate = useNavigate();
     const { t } = useTranslation();
+    const { me } = useAuthContext();
 
     const { notificationId } = useParams<{ notificationId: string }>();
     const [notification, setNotification] = useState<NotificationI | null>(null)
@@ -63,11 +71,62 @@ const SingleNotificationView: React.FC = () => {
         })
     }
 
-    if (loading) {
+    // TODO remove
+    console.log('notification:', notification)
+
+    const getActions = (): React.ReactNode => {
+        if (NotificationTypes.FRIEND_INVITE === notification?.type) {
+            const friendshipId = Number(notification.targetId)
+
+            return <div className="flex flex-col gap-3">
+
+                <Button fullWidth mode={BtnModes.PRIMARY} onClick={async () => {
+                    try {
+                        setLoading(true)
+                        await FriendsService.acceptInvite(friendshipId)
+                        navigate(Path.getFriendsPath(me!.uid))
+                    } finally {
+                        setLoading(false)
+                    }
+                }}>{t('friends.accept')}</Button>
+
+                <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={async () => {
+                    try {
+                        setLoading(true)
+                        await FriendsService.rejectInvite(friendshipId)
+                        navigate(-1)
+                    } finally {
+                        setLoading(false)
+                    }
+                }}>{t('friends.reject')}</Button>
+            </div>
+
+
+        }
+        return null
+    }
+
+    if (loading || !notification) {
         return <Loading></Loading>
     }
 
-    return <div></div>
+    return <div className="view-container">
+
+        <div className="flex flex-col justify-center  gap-4 mb-6">
+
+            <div className="notification-icon flex justify-center mt-5 mb-5">
+                {NotificationFrontUtil.getIcon(notification)}
+            </div>
+
+            <div className="text-center">
+                <h2 className="text-xl font-bold">{t(notification.title)}</h2>
+                <p className="secondary-text mt-10 mb-5 mx-10">{t(notification.message, notification.messageParams)}</p>
+            </div>
+
+            {getActions()}
+        </div>
+
+    </div>
 }
 
 export default SingleNotificationView;
