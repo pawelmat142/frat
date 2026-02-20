@@ -4,7 +4,7 @@
  * Database entity dla powiadomienia
  */
 export interface NotificationI {
-    notificationId: string;
+    notificationId: number;
     recipientUid: string;
     type: NotificationType;
 

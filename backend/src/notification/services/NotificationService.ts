@@ -106,9 +106,25 @@ export class NotificationService {
   }
 
   /**
+   * Retrieves a single notification by its ID, ensuring it belongs to the user
+   */
+  async getNotification(user: UserI, notificationId: number): Promise<NotificationI> {
+    const notification = await this.notificationRepository.findOne({
+      where: {
+        notificationId,
+        recipientUid: user.uid,
+      },
+    });
+    if (!notification) {
+      throw new ToastException('notification.error.notFound', this);
+    }
+    return notification;
+  }
+
+  /**
    * Marks a notification as read by its ID
    */
-  async markAsRead(user: UserI, notificationId: string): Promise<void> {
+  async markAsRead(user: UserI, notificationId: number): Promise<void> {
     const notification = await this.notificationRepository.findOne({
       where: {
         notificationId,

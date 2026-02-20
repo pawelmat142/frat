@@ -244,7 +244,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		setNotifications(prev => [...prev, notification])
 	}
 
-	const notificationDeleted = (notificationId: string) => {
+	const notificationDeleted = (notificationId: number) => {
 		setNotifications(prev => prev.filter(n => n.notificationId !== notificationId))
 	}
 

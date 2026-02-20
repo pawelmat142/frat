@@ -19,11 +19,19 @@ export class NotificationsController {
         return this.notificationService.getUserNotifications(user.uid);
     }
 
+    @Get(':notificationId')
+    getNotification(
+        @CurrentUser() user: UserI,
+        @Param('notificationId') notificationId: string,
+    ) {
+        return this.notificationService.getNotification(user, Number(notificationId));
+    }
+
     @Patch('/mark-as-read/:notificationId')
     markAsRead(
         @CurrentUser() user: UserI,
         @Param('notificationId') notificationId: string,
     ): Promise<void> {
-        return this.notificationService.markAsRead(user, notificationId);
+        return this.notificationService.markAsRead(user, Number(notificationId));
     }
 }

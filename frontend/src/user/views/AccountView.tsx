@@ -26,6 +26,8 @@ import { FriendsService } from "friends/services/FriendsService";
 
 const AccountView: React.FC = () => {
 
+    // TODO optimize endpoints number for init worker profie, offers, friendships, etc
+
     const { me, loading, firebaseUser } = useAuthContext()
     const userCtx = useUserContext()
     const [user, setUser] = useState<UserI | null>(null)

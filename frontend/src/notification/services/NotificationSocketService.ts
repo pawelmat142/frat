@@ -4,7 +4,7 @@ import WebSocketService from 'global/web-socket/WebSocketService';
 export class NotificationSocketService {
     private webSocket: WebSocketService;
     private receivedListeners: Set<(notification: NotificationI) => void> = new Set();
-    private deletedListeners: Set<(notificationId: string) => void> = new Set();
+    private deletedListeners: Set<(notificationId: number) => void> = new Set();
 
     constructor() {
         // Use the same WebSocketService singleton instance as ChatSocketService
@@ -19,7 +19,7 @@ export class NotificationSocketService {
             this.receivedListeners.forEach(listener => listener(notification));
         });
         
-        this.webSocket.on(NotificationEvents.NOTIFICATION_DELETED, (notificationId: string) => {
+        this.webSocket.on(NotificationEvents.NOTIFICATION_DELETED, (notificationId: number) => {
             console.log('on(NotificationEvents.NOTIFICATION_DELETED)', notificationId);
             this.deletedListeners.forEach(listener => listener(notificationId));
         });
@@ -43,11 +43,11 @@ export class NotificationSocketService {
         this.receivedListeners.delete(listener);
     }
 
-    registerDeletedListener(listener: (notificationId: string) => void): void {
+    registerDeletedListener(listener: (notificationId: number) => void): void {
         this.deletedListeners.add(listener);
     }
 
-    unregisterDeletedListener(listener: (notificationId: string) => void): void {
+    unregisterDeletedListener(listener: (notificationId: number) => void): void {
         this.deletedListeners.delete(listener);
     }
 

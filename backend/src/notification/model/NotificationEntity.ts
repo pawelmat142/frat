@@ -8,7 +8,7 @@ export class NotificationEntity implements NotificationI {
 
   @PrimaryGeneratedColumn({ name: 'notification_id' })
   @Expose()
-  notificationId: string;
+  notificationId: number;
   
   @Column({ name: 'recipient_uid' })
   @Expose()
