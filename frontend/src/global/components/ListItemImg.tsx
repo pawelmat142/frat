@@ -2,12 +2,16 @@ import React from "react";
 
 interface Props {
     imgUrl?: string;
+    component?: React.ReactNode;
     size?: number //rem
 }
 
-const ListItemImg: React.FC<Props> = ({ imgUrl, size = 3.5 }) => {
+const ListItemImg: React.FC<Props> = ({ imgUrl, component, size = 3.5 }) => {
 
-    if (!imgUrl) return null;
+    if (!imgUrl && !component) return null;
+
+    if (component) return <div className="list-view-item-icon">{component}</div>;
+
     return (
         <div className="list-view-item-img">
             <img src={imgUrl}

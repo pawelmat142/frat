@@ -2,6 +2,7 @@ import React from "react";
 import ListItemImg from "./ListItemImg";
 
 interface Props {
+    imgComponent?: React.ReactNode
     imgUrl?: string;
     topLeft: string
     topRight?: React.ReactNode
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const ListItem: React.FC<Props> = ({
+    imgComponent,
     imgUrl,
     topLeft,
     topRight,
@@ -26,7 +28,7 @@ const ListItem: React.FC<Props> = ({
 
     return (
         <div className={`list-view-item${first ? ' first' : ''}${last ? ' last' : ''}`}>
-            <ListItemImg imgUrl={imgUrl} />
+            <ListItemImg imgUrl={imgUrl} component={imgComponent} />
 
             <div className="w-full flex flex-col justify-center">
 

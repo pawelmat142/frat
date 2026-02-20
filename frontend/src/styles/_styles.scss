@@ -110,6 +110,13 @@ $headerHeightDesktop: 60px;
     }
 }
 
+.list-view-item-icon {
+    svg {
+        height: 100%;
+        width: 2.5rem;
+    }
+}
+
 .list-view-item {
     display: flex;
     padding: .5rem 1rem;
