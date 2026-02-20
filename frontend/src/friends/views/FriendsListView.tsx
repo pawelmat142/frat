@@ -102,11 +102,11 @@ const FriendsListView: React.FC = () => {
             <div className="px-2 flex flex-col gap-1 mt-2">
 
                 {!friends.length && (
-                    <div className="flex flex-col items-center gap-3 mt-10">
+                    <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
                         <FaIdCard size={48} className="secondary-text" />
                         <div className="secondary-text">{t('friends.noFriends')}</div>
                     </div>
-                )}
+                )}  
 
                 {friends.map(({ user, friendship }) => (
                     <div className="list-view-item" key={user.uid}>

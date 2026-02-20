@@ -8,6 +8,20 @@
       "offers": "Oferty",
       "account": "Konto"
     },
+    "notification": {
+      "header": "Powiadomienia",
+      "notificationViewTitle": "Powiadomienie",
+      "noNotifications": "Nie masz jeszcze żadnych powiadomień.",
+      "newInvitationTitle": "Nowe zaproszenie",
+      "newInvitationMessage": "Użytkownik {{name}} wysłał Ci zaproszenie do znajomych.",
+      "acceptInvitationTitle": "Zaproszenie zaakceptowane",
+      "acceptInvitationMessage": "Użytkownik {{name}} zaakceptował Twoje zaproszenie do znajomych.",
+      "friendRemovedTitle": "Znajomy usunięty",
+      "friendRemovedMessage": "Użytkownik {{name}} usunął Cię ze znajomych.",
+      "error": {
+        "notFound": "Nie można znaleźć powiadomienia o podanym ID"
+      }
+    },
     "chat": {
       "typeMessage": "Pisz wiadomość...",
       "openChat": "Otwórz czat",
@@ -200,7 +214,8 @@
       "year": "rok",
       "options": "Opcje",
       "search": "Szukaj",
-      "anywhere": "Gdziekolwiek"
+      "anywhere": "Gdziekolwiek",
+      "endOfResults": "Brak więcej wyników do wyświetlenia."
     },
     "header": {
       "home": "Strona główna",

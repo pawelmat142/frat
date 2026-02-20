@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ListItem from "global/components/ListItem";
 import { useTranslation } from "react-i18next";
-import { FaUserFriends } from "react-icons/fa";
+import { FaBell, FaUserFriends } from "react-icons/fa";
 
 import { FaComments } from "react-icons/fa";
 
@@ -32,7 +32,7 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
         if (NotificationIcons.CHAT === notification.icon) {
             return <FaComments />
         }
-        return null;
+        return <FaBell />;
     }
 
     return (
@@ -40,7 +40,7 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
             <ListItem
                 imgComponent={getIcon()}
                 topLeft={t(notification.title)}
-                bottomLeft={t(notification.message)}
+                bottomLeft={t(notification.message, notification.messageParams)}
                 first={first}
                 last={last}
             ></ListItem>

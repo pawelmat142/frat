@@ -22,13 +22,13 @@ export class NotificationService {
      * Creates a notification for a new friend invitation
    */
   async createFriendInviteNotification(recipientUid: string, friendship: FriendshipI): Promise<NotificationI> {
-    // TODO translacje
     const notification = this.notificationRepository.create({
       recipientUid,
       type: NotificationTypes.FRIEND_INVITE,
       targetId: friendship.friendshipId.toString(),
-      title: 'Nowe zaproszenie',
-      message: `${friendship.requesterName} wysłał Ci zaproszenie do znajomych`,
+      title: 'notification.newInvitationTitle',
+      message: `notification.newInvitationMessage`,
+      messageParams: { name: friendship.requesterName },
       icon: NotificationIcons.FRIEND,
     });
 
@@ -40,14 +40,14 @@ export class NotificationService {
   /**
    * Creates a notification for an accepted friend invitation
    */
-  // TODO translacje
   async createFriendshipAcceptedNotification(friendship: FriendshipI): Promise<NotificationI> {
     const notification = this.notificationRepository.create({
       recipientUid: friendship.requesterUid,
       type: NotificationTypes.FRIEND_ACCEPTED,
       targetId: friendship.friendshipId.toString(),
-      title: 'Zaproszenie zaakceptowane',
-      message: `${friendship.addresseeName} zaakceptował Twoje zaproszenie do znajomych`,
+      title: 'notification.acceptInvitationTitle',
+      message: 'notification.acceptInvitationMessage',
+      messageParams: { name: friendship.addresseeName },
       icon: NotificationIcons.FRIEND,
     });
     const saved = await this.notificationRepository.save(notification);
@@ -58,15 +58,15 @@ export class NotificationService {
   /**
    * Creates a notification for a removed friend
    */
-  // TODO translacje
   async createFriendshipRemovedNotification(otherUserUid: string, friendship: FriendshipI): Promise<NotificationI> {
     const userDisplayName = friendship.requesterUid === otherUserUid ? friendship.requesterName : friendship.addresseeName;
     const notification = this.notificationRepository.create({
       recipientUid: otherUserUid,
       type: NotificationTypes.FRIEND_REMOVED,
       targetId: friendship.friendshipId.toString(),
-      title: 'Znajomy usunięty',
-      message: `${userDisplayName} usunął Cię ze znajomych`,
+      title: 'notification.friendRemovedTitle',
+      message: 'notification.friendRemovedMessage',
+      messageParams: { name: userDisplayName },
       icon: NotificationIcons.FRIEND,
     });
     const saved = await this.notificationRepository.save(notification);
@@ -116,8 +116,7 @@ export class NotificationService {
       },
     });
     if (!notification) {
-      // TODO translation
-      throw new ToastException('Nie można znaleźć powiadomienia o podanym ID', this);
+      throw new ToastException('notification.error.notFound', this);
     }
     notification.readAt = new Date();
     await this.notificationRepository.save(notification);

@@ -8,6 +8,20 @@
       "offers": "Offers",
       "account": "Account"
     },
+    "notification": {
+      "header": "Notifications",
+      "notificationViewTitle": "Notification",
+      "noNotifications": "You have no notifications yet.",
+      "newInvitationTitle": "New invitation",
+      "newInvitationMessage": "User {{name}} sent you a friend invitation.",
+      "acceptInvitationTitle": "Invitation accepted",
+      "acceptInvitationMessage": "User {{name}} accepted your friend invitation.",
+      "friendRemovedTitle": "Friend removed",
+      "friendRemovedMessage": "User {{name}} removed you from friends.",
+      "error": {
+        "notFound": "Notification with given ID not found"
+      }
+    },
     "chat": {
       "typeMessage": "Type your message...",
       "fratChat": "FRAT Chat",
@@ -200,7 +214,8 @@
       "year": "year",
       "options": "Options",
       "search": "Search",
-      "anywhere": "Anywhere"
+      "anywhere": "Anywhere",
+      "endOfResults": "No more results to display."
     },
     "header": {
       "home": "Home",

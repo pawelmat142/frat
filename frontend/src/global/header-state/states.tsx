@@ -76,5 +76,9 @@ export const STATES: { [key: string]: ViewState } = {
     [Path.FRIENDS_SEARCH]: {
         leftBtn: <HeaderBackBtn />,
         title: 'friends.search',
+    },
+    [Path.NOTIFICATIONS]: {
+        leftBtn: <HeaderBackBtn />,
+        title: 'notification.header',
     }
 }
