@@ -30,6 +30,7 @@ interface UserContextType {
 	loading: boolean;
 	setLoading: (loading: boolean) => void;
 	notifications: NotificationI[];
+	notificationDeleted: (notificationId: number) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -328,7 +329,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			loading: loading,
 			setLoading: setLoading,
 			position,
-			notifications
+			notifications,
+			notificationDeleted
 		}}>
 			{children}
 		</UserContext.Provider>

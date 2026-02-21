@@ -14,5 +14,9 @@ export const NotificationService = {
     // TODO
     markAsRead(notification: NotificationI): Promise<void> {
         return httpClient.patch(`/notifications/mark-as-read/${notification.notificationId}`);
+    },
+    
+    deleteNotification(notificationId: number): Promise<void> {
+        return httpClient.delete(`/notifications/${notificationId}`);
     }
 }

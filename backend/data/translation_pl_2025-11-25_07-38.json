@@ -18,6 +18,9 @@
       "acceptInvitationMessage": "Użytkownik {{name}} zaakceptował Twoje zaproszenie do znajomych.",
       "friendRemovedTitle": "Znajomy usunięty",
       "friendRemovedMessage": "Użytkownik {{name}} usunął Cię ze znajomych.",
+      "deleteNotification": "Usuń powiadomienie",
+      "deleteConfirmMessage": "Czy na pewno chcesz usunąć to powiadomienie? Tej akcji nie można cofnąć.",
+      "deleteSuccessToast": "Powiadomienie zostało pomyślnie usunięte",
       "error": {
         "notFound": "Nie można znaleźć powiadomienia o podanym ID"
       }

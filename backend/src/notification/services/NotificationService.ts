@@ -112,6 +112,20 @@ export class NotificationService {
     });
   }
 
+  async deleteNotification(user: UserI, notificationId: number): Promise<void> {
+    const notification = await this.notificationRepository.findOne({
+      where: {
+        notificationId,
+        recipientUid: user.uid,
+      },
+    });
+    if (!notification) {
+      throw new ToastException('notification.error.notFound', this);
+    }
+    await this.notificationRepository.delete(notification.notificationId);
+    this.logger.log(`Deleted notification ${notificationId} for user ${user.uid}`);
+  }
+
   /**
    * Retrieves a single notification by its ID, ensuring it belongs to the user
    */

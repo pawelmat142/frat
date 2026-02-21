@@ -18,6 +18,9 @@
       "acceptInvitationMessage": "User {{name}} accepted your friend invitation.",
       "friendRemovedTitle": "Friend removed",
       "friendRemovedMessage": "User {{name}} removed you from friends.",
+      "deleteNotification": "Delete notification",
+      "deleteConfirmMessage": "Are you sure you want to delete this notification? This action cannot be undone.",
+      "deleteSuccessToast": "Notification deleted successfully",
       "error": {
         "notFound": "Notification with given ID not found"
       }

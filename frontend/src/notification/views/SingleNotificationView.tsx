@@ -13,6 +13,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
 import { useAuthContext } from "auth/AuthProvider";
 import AvatarTile from "user/components/AvatarTile";
+import { useConfirm } from "global/providers/PopupProvider";
+import { toast } from "react-toastify";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -21,6 +23,7 @@ const SingleNotificationView: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { me } = useAuthContext();
+    const confirm = useConfirm()
 
     const { notificationId } = useParams<{ notificationId: string }>();
     const [notification, setNotification] = useState<NotificationI | null>(null)
@@ -71,12 +74,30 @@ const SingleNotificationView: React.FC = () => {
         })
     }
 
+    const deleteNotification = async () => {
+        const confirmed = await confirm({
+            title: t('notification.deleteNotification'),
+            message: t('notification.deleteConfirmMessage'),
+        })
+        if (!confirmed) {
+            return
+        }
+        try {
+            setLoading(true)
+            await NotificationService.deleteNotification(notification!.notificationId)
+            toast.info(t('notification.deleteSuccessToast'))
+            userCtx.notificationDeleted(notification!.notificationId)
+            navigate(-1)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
     const getActions = (): React.ReactNode => {
 
-        const deleteButton = <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={() => {
-            // TODO delete notification from db, update global state, etc
-        }}>{t('common.delete')}</Button>
-
+        const deleteButton = <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={deleteNotification}
+        >{t('notification.deleteNotification')}</Button>
 
         if (NotificationTypes.FRIEND_INVITE === notification?.type) {
             const friendshipId = Number(notification.targetId)

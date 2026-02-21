@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Controller, Delete, Get, Param, Patch, UseGuards, UseInterceptors } from "@nestjs/common";
 import { UserI } from "@shared/interfaces/UserI";
 import { CurrentUser } from "auth/decorators/CurrentUserDecorator";
 import { JwtAuthGuard } from "auth/guards/JwtAuthGuard";
@@ -33,5 +33,13 @@ export class NotificationsController {
         @Param('notificationId') notificationId: string,
     ): Promise<void> {
         return this.notificationService.markAsRead(user, Number(notificationId));
+    }
+
+    @Delete(':notificationId')
+    deleteNotification(
+        @CurrentUser() user: UserI,
+        @Param('notificationId') notificationId: string,
+    ): Promise<void> {
+        return this.notificationService.deleteNotification(user, Number(notificationId));
     }
 }
