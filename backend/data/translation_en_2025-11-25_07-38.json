@@ -23,7 +23,7 @@
       "deleteSuccessToast": "Notification deleted successfully",
       "viewProfile": "See profile {{name}}",
       "readAt": "Read at {{date}}",
-      "sentAt": "Sent at {{date}}",
+      "sentAt": "Received at {{date}}",
       "error": {
         "notFound": "Notification with given ID not found"
       }

@@ -5,6 +5,7 @@ import ListItem from "global/components/ListItem";
 import { useTranslation } from "react-i18next";
 
 import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
+import { FrontDateUtil } from "global/utils/FrontDateUtil";
 
 interface Props {
     notification: NotificationI
@@ -37,13 +38,24 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
         return <div className="small-font">{msg}</div>
     }
 
+    const getDateMsg = () => {
+        const msg = notification.readAt
+            ? t('notification.readAt', { date: FrontDateUtil.displayDateWithTime(t, notification.readAt) })
+            : t('notification.sentAt', { date: FrontDateUtil.displayDateWithTime(t, notification.createdAt) })      
+
+        return <div className="small-font">{msg}</div>
+    }
+
+    const badge = notification.readAt ? null : <div className="notification-badge-red"></div>;
+
     return (
         <div onClick={goToNotification}>
             <ListItem
                 imgUrl={notification.avatarRef?.url}
                 imgComponent={getIcon()}
+                iconOrAvatarBadge={badge}
                 topLeft={t(notification.title)}
-                bottomLeft={getMessage()}
+                bottomLeft={getDateMsg()}
                 first={first}
                 last={last}
             ></ListItem>

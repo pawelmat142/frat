@@ -9,13 +9,25 @@ const NotificationsView: React.FC = () => {
     const userContext = useUserContext();
     const { t } = useTranslation();
 
-    const notifications = userContext.notifications;
+    // Sort notifications: unread first, then by createdAt descending
+    const notifications = (userContext.notifications ?? []).slice().sort((a, b) => {
+        // Unread first
+        const aUnread = a.readAt == null;
+        const bUnread = b.readAt == null;
+        if (aUnread !== bUnread) {
+            return aUnread ? -1 : 1;
+        }
+        // Newest first
+        const aTime = new Date(a.createdAt).getTime();
+        const bTime = new Date(b.createdAt).getTime();
+        return bTime - aTime;
+    });
 
     useEffect(() => { }, [notifications])
 
     return <div className="list-view">
 
-        <div className="px-2 flex flex-col gap-1 mt-2">
+        <div className="px-2 flex flex-col mt-2">
 
             {!notifications.length && (
                 <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">

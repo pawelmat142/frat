@@ -23,7 +23,7 @@
       "deleteSuccessToast": "Powiadomienie zostało pomyślnie usunięte",
       "viewProfile": "Zobacz profil {{name}}",
       "readAt": "Przeczytano: {{date}}",
-      "sentAt": "Wysłano: {{date}}",
+      "sentAt": "Otrzymano: {{date}}",
       "error": {
         "notFound": "Nie można znaleźć powiadomienia o podanym ID"
       }
