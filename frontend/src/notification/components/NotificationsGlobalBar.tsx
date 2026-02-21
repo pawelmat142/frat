@@ -16,9 +16,6 @@ const NotificationsGlobalBar: React.FC = () => {
     const [notifications, setNotifications] = useState<NotificationI[]>([])
     const [hideSection, setHideSection] = useState(false)
 
-    // TODO if 1 notification - show it on global bar, if more
-    // TODO mark as read, delete, etc
-    // TODO notifications counter global state
     // TODO notification appear animation
 
     useEffect(() => {
