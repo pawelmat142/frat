@@ -32,7 +32,9 @@ export class NotificationService {
       message: `notification.newInvitationMessage`,
       messageParams: { name: friendship.requesterName },
       icon: NotificationIcons.FRIEND,
-      avatarRef: requester.avatarRef
+      avatarRef: requester.avatarRef,
+      requesterUid: requester.uid,
+      requesterName: requester.displayName,
     });
 
     const saved = await this.notificationRepository.save(notification);
@@ -54,6 +56,8 @@ export class NotificationService {
       messageParams: { name: friendship.addresseeName },
       icon: NotificationIcons.FRIEND,
       avatarRef: addressee.avatarRef,
+      requesterUid: friendship.addresseeUid,
+      requesterName: friendship.addresseeName,
     });
     const saved = await this.notificationRepository.save(notification);
     this.logger.log(`Created friendship accepted notification ${saved.notificationId} for user ${friendship.requesterUid}`);
@@ -73,6 +77,8 @@ export class NotificationService {
       messageParams: { name: user.displayName },
       icon: NotificationIcons.FRIEND,
       avatarRef: user.avatarRef,
+      requesterUid: user.uid,
+      requesterName: user.displayName,
     });
     const saved = await this.notificationRepository.save(notification);
     this.logger.log(`Created friendship removed notification ${saved.notificationId} for user ${otherUserUid}`);

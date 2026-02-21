@@ -19,6 +19,8 @@ export interface NotificationI {
     messageParams?: Record<string, string>
     icon: NotificationIcon
     avatarRef?: AvatarRef;
+    requesterUid?: string
+    requesterName?: string
 
     // Timestamp
     createdAt: Date;

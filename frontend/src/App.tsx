@@ -16,7 +16,7 @@ import ErrorPage from 'global/views/ErrorPage';
 import SignUpPage from 'auth/views/SignUpPage';
 import AdminUsers from 'admin/views/users/AdminUsers';
 import SignInPage from 'auth/views/SignInPage';
-import ProfilePage from 'user/views/AccountView';
+import ProfileView from 'user/views/ProfileView';
 import ForgotPassword from 'auth/views/ForgotPassword';
 import { ProtectedRoute } from 'auth/ProtectedRoute';
 import { UserRoles } from '@shared/interfaces/UserI';
@@ -72,7 +72,7 @@ const App: React.FC = () => {
 
                 <Route path={Path.HOME} element={<PageWrapper direction={-1}><HomePage /></PageWrapper>} />
 
-                <Route path={Path.ACCOUNT} element={<PageWrapper direction={1}><ProtectedRoute><ProfilePage /></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.PROFILE} element={<PageWrapper direction={1}><ProtectedRoute><ProfileView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.CHATS} element={<PageWrapper direction={1}><ProtectedRoute><ChatsView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.CHAT_CONVERSATION} element={<PageWrapper direction={1}><ProtectedRoute><ChatConversationView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.FRIENDS} element={<PageWrapper direction={1}><ProtectedRoute><FriendsListView /></ProtectedRoute></PageWrapper>} />

@@ -43,6 +43,14 @@ export class NotificationEntity implements NotificationI {
   @Expose()
   avatarRef?: AvatarRef;
 
+  @Column({ name: 'requester_uid', nullable: true })
+  @Expose()
+  requesterUid?: string
+
+  @Column({ name: 'requester_name', nullable: true })
+  @Expose()
+  requesterName?: string
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamp'  })
   @Expose()
   createdAt: Date;

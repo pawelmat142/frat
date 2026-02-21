@@ -21,6 +21,7 @@
       "deleteNotification": "Delete notification",
       "deleteConfirmMessage": "Are you sure you want to delete this notification? This action cannot be undone.",
       "deleteSuccessToast": "Notification deleted successfully",
+      "viewProfile": "See profile {{name}}",
       "error": {
         "notFound": "Notification with given ID not found"
       }

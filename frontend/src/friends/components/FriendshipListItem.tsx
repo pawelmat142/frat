@@ -86,7 +86,7 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
     const isInvitationReceived = friendship?.status === FriendshipStatuses.PENDING && friendship.addresseeUid === me?.uid;
 
     return (
-        <div className="flex justify-between items-center w-full" onClick={() => navigate(Path.getAccountPath(user.uid))}>
+        <div className="flex justify-between items-center w-full" onClick={() => navigate(Path.getProfilePath(user.uid))}>
             <UserItem
                 user={user}
                 allowNavigate={false}

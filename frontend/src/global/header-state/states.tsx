@@ -58,7 +58,7 @@ export const STATES: { [key: string]: ViewState } = {
         leftBtn: <HeaderBackBtn />,
         title: 'offer.offersList',
     },
-    [Path.ACCOUNT]: {
+    [Path.PROFILE]: {
         leftBtn: <HeaderBackBtn />,
         title: 'account.account',
     },

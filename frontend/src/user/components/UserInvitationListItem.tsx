@@ -61,7 +61,7 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
     const canInvite = !isMe && !isFriend && !isInvited && !isInvitationReceived;
 
     return (
-        <div className="flex justify-between items-center w-full" onClick={() => navigate(Path.getAccountPath(user.uid))}>
+        <div className="flex justify-between items-center w-full" onClick={() => navigate(Path.getProfilePath(user.uid))}>
             <UserItem user={user} allowNavigate={false}></UserItem>
 
             {canInvite && <IconButton onClick={(e) => {

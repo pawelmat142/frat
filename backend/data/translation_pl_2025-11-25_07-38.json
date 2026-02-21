@@ -21,6 +21,7 @@
       "deleteNotification": "Usuń powiadomienie",
       "deleteConfirmMessage": "Czy na pewno chcesz usunąć to powiadomienie? Tej akcji nie można cofnąć.",
       "deleteSuccessToast": "Powiadomienie zostało pomyślnie usunięte",
+      "viewProfile": "Zobacz profil {{name}}",
       "error": {
         "notFound": "Nie można znaleźć powiadomienia o podanym ID"
       }
@@ -64,7 +65,7 @@
       "invitationSent": "Zaproszenie wysłane",
       "friend": "Znajomy",
       "invited": "Zaproszony",
-      "accept": "Zaakceptuj",
+      "accept": "Zaakceptuj zaproszenie",
       "acceptedToast": "Zaproszenie zaakceptowane",
       "reject": "Odrzuć zaproszenie",
       "rejectedToast": "Zaproszenie odrzucone",

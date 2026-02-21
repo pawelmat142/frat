@@ -24,7 +24,7 @@ import { OffersService } from "offer/services/OffersService";
 import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
 import { FriendsService } from "friends/services/FriendsService";
 
-const AccountView: React.FC = () => {
+const ProfileView: React.FC = () => {
 
     // TODO optimize endpoints number for init worker profie, offers, friendships, etc
 
@@ -394,4 +394,4 @@ const AccountView: React.FC = () => {
     );
 };
 
-export default AccountView;
+export default ProfileView;

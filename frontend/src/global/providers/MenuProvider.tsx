@@ -67,8 +67,8 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     if (me) {
         items.push({
             label: t('nav.account'),
-            active: !!matchPath({ path: Path.ACCOUNT, end: true }, location.pathname),
-            onClick: () => navigate(Path.getAccountPath(me.uid)),
+            active: !!matchPath({ path: Path.PROFILE, end: true }, location.pathname),
+            onClick: () => navigate(Path.getProfilePath(me.uid)),
             icon: <FaUserCircle size={iconSize} />
         });
     } else {

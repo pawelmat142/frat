@@ -19,7 +19,7 @@ const UserItem: React.FC<Props> = ({ user, size = 3.5, showNumber = false, allow
     return (
         <span className="ripple flex gap-2 items-center w-full" onClick={() => {
             if (!allowNavigate) return;
-            navigate(Path.getAccountPath(user?.uid))
+            navigate(Path.getProfilePath(user?.uid))
         }}>
             <ListItemImg imgUrl={user?.avatarRef?.url || AVATAR_MOCK} size={size} />
             <div>

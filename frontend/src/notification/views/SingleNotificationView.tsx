@@ -115,6 +115,10 @@ const SingleNotificationView: React.FC = () => {
                     }
                 }}>{t('friends.accept')}</Button>
 
+                {notification.requesterUid && <Button fullWidth mode={BtnModes.SECONDARY} onClick={() => {
+                    navigate(Path.getProfilePath(notification.requesterUid!))
+                }}>{t('notification.viewProfile', { name: notification.requesterName })}</Button>}
+
                 <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={async () => {
                     try {
                         setLoading(true)
