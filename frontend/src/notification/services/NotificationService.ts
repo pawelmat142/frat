@@ -11,7 +11,6 @@ export const NotificationService = {
         return httpClient.get(`/notifications/${notificationId}`);
     },
 
-    // TODO
     markAsRead(notification: NotificationI): Promise<void> {
         return httpClient.patch(`/notifications/mark-as-read/${notification.notificationId}`);
     },

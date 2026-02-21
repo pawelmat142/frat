@@ -22,6 +22,8 @@
       "deleteConfirmMessage": "Czy na pewno chcesz usunąć to powiadomienie? Tej akcji nie można cofnąć.",
       "deleteSuccessToast": "Powiadomienie zostało pomyślnie usunięte",
       "viewProfile": "Zobacz profil {{name}}",
+      "readAt": "Przeczytano: {{date}}",
+      "sentAt": "Wysłano: {{date}}",
       "error": {
         "notFound": "Nie można znaleźć powiadomienia o podanym ID"
       }
@@ -298,6 +300,10 @@
       "passwordResetNotAvailable": "Reset hasła nie jest dostępny dla tego konta."
     },
     "callendar": {
+      "today": "Dzisiaj",
+      "yesterday": "Wczoraj",
+      "tomorrow": "Jutro",
+      "at": "o godzinie",
       "month": {
         "0": "Styczeń",
         "1": "Luty",

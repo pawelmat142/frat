@@ -31,6 +31,7 @@ interface UserContextType {
 	setLoading: (loading: boolean) => void;
 	notifications: NotificationI[];
 	notificationDeleted: (notificationId: number) => void;
+	notificationUpdated: (notification: NotificationI) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -249,6 +250,10 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		setNotifications(prev => prev.filter(n => n.notificationId !== notificationId))
 	}
 
+	const notificationUpdated = (notification: NotificationI) => {
+		setNotifications(prev => prev.map(n => n.notificationId === notification.notificationId ? notification : n))
+	}
+
 	const registerFriendshipListeners = () => {
 		friendsSocket.registerInviteListener(onInviteFriend);
 		friendsSocket.registerRejectListener(onRejectInvite);
@@ -330,7 +335,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			setLoading: setLoading,
 			position,
 			notifications,
-			notificationDeleted
+			notificationDeleted,
+			notificationUpdated
 		}}>
 			{children}
 		</UserContext.Provider>

@@ -8,13 +8,35 @@ export abstract class DateUtil {
 
     public static displayDateWithTime(date: Date | string): string {
         const d = date instanceof Date ? date : new Date(date);
-        return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+        return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
     public static displayTime = (date: Date) => {
         return new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     };
 
+    public static isToday(date: Date): boolean {
+        const today = new Date();
+        return date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear();
+    }
+
+    public static isTomorrow(date: Date): boolean {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return date.getDate() === tomorrow.getDate() &&
+            date.getMonth() === tomorrow.getMonth() &&
+            date.getFullYear() === tomorrow.getFullYear();
+    }
+    
+    public static isYesterday(date: Date): boolean {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        return date.getDate() === yesterday.getDate() &&
+            date.getMonth() === yesterday.getMonth() &&
+            date.getFullYear() === yesterday.getFullYear();
+    }
 
     public static isBefore(date1: Date, date2: Date): boolean {
         // check if day 1 is before day 2

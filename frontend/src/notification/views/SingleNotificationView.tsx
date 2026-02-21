@@ -16,6 +16,7 @@ import AvatarTile from "user/components/AvatarTile";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
 import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
+import { FrontDateUtil } from "global/utils/FrontDateUtil";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -39,6 +40,7 @@ const SingleNotificationView: React.FC = () => {
             return
         }
         setViewState()
+        markNotificationAsRead()
     }, [notification])
 
     const initNotification = () => {
@@ -73,6 +75,19 @@ const SingleNotificationView: React.FC = () => {
                 <div>{t(notification?.title)}</div>
             </div>
         })
+    }
+
+    const markNotificationAsRead = async () => {
+        if (!notification || notification.readAt) {
+            return
+        }
+        try {
+            await NotificationService.markAsRead(notification)
+            notification.readAt = new Date()
+            userCtx.notificationUpdated(notification)
+        } catch (error) {
+        }
+
     }
 
     const deleteNotification = async () => {
@@ -142,7 +157,7 @@ const SingleNotificationView: React.FC = () => {
 
     return (<div className="view-container">
 
-        <div className="flex flex-col justify-center  gap-4 mb-6">
+        <div className="flex flex-col justify-center gap-4 mb-6">
 
             {notification.avatarRef ? (<div className="notification-avatar-wrapper mt-5">
                 <AvatarTile
@@ -151,12 +166,19 @@ const SingleNotificationView: React.FC = () => {
                     uid={""}
                 />
             </div>) : (
-                <div className="notification-view-icon mt-5">{ NotificationFrontUtil.getIcon(notification) }</div>
+                <div className="notification-view-icon mt-5">{NotificationFrontUtil.getIcon(notification)}</div>
             )}
 
-            <div className="text-center">
+            <div className="text-center mx-10">
                 <h2 className="text-xl font-bold mt-5">{t(notification.title)}</h2>
-                <p className="secondary-text mt-5 mb-5 mx-10">{t(notification.message, notification.messageParams)}</p>
+                <p className="secondary-text mt-5 mb-5 ">{t(notification.message, notification.messageParams)}</p>
+            </div>
+
+            <div>
+                <p className="small-font secondary-text mt-5 mb-1">
+                    {t('notification.sentAt', { date: FrontDateUtil.displayDateWithTime(t, notification.createdAt) })}</p>
+                {!!notification.readAt && (<p className="small-font secondary-text mb-5">
+                    {t('notification.readAt', { date: FrontDateUtil.displayDateWithTime(t, notification.readAt) })}</p>)}
             </div>
 
             <div className="flex flex-col gap-3 mt-6">
