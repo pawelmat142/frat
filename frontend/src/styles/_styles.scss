@@ -112,8 +112,8 @@ $headerHeightDesktop: 60px;
 
 .list-view-item-icon {
     svg {
-        height: 100%;
-        width: 2.5rem;
+        height: 3.5rem;
+        width: 3.5rem;
     }
 }
 
@@ -836,4 +836,13 @@ $cellRadiusBig: 1rem;
     max-width: 380px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.notification-view-icon {
+    display: flex;
+    justify-content: center;
+    svg {
+        height: 5rem;
+        width: 5rem;
+    }
 }

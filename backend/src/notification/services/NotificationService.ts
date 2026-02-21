@@ -63,18 +63,16 @@ export class NotificationService {
   /**
    * Creates a notification for a removed friend
    */
-  async createFriendshipRemovedNotification(otherUserUid: string, friendship: FriendshipI, removedFriendshipId: number): Promise<NotificationI> {
-    const userDisplayName = friendship.requesterUid === otherUserUid ? friendship.requesterName : friendship.addresseeName;
-    const otherUser = await this.userService.getUserByUid(otherUserUid);
+  async createFriendshipRemovedNotification(user: UserI, otherUserUid: string, removedFriendshipId: number): Promise<NotificationI> {
     const notification = this.notificationRepository.create({
       recipientUid: otherUserUid,
       type: NotificationTypes.FRIEND_REMOVED,
       targetId: removedFriendshipId.toString(),
       title: 'notification.friendRemovedTitle',
       message: 'notification.friendRemovedMessage',
-      messageParams: { name: userDisplayName },
+      messageParams: { name: user.displayName },
       icon: NotificationIcons.FRIEND,
-      avatarRef: otherUser.avatarRef,
+      avatarRef: user.avatarRef,
     });
     const saved = await this.notificationRepository.save(notification);
     this.logger.log(`Created friendship removed notification ${saved.notificationId} for user ${otherUserUid}`);

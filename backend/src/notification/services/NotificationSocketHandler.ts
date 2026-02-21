@@ -58,7 +58,7 @@ export class NotificationSocketHandler implements SocketHandler, OnModuleInit {
    */
   async notifyFriendshipRemoved(user: UserI, friendship: FriendshipI, removedFriendshipId: number): Promise<void> {
     const otherUserUid = friendship.requesterUid === user.uid ? friendship.addresseeUid : friendship.requesterUid;
-    const notification = await this.notificationService.createFriendshipRemovedNotification(otherUserUid, friendship, removedFriendshipId);
+    const notification = await this.notificationService.createFriendshipRemovedNotification(user, otherUserUid, removedFriendshipId);
     this.socketGateway.emitToUser(otherUserUid, NotificationEvents.NOTIFICATION_RECEIVED, notification);
   }
 

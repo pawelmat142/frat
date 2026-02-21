@@ -15,6 +15,7 @@ import { useAuthContext } from "auth/AuthProvider";
 import AvatarTile from "user/components/AvatarTile";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
+import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -139,16 +140,18 @@ const SingleNotificationView: React.FC = () => {
 
         <div className="flex flex-col justify-center  gap-4 mb-6">
 
-                <div className="notification-avatar-wrapper mt-5">
-                    <AvatarTile
-                        src={notification.avatarRef?.url}
-                        editable={false}
-                        uid={""}
-                    />
-                </div>
+            {notification.avatarRef ? (<div className="notification-avatar-wrapper mt-5">
+                <AvatarTile
+                    src={notification.avatarRef?.url}
+                    editable={false}
+                    uid={""}
+                />
+            </div>) : (
+                <div className="notification-view-icon mt-5">{ NotificationFrontUtil.getIcon(notification) }</div>
+            )}
 
             <div className="text-center">
-                <h2 className="text-xl font-bold mt-10">{t(notification.title)}</h2>
+                <h2 className="text-xl font-bold mt-5">{t(notification.title)}</h2>
                 <p className="secondary-text mt-5 mb-5 mx-10">{t(notification.message, notification.messageParams)}</p>
             </div>
 

@@ -1,12 +1,10 @@
-import { NotificationI, NotificationIcons, NotificationTypes } from "@shared/interfaces/NotificationI";
+import { NotificationI } from "@shared/interfaces/NotificationI";
 import { Path } from "../../path";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ListItem from "global/components/ListItem";
 import { useTranslation } from "react-i18next";
-import { FaBell, FaUserFriends } from "react-icons/fa";
 
-import { FaComments } from "react-icons/fa";
+import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
 
 interface Props {
     notification: NotificationI
@@ -19,28 +17,33 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
     const navigate = useNavigate()
     const { t } = useTranslation();
 
-    const [loading, setLoading] = useState(false)
-
     const goToNotification = () => {
         navigate(Path.getNotificationPath(notification.notificationId))
     }
 
     const getIcon = (): React.ReactNode => {
-        if (NotificationIcons.FRIEND === notification.icon) {
-            return <FaUserFriends />
+        if (notification.avatarRef) {
+            return null
         }
-        if (NotificationIcons.CHAT === notification.icon) {
-            return <FaComments />
+        return NotificationFrontUtil.getIcon(notification)
+    }
+
+    const getMessage = () => {
+        const lettersLimit = 35
+        let msg = t(notification.message, notification.messageParams)
+        if (msg.length > lettersLimit) {
+            msg = msg.slice(0, lettersLimit) + '...'
         }
-        return <FaBell />;
+        return <div className="small-font">{msg}</div>
     }
 
     return (
         <div onClick={goToNotification}>
             <ListItem
                 imgUrl={notification.avatarRef?.url}
+                imgComponent={getIcon()}
                 topLeft={t(notification.title)}
-                bottomLeft={t(notification.message, notification.messageParams)}
+                bottomLeft={getMessage()}
                 first={first}
                 last={last}
             ></ListItem>
