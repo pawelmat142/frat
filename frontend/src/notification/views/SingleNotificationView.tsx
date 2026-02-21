@@ -17,6 +17,7 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
 import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
 import { FrontDateUtil } from "global/utils/FrontDateUtil";
+import { FaTimes, FaTrash } from "react-icons/fa";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -110,10 +111,20 @@ const SingleNotificationView: React.FC = () => {
         }
     }
 
+    const goToRequesterProfile = () => {
+        if (!notification?.requesterUid) {
+            return
+        }
+        navigate(Path.getProfilePath(notification.requesterUid))
+    }
+
     const getActions = (): React.ReactNode => {
 
         const deleteButton = <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={deleteNotification}
-        >{t('notification.deleteNotification')}</Button>
+        ><FaTrash className="mr-2" />{t('notification.deleteNotification')}</Button>
+
+        const requesterProfileButton = !!notification?.requesterUid && <Button fullWidth mode={BtnModes.SECONDARY}
+         onClick={goToRequesterProfile}>{t('notification.viewProfile', { name: notification.requesterName })}</Button>
 
         if (NotificationTypes.FRIEND_INVITE === notification?.type) {
             const friendshipId = Number(notification.targetId)
@@ -130,9 +141,7 @@ const SingleNotificationView: React.FC = () => {
                     }
                 }}>{t('friends.accept')}</Button>
 
-                {notification.requesterUid && <Button fullWidth mode={BtnModes.SECONDARY} onClick={() => {
-                    navigate(Path.getProfilePath(notification.requesterUid!))
-                }}>{t('notification.viewProfile', { name: notification.requesterName })}</Button>}
+                {requesterProfileButton}
 
                 <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={async () => {
                     try {
@@ -142,13 +151,16 @@ const SingleNotificationView: React.FC = () => {
                     } finally {
                         setLoading(false)
                     }
-                }}>{t('friends.reject')}</Button>
+                }}><FaTimes className="mr-2" />{t('friends.reject')}</Button>
 
                 {deleteButton}
 
             </div>
         }
-        return <>{deleteButton}</>
+        return <>
+            {requesterProfileButton}
+            {deleteButton}
+            </>
     }
 
     if (loading || !notification) {
@@ -159,7 +171,7 @@ const SingleNotificationView: React.FC = () => {
 
         <div className="flex flex-col justify-center gap-4 mb-6">
 
-            {notification.avatarRef ? (<div className="notification-avatar-wrapper mt-5">
+            {notification.avatarRef ? (<div className="notification-avatar-wrapper" onClick={goToRequesterProfile}>
                 <AvatarTile
                     src={notification.avatarRef?.url}
                     editable={false}

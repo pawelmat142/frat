@@ -24,6 +24,9 @@
       "viewProfile": "See profile {{name}}",
       "readAt": "Read at {{date}}",
       "sentAt": "Received at {{date}}",
+      "unreadNotificationsOne": "You have {{count}} unread notification",
+      "unreadNotificationsFew": "You have {{count}} unread notifications",
+      "unreadNotificationsMany": "You have {{count}} unread notifications",
       "error": {
         "notFound": "Notification with given ID not found"
       }

@@ -3,12 +3,15 @@ import { NotificationI } from "@shared/interfaces/NotificationI";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Path } from "../../path";
 import { useUserContext } from "user/UserProvider";
+import { FaBell } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const NotificationsGlobalBar: React.FC = () => {
 
     const userCtx = useUserContext();
     const navigate = useNavigate()
     const location = useLocation();
+    const { t } = useTranslation();
 
     const [notifications, setNotifications] = useState<NotificationI[]>([])
     const [hideSection, setHideSection] = useState(false)
@@ -34,12 +37,26 @@ const NotificationsGlobalBar: React.FC = () => {
         }
     }, [location.pathname])
 
-    if (!notifications.length || hideSection) {
+    const unreadCount = notifications?.filter(n => n.readAt == null).length
+
+    if (!unreadCount || hideSection) {
         return null;
     }
 
-    return <div className="my-1 mx-2 px-2 py-1 secondary-bg rippple" onClick={() => navigate(Path.NOTIFICATIONS)}>
-        <h2 className="text-xl font-bold">{notifications.length} notifications</h2>
+    const getMessage = () => {
+        let key = unreadCount === 1
+            ? 'notification.unreadNotificationsOne'
+            : unreadCount > 1 && unreadCount < 5
+                ? 'notification.unreadNotificationsFew'
+                : 'notification.unreadNotificationsMany'
+        return t(key, { count: unreadCount })   
+    }
+
+    return <div className="my-1 mx-2 px-3 py-2 rounded-md secondary-bg rippple notification-bar" onClick={() => navigate(Path.NOTIFICATIONS)}>
+        <div className="flex items-center gap-3 primary-color">
+            <FaBell size={32}></FaBell>
+            <h2 className="font-bold">{getMessage()}</h2>
+        </div>
     </div>
 }
 

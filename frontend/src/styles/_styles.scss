@@ -861,3 +861,7 @@ $cellRadiusBig: 1rem;
     right:-.3rem;
     box-shadow: 0 0 6px 2px rgba(0,0,0,0.12);
 }
+
+.notification-bar {
+    border: 1px solid $primary-color;
+}

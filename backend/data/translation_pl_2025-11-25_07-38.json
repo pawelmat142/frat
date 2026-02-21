@@ -24,6 +24,9 @@
       "viewProfile": "Zobacz profil {{name}}",
       "readAt": "Przeczytano: {{date}}",
       "sentAt": "Otrzymano: {{date}}",
+      "unreadNotificationsOne": "Masz {{count}} nieprzeczytane powiadomienie",
+      "unreadNotificationsFew": "Masz {{count}} nieprzeczytane powiadomienia",
+      "unreadNotificationsMany": "Masz {{count}} nieprzeczytanych powiadomień",
       "error": {
         "notFound": "Nie można znaleźć powiadomienia o podanym ID"
       }
