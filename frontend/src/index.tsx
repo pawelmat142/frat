@@ -44,10 +44,10 @@ root.render(
                             <OfferSearchProvider>
                               <WorkersSearchProvider>
                                 <MenuProvider>
-                                  <div className="min-h-screen flex flex-col overflow-clip">
+                                  <div className="app-shell">
                                     <GlobalHeader />
                                     <NotificationsGlobalBar />
-                                    <main className="flex-1 flex flex-col items-center w-full">
+                                    <main className="app-main">
                                       <App />
                                     </main>
                                     <LayoutFooterSwitch />

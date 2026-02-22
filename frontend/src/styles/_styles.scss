@@ -43,7 +43,7 @@ $headerHeightDesktop: 60px;
 }
 
 .sticky-header {
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     z-index: 10;
@@ -134,7 +134,6 @@ $chatPadding: .5rem;
 $inputGap: .75rem;
 
 .chat-view {
-    margin-top: $headerHeight;
     padding-top: .5rem;
     padding-left: $chatPadding;
     padding-right: $chatPadding;
