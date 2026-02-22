@@ -1,9 +1,10 @@
 import { NotificationI } from "@shared/interfaces/NotificationI";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { notificationSocket } from "./services/NotificationSocketService";
 import { useAuthContext } from "auth/AuthProvider";
 import { NotificationService } from "./services/NotificationService";
 import { useChatsContext } from "chat/ChatsProvider";
+import { NativeNotificationService } from "./services/NativeNotificationService";
 
 interface NotificationsContextType {
     loading: boolean;
@@ -40,7 +41,18 @@ export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({
         setNotifications([...nativeNotifications, ...chatsCtx.unreadMsgNotifications])
     }, [chatsCtx.unreadMsgNotifications, nativeNotifications])
 
+    // Native browser notification - update on unread count change
+    const prevUnreadCount = useRef<number>(0)
+    useEffect(() => {
+        const unreadCount = notifications.filter(n => !n.readAt).length
+        if (unreadCount !== prevUnreadCount.current) {
+            prevUnreadCount.current = unreadCount
+            NativeNotificationService.updateUnreadNotification(unreadCount)
+        }
+    }, [notifications])
+
     const onInit = async () => {
+        NativeNotificationService.requestPermission()
         initNativeNotifications()
         registerNativeNotificationListeners()
     }
