@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useRef } from 'react';
 import { WorkerI } from '@shared/interfaces/WorkerProfileI';
 import { WorkerService } from 'employee/services/WorkerService';
 import { useAuthContext } from 'auth/AuthProvider';
@@ -9,7 +9,6 @@ import { Position } from '@shared/interfaces/MapsInterfaces';
 import { FriendshipI } from '@shared/interfaces/FriendshipI';
 import { FriendsService } from 'friends/services/FriendsService';
 import { friendsSocket } from 'friends/services/FriendsSocketService';
-import { useTranslation } from 'react-i18next';
 import WebSocketService from 'global/web-socket/WebSocketService';
 import { NotificationI } from '@shared/interfaces/NotificationI';
 import { NotificationService } from 'notification/services/NotificationService';
@@ -31,7 +30,7 @@ interface UserContextType {
 	setLoading: (loading: boolean) => void;
 	notifications: NotificationI[];
 	notificationDeleted: (notificationId: number) => void;
-	notificationUpdated: (notification: NotificationI) => void;
+	notificationReceived: (notification: NotificationI) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -45,6 +44,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const [friendships, setFriendships] = React.useState<FriendshipI[]>([])
 	const [notifications, setNotifications] = React.useState<NotificationI[]>([])
 
+	const notificationsRef = useRef<NotificationI[]>(notifications)
+	notificationsRef.current = notifications
+		
 	const [loading, setLoading] = React.useState(false)
 
 	const [position, setPosition] = React.useState<Position | null>(null)
@@ -237,7 +239,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}
 
 	const notificationReceived = (notification: NotificationI) => {
-		const exists = notifications.find(n => n.notificationId === notification.notificationId)
+		const exists = notificationsRef.current.find(n => n.notificationId === notification.notificationId)
 		if (exists) {
 			setNotifications(prev => prev.map(n => n.notificationId === notification.notificationId ? notification : n))
 			return;
@@ -247,10 +249,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	const notificationDeleted = (notificationId: number) => {
 		setNotifications(prev => prev.filter(n => n.notificationId !== notificationId))
-	}
-
-	const notificationUpdated = (notification: NotificationI) => {
-		setNotifications(prev => prev.map(n => n.notificationId === notification.notificationId ? notification : n))
 	}
 
 	const registerFriendshipListeners = () => {
@@ -335,7 +333,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			position,
 			notifications,
 			notificationDeleted,
-			notificationUpdated
+			notificationReceived,
 		}}>
 			{children}
 		</UserContext.Provider>

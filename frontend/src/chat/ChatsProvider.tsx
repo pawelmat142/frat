@@ -1,10 +1,11 @@
-import { ChatI, ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
+import { ChatI, ChatMemberI, ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
 import { useAuthContext } from "auth/AuthProvider";
-import React from "react";
-import { createContext, useState } from "react";
+import React, { useEffect } from "react";
+import { createContext, useRef, useState } from "react";
 import { ChatService } from "./services/ChatService";
 import { chatSocket } from "./services/ChatSocketService";
-import { set } from "react-hook-form";
+import { useUserContext } from "user/UserProvider";
+import { NotificationI, NotificationIcons, NotificationTypes } from "@shared/interfaces/NotificationI";
 
 interface ChatsContextType {
     chats: ChatWithMembers[],
@@ -15,13 +16,21 @@ const ChatsContext = createContext<ChatsContextType | undefined>(undefined);
 
 export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
+    // TODO nav from notification to chat
+
     const authCtx = useAuthContext();
-    const [chats, setChats] = useState<ChatWithMembers[]>([])
+    const userCtx = useUserContext();
+
     const [loading, setLoading] = useState(true)
+    const [chats, setChats] = useState<ChatWithMembers[]>([])
+    const chatsRef = useRef<ChatWithMembers[]>(chats)
+    chatsRef.current = chats
 
-    React.useEffect(() => {
+    const notificationsRef = useRef<NotificationI[]>(userCtx.notifications)
+    notificationsRef.current = userCtx.notifications
+
+    useEffect(() => {
         onInit()
-
         return () => onDestroy()
     }, [authCtx.me])
 
@@ -83,9 +92,57 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     const notificationMessageListener = (message: ChatMessageI) => {
-        // TODO regenerate notifications
-        console.log('Notification about new message in chatId', message.chatId)
+        const unreadMSgNotifications = prepareUnreadMsgNotificationsFromChats(chatsRef.current, message);
+        const otherNotifications = notificationsRef.current.filter(n => n.type !== NotificationTypes.NEW_MESSAGE)
+        // userCtx.setNotifications([...unreadMSgNotifications, ...otherNotifications])
     }
+
+    const prepareUnreadMsgNotificationsFromChats = (chats: ChatWithMembers[], message: ChatMessageI): NotificationI[] => {
+        const timestamp = Date.now();
+        return chats.filter(c => c.members?.some(m => m.user?.uid === authCtx.me?.uid && m.unreadCount && m.unreadCount > 0))
+            .map(chat => {
+
+                const otherMember = chat.members!.find(m => m.user?.uid !== authCtx.me?.uid);
+                if (!otherMember) {
+                    throw new Error(`Chat ${chat.chatId} - other memebr not found`);
+                }
+
+                const meChatMember = getMeChatMember(chat);
+
+                const isCurrentMsg = message.chatId === chat.chatId;
+
+                let unreadCount = meChatMember.unreadCount
+                if (isCurrentMsg) {
+                    unreadCount++
+                }
+
+        // TODO translations
+                const notification: NotificationI = {
+                    notificationId: timestamp + chat.chatId,
+                    recipientUid: meChatMember.uid,
+                    type: NotificationTypes.NEW_MESSAGE,
+                    targetId: chat.chatId.toString(),
+                    title: `New message`,
+                    message: isCurrentMsg ? message.content : (chat.latestMessageContent || ''),
+                    icon: NotificationIcons.CHAT,
+                    avatarRef: otherMember.user?.avatarRef,
+                    requesterUid: otherMember.user?.uid,
+                    requesterName: otherMember.user?.displayName,
+                    createdAt: new Date(),
+                    readAt: null,
+                }
+                return notification
+            })
+    }
+
+    const getMeChatMember = (chat: ChatWithMembers): ChatMemberI => {
+        const meChatMembet: ChatMemberI | null = chat.members!.find(m => m.user?.uid === authCtx.me?.uid) || null;
+        if (!meChatMembet) {
+            throw new Error(`Current user is not a member of chatId ${chat.chatId}`);
+        }
+        return meChatMembet;
+    }
+
 
     return <ChatsContext.Provider value={{ chats, loading }}>
         {children}

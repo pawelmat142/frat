@@ -85,7 +85,7 @@ const SingleNotificationView: React.FC = () => {
         try {
             await NotificationService.markAsRead(notification)
             notification.readAt = new Date()
-            userCtx.notificationUpdated(notification)
+            userCtx.notificationReceived(notification)
         } catch (error) {
         }
 
