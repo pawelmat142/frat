@@ -21,6 +21,7 @@ import { GlobalProvider } from 'global/providers/GlobalProvider';
 import GlobalHeader from 'global/components/GlobalHeader';
 import OfferSearchProvider from 'offer/views/search/OfferSearchProvider';
 import NotificationsGlobalBar from 'notification/components/NotificationsGlobalBar';
+import { ChatsProvider } from 'chat/ChatsProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -37,33 +38,35 @@ root.render(
                   <CookieProvider>
                     <AuthProvider>
                       <UserProvider>
-                        <OfferSearchProvider>
-                          <WorkersSearchProvider>
-                            <MenuProvider>
-                              <div className="min-h-screen flex flex-col overflow-clip">
-                                <GlobalHeader />
-                                <NotificationsGlobalBar />
-                                <main className="flex-1 flex flex-col items-center w-full">
-                                  <App />
-                                </main>
-                                <LayoutFooterSwitch />
-                              </div>
-                              <CookieBanner />
-                              <ToastContainer
-                                position="top-right"
-                                autoClose={3000}
-                                hideProgressBar={false}
-                                newestOnTop={false}
-                                closeOnClick
-                                rtl={false}
-                                pauseOnFocusLoss
-                                draggable
-                                pauseOnHover
-                                theme="light"
-                              />
-                            </MenuProvider>
-                          </WorkersSearchProvider>
-                        </OfferSearchProvider>
+                        <ChatsProvider>
+                          <OfferSearchProvider>
+                            <WorkersSearchProvider>
+                              <MenuProvider>
+                                <div className="min-h-screen flex flex-col overflow-clip">
+                                  <GlobalHeader />
+                                  <NotificationsGlobalBar />
+                                  <main className="flex-1 flex flex-col items-center w-full">
+                                    <App />
+                                  </main>
+                                  <LayoutFooterSwitch />
+                                </div>
+                                <CookieBanner />
+                                <ToastContainer
+                                  position="top-right"
+                                  autoClose={3000}
+                                  hideProgressBar={false}
+                                  newestOnTop={false}
+                                  closeOnClick
+                                  rtl={false}
+                                  pauseOnFocusLoss
+                                  draggable
+                                  pauseOnHover
+                                  theme="light"
+                                />
+                              </MenuProvider>
+                            </WorkersSearchProvider>
+                          </OfferSearchProvider>
+                        </ChatsProvider>
                       </UserProvider>
                     </AuthProvider>
                   </CookieProvider>

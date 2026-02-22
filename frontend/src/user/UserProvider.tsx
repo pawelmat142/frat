@@ -51,7 +51,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const [positionWatchId, setPositionWatchId] = React.useState<number | null>(null)
 
 	const authCtx = useAuthContext();
-	const { t } = useTranslation()
 
 	React.useEffect(() => {
 		if (authCtx.me) {

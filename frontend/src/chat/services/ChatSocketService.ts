@@ -5,6 +5,7 @@ class ChatSocketService {
     private webSocket: WebSocketService;
     private messageListeners: Map<number, (message: ChatMessageI) => void> = new Map();
     private loadChatListeners: Set<(chat: ChatI) => void> = new Set();
+    private notificationMessageListener: ((message: ChatMessageI) => void) | null = null;
 
     constructor() {
         this.webSocket = WebSocketService.getInstance();
@@ -17,7 +18,11 @@ class ChatSocketService {
             if (messageListener) {
                 messageListener(message);
             } else {
-                console.warn(`No message listener registered for chatId ${message.chatId}`);
+                if (this.notificationMessageListener) {
+                    this.notificationMessageListener(message);
+                } else {
+                    console.warn(`No message listener registered for chatId ${message.chatId}`);
+                }
             }
         });
 
@@ -67,6 +72,14 @@ class ChatSocketService {
 
     unregisterChatListener(loadChatListener: (chat: ChatI) => void): void {
         this.loadChatListeners.delete(loadChatListener);
+    }
+
+    registerNotificationMessageListener(listener: (message: ChatMessageI) => void): void {
+        this.notificationMessageListener = listener;
+    }
+
+    unregisterNotificationMessageListener(): void {
+        this.notificationMessageListener = null;
     }
 
     isConnected(): boolean {

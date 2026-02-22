@@ -52,7 +52,6 @@ class WebSocketService {
 
         const token = await FirebaseAuth.getCurrentIdToken();
         if (!token) {
-            console.error('WebSocket: No auth token available');
             this.isConnecting = false;
             return;
         }

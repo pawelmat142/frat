@@ -51,8 +51,8 @@ const NotificationsGlobalBar: React.FC = () => {
 
     return <div className="my-1 mx-2 px-3 py-2 rounded-md secondary-bg rippple notification-bar" onClick={() => navigate(Path.NOTIFICATIONS)}>
         <div className="flex items-center gap-3 primary-color">
-            <FaBell size={32}></FaBell>
-            <h2 className="font-bold">{getMessage()}</h2>
+            <FaBell size={24}></FaBell>
+            <h2 className="">{getMessage()}</h2>
         </div>
     </div>
 }
