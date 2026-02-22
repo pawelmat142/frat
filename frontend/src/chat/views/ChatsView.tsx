@@ -18,7 +18,7 @@ const ChatsView: React.FC = () => {
     useEffect(() => {}, [chatCtx.chats]) 
 
     const openChat = (chatId: number) => {
-        navigate(Path.getChatPath(chatId));
+        navigate(Path.getConversationPath(chatId));
     };
 
     const getOtherMember = (chat: ChatWithMembers): ChatMemberWithUserI | null | undefined => {

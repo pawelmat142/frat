@@ -26,6 +26,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const chatsRef = useRef<ChatWithMembers[]>(chats)
     chatsRef.current = chats
 
+    console.log('CHATS: ', chats)
     useEffect(() => {
         if (me) {
             onInit()
@@ -35,16 +36,19 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         return () => onDestroy()
     }, [me])
 
+    useEffect(() => {
+        const unreadMSgNotifications = prepareUnreadMsgNotificationsFromChats(chats);
+        setUnreadMsgNotifications(unreadMSgNotifications)
+    }, [chats])
+
     const onInit = async () => {
         loadChats()
         chatSocket.connect();
         chatSocket.registerChatListener(loadChatListener);
-        chatSocket.registerNotificationMessageListener(notificationMessageListener)
     }
 
     const onDestroy = () => {
         chatSocket.unregisterChatListener(loadChatListener);
-        chatSocket.unregisterNotificationMessageListener();
         chatSocket.disconnect();
         setChats([])
         setUnreadMsgNotifications([])
@@ -55,8 +59,6 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             setLoading(true)
             const data = await ChatService.getMyChats()
             setChats(data)
-            const unreadMSgNotifications = prepareUnreadMsgNotificationsFromChats(data);
-            setUnreadMsgNotifications(unreadMSgNotifications)
         } catch (error) {
             console.error('Failed to load chats:', error)
         } finally {
@@ -66,7 +68,13 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const loadChatListener = async (chat: ChatI) => {
         setChats(prev => {
-            return prev.map(c => {
+            const chatExists = prev.some(c => c.chatId === chat.chatId);
+            if (!chatExists) {
+                loadChats();
+                return prev;
+            }
+                // Jeśli chat nie istnieje, dodaj go na początek listy
+            const newChats = prev.map(c => {
                 if (c.chatId === chat.chatId) {
                     // Przepisz members z chat, ale zachowaj user z poprzedniego stanu jeśli istnieje
                     const newMembers = chat.members?.map(newMember => {
@@ -88,17 +96,14 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 const dateB = new Date(b.updatedAt || b.createdAt).getTime();
                 return dateB - dateA;
             });
+
+            return newChats;
         });
     };
 
 
 
     // CHAT NOTIFICATIONS
-    const notificationMessageListener = (message: ChatMessageI) => {
-        const unreadMSgNotifications = prepareUnreadMsgNotificationsFromChats(chatsRef.current, message);
-        setUnreadMsgNotifications(unreadMSgNotifications)
-    }
-
     const prepareUnreadMsgNotificationsFromChats = (chats: ChatWithMembers[], message?: ChatMessageI): NotificationI[] => {
         const timestamp = Date.now();
         return chats.filter(c => c.members?.some(m => m.user?.uid === me?.uid && m.unreadCount && m.unreadCount > 0))

@@ -70,7 +70,7 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
     const openChat = async () => {
         try {
             const chat = await ChatService.getOrCreateDirectChat(user.uid)
-            navigate(Path.getChatPath(chat.chatId))
+            navigate(Path.getConversationPath(chat.chatId))
         } catch (error) {
             console.error('Failed to open chat:', error)
             toast.error(t('chat.error.cannotOpen'))

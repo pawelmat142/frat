@@ -14,19 +14,19 @@ class ChatSocketService {
 
     private setupEventListeners(): void {
         this.webSocket.on(ChatEvents.RECEIVE_MESSAGE, (message: ChatMessageI) => {
+            console.log('on(ChatEvents.RECEIVE_MESSAGE', message);
             const messageListener = this.messageListeners.get(message.chatId);
             if (messageListener) {
                 messageListener(message);
+            } else if (this.notificationMessageListener) {
+                this.notificationMessageListener(message);
             } else {
-                if (this.notificationMessageListener) {
-                    this.notificationMessageListener(message);
-                } else {
-                    console.warn(`No message listener registered for chatId ${message.chatId}`);
-                }
+                console.warn(`No message listener registered for chatId ${message.chatId}`);
             }
         });
 
         this.webSocket.on(ChatEvents.LOAD_CHAT, (chat: ChatI) => {
+            console.log('on(ChatEvents.LOAD_CHAT', chat);
             this.loadChatListeners.forEach(listener => listener(chat));
         });
     }

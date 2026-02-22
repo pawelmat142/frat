@@ -37,7 +37,7 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
         if (!profile) return;
         try {
             const chat = await ChatService.getOrCreateDirectChat(profile.uid)
-            navigate(Path.getChatPath(chat.chatId))
+            navigate(Path.getConversationPath(chat.chatId))
         } catch (error) {
             console.error('Failed to open chat:', error)
             toast.error(t('chat.error.cannotOpen'))

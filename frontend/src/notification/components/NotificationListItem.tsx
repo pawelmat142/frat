@@ -1,4 +1,4 @@
-import { NotificationI } from "@shared/interfaces/NotificationI";
+import { NotificationI, NotificationTypes } from "@shared/interfaces/NotificationI";
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import ListItem from "global/components/ListItem";
@@ -19,6 +19,11 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
     const { t } = useTranslation();
 
     const goToNotification = () => {
+        if (NotificationTypes.NEW_MESSAGE === notification.type) {
+            const chatId = Number(notification.targetId)
+            navigate(Path.getConversationPath(chatId))
+            return
+        }
         navigate(Path.getNotificationPath(notification.notificationId))
     }
 

@@ -119,6 +119,16 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.to(room).emit(event, data);
   }
 
+  /** Join all active sockets of a user to a room (e.g. after a new chat is created) */
+  joinUserToRoom(uid: string, room: string): void {
+    const socketIds = this.userSockets.get(uid);
+    if (!socketIds) return;
+    for (const socketId of socketIds) {
+      const socket = this.server.sockets.sockets.get(socketId);
+      socket?.join(room);
+    }
+  }
+
   private extractToken(socket: Socket): string | null {
     const authHeader = socket.handshake.headers.authorization;
     if (authHeader?.startsWith('Bearer ')) {

@@ -104,8 +104,12 @@ export class ChatSocketHandler implements SocketHandler, OnModuleInit {
     return { success: true };
   }
 
-  /** Notify a specific user about a new chat (e.g. when someone initiates a direct chat) */
+  /**
+   * Notify a specific user about a new chat and join their socket(s) to the chat room.
+   * Must be called for every participant when a chat is created after they connected.
+   */
   notifyUserAboutNewChat(uid: string, chat: ChatI): void {
+    this.socketGateway.joinUserToRoom(uid, ChatUtil.chatRoom(chat.chatId));
     this.socketGateway.emitToUser(uid, ChatEvents.LOAD_CHAT, chat);
   }
 

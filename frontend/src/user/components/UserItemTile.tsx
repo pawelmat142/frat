@@ -34,7 +34,7 @@ const UserItemTile: React.FC<Props> = ({ uid, user, size = 3.5, showNumber = fal
                 <Button
                     onClick={async () => {
                         const chat = await ChatService.getOrCreateDirectChat(uid || user!.uid)
-                        navigate(Path.getChatPath(chat.chatId))
+                        navigate(Path.getConversationPath(chat.chatId))
                     }}
                     mode={BtnModes.PRIMARY_TXT}
                     type="submit"

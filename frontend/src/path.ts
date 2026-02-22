@@ -53,7 +53,7 @@ export abstract class Path {
     public static getOfferPath = (offerId: number) => `${Path.OFFER.replace(':offerId', `${offerId}`)}`;
     public static getOffersPath = (uid: string) => `${Path.USER_OFFERS.replace(':uid', uid)}`;
     public static getOfferFormEditPath = (offerId: number) => `${Path.OFFER_FORM_EDIT.replace(':offerId', `${offerId}`)}`;
-    public static getChatPath = (chatId: number) => `${Path.CHAT_CONVERSATION.replace(':chatId', `${chatId}`)}`;
+    public static getConversationPath = (chatId: number) => `${Path.CHAT_CONVERSATION.replace(':chatId', `${chatId}`)}`;
     public static getFriendsPath = (uid: string) => `${Path.FRIENDS.replace(':uid', uid)}`;
     public static getNotificationPath = (notificationId: number) => `${Path.NOTIFICATION.replace(':notificationId', `${notificationId}`)}`;
 }

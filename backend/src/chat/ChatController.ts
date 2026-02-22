@@ -70,7 +70,6 @@ export class ChatController {
     );
   }
 
-
   /**
    * Clean chat history
    */
