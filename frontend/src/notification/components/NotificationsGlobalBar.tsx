@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { NotificationI } from "@shared/interfaces/NotificationI";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Path } from "../../path";
-import { useUserContext } from "user/UserProvider";
 import { FaBell } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { useNotificationsContext } from "notification/NotificationsProvider";
 
 const NotificationsGlobalBar: React.FC = () => {
 
-    const userCtx = useUserContext();
+    const notificationsCtx = useNotificationsContext();
     const navigate = useNavigate()
     const location = useLocation();
     const { t } = useTranslation();
@@ -17,10 +17,11 @@ const NotificationsGlobalBar: React.FC = () => {
     const [hideSection, setHideSection] = useState(false)
 
     // TODO notification appear animation
+    // TODO nav from notification to chat
 
     useEffect(() => {
-        setNotifications(userCtx.notifications)
-    }, [userCtx.notifications])
+        setNotifications(notificationsCtx.notifications)
+    }, [notificationsCtx.notifications])
 
     useEffect(() => {
         if (hideSection) {

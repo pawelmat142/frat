@@ -10,7 +10,6 @@ import { Path } from "../../path";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import { useUserContext } from "user/UserProvider";
 import { useAuthContext } from "auth/AuthProvider";
 import AvatarTile from "user/components/AvatarTile";
 import { useConfirm } from "global/providers/PopupProvider";
@@ -18,11 +17,12 @@ import { toast } from "react-toastify";
 import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
 import { FrontDateUtil } from "global/utils/FrontDateUtil";
 import { FaTimes, FaTrash } from "react-icons/fa";
+import { useNotificationsContext } from "notification/NotificationsProvider";
 
 const SingleNotificationView: React.FC = () => {
 
     const globalCtx = useGlobalContext();
-    const userCtx = useUserContext();
+    const notificationsCtx = useNotificationsContext();
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { me } = useAuthContext();
@@ -48,7 +48,7 @@ const SingleNotificationView: React.FC = () => {
         if (!notificationId || notification) {
             return;
         }
-        const found = userCtx.notifications.find(n => String(n.notificationId) === notificationId)
+        const found = notificationsCtx.notifications.find(n => String(n.notificationId) === notificationId)
         if (found) {
             setNotification(found)
         } else {
@@ -85,7 +85,7 @@ const SingleNotificationView: React.FC = () => {
         try {
             await NotificationService.markAsRead(notification)
             notification.readAt = new Date()
-            userCtx.notificationReceived(notification)
+            notificationsCtx.notificationReceived(notification)
         } catch (error) {
         }
 
@@ -103,7 +103,7 @@ const SingleNotificationView: React.FC = () => {
             setLoading(true)
             await NotificationService.deleteNotification(notification!.notificationId)
             toast.info(t('notification.deleteSuccessToast'))
-            userCtx.notificationDeleted(notification!.notificationId)
+            notificationsCtx.notificationDeleted(notification!.notificationId)
             navigate(-1)
         }
         finally {

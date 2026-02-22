@@ -4,11 +4,11 @@ import React, { useEffect } from "react";
 import { createContext, useRef, useState } from "react";
 import { ChatService } from "./services/ChatService";
 import { chatSocket } from "./services/ChatSocketService";
-import { useUserContext } from "user/UserProvider";
 import { NotificationI, NotificationIcons, NotificationTypes } from "@shared/interfaces/NotificationI";
 
 interface ChatsContextType {
     chats: ChatWithMembers[],
+    unreadMsgNotifications: NotificationI[],
     loading: boolean
 }
 
@@ -16,33 +16,30 @@ const ChatsContext = createContext<ChatsContextType | undefined>(undefined);
 
 export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    // TODO nav from notification to chat
-
-    const authCtx = useAuthContext();
-    const userCtx = useUserContext();
+    const { me } = useAuthContext();
 
     const [loading, setLoading] = useState(true)
+
     const [chats, setChats] = useState<ChatWithMembers[]>([])
+    const [unreadMsgNotifications, setUnreadMsgNotifications] = useState<NotificationI[]>([])
+
     const chatsRef = useRef<ChatWithMembers[]>(chats)
     chatsRef.current = chats
 
-    const notificationsRef = useRef<NotificationI[]>(userCtx.notifications)
-    notificationsRef.current = userCtx.notifications
-
     useEffect(() => {
-        onInit()
+        if (me) {
+            onInit()
+        } else {
+            onDestroy()
+        }
         return () => onDestroy()
-    }, [authCtx.me])
+    }, [me])
 
     const onInit = async () => {
-        if (!authCtx.me) {
-            onDestroy()
-            return;
-        }
         loadChats()
         chatSocket.connect();
         chatSocket.registerChatListener(loadChatListener);
-        chatSocket.registerNotificationMessageListener(notificationMessageListener);
+        chatSocket.registerNotificationMessageListener(notificationMessageListener)
     }
 
     const onDestroy = () => {
@@ -50,6 +47,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         chatSocket.unregisterNotificationMessageListener();
         chatSocket.disconnect();
         setChats([])
+        setUnreadMsgNotifications([])
     }
 
     const loadChats = async () => {
@@ -57,6 +55,8 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             setLoading(true)
             const data = await ChatService.getMyChats()
             setChats(data)
+            const unreadMSgNotifications = prepareUnreadMsgNotificationsFromChats(data);
+            setUnreadMsgNotifications(unreadMSgNotifications)
         } catch (error) {
             console.error('Failed to load chats:', error)
         } finally {
@@ -91,32 +91,34 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         });
     };
 
+
+
+    // CHAT NOTIFICATIONS
     const notificationMessageListener = (message: ChatMessageI) => {
         const unreadMSgNotifications = prepareUnreadMsgNotificationsFromChats(chatsRef.current, message);
-        const otherNotifications = notificationsRef.current.filter(n => n.type !== NotificationTypes.NEW_MESSAGE)
-        // userCtx.setNotifications([...unreadMSgNotifications, ...otherNotifications])
+        setUnreadMsgNotifications(unreadMSgNotifications)
     }
 
-    const prepareUnreadMsgNotificationsFromChats = (chats: ChatWithMembers[], message: ChatMessageI): NotificationI[] => {
+    const prepareUnreadMsgNotificationsFromChats = (chats: ChatWithMembers[], message?: ChatMessageI): NotificationI[] => {
         const timestamp = Date.now();
-        return chats.filter(c => c.members?.some(m => m.user?.uid === authCtx.me?.uid && m.unreadCount && m.unreadCount > 0))
+        return chats.filter(c => c.members?.some(m => m.user?.uid === me?.uid && m.unreadCount && m.unreadCount > 0))
             .map(chat => {
 
-                const otherMember = chat.members!.find(m => m.user?.uid !== authCtx.me?.uid);
+                const otherMember = chat.members!.find(m => m.user?.uid !== me?.uid);
                 if (!otherMember) {
                     throw new Error(`Chat ${chat.chatId} - other memebr not found`);
                 }
 
                 const meChatMember = getMeChatMember(chat);
 
-                const isCurrentMsg = message.chatId === chat.chatId;
+                const isCurrentMsg = message?.chatId === chat.chatId;
 
                 let unreadCount = meChatMember.unreadCount
                 if (isCurrentMsg) {
                     unreadCount++
                 }
 
-        // TODO translations
+                // TODO translations
                 const notification: NotificationI = {
                     notificationId: timestamp + chat.chatId,
                     recipientUid: meChatMember.uid,
@@ -136,7 +138,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
 
     const getMeChatMember = (chat: ChatWithMembers): ChatMemberI => {
-        const meChatMembet: ChatMemberI | null = chat.members!.find(m => m.user?.uid === authCtx.me?.uid) || null;
+        const meChatMembet: ChatMemberI | null = chat.members!.find(m => m.user?.uid === me?.uid) || null;
         if (!meChatMembet) {
             throw new Error(`Current user is not a member of chatId ${chat.chatId}`);
         }
@@ -144,7 +146,11 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
 
 
-    return <ChatsContext.Provider value={{ chats, loading }}>
+    return <ChatsContext.Provider value={{
+        loading,
+        chats,
+        unreadMsgNotifications,
+    }}>
         {children}
     </ChatsContext.Provider>
 }

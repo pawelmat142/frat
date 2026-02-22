@@ -1,16 +1,16 @@
 import NotificationListItem from "notification/components/NotificationListItem";
+import { useNotificationsContext } from "notification/NotificationsProvider";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FaBell } from "react-icons/fa";
-import { useUserContext } from "user/UserProvider";
 
 const NotificationsView: React.FC = () => {
 
-    const userContext = useUserContext();
+    const notificationsCtx = useNotificationsContext();
     const { t } = useTranslation();
 
     // Sort notifications: unread first, then by createdAt descending
-    const notifications = (userContext.notifications ?? []).slice().sort((a, b) => {
+    const notifications = (notificationsCtx.notifications ?? []).slice().sort((a, b) => {
         // Unread first
         const aUnread = a.readAt == null;
         const bUnread = b.readAt == null;
@@ -23,32 +23,29 @@ const NotificationsView: React.FC = () => {
         return bTime - aTime;
     });
 
-    useEffect(() => { }, [notifications])
+    useEffect(() => { }, [notificationsCtx.notifications])
 
     return <div className="list-view">
 
-        <div className="px-2 flex flex-col mt-2">
+        {!notifications.length && (
+            <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
+                <FaBell size={48} className="secondary-text" />
+                <div className="secondary-text">{t('notification.noNotifications')}</div>
+            </div>
+        )}
 
-            {!notifications.length && (
-                <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
-                    <FaBell size={48} className="secondary-text" />
-                    <div className="secondary-text">{t('notification.noNotifications')}</div>
-                </div>
-            )}
-
-            {(notifications ?? []).map((notification, index) => (
-                <NotificationListItem
-                    key={index}
-                    notification={notification}
-                    first={index === 0}
-                    last={index === (notifications?.length ?? 0) - 1}
-                ></NotificationListItem>
-            ))}
-            {/* <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} /> */}
-
-        </div>
+        {(notifications ?? []).map((notification, index) => (
+            <NotificationListItem
+                key={index}
+                notification={notification}
+                first={index === 0}
+                last={index === (notifications?.length ?? 0) - 1}
+            ></NotificationListItem>
+        ))}
+        {/* <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} /> */}
 
     </div>
+
 }
 
 export default NotificationsView;

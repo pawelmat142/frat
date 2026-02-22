@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode, useRef } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 import { WorkerI } from '@shared/interfaces/WorkerProfileI';
 import { WorkerService } from 'employee/services/WorkerService';
 import { useAuthContext } from 'auth/AuthProvider';
@@ -10,9 +10,6 @@ import { FriendshipI } from '@shared/interfaces/FriendshipI';
 import { FriendsService } from 'friends/services/FriendsService';
 import { friendsSocket } from 'friends/services/FriendsSocketService';
 import WebSocketService from 'global/web-socket/WebSocketService';
-import { NotificationI } from '@shared/interfaces/NotificationI';
-import { NotificationService } from 'notification/services/NotificationService';
-import { notificationSocket } from 'notification/services/NotificationSocketService';
 
 interface UserContextType {
 	worker: WorkerI | null;
@@ -28,9 +25,6 @@ interface UserContextType {
 	putFriendship: (friendship: FriendshipI) => void;
 	loading: boolean;
 	setLoading: (loading: boolean) => void;
-	notifications: NotificationI[];
-	notificationDeleted: (notificationId: number) => void;
-	notificationReceived: (notification: NotificationI) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -42,11 +36,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const [offers, setOffers] = React.useState<OfferI[]>([])
 
 	const [friendships, setFriendships] = React.useState<FriendshipI[]>([])
-	const [notifications, setNotifications] = React.useState<NotificationI[]>([])
 
-	const notificationsRef = useRef<NotificationI[]>(notifications)
-	notificationsRef.current = notifications
-		
 	const [loading, setLoading] = React.useState(false)
 
 	const [position, setPosition] = React.useState<Position | null>(null)
@@ -61,7 +51,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				initOffers(true),
 				initLocation(true),
 				initFriendships(true),
-				initNotifications(true),
 			]).then(() => {
 				setLoading(false);
 				WebSocketService.getInstance().connect();
@@ -77,11 +66,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	const onDestroy = () => {
 		unregisterFriendshipListeners();
-		unregisterNotificationListeners();
 		cleanWorker()
 		cleanOffers()
 		cleanPosition()
-		cleanNotifications()
 	}
 
 	const initLocation = async (init?: boolean) => {
@@ -147,10 +134,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		}
 	}
 
-	const cleanNotifications = () => {
-		setNotifications([]);
-	}
-
 	const locationErrorToast = () => {
 		// TODO transaltion
 		toast.warn('Could not fetch location');
@@ -211,44 +194,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				setLoading(false);
 			}
 		}
-	}
-
-	const initNotifications = async (init?: boolean) => {
-		try {
-			setLoading(true);
-			const initialNotifications = await NotificationService.getNotifications()
-			setNotifications(initialNotifications)
-			registerNotificationListeners();
-		} catch (error) {
-			setNotifications([]);
-		} finally {
-			if (!init) {
-				setLoading(false);
-			}
-		}
-	}
-
-	const registerNotificationListeners = () => {
-		notificationSocket.registerReceivedListener(notificationReceived)
-		notificationSocket.registerDeletedListener(notificationDeleted)
-	}
-	
-	const unregisterNotificationListeners = () => {
-		notificationSocket.unregisterReceivedListener(notificationReceived)
-		notificationSocket.unregisterDeletedListener(notificationDeleted)
-	}
-
-	const notificationReceived = (notification: NotificationI) => {
-		const exists = notificationsRef.current.find(n => n.notificationId === notification.notificationId)
-		if (exists) {
-			setNotifications(prev => prev.map(n => n.notificationId === notification.notificationId ? notification : n))
-			return;
-		}
-		setNotifications(prev => [...prev, notification])
-	}
-
-	const notificationDeleted = (notificationId: number) => {
-		setNotifications(prev => prev.filter(n => n.notificationId !== notificationId))
 	}
 
 	const registerFriendshipListeners = () => {
@@ -331,9 +276,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			loading: loading,
 			setLoading: setLoading,
 			position,
-			notifications,
-			notificationDeleted,
-			notificationReceived,
 		}}>
 			{children}
 		</UserContext.Provider>
