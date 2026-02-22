@@ -17,6 +17,8 @@ const NotificationsGlobalBar: React.FC = () => {
     const [hideSection, setHideSection] = useState(false)
 
     // TODO notification appear animation
+    // TODO open chat on profile view, invitation/notification view
+    // TODO add to friends on chat/conversation view
     // TODO nav from notification to chat
 
     useEffect(() => {
@@ -24,14 +26,9 @@ const NotificationsGlobalBar: React.FC = () => {
     }, [notificationsCtx.notifications])
 
     useEffect(() => {
-        if (hideSection) {
-            if (!location.pathname.includes(Path.NOTIFICATIONS)) {
-                setHideSection(false)
-            }
-        } else {
-            if (location.pathname.includes(Path.NOTIFICATIONS)) {
-                setHideSection(true)
-            }
+        const doHide = location.pathname.includes(Path.NOTIFICATIONS)
+        if (doHide !== hideSection) {   
+            setHideSection(doHide)
         }
     }, [location.pathname])
 
