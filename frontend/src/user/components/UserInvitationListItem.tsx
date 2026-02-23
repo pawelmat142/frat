@@ -28,7 +28,7 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
 
     const friendships = userCtx.friendships;
 
-    useEffect(() => {{}}, [friendships]);
+    useEffect(() => { { } }, [friendships]);
 
     const [loading, setLoading] = useState(false);
 
@@ -57,8 +57,23 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
     const isFriend = friendship?.status === FriendshipStatuses.ACCEPTED;
     const isInvited = friendship?.status === FriendshipStatuses.PENDING && friendship.requesterUid === me?.uid;
     const isInvitationReceived = friendship?.status === FriendshipStatuses.PENDING && friendship.addresseeUid === me?.uid;
-    
+
     const canInvite = !isMe && !isFriend && !isInvited && !isInvitationReceived;
+
+    const acceptInvitation = async (e?: React.MouseEvent<HTMLButtonElement>) => {
+        if (!friendship) return;
+        e?.stopPropagation();
+        try {
+            setLoading(true);
+            const result = await FriendsService.acceptInvite(friendship.friendshipId)
+            navigate(Path.getProfilePath(user.uid));
+            toast.success(t('friends.accept'));
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
 
     return (
         <div className="flex justify-between items-center w-full" onClick={() => navigate(Path.getProfilePath(user.uid))}>
@@ -75,10 +90,8 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
             {isInvited && <div className="primary-color small-font">{t('friends.invited')}</div>}
             {isInvitationReceived && <Button
                 size={BtnSizes.SMALL}
-                onClick={(e) => {
-                    // todo accept invitation
-                }}
-            >{t('friends.accept')}</Button>}     
+                onClick={acceptInvitation}
+            >{t('friends.accept')}</Button>}
         </div>
     )
 }

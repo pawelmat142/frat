@@ -119,7 +119,6 @@ export interface WorkerFormDto {
   email: string;
   communicationLanguages: string[];
   avatarRef: AvatarRef;
-  // TODO dodac do forma
   bio?: string;
 
   locationOption: WorkerLocationOption;
