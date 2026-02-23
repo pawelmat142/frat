@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
 import { ChatService } from "chat/services/ChatService";
 import IconButton from "global/components/controls/IconButon";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 
 interface Props {
     user: UserI,
@@ -112,7 +112,7 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
                 e.stopPropagation();
                 openChat();
             }}
-                icon={<Icons.MSG size={20} />}
+                icon={<Ico.MSG size={20} />}
             ></IconButton>}
 
         </div>

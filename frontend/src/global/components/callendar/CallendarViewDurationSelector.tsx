@@ -2,7 +2,7 @@ import { BottomSheetContextType } from "global/providers/BottomSheetProvider";
 import React from "react";
 import CallendarDurationSlider from "./CallendarDurationSlider";
 import { useTranslation } from "react-i18next";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 
 interface Props {
     onSubmit: (value: number) => void;
@@ -25,7 +25,7 @@ const CallendarViewDurationSelector: React.FC<Props> = ({ onSubmit, initial = 1,
     }
 
     return (
-        <Icons.CALLENDAR onClick={openSelector} />
+        <Ico.CALENDAR onClick={openSelector} />
     );
 }
 

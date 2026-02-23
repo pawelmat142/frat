@@ -12,7 +12,8 @@ import { UserPublicService } from "user/services/UserPublicService"
 import FriendshipListItem from "friends/components/FriendshipListItem"
 import { FriendsService } from "friends/services/FriendsService"
 import Loading from "global/components/Loading"
-import { Icons } from "global/icon.def"
+import { Ico } from "global/icon.def"
+import { FriendUtil } from "@shared/utils/FriendUtil"
 
 const FriendsListView: React.FC = () => {
 
@@ -26,6 +27,12 @@ const FriendsListView: React.FC = () => {
     const [friendships, setFriendships] = useState<FriendshipI[]>([])
     const [friends, setFriends] = useState<{ user: UserI, friendship: FriendshipI }[]>([])
     const [loading, setLoading] = useState(false)
+
+    const isMyFriend = FriendUtil.isFriend(userCtx.friendships, uid!)
+
+    if (!isMyAccount && !isMyFriend) {
+        return null
+    }
 
     useEffect(() => {
         if (!uid) return
@@ -90,7 +97,6 @@ const FriendsListView: React.FC = () => {
         setFriends(friends);
     }
 
-    // TODO this view should be not permitted if not my account or not friend
     // TODO szukanie przerobic na floating button albo do headera
 
     if (loading) {
@@ -103,7 +109,7 @@ const FriendsListView: React.FC = () => {
 
                 {!friends.length && (
                     <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
-                        <Icons.EMPTY size={48} className="secondary-text" />
+                        <Ico.EMPTY size={48} className="secondary-text" />
                         <div className="secondary-text">{t('friends.noFriends')}</div>
                     </div>
                 )}  
@@ -124,7 +130,7 @@ const FriendsListView: React.FC = () => {
                     mode={BtnModes.SECONDARY}
                     onClick={() => navigate(Path.FRIENDS_SEARCH)}
                 >
-                    <Icons.SEARCH className="mr-2" />
+                    <Ico.SEARCH className="mr-2" />
                     {t('friends.search')}
                 </Button>
             </div>

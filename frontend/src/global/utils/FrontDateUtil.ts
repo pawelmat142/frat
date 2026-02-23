@@ -3,10 +3,11 @@ import { DateUtil } from "@shared/utils/DateUtil";
 export abstract class FrontDateUtil {
 
 
-    public static displayShortDateOrDayOrTimeIfToday(t: (input: string) => string, date: Date): string {
+    public static displayShortDateOrDayOrTimeIfToday(t: (input: string) => string, date: Date | string): string {
         if (!date) {
             return ''
         }
+        date = new Date(date)
         if (DateUtil.isToday(date)) {
             return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }

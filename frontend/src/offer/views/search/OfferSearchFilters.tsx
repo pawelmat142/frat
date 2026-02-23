@@ -12,7 +12,7 @@ import OfferSearchFiltersSheet from "./OfferSearchFiltersSheet";
 import { Currencies } from "@shared/interfaces/OfferI";
 import { useDebouncedValue } from "global/utils/useDebouncedValue";
 import { Utils } from "global/utils/utils";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 
 const OfferSearchFilters: React.FC = () => {
 
@@ -91,7 +91,7 @@ const OfferSearchFilters: React.FC = () => {
             <div className="flex gap-x-3 flex-wrap items-center">
                 {(!!ctx.filters.categories?.length) && (
                     <div className="chip-container ml-2 mt-1">
-                        <Icons.CATEGORIES className="secondary-text" />
+                        <Ico.CATEGORIES className="secondary-text" />
                         {(ctx.filters.categories || []).map(category => (
                             <div key={category} className="search-chip primary">
                                 {category}
@@ -102,7 +102,7 @@ const OfferSearchFilters: React.FC = () => {
 
                 {!!flags?.length && (
                     <div className="chip-container mt-1 ml-2">
-                        <Icons.LANGUAGE className="secondary-text" />
+                        <Ico.LANGUAGE className="secondary-text" />
                         {(flags).map((src, index) => (
                             <img key={index} className="filters-flag-chip pl-1" src={src} alt={"flag-" + index} />
                         ))}
@@ -111,7 +111,7 @@ const OfferSearchFilters: React.FC = () => {
 
                 {!!countryFlags?.length && (
                     <div className="chip-container mt-1 ml-2">
-                        <Icons.MARKER className="secondary-text" />
+                        <Ico.MARKER className="secondary-text" />
                         {(countryFlags).map((src, index) => (
                             <img key={index} className="filters-flag-chip pl-1" src={src} alt={"flag-" + index} />
                         ))}

@@ -237,7 +237,8 @@
     },
     "others": {
       "availableAnytime": "Available anytime",
-      "availableAnytimeShort": "Anytime"
+      "availableAnytimeShort": "Anytime",
+      "fetchLocationError": "Could not find location."
     },
     "report": {
       "send": "Send",

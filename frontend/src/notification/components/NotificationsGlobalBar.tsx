@@ -5,7 +5,7 @@ import { Path } from "../../path";
 import { useTranslation } from "react-i18next";
 import { useNotificationsContext } from "notification/NotificationsProvider";
 import { AnimatePresence, motion } from "framer-motion";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 
 const NotificationsGlobalBar: React.FC = () => {
 
@@ -16,9 +16,6 @@ const NotificationsGlobalBar: React.FC = () => {
 
     const [notifications, setNotifications] = useState<NotificationI[]>([])
     const [hideSection, setHideSection] = useState(false)
-
-    // TODO open chat buttons on profile view, invitation/notification view
-    // TODO add to friends on chat/conversation view
 
     useEffect(() => {
         setNotifications(notificationsCtx.notifications)
@@ -58,7 +55,7 @@ const NotificationsGlobalBar: React.FC = () => {
                     onClick={() => navigate(Path.NOTIFICATIONS)}
                 >
                     <div className="flex items-center gap-3 primary-color">
-                        <Icons.NOTIFICATION size={24} />
+                        <Ico.NOTIFICATION size={24} />
                         <h2 className="">{getMessage()}</h2>
                     </div>
                 </div>

@@ -16,13 +16,16 @@ import { useMenuContext } from "global/providers/MenuProvider";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
 import UserItem from "user/components/UserItem";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
+import { useUserContext } from "user/UserProvider";
+import { FriendUtil } from "@shared/utils/FriendUtil";
 
 const ChatConversationView: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { chatId } = useParams<{ chatId: string }>();
     const { me } = useAuthContext();
+    const userCtx = useUserContext();
 
     const [chat, setChat] = useState<ChatWithMembers | null>(null);
     const [messages, setMessages] = useState<ChatMessageI[]>([]);
@@ -59,7 +62,7 @@ const ChatConversationView: React.FC = () => {
                 onClick: () => navigate(Path.getProfilePath(otherUser?.uid || ''))
             });
             if (messages.length) {
-                items.push({    
+                items.push({
                     label: t('chat.cleanChat'),
                     onClick: async () => {
                         const confirmed = await confirm({
@@ -280,10 +283,9 @@ const ChatConversationView: React.FC = () => {
                                 <div className={`chat-view-message ${leftSide ? 'left' : 'right'}`}>
                                     <p>{msg.content}</p>
                                     <div className={`chat-view-message-info`}>
-                                        {/* TODO znaczek ze przeczytane */}
-                                        {/* {!!msg.readAt && (
-                                            <span><FaSearch size={5} /></span>
-                                        )} */}
+                                        {!!msg.readAt && !leftSide && (
+                                            <span className="primary-color"><Ico.CHECK size={12}/></span>
+                                        )}
                                         <span>{DateUtil.displayTime(msg.createdAt)}</span>
                                     </div>
 
@@ -328,7 +330,7 @@ const ChatConversationView: React.FC = () => {
                         disabled={!newMessage.trim() || sending}
                         className="px-2"
                     >
-                        <Icons.MSG size={iconSize * 1.2} />
+                        <Ico.MSG size={iconSize * 1.2} />
                     </Button>
                 </div>
 

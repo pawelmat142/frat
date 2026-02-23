@@ -3,7 +3,7 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import HomeIcon from '@mui/icons-material/Home';
 import MessageIcon from '@mui/icons-material/Message';
 import { Path } from '../../path';
-import { Icons } from 'global/icon.def';
+import { Ico } from 'global/icon.def';
 
 const AdminPanelSidebar: React.FC = () => {
 
@@ -29,7 +29,7 @@ const AdminPanelSidebar: React.FC = () => {
         to={Path.ADMIN_USERS}
         className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
       >
-        <Icons.FRIENDS />
+        <Ico.FRIENDS />
         <span>Users</span>
       </NavLink>
 
@@ -45,7 +45,7 @@ const AdminPanelSidebar: React.FC = () => {
         to={Path.ADMIN_EMPLOYEE_PROFILES}
         className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
       >
-          <Icons.WORKER />
+          <Ico.WORKER />
         <span>Employee Profiles</span>
       </NavLink>
 
@@ -53,7 +53,7 @@ const AdminPanelSidebar: React.FC = () => {
         to={Path.ADMIN_OFFERS}
         className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
       > 
-        <Icons.OFFER className="svg-icon" />
+        <Ico.OFFER className="svg-icon" />
         <span>Offers</span>
       </NavLink>
     </div>

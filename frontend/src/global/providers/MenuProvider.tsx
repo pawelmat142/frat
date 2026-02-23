@@ -9,7 +9,7 @@ import { useBottomSheet } from './BottomSheetProvider';
 import { useGlobalContext } from './GlobalProvider';
 import IconButton from 'global/components/controls/IconButon';
 import { useTranslation } from 'react-i18next';
-import { Icons } from 'global/icon.def';
+import { Ico } from 'global/icon.def';
 
 interface NewMenuItem {
     label: string
@@ -40,7 +40,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const globalCtx = useGlobalContext();
 
     const setupHeaderMenu = (menu: MenuConfig) => {
-        globalCtx.setHeaderMenu(<IconButton icon={<Icons.MENU onClick={() => {
+        globalCtx.setHeaderMenu(<IconButton icon={<Ico.MENU onClick={() => {
             bottomSheetCtx.openMenu(menu)
         }} />} />);
     }
@@ -51,17 +51,17 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         label: t('nav.start'),
         active: !!matchPath({ path: Path.HOME, end: true }, location.pathname),
         onClick: () => navigate(Path.HOME),
-        icon: <Icons.HOME size={iconSize} />
+        icon: <Ico.HOME size={iconSize} />
     }, {
         label: t('chat.chats'),
         active: location.pathname.includes(Path.CHATS),
         onClick: () => navigate(Path.CHATS),
-        icon: <Icons.CHAT size={iconSize} />
+        icon: <Ico.CHAT size={iconSize} />
     }, {
         label: t('account.friends'),
         active: location.pathname.includes(Path.FRIENDS),
         onClick: () => navigate(Path.getFriendsPath(me?.uid || '')),
-        icon: <Icons.FRIENDS size={iconSize} />
+        icon: <Ico.FRIENDS size={iconSize} />
     }]
 
     if (me) {
@@ -69,14 +69,14 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
             label: t('nav.account'),
             active: !!matchPath({ path: Path.PROFILE, end: true }, location.pathname),
             onClick: () => navigate(Path.getProfilePath(me.uid)),
-            icon: <Icons.ACCOUNT size={iconSize} />
+            icon: <Ico.ACCOUNT size={iconSize} />
         });
     } else {
         items.push({
             label: t('signin.submit'),
             active: !!matchPath({ path: Path.SIGN_IN, end: true }, location.pathname),
             onClick: () => navigate(Path.SIGN_IN),
-            icon: <Icons.SIGN_IN size={iconSize} />
+            icon: <Ico.SIGN_IN size={iconSize} />
         });
     }
 

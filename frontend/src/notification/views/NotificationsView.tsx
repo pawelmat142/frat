@@ -1,4 +1,4 @@
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 import NotificationListItem from "notification/components/NotificationListItem";
 import { useNotificationsContext } from "notification/NotificationsProvider";
 import { useEffect } from "react";
@@ -29,7 +29,7 @@ const NotificationsView: React.FC = () => {
 
         {!notifications.length && (
             <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
-                <Icons.NOTIFICATION size={48} className="secondary-text" />
+                <Ico.NOTIFICATION size={48} className="secondary-text" />
                 <div className="secondary-text">{t('notification.noNotifications')}</div>
             </div>
         )}

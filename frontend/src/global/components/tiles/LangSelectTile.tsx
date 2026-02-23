@@ -1,4 +1,4 @@
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 import { useBottomSheet } from "global/providers/BottomSheetProvider";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -37,7 +37,7 @@ const LangSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
     return (
         <div className="sec-tile-wrapper" onClick={() => selectLanguage()}>
             <div className="square-tile">
-                <Icons.LANGUAGE size={iconSize} />
+                <Ico.LANGUAGE size={iconSize} />
             </div>
             <div className="sec-tile-label">{t("lang.language")}</div>
         </div>

@@ -7,7 +7,7 @@ import Loading from "global/components/Loading";
 import { Path } from "../../path";
 import ChatListItem from "./ChatListItem";
 import { useChatsContext } from "chat/ChatsProvider";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 
 const ChatsView: React.FC = () => {
     const { t } = useTranslation()
@@ -34,7 +34,7 @@ const ChatsView: React.FC = () => {
         <div className="list-view">
             {chatCtx.chats.length === 0 ? (
                 <div className="text-center secondary-text py-8">
-                    <Icons.CHAT className="mx-auto text-4xl mb-2 opacity-50" />
+                    <Ico.CHAT className="mx-auto text-4xl mb-2 opacity-50" />
                     <p>{t('chat.noChats')}</p>
                 </div>
             ) : (

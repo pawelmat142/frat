@@ -215,7 +215,14 @@ $inputGap: .5rem;
         font-size: $smallFont;
         text-align: right;
         flex: 1;
+        display: inline-flex;
+        align-items: flex-end;
+        gap: .4rem;
         // margin-left: auto;
+        
+        .primary-color {
+            padding-bottom: .1rem;
+        }
     }
 
     &.left {
@@ -226,7 +233,6 @@ $inputGap: .5rem;
             text-align: left;
             align-self: flex-end;
             margin-right: .5rem;
-
         }
     }
 
@@ -234,6 +240,7 @@ $inputGap: .5rem;
         border-bottom-right-radius: 0;
 
         .chat-view-message-info {
+            flex-direction: row-reverse;
             text-align: right;
             align-self: flex-end;
             margin-left: .5rem;

@@ -11,7 +11,7 @@ import Button from "global/components/controls/Button";
 import CountrySelector from "global/components/selector/CountrySelector";
 import FloatingInput from "global/components/controls/FloatingInput";
 import DictionarySelector from "global/components/selector/DictionarySelector";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 
 const WorkersSearchFiltersView: React.FC = () => {
 
@@ -201,7 +201,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                     <Button
                         size={BtnSizes.LARGE}
                         mode={BtnModes.PRIMARY} fullWidth type="submit">
-                        <Icons.SEARCH size={22}></Icons.SEARCH>
+                        <Ico.SEARCH size={22}></Ico.SEARCH>
                         {t("common.search")}
                     </Button>
                     <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-3" fullWidth>

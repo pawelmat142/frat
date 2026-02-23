@@ -10,6 +10,7 @@ import { FriendshipI } from '@shared/interfaces/FriendshipI';
 import { FriendsService } from 'friends/services/FriendsService';
 import { friendsSocket } from 'friends/services/FriendsSocketService';
 import WebSocketService from 'global/web-socket/WebSocketService';
+import { useTranslation } from 'react-i18next';
 
 interface UserContextType {
 	worker: WorkerI | null;
@@ -31,6 +32,9 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
+	const { t } = useTranslation();
+	const authCtx = useAuthContext();
+
 	const [worker, setWorker] = React.useState<WorkerI | null>(null)
 
 	const [offers, setOffers] = React.useState<OfferI[]>([])
@@ -41,8 +45,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	const [position, setPosition] = React.useState<Position | null>(null)
 	const [positionWatchId, setPositionWatchId] = React.useState<number | null>(null)
-
-	const authCtx = useAuthContext();
 
 	React.useEffect(() => {
 		if (authCtx.me) {
@@ -135,8 +137,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}
 
 	const locationErrorToast = () => {
-		// TODO transaltion
-		toast.warn('Could not fetch location');
+		toast.warn(t('common.others.fetchLocationError'));
 	}
 
 	const initWorker = async (init?: boolean) => {

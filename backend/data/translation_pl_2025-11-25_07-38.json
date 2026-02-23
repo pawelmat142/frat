@@ -237,7 +237,8 @@
     },
     "others": {
       "availableAnytime": "Dostępny od zaraz",
-      "availableAnytimeShort": "Od zaraz"
+      "availableAnytimeShort": "Od zaraz",
+      "fetchLocationError": "Nie można znaleźć lokalizacji."
     },
     "report": {
       "send": "Wyślij",

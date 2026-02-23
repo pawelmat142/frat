@@ -17,7 +17,8 @@ import { toast } from "react-toastify";
 import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
 import { FrontDateUtil } from "global/utils/FrontDateUtil";
 import { useNotificationsContext } from "notification/NotificationsProvider";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
+import { ChatService } from "chat/services/ChatService";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -118,13 +119,29 @@ const SingleNotificationView: React.FC = () => {
         navigate(Path.getProfilePath(notification.requesterUid))
     }
 
+    const openChat = async () => {
+        if (!notification?.requesterUid) {
+            return
+        }
+        try {
+            const chat = await ChatService.getOrCreateDirectChat(notification.requesterUid)
+            navigate(Path.getConversationPath(chat.chatId))
+        } catch (error) {
+            console.error('Failed to open chat:', error)
+            toast.error(t('chat.error.cannotOpen'))
+        }
+    }
+
     const getActions = (): React.ReactNode => {
 
         const deleteButton = <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={deleteNotification}
-        ><Icons.DELETE className="mr-2" />{t('notification.deleteNotification')}</Button>
+        ><Ico.DELETE className="mr-2" />{t('notification.deleteNotification')}</Button>
 
         const requesterProfileButton = !!notification?.requesterUid && <Button fullWidth mode={BtnModes.SECONDARY}
-         onClick={goToRequesterProfile}>{t('notification.viewProfile', { name: notification.requesterName })}</Button>
+            onClick={goToRequesterProfile}>{t('notification.viewProfile', { name: notification.requesterName })}</Button>
+
+        const openChatButon = !!notification?.requesterUid && <Button fullWidth mode={BtnModes.PRIMARY}
+            onClick={openChat}><Ico.CHAT></Ico.CHAT>{t('chat.openChat')}</Button>
 
         if (NotificationTypes.FRIEND_INVITE === notification?.type) {
             const friendshipId = Number(notification.targetId)
@@ -141,6 +158,7 @@ const SingleNotificationView: React.FC = () => {
                     }
                 }}>{t('friends.accept')}</Button>
 
+                {openChatButon}
                 {requesterProfileButton}
 
                 <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={async () => {
@@ -151,16 +169,17 @@ const SingleNotificationView: React.FC = () => {
                     } finally {
                         setLoading(false)
                     }
-                }}><Icons.CANCEL className="mr-2" />{t('friends.reject')}</Button>
+                }}><Ico.CANCEL className="mr-2" />{t('friends.reject')}</Button>
 
                 {deleteButton}
 
             </div>
         }
         return <>
+            {openChatButon}
             {requesterProfileButton}
             {deleteButton}
-            </>
+        </>
     }
 
     if (loading || !notification) {

@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { FaCheck } from 'react-icons/fa';
 import { FrontDateUtil } from "global/utils/FrontDateUtil";
+import { Ico } from "global/icon.def";
 
 interface Props {
     chat: ChatWithMembers;
@@ -27,7 +28,7 @@ const ChatListItem: React.FC<Props> = ({ chat, otherMember: otherMember, first, 
         const everythingRead = !meAsMember?.unreadCount && !otherMember?.unreadCount;
 
         if (everythingRead) {
-            return <FaCheck className="primary-color" size={14} />
+            return <Ico.CHECK className="primary-color" size={14} />
         }
 
         if (!!meAsMember?.unreadCount) {

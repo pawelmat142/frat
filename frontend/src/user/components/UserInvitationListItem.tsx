@@ -13,7 +13,7 @@ import { useUserContext } from "user/UserProvider";
 import { FriendshipStatuses } from "@shared/interfaces/FriendshipI";
 import Button from "global/components/controls/Button";
 import { BtnSizes } from "global/interface/controls.interface";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 
 interface Props {
     user: UserI
@@ -83,7 +83,7 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
                 e.stopPropagation();
                 sendInvite();
             }}
-                icon={<Icons.ADD_USER size={20} />}
+                icon={<Ico.ADD_USER size={20} />}
             ></IconButton>}
 
             {isFriend && <div className="primary-color small-font">{t('friends.friend')}</div>}

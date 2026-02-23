@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { useIsDesktop } from "global/hooks/isMobile";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { useAuthContext } from "auth/AuthProvider";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 
 interface Props {
     profile: WorkerI,
@@ -62,13 +62,13 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
             e.stopPropagation();
             openPhoneCall();
         }}
-            icon={<Icons.PHONE size={20} />}
+            icon={<Ico.PHONE size={20} />}
         ></IconButton>
         <IconButton onClick={(e) => {
             e.stopPropagation();
             openChat();
         }}
-            icon={<Icons.MSG size={20} />}
+            icon={<Ico.MSG size={20} />}
         ></IconButton>
     </div>
 

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import { Path } from "../../path";
 import { ChatService } from "chat/services/ChatService";
 import { profile } from "console";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 
 interface Props {
     uid?: string,
@@ -39,7 +39,7 @@ const UserItemTile: React.FC<Props> = ({ uid, user, size = 3.5, showNumber = fal
                     mode={BtnModes.PRIMARY_TXT}
                     type="submit"
                     className="p-0">
-                    <Icons.MSG size={20} />
+                    <Ico.MSG size={20} />
                 </Button>
 
             </div>}

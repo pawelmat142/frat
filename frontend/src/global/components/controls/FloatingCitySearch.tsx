@@ -31,8 +31,6 @@ interface CityPrediction {
     toPlace: () => google.maps.places.Place;
 }
 
-// TODO styling list predictions
-
 const FloatingCitySearch = forwardRef<HTMLInputElement, FloatingCitySearchProps>(
     ({
         id,

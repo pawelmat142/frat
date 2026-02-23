@@ -22,7 +22,7 @@ import { WorkerService } from "employee/services/WorkerService";
 import { OffersService } from "offer/services/OffersService";
 import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
 import { FriendsService } from "friends/services/FriendsService";
-import { Icons } from "global/icon.def";
+import { Ico } from "global/icon.def";
 
 const ProfileView: React.FC = () => {
 
@@ -191,7 +191,7 @@ const ProfileView: React.FC = () => {
                 mode={BtnModes.SECONDARY}
                 onClick={sendInvite}
             >
-                <Icons.FRIENDS className="mr-2" />
+                <Ico.FRIENDS className="mr-2" />
                 {t('friends.invite')}
             </Button>
         }
@@ -202,7 +202,7 @@ const ProfileView: React.FC = () => {
                 mode={BtnModes.ERROR_TXT}
                 onClick={async () => { rejectInvitation(friendship); }}
             >
-                <Icons.CANCEL className="mr-2" />
+                <Ico.CANCEL className="mr-2" />
                 {t('friends.reject')}
             </Button>
         ) : null
@@ -213,7 +213,7 @@ const ProfileView: React.FC = () => {
                 mode={BtnModes.ERROR_TXT}
                 onClick={() => removeFriend(friendship)}
             >
-                <Icons.DELETE className="mr-2" />
+                <Ico.DELETE className="mr-2" />
                 {t('friends.remove')}
             </Button>
         }
@@ -225,7 +225,7 @@ const ProfileView: React.FC = () => {
                         mode={BtnModes.SECONDARY}
                         onClick={async () => { acceptInvitation(friendship); }}
                     >
-                        <Icons.FRIENDS className="mr-2" />
+                        <Ico.FRIENDS className="mr-2" />
                         {t('friends.accept')}
                     </Button>
                     {rejectInvitationBtn}
@@ -301,7 +301,7 @@ const ProfileView: React.FC = () => {
                     mode={BtnModes.SECONDARY}
                     onClick={() => { navigate(Path.NOTIFICATIONS); }}
                 >
-                    <Icons.NOTIFICATION className="mr-2" />
+                    <Ico.NOTIFICATION className="mr-2" />
                     {t('notification.header')}
                 </Button>}
 
@@ -310,7 +310,7 @@ const ProfileView: React.FC = () => {
                     mode={BtnModes.SECONDARY}
                     onClick={() => { navigate(Path.getFriendsPath(user.uid)); }}
                 >
-                    <Icons.FRIENDS className="mr-2" />
+                    <Ico.FRIENDS className="mr-2" />
                     {t('account.friends')}
                 </Button>}
 
@@ -321,7 +321,7 @@ const ProfileView: React.FC = () => {
                             mode={BtnModes.SECONDARY}
                             onClick={() => { navigate(Path.CHATS); }}
                         >
-                            <Icons.CHAT className="mr-2" />
+                            <Ico.CHAT className="mr-2" />
                             {t('chat.chats')}
                         </Button>
 
@@ -330,7 +330,7 @@ const ProfileView: React.FC = () => {
                             mode={BtnModes.SECONDARY}
                             onClick={goToUserOffers}
                         >
-                            <Icons.OFFER className="mr-2" />
+                            <Ico.OFFER className="mr-2" />
                             {t('account.offers')} ({offers?.length || 0})
                         </Button>
 
@@ -340,7 +340,7 @@ const ProfileView: React.FC = () => {
                                 mode={BtnModes.SECONDARY}
                                 onClick={openWorkerProfileOrForm}
                             >
-                                <Icons.WORKER className="mr-2" />
+                                <Ico.WORKER className="mr-2" />
                                 {t('account.createEmployeeProfile')}
                             </Button>
                         ) : (
@@ -349,7 +349,7 @@ const ProfileView: React.FC = () => {
                                 mode={BtnModes.SECONDARY}
                                 onClick={openWorkerProfileOrForm}
                             >
-                                <Icons.WORKER className="mr-2" />
+                                <Ico.WORKER className="mr-2" />
                                 {t('account.showEmployeeProfile')}
                             </Button>
                         )}
@@ -358,7 +358,7 @@ const ProfileView: React.FC = () => {
                             mode={BtnModes.ERROR_TXT}
                             onClick={deleteAccount}
                         >
-                            <Icons.DELETE className="mr-2" />
+                            <Ico.DELETE className="mr-2" />
                             {t('account.deleteAccountConfirmTitle')}
                         </Button>
                     </>
@@ -370,7 +370,7 @@ const ProfileView: React.FC = () => {
                                 mode={BtnModes.SECONDARY}
                                 onClick={goToUserOffers}
                             >
-                                <Icons.OFFER className="mr-2" />
+                                <Ico.OFFER className="mr-2" />
                                 {t('account.offers')} ({offers?.length || 0})
                             </Button>)}
 
@@ -379,7 +379,7 @@ const ProfileView: React.FC = () => {
                             mode={BtnModes.PRIMARY}
                             onClick={openChat}
                         >
-                            <Icons.CHAT className="mr-2" />
+                            <Ico.CHAT className="mr-2" />
                             {t('chat.openChat')}
                         </Button>
 
