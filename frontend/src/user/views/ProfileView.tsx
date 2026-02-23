@@ -358,7 +358,7 @@ const ProfileView: React.FC = () => {
                             mode={BtnModes.ERROR_TXT}
                             onClick={deleteAccount}
                         >
-                            <Icons.TRASH className="mr-2" />
+                            <Icons.DELETE className="mr-2" />
                             {t('account.deleteAccountConfirmTitle')}
                         </Button>
                     </>

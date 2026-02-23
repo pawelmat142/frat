@@ -1,7 +1,7 @@
 import { IconType } from "react-icons";
 import { FaBan, FaBell, FaBriefcase, FaCalendarAlt, FaCog, FaComments, FaEllipsisV, FaHome, FaIdCard, FaPaperPlane, FaPhone, FaSearch, FaSignInAlt, FaSignOutAlt, FaTags, FaTimes, FaTrash, FaUserCircle, FaUserFriends, FaUserPlus } from "react-icons/fa";
 
-export const Icons: { [key: string]: IconType } = {
+export const Icons = {
     HOME: FaHome,
     MENU: FaEllipsisV,
     FRIENDS: FaUserFriends,
@@ -24,4 +24,4 @@ export const Icons: { [key: string]: IconType } = {
     LANGUAGE: FaTags,
     MARKER: FaTags,
     CALLENDAR: FaCalendarAlt,
-} as const
+} as const satisfies Record<string, IconType>
