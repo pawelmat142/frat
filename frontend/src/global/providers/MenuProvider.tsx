@@ -8,7 +8,7 @@ import { MenuConfig } from 'global/components/selector/MenuItems';
 import { useBottomSheet } from './BottomSheetProvider';
 import { useGlobalContext } from './GlobalProvider';
 import IconButton from 'global/components/controls/IconButon';
-import { FaBriefcase, FaEllipsisV, FaHome, FaSearch, FaSignInAlt, FaUserCircle } from 'react-icons/fa';
+import { FaBriefcase, FaComments, FaEllipsisV, FaHome, FaSignInAlt, FaUserCircle, FaUserFriends } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 
 interface NewMenuItem {
@@ -53,15 +53,15 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         onClick: () => navigate(Path.HOME),
         icon: <FaHome size={iconSize} />
     }, {
-        label: t('nav.employees'),
-        active: !!matchPath({ path: Path.WORKERS_FILTERS_SEARCH, end: true }, location.pathname),
-        onClick: () => navigate(Path.WORKERS_FILTERS_SEARCH),
-        icon: <FaSearch size={iconSize} />
+        label: t('chat.chats'),
+        active: location.pathname.includes(Path.CHATS),
+        onClick: () => navigate(Path.CHATS),
+        icon: <FaComments size={iconSize} />
     }, {
-        label: t('nav.offers'),
-        active: !!matchPath({ path: Path.OFFERS_SEARCH, end: true }, location.pathname),
-        onClick: () => navigate(Path.OFFERS_SEARCH),
-        icon: <FaBriefcase size={iconSize} />
+        label: t('account.friends'),
+        active: location.pathname.includes(Path.FRIENDS),
+        onClick: () => navigate(Path.getFriendsPath(me?.uid || '')),
+        icon: <FaUserFriends size={iconSize} />
     }]
 
     if (me) {

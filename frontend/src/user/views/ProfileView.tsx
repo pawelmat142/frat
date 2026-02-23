@@ -12,7 +12,7 @@ import { UserPublicService } from "user/services/UserPublicService";
 import AvatarTile from "user/components/AvatarTile";
 import { Path } from "../../path";
 import { BtnModes } from "global/interface/controls.interface";
-import { FaBriefcase, FaIdCard, FaTrash, FaComments, FaUsers, FaTimes, FaBell } from "react-icons/fa";
+import { FaBriefcase, FaIdCard, FaTrash, FaComments, FaUsers, FaTimes, FaBell, FaUserFriends } from "react-icons/fa";
 import { useConfirm } from "global/providers/PopupProvider";
 import { UserManagementService } from "user/services/UserManagementService";
 import { FirebaseAuth } from "auth/services/FirebaseAuth";
@@ -310,7 +310,7 @@ const ProfileView: React.FC = () => {
                     mode={BtnModes.SECONDARY}
                     onClick={() => { navigate(Path.getFriendsPath(user.uid)); }}
                 >
-                    <FaUsers className="mr-2" />
+                    <FaUserFriends className="mr-2" />
                     {t('account.friends')}
                 </Button>}
 
