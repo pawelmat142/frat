@@ -29,6 +29,7 @@ const ChatConversationView: React.FC = () => {
     const [newMessage, setNewMessage] = useState("");
     const [loading, setLoading] = useState(true);
     const [sending, setSending] = useState(false);
+    const [inputFocused, setInputFocused] = useState(false);
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -53,8 +54,12 @@ const ChatConversationView: React.FC = () => {
     const prepareChatMenu = (chat: ChatWithMembers): MenuItem[] => {
         const items: MenuItem[] = [];
         if (!chat?.blockedByUid) {
+            items.push({
+                label: t('account.showProfile'),
+                onClick: () => navigate(Path.getProfilePath(otherUser?.uid || ''))
+            });
             if (messages.length) {
-                items.push({
+                items.push({    
                     label: t('chat.cleanChat'),
                     onClick: async () => {
                         const confirmed = await confirm({
@@ -291,7 +296,7 @@ const ChatConversationView: React.FC = () => {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSendMessage} className="chat-view-input">
+            <form onSubmit={handleSendMessage} className={`chat-view-input${inputFocused ? ' focus' : ''}`}>
 {/* 
                 <div className="chat-view-input-left">
                     <FaSearch size={iconSize} />
@@ -309,6 +314,8 @@ const ChatConversationView: React.FC = () => {
                         disabled={sending || !!chat?.blockedByUid}
                         enterKeyHint="send"
                         autoComplete="off"
+                        onFocus={() => setInputFocused(true)}
+                        onBlur={() => setInputFocused(false)}
                     />
                 </div>
 

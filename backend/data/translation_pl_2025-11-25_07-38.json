@@ -62,7 +62,8 @@
       "deleteAccountConfirmMessage": "Czy na pewno chcesz usunąć swoje konto? Tej akcji nie można cofnąć.",
       "deleteAccountSuccessToast": "Konto zostało pomyślnie usunięte",
       "deleteAccountFailed": "Nie udało się usunąć konta",
-      "friends": "Znajomi"
+      "friends": "Znajomi",
+      "showProfile": "Pokaż profil"
     },
     "friends": {
       "invite": "Zaproś do znajomych",

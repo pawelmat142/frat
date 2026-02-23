@@ -119,7 +119,6 @@ const FriendsListView: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-3 mt-6 px-5">
-
                 <Button
                     fullWidth
                     mode={BtnModes.SECONDARY}
@@ -128,7 +127,6 @@ const FriendsListView: React.FC = () => {
                     <FaSearch className="mr-2" />
                     {t('friends.search')}
                 </Button>
-
             </div>
         </div>
     )

@@ -158,6 +158,11 @@ $inputGap: .5rem;
     height: 48px;
     border-radius: 16px;
     background-color: $secondary-bg;
+    transition: $transition;
+
+    &.focus {
+        outline: 1px solid $primary-color;
+    }
 }
 
 .chat-view-input-content {
