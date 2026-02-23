@@ -12,6 +12,8 @@ interface ChatsContextType {
     loading: boolean
 }
 
+// TODO bug kiedy otwieram chat z app 1, potem otwieram go z app 2 to na app 2 wybucha
+
 const ChatsContext = createContext<ChatsContextType | undefined>(undefined);
 
 export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -26,7 +28,6 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const chatsRef = useRef<ChatWithMembers[]>(chats)
     chatsRef.current = chats
 
-    console.log('CHATS: ', chats)
     useEffect(() => {
         if (me) {
             onInit()

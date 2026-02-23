@@ -5,6 +5,7 @@ import { Path } from "../../path";
 import { FaBell } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { useNotificationsContext } from "notification/NotificationsProvider";
+import { AnimatePresence, motion } from "framer-motion";
 
 const NotificationsGlobalBar: React.FC = () => {
 
@@ -16,8 +17,7 @@ const NotificationsGlobalBar: React.FC = () => {
     const [notifications, setNotifications] = useState<NotificationI[]>([])
     const [hideSection, setHideSection] = useState(false)
 
-    // TODO notification appear animation
-    // TODO open chat on profile view, invitation/notification view
+    // TODO open chat buttons on profile view, invitation/notification view
     // TODO add to friends on chat/conversation view
     // TODO nav from notification to chat
 
@@ -33,10 +33,7 @@ const NotificationsGlobalBar: React.FC = () => {
     }, [location.pathname])
 
     const unreadCount = notifications?.filter(n => n.readAt == null).length
-
-    if (!unreadCount || hideSection) {
-        return null;
-    }
+    const isVisible = !!unreadCount && !hideSection;
 
     const getMessage = () => {
         let key = unreadCount === 1
@@ -47,12 +44,28 @@ const NotificationsGlobalBar: React.FC = () => {
         return t(key, { count: unreadCount })   
     }
 
-    return <div className="my-1 mx-2 px-3 py-2 rounded-md secondary-bg rippple notification-bar" onClick={() => navigate(Path.NOTIFICATIONS)}>
-        <div className="flex items-center gap-3 primary-color">
-            <FaBell size={24}></FaBell>
-            <h2 className="">{getMessage()}</h2>
-        </div>
-    </div>
+    return <AnimatePresence>
+        {isVisible && (
+            <motion.div
+                key="notification-bar"
+                initial={{ opacity: 0, height: 0, marginTop: 0, marginBottom: 0 }}
+                animate={{ opacity: 1, height: "auto", marginTop: 4, marginBottom: 4 }}
+                exit={{ opacity: 0, height: 0, marginTop: 0, marginBottom: 0 }}
+                transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                className="mx-2 overflow-hidden"
+            >
+                <div
+                    className="px-3 py-2 rounded-md secondary-bg rippple notification-bar"
+                    onClick={() => navigate(Path.NOTIFICATIONS)}
+                >
+                    <div className="flex items-center gap-3 primary-color">
+                        <FaBell size={24}></FaBell>
+                        <h2 className="">{getMessage()}</h2>
+                    </div>
+                </div>
+            </motion.div>
+        )}
+    </AnimatePresence>
 }
 
 export default NotificationsGlobalBar;
