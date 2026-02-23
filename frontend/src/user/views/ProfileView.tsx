@@ -192,7 +192,7 @@ const ProfileView: React.FC = () => {
                 onClick={sendInvite}
             >
                 <FaUsers className="mr-2" />
-                {t('account.invite')}
+                {t('friends.invite')}
             </Button>
         }
 

@@ -2,7 +2,7 @@ import { useAuthContext } from "auth/AuthProvider"
 import Button from "global/components/controls/Button"
 import { BtnModes } from "global/interface/controls.interface"
 import { Path } from "../../path"
-import { FaIdCard } from "react-icons/fa"
+import { FaIdCard, FaSearch } from "react-icons/fa"
 import { useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useUserContext } from "user/UserProvider"
@@ -99,7 +99,7 @@ const FriendsListView: React.FC = () => {
     return (
         <div className="list-view">
 
-            <div className="px-2 flex flex-col gap-1 mt-2">
+            <div className="flex flex-col gap-1 mt-2">
 
                 {!friends.length && (
                     <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
@@ -125,7 +125,7 @@ const FriendsListView: React.FC = () => {
                     mode={BtnModes.SECONDARY}
                     onClick={() => navigate(Path.FRIENDS_SEARCH)}
                 >
-                    <FaIdCard className="mr-2" />
+                    <FaSearch className="mr-2" />
                     {t('friends.search')}
                 </Button>
 

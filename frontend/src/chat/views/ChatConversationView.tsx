@@ -307,6 +307,8 @@ const ChatConversationView: React.FC = () => {
                         placeholder={t('chat.typeMessage')}
                         className="chat-view-input-content-control"
                         disabled={sending || !!chat?.blockedByUid}
+                        enterKeyHint="send"
+                        autoComplete="off"
                     />
                 </div>
 
@@ -317,7 +319,7 @@ const ChatConversationView: React.FC = () => {
                         mode={BtnModes.PRIMARY_TXT}
                         type="submit"
                         disabled={!newMessage.trim() || sending}
-                        className="p-0"
+                        className="px-2"
                     >
                         <FaPaperPlane size={iconSize * 1.2} />
                     </Button>
