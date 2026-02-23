@@ -10,7 +10,7 @@ import FloatingInput from "global/components/controls/FloatingInput";
 import CurrencySelector from "offer/components/CurrencySelector";
 import { useLocation } from "react-router-dom";
 import { OfferUtil } from "@shared/utils/OfferUtil";
-import { FaSearch } from "react-icons/fa";
+import { Icons } from "global/icon.def";
 
 const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ ctx }) => {
     const { t } = useTranslation();
@@ -139,7 +139,7 @@ const OfferSearchFiltersSheet: React.FC<{ ctx: OfferSearchContextProps }> = ({ c
 
             <div className="mt-10">
                 <Button onClick={search} mode={BtnModes.PRIMARY} fullWidth>
-                    <FaSearch size={22}></FaSearch>
+                    <Icons.SEARCH size={22} />
                     {t("common.search")}
                 </Button>
                 <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-3" fullWidth>

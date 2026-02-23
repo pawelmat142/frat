@@ -8,11 +8,10 @@ import DateRangeInputViewSelector from "global/components/callendar/DateRangeInp
 import { Controller, useForm } from "react-hook-form";
 import { FormValidator } from "global/FormValidator";
 import Button from "global/components/controls/Button";
-import { FaSearch } from "react-icons/fa";
 import CountrySelector from "global/components/selector/CountrySelector";
 import FloatingInput from "global/components/controls/FloatingInput";
 import DictionarySelector from "global/components/selector/DictionarySelector";
-import { DateUtil } from "@shared/utils/DateUtil";
+import { Icons } from "global/icon.def";
 
 const WorkersSearchFiltersView: React.FC = () => {
 
@@ -202,7 +201,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                     <Button
                         size={BtnSizes.LARGE}
                         mode={BtnModes.PRIMARY} fullWidth type="submit">
-                        <FaSearch size={22}></FaSearch>
+                        <Icons.SEARCH size={22}></Icons.SEARCH>
                         {t("common.search")}
                     </Button>
                     <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-3" fullWidth>

@@ -2,7 +2,6 @@ import { UserI } from "@shared/interfaces/UserI";
 import { useNavigate } from "react-router-dom";
 import UserItem from "./UserItem";
 import IconButton from "global/components/controls/IconButon";
-import { FaUserPlus } from "react-icons/fa";
 import { useAuthContext } from "auth/AuthProvider";
 import { FriendsService } from "friends/services/FriendsService";
 import { useEffect, useState } from "react";
@@ -14,6 +13,7 @@ import { useUserContext } from "user/UserProvider";
 import { FriendshipStatuses } from "@shared/interfaces/FriendshipI";
 import Button from "global/components/controls/Button";
 import { BtnSizes } from "global/interface/controls.interface";
+import { Icons } from "global/icon.def";
 
 interface Props {
     user: UserI
@@ -68,7 +68,7 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
                 e.stopPropagation();
                 sendInvite();
             }}
-                icon={<FaUserPlus size={20} />}
+                icon={<Icons.ADD_USER size={20} />}
             ></IconButton>}
 
             {isFriend && <div className="primary-color small-font">{t('friends.friend')}</div>}

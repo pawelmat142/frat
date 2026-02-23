@@ -2,7 +2,6 @@ import { useAuthContext } from "auth/AuthProvider"
 import Button from "global/components/controls/Button"
 import { BtnModes } from "global/interface/controls.interface"
 import { Path } from "../../path"
-import { FaIdCard, FaSearch } from "react-icons/fa"
 import { useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useUserContext } from "user/UserProvider"
@@ -13,6 +12,7 @@ import { UserPublicService } from "user/services/UserPublicService"
 import FriendshipListItem from "friends/components/FriendshipListItem"
 import { FriendsService } from "friends/services/FriendsService"
 import Loading from "global/components/Loading"
+import { Icons } from "global/icon.def"
 
 const FriendsListView: React.FC = () => {
 
@@ -103,7 +103,7 @@ const FriendsListView: React.FC = () => {
 
                 {!friends.length && (
                     <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
-                        <FaIdCard size={48} className="secondary-text" />
+                        <Icons.EMPTY size={48} className="secondary-text" />
                         <div className="secondary-text">{t('friends.noFriends')}</div>
                     </div>
                 )}  
@@ -124,7 +124,7 @@ const FriendsListView: React.FC = () => {
                     mode={BtnModes.SECONDARY}
                     onClick={() => navigate(Path.FRIENDS_SEARCH)}
                 >
-                    <FaSearch className="mr-2" />
+                    <Icons.SEARCH className="mr-2" />
                     {t('friends.search')}
                 </Button>
             </div>

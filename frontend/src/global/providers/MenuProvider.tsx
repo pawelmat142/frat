@@ -8,8 +8,8 @@ import { MenuConfig } from 'global/components/selector/MenuItems';
 import { useBottomSheet } from './BottomSheetProvider';
 import { useGlobalContext } from './GlobalProvider';
 import IconButton from 'global/components/controls/IconButon';
-import { FaBriefcase, FaComments, FaEllipsisV, FaHome, FaSignInAlt, FaUserCircle, FaUserFriends } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import { Icons } from 'global/icon.def';
 
 interface NewMenuItem {
     label: string
@@ -40,7 +40,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const globalCtx = useGlobalContext();
 
     const setupHeaderMenu = (menu: MenuConfig) => {
-        globalCtx.setHeaderMenu(<IconButton icon={<FaEllipsisV onClick={() => {
+        globalCtx.setHeaderMenu(<IconButton icon={<Icons.MENU onClick={() => {
             bottomSheetCtx.openMenu(menu)
         }} />} />);
     }
@@ -51,17 +51,17 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         label: t('nav.start'),
         active: !!matchPath({ path: Path.HOME, end: true }, location.pathname),
         onClick: () => navigate(Path.HOME),
-        icon: <FaHome size={iconSize} />
+        icon: <Icons.HOME size={iconSize} />
     }, {
         label: t('chat.chats'),
         active: location.pathname.includes(Path.CHATS),
         onClick: () => navigate(Path.CHATS),
-        icon: <FaComments size={iconSize} />
+        icon: <Icons.CHAT size={iconSize} />
     }, {
         label: t('account.friends'),
         active: location.pathname.includes(Path.FRIENDS),
         onClick: () => navigate(Path.getFriendsPath(me?.uid || '')),
-        icon: <FaUserFriends size={iconSize} />
+        icon: <Icons.FRIENDS size={iconSize} />
     }]
 
     if (me) {
@@ -69,14 +69,14 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
             label: t('nav.account'),
             active: !!matchPath({ path: Path.PROFILE, end: true }, location.pathname),
             onClick: () => navigate(Path.getProfilePath(me.uid)),
-            icon: <FaUserCircle size={iconSize} />
+            icon: <Icons.ACCOUNT size={iconSize} />
         });
     } else {
         items.push({
             label: t('signin.submit'),
             active: !!matchPath({ path: Path.SIGN_IN, end: true }, location.pathname),
             onClick: () => navigate(Path.SIGN_IN),
-            icon: <FaSignInAlt size={iconSize} />
+            icon: <Icons.SIGN_IN size={iconSize} />
         });
     }
 

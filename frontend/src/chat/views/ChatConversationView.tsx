@@ -8,7 +8,6 @@ import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import Button from "global/components/controls/Button";
 import { Path } from "../../path";
-import {  FaPaperPlane } from "react-icons/fa";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { BtnModes, MenuItem } from "global/interface/controls.interface";
@@ -17,6 +16,7 @@ import { useMenuContext } from "global/providers/MenuProvider";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
 import UserItem from "user/components/UserItem";
+import { Icons } from "global/icon.def";
 
 const ChatConversationView: React.FC = () => {
     const { t } = useTranslation();
@@ -328,7 +328,7 @@ const ChatConversationView: React.FC = () => {
                         disabled={!newMessage.trim() || sending}
                         className="px-2"
                     >
-                        <FaPaperPlane size={iconSize * 1.2} />
+                        <Icons.MSG size={iconSize * 1.2} />
                     </Button>
                 </div>
 

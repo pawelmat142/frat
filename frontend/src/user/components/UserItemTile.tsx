@@ -2,12 +2,12 @@ import { UserI } from "@shared/interfaces/UserI";
 import UserItemWithLoading from "./UserItemWithLoading";
 import UserItem from "./UserItem";
 import Button from "global/components/controls/Button";
-import { FaPaperPlane } from "react-icons/fa";
 import { BtnModes } from "global/interface/controls.interface";
 import { useNavigate } from "react-router";
 import { Path } from "../../path";
 import { ChatService } from "chat/services/ChatService";
 import { profile } from "console";
+import { Icons } from "global/icon.def";
 
 interface Props {
     uid?: string,
@@ -39,7 +39,7 @@ const UserItemTile: React.FC<Props> = ({ uid, user, size = 3.5, showNumber = fal
                     mode={BtnModes.PRIMARY_TXT}
                     type="submit"
                     className="p-0">
-                    <FaPaperPlane size={20} />
+                    <Icons.MSG size={20} />
                 </Button>
 
             </div>}

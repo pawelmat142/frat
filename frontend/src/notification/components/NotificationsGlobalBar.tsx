@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { NotificationI } from "@shared/interfaces/NotificationI";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Path } from "../../path";
-import { FaBell } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { useNotificationsContext } from "notification/NotificationsProvider";
 import { AnimatePresence, motion } from "framer-motion";
+import { Icons } from "global/icon.def";
 
 const NotificationsGlobalBar: React.FC = () => {
 
@@ -19,7 +19,6 @@ const NotificationsGlobalBar: React.FC = () => {
 
     // TODO open chat buttons on profile view, invitation/notification view
     // TODO add to friends on chat/conversation view
-    // TODO nav from notification to chat
 
     useEffect(() => {
         setNotifications(notificationsCtx.notifications)
@@ -59,7 +58,7 @@ const NotificationsGlobalBar: React.FC = () => {
                     onClick={() => navigate(Path.NOTIFICATIONS)}
                 >
                     <div className="flex items-center gap-3 primary-color">
-                        <FaBell size={24}></FaBell>
+                        <Icons.NOTIFICATION size={24} />
                         <h2 className="">{getMessage()}</h2>
                     </div>
                 </div>

@@ -6,12 +6,12 @@ import { useTranslation } from "react-i18next";
 import { ThumbUp, Visibility, Work } from "@mui/icons-material";
 import ListItem from "global/components/ListItem";
 import IconButton from "global/components/controls/IconButon";
-import { FaPaperPlane, FaPhone } from "react-icons/fa";
 import { ChatService } from "chat/services/ChatService";
 import { toast } from "react-toastify";
 import { useIsDesktop } from "global/hooks/isMobile";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { useAuthContext } from "auth/AuthProvider";
+import { Icons } from "global/icon.def";
 
 interface Props {
     profile: WorkerI,
@@ -62,13 +62,13 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
             e.stopPropagation();
             openPhoneCall();
         }}
-            icon={<FaPhone size={20} />}
+            icon={<Icons.PHONE size={20} />}
         ></IconButton>
         <IconButton onClick={(e) => {
             e.stopPropagation();
             openChat();
         }}
-            icon={<FaPaperPlane size={20} />}
+            icon={<Icons.MSG size={20} />}
         ></IconButton>
     </div>
 

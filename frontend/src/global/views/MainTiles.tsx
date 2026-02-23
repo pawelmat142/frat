@@ -1,13 +1,12 @@
-import { FaSearch, FaBriefcase, FaUserPlus, FaUser, FaPlus, FaCog, FaSignInAlt, FaSignOutAlt, FaTasks } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../path"
-import { toast } from 'react-toastify';
 import { useUserContext } from 'user/UserProvider';
 import { useAuthContext } from 'auth/AuthProvider';
 import { AuthService } from 'auth/services/AuthService';
 import { useTranslation } from 'react-i18next';
 import LangSelectTile from 'global/components/tiles/LangSelectTile';
 import ThemeSelectTile from 'global/components/tiles/ThemeSelectTile';
+import { Icons } from 'global/icon.def';
 
 const MainTiles: React.FC = () => {
 
@@ -26,16 +25,16 @@ const MainTiles: React.FC = () => {
 
                 {!me && (
                     <div className="square-tile col-tile big py-8" onClick={() => navigate(Path.SIGN_IN)}>
-                        <FaSignInAlt size={iconSize} />
+                        <Icons.SIGN_IN size={iconSize} />
                         <div>{t("signin.submit")}</div>
                     </div>
                 )}
                 <div className="square-tile col-tile" onClick={() => navigate(Path.WORKERS_FILTERS_SEARCH)}>
-                    <FaSearch size={iconSize} />
+                    <Icons.SEARCH size={iconSize} />
                     <div>{t("employeeProfile.search")}</div>
                 </div>
                 <div className="square-tile col-tile" onClick={() => navigate(Path.OFFERS_SEARCH)}>
-                    <FaBriefcase size={iconSize} />
+                    <Icons.OFFER size={iconSize} />
                     <div>{t("offer.search")}</div>
                 </div>
 
@@ -43,24 +42,24 @@ const MainTiles: React.FC = () => {
                     <>
                         {employeeProfile ? (
                             <div className="square-tile col-tile" onClick={() => navigate(Path.getWorkerProfilePath(me!.displayName))}>
-                                <FaUser size={iconSize} />
+                                <Icons.WORKER size={iconSize} />
                                 <div>{t("profile.tile")}</div>
                             </div>
                         ) : (
                             <div className="square-tile col-tile" onClick={() => navigate(Path.WORKER_FORM)}>
-                                <FaUserPlus size={iconSize} />
+                                <Icons.ADD_USER size={iconSize} />
                                 <div>{t("profile.add")}</div>
                             </div>
                         )}
 
                         {hasSomeOffers ? (
                             <div className="square-tile col-tile" onClick={() => navigate(Path.getOffersPath(me!.uid))}>
-                                <FaTasks size={iconSize} />
+                                <Icons.OFFER size={iconSize} />
                                 <div>{t("offer.management")}</div>
                             </div>
                         ) : (
                             <div className="square-tile col-tile" onClick={() => navigate(Path.OFFER_FORM)}>
-                                <FaPlus size={iconSize} />
+                                <Icons.OFFER size={iconSize} />
                                 <div>{t("offer.add")}</div>
                             </div>
                         )}
@@ -77,7 +76,7 @@ const MainTiles: React.FC = () => {
 
                 {!!me && (<div className="sec-tile-wrapper">
                     <div className="square-tile">
-                        <FaCog size={iconSize} />
+                        <Icons.SETTINGS size={iconSize} />
                     </div>
                     <div className="sec-tile-label">{t("common.settings")}</div>
                     {/* TODO settings view */}
@@ -89,7 +88,7 @@ const MainTiles: React.FC = () => {
 
                 {!!me && (<div className="sec-tile-wrapper" onClick={() => AuthService.logout()}>
                     <div className="square-tile">
-                        <FaSignOutAlt size={iconSize} />
+                        <Icons.SIGN_OUT size={iconSize} />
                     </div>
                     <div className="sec-tile-label">{t("signin.logout")}</div>
                 </div>)}

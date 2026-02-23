@@ -2,7 +2,7 @@ import { SelectorItem } from "global/interface/controls.interface";
 import { useBottomSheet } from "global/providers/BottomSheetProvider";
 import { useTheme } from "global/providers/ThemeProvider";
 import { useTranslation } from "react-i18next";
-import { FaLanguage, FaMoon, FaSun } from "react-icons/fa";
+import { FaMoon, FaSun } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 interface LangSelectTileProps {

@@ -16,8 +16,8 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
 import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
 import { FrontDateUtil } from "global/utils/FrontDateUtil";
-import { FaTimes, FaTrash } from "react-icons/fa";
 import { useNotificationsContext } from "notification/NotificationsProvider";
+import { Icons } from "global/icon.def";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -121,7 +121,7 @@ const SingleNotificationView: React.FC = () => {
     const getActions = (): React.ReactNode => {
 
         const deleteButton = <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={deleteNotification}
-        ><FaTrash className="mr-2" />{t('notification.deleteNotification')}</Button>
+        ><Icons.DELETE className="mr-2" />{t('notification.deleteNotification')}</Button>
 
         const requesterProfileButton = !!notification?.requesterUid && <Button fullWidth mode={BtnModes.SECONDARY}
          onClick={goToRequesterProfile}>{t('notification.viewProfile', { name: notification.requesterName })}</Button>
@@ -151,7 +151,7 @@ const SingleNotificationView: React.FC = () => {
                     } finally {
                         setLoading(false)
                     }
-                }}><FaTimes className="mr-2" />{t('friends.reject')}</Button>
+                }}><Icons.CANCEL className="mr-2" />{t('friends.reject')}</Button>
 
                 {deleteButton}
 

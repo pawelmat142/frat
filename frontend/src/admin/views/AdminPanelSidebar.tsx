@@ -1,11 +1,9 @@
 import { NavLink } from 'react-router-dom';
 import TranslateIcon from '@mui/icons-material/Translate';
 import HomeIcon from '@mui/icons-material/Home';
-import PeopleIcon from '@mui/icons-material/People';
 import MessageIcon from '@mui/icons-material/Message';
-import BadgeIcon from '@mui/icons-material/Badge';
 import { Path } from '../../path';
-import { FaBriefcase } from 'react-icons/fa';
+import { Icons } from 'global/icon.def';
 
 const AdminPanelSidebar: React.FC = () => {
 
@@ -31,7 +29,7 @@ const AdminPanelSidebar: React.FC = () => {
         to={Path.ADMIN_USERS}
         className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
       >
-        <PeopleIcon />
+        <Icons.FRIENDS />
         <span>Users</span>
       </NavLink>
 
@@ -47,7 +45,7 @@ const AdminPanelSidebar: React.FC = () => {
         to={Path.ADMIN_EMPLOYEE_PROFILES}
         className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
       >
-          <BadgeIcon />
+          <Icons.WORKER />
         <span>Employee Profiles</span>
       </NavLink>
 
@@ -55,7 +53,7 @@ const AdminPanelSidebar: React.FC = () => {
         to={Path.ADMIN_OFFERS}
         className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
       > 
-        <FaBriefcase className="svg-icon" />
+        <Icons.OFFER className="svg-icon" />
         <span>Offers</span>
       </NavLink>
     </div>
