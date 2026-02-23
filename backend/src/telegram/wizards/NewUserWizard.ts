@@ -96,7 +96,7 @@ export class NewUserWizard extends Wizard {
       const user = await this.services.telegramUserService.createProfile(firebaseUser, this.user.telegramChannelId, this.user.displayName);
       return this.STEP.BYE;
     } catch (error) {
-      this.error = error;
+      this.error = `${error}`;
       this.logger.warn(error);
       return this.STEP.ERROR;
     }
