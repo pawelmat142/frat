@@ -31,7 +31,6 @@ const TelegramSignPage: React.FC = () => {
             const credentials = await AuthService.loginByPin(pin);
             
             if (!credentials) {
-                // TODO
                 toast.error(t("signin.invalidOrExpiredPin"));   
                 return
             }
@@ -101,8 +100,7 @@ const TelegramSignPage: React.FC = () => {
                     className="mt-5"
                     onClick={handleTelegramNav}
                 >
-                    {/* TODO translation */}
-                    {t("signin.telegram.openBot")}
+                    {t("signin.openBot")}
                 </Button>
 
             </form>

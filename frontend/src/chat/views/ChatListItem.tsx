@@ -2,10 +2,10 @@ import { ChatMemberWithUserI, ChatWithMembers } from "@shared/interfaces/ChatI";
 import { DateUtil } from "@shared/utils/DateUtil";
 import { useAuthContext } from "auth/AuthProvider";
 import ListItem from "global/components/ListItem";
-import { Utils } from "global/utils/utils";
 import { useTranslation } from "react-i18next";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { FaCheck } from 'react-icons/fa';
+import { FrontDateUtil } from "global/utils/FrontDateUtil";
 
 interface Props {
     chat: ChatWithMembers;
@@ -20,7 +20,7 @@ const ChatListItem: React.FC<Props> = ({ chat, otherMember: otherMember, first, 
     const { me } = useAuthContext();
     const date = new Date(chat.updatedAt || chat.createdAt)
 
-    const topRight = <span className="small-font">{Utils.prepareDisplayShortDate(t, date)}</span>
+    const topRight = <span className="small-font">{FrontDateUtil.displayShortDateOrDayOrTimeIfToday(t, date)}</span>
 
     const getReadStatusBadge = (): React.ReactNode => {
         const meAsMember = chat.members?.find(m => m.user?.uid === me?.uid);

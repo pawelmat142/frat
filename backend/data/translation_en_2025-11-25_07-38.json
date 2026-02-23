@@ -27,6 +27,7 @@
       "unreadNotificationsOne": "You have {{count}} unread notification",
       "unreadNotificationsFew": "You have {{count}} unread notifications",
       "unreadNotificationsMany": "You have {{count}} unread notifications",
+      "newMessageTitle": "New message",
       "error": {
         "notFound": "Notification with given ID not found"
       }
@@ -263,7 +264,9 @@
       "googleProvider": "Sign In with Google",
       "alreadyHaveAccount": "Already have an account?",
       "forgotPasswordTitle": "Password reset",
-      "forgotPasswordSuccess": "If the email exists, a reset link has been sent."
+      "forgotPasswordSuccess": "If the email exists, a reset link has been sent.",
+      "invalidOrExpiredPin": "Invalid or expired PIN. Please try again.",
+      "openBot": "Open Telegram bot"
     },
     "signup": {
       "email": "Email",

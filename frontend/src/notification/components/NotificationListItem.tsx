@@ -44,11 +44,19 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
     }
 
     const getDateMsg = () => {
-        const msg = notification.readAt
-            ? t('notification.readAt', { date: FrontDateUtil.displayDateWithTime(t, notification.readAt) })
-            : t('notification.sentAt', { date: FrontDateUtil.displayDateWithTime(t, notification.createdAt) })      
+        return <div className="small-font">{notification.requesterName}</div>
+    }
 
-        return <div className="small-font">{msg}</div>
+    const shortDate = (): React.ReactNode => {
+        const date = notification.readAt ? notification.readAt : notification.createdAt;
+        return <span className="small-font">{FrontDateUtil.displayShortDateOrDayOrTimeIfToday(t, date)}</span>
+    } 
+
+    const getUnreadCount = (): React.ReactNode => {
+        if (notification.metadata?.unreadCount) {
+            return <div className="unread-badge">{notification.metadata.unreadCount}</div>;
+        }
+        return null;
     }
 
     const badge = notification.readAt ? null : <div className="notification-badge-red"></div>;
@@ -61,6 +69,8 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
                 iconOrAvatarBadge={badge}
                 topLeft={t(notification.title)}
                 bottomLeft={getDateMsg()}
+                bottomRight={getUnreadCount()}
+                topRight={shortDate()}
                 first={first}
                 last={last}
             ></ListItem>

@@ -124,13 +124,12 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     unreadCount++
                 }
 
-                // TODO translations
                 const notification: NotificationI = {
                     notificationId: timestamp + chat.chatId,
                     recipientUid: meChatMember.uid,
                     type: NotificationTypes.NEW_MESSAGE,
                     targetId: chat.chatId.toString(),
-                    title: `New message`,
+                    title: `notification.newMessageTitle`,
                     message: isCurrentMsg ? message.content : (chat.latestMessageContent || ''),
                     icon: NotificationIcons.CHAT,
                     avatarRef: otherMember.user?.avatarRef,
@@ -138,6 +137,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     requesterName: otherMember.user?.displayName,
                     createdAt: new Date(),
                     readAt: null,
+                    metadata: { unreadCount }
                 }
                 return notification
             })
