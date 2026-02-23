@@ -127,6 +127,12 @@ $headerHeightDesktop: 60px;
     }
 }
 
+.tiles-center-wrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1rem;
+}
 
 
 // CHAT
@@ -729,32 +735,9 @@ $cellRadiusBig: 1rem;
     font-size: $smallFont;
 }
 
-.form-wizard-top-wrapper {
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 4;
-    padding-bottom: 2rem;
-}
-
-.form-wizard-top {
-    background-color: $primary-bg;
-    padding-top: 1rem;
-    padding-bottom: .5rem;
-    display: flex;
-    justify-content: center;
-}
-
 .form-wizard-buttons-wrapper {
     padding-top: 2rem;
-    padding-bottom: 54px;
-    position: sticky;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 4;
+    padding-bottom: 1rem;
 }
 
 .form-wizard-buttons {
@@ -768,19 +751,53 @@ $cellRadiusBig: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
     padding: 0 .5rem;
 }
 
+.wizard-stepper-item {
+    display: flex;
+    align-items: center;
 
-
-.tiles-center-wrapper {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 1rem;
+    &:not(:first-child) {
+        flex: 1;
+    }
 }
+
+.wizard-stepper-line {
+    flex: 1;
+    height: 2px;
+    background-color: $border-color;
+    transition: $transition;
+
+    &.active {
+        background-color: $primary-color;
+    }
+}
+
+.wizard-stepper-circle {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid $border-color;
+    background-color: transparent;
+    transition: $transition;
+    flex-shrink: 0;
+
+    &.completed {
+        background-color: $primary-color;
+        border-color: $primary-color;
+    }
+
+    &.current {
+        background-color: $primary-color;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px $primary-color-transparent;
+    }
+}
+
+
+
 
 
 

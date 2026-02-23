@@ -3,10 +3,8 @@ import { UseFormReturn, FieldValues } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Button from 'global/components/controls/Button';
 import { BtnModes, BtnSizes } from 'global/interface/controls.interface';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import DoneIcon from '@mui/icons-material/Done';
 import { useTranslation } from 'react-i18next';
+import Stepper from './Stepper';
 
 type FormWizardProps<TForm extends FieldValues, TStep extends string> = {
     localStorageKey: string;
@@ -16,7 +14,6 @@ type FormWizardProps<TForm extends FieldValues, TStep extends string> = {
     onFinalSubmit: (validateFn: () => Promise<boolean>) => void | Promise<void>;
     children: React.ReactNode;
     onSelectStep: (step: TStep) => void;
-    labelKeyPrefix?: string;
 };
 
 function FormWizard<TForm extends FieldValues, TStep extends string = string>({
@@ -27,7 +24,6 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
     onFinalSubmit,
     children,
     onSelectStep,
-    labelKeyPrefix = 'employeeProfile.form',
 }: FormWizardProps<TForm, TStep>) {
 
     const { t } = useTranslation();
@@ -96,22 +92,22 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
             <form className='flex flex-col flex-1'
                 onSubmit={formRef.handleSubmit(() => { }, (errors) => {
                     console.log('Form errors', errors)
-                    // TODO translation
-                    toast.error('Form submit error')
+                    toast.error(t('common.sww'))
                 })}
                 noValidate
             >
 
 
                 <div className="flex-1">
-                    <div className="form-wizard-top-wrapper">
-                        <div className="form-wizard-top">
-                            {t(`${labelKeyPrefix}.${currentStep}.label`)}
 
-                        </div>
+                    <div className='py-10'>
+                        <Stepper stepsOrder={stepsOrder} currentStep={currentStep}></Stepper>
                     </div>
+
                     {children}
+
                 </div>
+
                 <div className="form-wizard-buttons-wrapper">
                     <div className="form-wizard-buttons">
                         <Button
@@ -122,55 +118,27 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
                             disabled={currentStep === stepsOrder[0]}
                             className="flex-1"
                             aria-label={t("common.previous")}
-                        >
-                            <ArrowBackIosNewIcon />
-                        </Button>
-
-                        <div className="wizard-stepper">
-                            {stepsOrder.map((step) => (
-                                <Button
-                                    onClick={() => {
-                                        if (currentStep === step || stepsOrder.indexOf(step) > stepsOrder.indexOf(currentStep)) {
-                                            return;
-                                        }
-                                        selectStep(step as TStep);
-                                    }}
-                                    key={String(step)}
-                                    type="button"
-                                    mode={currentStep === step ? BtnModes.PRIMARY_TXT : BtnModes.SECONDARY_TXT}
-                                    size={BtnSizes.SMALL}
-                                    disabled={
-                                        stepsOrder.indexOf(step) > stepsOrder.indexOf(currentStep)
-                                    }
-                                >
-                                    <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                                        <circle cx="6" cy="6" r="5" fill={currentStep === step ? 'var(--primary-color, #2563eb)' : '#e5e7eb'} />
-                                    </svg>
-                                </Button>
-                            ))}
-                        </div>
+                        >{t("common.previous")}</Button>
 
                         {currentStep !== stepsOrder[stepsOrder.length - 1] ? (
                             <Button
                                 type="button"
                                 onClick={handleNext}
                                 size={BtnSizes.LARGE}
-                                mode={BtnModes.PRIMARY_TXT}
+                                mode={BtnModes.PRIMARY}
                                 className="flex-1"
                                 aria-label={t("common.next")}
-                            >
-                                <ArrowForwardIosIcon />
-                            </Button>
+                            >{t("common.next")}</Button>
                         ) : (
                             <Button
                                 type="button"
                                 onClick={() => { onFinalSubmit(validateCurrentStep) }}
                                 size={BtnSizes.LARGE}
-                                mode={BtnModes.PRIMARY_TXT}
+                                mode={BtnModes.PRIMARY}
                                 className="flex-1 font-bold"
                                 aria-label={t("common.save")}
                             >
-                                <DoneIcon sx={{ fontSize: 22, transform: 'scale(1.6)' }} />
+                                {t("common.save")}
                             </Button>
                         )}
                     </div>

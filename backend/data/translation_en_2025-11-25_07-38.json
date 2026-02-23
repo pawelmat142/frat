@@ -226,7 +226,8 @@
       "options": "Options",
       "search": "Search",
       "anywhere": "Anywhere",
-      "endOfResults": "No more results to display."
+      "endOfResults": "No more results to display.",
+      "sww": "Something went wrong, please try again later."
     },
     "header": {
       "home": "Home",

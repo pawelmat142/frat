@@ -226,7 +226,8 @@
       "options": "Opcje",
       "search": "Szukaj",
       "anywhere": "Gdziekolwiek",
-      "endOfResults": "Brak więcej wyników do wyświetlenia."
+      "endOfResults": "Brak więcej wyników do wyświetlenia.",
+      "sww": "Coś poszło nie tak, spróbuj ponownie później."
     },
     "header": {
       "home": "Strona główna",

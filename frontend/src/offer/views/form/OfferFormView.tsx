@@ -134,7 +134,6 @@ const OfferFormContent: React.FC = () => {
             currentStep={ctx.form.currentStep}
             onFinalSubmit={onSubmit}
             onSelectStep={ctx.selectStep}
-            labelKeyPrefix="offer.form"
         >
             <>
                 {renderStep()}
