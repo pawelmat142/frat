@@ -23,7 +23,7 @@ export class WizardService implements OnModuleInit {
   constructor(
     private readonly servicesProvider: ServiceProvider,
     private readonly configService: ConfigService
-  ) {}
+  ) { }
 
   private initBot(): TelegramBot {
     const token = this.configService.get<string>('TELEGRAM_BOT_TOKEN');
@@ -109,28 +109,54 @@ export class WizardService implements OnModuleInit {
     }
 
     let wizard = await this.findOrCreateWizard(chatId);
-    let step = wizard.getStep();
+    try {
+      let step = wizard.getStep();
+  
+      const clickedButton = BotUtil.findClickedButton(step, message.data);
+      await this.removeCallbackButtons(message);
+  
+      if (clickedButton) {
+        if (clickedButton.switch) {
+          // this.stopWizard(wizard);
+          wizard = await this.ifWizardDoesNotContainUserTryToFetchIt(wizard);
+          wizard = this.switchWizard(
+            clickedButton.switch,
+            wizard as ProfileWizard,
+          ) as ProfileWizard;
+          await wizard.init();
+        } else if (clickedButton.process) {
+          this.wizardLog(wizard, `processing...`);
+          const order = await clickedButton.process();
+          wizard.order = order;
+        }
+      }
+  
+      wizard.msgId = message.message.message_id;
+      this.sendWizardMessage(wizard, input);
+    } catch (error) {
+      this.logger.error(error);
+      await this.sendErrorMessage(wizard, `${error}`);
+    }
+  }
 
-    const clickedButton = BotUtil.findClickedButton(step, message.data);
-    await this.removeCallbackButtons(message);
-
-    if (clickedButton) {
-      if (clickedButton.switch) {
-        this.stopWizard(wizard);
-        wizard = this.switchWizard(
-          clickedButton.switch,
-          wizard as ProfileWizard,
-        ) as ProfileWizard;
-        await wizard.init();
-      } else if (clickedButton.process) {
-        this.wizardLog(wizard, `processing...`);
-        const order = await clickedButton.process();
-        wizard.order = order;
+  private async ifWizardDoesNotContainUserTryToFetchIt(wizard: Wizard): Promise<ProfileWizard> {
+    this.logger.log(`Checking if wizard contains user...`);
+    if (wizard instanceof ProfileWizard) {
+      const profile = wizard.getProfile();
+      if (profile) {
+        return wizard
       }
     }
+    const telegramChannelId = wizard.chatId.toString();
+    if (!telegramChannelId) {
+      throw new Error('Telegram channel id not found');
+    }
 
-    wizard.msgId = message.message.message_id;
-    this.sendWizardMessage(wizard, input);
+    const user = await this.servicesProvider.telegramUserService.findUser(telegramChannelId);
+    if (!user) {
+      throw new Error(`User with telegram channel id ${telegramChannelId} not found`);
+    }
+    return new ProfileWizard(user, this.servicesProvider);
   }
 
   private async findOrCreateWizard(chatId: number): Promise<Wizard> {
@@ -174,12 +200,16 @@ export class WizardService implements OnModuleInit {
   }
 
   private stopWizard(wizard: Wizard) {
-    this.cleanMessages(wizard.chatId.toString());
     const wizards = this.wizards$.value.filter(
       (w) => w.chatId !== wizard.chatId,
     );
     this.wizards$.next(wizards);
     this.wizardLog(wizard, `stopped`);
+  }
+
+  private stopWizardAndCleanMessages(wizard: Wizard) {
+    this.cleanMessages(wizard.chatId.toString());
+    this.stopWizard(wizard);
   }
 
   @Cron(CronExpression.EVERY_30_MINUTES)
@@ -236,7 +266,7 @@ export class WizardService implements OnModuleInit {
     BotUtil.addBackBtnIfNeeded(step);
     if (step.close || input === WizBtn.STOP) {
       if (input === WizBtn.STOP) msg = ['Dialog interrupted'];
-      this.stopWizard(wizard);
+      this.stopWizardAndCleanMessages(wizard);
     }
     const options: TelegramBot.SendMessageOptions = {};
     let buttons = step.buttons || [];
@@ -271,9 +301,17 @@ export class WizardService implements OnModuleInit {
       this.lastMessageWithButtonsId[result.chat.id] = result.message_id;
     }
     if (step.close) {
-      this.stopWizard(wizard);
+      this.stopWizardAndCleanMessages(wizard);
       // this.startNewWizard(wizard.chatId)
     }
+  }
+
+  private async sendErrorMessage(wizard: Wizard, error: string) {
+    await this.sendMessage(wizard.chatId, BotUtil.msgFrom([
+      `Error: ${error}`,
+      `Start typing to continue...`
+    ]));
+    this.stopWizard(wizard);
   }
 
   public removeChatButtons(

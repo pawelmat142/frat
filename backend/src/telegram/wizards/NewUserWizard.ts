@@ -1,6 +1,8 @@
 import { UserI } from '@shared/interfaces/UserI';
 import { ServiceProvider } from './services.provider';
 import { Wizard, WizardStep } from './wizard';
+import { BotUtil } from 'telegram/util/bot.util';
+import { ProfileWizard } from './profile.wizard';
 
 export class NewUserWizard extends Wizard {
   constructor(chatId: number, services: ServiceProvider) {
@@ -15,34 +17,29 @@ export class NewUserWizard extends Wizard {
   readonly STEP = {
     START: 0,
     ASK_NAME: 1,
-    BYE: 2,
+    CREATED: 2,
     ERROR: 3,
     CONFIRM: 4,
-  }  
+    STOP: 5,
+  } 
   // TODO translations
   public getSteps(): WizardStep[] {
-    // const loginUrl = BotUtil.prepareLoginUrl();
-    // if (!loginUrl) {
-    //   return [BotUtil.swwStep()];
-    // }
+    const loginUrl = BotUtil.prepareLoginUrl();
+    if (!loginUrl) {
+      return [BotUtil.swwStep()];
+    }
     return [
       {
         order: this.STEP.START,
         message: [
-          `frat`,
-          `Would you like to register?`,
+          `Welcome to FRAT!`,
+          `Tap the button if you want to create an account!`,
         ],
         buttons: [
-          [
-            {
-              text: 'No',
-              process: async () => this.STEP.BYE,
-            },
-            {
-              text: `Yes`,
-              process: async () => this.STEP.ASK_NAME,
-            },
-          ],
+          [{
+            text: `Register`,
+            process: async () => this.STEP.ASK_NAME,
+          }],
         ],
       },
       {
@@ -58,9 +55,15 @@ export class NewUserWizard extends Wizard {
         },
       },
       {
-        order: this.STEP.BYE,
-        message: [`Bye`],
-        close: true,
+        order: this.STEP.CREATED,
+        message: [`Profile created successfully!`,
+           `You can sign in using the button below!`],
+        buttons: [
+          [{
+            text: `Sign in`,
+            switch: ProfileWizard.name
+          }],
+        ],
       },
       {
         order: this.STEP.ERROR,
@@ -82,19 +85,23 @@ export class NewUserWizard extends Wizard {
             },
             {
               text: 'Confirm',
-              process: async () => this.createProfile(),
+              process: () => this.createProfile(),
             },
           ],
         ],
+      }, {
+        order: this.STEP.STOP,
+        close: true,
+        message: ['ebebe']
       }
     ];
   }
 
   private async createProfile(): Promise<number> {
     try {
-      const firebaseUser = await this.services.exportedAuthService.registerByTelegram(this.user.telegramChannelId);
-      const user = await this.services.telegramUserService.createProfile(firebaseUser, this.user.telegramChannelId, this.user.displayName);
-      return this.STEP.BYE;
+      // const firebaseUser = await this.services.exportedAuthService.registerByTelegram(this.user.telegramChannelId);
+      // const user = await this.services.telegramUserService.createProfile(firebaseUser, this.user.telegramChannelId, this.user.displayName);
+      return this.STEP.CREATED;
     } catch (error) {
       this.error = `${error}`;
       this.logger.warn(error);

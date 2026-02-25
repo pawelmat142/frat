@@ -22,6 +22,10 @@ export const STATES: { [key: string]: ViewState } = {
         leftBtn: <HeaderBackBtn />,
         title: 'signin.title',
     },
+    [Path.TELEGRAM_SIGN]: {
+        leftBtn: <HeaderBackBtn />,
+        title: 'signin.title',
+    },
     [Path.SIGN_UP]: {
         leftBtn: <HeaderBackBtn />,
         title: 'signup.title',

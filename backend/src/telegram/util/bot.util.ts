@@ -3,7 +3,11 @@ import { WizBtn } from './wiz-btn';
 
 export abstract class BotUtil {
   public static prepareLoginUrl(): string {
-    return "test";
+    const isDevEnv = process.env.NODE_ENV === 'development';
+    if (isDevEnv) {
+        return `https://t.me/${process.env.BOT_USERNAME}?start=login`;
+    } 
+    return "https://frat.com.pl/sign-in/telegram";
   }
 
   public static swwStep(): WizardStep {

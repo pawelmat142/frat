@@ -3,7 +3,7 @@ import { ServiceProvider } from './services.provider';
 import { Wizard, WizardStep } from './wizard';
 
 export class ProfileWizard extends Wizard {
-  protected user: UserI;
+protected user: UserI;
 
   constructor(profile: UserI, services: ServiceProvider) {
     super(Number(profile.telegramChannelId), services);
