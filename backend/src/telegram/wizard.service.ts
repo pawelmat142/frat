@@ -122,12 +122,12 @@ export class WizardService implements OnModuleInit {
 
       if (clickedButton) {
         if (clickedButton.switch) {
-          // this.stopWizard(wizard);
+          this.stopWizard(wizard);
           wizard = await this.ifWizardDoesNotContainUserTryToFetchIt(wizard);
           wizard = this.switchWizard(
             clickedButton.switch,
             wizard as ProfileWizard,
-          ) as ProfileWizard;
+          );
           await wizard.init();
         } else if (clickedButton.process) {
           this.wizardLog(wizard, `processing...`);
