@@ -23,6 +23,8 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 import WorkerFormStep3 from "./WorkerFormStep3";
 import WorkerFormStep4 from "./WorkerFormStep4";
+import { UserProviders } from "@shared/interfaces/UserI";
+import { isOneOf } from "@shared/utils/util";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -95,7 +97,11 @@ const WorkerFormView: React.FC = () => {
         const position = await initPosition();
 
         formRef.setValue("step1.fullName", me.displayName)
-        formRef.setValue("step1.email", me.email)
+
+        if (isOneOf([UserProviders.EMAIL, UserProviders.GOOGLE], me.provider)) {
+            formRef.setValue("step1.email", me.email)
+        }
+        
         if (me.avatarRef) {
             formRef.setValue("step1.avatarRef", me.avatarRef);
         }

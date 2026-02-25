@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AVATAR_MOCK } from "./AvatarTile";
 import { Path } from "../../path";
 import ListItemImg from "global/components/ListItemImg";
+import { UserUtil } from "@shared/utils/UserUtil";
 
 interface Props {
     user: UserI
@@ -27,7 +28,7 @@ const UserItem: React.FC<Props> = ({ user, size = 3.5, showNumber = false, allow
                 {bottomRow ? (
                     bottomRow
                 ) : (
-                    showNumber && <div className="small-font secondary-text">{user?.email}</div>
+                    showNumber && !!user && <div className="small-font secondary-text">{UserUtil.getContactInfoLine(user)}</div>
                 )}
             </div>
         </span>

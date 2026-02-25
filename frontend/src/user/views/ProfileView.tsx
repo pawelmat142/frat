@@ -23,6 +23,7 @@ import { OffersService } from "offer/services/OffersService";
 import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
 import { FriendsService } from "friends/services/FriendsService";
 import { Ico } from "global/icon.def";
+import { UserUtil } from "@shared/utils/UserUtil";
 
 const ProfileView: React.FC = () => {
 
@@ -278,22 +279,7 @@ const ProfileView: React.FC = () => {
         }
     }
 
-    const getContctInfoLine = (): string => {
-        switch (user.provider) {
-            case UserProviders.EMAIL:
-            case UserProviders.GOOGLE:
-                if (!user.email) {
-                    throw new Error('Email is required for EMAIL and GOOGLE providers');
-                }
-                return user.email!;
-            case UserProviders.TELEGRAM:
-                if (!user.telegramUsername) {
-                    throw new Error('Telegram username is required for Telegram provider');
-                }
-                return user.telegramUsername!;
-            default: throw new Error('Unknown provider');
-        }
-    }
+
 
     return (
         <div className="view-container">
@@ -309,7 +295,7 @@ const ProfileView: React.FC = () => {
 
                 <div className="text-center">
                     <h2 className="text-xl font-bold">{user.displayName}</h2>
-                    <p className="secondary-text">{getContctInfoLine()}</p>
+                    <p className="secondary-text">{UserUtil.getContactInfoLine(user)}</p>
                 </div>
             </div>
 
