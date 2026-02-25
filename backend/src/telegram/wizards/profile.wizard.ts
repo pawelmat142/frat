@@ -6,7 +6,7 @@ export class ProfileWizard extends Wizard {
 protected user: UserI;
 
   constructor(profile: UserI, services: ServiceProvider) {
-    super(Number(profile.telegramChannelId), services);
+    super(Number(profile.telegramChannelId), profile.telegramUsername, services);
     this.user = profile;
   }
 

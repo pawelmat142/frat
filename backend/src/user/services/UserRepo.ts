@@ -22,6 +22,7 @@ export class UserRepo {
             displayName: createUser.displayName,
             email: createUser.email,
             telegramChannelId: createUser.telegramChannelId,
+            telegramUsername: createUser.telegramUsername,
             provider: createUser.provider,
             photoURL: createUser.photoURL,
             createdAt: new Date(),

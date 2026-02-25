@@ -3,6 +3,13 @@ import { UserRepo } from "./UserRepo";
 import { UserI, UserProviders } from "@shared/interfaces/UserI";
 import { UserRecord } from "firebase-admin/auth";
 
+export interface CreateTelegramUser {
+  firebaseUser: UserRecord;
+  telegramChannelId: string;
+  telegramUsername: string;
+  displayName: string;
+}
+
 @Injectable()
 export class TelegramUserService {
 
@@ -16,7 +23,8 @@ export class TelegramUserService {
     return this.userRepo.getByTelegramChannelId(telegramChannelId);
   }
 
-  public async createProfile(firebaseUser: UserRecord, telegramChannelId: string, displayName: string): Promise<UserI> {
+  public async createProfile(createTelegramUser: CreateTelegramUser): Promise<UserI> {
+    const { firebaseUser, telegramChannelId, telegramUsername, displayName } = createTelegramUser;
     if (!telegramChannelId) {
       throw new Error('Telegram Channel ID is required to create profile');
     }
@@ -32,6 +40,7 @@ export class TelegramUserService {
       uid: firebaseUser.uid,
       email: firebaseUser.email!,
       telegramChannelId,
+      telegramUsername: `@${telegramUsername}`,
       displayName,
       provider: UserProviders.TELEGRAM,
     })

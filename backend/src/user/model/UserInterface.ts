@@ -6,5 +6,6 @@ export interface CreateUser {
     email?: string
     photoURL?: string
     telegramChannelId?: string
+    telegramUsername?: string
     provider: UserProvider
 }

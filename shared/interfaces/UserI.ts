@@ -6,6 +6,7 @@ export interface UserI {
     displayName: string
     email: string
     telegramChannelId?: string
+    telegramUsername?: string
     provider: UserProvider
     verified: boolean
     photoURL?: string

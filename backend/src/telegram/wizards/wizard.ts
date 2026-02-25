@@ -34,14 +34,17 @@ export class Wizard {
 
   chatId: number;
 
+  telegramUsername: string;
+
   order: number;
 
   modified: Date;
 
   msgId: number;
 
-  constructor(chatId: number, protected readonly services: ServiceProvider) {
+  constructor(chatId: number, telegramUsername: string, protected readonly services: ServiceProvider) {
     this.chatId = chatId;
+    this.telegramUsername = telegramUsername;
     this.order = 0;
     this.modified = new Date();
   }

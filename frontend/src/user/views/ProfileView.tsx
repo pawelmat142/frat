@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Loading from "global/components/Loading";
-import { UserI } from "@shared/interfaces/UserI";
+import { UserI, UserProviders } from "@shared/interfaces/UserI";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "auth/AuthProvider";
 import Button from "global/components/controls/Button";
@@ -112,7 +112,9 @@ const ProfileView: React.FC = () => {
     }
 
     // Show warning if email not verified
-    const emailNotVerifiedWarning = isMyAccount && !firebaseUser?.emailVerified ? (
+    const emailNotVerifiedWarning = isMyAccount 
+    && me?.provider === UserProviders.EMAIL 
+    && !firebaseUser?.emailVerified ? (
         <div className="mb-6 p-4 rounded border error-color text-center flex flex-col items-center">
             <div className="font-bold mb-2">{t('signup.emailVerificationRequired')}</div>
             <div className="mb-2">{t('signup.emailVerificationMessage')}</div>

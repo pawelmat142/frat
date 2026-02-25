@@ -5,8 +5,8 @@ import { BotUtil } from 'telegram/util/bot.util';
 import { ProfileWizard } from './profile.wizard';
 
 export class NewUserWizard extends Wizard {
-  constructor(chatId: number, services: ServiceProvider) {
-    super(chatId, services);
+  constructor(chatId: number, telegramUsername: string,services: ServiceProvider) {
+    super(chatId, telegramUsername, services);
     this.user.telegramChannelId = chatId.toString();
   }
 
@@ -20,7 +20,6 @@ export class NewUserWizard extends Wizard {
     CREATED: 2,
     ERROR: 3,
     CONFIRM: 4,
-    STOP: 5,
   } 
   // TODO translations
   public getSteps(): WizardStep[] {
@@ -89,18 +88,19 @@ export class NewUserWizard extends Wizard {
             },
           ],
         ],
-      }, {
-        order: this.STEP.STOP,
-        close: true,
-        message: ['ebebe']
       }
     ];
   }
 
   private async createProfile(): Promise<number> {
     try {
-      // const firebaseUser = await this.services.exportedAuthService.registerByTelegram(this.user.telegramChannelId);
-      // const user = await this.services.telegramUserService.createProfile(firebaseUser, this.user.telegramChannelId, this.user.displayName);
+      const firebaseUser = await this.services.exportedAuthService.registerByTelegram(this.user.telegramChannelId);
+      const user = await this.services.telegramUserService.createProfile({
+        firebaseUser,
+        telegramChannelId: this.user.telegramChannelId!,
+        telegramUsername: this.telegramUsername!,
+        displayName: this.user.displayName!,
+      });
       return this.STEP.CREATED;
     } catch (error) {
       this.error = `${error}`;
