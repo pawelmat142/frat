@@ -1,5 +1,5 @@
 import { IconType } from "react-icons";
-import { FaBan, FaBell, FaBriefcase, FaCalendarAlt, FaCheck, FaCog, FaComments, FaEdit, FaEllipsisV, FaHome, FaIdCard, FaPaperPlane, FaPhone, FaSearch, FaSignInAlt, FaSignOutAlt, FaTags, FaTimes, FaTrash, FaUserCircle, FaUserFriends, FaUserPlus } from "react-icons/fa";
+import { FaBan, FaBell, FaBriefcase, FaCalendarAlt, FaCheck, FaCog, FaComments, FaEdit, FaEllipsisV, FaGlobe, FaHome, FaIdCard, FaPaperPlane, FaPhone, FaSearch, FaSignInAlt, FaSignOutAlt, FaTags, FaTimes, FaTrash, FaUserCircle, FaUserFriends, FaUserPlus } from "react-icons/fa";
 
 export const Ico = {
     HOME: FaHome,
@@ -21,7 +21,7 @@ export const Ico = {
     SETTINGS: FaCog,
     EMPTY: FaBan,
     CATEGORIES: FaTags,
-    LANGUAGE: FaTags,
+    LANGUAGE: FaGlobe,
     MARKER: FaTags,
     CALENDAR: FaCalendarAlt,
     EDIT: FaEdit,

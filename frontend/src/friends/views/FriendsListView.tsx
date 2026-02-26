@@ -109,7 +109,7 @@ const FriendsListView: React.FC = () => {
 
                 {!friends.length && (
                     <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
-                        <Ico.EMPTY size={48} className="secondary-text" />
+                        <Ico.FRIENDS className="mx-auto text-4xl mb-2 opacity-50" />
                         <div className="secondary-text">{t('friends.noFriends')}</div>
                     </div>
                 )}  
