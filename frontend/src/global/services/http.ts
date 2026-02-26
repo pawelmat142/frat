@@ -8,9 +8,6 @@ import { BtnModes } from 'global/interface/controls.interface';
 import { Path } from '../../path';
 import { FirebaseAuth } from 'auth/services/FirebaseAuth';
 
-// const API_URL = "http://78.159.81.140:3100/api"
-// const API_URL = "http://78.159.81.140/api"
-// const API_URL = "http://localhost:3100/api"
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const queryClient = new QueryClient();
@@ -62,6 +59,11 @@ export class HttpClient {
   }
 
   constructor() {
+
+    if (!API_URL) {
+      throw new Error("API_URL is not defined in environment variables.");
+    }
+
     // Request interceptor - automatycznie dodaj token do każdego requesta
     this.axiosInstance.interceptors.request.use(
       async (config) => {

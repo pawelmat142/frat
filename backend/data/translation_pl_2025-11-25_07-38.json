@@ -269,7 +269,8 @@
       "forgotPasswordTitle": "Resetowanie hasła",
       "forgotPasswordSuccess": "Jeśli email istnieje, wysłano link do resetu hasła.",
       "invalidOrExpiredPin": "PIN nieprawidłowy lub wygasł. Spróbuj ponownie.",
-      "openBot": "Otwórz bota Telegram"
+      "openBot": "Otwórz bota Telegram",
+      "pin": "PIN z Telegrama"
     },
     "signup": {
       "email": "Email",

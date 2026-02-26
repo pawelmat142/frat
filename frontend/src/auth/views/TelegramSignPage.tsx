@@ -8,12 +8,15 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+const TELEGRAM_BOT_USERNAME = process.env.REACT_APP_TELEGRAM_BOT_USERNAME;
+
 const TelegramSignPage: React.FC = () => {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [pin, setPin] = useState("");
+
 
     useEffect(() => {
         let executed = false;
@@ -45,12 +48,15 @@ const TelegramSignPage: React.FC = () => {
         }
     };
 
+    // @TestAccountFratBot
     const handleTelegramNav = () => {
-        const botUsername = 'AccountFratBot';
+        if (!TELEGRAM_BOT_USERNAME) {
+            throw new Error("Telegram bot username is not defined in environment variables.");
+        }
         // Deep link - otwiera aplikację Telegram bezpośrednio
-        const telegramAppUrl = `tg://resolve?domain=${botUsername}`;
+        const telegramAppUrl = `tg://resolve?domain=${TELEGRAM_BOT_USERNAME}`;
         // Fallback do web jeśli aplikacja nie jest zainstalowana
-        const telegramWebUrl = `https://t.me/${botUsername}`;
+        const telegramWebUrl = `https://t.me/${TELEGRAM_BOT_USERNAME}`;
 
         // Próba otwarcia aplikacji, z fallbackiem do web
         const appWindow = window.open(telegramAppUrl, '_self');

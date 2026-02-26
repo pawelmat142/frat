@@ -268,7 +268,8 @@
       "forgotPasswordTitle": "Password reset",
       "forgotPasswordSuccess": "If the email exists, a reset link has been sent.",
       "invalidOrExpiredPin": "Invalid or expired PIN. Please try again.",
-      "openBot": "Open Telegram bot"
+      "openBot": "Open Telegram bot",
+      "pin": "PIN from Telegram"
     },
     "signup": {
       "email": "Email",
