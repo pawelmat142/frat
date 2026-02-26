@@ -2,6 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { UserRepo } from "./UserRepo";
 import { UserI, UserProviders } from "@shared/interfaces/UserI";
 import { UserRecord } from "firebase-admin/auth";
+import { UserService } from "./UserService";
 
 export interface CreateTelegramUser {
   firebaseUser: UserRecord;
@@ -17,7 +18,8 @@ export class TelegramUserService {
 
   constructor(
     private readonly userRepo: UserRepo,
-  ) {}
+    private readonly userService: UserService,
+  ) { }
 
   public async findUser(telegramChannelId: string): Promise<any> {
     return this.userRepo.getByTelegramChannelId(telegramChannelId);
@@ -48,4 +50,7 @@ export class TelegramUserService {
     return user;
   }
 
+  public async deleteByTelegram(user: UserI): Promise<void> {
+    await this.userService.deleteUser(user.uid);
+  }
 }

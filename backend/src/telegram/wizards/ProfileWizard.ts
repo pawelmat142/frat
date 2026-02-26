@@ -3,7 +3,8 @@ import { ServiceProvider } from './services.provider';
 import { Wizard, WizardStep } from './wizard';
 
 export class ProfileWizard extends Wizard {
-protected user: UserI;
+
+  protected user: UserI;
 
   constructor(profile: UserI, services: ServiceProvider) {
     super(Number(profile.telegramChannelId), profile.telegramUsername, services);
@@ -17,8 +18,9 @@ protected user: UserI;
   private readonly STEP = {
     LOGIN: 1,
     ERROR: 2,
-    DELETE: 3,
+    ENSURE: 3,
     DELETED: 4,
+    STOP: 5,
   }
 
   override _init = async (user?: UserI) => {
@@ -39,26 +41,10 @@ protected user: UserI;
     return this.STEP.LOGIN
   }
 
-  private getLoginViewUrl = (): string | null => {
-    const loginViewUrl = this.services.configService.get<string>('LOGIN_BY_TELEGRAM_URL');
-    if (!loginViewUrl) {
-      return null;
-    }
-    return loginViewUrl;
-  }
 
-  private goToLoginPage = async (): Promise<number> => {
-    return this.STEP.LOGIN;
-  }
 
   public getSteps(): WizardStep[] {
-    // const loginUrl = BotUtil.prepareLoginUrl();
-    // if (!loginUrl) {
-    //   return [BotUtil.swwStep()];
-    // }
-
     const pin = this.services.exportedAuthService.getLoginPin(this.user.telegramChannelId!);
-    const loginUrl = this.getLoginViewUrl();
     return [
       {
         order: this.STEP.LOGIN,
@@ -70,14 +56,14 @@ protected user: UserI;
           copy_text: { text: pin?.pin || this.pin || '' },
         }], [{
           text: `🔄 New PIN`,
-          process: this.processLoginStep,
+          process: () => this.processLoginStep(),
         }], [{
           text: `🌐 Open login page`,
-          url: loginUrl,
+          url: this.getLoginViewUrl(),
         }], [
           {
             text: 'Delete account',
-            process: async () => this.STEP.DELETE,
+            process: async () => this.STEP.ENSURE,
           },
         ],]
       },
@@ -86,37 +72,40 @@ protected user: UserI;
         message: [this.error],
       },
       {
-        order: this.STEP.DELETE,
+        order: this.STEP.ENSURE,
         message: [`Are you sure?`],
-        buttons: [
-          [
-            {
-              text: `No`,
-              process: async () => this.STEP.LOGIN,
-            },
-            {
-              text: `Yes`,
-              process: () => this.deleteAccount(),
-            },
-          ],
-        ],
+        buttons: [[{
+          text: `No`,
+          process: async () => this.STEP.LOGIN,
+        }, {
+          text: `Yes`,
+          process: async () => this.deleteAccount(),
+        }]],
       },
       {
         order: this.STEP.DELETED,
         message: [`Your profile deleted successfully`],
+        buttons: [[{
+          text: `OK`,
+          process: async () => this.STEP.STOP,
+        }]]
       },
+      {
+        order: this.STEP.STOP,
+        message: [`Goodbye!`],
+        close: true,
+      }
     ];
   }
 
   private async deleteAccount() {
     try {
-      // TODO
-      // await this.services.telegramUserService.deleteByTelegram(this.user);
+      await this.services.telegramUserService.deleteByTelegram(this.user);
       return this.STEP.DELETED;
     } catch (error) {
       this.error = error;
       this.logger.error(error);
-      return 2;
+      return this.STEP.ERROR;
     }
   }
 }

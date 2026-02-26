@@ -4,7 +4,7 @@ import { Wizard } from './wizards/wizard';
 import { WizBtn } from './util/wiz-btn';
 import { BotUtil } from './util/bot.util';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { ProfileWizard } from './wizards/profile.wizard';
+import { ProfileWizard } from './wizards/ProfileWizard';
 import { ServiceProvider } from './wizards/services.provider';
 import { NewUserWizard } from './wizards/NewUserWizard';
 import TelegramBot = require('node-telegram-bot-api');

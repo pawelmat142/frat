@@ -1,8 +1,7 @@
 import { UserI } from '@shared/interfaces/UserI';
 import { ServiceProvider } from './services.provider';
 import { Wizard, WizardStep } from './wizard';
-import { BotUtil } from 'telegram/util/bot.util';
-import { ProfileWizard } from './profile.wizard';
+import { ProfileWizard } from './ProfileWizard';
 
 export class NewUserWizard extends Wizard {
   constructor(chatId: number, telegramUsername: string,services: ServiceProvider) {
@@ -23,10 +22,6 @@ export class NewUserWizard extends Wizard {
   } 
   // TODO translations
   public getSteps(): WizardStep[] {
-    const loginUrl = BotUtil.prepareLoginUrl();
-    if (!loginUrl) {
-      return [BotUtil.swwStep()];
-    }
     return [
       {
         order: this.STEP.START,

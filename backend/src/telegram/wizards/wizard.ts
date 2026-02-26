@@ -49,6 +49,14 @@ export class Wizard {
     this.modified = new Date();
   }
 
+  protected getLoginViewUrl = (): string => {
+    const loginViewUrl = this.services.configService.get<string>('LOGIN_BY_TELEGRAM_URL');
+    if (!loginViewUrl) {
+      throw new Error('LOGIN_BY_TELEGRAM_URL is not defined in environment variables');
+    }
+    return loginViewUrl;
+  }
+
   public getSteps(): WizardStep[] {
     throw new Error('not implemented');
   }
@@ -57,11 +65,18 @@ export class Wizard {
 
   public getStep(): WizardStep {
     const steps = this.getSteps();
-    if (this.order < 0 || this.order > steps.length - 1) {
+
+    const orders = steps.map(s => s.order);
+    if (!orders.includes(this.order)) {
       this.logger.error(`Invalid order: ${this.order}`);
       return steps[0];
     }
-    return steps[this.order];
+    const step = steps.find(s => s.order === this.order); 
+    if (!step) {
+      this.logger.error(`Step not found for order: ${this.order}`);
+      return steps[0];
+    }
+    return step;
   }
 
   public init = async (user?: UserI) => {
