@@ -38,6 +38,7 @@ import FriendsListView from 'friends/views/FriendsListView';
 import FriendsSearchView from 'friends/views/FriendsSearchView';
 import SingleNotificationView from 'notification/views/SingleNotificationView';
 import NotificationsView from 'notification/views/NotificationsView';
+import TranslationItemForm from 'admin/views/translations/TranslationItemForm';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -115,6 +116,7 @@ const App: React.FC = () => {
                     <Route path={Path.ADMIN_DICTIONARIES_GROUP} element={<DictionaryGroupForm />} />
 
                     <Route path={Path.ADMIN_TRANSLATIONS} element={<AdminTranslations />} />
+                    <Route path={Path.ADMIN_TRANSLATION_ITEM} element={<TranslationItemForm />} />
                     <Route path={Path.ADMIN_USERS} element={<AdminUsers />} />
                     <Route path={Path.ADMIN_FEEDBACKS} element={<AdminFeedbacks />} />
                     <Route path={Path.ADMIN_EMPLOYEE_PROFILES} element={<AdminEmployeeProfiles />} />

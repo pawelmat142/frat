@@ -7,5 +7,10 @@ export interface TranslationI {
     data: TranslationData;
 }
 
+export interface TranslationItemDto {
+    path: string;
+    translation: { [key: string] : string } // lang code -> translation
+}
+
 export type TranslationData = { [ key: string ]: any };
 export type TranslationDataWithPaths = { [ key: string ]: string };

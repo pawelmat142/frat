@@ -40,6 +40,7 @@ export abstract class Path {
     public static readonly ADMIN_DICTIONARIES_GROUP = `${Path.ADMIN_PANEL}/dictionaries/:dictionaryCode/group-form/:groupCode`;
 
     public static readonly ADMIN_TRANSLATIONS = `${Path.ADMIN_PANEL}/translations`;
+    public static readonly ADMIN_TRANSLATION_ITEM = `${Path.ADMIN_TRANSLATIONS}/:path`;
     public static readonly ADMIN_USERS = `${Path.ADMIN_PANEL}/users`;
     public static readonly ADMIN_FEEDBACKS = `${Path.ADMIN_PANEL}/feedbacks`;
     public static readonly ADMIN_EMPLOYEE_PROFILES = `${Path.ADMIN_PANEL}/workers`;
@@ -55,5 +56,6 @@ export abstract class Path {
     public static getOfferFormEditPath = (offerId: number) => `${Path.OFFER_FORM_EDIT.replace(':offerId', `${offerId}`)}`;
     public static getConversationPath = (chatId: number) => `${Path.CHAT_CONVERSATION.replace(':chatId', `${chatId}`)}`;
     public static getFriendsPath = (uid: string) => `${Path.FRIENDS.replace(':uid', uid)}`;
-    public static getNotificationPath = (notificationId: number) => `${Path.NOTIFICATION.replace(':notificationId', `${notificationId}`)}`;
+    public static getNotificationPath = (notificationId: string) => `${Path.NOTIFICATION.replace(':notificationId', `${notificationId}`)}`;
+    public static getTranslationItemPath = (path: string) => `${Path.ADMIN_TRANSLATION_ITEM.replace(':path', path)}`;
 }

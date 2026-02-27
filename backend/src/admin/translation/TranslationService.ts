@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { Dictionaries } from "@shared/def/dictionary.def";
-import { TranslationData, TranslationDataWithPaths, TranslationI } from "@shared/interfaces/TranslationI";
+import { TranslationDataWithPaths, TranslationI, TranslationItemDto } from "@shared/interfaces/TranslationI";
 import { DictionariesService } from "admin/dictionaries/services/DictionariesService";
 import { TranslationEntity } from "../dictionaries/model/TranslationEntity";
 import { Repository } from "typeorm";
@@ -103,6 +103,34 @@ export class TranslationService implements OnModuleInit {
             ObjUtil.setValueInNestedJsonByPath(translation.data, path, value);
         }
         await this.translationRepository.save(translation);
+    }
+
+    public async getTranslationItem(path: string): Promise<TranslationItemDto> {
+        const translations = await this.translationRepository.find();
+        const translationItem: TranslationItemDto = {
+            path,
+            translation: {}
+        }
+        for (const translation of translations) {
+            const value = ObjUtil.getValueFromNestedJsonByPath(translation.data, path);
+            if (value !== undefined) {
+                translationItem.translation[translation.langCode] = value;
+            }
+        }
+        return translationItem;
+    }
+
+    public async patchTranslationItem(item: TranslationItemDto): Promise<void> {
+        for (const [langCode, value] of Object.entries(item.translation)) {
+            const translation = await this.getTranslation(langCode);    
+            if (!translation) {
+                this.logger.warn(`Translation for language ${langCode} not found, skipping patching translation item for this language`);
+                continue;
+            }
+            ObjUtil.setValueInNestedJsonByPath(translation.data, item.path, value);
+            this.logger.log(`Patched translation item with path ${item.path} for language ${langCode}`);
+            await this.translationRepository.save(translation);
+        }
     }
 
 

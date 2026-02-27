@@ -55,6 +55,21 @@ module.exports = {
       return webpackConfig;
     },
   },
+  // devServer: {
+  //   proxy: {
+  //     '/api': {
+  //       target: 'https://frat.com.pl',
+  //       changeOrigin: true,
+  //       secure: true,
+  //     },
+  //     '/socket.io': {
+  //       target: 'https://frat.com.pl',
+  //       changeOrigin: true,
+  //       secure: true,
+  //       ws: true,
+  //     },
+  //   },
+  // },
   jest: {
     configure: {
       moduleNameMapping: {

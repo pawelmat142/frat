@@ -11,7 +11,7 @@ import { UserEntity } from "user/model/UserEntity";
 @Controller('api/admin/users')
 @UseInterceptors(LogInterceptor)
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
+@Roles(UserRoles.SUPERADMIN)
 export class UsersAdminController {
     
     constructor(

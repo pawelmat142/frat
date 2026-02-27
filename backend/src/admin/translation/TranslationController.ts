@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, Put, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Put, UseGuards, UseInterceptors } from "@nestjs/common";
 import { TranslationService } from "./TranslationService";
-import { TranslationI } from "@shared/interfaces/TranslationI";
+import { TranslationI, TranslationItemDto } from "@shared/interfaces/TranslationI";
 import { TranslationListDto } from "@shared/dto/TranslationListDto";
 import { LogInterceptor } from "global/interceptors/LogInterceptor";
 import { UserRoles } from "@shared/interfaces/UserI";
@@ -29,6 +29,16 @@ export class TranslationController {
     @Get('admin/list')
     getLanguagesList(): TranslationListDto[] {
         return this.translationService.getLanguagesList()
+    }
+
+    @Get('item/:path')
+    getTranslationItem(@Param('path') path: string): Promise<TranslationItemDto> {
+        return this.translationService.getTranslationItem(path)
+    }
+
+    @Patch('item')
+    updateTranslationItem(@Body() dto: TranslationItemDto): Promise<void> {
+        return this.translationService.patchTranslationItem(dto)
     }
 
     @Put('admin')

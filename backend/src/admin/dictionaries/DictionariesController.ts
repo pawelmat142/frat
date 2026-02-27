@@ -22,7 +22,7 @@ import { DictionaryEntity } from './model/DictionaryEntity';
 @Controller('api/admin/dictionaries')
 @UseInterceptors(LogInterceptor)
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
+@Roles(UserRoles.SUPERADMIN)
 export class DictionariesController {
 
   constructor(private readonly dictionariesService: DictionariesService) { }

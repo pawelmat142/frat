@@ -1,5 +1,5 @@
 import { TranslationListDto } from '@shared/dto/TranslationListDto';
-import { TranslationI } from '@shared/interfaces/TranslationI';
+import { TranslationI, TranslationItemDto } from '@shared/interfaces/TranslationI';
 import { httpClient } from 'global/services/http';
 
 export const TranslationAdminService = {
@@ -14,6 +14,14 @@ export const TranslationAdminService = {
 
 	putTranslation(translation: TranslationI): Promise<TranslationI> {
 		return httpClient.put<TranslationI>(`/admin/translations/admin`, translation);
+	},
+
+	getTranslationItem(path: string): Promise<TranslationItemDto> {
+		return httpClient.get<TranslationItemDto>(`/admin/translations/item/${path}`);
+	},
+
+	patchTranslationItem(item: TranslationItemDto): Promise<void> {
+		return httpClient.patch<void>(`/admin/translations/item`, item);
 	},
 
 	import(data: any): Promise<any> {

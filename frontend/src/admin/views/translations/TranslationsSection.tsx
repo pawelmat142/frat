@@ -16,6 +16,8 @@ import { ObjUtil } from "@shared/utils/ObjUtil";
 import { TranslationService } from "global/services/Translation.service";
 import { TranslationAdminService } from "admin/services/TranslationAdmin.service";
 import { useConfirm } from 'global/providers/PopupProvider';
+import { useNavigate } from 'react-router-dom';
+import { Path } from '../../../path';
 
 const TranslationsSection: React.FC = () => {
     const [loading, setLoading] = useState(false);
@@ -28,6 +30,7 @@ const TranslationsSection: React.FC = () => {
     const confirm = useConfirm();
     const ctx = userAdminPanelContext();
     const translation = ctx?.translation;
+    const navigate = useNavigate();
 
     const itemsPerPage = 15;
 
@@ -87,17 +90,11 @@ const TranslationsSection: React.FC = () => {
 
     const isDefaultLangSelected = selectedTranslation?.langCode === defaultTranslation.langCode;
 
-    const onShowForm = (key?: string) => { // if key is provided, we are editing
-        if (showForm) {
-            setShowForm(false);
-            setNewPath('');
-            setNewValue('');
-        } else {
-            setEditMode(!!key);
-            setShowForm(true);
-            setNewPath(key || '');
-            setNewValue(key ? selectedTranslation?.data[key] ?? '' : '');
+    const onShowForm = (path?: string) => { // if key is provided, we are editing
+        if (!path) {
+            return
         }
+        navigate(Path.getTranslationItemPath(path));
     }
 
 

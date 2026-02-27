@@ -20,7 +20,6 @@ export class NewUserWizard extends Wizard {
     ERROR: 3,
     CONFIRM: 4,
   } 
-  // TODO translations
   public getSteps(): WizardStep[] {
     return [
       {

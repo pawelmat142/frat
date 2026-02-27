@@ -24,7 +24,7 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
             navigate(Path.getConversationPath(chatId))
             return
         }
-        navigate(Path.getNotificationPath(notification.notificationId))
+        navigate(Path.getNotificationPath(notification.notificationId.toString()))
     }
 
     const getIcon = (): React.ReactNode => {
