@@ -24,6 +24,7 @@ import NotificationsGlobalBar from 'notification/components/NotificationsGlobalB
 import { ChatsProvider } from 'chat/ChatsProvider';
 import { NotificationsProvider } from 'notification/NotificationsProvider';
 import { FriendsProvider } from 'friends/FriendsProvider';
+import { OffersProvider } from 'offer/OffersProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -41,7 +42,8 @@ root.render(
                     <AuthProvider>
                       <UserProvider>
                         <FriendsProvider>
-                          <ChatsProvider>
+                          <OffersProvider>
+                            <ChatsProvider>
                             <NotificationsProvider>
                             <OfferSearchProvider>
                               <WorkersSearchProvider>
@@ -71,7 +73,8 @@ root.render(
                               </WorkersSearchProvider>
                             </OfferSearchProvider>
                           </NotificationsProvider>
-                        </ChatsProvider>
+                          </ChatsProvider>
+                        </OffersProvider>
                       </FriendsProvider>
                     </UserProvider>
                     </AuthProvider>

@@ -2,8 +2,6 @@ import React, { createContext, useContext, ReactNode, useEffect, useState } from
 import { WorkerI } from '@shared/interfaces/WorkerProfileI';
 import { WorkerService } from 'employee/services/WorkerService';
 import { useAuthContext } from 'auth/AuthProvider';
-import { OfferI } from '@shared/interfaces/OfferI';
-import { OffersService } from 'offer/services/OffersService';
 import { toast } from 'react-toastify';
 import { Position } from '@shared/interfaces/MapsInterfaces';
 import WebSocketService from 'global/web-socket/WebSocketService';
@@ -17,15 +15,11 @@ import { AuthService } from 'auth/services/AuthService';
 interface UserContextType {
 	me: UserI | null;
 	meCtx: MeUserContext | null;
-	offers: OfferI[];
 	worker: WorkerI | null;
 	settings: SettingsI;
 	position: Position | null;
 
 	updateMe: (user: UserI) => void;
-	
-	initOffers: () => void;
-	cleanOffers: () => void;
 	
 	initWorker: () => void;
 	cleanWorker: () => void;
@@ -43,7 +37,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	const [meCtx, setMeCtx] = useState<MeUserContext | null>(null)
 	const [me, setMe] = useState<UserI | null>(null)
-	const [offers, setOffers] = useState<OfferI[]>([])
 	const [workerProfile, setWorkerProfile] = useState<WorkerI | null>(null)
 	const [settings, setSettings] = useState<SettingsI>(defaultSettings)
 
@@ -52,7 +45,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const [position, setPosition] = useState<Position | null>(null)
 	const [positionWatchId, setPositionWatchId] = useState<number | null>(null)
 
-	// TODO settings zmiany nie zasialaja base tez
+	// TODO settings synchronizacja settings z baza i local storage
 
 	useEffect(() => {
 		const initUserContext = async () => {
@@ -61,7 +54,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				const ctx = await UserContextService.getMeUserContext();
 				setMeCtx(ctx);
 				setMe(ctx.user);
-				setOffers(ctx.offers);
 				setSettings(ctx.settings);
 				setWorkerProfile(ctx.workerProfile || null);
 				initLocation(true);
@@ -88,7 +80,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const onDestroy = () => {
 		setMe(null);
 		cleanWorker()
-		cleanOffers()
 		cleanPosition()
 		WebSocketService.getInstance().disconnect();
 	}
@@ -183,29 +174,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		}
 	}
 
-	const initOffers = async (init?: boolean) => {
-		try {
-			setLoading(true);
-			const offers = await OffersService.listMyOffers();
-			if (offers) {
-				setOffers(offers);
-			} else {
-				setOffers([]);
-			}
-		} catch (error) {
-			setOffers([]);
-		}
-		finally {
-			if (!init) {
-				setLoading(false);
-			}
-		}
-	}
-
-	const cleanOffers = () => {
-		setOffers([]);
-	}
-
 	const cleanWorker = () => {
 		setWorkerProfile(null);
 	}
@@ -214,14 +182,11 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		<UserContext.Provider value={{
 			me,
 			meCtx,
-			offers,
 			worker: workerProfile,
 			settings: settings,
 			updateMe,
 			initWorker: initWorker,
 			cleanWorker: cleanWorker,
-			initOffers: initOffers,
-			cleanOffers: cleanOffers,
 			loading: loading,
 			setLoading: setLoading,
 			position,

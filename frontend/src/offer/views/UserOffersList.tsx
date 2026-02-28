@@ -5,6 +5,7 @@ import { Path } from "../../path"
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
+import { useOffersContext } from "offer/OffersProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { BtnSizes } from "global/interface/controls.interface";
 import { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ const UserOffersList: React.FC = () => {
     const [offers, setOffers] = useState<OfferI[]>([]);
 
     const userCtx = useUserContext();
+    const offersCtx = useOffersContext();
     const me = userCtx?.me;
 
     const [loading, setLoading] = useState(true);
@@ -31,7 +33,7 @@ const UserOffersList: React.FC = () => {
         const initOffers = async () => {
             if (uid) {
                 if (me?.uid === uid) {
-                    setOffers(userCtx.offers);
+                    setOffers(offersCtx.offers);
                     return;
                 }
                 const userOffers = await OffersService.listUsersOffers(uid);

@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import Loading from "global/components/Loading";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
+import { useOffersContext } from "offer/OffersProvider";
 import { OfferUtil } from "@shared/utils/OfferUtil";
 import { Utils } from "global/utils/utils";
 import FormWizard from "global/components/FormWizard/FormWizard";
@@ -42,6 +43,7 @@ const OfferFormContent: React.FC = () => {
     const { t } = useTranslation();
     const ctx = useOfferForm();
     const userCtx = useUserContext();
+    const offersCtx = useOffersContext();
     const [loading, setLoading] = useState(false);
 
     const param = useParams<{ offerId?: string }>();
@@ -74,7 +76,7 @@ const OfferFormContent: React.FC = () => {
                 }
             }
             ctx.removeFormFromLocalStorage();
-            await userCtx.initOffers();
+            await offersCtx.initOffers();
             userCtx.setLoading(false);
             if (offerId) {
                 toast.success(t("offer.form.successUpdate"));

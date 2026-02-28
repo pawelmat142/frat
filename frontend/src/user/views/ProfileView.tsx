@@ -25,12 +25,14 @@ import { FriendsService } from "friends/services/FriendsService";
 import { Ico } from "global/icon.def";
 import { UserUtil } from "@shared/utils/UserUtil";
 import { useFriendsContext } from "friends/FriendsProvider";
+import { useOffersContext } from "offer/OffersProvider";
 
 const ProfileView: React.FC = () => {
 
     const { loading, firebaseUser } = useAuthContext()
     const userCtx = useUserContext()
     const friendsCtx = useFriendsContext();
+    const offersCtx = useOffersContext();
     const me = userCtx.me;
     const [user, setUser] = useState<UserI | null>(null)
     const { uid } = useParams<{ uid?: string }>()
@@ -66,7 +68,7 @@ const ProfileView: React.FC = () => {
         }
 
         if (user.uid === me?.uid) {
-            setOffers(userCtx.offers)
+            setOffers(offersCtx.offers)
             setWorker(userCtx.worker)
             setLocalLoading(false);
         } else {
