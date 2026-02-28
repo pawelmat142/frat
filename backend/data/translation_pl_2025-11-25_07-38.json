@@ -194,6 +194,10 @@
       "select": "Wybierz motyw",
       "changedTo": "Motyw zmieniony na {{theme}}"
     },
+    "pwa": {
+      "install": "Zainstaluj na ekranie głównym",
+      "success": "Aplikacja została pomyślnie zainstalowana"
+    },
     "common": {
       "h1": "Witamy w FRAT",
       "h2": "Platforma rekrutacyjna dla wysokościowych / pracowników dostępu linowego (rope-access)",

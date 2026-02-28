@@ -194,6 +194,10 @@
       "select": "Select theme",
       "changedTo": "Theme changed to {{theme}}"
     },
+    "pwa": {
+      "install": "Install on home screen",
+      "success": "App installed successfully"
+    },
     "common": {
       "h1": "Welcome to FRAT",
       "h2": "A recruitment platform for high-altitude / industrial rope-access workers",

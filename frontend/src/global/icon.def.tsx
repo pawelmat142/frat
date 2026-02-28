@@ -1,5 +1,5 @@
 import { IconType } from "react-icons";
-import { FaBan, FaBell, FaBriefcase, FaCalendarAlt, FaCheck, FaCog, FaComments, FaEdit, FaEllipsisV, FaGlobe, FaHome, FaIdCard, FaPaperPlane, FaPhone, FaSearch, FaSignInAlt, FaSignOutAlt, FaTags, FaTimes, FaTrash, FaUserCircle, FaUserFriends, FaUserPlus } from "react-icons/fa";
+import { FaBan, FaBell, FaBriefcase, FaCalendarAlt, FaCheck, FaCog, FaComments, FaDownload, FaEdit, FaEllipsisV, FaGlobe, FaHome, FaIdCard, FaPaperPlane, FaPhone, FaSearch, FaSignInAlt, FaSignOutAlt, FaTags, FaTimes, FaTrash, FaUserCircle, FaUserFriends, FaUserPlus } from "react-icons/fa";
 
 export const Ico = {
     HOME: FaHome,
@@ -26,4 +26,5 @@ export const Ico = {
     CALENDAR: FaCalendarAlt,
     EDIT: FaEdit,
     CHECK: FaCheck,
+    DOWNLOAD: FaDownload,
 } as const satisfies Record<string, IconType>

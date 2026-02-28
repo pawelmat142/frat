@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import LangSelectTile from 'global/components/tiles/LangSelectTile';
 import ThemeSelectTile from 'global/components/tiles/ThemeSelectTile';
 import { Ico } from 'global/icon.def';
+import InstallPwaButton from "global/components/InstallPwaButton";
 
 const MainTiles: React.FC = () => {
 
@@ -39,6 +40,12 @@ const MainTiles: React.FC = () => {
                     <Ico.OFFER size={iconSize} />
                     <div>{t("offer.search")}</div>
                 </div>
+
+
+                <div className="square-tile col-tile big">
+                    <InstallPwaButton />
+                </div>
+
 
                 {!!me && (
                     <>
