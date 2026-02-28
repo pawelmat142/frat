@@ -6,7 +6,7 @@ import { UsersAdminService } from "admin/services/UsersAdmin.service";
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
 import SelectorMulti from "global/components/selector/SelectorMulti";
-import { useAuthContext } from "auth/AuthProvider";
+import { useUserContext } from "user/UserProvider";
 
 interface SelectedUserProps {
     user: UserI | null;
@@ -18,7 +18,7 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
     const [assignRoleForm, setAssignRoleForm] = useState(false)
     const [assignRolesValue, setAssignRolesValue] = useState<UserRole[]>([])
     const [loading, setLoading] = useState(false)
-    const { me } = useAuthContext();
+    const { me } = useUserContext();
 
     useEffect(() => {
         // user changes

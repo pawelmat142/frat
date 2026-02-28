@@ -15,6 +15,7 @@ import { UserI } from '@shared/interfaces/UserI';
 import { UserContextService } from './services/UserContextService';
 import { defaultSettings, SettingsI } from '@shared/interfaces/SettingsI';
 import { MeUserContext } from '@shared/interfaces/UserContext';
+import { AuthService } from 'auth/services/AuthService';
 
 interface UserContextType {
 	me: UserI | null;
@@ -24,6 +25,7 @@ interface UserContextType {
 	settings: SettingsI;
 	position: Position | null;
 
+	updateMe: (user: UserI) => void;
 	initFriendships: () => void;
 	cleanFriendships: () => void;
 	putFriendship: (friendship: FriendshipI) => void;
@@ -46,14 +48,17 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const authCtx = useAuthContext();
 
 	const [meCtx, setMeCtx] = useState<MeUserContext | null>(null)
+	const [me, setMe] = useState<UserI | null>(null)
+	const [friendships, setFriendships] = useState<FriendshipI[]>([])
+	const [offers, setOffers] = useState<OfferI[]>([])
+	const [workerProfile, setWorkerProfile] = useState<WorkerI | null>(null)
+	const [settings, setSettings] = useState<SettingsI>(defaultSettings)
 
 	const [loading, setLoading] = useState(false)
 
 	const [position, setPosition] = useState<Position | null>(null)
 	const [positionWatchId, setPositionWatchId] = useState<number | null>(null)
 
-	// TODO usunac me z authctx 
-	// TODO chaty i notyfikacje zasilac na bazie meCtx
 	// TODO settings zmiany nie zasialaja base tez
 
 	useEffect(() => {
@@ -62,7 +67,13 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				setLoading(true);
 				const ctx = await UserContextService.getMeUserContext();
 				setMeCtx(ctx);
+				setMe(ctx.user);
+				setFriendships(ctx.friendships);
+				setOffers(ctx.offers);
+				setSettings(ctx.settings);
+				setWorkerProfile(ctx.workerProfile || null);
 				initLocation(true);
+				AuthService.saveTelegramLogin(ctx.user);
 			} catch (error) {
 				onDestroy();
 				toast.error(t('user.error.userInitError'));
@@ -83,10 +94,17 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}, [authCtx.firebaseUser])
 
 	const onDestroy = () => {
+		setMe(null);
+		setFriendships([]);
 		unregisterFriendshipListeners();
 		cleanWorker()
 		cleanOffers()
 		cleanPosition()
+		WebSocketService.getInstance().disconnect();
+	}
+
+	const updateMe = (user: UserI) => {
+		setMe(user);
 	}
 
 	const initLocation = async (init?: boolean) => {
@@ -161,12 +179,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			setLoading(true);
 			const profile = await WorkerService.getWorker();
 			if (profile) {
-				setMeCtx(prev => prev ? { ...prev, workerProfile: profile } : null);
+				setWorkerProfile(profile);
 			} else {
-				setMeCtx(prev => prev ? { ...prev, workerProfile: undefined } : null);
+				setWorkerProfile(null);
 			}
 		} catch (error) {
-			setMeCtx(prev => prev ? { ...prev, workerProfile: undefined } : null);
+			setWorkerProfile(null);
 		}
 		finally {
 			if (!init) {
@@ -180,12 +198,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			setLoading(true);
 			const offers = await OffersService.listMyOffers();
 			if (offers) {
-				setMeCtx(prev => prev ? { ...prev, offers: offers } : null);
+				setOffers(offers);
 			} else {
-				setMeCtx(prev => prev ? { ...prev, offers: [] } : null);
+				setOffers([]);
 			}
 		} catch (error) {
-			setMeCtx(prev => prev ? { ...prev, offers: [] } : null);
+			setOffers([]);
 		}
 		finally {
 			if (!init) {
@@ -195,17 +213,20 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}
 
 	const initFriendships = async (init?: boolean) => {
+		if (!meCtx?.user?.uid) {
+			return
+		}
 		try {
 			setLoading(true);
-			const friendships = await FriendsService.getFriendships(authCtx.me!.uid);
+			const friendships = await FriendsService.getFriendships(meCtx?.user?.uid!);
 			if (friendships) {
-				setMeCtx(prev => prev ? { ...prev, friendships: friendships } : null);
+				setFriendships(friendships);
 			} else {
-				setMeCtx(prev => prev ? { ...prev, friendships: [] } : null);
+				setFriendships([]);
 			}
 			registerFriendshipListeners();
 		} catch (error) {
-			setMeCtx(prev => prev ? { ...prev, friendships: [] } : null);
+			setFriendships([]);
 		} finally {
 			if (!init) {
 				setLoading(false);
@@ -230,9 +251,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const onInviteFriend = (friendship: FriendshipI) => {
 		const exists = meCtx?.friendships.find(f => f.friendshipId === friendship.friendshipId);
 		if (!exists) {
-			setMeCtx(prev => prev ? { ...prev, friendships: [...prev.friendships, friendship] } : null);
+			setFriendships(prev => prev ? [...prev, friendship] : [friendship]	);
 		} else {
-			setMeCtx(prev => prev ? { ...prev, friendships: prev.friendships.map(f => f.friendshipId === friendship.friendshipId ? friendship : f) } : null);
+			setFriendships(prev => prev ? prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f) : []);
 		}
 	}
 
@@ -243,48 +264,49 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			}
 			return f
 		}) ?? [];
-		setMeCtx(prev => prev ? { ...prev, friendships: newFriendships } : null);
+		setFriendships(newFriendships);
 	}
 
 	const onAcceptInvite = (friendship: FriendshipI) => {
 		const newFriendships = meCtx?.friendships.filter(f => f.friendshipId !== friendship.friendshipId) ?? [];
 		newFriendships.push(friendship);
-		setMeCtx(prev => prev ? { ...prev, friendships: newFriendships } : null);
+		setFriendships(newFriendships);
 	}
 
 	const putFriendship = (friendship: FriendshipI) => {
 		const exists = meCtx?.friendships.find(f => f.friendshipId === friendship.friendshipId);
 		if (exists) {
-			setMeCtx(prev => prev ? { ...prev, friendships: prev.friendships.map(f => f.friendshipId === friendship.friendshipId ? friendship : f) } : null);
+			setFriendships(prev => prev ? prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f) : []);
 		} else {
-			setMeCtx(prev => prev ? { ...prev, friendships: [...prev.friendships, friendship] } : null);
+			setFriendships(prev => prev ? [...prev, friendship] : [friendship]);
 		}
 	}
 
 	const onRemoveFriend = (friendship: FriendshipI) => {
 		const newFriendships = meCtx?.friendships.filter(f => f.friendshipId !== friendship.friendshipId) ?? [];
-		setMeCtx(prev => prev ? { ...prev, friendships: newFriendships } : null);
+		setFriendships(newFriendships);
 	}
 
 	const cleanOffers = () => {
-		setMeCtx(prev => prev ? { ...prev, offers: [] } : null);
+		setOffers([]);
 	}
 
 	const cleanWorker = () => {
-		setMeCtx(prev => prev ? { ...prev, workerProfile: undefined } : null);
+		setWorkerProfile(null);
 	}
 
 	const cleanFriendships = () => {
-		setMeCtx(prev => prev ? { ...prev, friendships: [] } : null);
+		setFriendships([]);
 	}
 
 	return (
 		<UserContext.Provider value={{
-			me: meCtx?.user ?? null,
-			friendships: meCtx?.friendships ?? [],
-			offers: meCtx?.offers ?? [],
-			worker: meCtx?.workerProfile ?? null,
-			settings: meCtx ? meCtx.settings : defaultSettings,
+			me,
+			friendships,
+			offers,
+			worker: workerProfile,
+			settings: settings,
+			updateMe,
 			initWorker: initWorker,
 			cleanWorker: cleanWorker,
 			initOffers: initOffers,

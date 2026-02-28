@@ -1,4 +1,3 @@
-import { useAuthContext } from "auth/AuthProvider"
 import Button from "global/components/controls/Button"
 import { BtnModes } from "global/interface/controls.interface"
 import { Path } from "../../path"
@@ -18,10 +17,10 @@ import { FriendUtil } from "@shared/utils/FriendUtil"
 const FriendsListView: React.FC = () => {
 
     const { uid } = useParams<{ uid?: string }>()
-    const { me } = useAuthContext()
     const { t } = useTranslation()
     const navigate = useNavigate()
     const userCtx = useUserContext()
+    const me = userCtx?.me;
     const isMyAccount = uid === me?.uid
 
     const [friendships, setFriendships] = useState<FriendshipI[]>([])

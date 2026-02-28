@@ -1,10 +1,10 @@
 import { ChatI, ChatMemberI, ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
-import { useAuthContext } from "auth/AuthProvider";
 import React, { useEffect } from "react";
 import { createContext, useRef, useState } from "react";
 import { ChatService } from "./services/ChatService";
 import { chatSocket } from "./services/ChatSocketService";
 import { NotificationI, NotificationIcons, NotificationTypes } from "@shared/interfaces/NotificationI";
+import { useUserContext } from "user/UserProvider";
 
 interface ChatsContextType {
     chats: ChatWithMembers[],
@@ -18,7 +18,7 @@ const ChatsContext = createContext<ChatsContextType | undefined>(undefined);
 
 export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    const { me } = useAuthContext();
+    const { me } = useUserContext();
 
     const [loading, setLoading] = useState(true)
 
@@ -28,10 +28,13 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const chatsRef = useRef<ChatWithMembers[]>(chats)
     chatsRef.current = chats
 
+    const meBefore = me
+
     useEffect(() => {
         if (me) {
             onInit()
-        } else {
+        } 
+        if (!me && meBefore) {
             onDestroy()
         }
         return () => onDestroy()
@@ -50,7 +53,6 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const onDestroy = () => {
         chatSocket.unregisterChatListener(loadChatListener);
-        chatSocket.disconnect();
         setChats([])
         setUnreadMsgNotifications([])
     }

@@ -1,7 +1,6 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { matchPath, useNavigate } from 'react-router-dom';
 import { Path } from '../../path';
-import { useAuthContext } from 'auth/AuthProvider';
 import { UserRoles } from '@shared/interfaces/UserI';
 import { isOneOf } from '@shared/utils/util';
 import { MenuConfig } from 'global/components/selector/MenuItems';
@@ -10,6 +9,7 @@ import { useGlobalContext } from './GlobalProvider';
 import IconButton from 'global/components/controls/IconButon';
 import { useTranslation } from 'react-i18next';
 import { Ico } from 'global/icon.def';
+import { useUserContext } from 'user/UserProvider';
 
 interface NewMenuItem {
     label: string
@@ -32,7 +32,7 @@ interface NavigationProviderProps {
 export const MenuProvider: React.FC<NavigationProviderProps> = ({
     children,
 }) => {
-    const { me } = useAuthContext();
+    const { me } = useUserContext();
     const { t } = useTranslation();
     const navigate = useNavigate();
 

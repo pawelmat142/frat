@@ -50,7 +50,6 @@ class ChatSocketService {
     async sendMessage(msg: SendMessageDto): Promise<SendMessageResponse> {
         try {
             const response = await this.webSocket.emit<SendMessageResponse>(ChatEvents.SEND_MESSAGE, msg);
-            console.log('ChatSocket: sendMessage response', response);
             return response;
         } catch (error) {
             console.error('ChatSocket: sendMessage error', error);

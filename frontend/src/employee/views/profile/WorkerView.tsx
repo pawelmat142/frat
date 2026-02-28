@@ -11,7 +11,6 @@ import ProfileDataTile from "./ProfileDataTile";
 import AvailabilityTile from "./AvailabilityTile";
 import { useTranslation } from "react-i18next";
 import Chips, { ChipModes } from "global/components/chips/Chips";
-import { useAuthContext } from "auth/AuthProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { Path } from "../../../path";
@@ -31,11 +30,11 @@ const WorkerView: React.FC = () => {
     const [profile, setProfile] = useState<WorkerI | null>(null)
 
     const { t } = useTranslation();
-    const { me } = useAuthContext();
     const navigate = useNavigate();
     const menuCtx = useMenuContext();
     const confirm = useConfirm();
     const userCtx = useUserContext();
+    const me = userCtx?.me; 
 
     const profileCtx = useWorkersSearch();
     const globalCtx = useGlobalContext();

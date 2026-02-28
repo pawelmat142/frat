@@ -1,12 +1,11 @@
 import { ChatMemberWithUserI, ChatWithMembers } from "@shared/interfaces/ChatI";
 import { DateUtil } from "@shared/utils/DateUtil";
-import { useAuthContext } from "auth/AuthProvider";
 import ListItem from "global/components/ListItem";
 import { useTranslation } from "react-i18next";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
-import { FaCheck } from 'react-icons/fa';
 import { FrontDateUtil } from "global/utils/FrontDateUtil";
 import { Ico } from "global/icon.def";
+import { useUserContext } from "user/UserProvider";
 
 interface Props {
     chat: ChatWithMembers;
@@ -18,7 +17,7 @@ interface Props {
 const ChatListItem: React.FC<Props> = ({ chat, otherMember: otherMember, first, last }) => {
 
     const { t } = useTranslation();
-    const { me } = useAuthContext();
+    const { me } = useUserContext();
     const date = new Date(chat.updatedAt || chat.createdAt)
 
     const topRight = <span className="small-font">{FrontDateUtil.displayShortDateOrDayOrTimeIfToday(t, date)}</span>

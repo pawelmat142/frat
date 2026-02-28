@@ -10,7 +10,6 @@ export class NotificationSocketService {
         // Use the same WebSocketService singleton instance as ChatSocketService
         this.webSocket = WebSocketService.getInstance();
         this.setupEventListeners();
-        console.log('NotificationSocketService initialized');
     }
 
     private setupEventListeners(): void {

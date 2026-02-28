@@ -5,10 +5,8 @@ import { UserI } from '@shared/interfaces/UserI';
 
 interface AuthContextType {
 	firebaseUser: FirebaseUser | null;
-    me: UserI | null;
 	loading: boolean;
 	isAuthenticated: boolean;
-	updateMe: (user: UserI) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

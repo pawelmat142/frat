@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../path"
 import { useUserContext } from 'user/UserProvider';
-import { useAuthContext } from 'auth/AuthProvider';
 import { AuthService } from 'auth/services/AuthService';
 import { useTranslation } from 'react-i18next';
 import LangSelectTile from 'global/components/tiles/LangSelectTile';
@@ -14,8 +13,7 @@ const MainTiles: React.FC = () => {
 
     const navigate = useNavigate()
     const { t } = useTranslation()
-    const { me } = useAuthContext()
-    const { worker: employeeProfile, offers } = useUserContext()
+    const { me, worker: employeeProfile, offers } = useUserContext()
 
     const hasSomeOffers = !!offers?.length
 

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import UserItem from "./UserItem";
 import { useTranslation } from "react-i18next";
 import Loading from "global/components/Loading";
-import { useAuthContext } from "auth/AuthProvider";
 import { UserPublicService } from "user/services/UserPublicService";
+import { useUserContext } from "user/UserProvider";
 
 interface Props {
     uid: string,
@@ -19,7 +19,7 @@ const UserItemWithLoading: React.FC<Props> = ({ uid, size = 3.5, showNumber = fa
     const { t } = useTranslation()
     const [user, setUser] = useState<UserI | null>(null);
     const [loading, setLoading] = useState(true);
-    const { me } = useAuthContext();
+    const { me } = useUserContext();
 
     // TODO ADD USERS STORAGE IN USER CTX 
 

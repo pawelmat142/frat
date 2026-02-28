@@ -25,9 +25,9 @@ interface Props {
 const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
 
     const navigate = useNavigate();
-    const { me } = useAuthContext();
     const { t } = useTranslation();
     const userCtx = useUserContext();
+    const me = userCtx?.me;
     const confirm = useConfirm();
 
     const [loading, setLoading] = useState(false);

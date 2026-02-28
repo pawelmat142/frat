@@ -16,13 +16,6 @@ import { AuthValidators } from "@shared/validators/AuthValidator";
 export const AuthService = {
 
 	/**
-	 * Pobnranie stanu usera po zalogowaniu
-	*/
-	login(): Promise<UserI> {
-		return httpClient.get("/auth/login");
-	},
-
-	/**
 	 * Wylogowanie użytkownika
 	 */
 	logout(): Promise<void> {

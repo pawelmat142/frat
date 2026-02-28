@@ -1,5 +1,4 @@
 import { OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
-import { useAuthContext } from "auth/AuthProvider";
 import CallendarTile from "employee/views/profile/CallendarTile";
 import EditButton from "global/components/buttons/EditButton";
 import Chips, { ChipModes } from "global/components/chips/Chips";
@@ -26,10 +25,10 @@ const OfferView: React.FC = () => {
     const params = useParams<{ offerId?: string }>()
     const offerId = params.offerId
 
-    const { me } = useAuthContext();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const userCtx = useUserContext();
+    const me = userCtx?.me;
     const globalCtx = useGlobalContext();
     const menuCtx = useMenuContext();
     const confirm = useConfirm();

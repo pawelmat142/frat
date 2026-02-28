@@ -29,8 +29,9 @@ const ProfileView: React.FC = () => {
 
     // TODO optimize endpoints number for init worker profie, offers, friendships, etc
 
-    const { me, loading, firebaseUser } = useAuthContext()
+    const { loading, firebaseUser } = useAuthContext()
     const userCtx = useUserContext()
+    const me = userCtx.me;
     const [user, setUser] = useState<UserI | null>(null)
     const { uid } = useParams<{ uid?: string }>()
     const { t } = useTranslation()
@@ -57,7 +58,7 @@ const ProfileView: React.FC = () => {
         }
 
         initUser();
-    }, [uid, me]);
+    }, [uid, userCtx.me]);
 
     useEffect(() => {
         if (!user) {

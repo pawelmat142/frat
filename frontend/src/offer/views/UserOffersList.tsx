@@ -9,7 +9,6 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { BtnSizes } from "global/interface/controls.interface";
 import { useEffect, useState } from "react";
 import { OfferI } from "@shared/interfaces/OfferI";
-import { useAuthContext } from "auth/AuthProvider";
 import { OffersService } from "offer/services/OffersService";
 
 const UserOffersList: React.FC = () => {
@@ -19,8 +18,8 @@ const UserOffersList: React.FC = () => {
 
     const [offers, setOffers] = useState<OfferI[]>([]);
 
-    const profileCtx = useUserContext();
-    const { me } = useAuthContext();
+    const userCtx = useUserContext();
+    const me = userCtx?.me;
 
     const [loading, setLoading] = useState(true);
 
@@ -32,7 +31,7 @@ const UserOffersList: React.FC = () => {
         const initOffers = async () => {
             if (uid) {
                 if (me?.uid === uid) {
-                    setOffers(profileCtx.offers);
+                    setOffers(userCtx.offers);
                     return;
                 }
                 const userOffers = await OffersService.listUsersOffers(uid);
@@ -42,7 +41,7 @@ const UserOffersList: React.FC = () => {
         initOffers().then(() => {setLoading(false);});
     }, [uid])
     
-    const _loading = globalCtx.loading || profileCtx.loading || !globalCtx.dics.languages || loading;
+    const _loading = globalCtx.loading || userCtx.loading || !globalCtx.dics.languages || loading;
 
     if (_loading) {
         return (<Loading></Loading>);

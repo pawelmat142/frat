@@ -52,7 +52,6 @@ class FirebaseAuthManager {
 
 			this.auth = getAuth(this.app);
 			this.initialized = true;
-			console.log('Firebase initialized successfully');
 		} catch (error) {
 			console.error('Firebase initialization error:', error);
 		}

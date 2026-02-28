@@ -9,7 +9,7 @@ import {
 import CommunicationLanguagesSection from "../../components/CommunicationLanguagesSection";
 import AvatarUploadField from "global/components/controls/AvatarUploadField";
 import PhoneNumberFloatingInput from "global/components/controls/PhoneNumberFloatingInput";
-import { useAuthContext } from "auth/AuthProvider";
+import { useUserContext } from "user/UserProvider";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -17,7 +17,7 @@ interface Props {
 
 const WorkerFormStep1: React.FC<Props> = ({ formRef }) => {
     const { t } = useTranslation();
-    const { me } = useAuthContext();
+    const { me } = useUserContext();
     const required = FormValidator.required(t);
     const { control, setValue, watch, formState } = formRef;
 

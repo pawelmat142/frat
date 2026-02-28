@@ -26,12 +26,6 @@ export class AuthController {
     private readonly exportedAuthService: ExportedAuthService,
   ) { }
   
-  @Get('login')
-  @UseGuards(JwtAuthGuard)
-  login(@CurrentUser() user: UserI): UserI {
-    return user;
-  }
-  
   @Get('send-verification-email')
   @UseGuards(JwtAuthGuard)
   sendVerificationEmail(@CurrentUser() user: UserI): Promise<void> {

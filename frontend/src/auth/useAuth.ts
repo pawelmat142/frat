@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { User as FirebaseUser } from 'firebase/auth';
 import { AuthService } from 'auth/services/AuthService';
 import { FirebaseAuth } from 'auth/services/FirebaseAuth';
-import { UserI } from '@shared/interfaces/UserI';
 import { useNavigate } from 'react-router-dom';
 import { Path } from '../path';
 import { toast } from 'react-toastify';
@@ -14,7 +13,6 @@ import { useTranslation } from 'react-i18next';
  */
 export const useAuth = () => {
 	const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
-	const [me, setMe] = useState<UserI | null>(null);
 	const [loading, setLoading] = useState(true);
     const firstLoadRef = useRef(true);
 
@@ -33,26 +31,12 @@ export const useAuth = () => {
             // AUTH_HOOK
             if (!newFirebaseUser) {
                 setFirebaseUser(null)
-                setMe(null)
-            }
-            else if (newFirebaseUser?.uid && !me) {
-                setLoading(true);
-                const newUser = await AuthService.login()
-                if (newUser) {
-                    setMe(newUser)
-                    AuthService.saveTelegramLogin(newUser);
-                    setFirebaseUser(newFirebaseUser)
-                } else {
-                    setMe(null)
-                    setFirebaseUser(null)
-                }
-            } 
-            else {
+            } else {
                 setFirebaseUser(newFirebaseUser)
             }
-            
-			setLoading(false);
 
+            setLoading(false);
+            
             if (firstLoadRef.current) {
                 firstLoadRef.current = false;
                 return;
@@ -70,15 +54,9 @@ export const useAuth = () => {
 		return () => unsubscribe();
 	}, []);
 
-    const updateMe = (user: UserI): void => {
-        setMe(user);
-    }
-
 	return {
 		firebaseUser,
 		loading,
-        me,
-		isAuthenticated: !!firebaseUser && !!me,
-        updateMe
+		isAuthenticated: !!firebaseUser,
 	};
 };

@@ -10,8 +10,8 @@ import { ChatService } from "chat/services/ChatService";
 import { toast } from "react-toastify";
 import { useIsDesktop } from "global/hooks/isMobile";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
-import { useAuthContext } from "auth/AuthProvider";
 import { Ico } from "global/icon.def";
+import { useUserContext } from "user/UserProvider";
 
 interface Props {
     profile: WorkerI,
@@ -24,7 +24,7 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
 
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { me } = useAuthContext();
+    const { me } = useUserContext();
 
     const isDesktop = useIsDesktop();
     const isMyProfile = me?.uid === profile.uid;

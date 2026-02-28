@@ -6,7 +6,7 @@ import { Save, Close, Edit } from "@mui/icons-material";
 import Loading from "global/components/Loading";
 import IconButton from "global/components/controls/IconButon";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
-import { useAuthContext } from "auth/AuthProvider";
+import { useUserContext } from "user/UserProvider";
 
 interface AvatarTileProps {
     src?: string;
@@ -33,7 +33,7 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
 
     const [localSrc, setLocalSrc] = useState<string>(src);
 
-    const authCtx = useAuthContext();
+    const userCtx = useUserContext();
 
     const validateFile = (file: File): string | null => {
         const extension = file.name.split('.').pop()?.toLowerCase();
@@ -95,7 +95,7 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
             const result = await AvatarService.uploadAvatar(pendingFile, uid)
 
             if (result) {
-                authCtx.updateMe(result);
+                userCtx.updateMe(result);
                 if (result.avatarRef?.url) {
                     setLocalSrc(result.avatarRef.url);
                 }

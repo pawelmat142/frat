@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChatMemberWithUserI, ChatWithMembers } from "@shared/interfaces/ChatI";
-import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import { Path } from "../../path";
 import ChatListItem from "./ChatListItem";
@@ -10,11 +9,12 @@ import { useChatsContext } from "chat/ChatsProvider";
 import { Ico } from "global/icon.def";
 import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
+import { useUserContext } from "user/UserProvider";
 
 const ChatsView: React.FC = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const { me } = useAuthContext()
+    const { me } = useUserContext()
     const chatCtx = useChatsContext()
 
     useEffect(() => { }, [chatCtx.chats])

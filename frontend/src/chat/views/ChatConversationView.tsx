@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { ChatI, ChatMemberWithUserI, ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
 import { ChatService } from "../services/ChatService";
 import { chatSocket } from "../services/ChatSocketService";
-import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import Button from "global/components/controls/Button";
 import { Path } from "../../path";
@@ -18,14 +17,13 @@ import { toast } from "react-toastify";
 import UserItem from "user/components/UserItem";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
-import { FriendUtil } from "@shared/utils/FriendUtil";
 
 const ChatConversationView: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { chatId } = useParams<{ chatId: string }>();
-    const { me } = useAuthContext();
     const userCtx = useUserContext();
+    const me = userCtx?.me;
 
     const [chat, setChat] = useState<ChatWithMembers | null>(null);
     const [messages, setMessages] = useState<ChatMessageI[]>([]);

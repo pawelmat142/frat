@@ -5,6 +5,7 @@ import { Path } from './../path';
 import Loading from 'global/components/Loading';
 import { UserRole } from '@shared/interfaces/UserI';
 import { Util } from '@shared/utils/util';
+import { useUserContext } from 'user/UserProvider';
 
 interface ProtectedRouteProps {
 	children: React.ReactNode;
@@ -24,7 +25,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 	redirectTo = Path.SIGN_IN,
 	roles
 }) => {
-	const { isAuthenticated, loading, me } = useAuthContext();
+	const { isAuthenticated, loading } = useAuthContext();
+	const { me } = useUserContext();
 
 	if (loading) {
 		return <Loading />;

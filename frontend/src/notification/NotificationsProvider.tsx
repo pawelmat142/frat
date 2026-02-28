@@ -1,10 +1,10 @@
 import { NotificationI } from "@shared/interfaces/NotificationI";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { notificationSocket } from "./services/NotificationSocketService";
-import { useAuthContext } from "auth/AuthProvider";
 import { NotificationService } from "./services/NotificationService";
 import { useChatsContext } from "chat/ChatsProvider";
 import { NativeNotificationService } from "./services/NativeNotificationService";
+import { useUserContext } from "user/UserProvider";
 
 interface NotificationsContextType {
     loading: boolean;
@@ -17,7 +17,7 @@ const NotificationsContext = createContext<NotificationsContextType | undefined>
 
 export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    const { me } = useAuthContext()
+    const { me } = useUserContext()
     const chatsCtx = useChatsContext();
 
     const [loading, setLoading] = useState<boolean>(false)

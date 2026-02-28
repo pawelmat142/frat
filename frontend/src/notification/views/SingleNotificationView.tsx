@@ -10,7 +10,6 @@ import { Path } from "../../path";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAuthContext } from "auth/AuthProvider";
 import AvatarTile from "user/components/AvatarTile";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
@@ -19,6 +18,7 @@ import { FrontDateUtil } from "global/utils/FrontDateUtil";
 import { useNotificationsContext } from "notification/NotificationsProvider";
 import { Ico } from "global/icon.def";
 import { ChatService } from "chat/services/ChatService";
+import { useUserContext } from "user/UserProvider";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -26,7 +26,7 @@ const SingleNotificationView: React.FC = () => {
     const notificationsCtx = useNotificationsContext();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { me } = useAuthContext();
+    const { me } = useUserContext();
     const confirm = useConfirm()
 
     const { notificationId } = useParams<{ notificationId: string }>();

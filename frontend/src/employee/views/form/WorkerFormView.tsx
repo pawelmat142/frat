@@ -17,7 +17,6 @@ import WorkerFormStep2 from "./WorkerFormStep2";
 import { Utils } from "global/utils/utils";
 import { useConfirm } from "global/providers/PopupProvider";
 import FormWizard from "global/components/FormWizard/FormWizard";
-import { useAuthContext } from "auth/AuthProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
@@ -41,8 +40,9 @@ const WorkerFormView: React.FC = () => {
     const profileCtx = useWorkersSearch();
     const isDevMode = Utils.isDevMode();
     const confirm = useConfirm();
-    const { me } = useAuthContext();
     const globalCtx = useGlobalContext();
+
+    const me = userCtx?.me;
 
     const [step, setStep] = React.useState<StepKey>(STEPS_ORDER[0]);
     const [geolocatedPosition, setGeolocatedPosition] = React.useState<GeocodedPosition | null>(null);
