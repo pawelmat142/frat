@@ -122,7 +122,6 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 
     const setFiltersWithSearchAndNavigate = (newFilters: WorkerSearchFilters) => {
-
         setFiltersState(newFilters);
         resultsLengthRef.current = 0;
         hasMoreRef.current = false;

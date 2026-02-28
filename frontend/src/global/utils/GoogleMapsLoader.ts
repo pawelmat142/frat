@@ -7,7 +7,7 @@ export const GoogleMapsLoader = {
             if ((window as any).google && (window as any).google.maps) return resolve();
 
             const srcBase = 'https://maps.googleapis.com/maps/api/js';
-            const src = `${srcBase}?key=${encodeURIComponent(apiKey || '')}&libraries=places&loading=async&v=weekly`;
+            const src = `${srcBase}?key=${encodeURIComponent(apiKey || '')}&libraries=places&v=weekly`;
 
             // If a script tag with maps API already exists, wait for it instead of adding another
             const existing = Array.from(document.getElementsByTagName('script')).find(s => s.src && s.src.indexOf(srcBase) !== -1);

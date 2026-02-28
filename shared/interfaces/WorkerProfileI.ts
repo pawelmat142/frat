@@ -143,6 +143,9 @@ export interface WorkerSearchFilters {
   endDate?: string | null;
   
   locationCountry?: string | null;
+  geocodedPosition?: GeocodedPosition | null;
+
+  // TODO remove
   freeText?: string;
 
   communicationLanguages?: string[];

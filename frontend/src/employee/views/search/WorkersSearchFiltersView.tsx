@@ -9,15 +9,22 @@ import { Controller, useForm } from "react-hook-form";
 import { FormValidator } from "global/FormValidator";
 import Button from "global/components/controls/Button";
 import CountrySelector from "global/components/selector/CountrySelector";
-import FloatingInput from "global/components/controls/FloatingInput";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import { Ico } from "global/icon.def";
+import { useState } from "react";
+import { useUserContext } from "user/UserProvider";
+import { GoogleMapService } from "global/services/GoogleMapService";
+import { toast } from "react-toastify";
+import FloatingPlaceSearch from "global/components/controls/FloatingPlaceSearch";
 
 const WorkersSearchFiltersView: React.FC = () => {
 
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
+    const userCtx = useUserContext();
     const ctx: WorkersSearchContextProps = useWorkersSearch()
+
+    const [loadingLocation, setLoadingLocation] = useState(false);
 
     const f = useForm<WorkerSearchFilters>({
         defaultValues: ctx.filters
@@ -31,10 +38,8 @@ const WorkersSearchFiltersView: React.FC = () => {
         )
     }
     const formState = f.watch()
-
     const startDateRequired = FormValidator.required(t);
     const required = FormValidator.required(t);
-
 
     const submit = async () => {
         ctx.setFiltersWithSearchAndNavigate(formState);
@@ -60,6 +65,23 @@ const WorkersSearchFiltersView: React.FC = () => {
             end: localFilters.endDate
         }
     }
+
+
+    const updatePosition = async (position: { lat: number; lng: number }) => {
+        try {
+            setLoadingLocation(true);
+            const geoPosition = await GoogleMapService.getGeocodedLocationn(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
+            f.setValue('geocodedPosition', geoPosition);
+            if (geoPosition?.country?.toLocaleLowerCase() !== formState.locationCountry?.toLocaleLowerCase()) {
+                f.setValue('locationCountry', null);
+            }
+        } catch (error) {
+            console.error('Geocoding error:', error);
+            toast.error(t('employeeProfile.error.getGeocodedLocation'));
+        } finally {
+            setLoadingLocation(false);
+        }
+    };
 
     return (
         <div className="form-view relative flex flex-col">
@@ -103,44 +125,34 @@ const WorkersSearchFiltersView: React.FC = () => {
                             error={f.formState.errors.locationCountry}
                             onSelect={item => {
                                 f.setValue('locationCountry', item);
+                                f.setValue('geocodedPosition', null); // Clear geocoded position when country changes
                             }}
                         />
                     )}
                 />
 
-                <Controller
-                    name="freeText"
-                    control={f.control}
-                    render={({ field }) => (
-                        <FloatingInput
-                            {...field}
-                            fullWidth
-                            value={field.value || ''}
-                            label={t("employeeProfile.form.city")}
-                            className="w-full mt-2"
-                            error={f.formState.errors.freeText}
-                        />
-                    )}
-                />
+                {loadingLocation ? (<Loading></Loading>) : (
+                    <Controller
+                        name="geocodedPosition"
+                        control={f.control}
+                        render={({ field }) => (
+                            <FloatingPlaceSearch
+                                {...field}
+                                fullWidth
+                                displayValue={field.value?.fullAddress || ''}
+                                label={t("employeeProfile.form.city")}
+                                className="w-full mt-5"
+                                error={f.formState.errors.geocodedPosition}
+                                onSelect={item => {
+                                    updatePosition({ lat: item.lat, lng: item.lng });
+                                }}
+                            ></FloatingPlaceSearch>
+                        )}
+                    />
+                )}
 
-                <Controller
-                    name="communicationLanguages"
-                    control={f.control}
-                    render={({ field }) => (
-                        <DictionarySelector
-                            type='multi'
-                            className="w-full mt-5"
-                            valueInput={field.value}
-                            onSelectMulti={items => {
-                                field.onChange(items);
-                            }}
-                            label={t("employeeProfile.form.communicationLanguages")}
-                            code="LANGUAGES"
-                            groupCode="COMMUNICATION"
-                            fullWidth
-                        />
-                    )}
-                />
+
+
 
                 <Controller
                     name="certificates"
@@ -178,7 +190,26 @@ const WorkersSearchFiltersView: React.FC = () => {
                     )}
                 />
 
-{/* TODO sort functionality... */}
+                <Controller
+                    name="communicationLanguages"
+                    control={f.control}
+                    render={({ field }) => (
+                        <DictionarySelector
+                            type='multi'
+                            className="w-full mt-5"
+                            valueInput={field.value}
+                            onSelectMulti={items => {
+                                field.onChange(items);
+                            }}
+                            label={t("employeeProfile.form.communicationLanguages")}
+                            code="LANGUAGES"
+                            groupCode="COMMUNICATION"
+                            fullWidth
+                        />
+                    )}
+                />
+
+                {/* TODO sort option select functionality... */}
                 {/* <Controller
                     name="sortBy"
                     control={f.control}
