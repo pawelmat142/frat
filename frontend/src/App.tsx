@@ -45,7 +45,7 @@ const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = 
         initial={{ x: 100 * direction, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: -100 * direction, opacity: 0 }}
-        transition={{ duration: .2, ease: 'easeInOut' }}
+        transition={{ duration: .15, ease: 'easeInOut' }}
         className="w-full h-full flex flex-col items-center flex-1"
     >
         {children}
