@@ -116,7 +116,7 @@ const WorkersSearchFiltersView: React.FC = () => {
         }
     }
     const getGeoPosition = (position: { lat: number; lng: number }): Promise<GeocodedPosition | null> => {
-        return GoogleMapService.getGeocodedLocationn(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
+        return GoogleMapService.getGeocodedLocation(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
     }
 
     return (

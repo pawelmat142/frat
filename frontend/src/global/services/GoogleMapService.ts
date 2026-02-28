@@ -22,7 +22,7 @@ export abstract class GoogleMapService {
 		}
 	}
 
-	static async getGeocodedLocationn(coords: { lat: number; lng: number }, apiKey: string): Promise<GeocodedPosition | null> {
+	static async getGeocodedLocation(coords: { lat: number; lng: number }, apiKey: string): Promise<GeocodedPosition | null> {
 		if (!apiKey) return null;
 
 		// Always load Google Maps JS first to use JS Geocoder (supports referrer restrictions)
@@ -35,7 +35,7 @@ export abstract class GoogleMapService {
 		const win: any = window;
 		if (win?.google?.maps && typeof win.google.maps.Geocoder === 'function') {
 			try {
-				return await GoogleMapService.getGeocodedLocation(coords, new win.google.maps.Geocoder());
+				return await GoogleMapService.getGeocodedLocationn(coords, new win.google.maps.Geocoder());
 			} catch (e) {
 				console.warn('[GoogleMapService] JS Geocoder failed:', e);
 				return null;
@@ -46,7 +46,7 @@ export abstract class GoogleMapService {
 		return await GoogleMapService.getGeocodedLocationUsingApiKey(coords, apiKey);
 	}
 
-	static async getGeocodedLocation(position: { lat: number; lng: number }, geocoder: google.maps.Geocoder): Promise<GeocodedPosition | null> {
+	private static async getGeocodedLocationn(position: { lat: number; lng: number }, geocoder: google.maps.Geocoder): Promise<GeocodedPosition | null> {
 		// google.maps.Geocoder.geocode uses a callback in the Maps JS API v3.
 		// Wrap it into a Promise for convenience.
 		return new Promise<GeocodedPosition | null>((resolve, reject) => {

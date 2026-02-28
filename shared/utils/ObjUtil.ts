@@ -1,3 +1,4 @@
+import { Position } from '@shared/interfaces/MapsInterfaces';
 import { TranslationData, TranslationDataWithPaths } from '../interfaces/TranslationI';
 
 export abstract class ObjUtil {
@@ -86,5 +87,11 @@ export abstract class ObjUtil {
             }
         }
         return false;
+    }
+
+    public static positionChanged(positionOne?: Position | null, positionTwo?: Position | null): boolean {
+        if (!positionOne && !positionTwo) return false;
+        if (!positionOne || !positionTwo) return true;
+        return positionOne.lat !== positionTwo.lat || positionOne.lng !== positionTwo.lng;
     }
 }

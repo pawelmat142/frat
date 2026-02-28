@@ -5,6 +5,8 @@ import { WorkerI, WorkerSearchFilters, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_L
 import { WorkerUtil } from "@shared/utils/WorkerUtil";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
+import { GoogleMapService } from "global/services/GoogleMapService";
+import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 
 export interface WorkersSearchContextProps {
     filters: WorkerSearchFilters;
@@ -20,6 +22,7 @@ export interface WorkersSearchContextProps {
     updateOneProfileInResults: (updatedProfile: WorkerI) => void;
 }
 
+// TODO move to config
 export const RADIUS_STEPS_KM = [10, 20, 50, 80, 100, 150, 200, 300, 400, 500, 800, 1000];
 
 export const WorkerDefaultFilters: WorkerSearchFilters = {
@@ -28,11 +31,10 @@ export const WorkerDefaultFilters: WorkerSearchFilters = {
 
     locationCountry: null,
     positionRadiusKm: RADIUS_STEPS_KM[4],
-    freeText: '',
 
     communicationLanguages: [],
+    categories: [],
     certificates: [],
-    experience: [],
 
     skip: 0,
     limit: PROFILES_INITIAL_SEARCH_LIMIT,
@@ -109,11 +111,23 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (!location.pathname.includes(Path.WORKERS_SEARCH)) {
             return
         }
+
+        onFiltersChange(location.search);
+    }, [location.search]);
+
+    const onFiltersChange = async (search: string) => {
         const newFilters = {
-            ...WorkerUtil.parseFiltersFromSearch(location.search, WorkerDefaultFilters),
+            ...WorkerUtil.parseFiltersFromSearch(search, WorkerDefaultFilters),
             skip: 0, // Always start from beginning for new search
             limit: PROFILES_INITIAL_SEARCH_LIMIT,
         };
+
+        if (newFilters.geocodedPosition?.lat && newFilters.geocodedPosition?.lng && !newFilters.geocodedPosition.country) {
+            const geocodedPosition = await getGeoPosition(newFilters.geocodedPosition);
+            if (geocodedPosition) {
+                newFilters.geocodedPosition = geocodedPosition;
+            }
+        }
 
         setFiltersState(newFilters);
         setResults([]);
@@ -121,7 +135,11 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         hasMoreRef.current = false;
 
         executeSearch(newFilters, false);
-    }, [location.search]);
+    }
+
+    const getGeoPosition = (position: { lat: number; lng: number }): Promise<GeocodedPosition | null> => {
+        return GoogleMapService.getGeocodedLocation(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
+    }
 
 
     const setFiltersWithSearchAndNavigate = (newFilters: WorkerSearchFilters) => {

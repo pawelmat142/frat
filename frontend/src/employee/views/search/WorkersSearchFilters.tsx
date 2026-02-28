@@ -7,12 +7,13 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { FaGlobe } from "react-icons/fa";
 import { Utils } from "global/utils/utils";
 import { DateRange } from "@shared/interfaces/WorkerProfileI";
-import { Place } from "@mui/icons-material";
+import { LocationCity, Place } from "@mui/icons-material";
 import Flags from "global/components/Flags";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path";
 import { useWorkersSearch } from "./WorkersSearchProvider";
 import { DateUtil } from "@shared/utils/DateUtil";
+import { Dictionaries, DictionaryUtil } from "@shared/utils/DictionaryUtil";
 
 const WorkersSearchFilters: React.FC = () => {
 
@@ -59,9 +60,10 @@ const WorkersSearchFilters: React.FC = () => {
                     <div className="flex items-center gap-1">
                         <DateRangeIcon fontSize="inherit" className="secondary-text" />
                         <span className="xs-font">
-                            {formatFromTo({ 
+                            {formatFromTo({
                                 start: ctx.filters.startDate,
-                                end: ctx.filters.endDate })}
+                                end: ctx.filters.endDate
+                            })}
                         </span>
                     </div>)}
 
@@ -69,24 +71,27 @@ const WorkersSearchFilters: React.FC = () => {
                     <div className="flex items-center gap-1">
                         <Place fontSize="inherit" className="secondary-text" />
                         {!!ctx.filters.locationCountry && (<Flags languages={[locationCountryDictionaryCode!]} size={12} />)}
-                        {!!(ctx.filters.freeText) && (
-                            <span className="xs-font">{ctx.filters.freeText}</span>
+                    </div>
+                )}
+
+                {!!ctx.filters.geocodedPosition?.city && (
+                    <div className="flex items-center gap-1">
+                        <LocationCity fontSize="inherit" className="secondary-text" />
+                        <span className="xs-font">{ctx.filters.geocodedPosition.city}</span>
+                        {!!ctx.filters.positionRadiusKm && (
+                            <div className="flex items-center gap-1">
+                                <span className="xs-font">+{ctx.filters.positionRadiusKm} [km]</span>
+                            </div>
                         )}
                     </div>
                 )}
 
-                {!!ctx.filters.communicationLanguages?.length && (
-                    <div className="chip-container">
-                        <FaGlobe className="secondary-text" />
-                        <Flags languages={ctx.filters.communicationLanguages!} size={12} />
-                    </div>
-                )}
                 <div className="flex items-center">
-                    {(!!ctx.filters.experience?.length) && (
+                    {(!!ctx.filters.categories?.length) && (
                         <div className="chip-container">
-                            {(ctx.filters.experience || []).map(ex => (
-                                <div key={ex} className="search-chip tertiary">
-                                    {ex}
+                            {(ctx.filters.categories || []).map(category => (
+                                <div key={category} className="search-chip tertiary">
+                                    {t(DictionaryUtil.getTranslationKey(Dictionaries.WORK_CATEGORY, category))}
                                 </div>
                             ))}
                         </div>
@@ -98,13 +103,19 @@ const WorkersSearchFilters: React.FC = () => {
                         <div className="chip-container">
                             {(ctx.filters.certificates || []).map(cert => (
                                 <div key={cert} className="search-chip secondary">
-                                    {cert}
+                                    {t(DictionaryUtil.getTranslationKey(Dictionaries.CERTIFICATES, cert))}
                                 </div>
                             ))}
                         </div>
                     )}
-
                 </div>
+
+                {!!ctx.filters.communicationLanguages?.length && (
+                    <div className="chip-container">
+                        <FaGlobe className="secondary-text" />
+                        <Flags languages={ctx.filters.communicationLanguages!} size={12} />
+                    </div>
+                )}
             </div>
 
         </div>

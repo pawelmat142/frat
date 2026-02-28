@@ -103,7 +103,6 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
                 selectedValues: selectedElement ? [selectedElement.code] : [],
                 title: label || '',
                 onSelect: (item) => {
-                    console.log('Selected country code:', item);
                     handlePrefixSelect(item as string);
                 },
             });

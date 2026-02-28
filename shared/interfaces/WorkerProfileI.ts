@@ -148,11 +148,6 @@ export interface WorkerSearchFilters {
 
   certificates?: string[];
   categories?: string[];
-
-  // TODO remove
-  freeText?: string;
-  experience?: string[];
-
   communicationLanguages?: string[];
 
   sortBy?: WorkerSearchSortOption;

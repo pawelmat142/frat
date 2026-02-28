@@ -6,6 +6,7 @@ import { useLocation, matchPath } from "react-router-dom";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { useIsDesktop } from "global/hooks/isMobile";
 import { ViewState as ViewState, STATES } from "global/header-state/states";
+import { Dictionaries } from "@shared/utils/DictionaryUtil";
 
 interface GlobalContextType {
     isDesktop: boolean;
@@ -28,6 +29,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const isDesktop = useIsDesktop();
 
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null)
+
     const [loading, setLoading] = useState(false)
     const [state, setState] = useState<ViewState>({})
 
@@ -35,8 +37,8 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         const initLanguagesDictionary = async () => {
             try {
                 setLoading(true)
-                const dictionary = await DictionaryService.getDictionary('LANGUAGES')
-                setLanguagesDictionary(dictionary)
+                const languages = await DictionaryService.getDictionary(Dictionaries.LANGUAGES)
+                setLanguagesDictionary(languages)
             } catch (error) {
                 setLanguagesDictionary(null)
             }
