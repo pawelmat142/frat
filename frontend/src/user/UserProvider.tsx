@@ -1,6 +1,4 @@
 import React, { createContext, useContext, ReactNode, useEffect, useState } from 'react';
-import { WorkerI } from '@shared/interfaces/WorkerProfileI';
-import { WorkerService } from 'employee/services/WorkerService';
 import { useAuthContext } from 'auth/AuthProvider';
 import { toast } from 'react-toastify';
 import { Position } from '@shared/interfaces/MapsInterfaces';
@@ -15,14 +13,10 @@ import { AuthService } from 'auth/services/AuthService';
 interface UserContextType {
 	me: UserI | null;
 	meCtx: MeUserContext | null;
-	worker: WorkerI | null;
 	settings: SettingsI;
 	position: Position | null;
 
 	updateMe: (user: UserI) => void;
-	
-	initWorker: () => void;
-	cleanWorker: () => void;
 
 	loading: boolean;
 	setLoading: (loading: boolean) => void;
@@ -37,7 +31,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	const [meCtx, setMeCtx] = useState<MeUserContext | null>(null)
 	const [me, setMe] = useState<UserI | null>(null)
-	const [workerProfile, setWorkerProfile] = useState<WorkerI | null>(null)
 	const [settings, setSettings] = useState<SettingsI>(defaultSettings)
 
 	const [loading, setLoading] = useState(false)
@@ -55,7 +48,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				setMeCtx(ctx);
 				setMe(ctx.user);
 				setSettings(ctx.settings);
-				setWorkerProfile(ctx.workerProfile || null);
 				initLocation(true);
 				AuthService.saveTelegramLogin(ctx.user);
 			} catch (error) {
@@ -79,7 +71,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	const onDestroy = () => {
 		setMe(null);
-		cleanWorker()
 		cleanPosition()
 		WebSocketService.getInstance().disconnect();
 	}
@@ -155,38 +146,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		toast.warn(t('common.others.fetchLocationError'));
 	}
 
-	const initWorker = async (init?: boolean) => {
-		try {
-			setLoading(true);
-			const profile = await WorkerService.getWorker();
-			if (profile) {
-				setWorkerProfile(profile);
-			} else {
-				setWorkerProfile(null);
-			}
-		} catch (error) {
-			setWorkerProfile(null);
-		}
-		finally {
-			if (!init) {
-				setLoading(false);
-			}
-		}
-	}
-
-	const cleanWorker = () => {
-		setWorkerProfile(null);
-	}
-
 	return (
 		<UserContext.Provider value={{
 			me,
 			meCtx,
-			worker: workerProfile,
 			settings: settings,
 			updateMe,
-			initWorker: initWorker,
-			cleanWorker: cleanWorker,
 			loading: loading,
 			setLoading: setLoading,
 			position,

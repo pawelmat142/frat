@@ -25,6 +25,7 @@ import { ChatsProvider } from 'chat/ChatsProvider';
 import { NotificationsProvider } from 'notification/NotificationsProvider';
 import { FriendsProvider } from 'friends/FriendsProvider';
 import { OffersProvider } from 'offer/OffersProvider';
+import { WorkerProvider } from 'employee/WorkerProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -43,7 +44,8 @@ root.render(
                       <UserProvider>
                         <FriendsProvider>
                           <OffersProvider>
-                            <ChatsProvider>
+                            <WorkerProvider>
+                              <ChatsProvider>
                             <NotificationsProvider>
                             <OfferSearchProvider>
                               <WorkersSearchProvider>
@@ -73,7 +75,8 @@ root.render(
                               </WorkersSearchProvider>
                             </OfferSearchProvider>
                           </NotificationsProvider>
-                          </ChatsProvider>
+                              </ChatsProvider>
+                            </WorkerProvider>
                         </OffersProvider>
                       </FriendsProvider>
                     </UserProvider>

@@ -19,6 +19,7 @@ import { MenuConfig } from "global/components/selector/MenuItems";
 import { toast } from "react-toastify";
 import { useConfirm } from "global/providers/PopupProvider";
 import { useUserContext } from "user/UserProvider";
+import { useWorkerContext } from "employee/WorkerProvider";
 import { ChatService } from "chat/services/ChatService";
 
 const WorkerView: React.FC = () => {
@@ -34,6 +35,7 @@ const WorkerView: React.FC = () => {
     const menuCtx = useMenuContext();
     const confirm = useConfirm();
     const userCtx = useUserContext();
+    const workerCtx = useWorkerContext();
     const me = userCtx?.me; 
 
     const profileCtx = useWorkersSearch();
@@ -144,7 +146,7 @@ const WorkerView: React.FC = () => {
         setLoading(true);
         try {
             await WorkerService.deleteProfile();
-            userCtx.initWorker();
+            workerCtx.initWorker();
             toast.success(t('employeeProfile.deleteSuccessToast'));
             navigate(Path.HOME, { replace: true });
             // Don't setLoading(false) - component will unmount after navigation

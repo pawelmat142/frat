@@ -26,6 +26,7 @@ import { Ico } from "global/icon.def";
 import { UserUtil } from "@shared/utils/UserUtil";
 import { useFriendsContext } from "friends/FriendsProvider";
 import { useOffersContext } from "offer/OffersProvider";
+import { useWorkerContext } from "employee/WorkerProvider";
 
 const ProfileView: React.FC = () => {
 
@@ -33,6 +34,7 @@ const ProfileView: React.FC = () => {
     const userCtx = useUserContext()
     const friendsCtx = useFriendsContext();
     const offersCtx = useOffersContext();
+    const workerCtx = useWorkerContext();
     const me = userCtx.me;
     const [user, setUser] = useState<UserI | null>(null)
     const { uid } = useParams<{ uid?: string }>()
@@ -69,7 +71,7 @@ const ProfileView: React.FC = () => {
 
         if (user.uid === me?.uid) {
             setOffers(offersCtx.offers)
-            setWorker(userCtx.worker)
+            setWorker(workerCtx.worker)
             setLocalLoading(false);
         } else {
             initUserData(user);

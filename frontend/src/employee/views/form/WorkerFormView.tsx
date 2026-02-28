@@ -8,6 +8,7 @@ import { WorkerService } from "employee/services/WorkerService";
 import Loading from "global/components/Loading";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
+import { useWorkerContext } from "employee/WorkerProvider";
 import { useNavigate } from "react-router-dom";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { Path } from "../../../path";
@@ -36,6 +37,7 @@ const WorkerFormView: React.FC = () => {
     const { t } = useTranslation();
     const [loading, setLoading] = React.useState<boolean>(false);
     const userCtx = useUserContext();
+    const workerCtx = useWorkerContext();
     const navigate = useNavigate();
     const profileCtx = useWorkersSearch();
     const isDevMode = Utils.isDevMode();
@@ -47,7 +49,7 @@ const WorkerFormView: React.FC = () => {
     const [step, setStep] = React.useState<StepKey>(STEPS_ORDER[0]);
     const [geolocatedPosition, setGeolocatedPosition] = React.useState<GeocodedPosition | null>(null);
 
-    const worker: WorkerI | null = userCtx.worker || null;
+    const worker: WorkerI | null = workerCtx.worker || null;
 
     const formRef = useForm<WorkerForm>({
         defaultValues: {
@@ -227,7 +229,7 @@ const WorkerFormView: React.FC = () => {
         try {
             setLoading(true);
             const result = await WorkerService.createWorker(form);
-            userCtx.initWorker();
+            workerCtx.initWorker();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
             navigate(Path.getWorkerProfilePath(`${result.displayName}`), { replace: true });
@@ -243,7 +245,7 @@ const WorkerFormView: React.FC = () => {
             setLoading(true);
             const result = await WorkerService.updateWorker(form);
             profileCtx.updateOneProfileInResults(result);
-            userCtx.initWorker();
+            workerCtx.initWorker();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
             navigate(-1)
