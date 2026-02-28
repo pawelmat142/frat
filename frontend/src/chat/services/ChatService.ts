@@ -4,14 +4,6 @@ import { ChatI, ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
 export const ChatService = {
 
     /**
-     * Get all chats for current user
-     */
-    // TODO refactor to initial load
-    getMyChats(): Promise<ChatWithMembers[]> {
-        return httpClient.get('/chat');
-    },
-
-    /**
      * Get or create a direct chat with another user
      */
     getOrCreateDirectChat(recipientUid: string): Promise<ChatI> {

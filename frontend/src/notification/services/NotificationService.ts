@@ -3,10 +3,6 @@ import { httpClient } from "global/services/http";
 
 export const NotificationService = {
 
-    getNotifications(): Promise<NotificationI[]> {
-        return httpClient.get('/notifications');
-    },
-
     getNotification(notificationId: string): Promise<NotificationI> {
         return httpClient.get(`/notifications/${notificationId}`);
     },

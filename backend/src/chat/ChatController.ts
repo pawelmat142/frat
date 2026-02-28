@@ -18,14 +18,6 @@ export class ChatController {
   ) { }
 
   /**
-   * Get all chats for current user
-   */
-  @Get()
-  getMyChats(@CurrentUser() user: UserI): Promise<ChatWithMembers[]> {
-    return this.chatService.getUserChats(user.uid);
-  }
-
-  /**
    * Get or create a direct chat with another user
    */
   @Post('direct/:recipientUid')

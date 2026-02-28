@@ -1,7 +1,6 @@
 import { NotificationI } from "@shared/interfaces/NotificationI";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { notificationSocket } from "./services/NotificationSocketService";
-import { NotificationService } from "./services/NotificationService";
 import { useChatsContext } from "chat/ChatsProvider";
 import { NativeNotificationService } from "./services/NativeNotificationService";
 import { useUserContext } from "user/UserProvider";
@@ -17,7 +16,8 @@ const NotificationsContext = createContext<NotificationsContextType | undefined>
 
 export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    const { me } = useUserContext()
+    const userCtx = useUserContext()
+    const { me } = userCtx;
     const chatsCtx = useChatsContext();
 
     const [loading, setLoading] = useState<boolean>(false)
@@ -63,15 +63,7 @@ export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     const initNativeNotifications = async () => {
-        try {
-            setLoading(true);
-            const initialNotifications = await NotificationService.getNotifications()
-            setNativeNotifications(initialNotifications)
-        } catch (error) {
-            setNotifications([]);
-        } finally {
-            setLoading(false);
-        }
+        setNativeNotifications(userCtx.meCtx?.notifications || [])
     }
 
     const registerNativeNotificationListeners = () => {

@@ -1,4 +1,4 @@
-import { ChatI } from "./ChatI";
+import { ChatI, ChatWithMembers } from "./ChatI";
 import { FriendshipI } from "./FriendshipI";
 import { NotificationI } from "./NotificationI";
 import { OfferI } from "./OfferI";
@@ -16,5 +16,5 @@ export interface UserContext {
 export interface MeUserContext extends UserContext {
     settings: SettingsI
     notifications: NotificationI[]
-    chats: ChatI[]
+    chats: ChatWithMembers[]
 }

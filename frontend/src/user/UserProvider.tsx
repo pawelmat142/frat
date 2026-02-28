@@ -16,9 +16,11 @@ import { UserContextService } from './services/UserContextService';
 import { defaultSettings, SettingsI } from '@shared/interfaces/SettingsI';
 import { MeUserContext } from '@shared/interfaces/UserContext';
 import { AuthService } from 'auth/services/AuthService';
+import { NotificationI } from '@shared/interfaces/NotificationI';
 
 interface UserContextType {
 	me: UserI | null;
+	meCtx: MeUserContext | null;
 	friendships: FriendshipI[];
 	offers: OfferI[];
 	worker: WorkerI | null;
@@ -302,6 +304,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	return (
 		<UserContext.Provider value={{
 			me,
+			meCtx,
 			friendships,
 			offers,
 			worker: workerProfile,

@@ -14,11 +14,6 @@ export class NotificationsController {
         private readonly notificationService: NotificationService,
     ) {}
 
-    @Get()
-    getNotifications(@CurrentUser() user: UserI) {
-        return this.notificationService.getUserNotifications(user.uid);
-    }
-
     @Get(':notificationId')
     getNotification(
         @CurrentUser() user: UserI,

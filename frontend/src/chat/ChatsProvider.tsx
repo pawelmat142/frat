@@ -1,7 +1,6 @@
 import { ChatI, ChatMemberI, ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
 import React, { useEffect } from "react";
 import { createContext, useRef, useState } from "react";
-import { ChatService } from "./services/ChatService";
 import { chatSocket } from "./services/ChatSocketService";
 import { NotificationI, NotificationIcons, NotificationTypes } from "@shared/interfaces/NotificationI";
 import { useUserContext } from "user/UserProvider";
@@ -9,7 +8,6 @@ import { useUserContext } from "user/UserProvider";
 interface ChatsContextType {
     chats: ChatWithMembers[],
     unreadMsgNotifications: NotificationI[],
-    loading: boolean
 }
 
 // TODO bug kiedy otwieram chat z app 1, potem otwieram go z app 2 to na app 2 wybucha
@@ -18,9 +16,8 @@ const ChatsContext = createContext<ChatsContextType | undefined>(undefined);
 
 export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    const { me } = useUserContext();
-
-    const [loading, setLoading] = useState(true)
+    const userCtx = useUserContext();
+    const { me } = userCtx;
 
     const [chats, setChats] = useState<ChatWithMembers[]>([])
     const [unreadMsgNotifications, setUnreadMsgNotifications] = useState<NotificationI[]>([])
@@ -28,13 +25,10 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const chatsRef = useRef<ChatWithMembers[]>(chats)
     chatsRef.current = chats
 
-    const meBefore = me
-
     useEffect(() => {
         if (me) {
             onInit()
-        } 
-        if (!me && meBefore) {
+        } else {
             onDestroy()
         }
         return () => onDestroy()
@@ -45,29 +39,21 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setUnreadMsgNotifications(unreadMSgNotifications)
     }, [chats])
 
-    const onInit = async () => {
-        loadChats()
-        chatSocket.connect();
-        chatSocket.registerChatListener(loadChatListener);
-    }
-
     const onDestroy = () => {
         chatSocket.unregisterChatListener(loadChatListener);
         setChats([])
         setUnreadMsgNotifications([])
     }
 
+    const onInit = async () => {
+        loadChats()
+        chatSocket.registerChatListener(loadChatListener);
+    }
+
     const loadChats = async () => {
-        try {
-            setLoading(true)
-            const data = await ChatService.getMyChats()
-            setChats(data)
-        } catch (error) {
-            console.error('Failed to load chats:', error)
-        } finally {
-            setLoading(false)
-        }
+        setChats(userCtx.meCtx?.chats || [])
     };
+
 
     const loadChatListener = async (chat: ChatI) => {
         setChats(prev => {
@@ -76,7 +62,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 loadChats();
                 return prev;
             }
-                // Jeśli chat nie istnieje, dodaj go na początek listy
+            // Jeśli chat nie istnieje, dodaj go na początek listy
             const newChats = prev.map(c => {
                 if (c.chatId === chat.chatId) {
                     // Przepisz members z chat, ale zachowaj user z poprzedniego stanu jeśli istnieje
@@ -155,7 +141,6 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 
     return <ChatsContext.Provider value={{
-        loading,
         chats,
         unreadMsgNotifications,
     }}>

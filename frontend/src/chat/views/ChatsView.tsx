@@ -28,7 +28,7 @@ const ChatsView: React.FC = () => {
         return chat.members.find((m: ChatMemberWithUserI) => m.uid !== me.uid);
     };
 
-    if (chatCtx.loading) {
+    if (!me) {
         return <Loading />;
     }
 
