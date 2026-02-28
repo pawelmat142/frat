@@ -1,11 +1,11 @@
 import { UserI } from "@shared/interfaces/UserI";
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "auth/AuthProvider";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Path } from "../../path";
 import { useUserContext } from "user/UserProvider";
 import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
+import { useFriendsContext } from "friends/FriendsProvider";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import UserItem from "user/components/UserItem";
@@ -27,11 +27,12 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const userCtx = useUserContext();
+    const friendsCtx = useFriendsContext();
     const me = userCtx?.me;
     const confirm = useConfirm();
 
     const [loading, setLoading] = useState(false);
-    const friendships = userCtx.friendships;
+    const friendships = friendsCtx.friendships;
 
     useEffect(() => { { } }, [friendships]);
 

@@ -24,13 +24,13 @@ import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI"
 import { FriendsService } from "friends/services/FriendsService";
 import { Ico } from "global/icon.def";
 import { UserUtil } from "@shared/utils/UserUtil";
+import { useFriendsContext } from "friends/FriendsProvider";
 
 const ProfileView: React.FC = () => {
 
-    // TODO optimize endpoints number for init worker profie, offers, friendships, etc
-
     const { loading, firebaseUser } = useAuthContext()
     const userCtx = useUserContext()
+    const friendsCtx = useFriendsContext();
     const me = userCtx.me;
     const [user, setUser] = useState<UserI | null>(null)
     const { uid } = useParams<{ uid?: string }>()
@@ -106,7 +106,7 @@ const ProfileView: React.FC = () => {
             setLocalLoading(true)
             const result = await FriendsService.sendInvite(user!.uid)
             toast.success(t('friends.invitationSent'))
-            userCtx.putFriendship(result);
+            friendsCtx.putFriendship(result);
         }
         finally {
             setLocalLoading(false);
@@ -132,7 +132,7 @@ const ProfileView: React.FC = () => {
     }
 
     const getFriendship = (): FriendshipI | undefined => {
-        return userCtx.friendships.find(f => [f.addresseeUid, f.requesterUid].includes(user?.uid));
+        return friendsCtx.friendships.find(f => [f.addresseeUid, f.requesterUid].includes(user?.uid));
     }
 
     const isFriend = getFriendship()?.status === FriendshipStatuses.ACCEPTED;

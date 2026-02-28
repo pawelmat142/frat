@@ -4,6 +4,7 @@ import { Path } from "../../path"
 import { useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useUserContext } from "user/UserProvider"
+import { useFriendsContext } from "friends/FriendsProvider"
 import { useEffect, useState } from "react"
 import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI"
 import { UserI } from "@shared/interfaces/UserI"
@@ -20,6 +21,7 @@ const FriendsListView: React.FC = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const userCtx = useUserContext()
+    const friendsCtx = useFriendsContext();
     const me = userCtx?.me;
     const isMyAccount = uid === me?.uid
 
@@ -27,7 +29,7 @@ const FriendsListView: React.FC = () => {
     const [friends, setFriends] = useState<{ user: UserI, friendship: FriendshipI }[]>([])
     const [loading, setLoading] = useState(false)
 
-    const isMyFriend = FriendUtil.isFriend(userCtx.friendships, uid!)
+    const isMyFriend = FriendUtil.isFriend(friendsCtx.friendships, uid!)
 
     if (!isMyAccount && !isMyFriend) {
         return null
@@ -40,9 +42,9 @@ const FriendsListView: React.FC = () => {
 
     useEffect(() => {
         if (isMyAccount) {
-            setFriendships(userCtx.friendships)
+            setFriendships(friendsCtx.friendships)
         }
-    }, [userCtx.friendships])
+    }, [friendsCtx.friendships])
 
     useEffect(() => {
         initFriends()
@@ -50,7 +52,7 @@ const FriendsListView: React.FC = () => {
 
     const initFriendships = async () => {
         if (isMyAccount) {
-            setFriendships(userCtx.friendships)
+            setFriendships(friendsCtx.friendships)
             return
         }
         try {

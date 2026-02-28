@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { Path } from "../../path";
 import { useUserContext } from "user/UserProvider";
 import { FriendshipStatuses } from "@shared/interfaces/FriendshipI";
+import { useFriendsContext } from "friends/FriendsProvider";
 import Button from "global/components/controls/Button";
 import { BtnSizes } from "global/interface/controls.interface";
 import { Ico } from "global/icon.def";
@@ -24,9 +25,10 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const userCtx = useUserContext();
+    const friendsCtx = useFriendsContext();
     const me = userCtx?.me; 
 
-    const friendships = userCtx.friendships;
+    const friendships = friendsCtx.friendships;
 
     useEffect(() => { { } }, [friendships]);
 
@@ -36,7 +38,7 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
         try {
             setLoading(true);
             const result = await FriendsService.sendInvite(user.uid);
-            userCtx.putFriendship(result);
+            friendsCtx.putFriendship(result);
             toast.success(t('friends.invitationSent'));
             navigate(-1)
         } finally {

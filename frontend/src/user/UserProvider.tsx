@@ -6,9 +6,6 @@ import { OfferI } from '@shared/interfaces/OfferI';
 import { OffersService } from 'offer/services/OffersService';
 import { toast } from 'react-toastify';
 import { Position } from '@shared/interfaces/MapsInterfaces';
-import { FriendshipI } from '@shared/interfaces/FriendshipI';
-import { FriendsService } from 'friends/services/FriendsService';
-import { friendsSocket } from 'friends/services/FriendsSocketService';
 import WebSocketService from 'global/web-socket/WebSocketService';
 import { useTranslation } from 'react-i18next';
 import { UserI } from '@shared/interfaces/UserI';
@@ -16,21 +13,16 @@ import { UserContextService } from './services/UserContextService';
 import { defaultSettings, SettingsI } from '@shared/interfaces/SettingsI';
 import { MeUserContext } from '@shared/interfaces/UserContext';
 import { AuthService } from 'auth/services/AuthService';
-import { NotificationI } from '@shared/interfaces/NotificationI';
 
 interface UserContextType {
 	me: UserI | null;
 	meCtx: MeUserContext | null;
-	friendships: FriendshipI[];
 	offers: OfferI[];
 	worker: WorkerI | null;
 	settings: SettingsI;
 	position: Position | null;
 
 	updateMe: (user: UserI) => void;
-	initFriendships: () => void;
-	cleanFriendships: () => void;
-	putFriendship: (friendship: FriendshipI) => void;
 	
 	initOffers: () => void;
 	cleanOffers: () => void;
@@ -51,7 +43,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	const [meCtx, setMeCtx] = useState<MeUserContext | null>(null)
 	const [me, setMe] = useState<UserI | null>(null)
-	const [friendships, setFriendships] = useState<FriendshipI[]>([])
 	const [offers, setOffers] = useState<OfferI[]>([])
 	const [workerProfile, setWorkerProfile] = useState<WorkerI | null>(null)
 	const [settings, setSettings] = useState<SettingsI>(defaultSettings)
@@ -70,7 +61,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				const ctx = await UserContextService.getMeUserContext();
 				setMeCtx(ctx);
 				setMe(ctx.user);
-				setFriendships(ctx.friendships);
 				setOffers(ctx.offers);
 				setSettings(ctx.settings);
 				setWorkerProfile(ctx.workerProfile || null);
@@ -97,8 +87,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	const onDestroy = () => {
 		setMe(null);
-		setFriendships([]);
-		unregisterFriendshipListeners();
 		cleanWorker()
 		cleanOffers()
 		cleanPosition()
@@ -214,81 +202,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		}
 	}
 
-	const initFriendships = async (init?: boolean) => {
-		if (!meCtx?.user?.uid) {
-			return
-		}
-		try {
-			setLoading(true);
-			const friendships = await FriendsService.getFriendships(meCtx?.user?.uid!);
-			if (friendships) {
-				setFriendships(friendships);
-			} else {
-				setFriendships([]);
-			}
-			registerFriendshipListeners();
-		} catch (error) {
-			setFriendships([]);
-		} finally {
-			if (!init) {
-				setLoading(false);
-			}
-		}
-	}
-
-	const registerFriendshipListeners = () => {
-		friendsSocket.registerInviteListener(onInviteFriend);
-		friendsSocket.registerRejectListener(onRejectInvite);
-		friendsSocket.registerAcceptListener(onAcceptInvite);
-		friendsSocket.registerRemoveListener(onRemoveFriend);
-	}
-
-	const unregisterFriendshipListeners = () => {
-		friendsSocket.unregisterInviteListener(onInviteFriend);
-		friendsSocket.unregisterRejectListener(onRejectInvite);
-		friendsSocket.unregisterAcceptListener(onAcceptInvite);
-		friendsSocket.unregisterRemoveListener(onRemoveFriend);
-	}
-
-	const onInviteFriend = (friendship: FriendshipI) => {
-		const exists = meCtx?.friendships.find(f => f.friendshipId === friendship.friendshipId);
-		if (!exists) {
-			setFriendships(prev => prev ? [...prev, friendship] : [friendship]	);
-		} else {
-			setFriendships(prev => prev ? prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f) : []);
-		}
-	}
-
-	const onRejectInvite = (friendship: FriendshipI) => {
-		const newFriendships = meCtx?.friendships.map(f => {
-			if (f.friendshipId === friendship.friendshipId) {
-				return friendship;
-			}
-			return f
-		}) ?? [];
-		setFriendships(newFriendships);
-	}
-
-	const onAcceptInvite = (friendship: FriendshipI) => {
-		const newFriendships = meCtx?.friendships.filter(f => f.friendshipId !== friendship.friendshipId) ?? [];
-		newFriendships.push(friendship);
-		setFriendships(newFriendships);
-	}
-
-	const putFriendship = (friendship: FriendshipI) => {
-		const exists = meCtx?.friendships.find(f => f.friendshipId === friendship.friendshipId);
-		if (exists) {
-			setFriendships(prev => prev ? prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f) : []);
-		} else {
-			setFriendships(prev => prev ? [...prev, friendship] : [friendship]);
-		}
-	}
-
-	const onRemoveFriend = (friendship: FriendshipI) => {
-		const newFriendships = meCtx?.friendships.filter(f => f.friendshipId !== friendship.friendshipId) ?? [];
-		setFriendships(newFriendships);
-	}
-
 	const cleanOffers = () => {
 		setOffers([]);
 	}
@@ -297,15 +210,10 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		setWorkerProfile(null);
 	}
 
-	const cleanFriendships = () => {
-		setFriendships([]);
-	}
-
 	return (
 		<UserContext.Provider value={{
 			me,
 			meCtx,
-			friendships,
 			offers,
 			worker: workerProfile,
 			settings: settings,
@@ -314,9 +222,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			cleanWorker: cleanWorker,
 			initOffers: initOffers,
 			cleanOffers: cleanOffers,
-			initFriendships: initFriendships,
-			cleanFriendships: cleanFriendships,
-			putFriendship: putFriendship,
 			loading: loading,
 			setLoading: setLoading,
 			position,

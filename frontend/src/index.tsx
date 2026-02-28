@@ -23,6 +23,7 @@ import OfferSearchProvider from 'offer/views/search/OfferSearchProvider';
 import NotificationsGlobalBar from 'notification/components/NotificationsGlobalBar';
 import { ChatsProvider } from 'chat/ChatsProvider';
 import { NotificationsProvider } from 'notification/NotificationsProvider';
+import { FriendsProvider } from 'friends/FriendsProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -39,8 +40,9 @@ root.render(
                   <CookieProvider>
                     <AuthProvider>
                       <UserProvider>
-                        <ChatsProvider>
-                          <NotificationsProvider>
+                        <FriendsProvider>
+                          <ChatsProvider>
+                            <NotificationsProvider>
                             <OfferSearchProvider>
                               <WorkersSearchProvider>
                                 <MenuProvider>
@@ -70,7 +72,8 @@ root.render(
                             </OfferSearchProvider>
                           </NotificationsProvider>
                         </ChatsProvider>
-                      </UserProvider>
+                      </FriendsProvider>
+                    </UserProvider>
                     </AuthProvider>
                   </CookieProvider>
                 </ThemeProvider>
