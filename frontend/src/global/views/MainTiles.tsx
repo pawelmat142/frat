@@ -74,12 +74,11 @@ const MainTiles: React.FC = () => {
                 <div className='desktop-flex'></div>
                 {!me && (<div className=''></div>)}
 
-                {!!me && (<div className="sec-tile-wrapper">
+                {!!me && (<div className="sec-tile-wrapper" onClick={() => navigate(Path.SETTINGS)}>
                     <div className="square-tile">
                         <Ico.SETTINGS size={iconSize} />
                     </div>
                     <div className="sec-tile-label">{t("common.settings")}</div>
-                    {/* TODO settings view */}
                 </div>)}
 
                 <LangSelectTile iconSize={iconSize} />

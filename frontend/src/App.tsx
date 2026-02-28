@@ -39,6 +39,7 @@ import FriendsSearchView from 'friends/views/FriendsSearchView';
 import SingleNotificationView from 'notification/views/SingleNotificationView';
 import NotificationsView from 'notification/views/NotificationsView';
 import TranslationItemForm from 'admin/views/translations/TranslationItemForm';
+import SettingsView from 'user/views/SettingsView';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -80,6 +81,7 @@ const App: React.FC = () => {
                 <Route path={Path.FRIENDS_SEARCH} element={<PageWrapper direction={1}><ProtectedRoute><FriendsSearchView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.NOTIFICATIONS} element={<PageWrapper direction={1}><ProtectedRoute><NotificationsView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.NOTIFICATION} element={<PageWrapper direction={1}><ProtectedRoute><SingleNotificationView /></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.SETTINGS} element={<PageWrapper direction={1}><ProtectedRoute><SettingsView /></ProtectedRoute></PageWrapper>} />
 
                 {/* EMPLOYEE PROFILE */}
                 <Route path={Path.WORKER} element={<PageWrapper direction={1}><WorkerView /></PageWrapper>} />

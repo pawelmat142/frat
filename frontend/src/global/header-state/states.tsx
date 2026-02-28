@@ -84,5 +84,9 @@ export const STATES: { [key: string]: ViewState } = {
     [Path.NOTIFICATIONS]: {
         leftBtn: <HeaderBackBtn />,
         title: 'notification.header',
+    },
+    [Path.SETTINGS]: {
+        leftBtn: <HeaderBackBtn />,
+        title: 'common.settings',
     }
 }
