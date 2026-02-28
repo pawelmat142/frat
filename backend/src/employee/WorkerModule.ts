@@ -33,6 +33,7 @@ import { UserModule } from 'user/UserModule';
         WorkersController
     ],
     exports: [
+        WorkersService
     ],
 })
 export class WorkerModule { }

@@ -33,6 +33,7 @@ import { UserModule } from 'user/UserModule';
         AdminOffersController,
     ],
     exports: [
+        OffersService
     ],
 })
 export class OffersModule { }

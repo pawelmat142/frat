@@ -19,6 +19,7 @@ import { NotificationModule } from 'notification/NotificationModule';
 import { SocketModule } from 'global/web-socket/SocketModule';
 import { GeocodingService } from 'global/services/GeocodingService';
 import { SettingsModule } from 'user/settings-module/SettingsModule';
+import { UserContextModule } from 'user/user-context-module/UserContextModule';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { SettingsModule } from 'user/settings-module/SettingsModule';
     FriendsModule,
     NotificationModule,
     SettingsModule,
+    UserContextModule,
   ],
   controllers: [
     GlobalController,
