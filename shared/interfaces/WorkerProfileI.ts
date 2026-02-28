@@ -144,6 +144,7 @@ export interface WorkerSearchFilters {
   
   locationCountry?: string | null;
   geocodedPosition?: GeocodedPosition | null;
+  positionRadiusKm?: number;
 
   // TODO remove
   freeText?: string;

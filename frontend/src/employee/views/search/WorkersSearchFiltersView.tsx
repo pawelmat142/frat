@@ -34,8 +34,26 @@ const WorkersSearchFiltersView: React.FC = () => {
     const formState = f.watch()
 
     useEffect(() => {
-
-        initLocationCountry();
+        const autofillLocationCountry = async () => {
+            if (!formState.geocodedPosition && userCtx.position) {
+                try {
+                    setLoadingLocation(true);
+                    const geoPosition = await getGeoPosition(userCtx.position);
+                    const countryCode = geoPosition?.country?.toLocaleLowerCase();
+                    const languages = globalCtx.dics.languages!;
+                    const langAllowed = languages.elements.map((lang) => lang.code.toLocaleLowerCase()).includes(countryCode || '')
+                    if (langAllowed) {
+                        f.setValue('locationCountry', countryCode || '');
+                    }
+                }
+                catch (error) {
+                    console.error('Error initializing location country:', error);
+                } finally {
+                    setLoadingLocation(false);
+                }
+            }
+        }
+        autofillLocationCountry();
     }, [userCtx.position])
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
@@ -70,26 +88,6 @@ const WorkersSearchFiltersView: React.FC = () => {
         return {
             start: localFilters.startDate,
             end: localFilters.endDate
-        }
-    }
-
-    const initLocationCountry = async () => {
-        if (!formState.geocodedPosition && userCtx.position) {
-            try {
-                setLoadingLocation(true);
-                const geoPosition = await getGeoPosition(userCtx.position);
-                const countryCode = geoPosition?.country?.toLocaleLowerCase();
-                const languages = globalCtx.dics.languages!;
-                const langAllowed = languages.elements.map((lang) => lang.code.toLocaleLowerCase()).includes(countryCode || '')
-                if (langAllowed) {
-                    f.setValue('locationCountry', countryCode || '');
-                }
-            }
-            catch (error) {
-                console.error('Error initializing location country:', error);
-            } finally {
-                setLoadingLocation(false);
-            }
         }
     }
 
