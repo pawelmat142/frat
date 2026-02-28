@@ -4,10 +4,10 @@ import { CurrentUser } from "auth/decorators/CurrentUserDecorator";
 import { JwtAuthGuard } from "auth/guards/JwtAuthGuard";
 import { LogInterceptor } from "global/interceptors/LogInterceptor";
 import { UserContextService } from "./UserContextService";
+import { MeUserContext, UserContext } from "@shared/interfaces/UserContext";
 
 @Controller('api/user-ctx')
 @UseInterceptors(LogInterceptor)
-@UseGuards(JwtAuthGuard)
 export class UserContextController {
 
     constructor(
@@ -18,8 +18,15 @@ export class UserContextController {
     public getUserContext(
         @CurrentUser() user: UserI,
         @Param('uid') uid: string
-    ) {
+    ): Promise<UserContext> {
         return this.userContextService.getUserContext(user, uid);
     }
 
+    @Get()
+    @UseGuards(JwtAuthGuard)
+    public getMeUserContext(
+        @CurrentUser() user: UserI
+    ): Promise<MeUserContext> {
+        return this.userContextService.getMeUserContext(user);
+    }
 }

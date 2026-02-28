@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useEffect, useState } from 'react';
 import { WorkerI } from '@shared/interfaces/WorkerProfileI';
 import { WorkerService } from 'employee/services/WorkerService';
 import { useAuthContext } from 'auth/AuthProvider';
@@ -11,19 +11,29 @@ import { FriendsService } from 'friends/services/FriendsService';
 import { friendsSocket } from 'friends/services/FriendsSocketService';
 import WebSocketService from 'global/web-socket/WebSocketService';
 import { useTranslation } from 'react-i18next';
+import { UserI } from '@shared/interfaces/UserI';
+import { UserContextService } from './services/UserContextService';
+import { defaultSettings, SettingsI } from '@shared/interfaces/SettingsI';
+import { MeUserContext } from '@shared/interfaces/UserContext';
 
 interface UserContextType {
-	worker: WorkerI | null;
-	position: Position | null;
-	initWorker: () => void;
-	cleanWorker: () => void;
-	offers: OfferI[];
-	initOffers: () => void;
-	cleanOffers: () => void;
+	me: UserI | null;
 	friendships: FriendshipI[];
+	offers: OfferI[];
+	worker: WorkerI | null;
+	settings: SettingsI;
+	position: Position | null;
+
 	initFriendships: () => void;
 	cleanFriendships: () => void;
 	putFriendship: (friendship: FriendshipI) => void;
+	
+	initOffers: () => void;
+	cleanOffers: () => void;
+	
+	initWorker: () => void;
+	cleanWorker: () => void;
+
 	loading: boolean;
 	setLoading: (loading: boolean) => void;
 }
@@ -35,36 +45,42 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const { t } = useTranslation();
 	const authCtx = useAuthContext();
 
-	const [worker, setWorker] = React.useState<WorkerI | null>(null)
+	const [meCtx, setMeCtx] = useState<MeUserContext | null>(null)
 
-	const [offers, setOffers] = React.useState<OfferI[]>([])
+	const [loading, setLoading] = useState(false)
 
-	const [friendships, setFriendships] = React.useState<FriendshipI[]>([])
+	const [position, setPosition] = useState<Position | null>(null)
+	const [positionWatchId, setPositionWatchId] = useState<number | null>(null)
 
-	const [loading, setLoading] = React.useState(false)
+	// TODO usunac me z authctx 
+	// TODO chaty i notyfikacje zasilac na bazie meCtx
+	// TODO settings zmiany nie zasialaja base tez
 
-	const [position, setPosition] = React.useState<Position | null>(null)
-	const [positionWatchId, setPositionWatchId] = React.useState<number | null>(null)
-
-	React.useEffect(() => {
-		if (authCtx.me) {
-			Promise.all([
-				initWorker(true),
-				initOffers(true),
-				initLocation(true),
-				initFriendships(true),
-			]).then(() => {
+	useEffect(() => {
+		const initUserContext = async () => {
+			try {
+				setLoading(true);
+				const ctx = await UserContextService.getMeUserContext();
+				setMeCtx(ctx);
+				initLocation(true);
+			} catch (error) {
+				onDestroy();
+				toast.error(t('user.error.userInitError'));
+			} finally {
 				setLoading(false);
 				WebSocketService.getInstance().connect();
-			})
-		} else {
+			}
+		}
 
+		if (authCtx.firebaseUser) {
+			initUserContext();
+		} else {
 			onDestroy();
 		}
 		return () => {
 			onDestroy();
 		}
-	}, [authCtx.me]);
+	}, [authCtx.firebaseUser])
 
 	const onDestroy = () => {
 		unregisterFriendshipListeners();
@@ -145,12 +161,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			setLoading(true);
 			const profile = await WorkerService.getWorker();
 			if (profile) {
-				setWorker(profile);
+				setMeCtx(prev => prev ? { ...prev, workerProfile: profile } : null);
 			} else {
-				setWorker(null);
+				setMeCtx(prev => prev ? { ...prev, workerProfile: undefined } : null);
 			}
 		} catch (error) {
-			setWorker(null);
+			setMeCtx(prev => prev ? { ...prev, workerProfile: undefined } : null);
 		}
 		finally {
 			if (!init) {
@@ -164,12 +180,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			setLoading(true);
 			const offers = await OffersService.listMyOffers();
 			if (offers) {
-				setOffers(offers);
+				setMeCtx(prev => prev ? { ...prev, offers: offers } : null);
 			} else {
-				setOffers([]);
+				setMeCtx(prev => prev ? { ...prev, offers: [] } : null);
 			}
 		} catch (error) {
-			setOffers([]);
+			setMeCtx(prev => prev ? { ...prev, offers: [] } : null);
 		}
 		finally {
 			if (!init) {
@@ -183,13 +199,13 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			setLoading(true);
 			const friendships = await FriendsService.getFriendships(authCtx.me!.uid);
 			if (friendships) {
-				setFriendships(friendships);
+				setMeCtx(prev => prev ? { ...prev, friendships: friendships } : null);
 			} else {
-				setFriendships([]);
+				setMeCtx(prev => prev ? { ...prev, friendships: [] } : null);
 			}
 			registerFriendshipListeners();
 		} catch (error) {
-			setFriendships([]);
+			setMeCtx(prev => prev ? { ...prev, friendships: [] } : null);
 		} finally {
 			if (!init) {
 				setLoading(false);
@@ -212,65 +228,67 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}
 
 	const onInviteFriend = (friendship: FriendshipI) => {
-		const exists = friendships.find(f => f.friendshipId === friendship.friendshipId)
+		const exists = meCtx?.friendships.find(f => f.friendshipId === friendship.friendshipId);
 		if (!exists) {
-			setFriendships(prev => [...prev, friendship])
+			setMeCtx(prev => prev ? { ...prev, friendships: [...prev.friendships, friendship] } : null);
 		} else {
-			setFriendships(prev => prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f))
+			setMeCtx(prev => prev ? { ...prev, friendships: prev.friendships.map(f => f.friendshipId === friendship.friendshipId ? friendship : f) } : null);
 		}
 	}
 
 	const onRejectInvite = (friendship: FriendshipI) => {
-		const newFriendships = friendships.map(f => {
+		const newFriendships = meCtx?.friendships.map(f => {
 			if (f.friendshipId === friendship.friendshipId) {
 				return friendship;
 			}
 			return f
-		})
-		setFriendships(newFriendships)
+		}) ?? [];
+		setMeCtx(prev => prev ? { ...prev, friendships: newFriendships } : null);
 	}
 
 	const onAcceptInvite = (friendship: FriendshipI) => {
-		const newFriendships = friendships.filter(f => f.friendshipId !== friendship.friendshipId);
+		const newFriendships = meCtx?.friendships.filter(f => f.friendshipId !== friendship.friendshipId) ?? [];
 		newFriendships.push(friendship);
-		setFriendships(newFriendships)
+		setMeCtx(prev => prev ? { ...prev, friendships: newFriendships } : null);
 	}
 
 	const putFriendship = (friendship: FriendshipI) => {
-		const exists = friendships.find(f => f.friendshipId === friendship.friendshipId);
+		const exists = meCtx?.friendships.find(f => f.friendshipId === friendship.friendshipId);
 		if (exists) {
-			setFriendships(prev => prev.map(f => f.friendshipId === friendship.friendshipId ? friendship : f));
+			setMeCtx(prev => prev ? { ...prev, friendships: prev.friendships.map(f => f.friendshipId === friendship.friendshipId ? friendship : f) } : null);
 		} else {
-			setFriendships(prev => [...prev, friendship]);
+			setMeCtx(prev => prev ? { ...prev, friendships: [...prev.friendships, friendship] } : null);
 		}
 	}
 
 	const onRemoveFriend = (friendship: FriendshipI) => {
-		const newFriendships = friendships.filter(f => f.friendshipId !== friendship.friendshipId);
-		setFriendships(newFriendships)
+		const newFriendships = meCtx?.friendships.filter(f => f.friendshipId !== friendship.friendshipId) ?? [];
+		setMeCtx(prev => prev ? { ...prev, friendships: newFriendships } : null);
 	}
 
 	const cleanOffers = () => {
-		setOffers([]);
+		setMeCtx(prev => prev ? { ...prev, offers: [] } : null);
 	}
 
 	const cleanWorker = () => {
-		setWorker(null);
+		setMeCtx(prev => prev ? { ...prev, workerProfile: undefined } : null);
 	}
 
 	const cleanFriendships = () => {
-		setFriendships([]);
+		setMeCtx(prev => prev ? { ...prev, friendships: [] } : null);
 	}
 
 	return (
 		<UserContext.Provider value={{
-			worker: worker,
+			me: meCtx?.user ?? null,
+			friendships: meCtx?.friendships ?? [],
+			offers: meCtx?.offers ?? [],
+			worker: meCtx?.workerProfile ?? null,
+			settings: meCtx ? meCtx.settings : defaultSettings,
 			initWorker: initWorker,
 			cleanWorker: cleanWorker,
-			offers: offers,
 			initOffers: initOffers,
 			cleanOffers: cleanOffers,
-			friendships: friendships,
 			initFriendships: initFriendships,
 			cleanFriendships: cleanFriendships,
 			putFriendship: putFriendship,

@@ -19,7 +19,7 @@ export class UserContextService {
         private readonly settingsService: SettingsService,
         private readonly notificationService: NotificationService,
         private readonly chatService: ChatService,
-    ) {}
+    ) { }
 
     public async getUserContext(user: UserI, uid: string): Promise<UserContext> {
 
@@ -34,16 +34,16 @@ export class UserContextService {
             workerProfile,
         }
 
-        const isMyProfile = user.uid === uid;
+        return ctx;
+    }
 
-        if (!isMyProfile) {
-            return ctx
-        }
-        
-        const settings = await this.settingsService.getSettings(uid);
-        const notifications = await this.notificationService.getUserNotifications(uid);
-        const chats = await this.chatService.getUserChats(uid);
-        
+    public async getMeUserContext(user: UserI): Promise<MeUserContext> {
+        const ctx = await this.getUserContext(user, user.uid);
+
+        const settings = await this.settingsService.getSettings(user.uid);
+        const notifications = await this.notificationService.getUserNotifications(user.uid);
+        const chats = await this.chatService.getUserChats(user.uid);
+
         const meCtx: MeUserContext = {
             ...ctx,
             settings,

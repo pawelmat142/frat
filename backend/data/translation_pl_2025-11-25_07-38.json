@@ -101,7 +101,8 @@
         "notFound": "Nie znaleziono użytkownika",
         "invalidRole": "Nieprawidłowa rola",
         "cannotDelete": "Nie można usunąć użytkownika",
-        "missingRoles": "Brak ról"
+        "missingRoles": "Brak ról",
+        "userInitError": "Błąd podczas inicjalizacji kontekstu użytkownika"
       }
     },
     "offer": {

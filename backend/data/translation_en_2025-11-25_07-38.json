@@ -102,7 +102,8 @@
         "notFound": "User not found",
         "invalidRole": "Invalid role",
         "cannotDelete": "Cannot delete user",
-        "missingRoles": "Missing roles"
+        "missingRoles": "Missing roles",
+        "userInitError": "Error initializing user context"
       }
     },
     "offer": {
