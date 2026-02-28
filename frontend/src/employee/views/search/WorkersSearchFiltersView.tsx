@@ -11,11 +11,12 @@ import Button from "global/components/controls/Button";
 import CountrySelector from "global/components/selector/CountrySelector";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import { Ico } from "global/icon.def";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserContext } from "user/UserProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { toast } from "react-toastify";
 import FloatingPlaceSearch from "global/components/controls/FloatingPlaceSearch";
+import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 
 const WorkersSearchFiltersView: React.FC = () => {
 
@@ -30,6 +31,13 @@ const WorkersSearchFiltersView: React.FC = () => {
         defaultValues: ctx.filters
     })
 
+    const formState = f.watch()
+
+    useEffect(() => {
+
+        initLocationCountry();
+    }, [userCtx.position])
+
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return (
             <div>
@@ -37,7 +45,6 @@ const WorkersSearchFiltersView: React.FC = () => {
             </div>
         )
     }
-    const formState = f.watch()
     const startDateRequired = FormValidator.required(t);
     const required = FormValidator.required(t);
 
@@ -66,22 +73,50 @@ const WorkersSearchFiltersView: React.FC = () => {
         }
     }
 
+    const initLocationCountry = async () => {
+        if (!formState.geocodedPosition && userCtx.position) {
+            try {
+                setLoadingLocation(true);
+                const geoPosition = await getGeoPosition(userCtx.position);
+                const countryCode = geoPosition?.country?.toLocaleLowerCase();
+                const languages = globalCtx.dics.languages!;
+                const langAllowed = languages.elements.map((lang) => lang.code.toLocaleLowerCase()).includes(countryCode || '')
+                if (langAllowed) {
+                    f.setValue('locationCountry', countryCode || '');
+                }
+            }
+            catch (error) {
+                console.error('Error initializing location country:', error);
+            } finally {
+                setLoadingLocation(false);
+            }
+        }
+    }
 
     const updatePosition = async (position: { lat: number; lng: number }) => {
+        const geoPosition = await updateFormPosition(position);
+        if (geoPosition?.country?.toLocaleLowerCase() !== formState.locationCountry?.toLocaleLowerCase()) {
+            f.setValue('locationCountry', null);
+        }
+    };
+
+    const updateFormPosition = async (position: { lat: number; lng: number }): Promise<GeocodedPosition | null> => {
         try {
             setLoadingLocation(true);
-            const geoPosition = await GoogleMapService.getGeocodedLocationn(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
+            const geoPosition = await getGeoPosition(position);
             f.setValue('geocodedPosition', geoPosition);
-            if (geoPosition?.country?.toLocaleLowerCase() !== formState.locationCountry?.toLocaleLowerCase()) {
-                f.setValue('locationCountry', null);
-            }
+            return geoPosition;
         } catch (error) {
             console.error('Geocoding error:', error);
             toast.error(t('employeeProfile.error.getGeocodedLocation'));
+            return null;
         } finally {
             setLoadingLocation(false);
         }
-    };
+    }
+    const getGeoPosition = (position: { lat: number; lng: number }): Promise<GeocodedPosition | null> => {
+        return GoogleMapService.getGeocodedLocationn(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
+    }
 
     return (
         <div className="form-view relative flex flex-col">
