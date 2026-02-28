@@ -16,7 +16,9 @@ import { useUserContext } from "user/UserProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { toast } from "react-toastify";
 import FloatingPlaceSearch from "global/components/controls/FloatingPlaceSearch";
+import FloatingStepSlider from "global/components/controls/FloatingStepSlider";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
+import { RADIUS_STEPS_KM } from "./WorkersSearchProvider";
 
 const WorkersSearchFiltersView: React.FC = () => {
 
@@ -33,6 +35,7 @@ const WorkersSearchFiltersView: React.FC = () => {
 
     const formState = f.watch()
 
+    console.log("formState", formState)
     useEffect(() => {
         const autofillLocationCountry = async () => {
             if (!formState.geocodedPosition && userCtx.position) {
@@ -184,8 +187,23 @@ const WorkersSearchFiltersView: React.FC = () => {
                     />
                 )}
 
-
-
+                {!!formState.geocodedPosition && (
+                    <Controller
+                        name="positionRadiusKm"
+                        control={f.control}
+                        render={({ field }) => (
+                            <FloatingStepSlider
+                                label={t('employeeProfile.form.radius')}
+                                steps={RADIUS_STEPS_KM}
+                                value={field.value}
+                                onChange={field.onChange}
+                                unit="km"
+                                fullWidth
+                                className="w-full mt-5 px-2 mb-5"
+                            />
+                        )}
+                    />
+                )}
 
                 <Controller
                     name="certificates"

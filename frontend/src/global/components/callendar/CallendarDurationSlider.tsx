@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { BottomSheetContextType } from "global/providers/BottomSheetProvider";
+import FloatingStepSlider from "global/components/controls/FloatingStepSlider";
 
 interface Props {
     initial?: number;
@@ -15,10 +16,6 @@ interface Props {
 const CallendarDurationSlider: React.FC<Props> = ({ initial = 1, min = 1, max = 24, onSubmit, bottomSheetCtx }) => {
     const { t } = useTranslation();
     const [value, setValue] = useState<number>(initial);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(parseInt(e.target.value, 10));
-    }
 
     const confirm = () => {
         onSubmit(value);
@@ -38,28 +35,15 @@ const CallendarDurationSlider: React.FC<Props> = ({ initial = 1, min = 1, max = 
 
     return (
         <div className="duration-slider-wrapper flex flex-col gap-4 px-5 py-3 h-full">
-            <div className="flex flex-col gap-5 h-full my-auto">
-                <label className="text-sm font-medium">
-                    {t("callendar.duration.selectLabel")}
-                </label>
-                <div className="px-5">
-                        {/** Dynamic gradient via CSS variable --slider-progress */}
-                        <input
-                            type="range"
-                            min={min}
-                            max={max}
-                            step={1}
-                            value={value}
-                            onChange={handleChange}
-                            className="w-full duration-slider"
-                            style={{ ['--slider-progress' as any]: `${((value - min) / (max - min)) * 100}%` }}
-                        />
-
-                </div>
-                <div className="text-center text-lg font-semibold">
-                    {prepareMonthsLabel(value)}
-                </div>
-            </div>
+            <FloatingStepSlider
+                label={t("callendar.duration.selectLabel")}
+                min={min}
+                max={max}
+                value={value}
+                onChange={setValue}
+                displayValue={prepareMonthsLabel}
+                fullWidth
+            />
             <div className="flex gap-3 mt-auto">
                 <Button
                     onClick={() => { reset(); }}

@@ -20,11 +20,14 @@ export interface WorkersSearchContextProps {
     updateOneProfileInResults: (updatedProfile: WorkerI) => void;
 }
 
+export const RADIUS_STEPS_KM = [10, 20, 50, 80, 100, 150, 200, 300, 400, 500, 800, 1000];
+
 export const WorkerDefaultFilters: WorkerSearchFilters = {
     startDate: null,
     endDate: null,
 
     locationCountry: null,
+    positionRadiusKm: RADIUS_STEPS_KM[4],
     freeText: '',
 
     communicationLanguages: [],
