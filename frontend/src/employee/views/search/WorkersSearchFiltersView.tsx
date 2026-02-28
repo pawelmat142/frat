@@ -182,6 +182,9 @@ const WorkersSearchFiltersView: React.FC = () => {
                                 onSelect={item => {
                                     updatePosition({ lat: item.lat, lng: item.lng });
                                 }}
+                                onClear={() => {
+                                    f.setValue('geocodedPosition', null);
+                                }}
                             ></FloatingPlaceSearch>
                         )}
                     />
@@ -206,6 +209,25 @@ const WorkersSearchFiltersView: React.FC = () => {
                 )}
 
                 <Controller
+                    name="categories"
+                    control={f.control}
+                    render={({ field }) => (
+                        <DictionarySelector
+                            type='multi'
+                            className="w-full mt-5"
+                            valueInput={field.value}
+                            onSelectMulti={items => {
+                                field.onChange(items);
+                            }}
+                            label={t("offer.filters.categories")}
+                            code="WORK_CATEGORY"
+                            fullWidth
+                            required
+                        />
+                    )}
+                />
+
+                <Controller
                     name="certificates"
                     control={f.control}
                     render={({ field }) => (
@@ -218,24 +240,6 @@ const WorkersSearchFiltersView: React.FC = () => {
                             }}
                             label={t("employeeProfile.form.certificates")}
                             code="CERTIFICATES"
-                            fullWidth
-                        />
-                    )}
-                />
-
-                <Controller
-                    name="experience"
-                    control={f.control}
-                    render={({ field }) => (
-                        <DictionarySelector
-                            type='multi'
-                            className="w-full mt-5"
-                            valueInput={field.value}
-                            onSelectMulti={items => {
-                                field.onChange(items);
-                            }}
-                            label={t("employeeProfile.form.experience")}
-                            code="SKILLS"
                             fullWidth
                         />
                     )}

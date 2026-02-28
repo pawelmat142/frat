@@ -146,12 +146,14 @@ export interface WorkerSearchFilters {
   geocodedPosition?: GeocodedPosition | null;
   positionRadiusKm?: number;
 
+  certificates?: string[];
+  categories?: string[];
+
   // TODO remove
   freeText?: string;
+  experience?: string[];
 
   communicationLanguages?: string[];
-  certificates?: string[];
-  experience?: string[];
 
   sortBy?: WorkerSearchSortOption;
   skip: number;

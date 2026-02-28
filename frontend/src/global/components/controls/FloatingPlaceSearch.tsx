@@ -4,7 +4,7 @@ import FormError from './FormError';
 import { FloatingInputMode, FloatingInputModes } from 'global/interface/controls.interface';
 import { useDebouncedValue } from 'global/utils/useDebouncedValue';
 import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
-import { Search } from '@mui/icons-material';
+import { Close, Search } from '@mui/icons-material';
 
 interface PlacePrediction {
     place_id: string;
@@ -24,6 +24,8 @@ interface FloatingPlaceSearchProps {
     label?: string;
     displayValue?: string;
     onSelect: (result: PlaceSearchResult) => void;
+    onClear?: () => void;
+    icon?: React.ReactNode;
     mapInstanceRef?: google.maps.Map | null;
     fullWidth?: boolean;
     disabled?: boolean;
@@ -41,6 +43,8 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
         label,
         displayValue,
         onSelect,
+        onClear,
+        icon,
         mapInstanceRef,
         fullWidth = false,
         disabled = false,
@@ -197,6 +201,16 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
             setTimeout(() => setIsFocused(false), 200);
         };
 
+        const handleClear = () => {
+            setInputValue('');
+            setSelectedPrediction(null);
+            setPredictions([]);
+            setShowPredictions(false);
+            onClear?.();
+        };
+
+        const hasSelection = !!selectedPrediction || !!displayValue;
+
         let inputClass = `pp-control-bg pp-input floating-input ${mode}`;
         if (fullWidth) {
             inputClass += ' w-full';
@@ -248,8 +262,16 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
                             </span>
+                        ) : hasSelection ? (
+                            <Close
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                                style={{ fontSize: '1.2rem' }}
+                                onClick={handleClear}
+                            />
                         ) : (
-                            <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style={{ fontSize: '1.2rem' }} />
+                            icon
+                                ? <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex items-center">{icon}</span>
+                                : <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style={{ fontSize: '1.2rem' }} />
                         )}
                         <FloatingLabel
                             htmlFor={id}
