@@ -1,3 +1,4 @@
+import { CertificateI } from './CertificateI';
 import { GeocodedPosition } from './MapsInterfaces';
 import { AvatarRef } from './UserI';
 
@@ -40,12 +41,15 @@ export interface WorkerI {
   categories?: string[];
   certificates?: string[];
 
-
   views: string[];
   jobs: string[];
   likes: string[];
 
   createdAt: Date;
+}
+
+export interface WorkerWithCertificates extends WorkerI {
+  certs: CertificateI[];
 }
 
 export const WorkerStatuses = {

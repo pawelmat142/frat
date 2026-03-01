@@ -12,6 +12,7 @@ import { DateUtil } from '@shared/utils/DateUtil';
 import { WorkersInitialData } from './WorkersInitialData';
 import { Subscription } from 'rxjs';
 import { UserService } from 'user/services/UserService';
+import { CertificatesWorkerService } from './CertificatesWorkerService';
 
 @Injectable()
 export class WorkersService implements OnModuleInit, OnModuleDestroy {
@@ -23,6 +24,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
     constructor(
         private readonly workerRepo: WorkerRepo,
         private readonly userService: UserService,
+        private readonly certificatesWorkerService: CertificatesWorkerService,
     ) { }
 
     onModuleInit() {
@@ -39,6 +41,8 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
                 if (user) {
                     const profile = await this.getWorker(user);
                     if (profile) {
+                        // Delete certificates before deleting profile
+                        await this.certificatesWorkerService.deleteAllCertificatesForWorker(user.uid);
                         await this.deleteProfile(profile.workerId);
                     } else {
                         this.logger.log(`No employee profile found for deleted user UID: ${user.uid}`);
@@ -105,6 +109,13 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
 
         const profile = await this.prepareProfile(user, form);
         const result = await this.workerRepo.create(profile);
+        
+        // Create certificates with validity dates if provided
+        if (Object.keys(form.certificateDates || {}).length) {
+            await this.certificatesWorkerService.createCertificates(user.uid, form)
+            this.logger.log(`Created certificates for new worker profile: ${result.workerId}`);
+        }
+        
         await this.userService.updateAvatarIfChanges(user, form.avatarRef);
         return result;
     }
@@ -114,17 +125,25 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         if (!profileBefore) {
             throw new ToastException('employeeProfile.notFound', this);
         }
-        const validityDatesChanged = this.updateCertificatesValidityDates(profileBefore, form.certificateDates || {});
+        
+        // Sync certificates before updating profile
+        const certificatesChanged = await this.updateCertificatesValidityDates(user.uid, form.certificates || [], form.certificateDates || {});
+        
         const profile = await this.prepareProfile(user, form);
-        const result = await this.workerRepo.update(profile, validityDatesChanged);
+        const result = await this.workerRepo.update(profile, certificatesChanged); // Mark as changed since certificates might have changed
         await this.userService.updateAvatarIfChanges(user, form.avatarRef);
         return result;
     }
 
 
-    private updateCertificatesValidityDates(profileBefore: WorkerEntity, certificateDates: Record<string, string>): boolean {
-        // TODO
-        return true
+    private async updateCertificatesValidityDates(
+        uid: string,
+        certificates: string[],
+        certificateDates: Record<string, string>
+    ): Promise<boolean> {
+        const result = await this.certificatesWorkerService.syncCertificates(uid, certificates, certificateDates);
+        this.logger.log(`Synced certificates for uid: ${uid}`);
+        return result.some(cert => certificateDates[cert.code] && cert.validityDate !== certificateDates[cert.code]);
     }
 
     public async notifyWorkerView(uid: string, viewerUid: string): Promise<void> {
@@ -171,6 +190,9 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         if (!profile) {
             throw new ToastException('employeeProfile.notFound', this);
         }
+        
+        // Delete certificates before deleting profile
+        await this.certificatesWorkerService.deleteAllCertificatesForWorker(user.uid);
         return this.deleteProfile(profile.workerId);
     }
 
