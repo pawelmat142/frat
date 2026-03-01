@@ -481,7 +481,8 @@
         "phoneNumberTooShort": "Phone number is too short (min. 6 digits).",
         "phoneNumberTooLong": "Phone number is too long (max. 15 digits).",
         "phoneNumberInvalid": "Invalid phone number format.",
-        "phoneNumberRequired": "Phone number is required."
+        "phoneNumberRequired": "Phone number is required.",
+        "formInvalid": "Form is invalid, please check all fields."
       },
       "view": {
         "title": "Something went wrong!",
@@ -547,7 +548,9 @@
         },
         "step2": {
           "label": "Step 2",
-          "title": "Where you want to work?"
+          "title": "Location",
+          "chooseOptions": "Choose option:",
+          "info": "*Providing an approximate location is required for the search functionality and helps others find your profile."
         },
         "step3": {
           "label": "Step 3",
@@ -576,7 +579,7 @@
         "uploadAvatar": "Upload avatar",
         "locationOption": {
           "POSITION": {
-            "msg": "Choose a location to receive offers based on it.",
+            "msg": "You will receive offers based on your location and distance.",
             "tab": "Location"
           },
           "ALL_EUROPE": {
@@ -584,7 +587,7 @@
             "tab": "Europe"
           },
           "SELECTED_COUNTRIES": {
-            "msg": "Choose the countries from which you want to receive offers.",
+            "msg": "You will receive offers from selected countries.",
             "tab": "Countries"
           }
         },

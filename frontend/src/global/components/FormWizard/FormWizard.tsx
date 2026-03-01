@@ -41,7 +41,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
         try {
             const result = await formRef.trigger(currentStep as any);
             if (!result) {
-                toast.error('Form validation failed');
+                toast.error(t('validation.form.formInvalid'));
             }
             return result;
         } catch (e) {

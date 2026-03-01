@@ -474,8 +474,8 @@
         "phoneNumberTooShort": "Numer telefonu jest za krótki (min. 6 cyfr).",
         "phoneNumberTooLong": "Numer telefonu jest za długi (maks. 15 cyfr).",
         "phoneNumberInvalid": "Nieprawidłowy format numeru telefonu.",
-        "phoneNumberRequired": "Numer telefonu jest wymagany."
-        
+        "phoneNumberRequired": "Numer telefonu jest wymagany.",
+        "formInvalid": "Formularz jest nieprawidłowy, sprawdź wszystkie pola."
       },
       "view": {
         "title": "Coś poszło nie tak!",
@@ -541,7 +541,9 @@
         },
         "step2": {
           "label": "Krok 2",
-          "title": "Gdzie chcesz pracować?"
+          "title": "Lokalizacja",
+          "chooseOptions": "Wybierz opcje:",
+          "info": "*Podanie orientacyjnej lokalizacji jest wymagane do działania wyszukiwarki i ułatwia innym znalezienie Twojego profilu."
         },
         "step3": {
           "label": "Krok 3",
@@ -570,7 +572,7 @@
         "uploadAvatar": "Prześlij avatar",
         "locationOption": {
           "POSITION": {
-            "msg": "Wybierz lokalizację, na podstawie której będą trafiać do Ciebie oferty.",
+            "msg": "Będą do Ciebie trafiać oferty na podstawie Twojej lokalizacji i odległości.",
             "tab": "Lokalizacja"
           },
           "ALL_EUROPE": {
@@ -578,7 +580,7 @@
             "tab": "Europa"
           },
           "SELECTED_COUNTRIES": {
-            "msg": "Wybierz kraje, z których chcesz otrzymywać oferty.",
+            "msg": "Będą do Ciebie trafiać ofery z wybranych krajów.",
             "tab": "Kraje"
           }
         },

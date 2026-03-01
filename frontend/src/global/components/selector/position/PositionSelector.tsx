@@ -32,6 +32,10 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(value || null);
         const fullScreenDialogCtx = useFullScreenDialog();
 
+        useEffect(() => {
+            setSelectedPosition(value || null);
+        }, [value]);
+        
         let myClass = `pp-control pp-position-selector floating-input ${className}`;
         if (fullWidth) {
             myClass += ' w-full';

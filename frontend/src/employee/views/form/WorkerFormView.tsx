@@ -1,7 +1,7 @@
 import Button from "global/components/controls/Button";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import React from "react";
+import React, { useEffect } from "react";
 import { DateRange, WorkerAvailabilityOptions, WorkerForm, WorkerI, WorkerLocationOptions } from "@shared/interfaces/WorkerProfileI";
 import { toast } from "react-toastify";
 import { WorkerService } from "employee/services/WorkerService";
@@ -51,6 +51,7 @@ const WorkerFormView: React.FC = () => {
 
     const worker: WorkerI | null = workerCtx.worker || null;
 
+    // TODO poprawic animacje przechodzenia miedzy krokami
     const formRef = useForm<WorkerForm>({
         defaultValues: {
             step1: {
@@ -139,7 +140,7 @@ const WorkerFormView: React.FC = () => {
     }
 
 
-    React.useEffect(() => {
+    useEffect(() => {
         // Load from localStorage if no employeeProfile exists
         if (!worker) {
             const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);

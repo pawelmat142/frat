@@ -14,6 +14,9 @@ import FloatingInput from "global/components/controls/FloatingInput";
 import { useUserContext } from "user/UserProvider";
 import { Position } from "@shared/interfaces/MapsInterfaces";
 
+// TODO move to config
+export const DEFAUT_POINT: Position = { lat: 52.2297, lng: 21.0122 }; // Warsaw center as default point
+
 const OfferFormStepOne: React.FC = () => {
 
     const { t } = useTranslation();
@@ -28,7 +31,7 @@ const OfferFormStepOne: React.FC = () => {
     const form = ctx.formCtx.getValues().STEP_ONE;
 
     const preparePosition = (): Position => {
-        return userCtx.position || { lat: 52.2297, lng: 21.0122 };//domyslnie warszawa
+        return userCtx.position || DEFAUT_POINT; 
     }
 
     /**
@@ -41,7 +44,6 @@ const OfferFormStepOne: React.FC = () => {
         }
         const key = `${position.lat.toFixed(3)},${position.lng.toFixed(3)}`; // coarse key to improve cache hits
         if (countryCacheRef.current[key]) {
-
             const country = countryCacheRef.current[key];
             ctx.formCtx.setValue("STEP_ONE.locationCountry", country);
             return;
