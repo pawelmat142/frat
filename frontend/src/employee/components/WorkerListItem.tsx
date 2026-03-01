@@ -3,7 +3,7 @@ import { WorkerI } from "@shared/interfaces/WorkerProfileI"
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ThumbUp, Visibility, Work } from "@mui/icons-material";
+import { ThumbUp, Visibility } from "@mui/icons-material";
 import ListItem from "global/components/ListItem";
 import IconButton from "global/components/controls/IconButon";
 import { ChatService } from "chat/services/ChatService";
@@ -12,6 +12,7 @@ import { useIsDesktop } from "global/hooks/isMobile";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
+import { PositionUtil } from "@shared/utils/PositionUtil";
 
 interface Props {
     profile: WorkerI,
@@ -20,18 +21,39 @@ interface Props {
     last?: boolean,
 }
 
+// TODO move to config
+const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = 50000; // 20 km
+
 const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, last }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { me } = useUserContext();
+    const userCtx = useUserContext();
+    const { me } = userCtx
 
     const isDesktop = useIsDesktop();
     const isMyProfile = me?.uid === profile.uid;
 
+    const a = userCtx.position
+    console.log(profile)
+    console.log(a)
     const goToProfileView = () => {
         navigate(Path.getWorkerProfilePath(profile.displayName!));
     }
+
+    const getDistanceInfo = (): string => {
+        if (!userCtx.position || !profile.point) {
+            return '';
+        }
+        const meters = PositionUtil.getDistanceFromToInMeters(userCtx.position, PositionUtil.fromGeoPoint(profile.point));
+
+        if (meters < MINIMUM_DISTANCE_FOR_DISPLAY_METERS) { 
+            return t("others.lessThan", { distance: MINIMUM_DISTANCE_FOR_DISPLAY_METERS / 1000, unit: 'km' });
+        }
+        return `${PositionUtil.displayDistance(meters)}`;
+    }
+
+    const distance = getDistanceInfo();
 
     const openChat = async () => {
         if (!profile) return;
@@ -81,10 +103,13 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
             <ThumbUp fontSize="inherit" className="secondary-text mr-1" />
             <span className="small-font">{profile.likes?.length || 0}</span>
         </div>
-        <div>
-            <Work fontSize="inherit" className="secondary-text mr-1" />
-            <span className="small-font">{profile.jobs?.length || 0}</span>
-        </div>
+
+        {!!distance && (
+            <div className="flex items-center">
+                <Ico.MARKER size={14} className="secondary-text mr-1" />
+                <span className="small-font">{distance}</span>
+            </div>
+        )}
     </div>
 
     return (

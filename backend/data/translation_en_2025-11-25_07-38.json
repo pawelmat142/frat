@@ -243,7 +243,8 @@
     "others": {
       "availableAnytime": "Available anytime",
       "availableAnytimeShort": "Anytime",
-      "fetchLocationError": "Could not find location."
+      "fetchLocationError": "Could not find location.",
+      "lessThan": "<{{value}}{{unit}}"
     },
     "report": {
       "send": "Send",

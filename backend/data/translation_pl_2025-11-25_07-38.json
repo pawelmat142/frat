@@ -243,7 +243,8 @@
     "others": {
       "availableAnytime": "Dostępny od zaraz",
       "availableAnytimeShort": "Od zaraz",
-      "fetchLocationError": "Nie można znaleźć lokalizacji."
+      "fetchLocationError": "Nie można znaleźć lokalizacji.",
+      "lessThan": "<{{distance}}{{unit}}"
     },
     "report": {
       "send": "Wyślij",
