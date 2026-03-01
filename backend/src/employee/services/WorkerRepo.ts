@@ -94,7 +94,7 @@ export class WorkerRepo {
         await this.woerkersRepository.save(profiles);
     }
 
-    public async update(newWorker: DeepPartial<WorkerEntity>): Promise<WorkerEntity> {
+    public async update(newWorker: DeepPartial<WorkerEntity>, anotherChange?: boolean): Promise<WorkerEntity> {
         const worker = await this.findByUid(newWorker.uid);
         if (!worker) {
             throw new ToastException("employeeProfile.notFound", this);
@@ -236,7 +236,7 @@ export class WorkerRepo {
         }
 
 
-        if (!updatedFlag) {
+        if (!updatedFlag && !anotherChange) {
             throw new ToastException("employeeProfile.noChanges", this);
         }
 

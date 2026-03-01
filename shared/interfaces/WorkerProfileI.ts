@@ -134,10 +134,8 @@ export interface WorkerFormDto {
   /** Local date string in YYYY-MM-DD format */
   startDate?: string | null;
 
-  experience?: string[];
-
-  // TODO remove
   certificates?: string[];
+  certificateDates?: { [key: string]: string }; // key is certificate code, value is local date string in YYYY-MM-DD format
 }
 
 export interface WorkerSearchFilters {

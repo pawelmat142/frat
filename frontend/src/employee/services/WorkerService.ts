@@ -22,6 +22,7 @@ const mapFormToApi = (form: WorkerForm): WorkerFormDto => {
 		startDate: form.step3.startDate || undefined,
 
 		certificates: form.step4.certificates,
+		certificateDates: form.step4.certificateDates,
 	};
 };
 

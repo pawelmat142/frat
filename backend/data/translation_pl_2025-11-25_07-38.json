@@ -526,6 +526,7 @@
       "deleteSuccessToast": "Profil został pomyślnie usunięty",
       "deleteErrorToast": "Wystąpił błąd podczas usuwania profilu",
       "form": {
+        "certificateValidityDate": "Data ważności ",
         "sortOptions": {
           "title": "Sortuj według",
           "DISTANCE_ASC": "Odległość: Najbliżej",

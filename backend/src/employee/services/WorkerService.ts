@@ -110,10 +110,21 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
     }
 
     public async updateWorker(user: UserI, form: WorkerFormDto): Promise<WorkerEntity> {
+        const profileBefore = await this.workerRepo.findByUid(user.uid);
+        if (!profileBefore) {
+            throw new ToastException('employeeProfile.notFound', this);
+        }
+        const validityDatesChanged = this.updateCertificatesValidityDates(profileBefore, form.certificateDates || {});
         const profile = await this.prepareProfile(user, form);
-        const result = await this.workerRepo.update(profile);
+        const result = await this.workerRepo.update(profile, validityDatesChanged);
         await this.userService.updateAvatarIfChanges(user, form.avatarRef);
         return result;
+    }
+
+
+    private updateCertificatesValidityDates(profileBefore: WorkerEntity, certificateDates: Record<string, string>): boolean {
+        // TODO
+        return true
     }
 
     public async notifyWorkerView(uid: string, viewerUid: string): Promise<void> {
@@ -177,7 +188,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
             avatarRef: form.avatarRef,
             bio: form.bio,
             // TODO
-            categories: form.experience || [],
+            categories: [],
             certificates: form.certificates || [],
         };
 

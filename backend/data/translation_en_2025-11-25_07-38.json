@@ -533,6 +533,7 @@
       "deleteSuccessToast": "Profile deleted successfully",
       "deleteErrorToast": "Error deleting profile",
       "form": {
+        "certificateValidityDate": "Validity date of",
         "sortOptions": {
           "title": "Sort by",
           "DISTANCE_ASC": "Distance: Nearest first",
