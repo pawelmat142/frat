@@ -26,7 +26,7 @@ export interface WorkerI {
   locationOption: WorkerLocationOption;
   locationCountries?: string[];
   point?: Point;
-	fullAddress?: string;
+  fullAddress?: string;
   geocodedPosition?: GeocodedPosition;
 
   // 
@@ -36,8 +36,8 @@ export interface WorkerI {
   /** Local date string in YYYY-MM-DD format */
   startDate: string | null;
 
-// 
-  experience?: string[];
+  // 
+  categories?: string[];
   certificates?: string[];
 
 
@@ -122,10 +122,10 @@ export interface WorkerFormDto {
   bio?: string;
 
   locationOption: WorkerLocationOption;
-// WorkerLocationOptions.POSITION
+  // WorkerLocationOptions.POSITION
   countryCode?: string;
   geocodedPosition?: GeocodedPosition;
-// WorkerLocationOptions.SELECTED_COUNTRIES
+  // WorkerLocationOptions.SELECTED_COUNTRIES
   locationCountries?: string[];
 
   availabilityOption: WorkerAvailabilityOption;
@@ -141,9 +141,27 @@ export interface WorkerFormDto {
 export interface WorkerSearchFilters {
   startDate?: string | null;
   endDate?: string | null;
-  
+
   locationCountry?: string | null;
   geocodedPosition?: GeocodedPosition | null;
+  positionRadiusKm?: number;
+
+  certificates?: string[];
+  categories?: string[];
+  communicationLanguages?: string[];
+
+  sortBy?: WorkerSearchSortOption;
+  skip: number;
+  limit: number;
+}
+
+export interface WorkerSearchRequest {
+  startDate?: string | null;
+  endDate?: string | null;
+
+  locationCountry?: string | null;
+  lat?: number;
+  lng?: number;
   positionRadiusKm?: number;
 
   certificates?: string[];

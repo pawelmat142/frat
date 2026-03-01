@@ -198,7 +198,8 @@ const WorkerFormView: React.FC = () => {
                 startDate: worker.startDate || null,
             },
             step4: {
-                experience: worker.experience || [],
+                // TODO
+                experience: worker.categories || [],
                 certificates: worker.certificates || []
             }
         });

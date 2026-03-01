@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { WorkerRepo } from './WorkerRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchFilters, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT, WorkerLocationOptions, WorkerFormRangesOptions } from '@shared/interfaces/WorkerProfileI';
+import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchFilters, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT, WorkerLocationOptions, WorkerFormRangesOptions, WorkerSearchRequest } from '@shared/interfaces/WorkerProfileI';
 import { SelectQueryBuilder } from 'typeorm';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { SearchUtil } from 'global/utils/SearchUtil';
@@ -16,12 +16,17 @@ export class SearchWorkersService {
         private readonly workerRepo: WorkerRepo,
     ) { }
 
-    async searchWorkers(user: UserI, filters: WorkerSearchFilters): Promise<WorkerSearchResponse> {
+    // TODO sortowanie po liczbie wspolnych znajomych
+
+    async searchWorkers(user: UserI, filters: WorkerSearchRequest): Promise<WorkerSearchResponse> {
         // Step 1: Build base query for filtering (without eagerly loading relations to avoid row multiplication)
         const baseQueryBuilder = this.workerRepo.getQueryBuilder()
             .leftJoin('profile.availabilityDateRanges', 'ranges');
 
         let hasFilter = false;
+
+        // TODO
+        console.log('SearchWorkersService.searchWorkers - filters:', filters);
 
         this.addBasicFilters(baseQueryBuilder, filters, hasFilter);
         this.addDateRangeFilter(baseQueryBuilder, filters, hasFilter);
@@ -61,9 +66,9 @@ export class SearchWorkersService {
     }
 
     
-    private addBasicFilters(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
-        const experience = SearchUtil.parseArray(filters.experience);
+    private addBasicFilters(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, hasFilter: boolean) {
         const certificates = SearchUtil.parseArray(filters.certificates);
+        const categories = SearchUtil.parseArray(filters.categories);
         const communicationLanguages = SearchUtil.parseArray(filters.communicationLanguages);
         // Base condition - only ACTIVE profiles
         baseQueryBuilder.where('profile.status = :status', { status: WorkerStatuses.ACTIVE });
@@ -76,13 +81,13 @@ export class SearchWorkersService {
             baseQueryBuilder.andWhere('profile.certificates @> :certificates', { certificates });
             hasFilter = true;
         }
-        if (experience?.length) {
-            baseQueryBuilder.andWhere('profile.experience @> :experience', { experience });
+        if (categories?.length) {
+            baseQueryBuilder.andWhere('profile.categories @> :categories', { categories });
             hasFilter = true;
         }
     }
     
-    private addDateRangeFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
+    private addDateRangeFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, hasFilter: boolean) {
         // Date range filter - use already joined ranges
         // filters.startDate and endDate are strings in YYYY-MM-DD format
         if (filters.startDate && filters.endDate) {
@@ -122,7 +127,7 @@ export class SearchWorkersService {
         }
     }
 
-    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters) {
+    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest) {
         switch (filters.sortBy) {
             case WorkerSearchSortOptions.START_FROM_ASC:
                 idsQueryBuilder
@@ -174,13 +179,13 @@ export class SearchWorkersService {
         return countQuery.getCount();
     }
 
-    private addPagination(queryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters) {
+    private addPagination(queryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest) {
         const skip = Number(filters.skip) || 0;
         const limit = Number(filters.limit) || PROFILES_INITIAL_SEARCH_LIMIT;
         queryBuilder.offset(skip).limit(limit);
     }
 
-    private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchFilters, hasFilter: boolean) {
+    private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, hasFilter: boolean) {
         if (filters.locationCountry) {
             baseQueryBuilder.andWhere(`(
                 profile.location_option = '${WorkerLocationOptions.ALL_EUROPE}'
@@ -190,12 +195,8 @@ export class SearchWorkersService {
             });
             hasFilter = true;
         }
-        if (filters.freeText) {
-            const freeText = `%${filters.freeText.trim().toLowerCase()}%`;
-            baseQueryBuilder.andWhere(`(
-                LOWER(profile.full_address) ILIKE :freeText
-            )`, { freeText });
-        }
+
+
     }
 
 }

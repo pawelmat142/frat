@@ -16,7 +16,7 @@ import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { UserI, UserRoles } from '@shared/interfaces/UserI';
 import { WorkersService } from './services/WorkerService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
-import { WorkerFormDto, WorkerI, WorkerSearchFilters, WorkerSearchResponse, WorkerStatus } from '@shared/interfaces/WorkerProfileI';
+import { WorkerFormDto, WorkerI, WorkerSearchFilters, WorkerSearchRequest, WorkerSearchResponse, WorkerStatus } from '@shared/interfaces/WorkerProfileI';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
 import { Serialize } from 'global/decorators/Serialize';
 import { WorkerEntity } from './model/WorkerEntity';
@@ -76,7 +76,7 @@ export class WorkersController {
   @Serialize(WorkerEntity)
   searchWorkers(
     @CurrentUser() user: UserI,
-    @Query() filters: WorkerSearchFilters
+    @Query() filters: WorkerSearchRequest
   ): Promise<WorkerSearchResponse> {
     return this.searchWorkerService.searchWorkers(user, filters);
   }

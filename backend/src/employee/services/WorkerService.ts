@@ -176,7 +176,8 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
             communicationLanguages: form.communicationLanguages || [],
             avatarRef: form.avatarRef,
             bio: form.bio,
-            experience: form.experience || [],
+            // TODO
+            categories: form.experience || [],
             certificates: form.certificates || [],
         };
 

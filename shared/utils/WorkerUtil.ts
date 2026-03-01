@@ -1,4 +1,4 @@
-import { WorkerI, WorkerSearchFilters, WorkerSearchSortOption } from "../interfaces/WorkerProfileI";
+import { WorkerI, WorkerSearchFilters, WorkerSearchRequest, WorkerSearchSortOption } from "../interfaces/WorkerProfileI";
 import { ObjUtil } from "./ObjUtil";
 
 export abstract class WorkerUtil {
@@ -25,6 +25,23 @@ export abstract class WorkerUtil {
         return v.split(',').filter(Boolean)
     }
 
+    public static filtersToRequest = (f: WorkerSearchFilters): WorkerSearchRequest => {
+        return {
+            startDate: f.startDate || undefined,
+            endDate: f.endDate || undefined,
+            locationCountry: f.locationCountry || undefined,
+            lat: f.geocodedPosition?.lat,
+            lng: f.geocodedPosition?.lng,
+            positionRadiusKm: f.positionRadiusKm,
+            certificates: f.certificates,
+            categories: f.categories,
+            communicationLanguages: f.communicationLanguages,
+            skip: f.skip,
+            limit: f.limit,
+            sortBy: f.sortBy,
+        };
+    }
+
     public static prepareUrlParams = (f: WorkerSearchFilters, defaultFilters: WorkerSearchFilters): string => {
         const params = new URLSearchParams();
         if (f.startDate) {
@@ -42,7 +59,7 @@ export abstract class WorkerUtil {
         if (f.geocodedPosition?.lng) {
             params.set(WorkerUtil.LNG, String(f.geocodedPosition.lng));
         }
-        if (f.positionRadiusKm) {
+        if (f.geocodedPosition?.lat && f.geocodedPosition.lng && f.positionRadiusKm) {
             params.set(WorkerUtil.RADIUS, String(f.positionRadiusKm));
         }
 
@@ -53,9 +70,11 @@ export abstract class WorkerUtil {
         const skip = f.skip ?? 0;
         const limit = f.limit ?? defaultFilters.limit ?? 12;
         const page = Math.floor(skip / limit) + 1;
+
         if (page > 1) params.set(WorkerUtil.PAGE, String(page));
         if (f.limit !== defaultFilters.limit) params.set(WorkerUtil.LIMIT, String(f.limit));
         if (f.sortBy) params.set(WorkerUtil.SORT_BY, f.sortBy);
+        
         const searchStr = params.toString();
         return searchStr;
     }

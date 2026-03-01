@@ -293,7 +293,8 @@ export const WorkersInitialData = (): DeepPartial<WorkerEntity>[] => {
             status,
             workerId: globalIndex,
             createdAt,
-            experience,
+            // TODO
+            categories: experience,
             certificates,
             availabilityOption,
             availabilityDateRanges: availabilityOption === WorkerAvailabilityOptions.DATE_RANGES ? [] : undefined,

@@ -78,7 +78,8 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
           <div><span className="font-semibold secondary-text">Phone Number:</span> <span className="primary-text">{localWorker.phoneNumber.prefix} {localWorker.phoneNumber.phoneNumber}</span></div>
         </div>
         <div className="flex flex-col gap-2">
-          <div><span className="font-semibold secondary-text">Experience:</span> <span className="primary-text">{localWorker.experience?.join(", ") || '-'}</span></div>
+          {/* TODO */}
+          <div><span className="font-semibold secondary-text">Categories:</span> <span className="primary-text">{localWorker.categories?.join(", ") || '-'}</span></div>
           <div><span className="font-semibold secondary-text">Certificates:</span> <span className="primary-text">{localWorker.certificates?.join(", ") || '-'}</span></div>
           <div><span className="font-semibold secondary-text">Languages:</span> <span className="primary-text">{localWorker.communicationLanguages?.join(", ") || '-'}</span></div>
           <div><span className="font-semibold secondary-text">Location Option:</span> <span className="primary-text">{localWorker.locationOption}</span></div>

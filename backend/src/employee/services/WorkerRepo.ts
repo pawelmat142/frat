@@ -143,9 +143,9 @@ export class WorkerRepo {
             updatedFlag = true;
         }
 
-        if (ObjUtil.arrayChanged(worker.experience, newWorker.experience || [])) {
-            this.logger.log(`Updating EmployeeProfile experience from ${worker.experience} to ${newWorker.experience}`);
-            worker.experience = newWorker.experience || [];
+        if (ObjUtil.arrayChanged(worker.categories, newWorker.categories || [])) {
+            this.logger.log(`Updating EmployeeProfile categories from ${worker.categories} to ${newWorker.categories}`);
+            worker.categories = newWorker.categories || [];
             updatedFlag = true;
         }
 

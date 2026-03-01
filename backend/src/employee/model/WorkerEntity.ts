@@ -92,8 +92,8 @@ export class WorkerEntity implements WorkerI {
   @Column({ name: 'start_date', type: 'date', nullable: true })
   startDate: string | null;
   
-  @Column({ name: 'experience', type: 'text', array: true })
-  experience: string[];
+  @Column({ name: 'categories', type: 'text', array: true })
+  categories: string[];
   
   @Column({ name: 'certificates', type: 'text', array: true })
   certificates: string[];

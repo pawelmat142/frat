@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { WorkerService } from "employee/services/WorkerService";
-import { WorkerI, WorkerSearchFilters, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT } from "@shared/interfaces/WorkerProfileI";
+import { WorkerI, WorkerSearchFilters, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT, WorkerSearchRequest } from "@shared/interfaces/WorkerProfileI";
 import { WorkerUtil } from "@shared/utils/WorkerUtil";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
@@ -73,7 +73,8 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
 
         try {
-            const result = await WorkerService.searchWorkers(searchFilters);
+            let request: WorkerSearchRequest = WorkerUtil.filtersToRequest(searchFilters);
+            const result = await WorkerService.searchWorkers(request);
             if (requestId !== requestIdRef.current) {
                 return;
             }

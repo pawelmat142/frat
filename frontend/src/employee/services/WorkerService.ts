@@ -1,5 +1,5 @@
 import { httpClient } from "global/services/http";
-import { WorkerForm, WorkerFormDto, WorkerI, WorkerSearchFilters, WorkerSearchResponse } from "@shared/interfaces/WorkerProfileI";
+import { WorkerForm, WorkerFormDto, WorkerI, WorkerSearchFilters, WorkerSearchRequest, WorkerSearchResponse } from "@shared/interfaces/WorkerProfileI";
 
 // Mapper to convert nested form structure to flat API structure
 const mapFormToApi = (form: WorkerForm): WorkerFormDto => {
@@ -46,7 +46,7 @@ export const WorkerService = {
 		return httpClient.put<WorkerI>(`/worker`, apiPayload);
 	},
 
-	searchWorkers(params: WorkerSearchFilters): Promise<WorkerSearchResponse> {
+	searchWorkers(params: WorkerSearchRequest): Promise<WorkerSearchResponse> {
 		return httpClient.get<WorkerSearchResponse>(`/worker/search/list`, { params });
 	},
 
