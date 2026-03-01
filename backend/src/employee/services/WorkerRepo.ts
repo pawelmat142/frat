@@ -235,6 +235,11 @@ export class WorkerRepo {
             updatedFlag = true;
         }
 
+        if (newWorker.startDate !== worker.startDate) {
+            this.logger.log(`Updating EmployeeProfile startDate from ${worker.startDate} to ${newWorker.startDate}`);
+            worker.startDate = newWorker.startDate || null;
+            updatedFlag = true;
+        }
 
         if (!updatedFlag && !anotherChange) {
             throw new ToastException("employeeProfile.noChanges", this);
