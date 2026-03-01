@@ -35,7 +35,6 @@ const WorkersSearchFiltersView: React.FC = () => {
 
     const formState = f.watch()
 
-    console.log("formState", formState)
     useEffect(() => {
         const autofillLocationCountry = async () => {
             if (!formState.geocodedPosition && userCtx.position) {

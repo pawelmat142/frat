@@ -79,7 +79,6 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             let request: WorkerSearchRequest = WorkerUtil.filtersToRequest(searchFilters);
             const result = await WorkerService.searchWorkers(request);
 
-            console.log('executeSearch result:', result);   
             if (loadMore) {
                 setResults(prev => {
                     const newResults = [...prev, ...result.profiles];

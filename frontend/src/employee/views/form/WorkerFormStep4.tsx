@@ -23,8 +23,6 @@ const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
     const [loading, setLoading] = useState(false);
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
 
-    console.log(watch());
-    
     useEffect(() => {
         const initDictionary = async () => {
             if (dictionary) {
