@@ -1,16 +1,16 @@
-import { ChatI, ChatWithMembers } from "./ChatI";
+import {  ChatWithMembers } from "./ChatI";
 import { FriendshipI } from "./FriendshipI";
 import { NotificationI } from "./NotificationI";
 import { OfferI } from "./OfferI";
 import { SettingsI } from "./SettingsI";
 import { UserI } from "./UserI";
-import { WorkerI } from "./WorkerProfileI";
+import { WorkerWithCertificates } from "./WorkerProfileI";
 
 export interface UserContext {
     user: UserI
     friendships: FriendshipI[]
     offers: OfferI[]
-    workerProfile?: WorkerI
+    workerProfile?: WorkerWithCertificates
 }
 
 export interface MeUserContext extends UserContext {

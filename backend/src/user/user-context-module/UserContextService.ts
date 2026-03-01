@@ -25,7 +25,7 @@ export class UserContextService {
 
         const friendships = await this.friendshipService.getFriendships(uid);
         const offers = await this.offersService.listOffersByUid(uid);
-        const workerProfile = await this.workersService.getWorker(user);
+        const workerProfile = await this.workersService.getWorkerWithCertificates(user);
 
         const ctx: UserContext = {
             user,

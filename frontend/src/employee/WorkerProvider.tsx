@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { WorkerI } from "@shared/interfaces/WorkerProfileI";
+import { WorkerWithCertificates } from "@shared/interfaces/WorkerProfileI";
 import { WorkerService } from "employee/services/WorkerService";
 import { useUserContext } from "user/UserProvider";
 
 interface WorkerContextType {
-    worker: WorkerI | null;
+    worker: WorkerWithCertificates | null;
     initWorker: () => Promise<void>;
     cleanWorker: () => void;
 }
@@ -16,7 +16,7 @@ export const WorkerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const userCtx = useUserContext();
     const { me, meCtx } = userCtx;
 
-    const [worker, setWorker] = useState<WorkerI | null>(null);
+    const [worker, setWorker] = useState<WorkerWithCertificates | null>(null);
 
     useEffect(() => {
         if (me) {

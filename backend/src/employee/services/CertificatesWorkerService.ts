@@ -15,15 +15,17 @@ export class CertificatesWorkerService {
     /**
      * Synchronize certificates for a worker profile
      * @param uid Worker's UID
-     * @param certificates Array of certificate codes currently in worker profile
-     * @param certificateDates Map of certificate codes to validity dates
+     * @param form Worker form data containing certificates and their validity dates
+     * @returns Promise<boolean> - true if any changes were made to the database
      */
     public async syncCertificates(
         uid: string,
-        certificates: string[],
-        certificateDates: Record<string, string>
-    ): Promise<CertificateEntity[]> {
+        form: WorkerFormDto
+    ): Promise<boolean> {
+        const { certificates = [], certificateDates = {} } = form;
         this.logger.log(`Syncing certificates for uid: ${uid}, certificates: ${certificates.join(', ')}`);
+
+        let hasChanges = false;
 
         // Get existing certificates for this worker
         const existingCertificates = await this.certificatesRepo.findByUid(uid);
@@ -42,6 +44,7 @@ export class CertificatesWorkerService {
         if (certsToRemove.length > 0) {
             await this.certificatesRepo.deleteByUidAndCodes(uid, certsToRemove);
             this.logger.log(`Removed certificates: ${certsToRemove.join(', ')} for uid: ${uid}`);
+            hasChanges = true;
         }
 
         // Add new certificates with validity dates (if provided)
@@ -54,6 +57,7 @@ export class CertificatesWorkerService {
                     validityDate
                 });
                 this.logger.log(`Added certificate: ${code} with validity date: ${validityDate} for uid: ${uid}`);
+                hasChanges = true;
             }
         }
 
@@ -63,11 +67,12 @@ export class CertificatesWorkerService {
             if (validityDate) {
                 await this.certificatesRepo.upsert(uid, code, validityDate);
                 this.logger.log(`Updated certificate: ${code} with validity date: ${validityDate} for uid: ${uid}`);
+                hasChanges = true;
             }
         }
 
-        // Return updated list of certificates
-        return this.certificatesRepo.findByUid(uid);
+        this.logger.log(`Certificate sync completed for uid: ${uid}, changes made: ${hasChanges}`);
+        return hasChanges;
     }
 
     /**

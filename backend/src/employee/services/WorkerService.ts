@@ -3,7 +3,7 @@ import { ForbiddenException, Injectable, Logger, OnModuleDestroy, OnModuleInit }
 import { WorkerRepo } from './WorkerRepo';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { UserI } from '@shared/interfaces/UserI';
-import { WorkerAvailabilityOptions, WorkerFormDto, WorkerI, WorkerStatus, WorkerStatuses } from '@shared/interfaces/WorkerProfileI';
+import { WorkerAvailabilityOptions, WorkerFormDto, WorkerI, WorkerStatus, WorkerStatuses, WorkerWithCertificates } from '@shared/interfaces/WorkerProfileI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { WorkerUtil } from './WorkerUtil';
 import { DeepPartial } from 'typeorm';
@@ -97,6 +97,15 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         return this.workerRepo.findByUid(user.uid);
     }
 
+    public async getWorkerWithCertificates(user: UserI): Promise<WorkerWithCertificates | null> {
+        const worker = await this.getWorker(user);
+        if (!worker) {
+            return null;
+        }
+        const certificates = await this.certificatesWorkerService.getCertificates(user.uid);
+        return { ...worker, certs: certificates };
+    }
+
     public fetchWorkerByDisplayName(displayName: string): Promise<WorkerEntity | null> {
         return this.workerRepo.findByDisplayName(displayName);
     }
@@ -127,7 +136,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         }
         
         // Sync certificates before updating profile
-        const certificatesChanged = await this.updateCertificatesValidityDates(user.uid, form.certificates || [], form.certificateDates || {});
+        const certificatesChanged = await this.updateCertificatesValidityDates(user.uid, form);
         
         const profile = await this.prepareProfile(user, form);
         const result = await this.workerRepo.update(profile, certificatesChanged); // Mark as changed since certificates might have changed
@@ -136,14 +145,10 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
     }
 
 
-    private async updateCertificatesValidityDates(
-        uid: string,
-        certificates: string[],
-        certificateDates: Record<string, string>
-    ): Promise<boolean> {
-        const result = await this.certificatesWorkerService.syncCertificates(uid, certificates, certificateDates);
+    private async updateCertificatesValidityDates(uid: string, form: WorkerFormDto): Promise<boolean> {
+        const result = await this.certificatesWorkerService.syncCertificates(uid, form);
         this.logger.log(`Synced certificates for uid: ${uid}`);
-        return result.some(cert => certificateDates[cert.code] && cert.validityDate !== certificateDates[cert.code]);
+        return result;
     }
 
     public async notifyWorkerView(uid: string, viewerUid: string): Promise<void> {

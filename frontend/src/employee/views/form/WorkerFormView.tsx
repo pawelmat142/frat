@@ -2,7 +2,7 @@ import Button from "global/components/controls/Button";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import React, { useEffect } from "react";
-import { DateRange, WorkerAvailabilityOptions, WorkerForm, WorkerI, WorkerLocationOptions } from "@shared/interfaces/WorkerProfileI";
+import { DateRange, WorkerAvailabilityOptions, WorkerForm, WorkerLocationOptions, WorkerWithCertificates } from "@shared/interfaces/WorkerProfileI";
 import { toast } from "react-toastify";
 import { WorkerService } from "employee/services/WorkerService";
 import Loading from "global/components/Loading";
@@ -49,7 +49,7 @@ const WorkerFormView: React.FC = () => {
     const [step, setStep] = React.useState<StepKey>(STEPS_ORDER[0]);
     const [geolocatedPosition, setGeolocatedPosition] = React.useState<GeocodedPosition | null>(null);
 
-    const worker: WorkerI | null = workerCtx.worker || null;
+    const worker: WorkerWithCertificates | null = workerCtx.worker || null;
 
     // TODO poprawic animacje przechodzenia miedzy krokami
     const formRef = useForm<WorkerForm>({
@@ -73,7 +73,8 @@ const WorkerFormView: React.FC = () => {
                 startDate: null,
             },
             step4: {
-                certificates: []
+                certificates: [],
+                certificateDates: {}
             }
         },
     });
@@ -198,7 +199,11 @@ const WorkerFormView: React.FC = () => {
                 startDate: worker.startDate || null,
             },
             step4: {
-                certificates: worker.certificates || []
+                certificates: worker.certificates || [],
+                certificateDates: worker.certs?.reduce((acc, cert) => {
+                    acc[cert.code] = cert.validityDate;
+                    return acc;
+                }, {} as Record<string, string>) || {},
             }
         });
     }
