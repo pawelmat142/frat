@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { WorkerRepo } from './WorkerRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchFilters, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT, WorkerLocationOptions, WorkerFormRangesOptions, WorkerSearchRequest } from '@shared/interfaces/WorkerProfileI';
+import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT, WorkerLocationOptions, WorkerFormRangesOptions, WorkerSearchRequest, DEFAULT_SEARCH_DISTANCE_M } from '@shared/interfaces/WorkerProfileI';
 import { SelectQueryBuilder } from 'typeorm';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { SearchUtil } from 'global/utils/SearchUtil';
@@ -65,7 +65,7 @@ export class SearchWorkersService {
         };
     }
 
-    
+
     private addBasicFilters(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, hasFilter: boolean) {
         const certificates = SearchUtil.parseArray(filters.certificates);
         const categories = SearchUtil.parseArray(filters.categories);
@@ -86,7 +86,7 @@ export class SearchWorkersService {
             hasFilter = true;
         }
     }
-    
+
     private addDateRangeFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, hasFilter: boolean) {
         // Date range filter - use already joined ranges
         // filters.startDate and endDate are strings in YYYY-MM-DD format
@@ -170,7 +170,7 @@ export class SearchWorkersService {
         queryBuilder.orderBy(`CASE ${orderCase} END`, 'ASC');
     }
 
-    
+
     private getCount(queryBuilder: SelectQueryBuilder<WorkerEntity>): Promise<number> {
         const countQuery = queryBuilder.clone()
             .select('profile.worker_id')
@@ -186,17 +186,51 @@ export class SearchWorkersService {
     }
 
     private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, hasFilter: boolean) {
-        if (filters.locationCountry) {
-            baseQueryBuilder.andWhere(`(
-                profile.location_option = '${WorkerLocationOptions.ALL_EUROPE}'
-                OR LOWER(:locationCountry) = ANY(profile.location_countries)
-            )`, {
-                locationCountry: filters.locationCountry.toLowerCase()
-            });
-            hasFilter = true;
+        const hasCoordinates = filters.lat != null && filters.lng != null;
+
+        if (!filters.locationCountry) {
+            throw new Error('locationCountry is required for position filter');
         }
 
+        const conditions: string[] = [];
+        const params: Record<string, any> = {};
 
+        // ALL_EUROPE workers always match any location filter
+        conditions.push(`profile.location_option = '${WorkerLocationOptions.ALL_EUROPE}'`);
+
+        // SELECTED_COUNTRIES - narrow to matching country when country filter is provided, otherwise match all
+        conditions.push(`(
+                profile.location_option = '${WorkerLocationOptions.SELECTED_COUNTRIES}'
+                AND LOWER(:locationCountry) = ANY(profile.location_countries)
+            )`);
+        params.locationCountry = filters.locationCountry!.toLowerCase();
+
+        if (hasCoordinates) {
+            const radiusMeters = filters.positionRadiusKm
+                ? filters.positionRadiusKm * 1000
+                : DEFAULT_SEARCH_DISTANCE_M;
+
+            conditions.push(`(
+                profile.location_option = '${WorkerLocationOptions.POSITION}'
+                AND ST_DWithin(
+                    profile.point,
+                    ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography,
+                    :radiusMeters
+                )
+            )`);
+            params.lng = filters.lng;
+            params.lat = filters.lat;
+            params.radiusMeters = radiusMeters;
+        } else {
+            // No coordinates - match POSITION profiles by country stored in location_countries
+            conditions.push(`(
+                profile.location_option = '${WorkerLocationOptions.POSITION}'
+                AND LOWER(:locationCountry) = ANY(profile.location_countries)
+            )`);
+        }
+
+        baseQueryBuilder.andWhere(`(${conditions.join('\n            OR ')})`, params);
+        hasFilter = true;
     }
 
 }

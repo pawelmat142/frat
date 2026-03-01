@@ -113,7 +113,7 @@ export abstract class DateUtil {
 
     public static getMonth(localDateString: string): number | null {
         const date = this.parseLocalDateString(localDateString);
-        return isNaN(date.getTime()) ? null : date.getMonth() + 1;
+        return isNaN(date.getTime()) ? null : date.getMonth();
     }
 
     public static getDay(localDateString: string): number | null {

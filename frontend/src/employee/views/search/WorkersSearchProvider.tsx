@@ -23,7 +23,7 @@ export interface WorkersSearchContextProps {
 }
 
 // TODO move to config
-export const RADIUS_STEPS_KM = [10, 20, 50, 80, 100, 150, 200, 300, 400, 500, 800, 1000];
+export const RADIUS_STEPS_KM = [50, 80, 100, 150, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
 
 export const WorkerDefaultFilters: WorkerSearchFilters = {
     startDate: null,
@@ -73,12 +73,13 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
 
         try {
-            let request: WorkerSearchRequest = WorkerUtil.filtersToRequest(searchFilters);
-            const result = await WorkerService.searchWorkers(request);
             if (requestId !== requestIdRef.current) {
                 return;
             }
+            let request: WorkerSearchRequest = WorkerUtil.filtersToRequest(searchFilters);
+            const result = await WorkerService.searchWorkers(request);
 
+            console.log('executeSearch result:', result);   
             if (loadMore) {
                 setResults(prev => {
                     const newResults = [...prev, ...result.profiles];

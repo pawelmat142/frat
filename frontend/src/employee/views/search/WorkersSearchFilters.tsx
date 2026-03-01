@@ -86,8 +86,8 @@ const WorkersSearchFilters: React.FC = () => {
                     </div>
                 )}
 
-                <div className="flex items-center">
-                    {(!!ctx.filters.categories?.length) && (
+                {(!!ctx.filters.categories?.length) && (
+                    <div className="flex items-center">
                         <div className="chip-container">
                             {(ctx.filters.categories || []).map(category => (
                                 <div key={category} className="search-chip tertiary">
@@ -95,11 +95,11 @@ const WorkersSearchFilters: React.FC = () => {
                                 </div>
                             ))}
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
 
-                <div className="flex items-center">
-                    {(!!ctx.filters.certificates?.length) && (
+                {(!!ctx.filters.certificates?.length) && (
+                    <div className="flex items-center">
                         <div className="chip-container">
                             {(ctx.filters.certificates || []).map(cert => (
                                 <div key={cert} className="search-chip secondary">
@@ -107,8 +107,8 @@ const WorkersSearchFilters: React.FC = () => {
                                 </div>
                             ))}
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
 
                 {!!ctx.filters.communicationLanguages?.length && (
                     <div className="chip-container">

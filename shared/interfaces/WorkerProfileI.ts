@@ -142,7 +142,7 @@ export interface WorkerSearchFilters {
   startDate?: string | null;
   endDate?: string | null;
 
-  locationCountry?: string | null;
+  locationCountry: string | null;
   geocodedPosition?: GeocodedPosition | null;
   positionRadiusKm?: number;
 
@@ -159,7 +159,7 @@ export interface WorkerSearchRequest {
   startDate?: string | null;
   endDate?: string | null;
 
-  locationCountry?: string | null;
+  locationCountry: string | null;
   lat?: number;
   lng?: number;
   positionRadiusKm?: number;

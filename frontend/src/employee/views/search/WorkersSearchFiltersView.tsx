@@ -105,7 +105,7 @@ const WorkersSearchFiltersView: React.FC = () => {
         try {
             setLoadingLocation(true);
             const geoPosition = await getGeoPosition(position);
-            f.setValue('geocodedPosition', geoPosition);
+            setGeoPosition(geoPosition);
             return geoPosition;
         } catch (error) {
             console.error('Geocoding error:', error);
@@ -115,6 +115,16 @@ const WorkersSearchFiltersView: React.FC = () => {
             setLoadingLocation(false);
         }
     }
+
+    const setGeoPosition = async (position?: GeocodedPosition | null) => {
+        f.setValue('geocodedPosition', position);
+        if (!position) {
+            f.setValue('positionRadiusKm', undefined);
+        } else {
+            f.setValue('positionRadiusKm', RADIUS_STEPS_KM[0]);
+        }
+    }
+
     const getGeoPosition = (position: { lat: number; lng: number }): Promise<GeocodedPosition | null> => {
         return GoogleMapService.getGeocodedLocation(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
     }
@@ -161,7 +171,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                             error={f.formState.errors.locationCountry}
                             onSelect={item => {
                                 f.setValue('locationCountry', item);
-                                f.setValue('geocodedPosition', null); // Clear geocoded position when country changes
+                                setGeoPosition(null);
                             }}
                         />
                     )}
@@ -183,7 +193,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                                     updatePosition({ lat: item.lat, lng: item.lng });
                                 }}
                                 onClear={() => {
-                                    f.setValue('geocodedPosition', null);
+                                    setGeoPosition(null);
                                 }}
                             ></FloatingPlaceSearch>
                         )}
