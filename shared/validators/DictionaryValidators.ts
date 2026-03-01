@@ -1,4 +1,4 @@
-import { DictionaryI } from "../interfaces/DictionaryI";
+import { DictionaryColumnTypes, DictionaryI } from "../interfaces/DictionaryI";
 
 export abstract class DictionaryValidators {
 
@@ -97,7 +97,8 @@ export abstract class DictionaryValidators {
         if (!dictionary.elements?.length) {
             return null;
         }
-        const requiredColumns = dictionary.columns.filter(col => col.required).map(col => col.code);
+        const requiredColumns = dictionary.columns.filter(col => col.required)
+        .filter(col => col.type !== DictionaryColumnTypes.BOOLEAN).map(col => col.code);
         const missingColumns = requiredColumns.filter(col => !dictionary.elements.some(el => col in el.values));
         if (missingColumns.length > 0) {
             return `Missing required columns in elements: ${missingColumns.join(", ")}`;

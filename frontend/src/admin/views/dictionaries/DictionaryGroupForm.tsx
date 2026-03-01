@@ -10,6 +10,7 @@ import Loading from "global/components/Loading";
 import { toast } from "react-toastify";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { useTranslation } from "react-i18next";
+import FloatingInput from "global/components/controls/FloatingInput";
 
 const DictionaryGroupForm: React.FC = () => {
     const pathInput = useParams<{ groupCode: string, dictionaryCode: string }>();
@@ -113,7 +114,7 @@ const DictionaryGroupForm: React.FC = () => {
                 <h2 className="text-lg font-bold mb-4">
                     {editMode ? `Edit group ${groupCode} in Dictionary: ${dictionary.code}` : `Add Group to Dictionary: ${dictionary.code}`}
                 </h2>
-                <Input
+                <FloatingInput
                     name="groupCode"
                     label="Group Code"
                     value={groupCode}
@@ -122,7 +123,7 @@ const DictionaryGroupForm: React.FC = () => {
                     fullWidth
                     disabled={editMode}
                 />
-                <Input
+                <FloatingInput
                     name="groupDescription"
                     label="Group Description"
                     value={groupDescription}

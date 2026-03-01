@@ -18,7 +18,8 @@ import { DictionaryColumnTypes, DictionaryI, DictionaryElement, DictionaryStatus
 import { BtnModes, BtnSizes, SelectorItem } from "global/interface/controls.interface";
 import { useTranslation } from "react-i18next";
 import BackBtn from "global/components/controls/BackBtn";
-import Selector from "global/components/selector/Selector";
+import FloatingSelector from "global/components/selector/FloatingSelector";
+import FloatingInput from "global/components/controls/FloatingInput";
 
 interface ColumnForm {
   code: string;
@@ -227,18 +228,18 @@ const AddDictionaryView: React.FC = () => {
 
           {columnForm && (<div className="flex flex-col gap-3 border-t pt-3 mt-3">
 
-            <Selector
+            <FloatingSelector
               items={columnTypeOptions}
               value={columnForm.type}
               fullWidth
               label="Column Type"
               required
               onSelect={item => {
-                setColumnForm({ ...columnForm, type: item as SelectorItem<DictionaryColumnType> | null })
+                setColumnForm({ ...columnForm, type: columnTypeOptions.find(opt => opt.value === item) || null })
               }}
             />
 
-            <Input
+            <FloatingInput
               name="columnCode"
               label="Column Code"
               value={columnForm.code}
@@ -248,7 +249,7 @@ const AddDictionaryView: React.FC = () => {
               disabled={!!columnForm.editMode}
             />
 
-            <Input
+            <FloatingInput
               name="columnDescription"
               label="Column description"
               value={columnForm.description ?? ''}
@@ -287,7 +288,6 @@ const AddDictionaryView: React.FC = () => {
                   onDateChange={date => {
                     setColumnForm({ ...columnForm, defaultValue: date })
                   }}
-                  required
                   fullWidth
                 />
               )}
@@ -300,7 +300,7 @@ const AddDictionaryView: React.FC = () => {
               <Button
                 onClick={handleAddColumn}
                 size={BtnSizes.SMALL}
-                disabled={!columnForm?.code || !columnForm.type || (columnForm.required && !columnForm.defaultValue)}
+                disabled={!columnForm?.code || !columnForm.type || (columnForm.required && !columnForm.defaultValue && columnForm.type.value !== DictionaryColumnTypes.BOOLEAN)}
               >
                 Column ready
               </Button>

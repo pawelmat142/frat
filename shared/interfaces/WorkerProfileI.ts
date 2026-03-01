@@ -102,7 +102,7 @@ export interface WorkerFormStep3 {
 
 export interface WorkerFormStep4 {
   certificates?: string[];
-  experience?: string[];
+  certificateDates?: { [key: string]: string }; // key is certificate name, value is local date string in YYYY-MM-DD format
 }
 
 export interface WorkerForm {
@@ -135,6 +135,8 @@ export interface WorkerFormDto {
   startDate?: string | null;
 
   experience?: string[];
+
+  // TODO remove
   certificates?: string[];
 }
 

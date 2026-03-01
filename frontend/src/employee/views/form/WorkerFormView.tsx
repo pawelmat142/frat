@@ -73,7 +73,6 @@ const WorkerFormView: React.FC = () => {
                 startDate: null,
             },
             step4: {
-                experience: [],
                 certificates: []
             }
         },
@@ -199,8 +198,6 @@ const WorkerFormView: React.FC = () => {
                 startDate: worker.startDate || null,
             },
             step4: {
-                // TODO
-                experience: worker.categories || [],
                 certificates: worker.certificates || []
             }
         });
@@ -261,7 +258,6 @@ const WorkerFormView: React.FC = () => {
     const handleDevFill = () => {
         formRef.setValue("step1.fullName", "Pawel Malek");
         formRef.setValue("step4.certificates", ["ONE"]);
-        formRef.setValue("step4.experience", ["ONE", "TWO"]);
         formRef.setValue("step1.communicationLanguages", ["en", "pl"]);
     };
 

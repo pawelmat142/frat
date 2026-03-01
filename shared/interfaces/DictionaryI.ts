@@ -43,6 +43,7 @@ export const DictionaryColumnTypes = {
     STRING: 'string',
     NUMBER: 'number',
     DATE: 'date',
+    BOOLEAN: 'boolean',
 } as const;
 
 export type DictionaryColumnType = typeof DictionaryColumnTypes[keyof typeof DictionaryColumnTypes];

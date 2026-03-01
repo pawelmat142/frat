@@ -45,7 +45,7 @@ export type FloatingInputMode = typeof FloatingInputModes[keyof typeof FloatingI
 export interface InputInterface {
     id?: string;
     name?: string;
-    type?: 'text' | 'number' | 'password' | 'email' | 'date';
+    type?: 'text' | 'number' | 'password' | 'email' | 'date' | 'checkbox';
     label?: string;
     fullWidth?: boolean;
     disabled?: boolean;
@@ -54,6 +54,7 @@ export interface InputInterface {
     onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     onDateChange?: (date: Date | null) => void;
     value: string | number | Date | null;
+    checked?: boolean;
     className?: string;
     required?: boolean;
     autoComplete?: string;

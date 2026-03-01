@@ -1,18 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
 import { WorkerForm } from "@shared/interfaces/WorkerProfileI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
+import { DictionaryI } from "@shared/interfaces/DictionaryI";
+import { DictionaryService } from "global/services/DictionaryService";
+import Loading from "global/components/Loading";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
 }
 
 const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
+
     const { control, formState } = formRef;
     const { t } = useTranslation();
-    const requiredArray = FormValidator.requiredArray(t);
+    const required = FormValidator.required(t);
+
+    const [loading, setLoading] = useState(false);
+    const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
+
+    useEffect(() => {
+        const initDictionary = async () => {
+            if (dictionary) {
+                return
+            }
+            setLoading(true);   
+
+            try {
+                const dic = await DictionaryService.getDictionary("CERTIFICATES");
+                setDictionary(dic);
+            } catch (error) {
+                console.error("Error fetching dictionary:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        initDictionary();
+    }, [])
+
+    if (loading) {
+        return <Loading></Loading>
+    }
+
 
     return (
         <>
@@ -25,7 +56,6 @@ const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
                 <Controller
                     name="step4.certificates"
                     control={control}
-                    rules={requiredArray}
                     render={({ field }) => (
                         <DictionarySelector
                             type="multi"
@@ -37,27 +67,6 @@ const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
                             fullWidth
                             required
                             error={formState.errors.step4?.certificates}
-                        />
-                    )}
-                />
-                <Controller
-                    name="step4.experience"
-                    control={control}
-                    rules={requiredArray}
-                    render={({ field }) => (
-                        <DictionarySelector
-                            type="multi"
-                            className="w-full"
-                            valueInput={field.value}
-                            onSelectMulti={items => {
-                                
-                                console.log(items);
-                                field.onChange(items)}}
-                            label={t("employeeProfile.form.experience")}
-                            code="SKILLS"
-                            fullWidth
-                            required
-                            error={formState.errors.step4?.experience}
                         />
                     )}
                 />

@@ -3,6 +3,8 @@ import Input from './Input';
 import DateInput from './DateInput';
 import { DictionaryColumnTypes } from '@shared/interfaces/DictionaryI';
 import { DateUtil } from '@shared/utils/DateUtil';
+import FloatingInput from './FloatingInput';
+import Checkbox from './Checkbox';
 
 const TypedInput: React.FC<InputInterface> = (param) => {
 
@@ -24,7 +26,7 @@ const TypedInput: React.FC<InputInterface> = (param) => {
         }
     if (param.valueType === DictionaryColumnTypes.NUMBER) {
         return (
-            <Input
+            <FloatingInput
                 type="number"
                 fullWidth={param.fullWidth}
                 className={param.className}
@@ -43,7 +45,7 @@ const TypedInput: React.FC<InputInterface> = (param) => {
     }
     if (param.valueType === DictionaryColumnTypes.STRING) {
         return (
-            <Input
+            <FloatingInput
                 type={param.type}
                 fullWidth={param.fullWidth}
                 className={param.className}
@@ -60,6 +62,30 @@ const TypedInput: React.FC<InputInterface> = (param) => {
             />
         );
     }
+
+    if (param.valueType === DictionaryColumnTypes.BOOLEAN) {
+        // Use Checkbox component for boolean values
+        // param.onChange expects (event), Checkbox expects (checked: boolean)
+        return (
+            <Checkbox
+                checked={!!param.value}
+                onChange={checked => {
+                    if (param.onChange) {
+                        // Simulate event for react-hook-form compatibility
+                        param.onChange({
+                            target: { value: checked, name: param.name, type: 'checkbox', checked },
+                            persist: () => {},
+                        } as any);
+                    }
+                }}
+                label={param.label}
+                id={param.id}
+                disabled={param.disabled}
+                className={param.className}
+            />
+        );
+    }
+
     return null;
 };
 

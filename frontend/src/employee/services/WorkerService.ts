@@ -21,7 +21,6 @@ const mapFormToApi = (form: WorkerForm): WorkerFormDto => {
 		rangesOption: form.step3.rangesOption,
 		startDate: form.step3.startDate || undefined,
 
-		experience: form.step4.experience,
 		certificates: form.step4.certificates,
 	};
 };

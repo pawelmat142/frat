@@ -204,6 +204,16 @@ const DictionaryView: React.FC = () => {
         AdminImportService.exportDictionaryJson(dictionary.code);
     }
 
+    const displayElementValue = (value: any, columnType: string) => {
+        if (columnType === DictionaryColumnTypes.DATE) {
+            return DateUtil.displayDate(value);
+        }
+        if (columnType === DictionaryColumnTypes.BOOLEAN) {
+            return value ? "true" : "false";
+        }
+        return value !== undefined && value !== "" ? value : "-";
+    }
+
     return (
         <div className="flex flex-col gap-6 w-full px-5 pb-20 pt-10">
             <div className="w-full">
@@ -251,9 +261,7 @@ const DictionaryView: React.FC = () => {
                                             <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text"}>{el.code}</td>
                                             {dictionary.columns.map(col => (
                                                 <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
-                                                    {col.type === DictionaryColumnTypes.DATE
-                                                        ? DateUtil.displayDate(el.values[col.code])
-                                                        : (el.values[col.code] !== undefined && el.values[col.code] !== "" ? el.values[col.code] : "-")}
+                                                    {displayElementValue(el.values[col.code], col.type)}
                                                 </td>
                                             ))}
                                             {/* <td className={"px-6 py-3 border-b border-color secondary-text"}>{el.description}</td> */}
