@@ -4,7 +4,7 @@ import ListItemImg from "./ListItemImg";
 interface Props {
     imgComponent?: React.ReactNode
     imgUrl?: string;
-    topLeft: string
+    topLeft: React.ReactNode
     topRight?: React.ReactNode
     bottomLeft: React.ReactNode
     bottomRight?: React.ReactNode
@@ -28,15 +28,18 @@ const ListItem: React.FC<Props> = ({
     iconOrAvatarBadge
 }) => {
 
+    if (typeof topLeft === 'string') {
+        topLeft = <span className="btn-font primary-text">{topLeft}</span>
+    }
     return (
         <div className={`list-view-item${first ? ' first' : ''}${last ? ' last' : ''}`}>
             <ListItemImg imgUrl={imgUrl} component={imgComponent} iconOrAvatarBadge={iconOrAvatarBadge}/>
 
             <div className="w-full flex flex-col justify-center">
 
-                {/* TODP */}
+                {/* TOP */}
                 <div className="flex justify-between ">
-                    <div className="btn-font primary-text">{topLeft}</div>
+                    {topLeft}
                     {topRight}
                 </div>
 

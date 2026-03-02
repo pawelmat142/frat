@@ -48,6 +48,7 @@ const WorkersSearchFilters: React.FC = () => {
             navigate(Path.WORKERS_FILTERS_SEARCH)
         }} />} />);
     }
+    
     useEffect(() => {
         setupHeaderMenu();
     }, [])

@@ -1,42 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import Search from '@mui/icons-material/Search';
-import FilterList from '@mui/icons-material/FilterList';
-import FloatingInput from "global/components/controls/FloatingInput";
-import IconButton from "global/components/controls/IconButon";
-import { BtnModes, FloatingInputModes } from "global/interface/controls.interface";
-import { useDrawer } from "global/providers/DrawerProvider";
+import React, { useEffect } from "react";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useOfferSearch } from "./OfferSearchProvider";
-import OfferSearchFiltersSheet from "./OfferSearchFiltersSheet";
 import { Currencies } from "@shared/interfaces/OfferI";
-import { useDebouncedValue } from "global/utils/useDebouncedValue";
 import { Utils } from "global/utils/utils";
 import { Ico } from "global/icon.def";
+import { Path } from "../../../path";
+import { useNavigate } from "react-router-dom";
+import IconButton from "global/components/controls/IconButon";
+import { FilterList } from "@mui/icons-material";
 
 const OfferSearchFilters: React.FC = () => {
 
     const globalCtx = useGlobalContext();
     const languagesDictionary = globalCtx.dics.languages;
-    const { t } = useTranslation();
-    const [freeTextInput, setFreeTextInput] = useState('');
+    const navigate = useNavigate();
     const ctx = useOfferSearch();
-    const { open } = useDrawer();
 
-    const debouncedFreeTextInput = useDebouncedValue(freeTextInput, 500);
-
-    // Debounce effect: update RHF value after 500ms
-    useEffect(() => {
-        ctx.setFilters({ ...ctx.filters, freeText: debouncedFreeTextInput });
-    }, [debouncedFreeTextInput]);
-
-    const openDrawer = () => {
-        open({
-            title: t("common.filters"),
-            children: <OfferSearchFiltersSheet ctx={ctx} />,
-            showClose: true,
-        });
+    const setupHeaderMenu = () => {
+        globalCtx.setHeaderMenu(<IconButton icon={<FilterList onClick={() => {
+            navigate(Path.OFFERS_FILTERS_SEARCH)
+        }} />} />);
     }
+
+    useEffect(() => {
+        setupHeaderMenu();
+    }, [])
 
     const flags = languagesDictionary
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.communicationLanguages || [], languagesDictionary))
@@ -47,11 +35,11 @@ const OfferSearchFilters: React.FC = () => {
         : [];
 
     const getSalaryFilterText = () => {
-        const currency = ctx.filters.currency === Currencies.EUR 
-            ? '€' 
-            : ctx.filters.currency === Currencies.USD 
-            ? '$' 
-            : 'zł';
+        const currency = ctx.filters.currency === Currencies.EUR
+            ? '€'
+            : ctx.filters.currency === Currencies.USD
+                ? '$'
+                : 'zł';
 
         let result = ''
         if (ctx.filters.hourlySalaryStart) {
@@ -61,7 +49,7 @@ const OfferSearchFilters: React.FC = () => {
             }
         }
         if (ctx.filters.monthlySalaryStart) {
-            result += `>${ctx.filters.monthlySalaryStart} ${currency}/month`; 
+            result += `>${ctx.filters.monthlySalaryStart} ${currency}/month`;
         }
         return result;
     }
@@ -70,24 +58,6 @@ const OfferSearchFilters: React.FC = () => {
 
     return (
         <div className="filters-container">
-            <div className="flex justify-between gap-5 w-full">
-                <FloatingInput
-                    mode={FloatingInputModes.THIN}
-                    name="freeText"
-                    value={freeTextInput}
-                    onChange={e => {
-                        setFreeTextInput(e.target.value);
-                    }}
-                    label={t("employeeProfile.form.freeText")}
-                    fullWidth
-                    icon={<Search />}
-                />
-
-                <div className="flex items-center">
-                    <IconButton mode={BtnModes.PRIMARY} icon={<FilterList />} aria-label="Filters" onClick={openDrawer} />
-                </div>
-            </div>
-
             <div className="flex gap-x-3 flex-wrap items-center">
                 {(!!ctx.filters.categories?.length) && (
                     <div className="chip-container ml-2 mt-1">

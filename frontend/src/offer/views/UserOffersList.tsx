@@ -1,6 +1,5 @@
 import Button from "global/components/controls/Button";
 import Loading from "global/components/Loading";
-import OfferTile from "offer/components/OfferTile";
 import { Path } from "../../path"
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
@@ -69,13 +68,14 @@ const UserOffersList: React.FC = () => {
         <div className="list-view flex-1 flex flex-col">
 
             <div className="results flex flex-col gap-1">
-                {!!globalCtx.dics.languages && offers.map((offer, index) => (
-                    <OfferTile
-                        key={offer.offerId}
-                        offer={offer}
-                        first={index === 0}
-                        last={index === offers.length - 1}
-                    ></OfferTile>
+                {!!globalCtx.dics.languages && offers.map((offer, index) => ( null
+                    // TODO
+                    // <OfferTile
+                    //     key={offer.offerId}
+                    //     offer={offer}
+                    //     first={index === 0}
+                    //     last={index === offers.length - 1}
+                    // ></OfferTile>
                 ))}
             </div>
 

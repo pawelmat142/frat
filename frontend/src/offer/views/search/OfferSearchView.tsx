@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { useOfferSearch } from "./OfferSearchProvider";
 import Loading from "global/components/Loading";
 import OfferSearchFilters from "./OfferSearchFilters";
-import OfferTile from "offer/components/OfferTile";
 import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
+import OfferListItem from "offer/components/OfferListItem";
 
 const OfferSearchView: React.FC = () => {
 
@@ -40,7 +40,7 @@ const OfferSearchView: React.FC = () => {
             ) : (
                 <div className="results flex flex-col gap-1">
                     {(ctx.results ?? []).map((offer, index) => (
-                        <OfferTile
+                        <OfferListItem
                             key={offer.offerId}
                             offer={offer}
                             first={index === 0}

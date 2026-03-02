@@ -124,7 +124,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         };
 
         if (newFilters.geocodedPosition?.lat && newFilters.geocodedPosition?.lng && !newFilters.geocodedPosition.country) {
-            const geocodedPosition = await getGeoPosition(newFilters.geocodedPosition);
+            const geocodedPosition = await GoogleMapService.getGeoPosition(newFilters.geocodedPosition);
             if (geocodedPosition) {
                 newFilters.geocodedPosition = geocodedPosition;
             }
@@ -136,10 +136,6 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         hasMoreRef.current = false;
 
         executeSearch(newFilters, false);
-    }
-
-    const getGeoPosition = (position: { lat: number; lng: number }): Promise<GeocodedPosition | null> => {
-        return GoogleMapService.getGeocodedLocation(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
     }
 
 

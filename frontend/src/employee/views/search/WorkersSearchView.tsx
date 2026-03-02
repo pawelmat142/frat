@@ -15,11 +15,7 @@ const EmployeeSearchView: React.FC = () => {
     const globalCtx = useGlobalContext()
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
-        return (
-            <div>
-                <Loading></Loading>
-            </div>
-        )
+        return <Loading></Loading>
     }
 
     const initialLoading = ctx.loading && ctx.results.length === 0;
