@@ -40,11 +40,13 @@ export class SearchWorkersService {
             .select('profile.worker_id', 'id')
             .groupBy('profile.worker_id');
 
-        this.addSortingForIds(idsQueryBuilder, filters, user.uid);
+        this.addMutualFriendsSelect(idsQueryBuilder, user.uid);
+        this.addSortingForIds(idsQueryBuilder, filters);
         this.addPagination(idsQueryBuilder, filters);
 
         const idsResult = await idsQueryBuilder.getRawMany();
         const profileIds = idsResult.map(row => row.id);
+        const mutualFriendsMap = this.buildMutualFriendsMap(idsResult);
 
         // Step 4: Load full profiles with relations using the IDs
         const resultsQueryBuilder = this.workerRepo.getQueryBuilder()
@@ -57,7 +59,8 @@ export class SearchWorkersService {
 
         return {
             profiles: results,
-            count
+            count,
+            mutualFriendsMap,
         };
     }
 
@@ -123,27 +126,42 @@ export class SearchWorkersService {
         }
     }
 
-    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, currentUserUid: string) {
+    /** Always compute mutual friends count for each profile in the result set */
+    private addMutualFriendsSelect(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, currentUserUid: string) {
+        idsQueryBuilder
+            .addGroupBy('profile.uid')
+            .addSelect(`(
+                SELECT COUNT(*) FROM (
+                    SELECT CASE WHEN f1.requester_uid = :currentUserUid THEN f1.addressee_uid ELSE f1.requester_uid END
+                    FROM jh_friendships f1
+                    WHERE (f1.requester_uid = :currentUserUid OR f1.addressee_uid = :currentUserUid)
+                    AND f1.status = 'ACCEPTED'
+                    INTERSECT
+                    SELECT CASE WHEN f2.requester_uid = profile.uid THEN f2.addressee_uid ELSE f2.requester_uid END
+                    FROM jh_friendships f2
+                    WHERE (f2.requester_uid = profile.uid OR f2.addressee_uid = profile.uid)
+                    AND f2.status = 'ACCEPTED'
+                ) mutual
+            )`, 'mutual_friends_count')
+            .setParameter('currentUserUid', currentUserUid);
+    }
+
+    private buildMutualFriendsMap(idsResult: { id: number; mutual_friends_count: string }[]): Record<number, number> {
+        const map: Record<number, number> = {};
+        for (const row of idsResult) {
+            const count = Number(row.mutual_friends_count) || 0;
+            if (count > 0) {
+                map[row.id] = count;
+            }
+        }
+        return map;
+    }
+
+    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest) {
         const sortBy = filters.sortBy || DefaultWorkerSearchSortOption;
         switch (sortBy) {
             case WorkerSearchSortOptions.MUTUAL_FRIENDS:
-                idsQueryBuilder
-                    .addGroupBy('profile.uid')
-                    .addSelect(`(
-                        SELECT COUNT(*) FROM (
-                            SELECT CASE WHEN f1.requester_uid = :currentUserUid THEN f1.addressee_uid ELSE f1.requester_uid END
-                            FROM jh_friendships f1
-                            WHERE (f1.requester_uid = :currentUserUid OR f1.addressee_uid = :currentUserUid)
-                            AND f1.status = 'ACCEPTED'
-                            INTERSECT
-                            SELECT CASE WHEN f2.requester_uid = profile.uid THEN f2.addressee_uid ELSE f2.requester_uid END
-                            FROM jh_friendships f2
-                            WHERE (f2.requester_uid = profile.uid OR f2.addressee_uid = profile.uid)
-                            AND f2.status = 'ACCEPTED'
-                        ) mutual
-                    )`, 'mutual_friends_count')
-                    .setParameter('currentUserUid', currentUserUid)
-                    .addOrderBy('mutual_friends_count', 'DESC', 'NULLS LAST');
+                idsQueryBuilder.addOrderBy('mutual_friends_count', 'DESC', 'NULLS LAST');
                 break;
 
             case WorkerSearchSortOptions.START_FROM_ASC:

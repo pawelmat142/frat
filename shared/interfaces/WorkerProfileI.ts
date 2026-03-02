@@ -180,6 +180,8 @@ export interface WorkerSearchRequest {
 export interface WorkerSearchResponse {
   profiles: WorkerI[];
   count: number;
+  /** Map of workerId -> mutual friends count (only populated in authenticated search) */
+  mutualFriendsMap?: Record<number, number>;
 }
 
 
