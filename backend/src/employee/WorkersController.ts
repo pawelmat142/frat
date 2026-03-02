@@ -24,6 +24,7 @@ import { SearchWorkersService } from './services/SearchWorkerService';
 import { RolesGuard } from 'auth/guards/RolesGuard';
 import { Roles } from 'auth/decorators/RolesDecorator';
 import { Public } from 'auth/decorators/PublicDecorator';
+import { OptionalJwtUser } from 'auth/guards/OptionalJwtUser';
 
 @Controller('api/worker')
 @UseInterceptors(LogInterceptor)
@@ -74,12 +75,12 @@ export class WorkersController {
 
   @Get("/search/list")
   @Serialize(WorkerEntity)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(OptionalJwtUser)
   searchWorkers(
-    @CurrentUser() user: UserI,
-    @Query() filters: WorkerSearchRequest
+    @Query() filters: WorkerSearchRequest,
+    @CurrentUser() user?: UserI,
   ): Promise<WorkerSearchResponse> {
-    return this.searchWorkerService.searchWorkers(user, filters);
+    return this.searchWorkerService.searchWorkers(filters, user);
   }
   
   @Get("/notify-profile-view/:uid")

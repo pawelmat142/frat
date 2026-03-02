@@ -46,8 +46,8 @@ export const WorkerService = {
 		return httpClient.put<WorkerI>(`/worker`, apiPayload);
 	},
 
-	searchWorkers(params: WorkerSearchRequest): Promise<WorkerSearchResponse> {
-		return httpClient.get<WorkerSearchResponse>(`/worker/search/list`, { params });
+	searchWorkers(params: WorkerSearchRequest, skipAuth: boolean = false): Promise<WorkerSearchResponse> {
+		return httpClient.get<WorkerSearchResponse>(`/worker/search/list`, { params, skipAuth });
 	},
 
 	notifyWorkerView(uid: string): Promise<void> {

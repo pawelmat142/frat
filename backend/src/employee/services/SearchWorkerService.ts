@@ -16,7 +16,7 @@ export class SearchWorkersService {
         private readonly workerRepo: WorkerRepo,
     ) { }
 
-    async searchWorkers(user: UserI, filters: WorkerSearchRequest): Promise<WorkerSearchResponse> {
+    async searchWorkers(filters: WorkerSearchRequest, user?: UserI): Promise<WorkerSearchResponse> {
 
         // Step 1: Build base query for filtering (without eagerly loading relations to avoid row multiplication)
         const baseQueryBuilder = this.workerRepo.getQueryBuilder()
@@ -40,13 +40,15 @@ export class SearchWorkersService {
             .select('profile.worker_id', 'id')
             .groupBy('profile.worker_id');
 
-        this.addMutualFriendsSelect(idsQueryBuilder, user.uid);
-        this.addSortingForIds(idsQueryBuilder, filters);
+        if (user) {
+            this.addMutualFriendsSelect(idsQueryBuilder, user.uid);
+        }
+        this.addSortingForIds(idsQueryBuilder, filters, user);
         this.addPagination(idsQueryBuilder, filters);
 
         const idsResult = await idsQueryBuilder.getRawMany();
         const profileIds = idsResult.map(row => row.id);
-        const mutualFriendsMap = this.buildMutualFriendsMap(idsResult);
+        const mutualFriendsMap = user ? this.buildMutualFriendsMap(idsResult) : {};
 
         // Step 4: Load full profiles with relations using the IDs
         const resultsQueryBuilder = this.workerRepo.getQueryBuilder()
@@ -131,7 +133,7 @@ export class SearchWorkersService {
     }
 
     /** Always compute mutual friends UIDs for each profile in the result set */
-    private addMutualFriendsSelect(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, currentUserUid: string) {
+    private addMutualFriendsSelect(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, currentUserUid?: string) {
         const mutualSubquery = `(
                 SELECT COALESCE(array_agg(mutual.uid), ARRAY[]::text[]) FROM (
                     SELECT CASE WHEN f1.requester_uid = :currentUserUid THEN f1.addressee_uid ELSE f1.requester_uid END AS uid
@@ -171,11 +173,13 @@ export class SearchWorkersService {
         return value.replace(/^\{|\}$/g, '').split(',');
     }
 
-    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest) {
+    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, user?: UserI) {
         const sortBy = filters.sortBy || DefaultWorkerSearchSortOption;
         switch (sortBy) {
             case WorkerSearchSortOptions.MUTUAL_FRIENDS:
-                idsQueryBuilder.addOrderBy('mutual_friends_count', 'DESC', 'NULLS LAST');
+                if (user) {
+                    idsQueryBuilder.addOrderBy('mutual_friends_count', 'DESC', 'NULLS LAST');
+                }
                 break;
 
             case WorkerSearchSortOptions.START_FROM_ASC:

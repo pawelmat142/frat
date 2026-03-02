@@ -77,7 +77,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 return;
             }
             let request: WorkerSearchRequest = WorkerUtil.filtersToRequest(searchFilters);
-            const result = await WorkerService.searchWorkers(request);
+            const result = await WorkerService.searchWorkers(request, !userCtx.me);
 
             if (loadMore) {
                 setResults(prev => {
