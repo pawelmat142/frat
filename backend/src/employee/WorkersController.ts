@@ -74,6 +74,7 @@ export class WorkersController {
 
   @Get("/search/list")
   @Serialize(WorkerEntity)
+  @UseGuards(JwtAuthGuard)
   searchWorkers(
     @CurrentUser() user: UserI,
     @Query() filters: WorkerSearchRequest

@@ -252,7 +252,7 @@ const WorkerFormView: React.FC = () => {
             workerCtx.initWorker();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
-            navigate(-1)
+            navigate(Path.getWorkerProfilePath(result.displayName), { replace: true });
         } catch (error) {
             console.error("Error updating employee profile:", error);
         } finally {

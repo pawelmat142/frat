@@ -204,6 +204,7 @@ export interface DateRange {
 }
 
 export const WorkerSearchSortOptions = {
+  MUTUAL_FRIENDS: 'MUTUAL_FRIENDS',
   START_FROM_DESC: 'START_FROM_DESC',
   START_FROM_ASC: 'START_FROM_ASC',
   CREATED_AT_DESC: 'CREATED_AT_DESC',
@@ -213,7 +214,8 @@ export const WorkerSearchSortOptions = {
 } as const;
 export type WorkerSearchSortOption = typeof WorkerSearchSortOptions[keyof typeof WorkerSearchSortOptions];
 
-export const PROFILE_DEFAULT_SORT_OPTION: WorkerSearchSortOption = WorkerSearchSortOptions.START_FROM_DESC;
+// move to config
+export const DefaultWorkerSearchSortOption: WorkerSearchSortOption = WorkerSearchSortOptions.MUTUAL_FRIENDS;
 
 export const PROFILES_INITIAL_SEARCH_LIMIT = 12;
 export const PROFILES_LOAD_MORE_SEARCH_LIMIT = 4;

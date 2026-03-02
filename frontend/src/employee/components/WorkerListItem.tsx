@@ -34,9 +34,6 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
     const isDesktop = useIsDesktop();
     const isMyProfile = me?.uid === profile.uid;
 
-    const a = userCtx.position
-    console.log(profile)
-    console.log(a)
     const goToProfileView = () => {
         navigate(Path.getWorkerProfilePath(profile.displayName!));
     }

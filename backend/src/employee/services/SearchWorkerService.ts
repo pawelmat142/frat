@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { WorkerRepo } from './WorkerRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT, WorkerLocationOptions, WorkerFormRangesOptions, WorkerSearchRequest, DEFAULT_SEARCH_DISTANCE_M } from '@shared/interfaces/WorkerProfileI';
+import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT, WorkerLocationOptions, WorkerFormRangesOptions, WorkerSearchRequest, DEFAULT_SEARCH_DISTANCE_M, DefaultWorkerSearchSortOption } from '@shared/interfaces/WorkerProfileI';
 import { SelectQueryBuilder } from 'typeorm';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { SearchUtil } from 'global/utils/SearchUtil';
@@ -16,17 +16,13 @@ export class SearchWorkersService {
         private readonly workerRepo: WorkerRepo,
     ) { }
 
-    // TODO sortowanie po liczbie wspolnych znajomych
-
     async searchWorkers(user: UserI, filters: WorkerSearchRequest): Promise<WorkerSearchResponse> {
+
         // Step 1: Build base query for filtering (without eagerly loading relations to avoid row multiplication)
         const baseQueryBuilder = this.workerRepo.getQueryBuilder()
             .leftJoin('profile.availabilityDateRanges', 'ranges');
 
         let hasFilter = false;
-
-        // TODO
-        console.log('SearchWorkersService.searchWorkers - filters:', filters);
 
         this.addBasicFilters(baseQueryBuilder, filters, hasFilter);
         this.addDateRangeFilter(baseQueryBuilder, filters, hasFilter);
@@ -44,7 +40,7 @@ export class SearchWorkersService {
             .select('profile.worker_id', 'id')
             .groupBy('profile.worker_id');
 
-        // this.addSortingForIds(idsQueryBuilder, filters);
+        this.addSortingForIds(idsQueryBuilder, filters, user.uid);
         this.addPagination(idsQueryBuilder, filters);
 
         const idsResult = await idsQueryBuilder.getRawMany();
@@ -55,7 +51,7 @@ export class SearchWorkersService {
             .leftJoinAndSelect('profile.availabilityDateRanges', 'ranges')
             .whereInIds(profileIds);
 
-        // this.addSortingById(resultsQueryBuilder, profileIds);
+        this.addSortingById(resultsQueryBuilder, profileIds);
 
         const results = await resultsQueryBuilder.getMany();
 
@@ -127,8 +123,29 @@ export class SearchWorkersService {
         }
     }
 
-    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest) {
-        switch (filters.sortBy) {
+    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, currentUserUid: string) {
+        const sortBy = filters.sortBy || DefaultWorkerSearchSortOption;
+        switch (sortBy) {
+            case WorkerSearchSortOptions.MUTUAL_FRIENDS:
+                idsQueryBuilder
+                    .addGroupBy('profile.uid')
+                    .addSelect(`(
+                        SELECT COUNT(*) FROM (
+                            SELECT CASE WHEN f1.requester_uid = :currentUserUid THEN f1.addressee_uid ELSE f1.requester_uid END
+                            FROM jh_friendships f1
+                            WHERE (f1.requester_uid = :currentUserUid OR f1.addressee_uid = :currentUserUid)
+                            AND f1.status = 'ACCEPTED'
+                            INTERSECT
+                            SELECT CASE WHEN f2.requester_uid = profile.uid THEN f2.addressee_uid ELSE f2.requester_uid END
+                            FROM jh_friendships f2
+                            WHERE (f2.requester_uid = profile.uid OR f2.addressee_uid = profile.uid)
+                            AND f2.status = 'ACCEPTED'
+                        ) mutual
+                    )`, 'mutual_friends_count')
+                    .setParameter('currentUserUid', currentUserUid)
+                    .addOrderBy('mutual_friends_count', 'DESC', 'NULLS LAST');
+                break;
+
             case WorkerSearchSortOptions.START_FROM_ASC:
                 idsQueryBuilder
                     .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
