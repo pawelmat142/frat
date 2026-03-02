@@ -52,6 +52,10 @@ export interface WorkerWithCertificates extends WorkerI {
   certs: CertificateI[];
 }
 
+export interface WorkerWithMutualFriends extends WorkerI {
+  mutualFriendsUids: string[];
+}
+
 export const WorkerStatuses = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE'
@@ -178,10 +182,8 @@ export interface WorkerSearchRequest {
 }
 
 export interface WorkerSearchResponse {
-  profiles: WorkerI[];
+  profiles: WorkerWithMutualFriends[];
   count: number;
-  /** Map of workerId -> mutual friends count (only populated in authenticated search) */
-  mutualFriendsMap?: Record<number, number>;
 }
 
 

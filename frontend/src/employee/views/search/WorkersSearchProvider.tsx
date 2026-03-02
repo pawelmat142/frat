@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { WorkerService } from "employee/services/WorkerService";
-import { WorkerI, WorkerSearchFilters, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT, WorkerSearchRequest, WorkerSearchResponse } from "@shared/interfaces/WorkerProfileI";
+import { WorkerI, WorkerSearchFilters, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT, WorkerSearchRequest, WorkerSearchResponse, WorkerWithMutualFriends } from "@shared/interfaces/WorkerProfileI";
 import { WorkerUtil } from "@shared/utils/WorkerUtil";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
@@ -13,8 +13,7 @@ export interface WorkersSearchContextProps {
     defaultFilters: WorkerSearchFilters;
     setFiltersWithSearchAndNavigate: (filters: WorkerSearchFilters) => void;
     resetFilters: () => void;
-    results: WorkerI[];
-    mutualFriendsMap: Record<number, number>;
+    results: WorkerWithMutualFriends[];
     loading: boolean;
     loadingMore: boolean;
     hasMore: boolean;
@@ -57,8 +56,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const [filters, setFiltersState] = useState<WorkerSearchFilters>(WorkerUtil.parseFiltersFromSearch(location.search, WorkerDefaultFilters))
 
-    const [results, setResults] = useState<WorkerI[]>([]);
-    const [mutualFriendsMap, setMutualFriendsMap] = useState<Record<number, number>>({});
+    const [results, setResults] = useState<WorkerWithMutualFriends[]>([]);
     const [loading, setLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
 
@@ -87,11 +85,9 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                     resultsLengthRef.current = newResults.length;
                     return newResults;
                 });
-                setMutualFriendsMap(prev => ({ ...prev, ...result.mutualFriendsMap }));
             } else {
                 setResults(result.profiles);
                 resultsLengthRef.current = result.profiles.length;
-                setMutualFriendsMap(result.mutualFriendsMap || {});
             }
 
             const loaded = searchFilters.skip + result.profiles.length;
@@ -136,7 +132,6 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
         setFiltersState(newFilters);
         setResults([]);
-        setMutualFriendsMap({});
         resultsLengthRef.current = 0;
         hasMoreRef.current = false;
 
@@ -182,7 +177,11 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const updateOneProfileInResults = (updatedProfile: WorkerI) => {
         if (results.map(profile => profile.uid).includes(updatedProfile.uid)) {
             setResults(profiles => {
-                return profiles.map(profile => profile.uid === updatedProfile.uid ? updatedProfile : profile);
+                return profiles.map(profile => profile.uid === updatedProfile.uid 
+                    ? {...updatedProfile, 
+                        mutualFriendsUids: profile.mutualFriendsUids
+                    } 
+                    : profile);
             });
         }
     }
@@ -193,7 +192,6 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setFiltersWithSearchAndNavigate,
             hasMore: hasMoreRef.current,
             results,
-            mutualFriendsMap,
             loading,
             loadingMore,
             loadMore,

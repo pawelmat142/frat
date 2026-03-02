@@ -49,7 +49,6 @@ const EmployeeSearchView: React.FC = () => {
                             key={index}
                             profile={profile}
                             languagesDictionary={globalCtx.dics.languages!}
-                            mutualFriendsCount={ctx.mutualFriendsMap[profile.workerId]}
                             first={index === 0}
                             last={index === (ctx.results?.length ?? 0) - 1}
                         ></WorkerListItem>

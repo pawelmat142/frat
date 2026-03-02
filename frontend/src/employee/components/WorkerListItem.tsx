@@ -1,5 +1,5 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
-import { WorkerI } from "@shared/interfaces/WorkerProfileI"
+import { WorkerWithMutualFriends } from "@shared/interfaces/WorkerProfileI"
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -15,9 +15,8 @@ import { useUserContext } from "user/UserProvider";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 
 interface Props {
-    profile: WorkerI,
+    profile: WorkerWithMutualFriends,
     languagesDictionary: DictionaryI
-    mutualFriendsCount?: number,
     first?: boolean,
     last?: boolean,
 }
@@ -25,7 +24,7 @@ interface Props {
 // TODO move to config
 const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = 50000; // 20 km
 
-const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, mutualFriendsCount, first, last }) => {
+const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, last }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -102,10 +101,10 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, mutualF
             <span className="small-font">{profile.likes?.length || 0}</span>
         </div>
 
-        {!!mutualFriendsCount && (
+        {!!profile.mutualFriendsUids?.length && (
             <div className="flex items-center">
                 <Ico.FRIENDS size={14} className="secondary-text mr-1" />
-                <span className="small-font">{mutualFriendsCount}</span>
+                <span className="small-font">{profile.mutualFriendsUids.length}</span>
             </div>
         )}
 

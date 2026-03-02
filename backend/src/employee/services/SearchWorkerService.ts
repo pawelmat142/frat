@@ -57,10 +57,14 @@ export class SearchWorkersService {
 
         const results = await resultsQueryBuilder.getMany();
 
+        const profilesWithMutualFriends = results.map(profile => ({
+            ...profile,
+            mutualFriendsUids: mutualFriendsMap[profile.workerId] || []
+        }))
+
         return {
-            profiles: results,
+            profiles: profilesWithMutualFriends,
             count,
-            mutualFriendsMap,
         };
     }
 
@@ -126,35 +130,45 @@ export class SearchWorkersService {
         }
     }
 
-    /** Always compute mutual friends count for each profile in the result set */
+    /** Always compute mutual friends UIDs for each profile in the result set */
     private addMutualFriendsSelect(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, currentUserUid: string) {
-        idsQueryBuilder
-            .addGroupBy('profile.uid')
-            .addSelect(`(
-                SELECT COUNT(*) FROM (
-                    SELECT CASE WHEN f1.requester_uid = :currentUserUid THEN f1.addressee_uid ELSE f1.requester_uid END
+        const mutualSubquery = `(
+                SELECT COALESCE(array_agg(mutual.uid), ARRAY[]::text[]) FROM (
+                    SELECT CASE WHEN f1.requester_uid = :currentUserUid THEN f1.addressee_uid ELSE f1.requester_uid END AS uid
                     FROM jh_friendships f1
                     WHERE (f1.requester_uid = :currentUserUid OR f1.addressee_uid = :currentUserUid)
                     AND f1.status = 'ACCEPTED'
                     INTERSECT
-                    SELECT CASE WHEN f2.requester_uid = profile.uid THEN f2.addressee_uid ELSE f2.requester_uid END
+                    SELECT CASE WHEN f2.requester_uid = profile.uid THEN f2.addressee_uid ELSE f2.requester_uid END AS uid
                     FROM jh_friendships f2
                     WHERE (f2.requester_uid = profile.uid OR f2.addressee_uid = profile.uid)
                     AND f2.status = 'ACCEPTED'
                 ) mutual
-            )`, 'mutual_friends_count')
+            )`;
+        idsQueryBuilder
+            .addGroupBy('profile.uid')
+            .addSelect(mutualSubquery, 'mutual_friends_uids')
+            .addSelect(`array_length(${mutualSubquery}, 1)`, 'mutual_friends_count')
             .setParameter('currentUserUid', currentUserUid);
     }
 
-    private buildMutualFriendsMap(idsResult: { id: number; mutual_friends_count: string }[]): Record<number, number> {
-        const map: Record<number, number> = {};
+    private buildMutualFriendsMap(idsResult: { id: number; mutual_friends_uids: string | string[] }[]): Record<number, string[]> {
+        const map: Record<number, string[]> = {};
         for (const row of idsResult) {
-            const count = Number(row.mutual_friends_count) || 0;
-            if (count > 0) {
-                map[row.id] = count;
+            // PostgreSQL may return text[] as a string '{uid1,uid2}' or as parsed array
+            const uids = Array.isArray(row.mutual_friends_uids)
+                ? row.mutual_friends_uids
+                : this.parsePostgresArray(row.mutual_friends_uids);
+            if (uids.length > 0) {
+                map[row.id] = uids;
             }
         }
         return map;
+    }
+
+    private parsePostgresArray(value: string | null): string[] {
+        if (!value || value === '{}') return [];
+        return value.replace(/^\{|\}$/g, '').split(',');
     }
 
     private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest) {
