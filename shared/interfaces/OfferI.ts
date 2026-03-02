@@ -141,16 +141,15 @@ export interface OfferFormFour {
 }
 
 export interface OfferSearchFilters {
-    freeText?: string;
 
+    locationCountries?: string[]
+    communicationLanguages?: string[];
     categories?: string[];
 
-    communicationLanguages?: string[];
-    locationCountries?: string[]
-
+    // TODO remove
+    freeText?: string;
     skills?: string[];
     certificates?: string[];
-
     currency?: Currency | null;
     monthlySalaryStart?: number | null;
     hourlySalaryStart?: number | null;

@@ -42,6 +42,10 @@ export const STATES: { [key: string]: ViewState } = {
         leftBtn: <HeaderBackBtn />,
         title: 'employeeProfile.searchTitle',
     },
+    [Path.OFFERS_FILTERS_SEARCH]: {
+        leftBtn: <HeaderBackBtn />,
+        title: 'offer.searchTitle',
+    },
     [Path.WORKER]: {
         leftBtn: <HeaderBackBtn />,
         title: 'employeeProfile.title',

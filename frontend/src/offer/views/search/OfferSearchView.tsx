@@ -15,12 +15,7 @@ const OfferSearchView: React.FC = () => {
     const ctx = useOfferSearch();
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
-        return (
-            <div>
-                <Loading></Loading>
-
-            </div>
-        );
+        return <Loading></Loading>
     }
 
     const initialLoading = ctx.loading && ctx.results.length === 0;

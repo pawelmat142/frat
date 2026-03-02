@@ -36,7 +36,7 @@ const MainTiles: React.FC = () => {
                     <Ico.SEARCH size={iconSize} />
                     <div>{t("employeeProfile.search")}</div>
                 </div>
-                <div className="square-tile col-tile" onClick={() => navigate(Path.OFFERS_SEARCH)}>
+                <div className="square-tile col-tile" onClick={() => navigate(Path.OFFERS_FILTERS_SEARCH)}>
                     <Ico.OFFER size={iconSize} />
                     <div>{t("offer.search")}</div>
                 </div>

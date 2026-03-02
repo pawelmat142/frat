@@ -1,6 +1,6 @@
 import GoogleMapsLoader from "global/utils/GoogleMapsLoader";
 import { httpClient } from "./http";
-import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
+import { GeocodedPosition, Position } from "@shared/interfaces/MapsInterfaces";
 
 
 export abstract class GoogleMapService {
@@ -44,6 +44,10 @@ export abstract class GoogleMapService {
 
 		// Fallback to REST API only if JS API unavailable (will fail with referrer restrictions)
 		return await GoogleMapService.getGeocodedLocationUsingApiKey(coords, apiKey);
+	}
+
+	static async getGeoPosition(position: Position): Promise<GeocodedPosition | null> {
+		return GoogleMapService.getGeocodedLocation(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
 	}
 
 	private static async getGeocodedLocationn(position: { lat: number; lng: number }, geocoder: google.maps.Geocoder): Promise<GeocodedPosition | null> {

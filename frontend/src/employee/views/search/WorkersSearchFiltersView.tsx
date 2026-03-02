@@ -17,7 +17,7 @@ import { GoogleMapService } from "global/services/GoogleMapService";
 import { toast } from "react-toastify";
 import FloatingPlaceSearch from "global/components/controls/FloatingPlaceSearch";
 import FloatingStepSlider from "global/components/controls/FloatingStepSlider";
-import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
+import { GeocodedPosition, Position } from "@shared/interfaces/MapsInterfaces";
 import { RADIUS_STEPS_KM } from "./WorkersSearchProvider";
 
 const WorkersSearchFiltersView: React.FC = () => {
@@ -40,7 +40,7 @@ const WorkersSearchFiltersView: React.FC = () => {
             if (!formState.geocodedPosition && userCtx.position) {
                 try {
                     setLoadingLocation(true);
-                    const geoPosition = await getGeoPosition(userCtx.position);
+                    const geoPosition = await GoogleMapService.getGeoPosition(userCtx.position);
                     const countryCode = geoPosition?.country?.toLocaleLowerCase();
                     const languages = globalCtx.dics.languages!;
                     const langAllowed = languages.elements.map((lang) => lang.code.toLocaleLowerCase()).includes(countryCode || '')
@@ -59,12 +59,9 @@ const WorkersSearchFiltersView: React.FC = () => {
     }, [userCtx.position])
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
-        return (
-            <div>
-                <Loading></Loading>
-            </div>
-        )
+        return <Loading></Loading>
     }
+
     const startDateRequired = FormValidator.required(t);
     const required = FormValidator.required(t);
 
@@ -103,7 +100,7 @@ const WorkersSearchFiltersView: React.FC = () => {
     const updateFormPosition = async (position: { lat: number; lng: number }): Promise<GeocodedPosition | null> => {
         try {
             setLoadingLocation(true);
-            const geoPosition = await getGeoPosition(position);
+            const geoPosition = await GoogleMapService.getGeoPosition(position);
             setGeoPosition(geoPosition);
             return geoPosition;
         } catch (error) {
@@ -122,10 +119,6 @@ const WorkersSearchFiltersView: React.FC = () => {
         } else {
             f.setValue('positionRadiusKm', RADIUS_STEPS_KM[0]);
         }
-    }
-
-    const getGeoPosition = (position: { lat: number; lng: number }): Promise<GeocodedPosition | null> => {
-        return GoogleMapService.getGeocodedLocation(position, process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '');
     }
 
     return (

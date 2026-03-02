@@ -40,6 +40,7 @@ import SingleNotificationView from 'notification/views/SingleNotificationView';
 import NotificationsView from 'notification/views/NotificationsView';
 import TranslationItemForm from 'admin/views/translations/TranslationItemForm';
 import SettingsView from 'user/views/SettingsView';
+import OfferSearchFiltersView from 'offer/views/search/OfferSearchFiltersView';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -93,6 +94,7 @@ const App: React.FC = () => {
                 <Route path={Path.OFFER_FORM} element={<PageWrapper direction={1}><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.OFFER_FORM_EDIT} element={<PageWrapper direction={1}><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.USER_OFFERS} element={<PageWrapper direction={1}><ProtectedRoute><UserOffersList/></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.OFFERS_FILTERS_SEARCH} element={<PageWrapper direction={1}><ProtectedRoute><OfferSearchFiltersView/></ProtectedRoute></PageWrapper>} />
                 {/* unprotected */}
                 <Route path={Path.OFFER} element={<PageWrapper direction={1}><OfferView/></PageWrapper>} />
                 <Route path={Path.OFFERS_SEARCH} element={<PageWrapper direction={1}><OfferSearchView/></PageWrapper>} />

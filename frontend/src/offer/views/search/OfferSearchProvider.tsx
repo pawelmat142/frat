@@ -16,16 +16,21 @@ export interface OfferSearchContextProps {
     loadingMore: boolean;
     hasMore: boolean;
     loadMore: () => void;
+    setFiltersWithSearchAndNavigate: (filters: OfferSearchFilters) => void;
 }
 const INITIAL_LIMIT = 8;
 const LOAD_MORE_LIMIT = 4;
+
 export const defaultOfferFilters: OfferSearchFilters = {
-    freeText: '',
+    locationCountries: [],
     categories: [],
     communicationLanguages: [],
-    locationCountries: [],
+
+    // TODO remove
+    freeText: '',
     skills: [],
     certificates: [],
+
     skip: 0,
     limit: INITIAL_LIMIT,
 };
@@ -65,6 +70,21 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [hasMore, setHasMore] = useState(false);
 
     const requestIdRef = useRef(0);
+    const requestsLengthRef = useRef(0);
+    const hasMoreRef = useRef(false);
+
+    const setFiltersWithSearchAndNavigate = (newFilters: OfferSearchFilters) => {
+        setFiltersState(newFilters);
+        requestsLengthRef.current = 0;
+        hasMoreRef.current = false;
+
+        const searchStr = OfferUtil.prepareUrlParams(newFilters, defaultOfferFilters);
+        const newUrl = searchStr ? `?${searchStr}` : '';
+
+        if (newUrl !== location.search) {
+            navigate({ pathname: Path.OFFERS_SEARCH, search: newUrl });
+        }
+    }
 
     const filtersEquals = (f1: OfferSearchFilters, f2: OfferSearchFilters): boolean => {
         if (f1.freeText !== f2.freeText) return false;
@@ -183,7 +203,8 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
             hasMore,
             loadMore,
             resetFilters,
-            defaultFilters: defaultOfferFilters
+            defaultFilters: defaultOfferFilters,
+            setFiltersWithSearchAndNavigate
         }}>
             {children}
         </OfferSearchContext.Provider>
