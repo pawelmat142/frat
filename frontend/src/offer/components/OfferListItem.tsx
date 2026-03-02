@@ -16,8 +16,8 @@ import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import { UserPublicService } from "user/services/UserPublicService";
 import { useEffect, useState } from "react";
 import Chips, { ChipModes } from "global/components/chips/Chips";
-import { set } from "react-hook-form";
 import { ParsedPhoneNumber } from "@shared/interfaces/WorkerProfileI";
+import Loading from "global/components/Loading";
 
 interface Props {
     offer: OfferI,
@@ -167,6 +167,10 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
             )}
         </div>
     </div>
+
+    if (loading) {
+        return <Loading></Loading>
+    }
 
     return (
         <div onClick={goToOfferView}>
