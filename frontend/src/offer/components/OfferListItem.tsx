@@ -64,9 +64,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
     }, []);
 
     const goToOfferView = () => {
-        // TODO: implement offer detail view path
-        // navigate(Path.getOfferPath(offer.offerId));
-        console.log('Navigate to offer:', offer.offerId);
+        navigate(Path.getOfferPath(offer.offerId));
     }
 
     const getDistanceInfo = (): string => {
