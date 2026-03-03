@@ -18,16 +18,33 @@ import { OfferUtil } from "@shared/utils/OfferUtil";
 import { Utils } from "global/utils/utils";
 import FormWizard from "global/components/FormWizard/FormWizard";
 import { DateUtil } from "@shared/utils/DateUtil";
-import { Position } from "@shared/interfaces/MapsInterfaces";
+import { GeocodedPosition, Position } from "@shared/interfaces/MapsInterfaces";
+import { GoogleMapService } from "global/services/GoogleMapService";
+import { useGlobalContext } from "global/providers/GlobalProvider";
+import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 
 // TODO move to config - share with front
 const DEFAUT_POINT: Position = { lat: 52.2297, lng: 21.0122 }; // Warsaw center as default point
 
 const OfferFormContent: React.FC = () => {
 
+    const isDevMode = Utils.isDevMode();
+
+    const navigate = useNavigate();
+    const { t } = useTranslation();
+    const ctx = useOfferForm();
+    const userCtx = useUserContext();
+    const offersCtx = useOffersContext();
+    const globalCtx = useGlobalContext();
+    const [loading, setLoading] = useState(false);
+
+    const param = useParams<{ offerId?: string }>();
+    const offerId = param.offerId;
+
     const initFormIfEditMode = async (offerId?: string) => {
         if (!offerId) {
-            return;
+            prefillFormIfNewOffer()
+            return
         }
         try {
             setLoading(true);
@@ -40,21 +57,55 @@ const OfferFormContent: React.FC = () => {
         }
     }
 
-    const isDevMode = Utils.isDevMode();
+    const prefillFormIfNewOffer = async () => {
+        const position = await getGeoPosition()
+        if (position) {
+            const countryCode = position.country?.toLocaleLowerCase();
+            const languagesDictionary = globalCtx.dics.languages;
+            if (!languagesDictionary) {
+                throw new Error("LANGUAGES dictionary not found");
+            }
+            if (countryCode) {
+                const element = DictionaryUtil.getElementByCountryCode(languagesDictionary, countryCode || "")
+                if (element) {
+                    const currencyCode = element.values.CURRENCY
+                    if (currencyCode) {
+                        ctx.formCtx.setValue("STEP_THREE.currency", currencyCode);
+                    }
+                }
+            }
+            ctx.formCtx.setValue("STEP_TWO.geocodedPosition", position)
+            ctx.formCtx.setValue("STEP_TWO.locationCountry", countryCode)
+        }
 
-    const navigate = useNavigate();
-    const { t } = useTranslation();
-    const ctx = useOfferForm();
-    const userCtx = useUserContext();
-    const offersCtx = useOffersContext();
-    const [loading, setLoading] = useState(false);
+        const phoneNumber =  offersCtx.offers.find(o => o.phoneNumber)?.phoneNumber
+        if (phoneNumber) {
+            ctx.formCtx.setValue("STEP_ONE.phoneNumber", phoneNumber)
+        }
 
-    const param = useParams<{ offerId?: string }>();
-    const offerId = param.offerId;
+        ctx.formCtx.setValue("STEP_ONE.startDate", DateUtil.toLocalDateString(new Date()))
+        
+
+    }
 
     useEffect(() => {
         initFormIfEditMode(offerId);
     }, [offerId]);
+
+    const getGeoPosition = async (): Promise<GeocodedPosition | null> => {
+        if (userCtx.position) {
+            // Use backend geocoding to avoid API key restrictions
+            const position = await GoogleMapService.reverseGeocodeViaBackend({
+                lat: userCtx.position.lat,
+                lng: userCtx.position.lng,
+            });
+            if (position) {
+                return position;
+            }
+        }
+        return null;
+    }
+
 
     const onSubmit = async () => {
         const valid = await ctx.formCtx.trigger();
@@ -108,12 +159,11 @@ const OfferFormContent: React.FC = () => {
     }
 
     const handleDevFill = () => {
-        // TODO
         ctx.formCtx.setValue("STEP_ONE.category", "SCAFFOLD");
         ctx.formCtx.setValue("STEP_ONE.startDate", DateUtil.toLocalDateString(new Date()));
         ctx.formCtx.setValue("STEP_ONE.communicationLanguages", ["pl", "en"]);
         ctx.formCtx.setValue("STEP_ONE.phoneNumber", { prefix: "+48", number: "123456789" });
-        
+
         ctx.formCtx.setValue("STEP_TWO.locationCountry", "pl");
         ctx.formCtx.setValue("STEP_TWO.geocodedPosition", DEFAUT_POINT);
 

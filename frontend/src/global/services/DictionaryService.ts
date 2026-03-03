@@ -1,4 +1,5 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
+import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import { httpClient } from "global/services/http";
 
 const CACHE_KEY = 'dictionary_cache';
@@ -84,7 +85,7 @@ export const DictionaryService = {
             console.warn('LANGUAGES dictionary not found');
             return null
         }
-        const element = dictionary.elements.find(el => el.values.COUNTRY_CODE === countryCode);
+        const element = DictionaryUtil.getElementByCountryCode(dictionary, countryCode);
         if (!element?.code) {
             console.warn(`Language for country code ${countryCode} not found in LANGUAGES dictionary`);
             return null;

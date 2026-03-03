@@ -27,7 +27,7 @@ const WorkersSearchFilters: React.FC = () => {
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.communicationLanguages || [], languagesDictionary))
         : [];
 
-    const locationCountryDictionaryCode = languagesDictionary?.elements.find(e => e.values.COUNTRY_CODE === ctx.filters.locationCountry)?.code;
+    const locationCountryDictionaryCode = DictionaryUtil.getElementByCountryCode(languagesDictionary!, ctx.filters.locationCountry || "")?.code;
 
     const formatFromTo = (range?: DateRange | null): string | null => {
         if (!range?.start) return null;

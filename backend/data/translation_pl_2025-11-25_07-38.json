@@ -106,14 +106,14 @@
       }
     },
     "offer": {
-      "add": "Nowa oferta",
+      "add": "Dodaj ofertę",
       "statusActive": "Aktywna",
       "statusInactive": "Nieaktywna",
       "management": "Zarządzanie ofertami",
       "editButton": "Edytuj ofertę",
       "removeButton": "Usuń ofertę",
       "unlikeButton": "Usuń polubienie oferty",
-      "likeButton": "Polub ofertę",
+      "likeButton": "Polub ofertę", 
       "activateButton": "Aktywuj ofertę",
       "deactivateButton": "Dezaktywuj ofertę",
       "views": "Wyświetlenia",

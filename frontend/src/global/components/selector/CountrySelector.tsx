@@ -5,6 +5,7 @@ import { DictionaryService } from 'global/services/DictionaryService';
 import Loading from '../Loading';
 import { useTranslation } from 'react-i18next';
 import FloatingSelector from './FloatingSelector';
+import { DictionaryUtil } from '@shared/utils/DictionaryUtil';
 
 interface CountrySelectorProps {
     /** Currently selected country code (e.g., 'pl', 'de', 'gb') */
@@ -72,7 +73,7 @@ const CountrySelector = forwardRef((
 
     const handleSelect = (countryCode: string | null): void => {
         if (onSelect) {
-            const element = dictionary.elements.find(el => el.values.COUNTRY_CODE === countryCode);
+            const element = DictionaryUtil.getElementByCountryCode(dictionary, countryCode || "");
             onSelect(countryCode, element);
         }
     };

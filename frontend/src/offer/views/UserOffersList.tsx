@@ -10,6 +10,7 @@ import { BtnSizes } from "global/interface/controls.interface";
 import { useEffect, useState } from "react";
 import { OfferI } from "@shared/interfaces/OfferI";
 import { OffersService } from "offer/services/OffersService";
+import OfferListItem from "offer/components/OfferListItem";
 
 const UserOffersList: React.FC = () => {
 
@@ -68,14 +69,13 @@ const UserOffersList: React.FC = () => {
         <div className="list-view flex-1 flex flex-col">
 
             <div className="results flex flex-col gap-1">
-                {!!globalCtx.dics.languages && offers.map((offer, index) => ( null
-                    // TODO
-                    // <OfferTile
-                    //     key={offer.offerId}
-                    //     offer={offer}
-                    //     first={index === 0}
-                    //     last={index === offers.length - 1}
-                    // ></OfferTile>
+                {!!globalCtx.dics.languages && offers.map((offer, index) => (
+                    <OfferListItem
+                        key={offer.offerId}
+                        offer={offer}
+                        first={index === 0}
+                        last={index === offers.length - 1}
+                    ></OfferListItem>
                 ))}
             </div>
 

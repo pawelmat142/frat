@@ -25,6 +25,7 @@ import WorkerFormStep3 from "./WorkerFormStep3";
 import WorkerFormStep4 from "./WorkerFormStep4";
 import { UserProviders } from "@shared/interfaces/UserI";
 import { isOneOf } from "@shared/utils/util";
+import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -47,7 +48,6 @@ const WorkerFormView: React.FC = () => {
     const me = userCtx?.me;
 
     const [step, setStep] = React.useState<StepKey>(STEPS_ORDER[0]);
-    const [geolocatedPosition, setGeolocatedPosition] = React.useState<GeocodedPosition | null>(null);
 
     const worker: WorkerWithCertificates | null = workerCtx.worker || null;
 
@@ -79,7 +79,7 @@ const WorkerFormView: React.FC = () => {
         },
     });
 
-    const initPosition = async (): Promise<GeocodedPosition | null> => {
+    const getGeoPosition = async (): Promise<GeocodedPosition | null> => {
         if (userCtx.position) {
             // Use backend geocoding to avoid API key restrictions
             const position = await GoogleMapService.reverseGeocodeViaBackend({
@@ -87,7 +87,6 @@ const WorkerFormView: React.FC = () => {
                 lng: userCtx.position.lng,
             });
             if (position) {
-                setGeolocatedPosition(position);
                 return position;
             }
         }
@@ -97,7 +96,7 @@ const WorkerFormView: React.FC = () => {
     const initFormWithUserData = async () => {
         if (!me) return;
         setLoading(true);
-        const position = await initPosition();
+        const position = await getGeoPosition();
 
         formRef.setValue("step1.fullName", me.displayName)
 
@@ -109,7 +108,7 @@ const WorkerFormView: React.FC = () => {
             formRef.setValue("step1.avatarRef", me.avatarRef);
         }
         if (position) {
-            const element = globalCtx.dics.languages?.elements.find(lang => lang.values.COUNTRY_CODE === position.country?.toLocaleLowerCase());
+            const element = DictionaryUtil.getElementByCountryCode(globalCtx.dics.languages!, position.country?.toLocaleLowerCase() || "");
 
             if (element) {
                 formRef.setValue("step1.phoneNumber.prefix", element.values.PHONE_PREFIX);
@@ -121,14 +120,14 @@ const WorkerFormView: React.FC = () => {
     }
 
     const resetPositionFormData = async () => {
-        const position = await initPosition();
+        const position = await getGeoPosition();
         if (position) {
             setPositionFormDataByLocation(position);
         }
     }
 
     const getDictionaryElementByPosition = (position: GeocodedPosition) => {
-        return globalCtx.dics.languages?.elements.find(lang => lang.values.COUNTRY_CODE === position.country?.toLocaleLowerCase());
+        return DictionaryUtil.getElementByCountryCode(globalCtx.dics.languages!, position.country?.toLocaleLowerCase() || "");
     }
 
     const setPositionFormDataByLocation = (position: GeocodedPosition) => {
@@ -171,7 +170,7 @@ const WorkerFormView: React.FC = () => {
             };
         }
 
-        const geoPosition: GeocodedPosition | null = worker?.geocodedPosition || await initPosition();
+        const geoPosition: GeocodedPosition | null = worker?.geocodedPosition || await getGeoPosition();
 
         const availabilityDateRanges: DateRange[] = (worker.availabilityDateRanges || [])
             .map(r => DateRangeUtil.toDateRange(r))

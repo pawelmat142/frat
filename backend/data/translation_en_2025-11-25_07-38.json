@@ -107,7 +107,7 @@
       }
     },
     "offer": {
-      "add": "New offer",
+      "add": "Add offer",
       "statusActive": "Active",
       "statusInactive": "Inactive",
       "management": "Offer management",

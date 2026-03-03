@@ -1,0 +1,429 @@
+{
+  "code": "LANGUAGES",
+  "description": "Languages list",
+  "version": 20,
+  "status": "INACTIVE",
+  "elements": [
+    {
+      "code": "pl",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/pl.png",
+        "NAME": "dictionary.LANGUAGES.NAME.pl",
+        "LOCALE_CODE": "pl-PL",
+        "COUNTRY_CODE": "pl",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.pl",
+        "PHONE_PREFIX": "+48",
+        "CURRENCY": "PLN"
+      },
+      "description": "Polish"
+    },
+    {
+      "code": "en",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/gb.png",
+        "NAME": "dictionary.LANGUAGES.NAME.en",
+        "LOCALE_CODE": "en-GB",
+        "COUNTRY_CODE": "gb",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.en",
+        "PHONE_PREFIX": "+44",
+        "CURRENCY": "EUR"
+      },
+      "description": "English"
+    },
+    {
+      "code": "de",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/de.png",
+        "NAME": "dictionary.LANGUAGES.NAME.de",
+        "LOCALE_CODE": "de-DE",
+        "COUNTRY_CODE": "de",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.de",
+        "PHONE_PREFIX": "+49",
+        "CURRENCY": "EUR"
+      },
+      "description": "German"
+    },
+    {
+      "code": "fr",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/fr.png",
+        "NAME": "dictionary.LANGUAGES.NAME.fr",
+        "LOCALE_CODE": "fr-FR",
+        "COUNTRY_CODE": "fr",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.fr",
+        "PHONE_PREFIX": "+33",
+        "CURRENCY": "EUR"
+      },
+      "description": "French"
+    },
+    {
+      "code": "es",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/es.png",
+        "NAME": "dictionary.LANGUAGES.NAME.es",
+        "LOCALE_CODE": "es-ES",
+        "COUNTRY_CODE": "es",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.es",
+        "PHONE_PREFIX": "+34",
+        "CURRENCY": "EUR"
+      },
+      "description": "Spanish"
+    },
+    {
+      "code": "it",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/it.png",
+        "NAME": "dictionary.LANGUAGES.NAME.it",
+        "LOCALE_CODE": "it-IT",
+        "COUNTRY_CODE": "it",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.it",
+        "PHONE_PREFIX": "+39",
+        "CURRENCY": "EUR"
+      },
+      "description": "Italian"
+    },
+    {
+      "code": "pt",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/pt.png",
+        "NAME": "dictionary.LANGUAGES.NAME.pt",
+        "LOCALE_CODE": "pt-PT",
+        "COUNTRY_CODE": "pt",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.pt",
+        "PHONE_PREFIX": "+351",
+        "CURRENCY": "EUR"
+      },
+      "description": "Portuguese"
+    },
+    {
+      "code": "nl",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/nl.png",
+        "NAME": "dictionary.LANGUAGES.NAME.nl",
+        "LOCALE_CODE": "nl-NL",
+        "COUNTRY_CODE": "nl",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.nl",
+        "PHONE_PREFIX": "+31",
+        "CURRENCY": "EUR"
+      },
+      "description": "Dutch"
+    },
+    {
+      "code": "cs",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/cz.png",
+        "NAME": "dictionary.LANGUAGES.NAME.cs",
+        "LOCALE_CODE": "cs-CZ",
+        "COUNTRY_CODE": "cz",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.cs",
+        "PHONE_PREFIX": "+420",
+        "CURRENCY": "EUR"
+      },
+      "description": "Czech"
+    },
+    {
+      "code": "sk",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/sk.png",
+        "NAME": "dictionary.LANGUAGES.NAME.sk",
+        "LOCALE_CODE": "sk-SK",
+        "COUNTRY_CODE": "sk",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.sk",
+        "PHONE_PREFIX": "+421",
+        "CURRENCY": "EUR"
+      },
+      "description": "Slovak"
+    },
+    {
+      "code": "hu",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/hu.png",
+        "NAME": "dictionary.LANGUAGES.NAME.hu",
+        "LOCALE_CODE": "hu-HU",
+        "COUNTRY_CODE": "hu",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.hu",
+        "PHONE_PREFIX": "+36",
+        "CURRENCY": "EUR"
+      },
+      "description": "Hungarian"
+    },
+    {
+      "code": "ro",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/ro.png",
+        "NAME": "dictionary.LANGUAGES.NAME.ro",
+        "LOCALE_CODE": "ro-RO",
+        "COUNTRY_CODE": "ro",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.ro",
+        "PHONE_PREFIX": "+40",
+        "CURRENCY": "EUR"
+      },
+      "description": "Romanian"
+    },
+    {
+      "code": "bg",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/bg.png",
+        "NAME": "dictionary.LANGUAGES.NAME.bg",
+        "LOCALE_CODE": "bg-BG",
+        "COUNTRY_CODE": "bg",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.bg",
+        "PHONE_PREFIX": "+359",
+        "CURRENCY": "EUR"
+      },
+      "description": "Bulgarian"
+    },
+    {
+      "code": "el",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/gr.png",
+        "NAME": "dictionary.LANGUAGES.NAME.el",
+        "LOCALE_CODE": "el-GR",
+        "COUNTRY_CODE": "gr",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.el",
+        "PHONE_PREFIX": "+30",
+        "CURRENCY": "EUR"
+      },
+      "description": "Greek"
+    },
+    {
+      "code": "sv",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/se.png",
+        "NAME": "dictionary.LANGUAGES.NAME.sv",
+        "LOCALE_CODE": "sv-SE",
+        "COUNTRY_CODE": "se",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.sv",
+        "PHONE_PREFIX": "+46",
+        "CURRENCY": "EUR"
+      },
+      "description": "Swedish"
+    },
+    {
+      "code": "fi",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/fi.png",
+        "NAME": "dictionary.LANGUAGES.NAME.fi",
+        "LOCALE_CODE": "fi-FI",
+        "COUNTRY_CODE": "fi",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.fi",
+        "PHONE_PREFIX": "+358",
+        "CURRENCY": "EUR"
+      },
+      "description": "Finnish"
+    },
+    {
+      "code": "da",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/dk.png",
+        "NAME": "dictionary.LANGUAGES.NAME.da",
+        "LOCALE_CODE": "da-DK",
+        "COUNTRY_CODE": "dk",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.da",
+        "PHONE_PREFIX": "+45",
+        "CURRENCY": "EUR"
+      },
+      "description": "Danish"
+    },
+    {
+      "code": "no",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/no.png",
+        "NAME": "dictionary.LANGUAGES.NAME.no",
+        "LOCALE_CODE": "no-NO",
+        "COUNTRY_CODE": "no",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.no",
+        "PHONE_PREFIX": "+47",
+        "CURRENCY": "EUR"
+      },
+      "description": "Norwegian"
+    },
+    {
+      "code": "et",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/ee.png",
+        "NAME": "dictionary.LANGUAGES.NAME.et",
+        "LOCALE_CODE": "et-EE",
+        "COUNTRY_CODE": "ee",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.et",
+        "PHONE_PREFIX": "+372",
+        "CURRENCY": "EUR"
+      },
+      "description": "Estonian"
+    },
+    {
+      "code": "lt",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/lt.png",
+        "NAME": "dictionary.LANGUAGES.NAME.lt",
+        "LOCALE_CODE": "lt-LT",
+        "COUNTRY_CODE": "lt",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.lt",
+        "PHONE_PREFIX": "+370",
+        "CURRENCY": "EUR"
+      },
+      "description": "Lithuanian"
+    },
+    {
+      "code": "lv",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/lv.png",
+        "NAME": "dictionary.LANGUAGES.NAME.lv",
+        "LOCALE_CODE": "lv-LV",
+        "COUNTRY_CODE": "lv",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.lv",
+        "PHONE_PREFIX": "+371",
+        "CURRENCY": "EUR"
+      },
+      "description": "Latvian"
+    },
+    {
+      "code": "hr",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/hr.png",
+        "NAME": "dictionary.LANGUAGES.NAME.hr",
+        "LOCALE_CODE": "hr-HR",
+        "COUNTRY_CODE": "hr",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.hr",
+        "PHONE_PREFIX": "+385",
+        "CURRENCY": "EUR"
+      },
+      "description": "Croatian"
+    },
+    {
+      "code": "sl",
+      "active": true,
+      "values": {
+        "SRC": "https://flagcdn.com/32x24/si.png",
+        "NAME": "dictionary.LANGUAGES.NAME.sl",
+        "LOCALE_CODE": "sl-SI",
+        "COUNTRY_CODE": "si",
+        "COUNTRY_NAME": "dictionary.LANGUAGES.COUNTRY_NAME.sl",
+        "PHONE_PREFIX": "+386",
+        "CURRENCY": "EUR"
+      },
+      "description": "Slovenian"
+    }
+  ],
+  "columns": [
+    {
+      "code": "NAME",
+      "type": "string",
+      "required": true,
+      "description": "Translation key",
+      "defaultValue": "translationKey",
+      "translatable": true
+    },
+    {
+      "code": "SRC",
+      "type": "string",
+      "required": true,
+      "description": "Country flag URL",
+      "defaultValue": "none",
+      "translatable": false
+    },
+    {
+      "code": "LOCALE_CODE",
+      "type": "string",
+      "required": true,
+      "description": "Locale code",
+      "defaultValue": "en-US",
+      "translatable": false
+    },
+    {
+      "code": "COUNTRY_NAME",
+      "type": "string",
+      "required": true,
+      "description": "Country translation key",
+      "defaultValue": "country.code",
+      "translatable": true
+    },
+    {
+      "code": "COUNTRY_CODE",
+      "type": "string",
+      "required": true,
+      "description": "Country code",
+      "defaultValue": "none",
+      "translatable": false
+    },
+    {
+      "code": "PHONE_PREFIX",
+      "type": "string",
+      "required": true,
+      "description": "country phone number prefix",
+      "defaultValue": "+00",
+      "translatable": false
+    },
+    {
+      "code": "CURRENCY",
+      "type": "string",
+      "required": true,
+      "description": "Country currency code",
+      "defaultValue": "EUR",
+      "translatable": false
+    }
+  ],
+  "groups": [
+    {
+      "code": "TRANSLATIONS",
+      "active": true,
+      "elementCodes": [
+        "pl",
+        "en"
+      ]
+    },
+    {
+      "code": "COMMUNICATION",
+      "active": true,
+      "elementCodes": [
+        "pl",
+        "de",
+        "en",
+        "fr",
+        "es",
+        "it",
+        "pt",
+        "nl",
+        "cs",
+        "sk",
+        "hu",
+        "ro",
+        "bg",
+        "el",
+        "sv",
+        "fi",
+        "da",
+        "no",
+        "et",
+        "lt",
+        "lv",
+        "hr",
+        "sl"
+      ]
+    }
+  ],
+  "createdAt": "2025-09-27T10:57:50.629Z",
+  "updatedAt": "2026-01-01T11:12:18.833Z"
+}
