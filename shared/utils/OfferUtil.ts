@@ -87,31 +87,35 @@ export abstract class OfferUtil {
             currentStep: OfferFormSteps.STEP_ONE,
             STEP_ONE: {
                 category: offer.category ?? null,
-                locationCountry: offer.locationCountry ?? null,
-                displayAddress: offer.displayAddress ?? null,
-                position: position,
-                dateRange: dateRange,
-                availableSlots: offer.availableSlots ?? null,
+                startDate: DateUtil.toLocalDateString(offer.startDate) ?? null,
+                communicationLanguages: offer.languagesRequired ?? [],
+                phoneNumber: offer.phoneNumber ?? null,
+
+                // TODO remove
+                // locationCountry: offer.locationCountry ?? null,
+                // displayAddress: offer.displayAddress ?? null,
+                // position: position,
+                // dateRange: dateRange,
+                // availableSlots: offer.availableSlots ?? null,
             },
             STEP_TWO: {
-                skillsRequired: offer.skillsRequired,
-                skillsNiceToHave: offer.skillsNiceToHave,
-                certificatesRequired: offer.certificatesRequired,
-                certificatesNiceToHave: offer.certificatesNiceToHave,
-                languagesRequired: offer.languagesRequired,
-                languagesNiceToHave: offer.languagesNiceToHave,
+                locationCountry: offer.locationCountry ?? null,
+                geocodedPosition: offer.point ? PositionUtil.fromGeoPoint(offer.point) : null,
+
+                // TODO
+                // skillsRequired: offer.skillsRequired,
+                // skillsNiceToHave: offer.skillsNiceToHave,
+                // certificatesRequired: offer.certificatesRequired,
+                // certificatesNiceToHave: offer.certificatesNiceToHave,
+                // languagesRequired: offer.languagesRequired,
+                // languagesNiceToHave: offer.languagesNiceToHave,
             },
             STEP_THREE: {
-                monthlySalaryStart: offer.monthlySalaryStart ? String(offer.monthlySalaryStart) : undefined,
-                monthlySalaryEnd: offer.monthlySalaryEnd ? String(offer.monthlySalaryEnd) : undefined,
-                hourlySalaryStart: offer.hourlySalaryStart ? String(offer.hourlySalaryStart) : undefined,
-                hourlySalaryEnd: offer.hourlySalaryEnd ? String(offer.hourlySalaryEnd) : undefined,
-                currency: offer.currency ?? null,
-            },
-            STEP_FOUR: {
                 displayName: offer.displayName ?? null,
+                currency: offer.currency ?? null,
+                salary: offer.salary ?? null,
                 description: offer.description ?? null,
-            }
+            },
         };
     }
 

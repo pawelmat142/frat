@@ -3,16 +3,9 @@ import { Controller } from "react-hook-form"
 import { useTranslation } from "react-i18next";
 import { useOfferForm } from "./OfferFormProvider";
 import DictionarySelector from "global/components/selector/DictionarySelector";
-import PositionSelector from "global/components/selector/position/PositionSelector";
-import DateRangeInput from "global/components/callendar/DateRangeInputViewSelector";
-import { useRef } from "react";
-import { useState } from "react";
-import { PositionService } from "global/services/PositionService";
-import { DictionaryService } from "global/services/DictionaryService";
-import Loading from "global/components/Loading";
-import FloatingInput from "global/components/controls/FloatingInput";
-import { useUserContext } from "user/UserProvider";
 import { Position } from "@shared/interfaces/MapsInterfaces";
+import DateInputViewSelector from "global/components/callendar/DateInputViewSelector";
+import PhoneNumberFloatingInput from "global/components/controls/PhoneNumberFloatingInput";
 
 // TODO move to config
 export const DEFAUT_POINT: Position = { lat: 52.2297, lng: 21.0122 }; // Warsaw center as default point
@@ -21,49 +14,9 @@ const OfferFormStepOne: React.FC = () => {
 
     const { t } = useTranslation();
     const required = FormValidator.required(t);
-    const dateRangeStartRequired = FormValidator.dateRangeStartRequired(t);
-    const positiveInteger = FormValidator.positiveInterger(t);
     const ctx = useOfferForm();
-    const userCtx = useUserContext();
-    const countryCacheRef = useRef<Record<string, string>>({});
-    const [geoLoading, setGeoLoading] = useState(false);
 
-    const form = ctx.formCtx.getValues().STEP_ONE;
-
-    const preparePosition = (): Position => {
-        return userCtx.position || DEFAUT_POINT; 
-    }
-
-    /**
-     * Attempt to reverse geocode the provided lat/lng and update country filter automatically.
-     * Uses OpenStreetMap Nominatim (public) – consider proxying via backend for production to respect rate limits.
-     */
-    const autofillCountryByPosition = async (position?: Position | null) => {
-        if (!position) {
-            return;
-        }
-        const key = `${position.lat.toFixed(3)},${position.lng.toFixed(3)}`; // coarse key to improve cache hits
-        if (countryCacheRef.current[key]) {
-            const country = countryCacheRef.current[key];
-            ctx.formCtx.setValue("STEP_ONE.locationCountry", country);
-            return;
-        }
-        setGeoLoading(true);
-        try {
-            const countryCode = await PositionService.callApiFindCountryByPosition(position);
-            if (countryCode) {
-                const languageCode = await DictionaryService.getLanguageDictionaryCodeByCountryCode(countryCode || '');
-                if (languageCode) {
-                    countryCacheRef.current[key] = languageCode;
-                    ctx.formCtx.setValue("STEP_ONE.locationCountry", languageCode);
-                }
-            }
-        } catch (e) {
-            // Intentionally swallow errors – network issues shouldn't break filter sheet.
-        } finally {
-            setGeoLoading(false);
-        }
-    }
+    // TODO prefil phone number 
 
     return (
         <>
@@ -93,82 +46,53 @@ const OfferFormStepOne: React.FC = () => {
                 />
 
                 <Controller
-                    name="STEP_ONE.locationCountry"
+                    name="STEP_ONE.communicationLanguages"
+                    control={ctx.formCtx.control}
+                    render={({ field }) => <DictionarySelector
+                        type="multi"
+                        className="w-full"
+                        valueInput={field.value}
+                        onSelectMulti={items => field.onChange(items.map(i => String(i)))}
+                        label={t("offer.languagesRequired")}
+                        code="LANGUAGES"
+                        groupCode="COMMUNICATION"
+                        fullWidth
+                        error={ctx.formCtx.formState.errors.STEP_ONE?.communicationLanguages}
+                    />
+                    }
+                />
+
+                <Controller
+                    name={`STEP_ONE.startDate`}
                     control={ctx.formCtx.control}
                     rules={required}
+                    render={({ field }) => <DateInputViewSelector
+                        label={t("offer.dateRange")}
+                        className="w-full"
+                        value={field.value}
+                        onChange={(date) => {
+                            field.onChange(date);
+                        }}
+                        error={ctx.formCtx.formState.errors.STEP_ONE?.startDate?.message}
+                    />
+                    }
+                />
+
+                <Controller
+                    name="STEP_ONE.phoneNumber"
+                    control={ctx.formCtx.control}
+                    rules={{
+                        ...required,
+                        ...FormValidator.phoneNumber(t)
+                    }}
                     render={({ field }) => (
-                        <DictionarySelector
-                            className="w-full"
-                            valueInput={field.value || ''}
-                            onSelect={item => field.onChange(item ? String(item) : null)}
-                            label={t("offer.workCountry")}
-                            code="LANGUAGES"
-                            groupCode="COMMUNICATION"
-                            elementLabelTranslationKey="COUNTRY_NAME"
+                        <PhoneNumberFloatingInput
+                            {...field}
+                            value={field.value || { prefix: '', phoneNumber: '' }}
+                            label={t("employeeProfile.form.phoneNumber")}
                             fullWidth
                             required
-                            error={ctx.formCtx.formState.errors.STEP_ONE?.locationCountry}
-                        />
-                    )}
-                />
-
-                {geoLoading ? (<Loading></Loading>) : (
-                    <Controller
-                        name="STEP_ONE.position"
-                        control={ctx.formCtx.control}
-                        render={({ field }) => (
-                            <PositionSelector
-                                label={t("offer.workLocation")}
-                                name="STEP_ONE.position"
-                                className="w-full"
-                                value={field.value}
-                                initialPosition={ preparePosition() }
-                                required
-                                onChange={(p) => {
-                                    autofillCountryByPosition(p);
-                                    field.onChange(p);
-                                }}
-                                error={ctx.formCtx.formState.errors.STEP_ONE?.position}
-                            />
-                        )}
-                    />
-                )}
-
-                <Controller
-                    name="STEP_ONE.dateRange"
-                    control={ctx.formCtx.control}
-                    rules={dateRangeStartRequired}
-                    render={({ field }) => (
-                        <DateRangeInput
-                            label={t("offer.dateRange")}
-                            name="STEP_ONE.dateRange"
-                            className="w-full"
-                            value={field.value}
-                            required
-                            onChange={(p) => {
-                                field.onChange(p);
-                            }}
-                            error={ctx.formCtx.formState.errors.STEP_ONE?.dateRange?.message}
-                        />
-                    )}
-                />
-
-                <Controller
-                    name="STEP_ONE.availableSlots"
-                    control={ctx.formCtx.control}
-                    rules={positiveInteger}
-                    render={({ field }) => (
-                        <FloatingInput
-                            type="number"
-                            label={t("offer.availableSlots")}
-                            name="STEP_ONE.availableSlots"
-                            className="w-full"
-                            value={field.value || null}
-                            required
-                            onChange={(p) => {
-                                field.onChange(p);
-                            }}
-                            error={ctx.formCtx.formState.errors.STEP_ONE?.availableSlots}
+                            error={ctx.formCtx.formState.errors.STEP_ONE?.phoneNumber}
                         />
                     )}
                 />

@@ -90,6 +90,7 @@ export interface WorkerFormStep1 {
   email: string;
   communicationLanguages: string[];
   avatarRef: AvatarRef;
+  // TODO - add step for bio and move it there
   bio?: string;
 }
 

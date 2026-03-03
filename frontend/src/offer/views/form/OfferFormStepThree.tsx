@@ -1,39 +1,18 @@
-import FloatingInput from "global/components/controls/FloatingInput";
 import { FormValidator } from "global/FormValidator";
-import { Controller } from "react-hook-form"
 import { useTranslation } from "react-i18next";
 import { useOfferForm } from "./OfferFormProvider";
-import { OfferForm, Currencies, Currency } from "@shared/interfaces/OfferI";
-import { useEffect } from "react";
 import CurrencySelector from "offer/components/CurrencySelector";
+import { Controller } from "react-hook-form";
+import FloatingInput from "global/components/controls/FloatingInput";
+import FloatingTextarea from "global/components/controls/FloatingTextarea";
 
+// TODO remove
 const OfferFormStepThree: React.FC = () => {
 
     const { t } = useTranslation();
     const required = FormValidator.required(t);
-    // Custom validator: at least one of monthlySalaryStart or hourlySalaryStart must be filled
-    const atLeastOneSalaryRequired = {
-        validate: (_: any, formValues: OfferForm) => {
-            const monthly = formValues?.STEP_THREE?.monthlySalaryStart;
-            const hourly = formValues?.STEP_THREE?.hourlySalaryStart;
-            if ((monthly == null || monthly === "") && (hourly == null || hourly === "")) {
-                return t("offer.validation.atLeastOneSalaryRequired");
-            }
-            return true;
-        }
-    };
-
 
     const ctx = useOfferForm();
-
-
-
-    useEffect(() => {
-        if (!ctx.form.STEP_THREE?.currency) {
-            ctx.formCtx.setValue("STEP_THREE.currency", Currencies.EUR);
-        }
-    }, [])
-
 
     return (
         <>
@@ -43,65 +22,36 @@ const OfferFormStepThree: React.FC = () => {
             <div className="flex flex-col gap-2">
 
                 <Controller
-                    name="STEP_THREE.monthlySalaryStart"
+                    name="STEP_THREE.displayName"
                     control={ctx.formCtx.control}
-                    rules={atLeastOneSalaryRequired}
+                    rules={required}
                     render={({ field }) => (
                         <FloatingInput
-                            type="number"
-                            {...field}
-                            value={field.value ?? null}
-                            label={t("offer.monthlySalaryStart")}
-                            fullWidth
-                            error={ctx.formCtx.formState.errors.STEP_THREE?.monthlySalaryStart}
+                            label={t("offer.displayName")}
+                            name="STEP_FOUR.displayName"
+                            className="w-full mb-5"
+                            value={field.value || ''}
+                            required
+                            onChange={(p) => {
+                                field.onChange(p);
+                            }}
+                            error={ctx.formCtx.formState.errors.STEP_THREE?.displayName}
                         />
                     )}
                 />
 
                 <Controller
-                    name="STEP_THREE.monthlySalaryEnd"
+                    name="STEP_THREE.salary"
                     control={ctx.formCtx.control}
-                    render={({ field }) => (
-                        <FloatingInput
-                            className="mb-5"
-                            type="number"
-                            {...field}
-                            value={field.value ?? null}
-                            label={t("offer.monthlySalaryEnd")}
-                            fullWidth
-                            error={ctx.formCtx.formState.errors.STEP_THREE?.monthlySalaryEnd}
-                        />
-                    )}
-                />
-
-                <Controller
-                    name="STEP_THREE.hourlySalaryStart"
-                    control={ctx.formCtx.control}
-                    rules={atLeastOneSalaryRequired}
+                    rules={required}
                     render={({ field }) => (
                         <FloatingInput
                             type="number"
                             {...field}
                             value={field.value ?? null}
-                            label={t("offer.hourlySalaryStart")}
+                            label={t("offer.salary")}
                             fullWidth
-                            error={ctx.formCtx.formState.errors.STEP_THREE?.hourlySalaryStart}
-                        />
-                    )}
-                />
-
-                <Controller
-                    name="STEP_THREE.hourlySalaryEnd"
-                    control={ctx.formCtx.control}
-                    render={({ field }) => (
-                        <FloatingInput
-                            type="number"
-                            className="mb-5"
-                            {...field}
-                            value={field.value ?? null}
-                            label={t("offer.hourlySalaryEnd")}
-                            fullWidth
-                            error={ctx.formCtx.formState.errors.STEP_THREE?.hourlySalaryEnd}
+                            error={ctx.formCtx.formState.errors.STEP_THREE?.salary}
                         />
                     )}
                 />
@@ -112,6 +62,24 @@ const OfferFormStepThree: React.FC = () => {
                     value={ctx.form.STEP_THREE?.currency}
                     required
                     className="mb-5"
+                />
+
+
+                <Controller
+                    name="STEP_THREE.description"
+                    control={ctx.formCtx.control}
+                    render={({ field }) => (
+                        <FloatingTextarea
+                            label={t("offer.description")}
+                            name="STEP_THREE.description"
+                            className="w-full"
+                            value={field.value || ''}
+                            onChange={(p) => {
+                                field.onChange(p);
+                            }}
+                            error={ctx.formCtx.formState.errors.STEP_THREE?.description}
+                        />
+                    )}
                 />
 
             </div>

@@ -1,5 +1,5 @@
-import { DateRange, Point } from "./WorkerProfileI";
-import { Position } from "./MapsInterfaces";
+import { DateRange, ParsedPhoneNumber, Point } from "./WorkerProfileI";
+import { GeocodedPosition, Position } from "./MapsInterfaces";
 
 export interface OfferI {
 
@@ -9,34 +9,35 @@ export interface OfferI {
 
     // BASIC FIELDS
     category: string
+    startDate: Date
+    languagesRequired?: string[]
+    phoneNumber: ParsedPhoneNumber;
+
 
     locationCountry: string
     displayAddress?: string
     point?: Point
 
-    startDate: Date
-    endDate?: Date
+   // DETAILS FIELDS    
+    displayName?: string
+    currency?: Currency;
+    salary?: number;
+    description?: string
+    
 
-    // REQUIREMENTS FIELDS
+    // TODO remove
+    endDate?: Date
     skillsRequired?: string[]
     skillsNiceToHave?: string[]
-
     certificatesRequired?: string[]
     certificatesNiceToHave?: string[]
-
-    languagesRequired?: string[]
     languagesNiceToHave?: string[]
-
-    // SALARY FIELDS
     hourlySalaryStart?: number;
     hourlySalaryEnd?: number;
     monthlySalaryStart?: number;
     monthlySalaryEnd?: number;
-    currency?: Currency;
 
-    // DETAILS FIELDS    
-    displayName?: string
-    description?: string
+ 
 
     availableSlots: number
     // TODO power fields
@@ -91,14 +92,12 @@ export interface OfferForm {
     STEP_ONE: OfferFormOne;
     STEP_TWO?: OfferFormTwo;
     STEP_THREE?: OfferFormThree;
-    STEP_FOUR?: OfferFormFour;
 }
 
 export const OfferFormSteps = {
     STEP_ONE: 'STEP_ONE',
     STEP_TWO: 'STEP_TWO',
     STEP_THREE: 'STEP_THREE',
-    STEP_FOUR: 'STEP_FOUR',
 } as const;
 export type OfferFormStep = typeof OfferFormSteps[keyof typeof OfferFormSteps];
 
@@ -106,12 +105,17 @@ export const OFFER_STEPS_ORDER = [
     OfferFormSteps.STEP_ONE,
     OfferFormSteps.STEP_TWO,
     OfferFormSteps.STEP_THREE,
-    OfferFormSteps.STEP_FOUR,
 ]
 
 export interface OfferFormOne {
     category: string | null;
-    locationCountry: string | null;
+    startDate: string | null;
+    communicationLanguages: string[];
+    phoneNumber: ParsedPhoneNumber | null;
+
+    // TODO remove
+    locationCountry?: string | null;
+    geocodedPosition?: GeocodedPosition | null;
     displayAddress?: string | null;
     position?: Position | null;
     dateRange?: DateRange | null;
@@ -119,6 +123,10 @@ export interface OfferFormOne {
 }
 
 export interface OfferFormTwo {
+    locationCountry: string | null;
+    geocodedPosition: GeocodedPosition | null;
+
+    // TODO remove
     skillsRequired?: string[];
     skillsNiceToHave?: string[];
     certificatesRequired?: string[];
@@ -128,16 +136,16 @@ export interface OfferFormTwo {
 }
 
 export interface OfferFormThree {
+    displayName: string | null;
+    currency: Currency | null;
+    salary: number | null;
+    description?: string | null;
+
+    // TODO remove
     monthlySalaryStart?: string | null;
     monthlySalaryEnd?: string | null;
     hourlySalaryStart?: string | null;
     hourlySalaryEnd?: string | null;
-    currency?: Currency | null;
-}
-
-export interface OfferFormFour {
-    displayName?: string | null;
-    description?: string | null;
 }
 
 export interface OfferSearchFilters {

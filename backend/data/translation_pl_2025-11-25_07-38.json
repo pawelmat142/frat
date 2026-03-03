@@ -148,7 +148,8 @@
         },
         "STEP_TWO": {
           "label": "Krok 2",
-          "title": "Wymagania"
+          "title": "Lokalizacja",
+          "info": "*Podanie orientacyjnej lokalizacji jest wymagane do działania wyszukiwarki i ułatwia innym znalezienie Twojej oferty."
         },
         "STEP_FOUR": {
           "label": "Krok 4",
@@ -156,7 +157,7 @@
         },
         "STEP_THREE": {
           "label": "Krok 3",
-          "title": "Wynagrodzenie"
+          "title": "Opis i wynagrodzenie"
         },
         "validation": {
           "atLeastOneSalaryRequired": "Wymagane jest podanie wynagrodzenia (miesięczne lub godzinowe).",
@@ -166,25 +167,16 @@
           "notFound": "Nie znaleziono oferty."
         }
       },
-      "dateRange": "Czas trwania umowy",
+      "dateRange": "Data rozpoczęcia",
       "search": "Szukaj ofert",
       "workCountry": "Kraj pracy",
       "workCategory": "Kategoria",
-      "workLocation": "Miejsce pracy",
-      "skillsRequired": "Wymagane umiejętności",
-      "skillsNiceToHave": "Mile widziane umiejętności",
-      "certificatesRequired": "Wymagane certyfikaty",
-      "certificatesNiceToHave": "Mile widziane certyfikaty",
       "languagesRequired": "Wymagane języki",
       "languagesNiceToHave": "Mile widziane języki",
-      "hourlySalaryStart": "Stawka godzinowa od",
-      "hourlySalaryEnd": "do",
-      "monthlySalaryStart": "Wynagrodzenie miesięczne od",
-      "monthlySalaryEnd": "do",
+      "salary": "Stawka godzinowa od",
       "currency": "Waluta",
-      "displayName": "Nazwa wyświetlana",
-      "description": "Opis oferty",
-      "availableSlots": "Dostępne miejsca",
+      "displayName": "Tytuł",
+      "description": "Krótki opis oferty",
       "cannotLikeOwnOffer": "Nie możesz polubić własnej oferty"
     },
     "theme": {
@@ -626,7 +618,7 @@
         "notFound": "Nie znaleziono profilu",
         "startDate": "Brak daty rozpoczęcia",
         "uidRequired": "UID profilu pracownika jest wymagany",
-        "dataRequired": "Dane profilu pracownika są wymagane",
+        " equired": "Dane profilu pracownika są wymagane",
         "emailRequired": "Email użytkownika jest wymagany do utworzenia profilu pracownika",
         "statusRequired": "Status profilu pracownika jest wymagany",
         "fullNameRequired": "Pełne imię i nazwisko profilu pracownika jest wymagane",

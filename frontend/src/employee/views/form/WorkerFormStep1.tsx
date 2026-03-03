@@ -81,7 +81,7 @@ const WorkerFormStep1: React.FC<Props> = ({ formRef }) => {
                     setValue={setValue}
                     watch={watch}
                     formState={formState}
-                />
+                />  
 
                 <Controller
                     name="step1.avatarRef"

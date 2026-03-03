@@ -13,8 +13,9 @@ const defaultNewForm = (): OfferForm => ({
     currentStep: OfferFormSteps.STEP_ONE,
     STEP_ONE: {
         category: null,
-        locationCountry: null,
-        availableSlots: null
+        startDate: null,
+        communicationLanguages: [],
+        phoneNumber: null,
     }
 })
 
