@@ -85,7 +85,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
         // TODO add phone number to offer
         return {
             prefix: '+55',
-            phoneNumber: '555 555 555'
+            number: '555 555 555'
         }
     }
 
@@ -105,14 +105,14 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
     const openPhoneCall = () => {
         if (!phoneNumber || isMyOffer) return;
 
-        const number = `${phoneNumber.prefix}${phoneNumber.phoneNumber}`
+        const number = `${phoneNumber.prefix}${phoneNumber.number}`
         if (isDesktop) {
             // copy to clipboard
             navigator.clipboard.writeText(number);
             toast.info(t('employeeProfile.phoneNumberCopied', { number }));
             return;
         }
-        window.location.href = `tel:${phoneNumber.prefix}${phoneNumber.phoneNumber}`;
+        window.location.href = `tel:${phoneNumber.prefix}${phoneNumber.number}`;
     }
 
     const rightSection = isMyOffer ? null : <div className="flex justify-end items-center gap-2">

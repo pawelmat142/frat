@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import OfferFormProvider, { useOfferForm } from "./OfferFormProvider";
-import { OFFER_STEPS_ORDER, OfferFormSteps, OfferI } from "@shared/interfaces/OfferI";
+import { Currencies, OFFER_STEPS_ORDER, OfferFormSteps, OfferI } from "@shared/interfaces/OfferI";
 import { toast } from "react-toastify";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
@@ -18,6 +18,10 @@ import { OfferUtil } from "@shared/utils/OfferUtil";
 import { Utils } from "global/utils/utils";
 import FormWizard from "global/components/FormWizard/FormWizard";
 import { DateUtil } from "@shared/utils/DateUtil";
+import { Position } from "@shared/interfaces/MapsInterfaces";
+
+// TODO move to config - share with front
+const DEFAUT_POINT: Position = { lat: 52.2297, lng: 21.0122 }; // Warsaw center as default point
 
 const OfferFormContent: React.FC = () => {
 
@@ -61,7 +65,7 @@ const OfferFormContent: React.FC = () => {
 
         try {
             setLoading(true);
-
+            ctx.saveFormToLocalStorage(ctx.form);
             let offer: OfferI | null = null;
             if (offerId) {
                 offer = await OffersService.updateOffer(Number(offerId), ctx.form);
@@ -74,7 +78,6 @@ const OfferFormContent: React.FC = () => {
                     throw new Error(t("offer.form.validation.createError"));
                 }
             }
-            ctx.removeFormFromLocalStorage();
             await offersCtx.initOffers();
             userCtx.setLoading(false);
             if (offerId) {
@@ -87,6 +90,7 @@ const OfferFormContent: React.FC = () => {
             toast.error(t("offer.form.validation.createError"));
         } finally {
             setLoading(false);
+            ctx.removeFormFromLocalStorage();
         }
     }
 
@@ -106,15 +110,16 @@ const OfferFormContent: React.FC = () => {
     const handleDevFill = () => {
         // TODO
         ctx.formCtx.setValue("STEP_ONE.category", "SCAFFOLD");
-        ctx.formCtx.setValue("STEP_ONE.locationCountry", "pl");
-        ctx.formCtx.setValue("STEP_ONE.dateRange", { start: DateUtil.toLocalDateString(new Date()), end: null });
-        ctx.formCtx.setValue("STEP_ONE.availableSlots", 5);
+        ctx.formCtx.setValue("STEP_ONE.startDate", DateUtil.toLocalDateString(new Date()));
+        ctx.formCtx.setValue("STEP_ONE.communicationLanguages", ["pl", "en"]);
+        ctx.formCtx.setValue("STEP_ONE.phoneNumber", { prefix: "+48", number: "123456789" });
+        
+        ctx.formCtx.setValue("STEP_TWO.locationCountry", "pl");
+        ctx.formCtx.setValue("STEP_TWO.geocodedPosition", DEFAUT_POINT);
 
-        ctx.formCtx.setValue("STEP_TWO.skillsRequired", ["ONE", "TWO"]);
-        ctx.formCtx.setValue("STEP_TWO.skillsNiceToHave", ["THREE", "FOUR"]);
-        ctx.formCtx.setValue("STEP_TWO.certificatesRequired", ["ONE", "TWO"]);
-
-        ctx.formCtx.setValue("STEP_THREE.hourlySalaryStart", "100");
+        ctx.formCtx.setValue("STEP_THREE.displayName", "Praca na budowie");
+        ctx.formCtx.setValue("STEP_THREE.salary", 5000);
+        ctx.formCtx.setValue("STEP_THREE.currency", Currencies.PLN);
     };
 
     const LOCAL_STORAGE_KEY = 'offerFormDraft';

@@ -44,7 +44,7 @@ export abstract class WorkerUtil {
         if (!profile?.fullName) {
             throw new ToastException('employeeProfile.error.fullNameRequired', this);
         }
-        if (!profile?.phoneNumber || !profile.phoneNumber.phoneNumber) {
+        if (!profile?.phoneNumber || !profile.phoneNumber.number) {
             throw new ToastException('employeeProfile.error.phoneNumberRequired', this);
         }
         if (!profile?.email) {

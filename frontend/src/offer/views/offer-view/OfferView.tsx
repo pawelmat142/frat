@@ -1,7 +1,6 @@
 import { OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
 import CallendarTile from "employee/views/profile/CallendarTile";
 import EditButton from "global/components/buttons/EditButton";
-import Chips, { ChipModes } from "global/components/chips/Chips";
 import Loading from "global/components/Loading";
 import Flags from "global/components/Flags";
 import { useGlobalContext } from "global/providers/GlobalProvider";
@@ -188,39 +187,17 @@ const OfferView: React.FC = () => {
 
                     <OfferDetailsTile offer={offer} />
 
-                    <CallendarTile range={{ start: DateUtil.toLocalDateString(offer.startDate), end: DateUtil.toLocalDateString(offer.endDate) }}></CallendarTile>
+                    <CallendarTile range={{ start: DateUtil.toLocalDateString(offer.startDate) }}></CallendarTile>
 
                     <div className="square-tile col-tile"></div>
 
                 </div>
 
-                {!!offer.skillsRequired?.length && (<>
-                    <div className="mt-5 mb-1 secondary-text">{t('offer.skillsRequired')}: </div>
-                    <Chips chips={offer.skillsRequired || []} mode={ChipModes.TERTIARY}></Chips>
-                </>)}
-                {!!offer.skillsNiceToHave?.length && (<>
-                    <div className="mt-3 mb-1 secondary-text">{t('offer.skillsNiceToHave')}: </div>
-                    <Chips chips={offer.skillsNiceToHave || []} mode={ChipModes.SECONDARY}></Chips>
-                </>)}
-
-                {!!offer.certificatesRequired?.length && (<>
-                    <div className="mt-5 mb-1 secondary-text">{t('offer.certificatesRequired')}: </div>
-                    <Chips chips={offer.certificatesRequired || []} mode={ChipModes.TERTIARY}></Chips>
-                </>)}
-                {!!offer.certificatesNiceToHave?.length && (<>
-                    <div className="mt-3 mb-1 secondary-text">{t('offer.certificatesNiceToHave')}: </div>
-                    <Chips chips={offer.certificatesNiceToHave || []} mode={ChipModes.SECONDARY}></Chips>
-                </>)}
 
                 {!!offer.languagesRequired?.length && (<div>
                     <div className="mt-5 mb-1 secondary-text">{t('offer.languagesRequired')}: </div>
                     <Flags languages={offer.languagesRequired!} />
                     <div className="mt-1 xs-font secondary-text">{Utils.prepareLanguageNames(t, offer.languagesRequired!, globalCtx.dics.languages!)}</div>
-                </div>)}
-                {!!offer.languagesNiceToHave?.length && (<div>
-                    <div className="mt-3 mb-1 secondary-text">{t('offer.languagesNiceToHave')}: </div>
-                    <Flags languages={offer.languagesNiceToHave!} />
-                    <div className="mt-1 xs-font secondary-text">{Utils.prepareLanguageNames(t, offer.languagesNiceToHave!, globalCtx.dics.languages!)}</div>
                 </div>)}
 
                 {isMyOffer && (

@@ -4,7 +4,7 @@ import { AvatarRef } from './UserI';
 
 export interface ParsedPhoneNumber {
   prefix: string;
-  phoneNumber: string;
+  number: string;
 }
 
 export interface WorkerI {

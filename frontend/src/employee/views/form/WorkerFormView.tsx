@@ -56,7 +56,7 @@ const WorkerFormView: React.FC = () => {
         defaultValues: {
             step1: {
                 fullName: "",
-                phoneNumber: { prefix: "+00", phoneNumber: "" },
+                phoneNumber: { prefix: "+00", number: "" },
                 email: "",
                 communicationLanguages: [""]
             },
@@ -180,7 +180,7 @@ const WorkerFormView: React.FC = () => {
         formRef.reset({
             step1: {
                 fullName: worker.fullName || "",
-                phoneNumber: worker.phoneNumber || { prefix: "+48", phoneNumber: "" },
+                phoneNumber: worker.phoneNumber || { prefix: "+48", number: "" },
                 email: worker.email || "",
                 communicationLanguages: worker.communicationLanguages || [""],
                 avatarRef: worker.avatarRef,

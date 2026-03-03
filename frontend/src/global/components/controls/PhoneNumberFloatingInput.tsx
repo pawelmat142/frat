@@ -74,7 +74,7 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
             }
             onChange({
                 prefix: value?.prefix || '+48',
-                phoneNumber: newPhoneNumber
+                number: newPhoneNumber
             });
         };
 
@@ -84,7 +84,7 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
                 const newPrefix = element.values.PHONE_PREFIX;
                 onChange({
                     prefix: newPrefix,
-                    phoneNumber: value?.phoneNumber || ''
+                    number: value?.number || ''
                 });
             }
         };
@@ -109,7 +109,7 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
         };
 
         const hasValue = () => {
-            return !!value?.phoneNumber || !!value?.prefix;
+            return !!value?.number || !!value?.prefix;
         };
 
         const isLabelFloating = isFocused || hasValue();
@@ -148,7 +148,7 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
                             id={id}
                             name={name || id}
                             type="tel"
-                            value={value?.phoneNumber || ''}
+                            value={value?.number || ''}
                             onChange={handlePhoneNumberChange}
                             onFocus={() => setIsFocused(true)}
                             onBlur={() => setIsFocused(false)}

@@ -66,14 +66,14 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
     const openPhoneCall = () => {
         if (!profile.phoneNumber) return;
 
-        const number = `${profile.phoneNumber.prefix}${profile.phoneNumber.phoneNumber}`
+        const number = `${profile.phoneNumber.prefix}${profile.phoneNumber.number}`
         if (isDesktop) {
             // copy to clipboard
             navigator.clipboard.writeText(number);
             toast.info(t('employeeProfile.phoneNumberCopied', { number }));
             return;
         }
-        window.location.href = `tel:${profile.phoneNumber.prefix}${profile.phoneNumber.phoneNumber}`;
+        window.location.href = `tel:${profile.phoneNumber.prefix}${profile.phoneNumber.number}`;
     }
 
     const rightSection = isMyProfile ? null : <div className="flex justify-end items-center gap-2">

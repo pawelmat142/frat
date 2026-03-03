@@ -1,4 +1,4 @@
-import { Point } from "@shared/interfaces/WorkerProfileI";
+import { ParsedPhoneNumber, Point } from "@shared/interfaces/WorkerProfileI";
 import { Currency, OfferI, OfferStatus } from "@shared/interfaces/OfferI";
 import { Expose } from "class-transformer";
 import { Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";
@@ -34,6 +34,18 @@ export class OfferEntity implements OfferI {
     @Expose()
     category: string;
 
+    @Column({ name: 'start_date', type: 'date', transformer: dateTransformer })
+    @Expose()
+    startDate: Date;
+
+    @Column({ name: 'languages_required', type: 'text', array: true, nullable: true })
+    @Expose()
+    languagesRequired?: string[];
+
+    @Column({ name: 'phone_number', type: 'jsonb' })
+    @Expose()
+    phoneNumber: ParsedPhoneNumber;
+
     @Column({ name: 'location_country' })
     @Expose()
     locationCountry: string;
@@ -50,14 +62,26 @@ export class OfferEntity implements OfferI {
     @Expose()
     displayAddress?: string;
 
-    @Column({ name: 'start_date', type: 'date', transformer: dateTransformer })
-    @Expose()
-    startDate: Date;
 
-    @Column({ name: 'end_date', type: 'date', nullable: true, transformer: dateTransformer })
-    @Expose()
-    endDate?: Date;
 
+    // DETAILS FIELDS
+    @Column({ name: 'display_name' })
+    @Expose()
+    displayName: string;
+
+    @Column({ name: 'salary', type: 'int' })
+    salary: number;
+
+    @Column({ name: 'currency' })
+    @Expose()
+    currency: Currency;
+
+    @Column({ name: 'description', nullable: true })
+    @Expose()
+    description?: string;
+
+
+    // slots
     @Column({ name: 'open_slots', type: 'int', default: 0 })
     @Expose()
     availableSlots: number;
@@ -70,61 +94,6 @@ export class OfferEntity implements OfferI {
     @Expose()
     acceptedSlots: number;
 
-    // REQUIREMENTS FIELDS
-    @Column({ name: 'skills_required', type: 'text', array: true, nullable: true })
-    @Expose()
-    skillsRequired?: string[];
-
-    @Column({ name: 'skills_nice_to_have', type: 'text', array: true, nullable: true })
-    @Expose()
-    skillsNiceToHave?: string[];
-
-    @Column({ name: 'certificates_required', type: 'text', array: true, nullable: true })
-    @Expose()
-    certificatesRequired?: string[];
-
-    @Column({ name: 'certificates_nice_to_have', type: 'text', array: true, nullable: true })
-    @Expose()
-    certificatesNiceToHave?: string[];
-
-    @Column({ name: 'languages_required', type: 'text', array: true, nullable: true })
-    @Expose()
-    languagesRequired?: string[];
-
-    @Column({ name: 'languages_nice_to_have', type: 'text', array: true, nullable: true })
-    @Expose()
-    languagesNiceToHave?: string[];
-
-
-    // SALARY FIELDS
-    @Column({ name: 'hourly_salary_start', type: 'int', nullable: true })
-    @Expose()
-    hourlySalaryStart?: number;
-
-    @Column({ name: 'hourly_salary_end', type: 'int', nullable: true })
-    @Expose()
-    hourlySalaryEnd?: number;
-
-    @Column({ name: 'monthly_salary_start', type: 'int', nullable: true })
-    @Expose()
-    monthlySalaryStart?: number;
-
-    @Column({ name: 'monthly_salary_end', type: 'int', nullable: true })
-    @Expose()
-    monthlySalaryEnd?: number;
-
-    @Column({ name: 'currency', nullable: true })
-    @Expose()
-    currency?: Currency;
-
-    // DETAILS FIELDS
-    @Column({ name: 'display_name', nullable: true })
-    @Expose()
-    displayName?: string;
-
-    @Column({ name: 'description', nullable: true })
-    @Expose()
-    description?: string;
 
 
     // AUDIT FIELDS
@@ -147,28 +116,4 @@ export class OfferEntity implements OfferI {
     @Column({ name: 'updated_at', type: 'timestamptz', nullable: true })
     @Expose()
     updatedAt?: Date;
-
-    // get salary(): Salary | null {
-    //     if (!this.hourlySalaryStart && !this.monthlySalaryStart) {
-    //         return null;
-    //     }
-    //     const result: Salary = {
-    //         currency: this.currency || Currencies.EUR,
-    //     }
-    //     if (this.monthlySalaryStart) {
-    //         result.monthly = {
-    //             from: this.monthlySalaryStart,
-    //             to: this.monthlySalaryEnd,
-    //             type: SalaryTypes.MONTHLY
-    //         }
-    //     }
-    //     if (this.hourlySalaryStart) {
-    //         result.hourly = {
-    //             from: this.hourlySalaryStart,
-    //             to: this.hourlySalaryEnd,
-    //             type: SalaryTypes.HOURLY
-    //         }
-    //     }
-    //     return result;
-    // }
 }

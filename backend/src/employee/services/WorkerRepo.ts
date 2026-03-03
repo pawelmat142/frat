@@ -127,7 +127,7 @@ export class WorkerRepo {
         }
 
         const phoneChanged = worker.phoneNumber?.prefix !== newWorker.phoneNumber?.prefix
-            || worker.phoneNumber?.phoneNumber !== newWorker.phoneNumber?.phoneNumber;
+            || worker.phoneNumber?.number !== newWorker.phoneNumber?.number;
         if (phoneChanged) {
             this.logger.log(`Updating EmployeeProfile phoneNumber from ${JSON.stringify(worker.phoneNumber)} to ${JSON.stringify(newWorker.phoneNumber)}`);
             worker.phoneNumber = newWorker.phoneNumber as any;

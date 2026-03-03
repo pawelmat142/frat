@@ -46,23 +46,6 @@ const OfferFormStepOne: React.FC = () => {
                 />
 
                 <Controller
-                    name="STEP_ONE.communicationLanguages"
-                    control={ctx.formCtx.control}
-                    render={({ field }) => <DictionarySelector
-                        type="multi"
-                        className="w-full"
-                        valueInput={field.value}
-                        onSelectMulti={items => field.onChange(items.map(i => String(i)))}
-                        label={t("offer.languagesRequired")}
-                        code="LANGUAGES"
-                        groupCode="COMMUNICATION"
-                        fullWidth
-                        error={ctx.formCtx.formState.errors.STEP_ONE?.communicationLanguages}
-                    />
-                    }
-                />
-
-                <Controller
                     name={`STEP_ONE.startDate`}
                     control={ctx.formCtx.control}
                     rules={required}
@@ -88,13 +71,31 @@ const OfferFormStepOne: React.FC = () => {
                     render={({ field }) => (
                         <PhoneNumberFloatingInput
                             {...field}
-                            value={field.value || { prefix: '', phoneNumber: '' }}
+                            value={field.value || { prefix: '', number: '' }}
                             label={t("employeeProfile.form.phoneNumber")}
                             fullWidth
                             required
                             error={ctx.formCtx.formState.errors.STEP_ONE?.phoneNumber}
                         />
                     )}
+                />
+
+{/* TODO prefill */}
+                <Controller
+                    name="STEP_ONE.communicationLanguages"
+                    control={ctx.formCtx.control}
+                    render={({ field }) => <DictionarySelector
+                        type="multi"
+                        className="w-full"
+                        valueInput={field.value}
+                        onSelectMulti={items => field.onChange(items.map(i => String(i)))}
+                        label={t("offer.languagesRequired")}
+                        code="LANGUAGES"
+                        groupCode="COMMUNICATION"
+                        fullWidth
+                        error={ctx.formCtx.formState.errors.STEP_ONE?.communicationLanguages}
+                    />
+                    }
                 />
 
             </div>

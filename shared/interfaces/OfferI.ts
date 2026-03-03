@@ -23,21 +23,6 @@ export interface OfferI {
     currency?: Currency;
     salary?: number;
     description?: string
-    
-
-    // TODO remove
-    endDate?: Date
-    skillsRequired?: string[]
-    skillsNiceToHave?: string[]
-    certificatesRequired?: string[]
-    certificatesNiceToHave?: string[]
-    languagesNiceToHave?: string[]
-    hourlySalaryStart?: number;
-    hourlySalaryEnd?: number;
-    monthlySalaryStart?: number;
-    monthlySalaryEnd?: number;
-
- 
 
     availableSlots: number
     // TODO power fields
@@ -112,27 +97,11 @@ export interface OfferFormOne {
     startDate: string | null;
     communicationLanguages: string[];
     phoneNumber: ParsedPhoneNumber | null;
-
-    // TODO remove
-    locationCountry?: string | null;
-    geocodedPosition?: GeocodedPosition | null;
-    displayAddress?: string | null;
-    position?: Position | null;
-    dateRange?: DateRange | null;
-    availableSlots?: number | null;
 }
 
 export interface OfferFormTwo {
     locationCountry: string | null;
     geocodedPosition: GeocodedPosition | null;
-
-    // TODO remove
-    skillsRequired?: string[];
-    skillsNiceToHave?: string[];
-    certificatesRequired?: string[];
-    certificatesNiceToHave?: string[];
-    languagesRequired?: string[];
-    languagesNiceToHave?: string[];
 }
 
 export interface OfferFormThree {
@@ -140,12 +109,6 @@ export interface OfferFormThree {
     currency: Currency | null;
     salary: number | null;
     description?: string | null;
-
-    // TODO remove
-    monthlySalaryStart?: string | null;
-    monthlySalaryEnd?: string | null;
-    hourlySalaryStart?: string | null;
-    hourlySalaryEnd?: string | null;
 }
 
 export interface OfferSearchFilters {

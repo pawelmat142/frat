@@ -55,6 +55,7 @@ export interface OfferFormProps {
     prevStep: () => void;
     selectStep: (targetStep: OfferFormStep) => Promise<void>;
     removeFormFromLocalStorage: () => void;
+    saveFormToLocalStorage: (form: OfferForm) => void;
     initForm: (offer: OfferForm) => void;
 }
 
@@ -134,6 +135,7 @@ const OfferFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }
             prevStep,
             selectStep,
             removeFormFromLocalStorage,
+            saveFormToLocalStorage,
             initForm
         }}>{children}</OfferFormContext.Provider>
     );

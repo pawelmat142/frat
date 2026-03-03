@@ -75,7 +75,7 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
           <div><span className="font-semibold secondary-text">Display Name:</span> <span className="primary-text">{localWorker.displayName}</span></div>
           <div><span className="font-semibold secondary-text">Email:</span> <span className="primary-text">{localWorker.email}</span></div>
           <div><span className="font-semibold secondary-text">Full Name:</span> <span className="primary-text">{localWorker.fullName}</span></div>
-          <div><span className="font-semibold secondary-text">Phone Number:</span> <span className="primary-text">{localWorker.phoneNumber.prefix} {localWorker.phoneNumber.phoneNumber}</span></div>
+          <div><span className="font-semibold secondary-text">Phone Number:</span> <span className="primary-text">{localWorker.phoneNumber.prefix} {localWorker.phoneNumber.number}</span></div>
         </div>
         <div className="flex flex-col gap-2">
           {/* TODO */}
