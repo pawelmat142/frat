@@ -300,9 +300,9 @@ export const WorkersInitialData = (): DeepPartial<WorkerEntity>[] => {
             availabilityDateRanges: availabilityOption === WorkerAvailabilityOptions.DATE_RANGES ? [] : undefined,
             rangesOption: availabilityOption === WorkerAvailabilityOptions.DATE_RANGES ? rangesOption : undefined,
             startDate: availabilityOption === WorkerAvailabilityOptions.FROM_DATE 
-            ? startDateStr 
-            : availabilityOption === WorkerAvailabilityOptions.ANYTIME 
-            ? DateUtil.toLocalDateString(new Date()) : undefined,
+                ? startDateStr 
+                : availabilityOption === WorkerAvailabilityOptions.ANYTIME 
+                ? DateUtil.toLocalDateString(new Date()) : undefined,
             jobs: numberToStringList(getRandomNumberFromTo(0, 20, globalIndex)).map(n => `job-${n}`),
             views: numberToStringList(getRandomNumberFromTo(30, 100, globalIndex)).map(n => `view-${n}`),
             fullAddress: adress.fullAddress,

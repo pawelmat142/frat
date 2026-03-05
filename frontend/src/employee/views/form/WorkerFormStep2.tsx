@@ -11,7 +11,7 @@ import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import { useUserContext } from "user/UserProvider";
-import { DEFAUT_POINT } from "offer/views/form/OfferFormStepOne";
+import { DEFAUT_POSITION } from "offer/views/form/OfferFormStepOne";
 import Loading from "global/components/Loading";
 import { PositionService } from "global/services/PositionService";
 
@@ -31,7 +31,7 @@ const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
     const locationOption = watch("step2.locationOption");
 
     const preparePosition = (): Position => {
-        return userCtx.position || DEFAUT_POINT;
+        return userCtx.position || DEFAUT_POSITION;
     }
 
     /**

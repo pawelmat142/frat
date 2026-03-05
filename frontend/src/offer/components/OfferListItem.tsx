@@ -15,6 +15,7 @@ import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import { useState } from "react";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import Loading from "global/components/Loading";
+import { AppConfig } from "@shared/AppConfig";
 
 interface Props {
     offer: OfferI,
@@ -22,8 +23,7 @@ interface Props {
     last?: boolean,
 }
 
-// TODO move to config
-export const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = 50000; // 50 km
+const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS; 
 
 const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
 

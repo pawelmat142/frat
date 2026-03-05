@@ -13,6 +13,7 @@ import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import { PositionUtil } from "@shared/utils/PositionUtil";
+import { AppConfig } from "@shared/AppConfig";
 
 interface Props {
     profile: WorkerWithMutualFriends,
@@ -21,8 +22,7 @@ interface Props {
     last?: boolean,
 }
 
-// TODO move to config
-const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = 50000; // 20 km
+const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS; 
 
 const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, last }) => {
 

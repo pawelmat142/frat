@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import FloatingPlaceSearch from "global/components/controls/FloatingPlaceSearch";
 import FloatingStepSlider from "global/components/controls/FloatingStepSlider";
 import { GeocodedPosition, Position } from "@shared/interfaces/MapsInterfaces";
-import { RADIUS_STEPS_KM } from "./WorkersSearchProvider";
+import { AppConfig } from "@shared/AppConfig";
 
 const WorkersSearchFiltersView: React.FC = () => {
 
@@ -117,7 +117,7 @@ const WorkersSearchFiltersView: React.FC = () => {
         if (!position) {
             f.setValue('positionRadiusKm', undefined);
         } else {
-            f.setValue('positionRadiusKm', RADIUS_STEPS_KM[0]);
+            f.setValue('positionRadiusKm', AppConfig.RADIUS_STEPS_KM[0]);
         }
     }
 
@@ -199,7 +199,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                         render={({ field }) => (
                             <FloatingStepSlider
                                 label={t('employeeProfile.form.radius')}
-                                steps={RADIUS_STEPS_KM}
+                                steps={[...AppConfig.RADIUS_STEPS_KM]}
                                 value={field.value}
                                 onChange={field.onChange}
                                 unit="km"

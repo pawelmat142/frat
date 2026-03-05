@@ -8,7 +8,7 @@ import { useState } from "react";
 import PositionSelector from "global/components/selector/position/PositionSelector";
 import { useUserContext } from "user/UserProvider";
 import { GeocodedPosition, Position } from "@shared/interfaces/MapsInterfaces";
-import { DEFAUT_POINT } from "./OfferFormStepOne";
+import { DEFAUT_POSITION } from "./OfferFormStepOne";
 import { PositionService } from "global/services/PositionService";
 import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
@@ -30,7 +30,7 @@ const OfferFormStepTwo: React.FC = () => {
     };
 
     const preparePosition = (): Position => {
-        return userCtx.position || DEFAUT_POINT;
+        return userCtx.position || DEFAUT_POSITION;
     }
 
     const resetLocation = async () => {

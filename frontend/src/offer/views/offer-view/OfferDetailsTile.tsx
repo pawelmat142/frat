@@ -1,4 +1,5 @@
 import { ThumbUp, Visibility } from "@mui/icons-material";
+import { AppConfig } from "@shared/AppConfig";
 import { OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
 import { DateUtil } from "@shared/utils/DateUtil";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
@@ -6,13 +7,14 @@ import { PositionUtil } from "@shared/utils/PositionUtil";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import { Ico } from "global/icon.def";
 import { StringUtil } from "global/utils/StringUtil";
-import { MINIMUM_DISTANCE_FOR_DISPLAY_METERS } from "offer/components/OfferListItem";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "user/UserProvider";
 
 interface OfferDetailsTileProps {
     offer: OfferI;
 }
+
+const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS; 
 
 const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
     const { t } = useTranslation();

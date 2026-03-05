@@ -7,6 +7,7 @@ import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
+import { AppConfig } from "@shared/AppConfig";
 
 export interface WorkersSearchContextProps {
     filters: WorkerSearchFilters;
@@ -22,15 +23,12 @@ export interface WorkersSearchContextProps {
     updateOneProfileInResults: (updatedProfile: WorkerI) => void;
 }
 
-// TODO move to config
-export const RADIUS_STEPS_KM = [50, 80, 100, 150, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
-
 export const WorkerDefaultFilters: WorkerSearchFilters = {
     startDate: null,
     endDate: null,
 
     locationCountry: null,
-    positionRadiusKm: RADIUS_STEPS_KM[4],
+    positionRadiusKm: AppConfig.RADIUS_STEPS_KM[4],
 
     communicationLanguages: [],
     categories: [],

@@ -11,11 +11,6 @@ export const OffersAdminService = {
 		return httpClient.delete<void>(`/offer/admin/${id}`);
 	},
 
-	// TODO
-	// activation(id: number, status: EmployeeProfileStatus): Promise<EmployeeProfileI> {
-	// 	return httpClient.put<EmployeeProfileI>(`/employee-profile/admin/${id}/activation/${status}`);
-	// },
-
 	deleteAllOffers(): Promise<void> {
 		return httpClient.delete<void>(`/offer/admin`);
 	},

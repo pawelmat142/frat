@@ -3,20 +3,17 @@ import { Controller } from "react-hook-form"
 import { useTranslation } from "react-i18next";
 import { useOfferForm } from "./OfferFormProvider";
 import DictionarySelector from "global/components/selector/DictionarySelector";
-import { Position } from "@shared/interfaces/MapsInterfaces";
 import DateInputViewSelector from "global/components/callendar/DateInputViewSelector";
 import PhoneNumberFloatingInput from "global/components/controls/PhoneNumberFloatingInput";
+import { AppConfig } from "@shared/AppConfig";
 
-// TODO move to config
-export const DEFAUT_POINT: Position = { lat: 52.2297, lng: 21.0122 }; // Warsaw center as default point
+export const DEFAUT_POSITION = AppConfig.DEFAUT_POSITION
 
 const OfferFormStepOne: React.FC = () => {
 
     const { t } = useTranslation();
     const required = FormValidator.required(t);
     const ctx = useOfferForm();
-
-    // TODO prefil phone number 
 
     return (
         <>
@@ -80,7 +77,6 @@ const OfferFormStepOne: React.FC = () => {
                     )}
                 />
 
-{/* TODO prefill */}
                 <Controller
                     name="STEP_ONE.communicationLanguages"
                     control={ctx.formCtx.control}

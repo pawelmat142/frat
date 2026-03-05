@@ -18,13 +18,13 @@ import { OfferUtil } from "@shared/utils/OfferUtil";
 import { Utils } from "global/utils/utils";
 import FormWizard from "global/components/FormWizard/FormWizard";
 import { DateUtil } from "@shared/utils/DateUtil";
-import { GeocodedPosition, Position } from "@shared/interfaces/MapsInterfaces";
+import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
+import { AppConfig } from "@shared/AppConfig";
 
-// TODO move to config - share with front
-const DEFAUT_POINT: Position = { lat: 52.2297, lng: 21.0122 }; // Warsaw center as default point
+const DEFAUT_POSITION = AppConfig.DEFAUT_POSITION;
 
 const OfferFormContent: React.FC = () => {
 
@@ -84,8 +84,6 @@ const OfferFormContent: React.FC = () => {
         }
 
         ctx.formCtx.setValue("STEP_ONE.startDate", DateUtil.toLocalDateString(new Date()))
-        
-
     }
 
     useEffect(() => {
@@ -165,7 +163,7 @@ const OfferFormContent: React.FC = () => {
         ctx.formCtx.setValue("STEP_ONE.phoneNumber", { prefix: "+48", number: "123456789" });
 
         ctx.formCtx.setValue("STEP_TWO.locationCountry", "pl");
-        ctx.formCtx.setValue("STEP_TWO.geocodedPosition", DEFAUT_POINT);
+        ctx.formCtx.setValue("STEP_TWO.geocodedPosition", DEFAUT_POSITION);
 
         ctx.formCtx.setValue("STEP_THREE.displayName", "Praca na budowie");
         ctx.formCtx.setValue("STEP_THREE.salary", 5000);
