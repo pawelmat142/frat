@@ -16,7 +16,6 @@ import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import { UserPublicService } from "user/services/UserPublicService";
 import { useEffect, useState } from "react";
 import Chips, { ChipModes } from "global/components/chips/Chips";
-import { ParsedPhoneNumber } from "@shared/interfaces/WorkerProfileI";
 import Loading from "global/components/Loading";
 
 interface Props {
@@ -26,7 +25,7 @@ interface Props {
 }
 
 // TODO move to config
-const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = 50000; // 50 km
+export const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = 50000; // 50 km
 
 const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
 
@@ -35,37 +34,17 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
     const userCtx = useUserContext();
     const { me } = userCtx;
 
-    const [offerOwner, setOfferOwner] = useState<UserI | null>(null);
     const isDesktop = useIsDesktop();
     const isMyOffer = me?.uid === offer.uid;
 
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        const initOfferOwner = async () => {
-
-            if (isMyOffer) {
-                setOfferOwner(me!);
-            } else {
-                try {
-                    // TODO store users in global state
-                    setLoading(true);
-                    const result = await UserPublicService.fetchUser(offer.uid);
-                    setOfferOwner(result);
-                } catch (error) {
-                    toast.error(t('offer.error.fetchingOfferOwner'));
-                }
-                finally {
-                    setLoading(false);
-                }
-            }
-        }
-        initOfferOwner();   
-    }, []);
-
     const goToOfferView = () => {
         navigate(Path.getOfferPath(offer.offerId));
     }
+
+    console.log(offer)
+
 
     const getDistanceInfo = (): string => {
         if (!userCtx.position || !offer.point) {
@@ -73,21 +52,13 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
         }
         const meters = PositionUtil.getDistanceFromToInMeters(userCtx.position, PositionUtil.fromGeoPoint(offer.point));
 
-        if (meters < MINIMUM_DISTANCE_FOR_DISPLAY_METERS) { 
+        if (meters < MINIMUM_DISTANCE_FOR_DISPLAY_METERS) {
             return t("others.lessThan", { distance: MINIMUM_DISTANCE_FOR_DISPLAY_METERS / 1000, unit: 'km' });
         }
         return `${PositionUtil.displayDistance(meters)}`;
     }
 
     const distance = getDistanceInfo();
-
-    const getPhoneNumber = (): ParsedPhoneNumber => {
-        // TODO add phone number to offer
-        return {
-            prefix: '+55',
-            number: '555 555 555'
-        }
-    }
 
     const openChat = async () => {
         if (!offer || isMyOffer) return;
@@ -100,23 +71,21 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
         }
     }
 
-    const phoneNumber = getPhoneNumber();
-
     const openPhoneCall = () => {
-        if (!phoneNumber || isMyOffer) return;
+        if (!offer.phoneNumber || isMyOffer) return;
 
-        const number = `${phoneNumber.prefix}${phoneNumber.number}`
+        const number = `${offer.phoneNumber.prefix}${offer.phoneNumber.number}`
         if (isDesktop) {
             // copy to clipboard
             navigator.clipboard.writeText(number);
             toast.info(t('employeeProfile.phoneNumberCopied', { number }));
             return;
         }
-        window.location.href = `tel:${phoneNumber.prefix}${phoneNumber.number}`;
+        window.location.href = `tel:${offer.phoneNumber.prefix}${offer.phoneNumber.number}`;
     }
 
     const rightSection = isMyOffer ? null : <div className="flex justify-end items-center gap-2">
-        {phoneNumber && (
+        {offer.phoneNumber && (
             <IconButton onClick={(e) => {
                 e.stopPropagation();
                 openPhoneCall();
@@ -133,8 +102,8 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
     </div>
 
     const categoryChip = offer.category ? (
-        <Chips 
-            chips={[t(DictionaryUtil.getTranslationKey('WORK_CATEGORY', offer.category))]} 
+        <Chips
+            chips={[t(DictionaryUtil.getTranslationKey('WORK_CATEGORY', offer.category))]}
             mode={ChipModes.SECONDARY}
         />
     ) : null;

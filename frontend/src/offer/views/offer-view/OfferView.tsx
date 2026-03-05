@@ -168,7 +168,6 @@ const OfferView: React.FC = () => {
         }
     }
 
-
     const isMyOffer = me?.uid === offer.uid;
 
     return (
@@ -177,10 +176,10 @@ const OfferView: React.FC = () => {
             <div>
                 <div className="my-2">
                     <UserItemTile
-                     uid={offer.uid}
-                      size={2.5} 
-                      showNumber={true} 
-                      showChat={true}></UserItemTile>
+                        uid={offer.uid}
+                        size={2.5}
+                        showNumber={true}
+                        showChat={true}></UserItemTile>
                 </div>
 
                 <div className="main-tiles">
@@ -189,6 +188,7 @@ const OfferView: React.FC = () => {
 
                     <CallendarTile range={{ start: DateUtil.toLocalDateString(offer.startDate) }}></CallendarTile>
 
+                    {/* TODO map tile */}
                     <div className="square-tile col-tile"></div>
 
                 </div>

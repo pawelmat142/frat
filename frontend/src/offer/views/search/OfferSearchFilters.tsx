@@ -58,9 +58,9 @@ const OfferSearchFilters: React.FC = () => {
 
     return (
         <div className="filters-container">
-            <div className="flex gap-x-3 flex-wrap items-center">
+            <div className="flex gap-x-3 flex-wrap items-center pb-1">
                 {(!!ctx.filters.categories?.length) && (
-                    <div className="chip-container ml-2 mt-1">
+                    <div className="chip-container ml-2">
                         <Ico.CATEGORIES className="secondary-text" />
                         {(ctx.filters.categories || []).map(category => (
                             <div key={category} className="search-chip primary">
@@ -71,7 +71,7 @@ const OfferSearchFilters: React.FC = () => {
                 )}
 
                 {!!flags?.length && (
-                    <div className="chip-container mt-1 ml-2">
+                    <div className="chip-container ml-2">
                         <Ico.LANGUAGE className="secondary-text" />
                         {(flags).map((src, index) => (
                             <img key={index} className="filters-flag-chip pl-1" src={src} alt={"flag-" + index} />
@@ -80,7 +80,7 @@ const OfferSearchFilters: React.FC = () => {
                 )}
 
                 {!!countryFlags?.length && (
-                    <div className="chip-container mt-1 ml-2">
+                    <div className="chip-container ml-2">
                         <Ico.MARKER className="secondary-text" />
                         {(countryFlags).map((src, index) => (
                             <img key={index} className="filters-flag-chip pl-1" src={src} alt={"flag-" + index} />
@@ -89,7 +89,7 @@ const OfferSearchFilters: React.FC = () => {
                 )}
 
                 {(!!ctx.filters.skills?.length) && (
-                    <div className="chip-container ml-2 mt-1">
+                    <div className="chip-container ml-2">
                         {(ctx.filters.skills || []).map(skill => (
                             <div key={skill} className="search-chip tertiary">
                                 {skill}
@@ -100,7 +100,7 @@ const OfferSearchFilters: React.FC = () => {
                 )}
 
                 {(!!ctx.filters.certificates?.length) && (
-                    <div className="chip-container ml-2 mt-1">
+                    <div className="chip-container ml-2">
                         {(ctx.filters.certificates || []).map(cert => (
                             <div key={cert} className="search-chip secondary">
                                 {cert}

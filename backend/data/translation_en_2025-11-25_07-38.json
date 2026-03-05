@@ -119,7 +119,7 @@
       "deactivateButton": "Deactivate Offer",
       "views": "Views",
       "likes": "Likes",
-      "created": "Created",
+      "created": "Added",
       "noOffers": "Has no offers yet...",
       "offersList": "Offers list",
       "searchTitle": "Offers",
@@ -224,7 +224,8 @@
       "search": "Search",
       "anywhere": "Anywhere",
       "endOfResults": "No more results to display.",
-      "sww": "Something went wrong, please try again later."
+      "sww": "Something went wrong, please try again later.",
+      "distance": "Distance"
     },
     "header": {
       "home": "Home",

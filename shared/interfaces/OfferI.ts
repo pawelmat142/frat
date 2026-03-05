@@ -1,5 +1,5 @@
-import { DateRange, ParsedPhoneNumber, Point } from "./WorkerProfileI";
-import { GeocodedPosition, Position } from "./MapsInterfaces";
+import { ParsedPhoneNumber, Point } from "./WorkerProfileI";
+import { GeocodedPosition } from "./MapsInterfaces";
 
 export interface OfferI {
 
@@ -12,7 +12,6 @@ export interface OfferI {
     startDate: Date
     languagesRequired?: string[]
     phoneNumber: ParsedPhoneNumber;
-
 
     locationCountry: string
     displayAddress?: string

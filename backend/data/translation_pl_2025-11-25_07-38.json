@@ -118,7 +118,7 @@
       "deactivateButton": "Dezaktywuj ofertę",
       "views": "Wyświetlenia",
       "likes": "Polubienia",
-      "created": "Utworzono",
+      "created": "Dodano",
       "noOffers": "Nie ma jeszcze żadnych ofert...",
       "myListTitle": "Moje oferty",
       "offersList": "Lista ofert",
@@ -224,7 +224,8 @@
       "search": "Szukaj",
       "anywhere": "Gdziekolwiek",
       "endOfResults": "Brak więcej wyników do wyświetlenia.",
-      "sww": "Coś poszło nie tak, spróbuj ponownie później."
+      "sww": "Coś poszło nie tak, spróbuj ponownie później.",
+      "distance": "Odległość"
     },
     "header": {
       "home": "Strona główna",
