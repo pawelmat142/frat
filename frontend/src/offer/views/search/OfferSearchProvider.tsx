@@ -26,11 +26,6 @@ export const defaultOfferFilters: OfferSearchFilters = {
     categories: [],
     communicationLanguages: [],
 
-    // TODO remove
-    freeText: '',
-    skills: [],
-    certificates: [],
-
     skip: 0,
     limit: INITIAL_LIMIT,
 };
@@ -87,18 +82,10 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     const filtersEquals = (f1: OfferSearchFilters, f2: OfferSearchFilters): boolean => {
-        if (f1.freeText !== f2.freeText) return false;
         if (ObjUtil.arrayChanged(f1.categories, f2.categories)) return false;
 
         if (ObjUtil.arrayChanged(f1.communicationLanguages, f2.communicationLanguages)) return false;
         if (ObjUtil.arrayChanged(f1.locationCountries, f2.locationCountries)) return false;
-
-        if (ObjUtil.arrayChanged(f1.skills, f2.skills)) return false;
-        if (ObjUtil.arrayChanged(f1.certificates, f2.certificates)) return false;
-
-        if (f1.currency !== f2.currency) return false;
-        if (f1.monthlySalaryStart !== f2.monthlySalaryStart) return false;
-        if (f1.hourlySalaryStart !== f2.hourlySalaryStart) return false;
 
         if (f1.skip !== f2.skip) return false;
         if (f1.limit !== f2.limit) return false;

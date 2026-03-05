@@ -1,5 +1,4 @@
 import { OfferI } from "@shared/interfaces/OfferI"
-import { UserI } from "@shared/interfaces/UserI";
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -13,8 +12,7 @@ import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
-import { UserPublicService } from "user/services/UserPublicService";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import Loading from "global/components/Loading";
 
@@ -42,9 +40,6 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
     const goToOfferView = () => {
         navigate(Path.getOfferPath(offer.offerId));
     }
-
-    console.log(offer)
-
 
     const getDistanceInfo = (): string => {
         if (!userCtx.position || !offer.point) {

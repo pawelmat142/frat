@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useOfferSearch } from "./OfferSearchProvider";
-import { Currencies } from "@shared/interfaces/OfferI";
 import { Utils } from "global/utils/utils";
 import { Ico } from "global/icon.def";
 import { Path } from "../../../path";
@@ -33,28 +32,6 @@ const OfferSearchFilters: React.FC = () => {
     const countryFlags = languagesDictionary
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.locationCountries || [], languagesDictionary))
         : [];
-
-    const getSalaryFilterText = () => {
-        const currency = ctx.filters.currency === Currencies.EUR
-            ? '€'
-            : ctx.filters.currency === Currencies.USD
-                ? '$'
-                : 'zł';
-
-        let result = ''
-        if (ctx.filters.hourlySalaryStart) {
-            result += `>${ctx.filters.hourlySalaryStart} ${currency}/h`;
-            if (ctx.filters.monthlySalaryStart) {
-                result += ' or ';
-            }
-        }
-        if (ctx.filters.monthlySalaryStart) {
-            result += `>${ctx.filters.monthlySalaryStart} ${currency}/month`;
-        }
-        return result;
-    }
-
-    const salaryFilterText = getSalaryFilterText();
 
     return (
         <div className="filters-container">
@@ -88,30 +65,6 @@ const OfferSearchFilters: React.FC = () => {
                     </div>
                 )}
 
-                {(!!ctx.filters.skills?.length) && (
-                    <div className="chip-container ml-2">
-                        {(ctx.filters.skills || []).map(skill => (
-                            <div key={skill} className="search-chip tertiary">
-                                {skill}
-                            </div>
-                        ))}
-
-                    </div>
-                )}
-
-                {(!!ctx.filters.certificates?.length) && (
-                    <div className="chip-container ml-2">
-                        {(ctx.filters.certificates || []).map(cert => (
-                            <div key={cert} className="search-chip secondary">
-                                {cert}
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                {(!!salaryFilterText && (
-                    <div className="ml-2 small-font">{salaryFilterText}</div>
-                ))}
             </div>
 
 

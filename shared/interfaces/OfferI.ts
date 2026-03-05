@@ -116,14 +116,6 @@ export interface OfferSearchFilters {
     communicationLanguages?: string[];
     categories?: string[];
 
-    // TODO remove
-    freeText?: string;
-    skills?: string[];
-    certificates?: string[];
-    currency?: Currency | null;
-    monthlySalaryStart?: number | null;
-    hourlySalaryStart?: number | null;
-
     skip: number;
     limit: number;
 }

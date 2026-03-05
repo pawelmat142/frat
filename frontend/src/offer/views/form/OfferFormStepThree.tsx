@@ -6,7 +6,6 @@ import { Controller } from "react-hook-form";
 import FloatingInput from "global/components/controls/FloatingInput";
 import FloatingTextarea from "global/components/controls/FloatingTextarea";
 
-// TODO remove
 const OfferFormStepThree: React.FC = () => {
 
     const { t } = useTranslation();
