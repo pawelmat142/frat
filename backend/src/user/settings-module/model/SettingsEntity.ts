@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
 import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn } from 'typeorm';
-import { SettingsI, ThemeType, Themes } from '@shared/interfaces/SettingsI';
+import { SettingsI, Theme, Themes } from '@shared/interfaces/SettingsI';
 import { UserEntity } from 'user/model/UserEntity';
 
 @Entity('jh_user_settings')
@@ -10,7 +10,7 @@ export class SettingsEntity implements SettingsI {
     uid: string;
 
     @Column({ name: 'theme', type: 'varchar', length: 10, default: Themes.LIGHT })
-    theme: ThemeType;
+    theme: Theme;
 
     @Column({ name: 'language_code', type: 'varchar', length: 10, default: 'en' })
     languageCode: string;

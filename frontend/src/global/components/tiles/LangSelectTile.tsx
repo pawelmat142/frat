@@ -1,7 +1,6 @@
 import { Ico } from "global/icon.def";
-import { useBottomSheet } from "global/providers/BottomSheetProvider";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
+import { useUserContext } from "user/UserProvider";
 
 interface LangSelectTileProps {
     iconSize?: number;
@@ -9,29 +8,11 @@ interface LangSelectTileProps {
 
 const LangSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
 
-    const { i18n, t } = useTranslation();
-    const langCode = i18n.language;
-    const bottomSheet = useBottomSheet()
-
-    const setLang = (langCode?: string) => {
-        if (!langCode) {
-            throw new Error(t('lang.notDefined'));
-        }
-        i18n.changeLanguage(langCode);
-        toast.success(t('lang.changedTo', { lang: langCode }));
-    };
+    const { t } = useTranslation();
+    const userCtx = useUserContext();
 
     const selectLanguage = () => {
-        bottomSheet.openDictionarySelector({
-            title: i18n.t('lang.select'),
-            translateItems: true,
-            code: "LANGUAGES",
-            groupCode: "TRANSLATIONS",
-            selectedValues: [langCode],
-            onSelect: (item) => {
-                setLang(item ? String(item) : undefined);
-            }
-        })
+        userCtx.selectLanguage();
     }
 
     return (

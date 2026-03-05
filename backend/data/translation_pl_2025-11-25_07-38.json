@@ -493,7 +493,8 @@
     },
     "error": {
       "missingUserId": "Brak ID użytkownika",
-      "avatarUploadFailed": "Nie udało się przesłać avatara"
+      "avatarUploadFailed": "Nie udało się przesłać avatara",
+      "settingsUpdate": "Nie udało się zaktualizować ustawień"
     },
     "success": {
       "avatarUploaded": "Avatar został przesłany"

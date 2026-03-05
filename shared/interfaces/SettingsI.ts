@@ -1,6 +1,6 @@
 export interface SettingsI {
     uid: string;
-    theme: ThemeType;
+    theme: Theme;
     languageCode: string;
 }
 
@@ -9,7 +9,7 @@ export const Themes = {
     DARK: 'dark',
 } as const;
 
-export type ThemeType = typeof Themes[keyof typeof Themes];
+export type Theme = typeof Themes[keyof typeof Themes];
 
 export const defaultSettings: SettingsI = {
     uid: '',

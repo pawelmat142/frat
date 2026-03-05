@@ -6,9 +6,14 @@ import WebSocketService from 'global/web-socket/WebSocketService';
 import { useTranslation } from 'react-i18next';
 import { UserI } from '@shared/interfaces/UserI';
 import { UserContextService } from './services/UserContextService';
-import { defaultSettings, SettingsI } from '@shared/interfaces/SettingsI';
+import { defaultSettings, SettingsI, Theme, Themes } from '@shared/interfaces/SettingsI';
 import { MeUserContext } from '@shared/interfaces/UserContext';
 import { AuthService } from 'auth/services/AuthService';
+import { useBottomSheet } from 'global/providers/BottomSheetProvider';
+import { SelectorItem } from 'global/interface/controls.interface';
+import { FaMoon, FaSun } from 'react-icons/fa';
+import { useTheme } from "global/providers/ThemeProvider";
+import { SettingsService } from './services/SettingsService';
 
 interface UserContextType {
 	me: UserI | null;
@@ -20,14 +25,18 @@ interface UserContextType {
 
 	loading: boolean;
 	setLoading: (loading: boolean) => void;
+	selectLanguage: () => void;
+	selectTheme: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
 	const authCtx = useAuthContext();
+	const bottomSheet = useBottomSheet()
+	const { theme, setTheme } = useTheme();
 
 	const [meCtx, setMeCtx] = useState<MeUserContext | null>(null)
 	const [me, setMe] = useState<UserI | null>(null)
@@ -38,8 +47,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const [position, setPosition] = useState<Position | null>(null)
 	const [positionWatchId, setPositionWatchId] = useState<number | null>(null)
 
-	// TODO settings synchronizacja settings z baza i local storage
-
 	useEffect(() => {
 		const initUserContext = async () => {
 			try {
@@ -48,6 +55,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				setMeCtx(ctx);
 				setMe(ctx.user);
 				setSettings(ctx.settings);
+				applySettingsWhenLogin(ctx.settings);
 				initLocation(true);
 				AuthService.saveTelegramLogin(ctx.user);
 			} catch (error) {
@@ -146,6 +154,76 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		toast.warn(t('common.others.fetchLocationError'));
 	}
 
+	const applySettingsWhenLogin = (settings: SettingsI) => {
+		const langCode = settings?.languageCode;
+		if (langCode) {
+			i18n.changeLanguage(langCode);
+		}
+
+		const theme = settings?.theme;
+		if (theme) {
+			setTheme(theme);
+		}
+	}
+
+
+	const selectLanguage = () => {
+		bottomSheet.openDictionarySelector({
+			title: i18n.t('lang.select'),
+			translateItems: true,
+			code: "LANGUAGES",
+			groupCode: "TRANSLATIONS",
+			selectedValues: [i18n.language],
+			onSelect: async (item) => {
+				if (item === i18n.language) return; // no change
+				const langCode = String(item);
+				if (!item) {
+					throw new Error(t('lang.notDefined'));
+				}
+				await updateSettings({ ...settings, languageCode: langCode });
+				i18n.changeLanguage(langCode);
+				toast.success(t('lang.changedTo', { lang: langCode }));
+			}
+		})
+	}
+
+	const selectTheme = () => {
+		const items: SelectorItem[] = [{
+			label: t("theme.light"),
+			value: Themes.LIGHT,
+			icon: <FaSun />
+		}, {
+			label: t("theme.dark"),
+			value: Themes.DARK,
+			icon: <FaMoon />
+		}]
+		bottomSheet.openSelector({
+			title: t("theme.select"),
+			selectedValues: [theme],
+			items,
+			onSelect: async (item) => {
+				const newTheme = String(item) as Theme;
+				if (newTheme === theme) return; // no change
+				await updateSettings({ ...settings, theme: newTheme });
+				setTheme(newTheme);
+				toast.success(t('theme.changedTo', { theme: newTheme }));
+			}
+		})
+	}
+
+	const updateSettings = async (settings: SettingsI) => {
+		if (!me) {
+			return
+		}
+		try {
+			const result = await SettingsService.updateSettings(settings);
+			setSettings(result);
+		} catch (error) {
+			toast.error(t('error.settingsUpdate'));
+		}
+
+	}
+
 	return (
 		<UserContext.Provider value={{
 			me,
@@ -155,6 +233,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			loading: loading,
 			setLoading: setLoading,
 			position,
+			selectLanguage,
+			selectTheme
 		}}>
 			{children}
 		</UserContext.Provider>

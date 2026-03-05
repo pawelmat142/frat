@@ -46,40 +46,40 @@ root.render(
                           <OffersProvider>
                             <WorkerProvider>
                               <ChatsProvider>
-                            <NotificationsProvider>
-                            <OfferSearchProvider>
-                              <WorkersSearchProvider>
-                                <MenuProvider>
-                                  <div className="app-shell">
-                                    <GlobalHeader />
-                                    <NotificationsGlobalBar />
-                                    <main className="app-main">
-                                      <App />
-                                    </main>
-                                    <LayoutFooterSwitch />
-                                  </div>
-                                  <CookieBanner />
-                                  <ToastContainer
-                                    position="top-right"
-                                    autoClose={3000}
-                                    hideProgressBar={false}
-                                    newestOnTop={false}
-                                    closeOnClick
-                                    rtl={false}
-                                    pauseOnFocusLoss
-                                    draggable
-                                    pauseOnHover
-                                    theme="light"
-                                  />
-                                </MenuProvider>
-                              </WorkersSearchProvider>
-                            </OfferSearchProvider>
-                          </NotificationsProvider>
+                                <NotificationsProvider>
+                                  <OfferSearchProvider>
+                                    <WorkersSearchProvider>
+                                      <MenuProvider>
+                                        <div className="app-shell">
+                                          <GlobalHeader />
+                                          <NotificationsGlobalBar />
+                                          <main className="app-main">
+                                            <App />
+                                          </main>
+                                          <LayoutFooterSwitch />
+                                        </div>
+                                        <CookieBanner />
+                                        <ToastContainer
+                                          position="top-right"
+                                          autoClose={3000}
+                                          hideProgressBar={false}
+                                          newestOnTop={false}
+                                          closeOnClick
+                                          rtl={false}
+                                          pauseOnFocusLoss
+                                          draggable
+                                          pauseOnHover
+                                          theme="light"
+                                        />
+                                      </MenuProvider>
+                                    </WorkersSearchProvider>
+                                  </OfferSearchProvider>
+                                </NotificationsProvider>
                               </ChatsProvider>
                             </WorkerProvider>
-                        </OffersProvider>
-                      </FriendsProvider>
-                    </UserProvider>
+                          </OffersProvider>
+                        </FriendsProvider>
+                      </UserProvider>
                     </AuthProvider>
                   </CookieProvider>
                 </ThemeProvider>

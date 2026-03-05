@@ -118,9 +118,9 @@ const ProfileView: React.FC = () => {
     }
 
     // Show warning if email not verified
-    const emailNotVerifiedWarning = isMyAccount 
-    && me?.provider === UserProviders.EMAIL 
-    && !firebaseUser?.emailVerified ? (
+    const emailNotVerifiedWarning = isMyAccount
+        && me?.provider === UserProviders.EMAIL
+        && !firebaseUser?.emailVerified ? (
         <div className="mb-6 p-4 rounded border error-color text-center flex flex-col items-center">
             <div className="font-bold mb-2">{t('signup.emailVerificationRequired')}</div>
             <div className="mb-2">{t('signup.emailVerificationMessage')}</div>
@@ -363,6 +363,14 @@ const ProfileView: React.FC = () => {
                                 {t('account.showEmployeeProfile')}
                             </Button>
                         )}
+                        <Button
+                            fullWidth
+                            mode={BtnModes.SECONDARY}
+                            onClick={()=> navigate(Path.SETTINGS)}
+                        >
+                            <Ico.SETTINGS className="mr-2" />
+                            {t('common.settings')}
+                        </Button>
                         <Button
                             fullWidth
                             mode={BtnModes.ERROR_TXT}

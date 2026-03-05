@@ -500,7 +500,8 @@
     },
     "error": {
       "missingUserId": "User ID is missing",
-      "avatarUploadFailed": "Failed to upload avatar"
+      "avatarUploadFailed": "Failed to upload avatar",
+      "settingsUpdate": "Failed to update settings"
     },
     "success": {
       "avatarUploaded": "Avatar uploaded successfully"

@@ -1,7 +1,7 @@
 /** Created by Pawel Malek **/
 import { Injectable } from '@nestjs/common';
 import { SettingsRepo } from './SettingsRepo';
-import { SettingsI, defaultSettings, ThemeType } from '@shared/interfaces/SettingsI';
+import { SettingsI, defaultSettings } from '@shared/interfaces/SettingsI';
 
 @Injectable()
 export class SettingsService {
