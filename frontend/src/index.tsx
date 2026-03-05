@@ -26,6 +26,7 @@ import { NotificationsProvider } from 'notification/NotificationsProvider';
 import { FriendsProvider } from 'friends/FriendsProvider';
 import { OffersProvider } from 'offer/OffersProvider';
 import { WorkerProvider } from 'employee/WorkerProvider';
+import { UsersStorageProvider } from 'global/providers/UsersStorageProvider';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -39,49 +40,51 @@ root.render(
             <BottomSheetProvider>
               <DrawerProvider>
                 <ThemeProvider>
-                  <CookieProvider>
-                    <AuthProvider>
-                      <UserProvider>
-                        <FriendsProvider>
-                          <OffersProvider>
-                            <WorkerProvider>
-                              <ChatsProvider>
-                                <NotificationsProvider>
-                                  <OfferSearchProvider>
-                                    <WorkersSearchProvider>
-                                      <MenuProvider>
-                                        <div className="app-shell">
-                                          <GlobalHeader />
-                                          <NotificationsGlobalBar />
-                                          <main className="app-main">
-                                            <App />
-                                          </main>
-                                          <LayoutFooterSwitch />
-                                        </div>
-                                        <CookieBanner />
-                                        <ToastContainer
-                                          position="top-right"
-                                          autoClose={3000}
-                                          hideProgressBar={false}
-                                          newestOnTop={false}
-                                          closeOnClick
-                                          rtl={false}
-                                          pauseOnFocusLoss
-                                          draggable
-                                          pauseOnHover
-                                          theme="light"
-                                        />
-                                      </MenuProvider>
-                                    </WorkersSearchProvider>
-                                  </OfferSearchProvider>
-                                </NotificationsProvider>
-                              </ChatsProvider>
-                            </WorkerProvider>
-                          </OffersProvider>
-                        </FriendsProvider>
-                      </UserProvider>
-                    </AuthProvider>
-                  </CookieProvider>
+                  <UsersStorageProvider>
+                    <CookieProvider>
+                      <AuthProvider>
+                        <UserProvider>
+                          <FriendsProvider>
+                            <OffersProvider>
+                              <WorkerProvider>
+                                <ChatsProvider>
+                                  <NotificationsProvider>
+                                    <OfferSearchProvider>
+                                      <WorkersSearchProvider>
+                                        <MenuProvider>
+                                          <div className="app-shell">
+                                            <GlobalHeader />
+                                            <NotificationsGlobalBar />
+                                            <main className="app-main">
+                                              <App />
+                                            </main>
+                                            <LayoutFooterSwitch />
+                                          </div>
+                                          <CookieBanner />
+                                          <ToastContainer
+                                            position="top-right"
+                                            autoClose={3000}
+                                            hideProgressBar={false}
+                                            newestOnTop={false}
+                                            closeOnClick
+                                            rtl={false}
+                                            pauseOnFocusLoss
+                                            draggable
+                                            pauseOnHover
+                                            theme="light"
+                                          />
+                                        </MenuProvider>
+                                      </WorkersSearchProvider>
+                                    </OfferSearchProvider>
+                                  </NotificationsProvider>
+                                </ChatsProvider>
+                              </WorkerProvider>
+                            </OffersProvider>
+                          </FriendsProvider>
+                        </UserProvider>
+                      </AuthProvider>
+                    </CookieProvider>
+                  </UsersStorageProvider>
                 </ThemeProvider>
               </DrawerProvider>
             </BottomSheetProvider>

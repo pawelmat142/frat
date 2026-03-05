@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import UserItem from "./UserItem";
 import { useTranslation } from "react-i18next";
 import Loading from "global/components/Loading";
-import { UserPublicService } from "user/services/UserPublicService";
 import { useUserContext } from "user/UserProvider";
+import { useUsersStorage } from "global/providers/UsersStorageProvider";
 
 interface Props {
     uid: string,
@@ -20,8 +20,7 @@ const UserItemWithLoading: React.FC<Props> = ({ uid, size = 3.5, showNumber = fa
     const [user, setUser] = useState<UserI | null>(null);
     const [loading, setLoading] = useState(true);
     const { me } = useUserContext();
-
-    // TODO ADD USERS STORAGE IN USER CTX 
+    const userStorage = useUsersStorage();
 
     useEffect(() => {
         const initUser = async () => {
@@ -32,7 +31,7 @@ const UserItemWithLoading: React.FC<Props> = ({ uid, size = 3.5, showNumber = fa
             }
 
             try {
-                const fetchedUser = await UserPublicService.fetchUser(uid);
+                const fetchedUser = await userStorage.getUser(uid);
                 setUser(fetchedUser);
             } finally {
                 setLoading(false);

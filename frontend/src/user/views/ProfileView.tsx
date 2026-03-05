@@ -8,7 +8,6 @@ import { AuthService } from "auth/services/AuthService";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "user/UserProvider";
-import { UserPublicService } from "user/services/UserPublicService";
 import AvatarTile from "user/components/AvatarTile";
 import { Path } from "../../path";
 import { BtnModes } from "global/interface/controls.interface";
@@ -27,6 +26,7 @@ import { UserUtil } from "@shared/utils/UserUtil";
 import { useFriendsContext } from "friends/FriendsProvider";
 import { useOffersContext } from "offer/OffersProvider";
 import { useWorkerContext } from "employee/WorkerProvider";
+import { useUsersStorage } from "global/providers/UsersStorageProvider";
 
 const ProfileView: React.FC = () => {
 
@@ -41,6 +41,7 @@ const ProfileView: React.FC = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const confirm = useConfirm()
+    const userStorage = useUsersStorage();
 
     const [localLoading, setLocalLoading] = useState(true);
     const [worker, setWorker] = useState<WorkerI | null>(null)
@@ -55,7 +56,7 @@ const ProfileView: React.FC = () => {
                 if (uid === me?.uid) {
                     setUser(me)
                 } else {
-                    const _user = await UserPublicService.fetchUser(uid)
+                    const _user = await userStorage.getUser(uid);
                     setUser(_user)
                 }
             }

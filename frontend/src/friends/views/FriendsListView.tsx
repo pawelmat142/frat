@@ -8,12 +8,12 @@ import { useFriendsContext } from "friends/FriendsProvider"
 import { useEffect, useState } from "react"
 import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI"
 import { UserI } from "@shared/interfaces/UserI"
-import { UserPublicService } from "user/services/UserPublicService"
 import FriendshipListItem from "friends/components/FriendshipListItem"
 import { FriendsService } from "friends/services/FriendsService"
 import Loading from "global/components/Loading"
 import { Ico } from "global/icon.def"
 import { FriendUtil } from "@shared/utils/FriendUtil"
+import { useUsersStorage } from "global/providers/UsersStorageProvider"
 
 const FriendsListView: React.FC = () => {
 
@@ -21,6 +21,7 @@ const FriendsListView: React.FC = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const userCtx = useUserContext()
+    const usersStorage = useUsersStorage();
     const friendsCtx = useFriendsContext();
     const me = userCtx?.me;
     const isMyAccount = uid === me?.uid
@@ -72,7 +73,7 @@ const FriendsListView: React.FC = () => {
             setFriends([])
             return;
         }
-        const users = await UserPublicService.fetchUsers(uids)
+        const users = await usersStorage.getUsers(uids)
 
         const friends = friendships.filter(f => f.status !== FriendshipStatuses.REJECTED).map(friendship => {
             const friendUid = friendship.requesterUid === uid ? friendship.addresseeUid : friendship.requesterUid
