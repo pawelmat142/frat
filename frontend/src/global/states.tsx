@@ -1,6 +1,6 @@
-import MainHeaderState from "./MainHeaderState";
-import HeaderBackBtn from "./HeaderBackBtn";
-import { Path } from "../../path";
+import MainHeaderState from "./header-state/MainHeaderState";
+import HeaderBackBtn from "./header-state/HeaderBackBtn";
+import { Path } from "../path";
 
 export interface ViewState {
     title?: string;
@@ -51,6 +51,10 @@ export const STATES: { [key: string]: ViewState } = {
         title: 'employeeProfile.title',
     },
     [Path.OFFER_FORM]: {
+        leftBtn: <HeaderBackBtn />,
+        title: 'offer.form.title',
+    },
+    [Path.OFFER_FORM_EDIT]: {
         leftBtn: <HeaderBackBtn />,
         title: 'offer.form.title',
     },

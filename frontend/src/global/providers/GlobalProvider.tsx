@@ -5,7 +5,7 @@ import { createContext, useState } from "react"
 import { useLocation, matchPath } from "react-router-dom";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { useIsDesktop } from "global/hooks/isMobile";
-import { ViewState as ViewState, STATES } from "global/header-state/states";
+import { ViewState as ViewState, STATES } from "global/states";
 import { Dictionaries } from "@shared/utils/DictionaryUtil";
 
 interface GlobalContextType {
