@@ -10,6 +10,8 @@ export const AppConfig = {
     
     
     // used in worker search filters for position radius slider
-    RADIUS_STEPS_KM: [50, 80, 100, 150, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+    RADIUS_STEPS_KM: [50, 80, 100, 150, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
+
+    DEFAULT_LANG_CODE: 'en',
 
 } as const;

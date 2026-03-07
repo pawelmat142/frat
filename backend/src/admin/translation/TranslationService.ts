@@ -9,6 +9,7 @@ import { TranslationListDto } from "@shared/dto/TranslationListDto";
 import { ToastException } from "global/exceptions/ToastException";
 import { DictionaryElement, DictionaryI } from "@shared/interfaces/DictionaryI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
+import { AppConfig } from "@shared/AppConfig";
 
 @Injectable()
 export class TranslationService implements OnModuleInit {
@@ -20,14 +21,13 @@ export class TranslationService implements OnModuleInit {
         @InjectRepository(TranslationEntity)
         private translationRepository: Repository<TranslationEntity>,
     ) {
-        this.dictionariesService.addTranslationItems$.subscribe((translation: TranslationI) => {
-            this.addTranslationItems(translation);
-        });
+        this.dictionariesService.registerSetTranslationsForTranslatableElementCallback(this.patchTranslationItem.bind(this));
+        this.dictionariesService.registerRemoveTranslationsForPathCallback(this.removeTranslationForPath.bind(this));
     }
 
     private languagesList: DictionaryElement[]
 
-    private readonly DEFAULT_LANG_CODE = 'en';
+    private readonly DEFAULT_LANG_CODE = AppConfig.DEFAULT_LANG_CODE;
 
     public async onModuleInit(): Promise<void> {
         this.reloadLanguagesList();
@@ -50,8 +50,8 @@ export class TranslationService implements OnModuleInit {
         }
 
         if (!(await this.isSupportedTranslationLang(code))) {
-            this.logger.warn(`Language ${langCode} is not supported by translations, returning default 'en'`);
-            code = 'en'
+            this.logger.warn(`Language ${langCode} is not supported by translations, returning default '${this.DEFAULT_LANG_CODE}'`);
+            code = this.DEFAULT_LANG_CODE;
         }
 
         const result = await this.getTranslation(code);
@@ -130,6 +130,17 @@ export class TranslationService implements OnModuleInit {
             ObjUtil.setValueInNestedJsonByPath(translation.data, item.path, value);
             this.logger.log(`Patched translation item with path ${item.path} for language ${langCode}`);
             await this.translationRepository.save(translation);
+        }
+    }
+
+    public async removeTranslationForPath(path: string): Promise<void> {
+        const translations = await this.translationRepository.find();
+        for (const translation of translations) {
+            if (ObjUtil.getValueFromNestedJsonByPath(translation.data, path) !== undefined) {
+                ObjUtil.deleteValueInNestedJsonByPath(translation.data, path);
+                this.logger.log(`Removed translation item with path ${path} for language ${translation.langCode}`);
+                await this.translationRepository.save(translation);
+            }
         }
     }
 

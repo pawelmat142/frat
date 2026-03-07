@@ -41,6 +41,7 @@ import NotificationsView from 'notification/views/NotificationsView';
 import TranslationItemForm from 'admin/views/translations/TranslationItemForm';
 import SettingsView from 'user/views/SettingsView';
 import OfferSearchFiltersView from 'offer/views/search/OfferSearchFiltersView';
+import DictionaryElementForm from 'admin/views/dictionaries/DictionaryElementForm';
 
 const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = ({ children, direction }) => (
     <motion.div
@@ -118,6 +119,8 @@ const App: React.FC = () => {
                     <Route path={Path.ADMIN_DICTIONARIES_ADD} element={<AddDictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES_EDIT} element={<AddDictionaryView />} />
                     <Route path={Path.ADMIN_DICTIONARIES_GROUP} element={<DictionaryGroupForm />} />
+                    <Route path={Path.ADMIN_DICTIONARIES_EDIT_ELEMENT} element={<DictionaryElementForm />} />
+                    <Route path={Path.ADMIN_DICTIONARIES_ADD_ELEMENT} element={<DictionaryElementForm />} />
 
                     <Route path={Path.ADMIN_TRANSLATIONS} element={<AdminTranslations />} />
                     <Route path={Path.ADMIN_TRANSLATION_ITEM} element={<TranslationItemForm />} />

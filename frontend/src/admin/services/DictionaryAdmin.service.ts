@@ -1,30 +1,21 @@
-import { DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
-import i18n from 'global/i18n';
+import { DictionaryElement, DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
 import { httpClient } from 'global/services/http';
 import { TranslationService } from 'global/services/Translation.service';
 
 export const DictionaryAdminService = {
 
-	async getDictionary(code: string, translate?: any): Promise<DictionaryI> {
+	async getDictionary(code: string): Promise<DictionaryI> {
 		const dictionary = await httpClient.get<DictionaryI>(`/admin/dictionaries/${code}`);
-		if (translate) {
-			this.translateTranslateableColumns(dictionary, translate);
-		}
 		return dictionary;
 	},
 
-	async putDictionary(dictionary: DictionaryI, translate?: any): Promise<DictionaryI> {
-		const langCode = i18n.language;
-		const result = await httpClient.put<DictionaryI>(`/admin/dictionaries/${langCode}`, dictionary);
+	async putDictionary(dictionary: DictionaryI): Promise<DictionaryI> {
+		const result = await httpClient.put<DictionaryI>(`/admin/dictionaries`, dictionary);
+		return result;
+	},
 
-		const anyTranslatableColumn = dictionary.columns.find(c => c.translatable);
-		if (anyTranslatableColumn) {
-			TranslationService.clearCache();
-		}
-		
-		if (translate) {
-			this.translateTranslateableColumns(result, translate);
-		}
+	async putElement(element: DictionaryElement, dictionaryCode: string): Promise<DictionaryI> {
+		const result = await httpClient.put<DictionaryI>(`/admin/dictionaries/${dictionaryCode}`, element);
 		return result;
 	},
 
@@ -40,6 +31,7 @@ export const DictionaryAdminService = {
 		return httpClient.post("/admin/import/dictionaries/import", data)
 	},
 
+	// remove?
 	translateTranslateableColumns(dictionary: DictionaryI, translate: any): void {
 		dictionary.columns
 			.filter(c => c.translatable)

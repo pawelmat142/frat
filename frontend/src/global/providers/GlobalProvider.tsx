@@ -15,6 +15,7 @@ interface GlobalContextType {
     state: ViewState,
     setHeaderMenu: (menu: React.ReactNode) => void;
     setViewState: (state: ViewState) => void;
+    getLanguagesList: () => string[];
 }
 
 interface Dictionaries {
@@ -76,6 +77,10 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setState(state)
     }
 
+    const getLanguagesList = (): string[] => {
+        return languagesDictionary?.groups.find(g => g.code === 'TRANSLATIONS')?.elementCodes || []
+    }
+
     return (
         <GlobalContext.Provider value={{
             isDesktop: isDesktop,
@@ -85,7 +90,8 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             loading: loading,
             state,
             setHeaderMenu,
-            setViewState
+            setViewState,
+            getLanguagesList
         }}>
             {children}
         </GlobalContext.Provider>

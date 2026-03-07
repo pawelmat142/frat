@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
-import Input from "global/components/controls/Input";
 import Button from "global/components/controls/Button";
 import Checkbox from "global/components/controls/Checkbox";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
@@ -9,7 +8,6 @@ import { Path } from "../../../path";
 import Loading from "global/components/Loading";
 import { toast } from "react-toastify";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
-import { useTranslation } from "react-i18next";
 import FloatingInput from "global/components/controls/FloatingInput";
 
 const DictionaryGroupForm: React.FC = () => {
@@ -25,12 +23,11 @@ const DictionaryGroupForm: React.FC = () => {
     const [groupDescription, setGroupDescription] = useState("");
     const [selectedElements, setSelectedElements] = useState<string[]>([]);
     const [active, setActive] = useState(true);
-    const { t } = useTranslation();
 
     useEffect(() => {
         if (!dictionaryCode) return;
         setLoading(true);
-        DictionaryAdminService.getDictionary(dictionaryCode, t)
+        DictionaryAdminService.getDictionary(dictionaryCode)
             .then(dict => {
                 setDictionary(dict);
                 if (editMode && dict.groups) {
@@ -69,7 +66,7 @@ const DictionaryGroupForm: React.FC = () => {
         const updatedDictionary = getDictionaryToSave();
         setLoading(true);
         try {
-            await DictionaryAdminService.putDictionary(updatedDictionary, t);
+            await DictionaryAdminService.putDictionary(updatedDictionary);
             navigate(Path.getDictionaryPath(dictionary.code));
         } catch (error) {
         } finally {

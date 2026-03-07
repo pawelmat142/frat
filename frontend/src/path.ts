@@ -39,6 +39,8 @@ export abstract class Path {
     public static readonly ADMIN_DICTIONARY = `${Path.ADMIN_DICTIONARIES}/:code`;
     public static readonly ADMIN_DICTIONARIES_ADD = `${Path.ADMIN_PANEL}/dictionaries/add`;
     public static readonly ADMIN_DICTIONARIES_EDIT = `${Path.ADMIN_PANEL}/dictionaries/edit/:code`;
+    public static readonly ADMIN_DICTIONARIES_EDIT_ELEMENT = `${Path.ADMIN_PANEL}/dictionaries/:code/edit/:elementCode`;
+    public static readonly ADMIN_DICTIONARIES_ADD_ELEMENT = `${Path.ADMIN_PANEL}/dictionaries/:code/add`;
     public static readonly ADMIN_DICTIONARIES_GROUP = `${Path.ADMIN_PANEL}/dictionaries/:dictionaryCode/group-form/:groupCode`;
 
     public static readonly ADMIN_TRANSLATIONS = `${Path.ADMIN_PANEL}/translations`;
@@ -50,6 +52,8 @@ export abstract class Path {
 
     public static getDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES}/${code}`;
     public static getEditDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES_EDIT.replace(':code', code)}`;
+    public static getEditDictionaryElementPath = (code: string, elementCode: string) => `${Path.ADMIN_DICTIONARIES_EDIT_ELEMENT.replace(':code', code).replace(':elementCode', elementCode)}`;
+    public static getAddDictionaryElementPath = (code: string) => `${Path.ADMIN_DICTIONARIES_ADD_ELEMENT.replace(':code', code)}`;
     public static getDictionaryGroupFormPath = (dictionaryCode: string, groupCode: string) => `${Path.ADMIN_DICTIONARIES_GROUP.replace(':dictionaryCode', dictionaryCode).replace(':groupCode', groupCode)}`;
     public static getProfilePath = (uid: string) => `${Path.PROFILE.replace(':uid', uid)}`;
     public static getWorkerProfilePath = (displayName: string) => `${Path.WORKER.replace(':displayName', displayName)}`;

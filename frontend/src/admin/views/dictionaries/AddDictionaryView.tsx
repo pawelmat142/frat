@@ -1,5 +1,4 @@
 import Button from "global/components/controls/Button";
-import Input from "global/components/controls/Input";
 import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import AddIcon from '@mui/icons-material/Add';
@@ -7,7 +6,6 @@ import Checkbox from "global/components/controls/Checkbox";
 import { useNavigate, useParams } from "react-router-dom";
 import { Path } from '../../../path';
 import Loading from "global/components/Loading";
-import TypedInput from "global/components/controls/TypedInput";
 import IconButton from "global/components/controls/IconButon";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -42,8 +40,6 @@ const AddDictionaryView: React.FC = () => {
   const [columnForm, setColumnForm] = useState<ColumnForm | null>(null);
   const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
 
-  const { t } = useTranslation();
-
   const { code: editCode } = useParams<{ code?: string }>();
   const isEditMode = window.location.pathname.includes("/edit/") && !!editCode;
 
@@ -52,7 +48,7 @@ const AddDictionaryView: React.FC = () => {
   useEffect(() => {
     if (isEditMode && editCode) {
       setLoading(true);
-      DictionaryAdminService.getDictionary(editCode, t)
+      DictionaryAdminService.getDictionary(editCode)
         .then(dict => {
           setDictionary(dict);
           setCode(dict.code);
@@ -158,7 +154,7 @@ const AddDictionaryView: React.FC = () => {
     try {
       setLoading(true);
 
-      const res = await DictionaryAdminService.putDictionary(result, t);
+      const res = await DictionaryAdminService.putDictionary(result);
       if (!res) {
         return
       }
@@ -207,7 +203,7 @@ const AddDictionaryView: React.FC = () => {
         <h2 className="text-lg font-bold">{isEditMode ? "Edit dictionary" : "Add Dictionary"}</h2>
         <div className="flex flex-col gap-3">
 
-          <Input
+          <FloatingInput
             name="code"
             label="Code"
             value={code}
@@ -217,7 +213,7 @@ const AddDictionaryView: React.FC = () => {
             disabled={isEditMode}
           />
 
-          <Input
+          <FloatingInput
             name="description"
             label="Description"
             value={description}
@@ -264,9 +260,6 @@ const AddDictionaryView: React.FC = () => {
                 label="Translatable"
                 className="mb-3"
               />
-              {columnForm.translatable && (
-                <div>"Translation key and default value will be added automaticaly with key dictionary./dictionaryCode/./columnCode/./elementCode/"</div>
-              )}
             </div>
 
             <div className="mb-5">
@@ -276,21 +269,6 @@ const AddDictionaryView: React.FC = () => {
                 label="Required"
                 className="mb-3"
               />
-              {columnForm.required && (
-                <TypedInput
-                  valueType={columnForm.type?.value as DictionaryColumnType}
-                  name="defaultValue"
-                  label="Default value"
-                  value={columnForm.defaultValue ?? ''}
-                  onChange={e => {
-                    setColumnForm({ ...columnForm, defaultValue: e.target.value })
-                  }}
-                  onDateChange={date => {
-                    setColumnForm({ ...columnForm, defaultValue: date })
-                  }}
-                  fullWidth
-                />
-              )}
             </div>
 
           </div>)}

@@ -18,6 +18,18 @@ export abstract class ObjUtil {
         return path.split('.').reduce((o, k) => (o || {})[k], obj);
     }
 
+    public static deleteValueInNestedJsonByPath(obj: any, path: string): void {
+        const keys = path.split('.');
+        let current = obj;
+        keys.forEach((k, i) => {
+            if (i === keys.length - 1) {
+                delete current[k];
+            } else {
+                current = current[k];
+            }
+        });
+    }
+
     public static deleteValueFromNestedJsonByPath(obj: any, path: string): void {
         const keys = path.split('.');
         let current = obj;

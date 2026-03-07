@@ -1,41 +1,166 @@
-import React from "react";
-import Input from "global/components/controls/Input";
+import React, { useEffect, useState } from "react";
 import Checkbox from "global/components/controls/Checkbox";
 import Button from "global/components/controls/Button";
-import { BtnModes } from "global/interface/controls.interface";
+import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import TypedInput from "global/components/controls/TypedInput";
-import { DictionaryI, DictionaryElement } from "@shared/interfaces/DictionaryI";
+import { DictionaryI, DictionaryElement, DictionaryColumnTypes } from "@shared/interfaces/DictionaryI";
+import { userAdminPanelContext } from "../AdminPanelProvider";
+import FloatingInput from "global/components/controls/FloatingInput";
+import Loading from "global/components/Loading";
+import { useNavigate, useParams } from "react-router-dom";
+import { DictionaryAdminService } from "admin/services/DictionaryAdmin.service";
+import { useTranslation } from "react-i18next";
+import { useConfirm } from "global/providers/PopupProvider";
+import { toast } from "react-toastify";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
-interface DictionaryElementFormProps {
-    dictionary: DictionaryI;
-    elementForm: Partial<DictionaryElement> | null;
-    setElementForm: (form: Partial<DictionaryElement> | null) => void;
-    onAddElement: () => void;
-    onCancel: () => void;
-    editMode?: boolean;
-}
+const DictionaryElementForm: React.FC = () => {
 
-const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
-    dictionary,
-    elementForm,
-    setElementForm,
-    onAddElement,
-    onCancel,
-    editMode
-}) => {
-    const allElementRequiredFiledsFilled = dictionary.columns.every(col => !col.required || (elementForm?.values && elementForm.values[col.code]));
+    const { code, elementCode } = useParams<{ code: string, elementCode: string }>();
+    const navigate = useNavigate();
+    const adminPanelCtx = userAdminPanelContext();
+    const globalCtx = useGlobalContext();
+    const languages = globalCtx.getLanguagesList();
+    const { t } = useTranslation();
+    const confirm = useConfirm();
 
-    const onElementChange = (elementCode: string, value: string | number | null) => {
-        const newElementForm = {
+    const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [elementForm, setElementForm] = useState<DictionaryElement | null>()
+
+    const isNewElement = !elementCode
+
+    useEffect(() => {
+        console.log("Element form updated:", elementForm);
+    }, [elementForm]);
+
+    useEffect(() => {
+        if (!code) return;
+        setLoading(true);
+        const initDctionary = async () => {
+            try {
+                const dict = await DictionaryAdminService.getDictionary(code);
+                setDictionary(dict || null);
+
+                if (!dict) {
+                    return
+                }
+                if (isNewElement) {
+                    setElementForm({
+                        code: '',
+                        description: '',
+                        active: true,
+                        values: Object.fromEntries(dict.columns.map(col => {
+                            if (col.translatable) {
+                                const translations = Object.fromEntries(languages.map(lang => [lang, '']))
+                                return [col.code, translations]
+                            }
+                            return [col.code, null]
+                        }))
+                    })
+                }
+                const element = dict?.elements.find(el => el.code === elementCode);
+                if (!element) {
+                    console.warn(` TODO Element with code ${elementCode} not found in dictionary ${code}`);
+                    return
+                }
+                setElementForm({
+                    ...element,
+                    values: Object.fromEntries(
+                        Object.entries(element.values).map(([key, value]) => {
+                            const column = dict.columns.find(col => col.code === key);
+                            if (column?.translatable) {
+                                const translationKey = value
+                                const translations: { [langCode: string]: string } = {};
+                                languages.forEach(language => {
+                                    const translated = t(translationKey, { lng: language });
+                                    translations[language] = translated !== translationKey ? translated : '';
+                                })
+                                return [key, translations];
+                            }
+                            return [key, value];
+                        })
+                    )
+                })
+            } catch (e) {
+                console.error("Failed to load dictionary:", e);
+                setDictionary(null);
+            }
+            finally {
+                setLoading(false);
+            }
+        }
+        initDctionary();
+    }, [])
+
+
+    const submitForm = async () => {
+        if (!elementForm || !dictionary) return;
+        const confirmed = await confirm({
+            title: isNewElement ? "Add new element?" : "Update element?",
+            message: isNewElement ? "Are you sure you want to add this new element to the dictionary?" : "Are you sure you want to update this element?",
+        })
+        if (!confirmed) return;
+        try {
+            setLoading(true);
+            if (!elementForm || !dictionary) return;
+            if (!elementForm || !dictionary) return;
+            const result = await DictionaryAdminService.putElement(elementForm, dictionary!.code);
+            toast.success(isNewElement ? "Element added successfully" : "Element updated successfully");
+            navigate(-1);
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
+    const onCancel = () => {
+        navigate(-1);
+    }
+
+    const initLanguages = async () => {
+        try {
+            setLoading(true);
+            if (!adminPanelCtx?.translation?.languages?.length) {
+                await adminPanelCtx?.translation?.initTranslations();
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        initLanguages();
+    }, []);
+
+    if (!elementForm) {
+        return <Loading></Loading>
+    }
+
+    const onElementChange = (elementCode: string, value: string | number | null, langCode?: string) => {
+        if (langCode) {
+            const newElementForm = {
+                ...elementForm,
+                values: {
+                    ...elementForm?.values,
+                    [elementCode]: {
+                        ...elementForm?.values?.[elementCode],
+                        [langCode]: value
+                    }
+                }
+            }
+            setElementForm(newElementForm);
+            return
+        }
+        const newElementForm: DictionaryElement = {
             ...elementForm,
             values: {
                 ...elementForm?.values,
                 [elementCode]: value
             }
-
         };
         setElementForm(newElementForm);
-    }
+    };
 
     const onElementChangeDate = (elementCode: string, date: Date | null) => {
         const newElementForm = {
@@ -46,64 +171,110 @@ const DictionaryElementForm: React.FC<DictionaryElementFormProps> = ({
             }
         };
         setElementForm(newElementForm);
+    };
+
+    if (!dictionary || loading) {
+        return <Loading />;
     }
 
     return (
-        <div className="flex flex-col gap-4 p-4 border rounded shadow w-full max-w-lg mx-auto">
-            <h3 className="text-lg font-bold mb-2">{editMode ? `Update Element` : `Add Element`}</h3>
-            <div className="flex flex-col gap-3">
-                <Input
+
+        <div className="p-6">
+            <div className="flex flex-col gap-4 w-full">
+                <Button onClick={() => navigate(-1)} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple">
+                    ← Back
+                </Button>
+                
+                <h3 className="text-xl font-bold mb-4">{isNewElement ? "Add Dictionary Element" : "Edit Dictionary Element"}</h3>
+
+                <FloatingInput
                     name="elementCode"
                     label="Element Code"
                     value={elementForm?.code || ""}
                     onChange={e => setElementForm({ ...elementForm, code: e.target.value })}
                     required
                     fullWidth
-                    disabled={editMode}
+                    disabled={!isNewElement}
                 />
-                <Input
+                <FloatingInput
                     name="elementDescription"
                     label="Description"
                     value={elementForm?.description || ""}
                     onChange={e => setElementForm({ ...elementForm, description: e.target.value })}
                     fullWidth
                 />
-                <Checkbox
-                    checked={elementForm?.active ?? true}
-                    onChange={checked => setElementForm({ ...elementForm, active: checked })}
-                    label="Active"
-                />
-                {/* Dynamic columns */}
-                {dictionary.columns.map(col => (
-                    <TypedInput
-                        valueType={col.type}
-                        key={col.code}
-                        name={col.code}
-                        label={`${col.code} (${col.type})${col.translatable ? ' [translatable]' : ''}`}
-                        value={elementForm?.values?.[col.code] || ""}
-                        onChange={e => onElementChange(col.code, e.target.value)}
-                        onDateChange={date => onElementChangeDate(col.code, date)}
-                        required={col.required}
-                        fullWidth
-                    ></TypedInput>
-                ))}
+
+                <div className="mb-4">
+                    <Checkbox
+                        checked={elementForm?.active ?? true}
+                        onChange={checked => setElementForm({ ...elementForm, active: checked })}
+                        label="Active"
+                    />
+                </div>
+
+
+                {dictionary.columns.map(col => {
+
+                    const value = elementForm?.values?.[col.code] || ""
+
+                    return (
+                        <div key={col.code} className="space-y-3">
+                            {col.type !== DictionaryColumnTypes.BOOLEAN && (
+                                <div className="flex items-center gap-2 mb-2">
+
+                                    <h5 className="font-medium">{col.code}</h5>
+                                    <span className="text-sm text-gray-500">({col.type})</span>
+                                    {col.translatable && <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">translatable</span>}
+                                    {col.required && <span className="text-sm bg-red-100 text-red-800 px-2 py-1 rounded">required</span>}
+                                </div>
+                            )}
+
+                            {col.translatable ? (
+                                Object.entries(value).map(([langCode, val]) => {
+                                    return <FloatingInput
+                                        key={langCode}
+                                        name={`${col.code}_${langCode}`}
+                                        label={`${langCode}`}
+                                        value={String(val)}
+                                        onChange={e => onElementChange(col.code, e.target.value, langCode)}
+                                        fullWidth
+                                    ></FloatingInput>
+                                })
+
+                            ) : (
+                                <TypedInput
+                                    valueType={col.type}
+                                    name={col.code}
+                                    label={`${col.code}${col.description ? ` (${col.type})` : ''}`}
+                                    value={value}
+                                    onChange={e => onElementChange(col.code, e.target.value)}
+                                    onDateChange={date => onElementChangeDate(col.code, date)}
+                                    required={col.required}
+                                    fullWidth
+                                />
+                            )}
+                        </div>
+                    )
+                })}
             </div>
-            <div className="flex gap-2 justify-center mt-2">
+
+            <div className="flex gap-3 justify-center mt-6 pt-4 border-t">
                 <Button
-                    onClick={onAddElement}
-                    mode={BtnModes.PRIMARY}
-                    disabled={!elementForm?.code || !allElementRequiredFiledsFilled}
-                >
-                    {editMode ? `Update Element` : `Add Element`}
-                </Button>
-                <Button
-                    onClick={() => onCancel()}
+                    onClick={onCancel}
                     mode={BtnModes.PRIMARY_TXT}
                 >
                     Cancel
                 </Button>
+                <Button
+                    onClick={submitForm}
+                    mode={BtnModes.PRIMARY}
+                    disabled={!elementForm?.code}
+                >
+                    {isNewElement ? 'Add Element' : 'Update Element'}
+                </Button>
             </div>
         </div>
+
     );
 };
 

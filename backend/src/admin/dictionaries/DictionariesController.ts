@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { DictionariesService } from './services/DictionariesService';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
-import { DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
+import { DictionaryElement,  DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
 import { RolesGuard } from 'auth/guards/RolesGuard';
 import { UserRoles } from '@shared/interfaces/UserI';
 import { Roles } from 'auth/decorators/RolesDecorator';
@@ -37,18 +37,20 @@ export class DictionariesController {
   get(@Param('code') code: string): Promise<DictionaryI> {
     return this.dictionariesService.get(code)
   }
-  
-  @Put(':langCode')
+
+  @Put()
   @Serialize(DictionaryEntity)
-  put(@Param('langCode') langCode: string, @Body() dictionaryDto: DictionaryI): Promise<DictionaryI> {
-    return this.dictionariesService.put(dictionaryDto, langCode);
+  put(
+    @Body() dictionaryDto: DictionaryI
+  ): Promise<DictionaryI> {
+    return this.dictionariesService.put(dictionaryDto);
   }
-  
+
   @Delete(':code')
   delete(@Param('code') code: string): Promise<void> {
     return this.dictionariesService.delete(code);
   }
-  
+
   @Get(':code/:groupCode')
   @Serialize(DictionaryEntity)
   getDictionaryGroup(
@@ -56,6 +58,14 @@ export class DictionariesController {
     @Param('groupCode') groupCode: string
   ): Promise<DictionaryI | null> {
     return this.dictionariesService.getDictionaryGroup(code, groupCode);
+  }
+
+  @Put(':dictionaryCode')
+  putElement(
+    @Param('dictionaryCode') dictionaryCode: string,
+    @Body() element: DictionaryElement
+  ) {
+    return this.dictionariesService.putElement(element, dictionaryCode)
   }
 
 }

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "global/components/controls/Button";
-import DictionaryElementForm from "./DictionaryElementForm";
 import Loading from "global/components/Loading";
 import AddIcon from '@mui/icons-material/Add';
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
@@ -26,8 +25,6 @@ const DictionaryView: React.FC = () => {
     const { code = "" } = useParams<{ code: string }>();
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
     const [loading, setLoading] = useState(false);
-    const [elementForm, setElementForm] = useState<Partial<DictionaryElement> | null>(null);
-    const [elementFormEditMode, setElementFormEditMode] = useState<boolean>(false);
     const [elements, setElements] = useState<DictionaryElement[]>([]);
     const { t } = useTranslation()
 
@@ -40,7 +37,7 @@ const DictionaryView: React.FC = () => {
         const initDictionary = async () => {
             try {
                 setLoading(true);
-                const result = await DictionaryAdminService.getDictionary(code, t)
+                const result = await DictionaryAdminService.getDictionary(code)
                 _setDictionary(result);
             } catch (e) {
             } finally {
@@ -59,43 +56,6 @@ const DictionaryView: React.FC = () => {
         return <div className="p-5 text-center primary-text">Dictionary not found.</div>;
     }
 
-    const handleAddElement = () => {
-        if (!elementFormEditMode && elements.some(e => e.code === elementForm?.code)) {
-            toast.error("Element with this code already exists.");
-            return;
-        }
-        // Prepare values for columns
-        const values: { [key: string]: any } = {};
-        dictionary.columns.forEach(col => {
-            values[col.code] = elementForm?.values?.[col.code] ?? "";
-        });
-        if (!elementForm) return;
-
-        if (elementFormEditMode) {
-            setElements(elements.map(el => {
-                if (el.code === elementForm.code) {
-                    return {
-                        code: elementForm.code ?? "",
-                        description: elementForm.description || "",
-                        active: elementForm.active ?? true,
-                        values,
-                    }
-                }
-                return el
-            }))
-        } else {
-            const newElement: DictionaryElement = {
-                code: elementForm.code ?? "",
-                description: elementForm.description || "",
-                active: elementForm.active ?? true,
-                values,
-            };
-            setElements([...elements, newElement]);
-        }
-        setElementFormEditMode(false);
-        setElementForm(null);
-    };
-
     const handleSave = async () => {
         const updatedDictionary: DictionaryI = {
             ...dictionary,
@@ -104,7 +64,7 @@ const DictionaryView: React.FC = () => {
 
         try {
             setLoading(true);
-            const result = await DictionaryAdminService.putDictionary(updatedDictionary, t);
+            const result = await DictionaryAdminService.putDictionary(updatedDictionary);
             _setDictionary(result);
             toast.success("Dictionary updated successfully.");
         } catch (e) {
@@ -155,7 +115,7 @@ const DictionaryView: React.FC = () => {
             const result = await DictionaryAdminService.putDictionary({
                 ...dictionary,
                 elements: newElements
-            }, t);
+            });
             _setDictionary(result);
             toast.success("Element deleted successfully.");
         } catch (e) {
@@ -165,22 +125,11 @@ const DictionaryView: React.FC = () => {
     };
 
     const handleEditElement = (elementCode: string) => {
-        // show add element form with data populated
-        const element = elements.find(el => el.code === elementCode);
-        if (element) {
-            setElementFormEditMode(true);
-            setElementForm(element);
-        }
+        navigate(Path.getEditDictionaryElementPath(dictionary.code, elementCode));
     }
-
+    
     const onAddElement = () => {
-        const values: { [key: string]: any } = {};
-        dictionary.columns.forEach(col => {
-            if (col.required) {
-                values[col.code] = col.defaultValue || "";
-            }
-        });
-        setElementForm({ values });
+        navigate(Path.getAddDictionaryElementPath(dictionary.code));
     }
 
     const handleEditDictionary = () => {
@@ -204,7 +153,16 @@ const DictionaryView: React.FC = () => {
         AdminImportService.exportDictionaryJson(dictionary.code);
     }
 
-    const displayElementValue = (value: any, columnType: string) => {
+    const displayElementValue = (value: any, columnType: string, isTranslatable: boolean = false) => {
+        if (isTranslatable && value && typeof value === 'object') {
+            // Show all translations in format: "en: value, pl: wartość"
+            const translations = Object.entries(value)
+                .filter(([_, val]) => val !== undefined && val !== "")
+                .map(([langCode, val]) => `${langCode}: ${val}`)
+                .join(', ');
+            return translations || "-";
+        }
+
         if (columnType === DictionaryColumnTypes.DATE) {
             return DateUtil.displayDate(value);
         }
@@ -213,6 +171,8 @@ const DictionaryView: React.FC = () => {
         }
         return value !== undefined && value !== "" ? value : "-";
     }
+
+
 
     return (
         <div className="flex flex-col gap-6 w-full px-5 pb-20 pt-10">
@@ -237,6 +197,7 @@ const DictionaryView: React.FC = () => {
                                     <th key={col.code} className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
                                         {col.required && (<span>*</span>)}
                                         <span>{col.code}</span>
+                                        {col.translatable && (<span className="ml-1 text-xs bg-blue-100 text-blue-800 px-1 py-0.5 rounded">T</span>)}
                                     </th>
                                 ))}
                                 {/* <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Description</th> */}
@@ -261,7 +222,7 @@ const DictionaryView: React.FC = () => {
                                             <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text"}>{el.code}</td>
                                             {dictionary.columns.map(col => (
                                                 <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
-                                                    {displayElementValue(el.values[col.code], col.type)}
+                                                    {displayElementValue(el.values[col.code], col.type, col.translatable)}
                                                 </td>
                                             ))}
                                             {/* <td className={"px-6 py-3 border-b border-color secondary-text"}>{el.description}</td> */}
@@ -273,23 +234,6 @@ const DictionaryView: React.FC = () => {
                                                 </div>
                                             </td>
                                         </tr>
-                                        {elementFormEditMode && elementForm?.code === el.code && (
-                                            <tr>
-                                                <td colSpan={3 + dictionary.columns.length + 1} className="px-6 py-6 text-center">
-                                                    <DictionaryElementForm
-                                                        dictionary={dictionary}
-                                                        elementForm={elementForm}
-                                                        setElementForm={setElementForm}
-                                                        onAddElement={handleAddElement}
-                                                        editMode={true}
-                                                        onCancel={() => {
-                                                            setElementForm(null)
-                                                            setElementFormEditMode(false);
-                                                        }}
-                                                    />
-                                                </td>
-                                            </tr>
-                                        )}
                                     </React.Fragment>
                                 ))
                             )}
@@ -300,70 +244,55 @@ const DictionaryView: React.FC = () => {
 
                 {/* Add element button and form */}
                 <div className="">
-                    {elementForm ? (
-                        !elementFormEditMode ?
-                            (<div className="flex flex-col gap-4 mt-4 secondary-bg w-full max-w-lg mx-auto mb-10">
-                                <div className="flex flex-col gap-3">
-                                    <DictionaryElementForm
-                                        dictionary={dictionary}
-                                        elementForm={elementForm}
-                                        setElementForm={setElementForm}
-                                        onAddElement={handleAddElement}
-                                        onCancel={() => setElementForm(null)}
-                                    />
-                                </div>
-                            </div>) : null
-                    ) : (
-                        <div className="flex gap-2 my-10">
-                            <Button
-                                onClick={() => onAddElement()}
-                                mode={BtnModes.PRIMARY}
-                            >
-                                <AddIcon /> Add element
-                            </Button>
-                            <Button
-                                onClick={() => handleSave()}
-                                mode={BtnModes.SECONDARY}
-                            >
-                                Save changes
-                            </Button>
+                    <div className="flex gap-2 my-10">
+                        <Button
+                            onClick={() => onAddElement()}
+                            mode={BtnModes.PRIMARY}
+                        >
+                            <AddIcon /> Add element
+                        </Button>
+                        <Button
+                            onClick={() => handleSave()}
+                            mode={BtnModes.SECONDARY}
+                        >
+                            Save changes
+                        </Button>
 
-                            <Button
-                                onClick={() => navigate(Path.getDictionaryGroupFormPath(dictionary.code, 'new'))}
-                            >
-                                Add group
-                            </Button>
+                        <Button
+                            onClick={() => navigate(Path.getDictionaryGroupFormPath(dictionary.code, 'new'))}
+                        >
+                            Add group
+                        </Button>
 
-                            <Button
-                                onClick={() => setDictionary({
-                                    ...dictionary,
-                                    status: dictionary.status === DictionaryStatuses.ACTIVE
-                                        ? DictionaryStatuses.INACTIVE
-                                        : DictionaryStatuses.ACTIVE
-                                })}
-                                mode={BtnModes.PRIMARY_TXT}
-                            >
-                                {dictionary.status === DictionaryStatuses.ACTIVE
-                                    ? 'Deactivate'
-                                    : 'Activate'}
-                            </Button>
+                        <Button
+                            onClick={() => setDictionary({
+                                ...dictionary,
+                                status: dictionary.status === DictionaryStatuses.ACTIVE
+                                    ? DictionaryStatuses.INACTIVE
+                                    : DictionaryStatuses.ACTIVE
+                            })}
+                            mode={BtnModes.PRIMARY_TXT}
+                        >
+                            {dictionary.status === DictionaryStatuses.ACTIVE
+                                ? 'Deactivate'
+                                : 'Activate'}
+                        </Button>
 
-                            <Button
-                                onClick={() => exportJson()}
-                                mode={BtnModes.PRIMARY_TXT}
-                            >
-                                Export JSON
-                            </Button>
+                        <Button
+                            onClick={() => exportJson()}
+                            mode={BtnModes.PRIMARY_TXT}
+                        >
+                            Export JSON
+                        </Button>
 
-                            <Button
-                                onClick={() => handleDelete()}
-                                mode={BtnModes.ERROR}
-                            >
-                                Delete dictionary
-                            </Button>
+                        <Button
+                            onClick={() => handleDelete()}
+                            mode={BtnModes.ERROR}
+                        >
+                            Delete dictionary
+                        </Button>
 
-                        </div>
-                    )}
+                    </div>
                 </div>
 
                 <DictionaryGroups
