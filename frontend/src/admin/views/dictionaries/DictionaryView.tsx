@@ -108,17 +108,11 @@ const DictionaryView: React.FC = () => {
             if (!confirmed) {
                 return;
             }
-
-            const newElements = elements.filter(el => el.code !== elementCode);
-
-            setLoading(true);
-            const result = await DictionaryAdminService.putDictionary({
-                ...dictionary,
-                elements: newElements
-            });
+            const result = await DictionaryAdminService.deleteElement(dictionary.code, elementCode);
             _setDictionary(result);
             toast.success("Element deleted successfully.");
         } catch (e) {
+
         } finally {
             setLoading(false);
         }

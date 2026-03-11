@@ -51,6 +51,14 @@ export class DictionariesController {
     return this.dictionariesService.delete(code);
   }
 
+  @Delete(':code/:elementCode')
+  deleteElement(
+    @Param('code') code: string,
+    @Param('elementCode') elementCode: string
+  ): Promise<DictionaryI> {
+    return this.dictionariesService.deleteElement(code, elementCode);
+  }
+
   @Get(':code/:groupCode')
   @Serialize(DictionaryEntity)
   getDictionaryGroup(

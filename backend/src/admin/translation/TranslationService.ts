@@ -23,6 +23,7 @@ export class TranslationService implements OnModuleInit {
     ) {
         this.dictionariesService.registerSetTranslationsForTranslatableElementCallback(this.patchTranslationItem.bind(this));
         this.dictionariesService.registerRemoveTranslationsForPathCallback(this.removeTranslationForPath.bind(this));
+        this.dictionariesService.registerRemoveTranslationsForPathStartsWithCallback(this.removeTranslationsForPathStartsWith.bind(this));
     }
 
     private languagesList: DictionaryElement[]
@@ -141,6 +142,30 @@ export class TranslationService implements OnModuleInit {
                 this.logger.log(`Removed translation item with path ${path} for language ${translation.langCode}`);
                 await this.translationRepository.save(translation);
             }
+        }
+    }
+
+    public async removeTranslationsForPathStartsWith(pathStart: string): Promise<void> {
+        const translations = await this.translationRepository.find();
+        const pathKeys = pathStart.split('.');
+
+        for (const translation of translations) {
+
+            let data = translation.data;
+
+            pathKeys.forEach((key, i) => {
+                const isLast = i === pathKeys.length - 1;
+                if (!isLast) {
+                    if (!data[key]) {
+                        return;
+                    }
+                    data = data[key];
+                } else {
+                    delete data[key];
+                }
+            })
+            await this.translationRepository.save(translation);
+            this.logger.log(`Removed translation items with path starting with ${pathStart} for language ${translation.langCode}`);
         }
     }
 

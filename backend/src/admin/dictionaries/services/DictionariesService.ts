@@ -1,7 +1,6 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger } from '@nestjs/common';
 import { DictionariesRepo } from './DictionariesRepo';
-import { SWWException } from 'global/exceptions/SWWException';
 import { ToastWarningException } from 'global/exceptions/ToastWarningException';
 import { DictionaryColumnTypes, DictionaryElement, DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
 import { DictionaryValidators } from '@shared/validators/DictionaryValidators';
@@ -22,14 +21,18 @@ export class DictionariesService {
     this.removeTranslationsForPath = callback;
   }
 
+  public registerRemoveTranslationsForPathStartsWithCallback(callback: (pathStart: string) => Promise<void>): void {
+    this.removeTranslationsForPathStartsWith = callback;
+  }
+
   private setTranslatableElementTranslations: (translations: TranslationItemDto) => Promise<void>;
 
   private removeTranslationsForPath: (path: string) => Promise<void>;
 
+  private removeTranslationsForPathStartsWith: (pathStart: string) => Promise<void>;
+
   // TODO przy dodawaniu/edycji elementu edycja grup
-  // TODO usluga do usuwania elementu
-  // TODO usuwanie elementu -> usuwanie klucza
-  // TODO usuwanie slownika -> uwanie kluczy
+  
   constructor(
     private readonly repo: DictionariesRepo,
   ) { }
@@ -42,7 +45,7 @@ export class DictionariesService {
   public async get(code: string): Promise<DictionaryI> {
     const dictionary = await this.repo.findOne(code);
     if (!dictionary) {
-      throw new SWWException(`Dictionary ${code} not found`, this);
+      throw new ToastException(`Dictionary ${code} not found`, this);
     }
     return dictionary;
   }
@@ -111,8 +114,31 @@ export class DictionariesService {
     return result;
   }
 
-  public delete(code: string): Promise<void> {
+  public async delete(code: string): Promise<void> {
+    if (this.removeTranslationsForPathStartsWith) {
+      await this.removeTranslationsForPathStartsWith(`dictionary.${code}`);
+    }
     return this.repo.remove(code);
+  }
+
+  public async deleteElement(code: string, elementCode: string): Promise<DictionaryI> {
+    const dictionary = await this.get(code);
+    const element = dictionary.elements.find(el => el.code === elementCode);
+    if (!element) {
+      throw new ToastException(`Element with code ${elementCode} not found in dictionary ${code}`, this);
+    }
+
+    if (this.removeTranslationsForPath) {
+      for (const column of dictionary.columns) {
+        if (column.translatable) {
+          const path = DictionaryUtil.getTranslationKeyWithCol(code, column.code, elementCode);
+          await this.removeTranslationsForPath(path);
+        }
+      }
+    }
+
+    dictionary.elements = dictionary.elements.filter(el => el.code !== elementCode);
+    return this.put(dictionary);
   }
 
   public getDictionaryGroupIfExists(dictionaryCode: string, groupCode: string): Promise<DictionaryI | null> {

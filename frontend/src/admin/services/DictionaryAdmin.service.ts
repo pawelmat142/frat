@@ -1,6 +1,5 @@
 import { DictionaryElement, DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
 import { httpClient } from 'global/services/http';
-import { TranslationService } from 'global/services/Translation.service';
 
 export const DictionaryAdminService = {
 
@@ -21,6 +20,10 @@ export const DictionaryAdminService = {
 
 	deleteDictionary(code: string): Promise<void> {
 		return httpClient.delete<void>(`/admin/dictionaries/${code}`);
+	},
+
+	deleteElement(code: string, elementCode: string): Promise<DictionaryI> {
+		return httpClient.delete<DictionaryI>(`/admin/dictionaries/${code}/${elementCode}`)
 	},
 
 	getDictionariesList(): Promise<DictionaryListItem[]> {
