@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { DictionariesService } from './services/DictionariesService';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
-import { DictionaryElement,  DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
+import { DictionaryElementWithGroups,  DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
 import { RolesGuard } from 'auth/guards/RolesGuard';
 import { UserRoles } from '@shared/interfaces/UserI';
 import { Roles } from 'auth/decorators/RolesDecorator';
@@ -71,7 +71,7 @@ export class DictionariesController {
   @Put(':dictionaryCode')
   putElement(
     @Param('dictionaryCode') dictionaryCode: string,
-    @Body() element: DictionaryElement
+    @Body() element: DictionaryElementWithGroups
   ) {
     return this.dictionariesService.putElement(element, dictionaryCode)
   }

@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DictionariesRepo } from './DictionariesRepo';
 import { ToastWarningException } from 'global/exceptions/ToastWarningException';
-import { DictionaryColumnTypes, DictionaryElement, DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
+import { DictionaryColumnTypes, DictionaryElementWithGroups, DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
 import { DictionaryValidators } from '@shared/validators/DictionaryValidators';
 import { ToastException } from 'global/exceptions/ToastException';
 import { TranslationItemDto } from '@shared/interfaces/TranslationI';
@@ -31,8 +31,6 @@ export class DictionariesService {
 
   private removeTranslationsForPathStartsWith: (pathStart: string) => Promise<void>;
 
-  // TODO przy dodawaniu/edycji elementu edycja grup
-  
   constructor(
     private readonly repo: DictionariesRepo,
   ) { }
@@ -59,7 +57,7 @@ export class DictionariesService {
     }
   }
 
-  public async putElement(element: DictionaryElement, dictionaryCode: string): Promise<DictionaryI> {
+  public async putElement(element: DictionaryElementWithGroups, dictionaryCode: string): Promise<DictionaryI> {
     const dictionary = await this.get(dictionaryCode);
     const elementIndex = dictionary.elements.findIndex(el => el.code === element.code);
 
@@ -71,6 +69,24 @@ export class DictionariesService {
         }
       }
     })
+
+    const elementIsInGroups = dictionary.groups.filter(group => group.elementCodes.includes(element.code)).map(group => group.code);
+    const elementShouldBeInGroups = element.groups || [];
+
+    if (elementIsInGroups.sort().join(',') !== elementShouldBeInGroups.sort().join(',')) {
+      const groupsToAdd = elementShouldBeInGroups.filter(groupCode => !elementIsInGroups.includes(groupCode));
+      const groupsToRemove = elementIsInGroups.filter(groupCode => !elementShouldBeInGroups.includes(groupCode));
+      groupsToAdd.forEach(groupCode => {
+        const group = dictionary.groups.find(g => g.code === groupCode);
+        group.elementCodes.push(element.code);
+        this.logger.log(`Added element with code ${element.code} to group ${groupCode} in dictionary ${dictionaryCode}`);
+      })
+      groupsToRemove.forEach(groupCode => {
+        const group = dictionary.groups.find(g => g.code === groupCode);
+        group.elementCodes = group.elementCodes.filter(code => code !== element.code);
+        this.logger.log(`Removed element with code ${element.code} from group ${groupCode} in dictionary ${dictionaryCode}`);
+      })
+    }
 
     for (const columnCode of Object.keys(element.values)) {
       const column = dictionary.columns.find(col => col.code === columnCode);
@@ -127,6 +143,11 @@ export class DictionariesService {
     if (!element) {
       throw new ToastException(`Element with code ${elementCode} not found in dictionary ${code}`, this);
     }
+
+    dictionary.groups.filter(group => group.elementCodes.includes(elementCode)).forEach(group => {
+      group.elementCodes = group.elementCodes.filter(code => code !== elementCode);
+      this.logger.log(`Removed element with code ${elementCode} from group ${group.code} in dictionary ${code} due to element deletion`);
+    })
 
     if (this.removeTranslationsForPath) {
       for (const column of dictionary.columns) {

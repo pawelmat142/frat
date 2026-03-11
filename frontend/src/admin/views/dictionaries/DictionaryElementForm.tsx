@@ -3,7 +3,7 @@ import Checkbox from "global/components/controls/Checkbox";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import TypedInput from "global/components/controls/TypedInput";
-import { DictionaryI, DictionaryElement, DictionaryColumnTypes } from "@shared/interfaces/DictionaryI";
+import { DictionaryI, DictionaryColumnTypes, DictionaryElementWithGroups } from "@shared/interfaces/DictionaryI";
 import { userAdminPanelContext } from "../AdminPanelProvider";
 import FloatingInput from "global/components/controls/FloatingInput";
 import Loading from "global/components/Loading";
@@ -26,13 +26,9 @@ const DictionaryElementForm: React.FC = () => {
 
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
     const [loading, setLoading] = useState(false);
-    const [elementForm, setElementForm] = useState<DictionaryElement | null>()
+    const [elementForm, setElementForm] = useState<DictionaryElementWithGroups | null>()
 
     const isNewElement = !elementCode
-
-    useEffect(() => {
-        console.log("Element form updated:", elementForm);
-    }, [elementForm]);
 
     useEffect(() => {
         if (!code) return;
@@ -56,7 +52,8 @@ const DictionaryElementForm: React.FC = () => {
                                 return [col.code, translations]
                             }
                             return [col.code, null]
-                        }))
+                        })),
+                        groups: []
                     })
                 }
                 const element = dict?.elements.find(el => el.code === elementCode);
@@ -80,7 +77,8 @@ const DictionaryElementForm: React.FC = () => {
                             }
                             return [key, value];
                         })
-                    )
+                    ),
+                    groups: dict.groups.filter(group => group.elementCodes.includes(element.code)).map(group => group.code)
                 })
             } catch (e) {
                 console.error("Failed to load dictionary:", e);
@@ -152,7 +150,7 @@ const DictionaryElementForm: React.FC = () => {
             setElementForm(newElementForm);
             return
         }
-        const newElementForm: DictionaryElement = {
+        const newElementForm: DictionaryElementWithGroups = {
             ...elementForm,
             values: {
                 ...elementForm?.values,
@@ -184,7 +182,7 @@ const DictionaryElementForm: React.FC = () => {
                 <Button onClick={() => navigate(-1)} mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="ripple">
                     ← Back
                 </Button>
-                
+
                 <h3 className="text-xl font-bold mb-4">{isNewElement ? "Add Dictionary Element" : "Edit Dictionary Element"}</h3>
 
                 <FloatingInput
@@ -256,6 +254,34 @@ const DictionaryElementForm: React.FC = () => {
                         </div>
                     )
                 })}
+
+                {!!dictionary.groups?.length && (
+                    <div className="mt-6">
+                        <h5 className="font-medium border-t pt-4">Groups:</h5>
+
+                        {dictionary.groups.map(group => (
+                            <Checkbox
+                                className="mt-3"
+                                checked={elementForm.groups.includes(group.code)}
+                                onChange={checked => {
+                                    if (checked) {
+                                        setElementForm({
+                                            ...elementForm,
+                                            groups: [...elementForm.groups, group.code]
+                                        });
+                                    } else {
+                                        setElementForm({
+                                            ...elementForm,
+                                            groups: elementForm.groups.filter(code => code !== group.code)
+                                        });
+                                    }
+                                }}
+                                label={group.code}
+                            />
+                        ))}
+
+                    </div>
+                )}
             </div>
 
             <div className="flex gap-3 justify-center mt-6 pt-4 border-t">

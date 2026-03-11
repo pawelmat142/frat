@@ -1,4 +1,4 @@
-import { DictionaryElement, DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
+import { DictionaryElementWithGroups, DictionaryI, DictionaryListItem } from '@shared/interfaces/DictionaryI';
 import { httpClient } from 'global/services/http';
 
 export const DictionaryAdminService = {
@@ -13,7 +13,7 @@ export const DictionaryAdminService = {
 		return result;
 	},
 
-	async putElement(element: DictionaryElement, dictionaryCode: string): Promise<DictionaryI> {
+	async putElement(element: DictionaryElementWithGroups, dictionaryCode: string): Promise<DictionaryI> {
 		const result = await httpClient.put<DictionaryI>(`/admin/dictionaries/${dictionaryCode}`, element);
 		return result;
 	},

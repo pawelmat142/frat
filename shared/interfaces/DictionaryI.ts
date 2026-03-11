@@ -23,6 +23,10 @@ export interface DictionaryElement {
     values: { [key: string]: any }; // key -> column code, typeof value -> DictionaryColumn.type
 }
 
+export interface DictionaryElementWithGroups extends DictionaryElement {
+    groups: string[]
+}
+
 export interface DictionaryColumn {
     code: string
     type: DictionaryColumnType

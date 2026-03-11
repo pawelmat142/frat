@@ -14,7 +14,6 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { DictionaryValidators } from "@shared/validators/DictionaryValidators";
 import { DictionaryColumnTypes, DictionaryI, DictionaryElement, DictionaryStatuses, DictionaryColumnType } from "@shared/interfaces/DictionaryI";
 import { BtnModes, BtnSizes, SelectorItem } from "global/interface/controls.interface";
-import { useTranslation } from "react-i18next";
 import BackBtn from "global/components/controls/BackBtn";
 import FloatingSelector from "global/components/selector/FloatingSelector";
 import FloatingInput from "global/components/controls/FloatingInput";
@@ -278,7 +277,7 @@ const AddDictionaryView: React.FC = () => {
               <Button
                 onClick={handleAddColumn}
                 size={BtnSizes.SMALL}
-                disabled={!columnForm?.code || !columnForm.type || (columnForm.required && !columnForm.defaultValue && columnForm.type.value !== DictionaryColumnTypes.BOOLEAN)}
+                disabled={!columnForm?.code || !columnForm.type}
               >
                 Column ready
               </Button>
