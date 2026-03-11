@@ -4,92 +4,40 @@
   "data": {
     "nav": {
       "start": "Start",
-      "employees": "Employees",
       "offers": "Offers",
-      "account": "Account"
+      "account": "Account",
+      "employees": "Employees"
     },
-    "notification": {
-      "header": "Notifications",
-      "notificationViewTitle": "Notification",
-      "noNotifications": "You have no notifications yet.",
-      "newInvitationTitle": "New invitation",
-      "newInvitationMessage": "User {{name}} sent you a friend invitation.",
-      "acceptInvitationTitle": "Invitation accepted",
-      "acceptInvitationMessage": "User {{name}} accepted your friend invitation.",
-      "friendRemovedTitle": "Friend removed",
-      "friendRemovedMessage": "User {{name}} removed you from friends.",
-      "deleteNotification": "Delete notification",
-      "deleteConfirmMessage": "Are you sure you want to delete this notification? This action cannot be undone.",
-      "deleteSuccessToast": "Notification deleted successfully",
-      "viewProfile": "See profile {{name}}",
-      "readAt": "Read at {{date}}",
-      "sentAt": "Received at {{date}}",
-      "unreadNotificationsOne": "You have {{count}} unread notification",
-      "unreadNotificationsFew": "You have {{count}} unread notifications",
-      "unreadNotificationsMany": "You have {{count}} unread notifications",
-      "newMessageTitle": "New message",
-      "error": {
-        "notFound": "Notification with given ID not found"
-      }
+    "pwa": {
+      "install": "Install on home screen",
+      "success": "App installed successfully",
+      "iosGuide": "To install the app on your iPhone, follow these steps:",
+      "iosStep1": "Tap the Share button in Safari",
+      "iosStep2": "Scroll down and tap \"Add to Home Screen\"",
+      "iosStep3": "Tap \"Add\" in the top right corner"
     },
     "chat": {
-      "typeMessage": "Type your message...",
-      "fratChat": "FRAT Chat",
-      "openChat": "Open chat",
       "chats": "Chats",
       "noChats": "No chats available",
       "chatMenu": "Chat menu",
-      "cleanChat": "Clean chat",
+      "fratChat": "FRAT Chat",
+      "joinedAt": "Join at {{date}}",
+      "openChat": "Open chat",
       "blockUser": "Block user",
+      "cleanChat": "Clean chat",
       "deleteChat": "Delete chat",
-      "blockedByMe": "Blocked by you",
-      "blockedByOther": "Blocked by ",
       "noMessages": "No messages",
-      "cleanChatConfirm": "Are you sure you want to clean the chat history? This action cannot be undone.",
-      "cleanChatSuccess": "Chat history cleaned successfully",
+      "blockedByMe": "Blocked by you",
+      "typeMessage": "Type your message...",
+      "blockedByOther": "Blocked by ",
       "blockUserConfirm": "Are you sure you want to block this user? You will no longer be able to send or receive messages from them.",
       "blockUserSuccess": "User blocked successfully",
-      "unblockUserConfirm": "Are you sure you want to unblock this user? You will be able to send and receive messages from them again.",
-      "unblockUserSuccess": "User unblocked successfully",
+      "cleanChatConfirm": "Are you sure you want to clean the chat history? This action cannot be undone.",
+      "cleanChatSuccess": "Chat history cleaned successfully",
       "deleteChatConfirm": "Are you sure you want to delete this chat? This action cannot be undone.",
       "deleteChatSuccess": "Chat deleted successfully",
-      "joinedAt": "Join at {{date}}"
-    },
-    "account": {
-      "account": "Account",
-      "showEmployeeProfile": "Show Employee Profile",
-      "createEmployeeProfile": "Create Employee Profile",
-      "offers": "Offers",
-      "deleteAccountConfirmTitle": "Delete Account",
-      "deleteAccountConfirmMessage": "Are you sure you want to delete your account? This action cannot be undone.",
-      "deleteAccountSuccessToast": "Account deleted successfully",
-      "deleteAccountFailed": "Failed to delete account",
-      "friends": "Friends",
-      "showProfile": "Show profile"
-    },
-    "friends": {
-      "invite": "Invite to friends",
-      "search": "Search friends",
-      "invitationSent": "Invitation sent",
-      "friend": "Friend",
-      "invited": "Invited by you",
-      "accept": "Accept",
-      "acceptedToast": "Invitation accepted",
-      "reject": "Reject invitation",
-      "rejectedToast": "Invitation rejected",
-      "endOfResults": "No more results to display.",
-      "invitationReceived": "Invitation received",
-      "cancel": "Cancel invitation",
-      "cancelInvitation": "Cancel Invitation",
-      "cancelInvitationConfirm": "Are you sure you want to cancel this invitation?",
-      "cancelInvitationSuccess": "Invitation rejected successfully",
-      "noFriends": "You have no friends yet. Search and add some!",
-      "remove": "Remove friend",
-      "removeConfirm": "Are you sure you want to remove this friend?",
-      "removeSuccess": "Friend removed successfully",
-      "removeFailed": "Failed to remove friend",
-      "inviteReceivedToast": "User {{name}} sent you an invitation.",
-      "invitationNotification": "You have new invitation"
+      "unblockUserConfirm": "Are you sure you want to unblock this user? You will be able to send and receive messages from them again.",
+      "unblockUserSuccess": "User unblocked successfully"
     },
     "lang": {
       "select": "Select Language",
@@ -106,50 +54,24 @@
         "userInitError": "Error initializing user context"
       }
     },
+    "error": {
+      "missingUserId": "User ID is missing",
+      "settingsUpdate": "Failed to update settings",
+      "avatarUploadFailed": "Failed to upload avatar"
+    },
     "offer": {
       "add": "Add offer",
-      "statusActive": "Active",
-      "statusInactive": "Inactive",
-      "management": "Offer management",
-      "editButton": "Edit Offer",
-      "removeButton": "Remove Offer",
-      "likeButton": "Like Offer",
-      "unlikeButton": "Unlike Offer",
-      "activateButton": "Activate Offer",
-      "deactivateButton": "Deactivate Offer",
-      "views": "Views",
-      "likes": "Likes",
-      "created": "Added",
-      "noOffers": "Has no offers yet...",
-      "offersList": "Offers list",
-      "searchTitle": "Offers",
-      "offerViewTitle": "Offer details",
-      "activationSuccessToast": "Offer activated successfully",
-      "deactivationSuccessToast": "Offer deactivated successfully",
-      "activationErrorToast": "Error toggling offer activation",
-      "deleteSuccessToast": "Offer deleted successfully",
-      "deleteConfirmMessage": "Are you sure you want to delete this offer? This action cannot be undone.",
-      "likeSuccessToast": "Liked the offer",
-      "likeRemoveToast": "Unliked the offer",
-      "deleteButton": "Delete Offer",
-      "offerMenu": "Offer menu",
-      "filters": {
-        "categories": "Categories",
-        "countries": "Countries",
-        "communicationLanguages": "Communication languages"
-      },
       "form": {
         "title": "Job offer form",
         "success": "Offer created successfully",
-        "successUpdate": "Offer updated successfully",
         "STEP_ONE": {
           "label": "Step 1",
           "title": "Basic Information"
         },
         "STEP_TWO": {
+          "msg": "*Providing an approximate location is required for the search functionality and helps others find your offer.",
           "label": "Step 2",
-          "title": "Location",
-          "msg": "*Providing an approximate location is required for the search functionality and helps others find your offer."
+          "title": "Location"
         },
         "STEP_FOUR": {
           "label": "Step 4",
@@ -160,24 +82,55 @@
           "title": "Description and salary"
         },
         "validation": {
-          "atLeastOneSalaryRequired": "At least one salary (monthly or hourly) is required.",
-          "currencyRequired": "Currency is required.",
-          "formInvalid": "Form is invalid, please check all fields.",
+          "notFound": "Offer not found.",
           "createError": "Error creating offer, please try again later.",
-          "notFound": "Offer not found."
-        }
+          "formInvalid": "Form is invalid, please check all fields.",
+          "currencyRequired": "Currency is required.",
+          "atLeastOneSalaryRequired": "At least one salary (monthly or hourly) is required."
+        },
+        "successUpdate": "Offer updated successfully"
       },
-      "dateRange": "Start date",
-      "search": "Offers search",
-      "workCountry": "Work country",
-      "workCategory": "Work category",
-      "languagesRequired": "Required languages",
-      "languagesNiceToHave": "Nice to have languages",
+      "likes": "Likes",
+      "views": "Views",
       "salary": "Salary hourly from",
+      "search": "Offers search",
+      "created": "Added",
+      "filters": {
+        "countries": "Countries",
+        "categories": "Categories",
+        "communicationLanguages": "Communication languages"
+      },
       "currency": "Currency",
-      "displayName": "Title",
+      "noOffers": "Has no offers yet...",
+      "dateRange": "Start date",
+      "offerMenu": "Offer menu",
+      "editButton": "Edit Offer",
+      "likeButton": "Like Offer",
+      "management": "Offer management",
+      "offersList": "Offers list",
       "description": "Short offer description",
-      "cannotLikeOwnOffer": "You cannot like your own offer"
+      "displayName": "Title",
+      "searchTitle": "Offers",
+      "workCountry": "Work country",
+      "deleteButton": "Delete Offer",
+      "removeButton": "Remove Offer",
+      "statusActive": "Active",
+      "unlikeButton": "Unlike Offer",
+      "workCategory": "Work category",
+      "activateButton": "Activate Offer",
+      "offerViewTitle": "Offer details",
+      "statusInactive": "Inactive",
+      "likeRemoveToast": "Unliked the offer",
+      "deactivateButton": "Deactivate Offer",
+      "likeSuccessToast": "Liked the offer",
+      "languagesRequired": "Required languages",
+      "cannotLikeOwnOffer": "You cannot like your own offer",
+      "deleteSuccessToast": "Offer deleted successfully",
+      "languagesNiceToHave": "Nice to have languages",
+      "activationErrorToast": "Error toggling offer activation",
+      "deleteConfirmMessage": "Are you sure you want to delete this offer? This action cannot be undone.",
+      "activationSuccessToast": "Offer activated successfully",
+      "deactivationSuccessToast": "Offer deactivated successfully"
     },
     "theme": {
       "dark": "Dark",
@@ -186,46 +139,42 @@
       "select": "Select theme",
       "changedTo": "Theme changed to {{theme}}"
     },
-    "pwa": {
-      "install": "Install on home screen",
-      "success": "App installed successfully"
-    },
     "common": {
       "h1": "Welcome to FRAT",
       "h2": "A recruitment platform for high-altitude / industrial rope-access workers",
+      "of": "of",
       "ok": "OK",
       "to": "to",
+      "day": "day",
       "end": "End",
+      "sww": "Something went wrong, please try again later.",
       "back": "Back",
       "edit": "Edit",
       "from": "From",
+      "hour": "hour",
       "next": "Next",
+      "page": "Page",
       "save": "Save",
+      "year": "year",
       "close": "Close",
+      "items": "items",
+      "month": "month",
       "reset": "Reset",
       "start": "Start",
       "cancel": "Cancel",
+      "search": "Search",
       "submit": "Submit",
       "confirm": "Confirm",
       "filters": "Filters",
+      "options": "Options",
+      "anywhere": "Anywhere",
+      "distance": "Distance",
       "language": "Language",
       "previous": "Previous",
-      "items": "items",
-      "page": "Page",
-      "of": "of",
       "settings": "Settings",
       "noResults": "No results found... ;(",
-      "networkError": "Network error",
-      "month": "month",
-      "hour": "hour",
-      "day": "day",
-      "year": "year",
-      "options": "Options",
-      "search": "Search",
-      "anywhere": "Anywhere",
       "endOfResults": "No more results to display.",
-      "sww": "Something went wrong, please try again later.",
-      "distance": "Distance"
+      "networkError": "Network error"
     },
     "header": {
       "home": "Home",
@@ -234,10 +183,10 @@
       "profile": "Profile"
     },
     "others": {
+      "lessThan": "<{{value}}{{unit}}",
       "availableAnytime": "Available anytime",
-      "availableAnytimeShort": "Anytime",
       "fetchLocationError": "Could not find location.",
-      "lessThan": "<{{value}}{{unit}}"
+      "availableAnytimeShort": "Anytime"
     },
     "report": {
       "send": "Send",
@@ -251,10 +200,12 @@
       "feedbackPopupTitle": "Is your feedback complete?"
     },
     "signin": {
+      "pin": "PIN from Telegram",
       "email": "Email",
       "title": "Sign In",
       "logout": "Log Out",
       "submit": "Sign In",
+      "openBot": "Open Telegram bot",
       "signout": "Signed out!",
       "success": "Successfully signed in!",
       "password": "Password",
@@ -265,10 +216,8 @@
       "googleProvider": "Sign In with Google",
       "alreadyHaveAccount": "Already have an account?",
       "forgotPasswordTitle": "Password reset",
-      "forgotPasswordSuccess": "If the email exists, a reset link has been sent.",
       "invalidOrExpiredPin": "Invalid or expired PIN. Please try again.",
-      "openBot": "Open Telegram bot",
-      "pin": "PIN from Telegram"
+      "forgotPasswordSuccess": "If the email exists, a reset link has been sent."
     },
     "signup": {
       "email": "Email",
@@ -284,18 +233,57 @@
       "errorEmailMatch": "Emails do not match.",
       "errorPasswordMatch": "Passwords do not match.",
       "verificationEmailSent": "Verification email sent. Please check your inbox.",
-      "emailVerificationRequired": "Email verification is required.",
+      "resendVerificationEmail": "Resend verification email",
       "emailVerificationMessage": "You need to verify your email address to access all features.",
-      "resendVerificationEmail": "Resend verification email"
+      "emailVerificationRequired": "Email verification is required."
+    },
+    "account": {
+      "offers": "Offers",
+      "account": "Account",
+      "friends": "Friends",
+      "showProfile": "Show profile",
+      "deleteAccountFailed": "Failed to delete account",
+      "showEmployeeProfile": "Show Employee Profile",
+      "createEmployeeProfile": "Create Employee Profile",
+      "deleteAccountConfirmTitle": "Delete Account",
+      "deleteAccountSuccessToast": "Account deleted successfully",
+      "deleteAccountConfirmMessage": "Are you sure you want to delete your account? This action cannot be undone."
     },
     "cookies": {
       "title": "Cookie Notice",
       "accept": "Accept",
       "description": "We use necessary cookies to ensure the website functions properly. These cookies enable basic features like page navigation, authentication, and security."
     },
+    "friends": {
+      "accept": "Accept",
+      "cancel": "Cancel invitation",
+      "friend": "Friend",
+      "invite": "Invite to friends",
+      "reject": "Reject invitation",
+      "remove": "Remove friend",
+      "search": "Search friends",
+      "invited": "Invited by you",
+      "noFriends": "You have no friends yet. Search and add some!",
+      "endOfResults": "No more results to display.",
+      "removeFailed": "Failed to remove friend",
+      "acceptedToast": "Invitation accepted",
+      "rejectedToast": "Invitation rejected",
+      "removeConfirm": "Are you sure you want to remove this friend?",
+      "removeSuccess": "Friend removed successfully",
+      "invitationSent": "Invitation sent",
+      "cancelInvitation": "Cancel Invitation",
+      "invitationReceived": "Invitation received",
+      "inviteReceivedToast": "User {{name}} sent you an invitation.",
+      "invitationNotification": "You have new invitation",
+      "cancelInvitationConfirm": "Are you sure you want to cancel this invitation?",
+      "cancelInvitationSuccess": "Invitation rejected successfully"
+    },
     "profile": {
       "add": "Add profile",
       "tile": "Your profile"
+    },
+    "success": {
+      "avatarUploaded": "Avatar uploaded successfully"
     },
     "authError": {
       "userDisabled": "Account disabled",
@@ -308,9 +296,6 @@
       "passwordResetNotAvailable": "Password reset is not available for this account."
     },
     "callendar": {
-      "today": "Today",
-      "yesterday": "Yesterday",
-      "tomorrow": "Tomorrow",
       "at": "at",
       "month": {
         "0": "January",
@@ -326,6 +311,7 @@
         "10": "November",
         "11": "December"
       },
+      "today": "Today",
       "control": {
         "anytime": "Anytime",
         "rangeEndLabel": "to",
@@ -340,6 +326,8 @@
         "months2": "months",
         "selectLabel": "Select number of months"
       },
+      "tomorrow": "Tomorrow",
+      "yesterday": "Yesterday",
       "monthShort": {
         "0": "Jan",
         "1": "Feb",
@@ -381,6 +369,11 @@
         "5": "Fri",
         "6": "Sat"
       }
+    },
+    "cloudinary": {
+      "missingConfig": "Cloudinary configuration is missing",
+      "deletionFailed": "Failed to delete image from Cloudinary",
+      "missingPublicId": "Cloudinary public ID is missing"
     },
     "dictionary": {
       "SKILLS": {
@@ -448,13 +441,10 @@
       },
       "CERTIFICATES": {
         "NAME": {
-          "ONE": "ONE",
-          "SIX": "SIX",
-          "TWO": "TWO",
-          "FIVE": "FIVE",
-          "FOUR": "FOUR",
-          "SEVEN": "SEVEN",
-          "THREE": "THREE"
+          "IRATA1": "IRATA L1",
+          "IRATA_ONE": "IRATA L1",
+          "IRATA_TWO": "IRATA L2 – Experienced Technician",
+          "IRATA_THREE": "IRATA L3 – Supervisor"
         }
       },
       "WORK_CATEGORY": {
@@ -469,14 +459,14 @@
     "validation": {
       "form": {
         "required": "This field is required.",
-        "dateRangeRequired": "Start and end dates are required.",
-        "dateRangeStartRequired": "Start date is required.",
+        "formInvalid": "Form is invalid, please check all fields.",
         "positiveInteger": "Value must be a positive integer.",
-        "phoneNumberTooShort": "Phone number is too short (min. 6 digits).",
-        "phoneNumberTooLong": "Phone number is too long (max. 15 digits).",
+        "dateRangeRequired": "Start and end dates are required.",
         "phoneNumberInvalid": "Invalid phone number format.",
+        "phoneNumberTooLong": "Phone number is too long (max. 15 digits).",
         "phoneNumberRequired": "Phone number is required.",
-        "formInvalid": "Form is invalid, please check all fields."
+        "phoneNumberTooShort": "Phone number is too short (min. 6 digits).",
+        "dateRangeStartRequired": "Start date is required."
       },
       "view": {
         "title": "Something went wrong!",
@@ -492,61 +482,50 @@
       "notFound": "Not found",
       "required": "All fields are required.",
       "emailMatch": "Email and confirm email must match.",
+      "fileTooLarge": "File is too large. Maximum size: {{max}} MB",
       "firebaseError": "Registration failed. Please try again later.",
       "passwordMatch": "Password and confirm password must match.",
-      "dictionaryNotFound": "Dictionary not found",
       "invalidFileType": "Invalid file type. Allowed: {{allowed}}",
-      "fileTooLarge": "File is too large. Maximum size: {{max}} MB"
+      "dictionaryNotFound": "Dictionary not found"
     },
-    "error": {
-      "missingUserId": "User ID is missing",
-      "avatarUploadFailed": "Failed to upload avatar",
-      "settingsUpdate": "Failed to update settings"
-    },
-    "success": {
-      "avatarUploaded": "Avatar uploaded successfully"
-    },
-    "cloudinary": {
-      "missingConfig": "Cloudinary configuration is missing",
-      "deletionFailed": "Failed to delete image from Cloudinary",
-      "missingPublicId": "Cloudinary public ID is missing"
+    "notification": {
+      "error": {
+        "notFound": "Notification with given ID not found"
+      },
+      "header": "Notifications",
+      "readAt": "Read at {{date}}",
+      "sentAt": "Received at {{date}}",
+      "viewProfile": "See profile {{name}}",
+      "newMessageTitle": "New message",
+      "noNotifications": "You have no notifications yet.",
+      "deleteNotification": "Delete notification",
+      "deleteSuccessToast": "Notification deleted successfully",
+      "friendRemovedTitle": "Friend removed",
+      "newInvitationTitle": "New invitation",
+      "deleteConfirmMessage": "Are you sure you want to delete this notification? This action cannot be undone.",
+      "friendRemovedMessage": "User {{name}} removed you from friends.",
+      "newInvitationMessage": "User {{name}} sent you a friend invitation.",
+      "acceptInvitationTitle": "Invitation accepted",
+      "notificationViewTitle": "Notification",
+      "unreadNotificationsFew": "You have {{count}} unread notifications",
+      "unreadNotificationsOne": "You have {{count}} unread notification",
+      "acceptInvitationMessage": "User {{name}} accepted your friend invitation.",
+      "unreadNotificationsMany": "You have {{count}} unread notifications"
     },
     "employeeProfile": {
       "edit": "Edit employee profile",
-      "searchTitle": "Employees",
-      "profileMenu": "Profile menu",
-      "activateButton": "Activate Profile",
-      "deactivateButton": "Deactivate Profile",
-      "deleteButton": "Delete Profile",
-      "likeButton": "Like Profile",
-      "unlikeButton": "Unlike Profile",
-      "activationSuccessToast": "Profile activated successfully",
-      "deactivationSuccessToast": "Profile deactivated successfully",
-      "likeSuccessToast": "Liked the profile",
-      "likeRemoveToast": "Unliked the profile",
-      "deleteConfirmMessage": "Are you sure you want to delete this profile? This action cannot be undone.",
-      "deleteSuccessToast": "Profile deleted successfully",
-      "deleteErrorToast": "Error deleting profile",
       "form": {
-        "certificateValidityDate": "Validity date of",
-        "sortOptions": {
-          "title": "Sort by",
-          "DISTANCE_ASC": "Distance: Nearest first",
-          "CREATED_AT_DESC": "Joined: Newest first",
-          "CREATED_AT_ASC": "Joined: Oldest first",
-          "START_FROM_DESC": "Availability: Soonest first",
-          "START_FROM_ASC": "Availability: Latest first",
-          "POPULARITY": "Popularity"
-        },
+        "city": "City",
+        "email": "Email",
         "step1": {
           "label": "Step 1",
           "title": "Personal Information"
         },
         "step2": {
+          "info": "*Providing an approximate location is required for the search functionality and helps others find your profile.",
           "label": "Step 2",
           "title": "Location",
-          "chooseOptions": "Choose option:",
-          "info": "*Providing an approximate location is required for the search functionality and helps others find your profile."
+          "chooseOptions": "Choose option:"
         },
         "step3": {
           "label": "Step 3",
@@ -557,22 +536,41 @@
           "title": "Certificates"
         },
         "title": "Employee Profile Form",
-        "confirmTitle": "Confirm submission",
-        "confirmSubmit": "Are you sure you want to save the employee profile?",
         "radius": "Radius",
-        "experience": "Experience",
         "address": "Address",
         "freeText": "Search...",
         "fullName": "Full name",
-        "email": "Email",
         "location": "Location",
-        "phoneNumber": "Phone number",
+        "experience": "Experience",
         "addLanguage": "Add language",
+        "phoneNumber": "Phone number",
+        "sortOptions": {
+          "title": "Sort by",
+          "POPULARITY": "Popularity",
+          "DISTANCE_ASC": "Distance: Nearest first",
+          "CREATED_AT_ASC": "Joined: Oldest first",
+          "START_FROM_ASC": "Availability: Latest first",
+          "CREATED_AT_DESC": "Joined: Newest first",
+          "START_FROM_DESC": "Availability: Soonest first"
+        },
         "submitError": "Please fill in all required fields correctly",
         "certificates": "Certificates",
-        "locationPoint": "Exact location [lat, lng]",
-        "submitSuccess": "Profile saved successfully",
+        "confirmTitle": "Confirm submission",
+        "rangesOption": {
+          "AVAILABLE_ON": {
+            "msg": "Select the dates you are available to work.",
+            "tab": "Available"
+          },
+          "NOT_AVAILABLE_ON": {
+            "msg": "Select the dates you are not available to work.",
+            "tab": "Not available"
+          }
+        },
         "uploadAvatar": "Upload avatar",
+        "confirmSubmit": "Are you sure you want to save the employee profile?",
+        "locationPoint": "Exact location [lat, lng]",
+        "resetLocation": "Reset location",
+        "submitSuccess": "Profile saved successfully",
         "locationOption": {
           "POSITION": {
             "msg": "You will receive offers based on your location and distance.",
@@ -588,9 +586,7 @@
           }
         },
         "locationCountry": "Location country",
-        "resetLocation": "Reset location",
         "validationError": "Please fill in all required fields in this step",
-        "city": "City",
         "locationCountries": "Location countries",
         "availabilityOption": {
           "ANYTIME": {
@@ -608,22 +604,12 @@
             "label": "Date range"
           }
         },
-        "rangesOption": {
-          "AVAILABLE_ON": {
-            "tab": "Available",
-            "msg": "Select the dates you are available to work."
-          },
-          "NOT_AVAILABLE_ON": {
-            "tab": "Not available",
-            "msg": "Select the dates you are not available to work."
-          }
-        },
         "communicationLanguage": "Communication language",
-        "communicationLanguages": "Communication languages"
+        "communicationLanguages": "Communication languages",
+        "certificateValidityDate": "Validity date of"
       },
       "jobs": "Jobs finished",
       "error": {
-        "getGeocodedLocation": "Error getting location",
         "notFound": "Profile not found",
         "startDate": "Start date missing",
         "uidRequired": "Employee profile uid is required",
@@ -631,8 +617,9 @@
         "emailRequired": "User email is required to create employee profile",
         "statusRequired": "Employee profile status is required",
         "fullNameRequired": "Employee profile full name is required",
-        "phoneNumberRequired": "Employee profile phone number is required",
         "avatarRefRequired": "Employee profile avatar is required",
+        "getGeocodedLocation": "Error getting location",
+        "phoneNumberRequired": "Employee profile phone number is required",
         "locationOptionRequired": "Employee profile location option is required",
         "locationRadiusRequired": "Location radius is required for distance location option",
         "locationCountryRequired": "At least one location country is required for selected countries location option",
@@ -653,10 +640,24 @@
       "noChanges": "No changes detected in the worker profile",
       "editButton": "Edit Worker Profile",
       "experience": "Experience",
+      "likeButton": "Like Profile",
+      "profileMenu": "Profile menu",
+      "searchTitle": "Employees",
       "availability": "Availability",
+      "deleteButton": "Delete Profile",
+      "unlikeButton": "Unlike Profile",
       "submitSuccess": "Worker profile saved successfully.",
+      "activateButton": "Activate Profile",
       "alreadyInStatus": "Profile is already in the specified status",
-      "cannotLikeOwnProfile": "You cannot like your own profile"
+      "likeRemoveToast": "Unliked the profile",
+      "deactivateButton": "Deactivate Profile",
+      "deleteErrorToast": "Error deleting profile",
+      "likeSuccessToast": "Liked the profile",
+      "deleteSuccessToast": "Profile deleted successfully",
+      "cannotLikeOwnProfile": "You cannot like your own profile",
+      "deleteConfirmMessage": "Are you sure you want to delete this profile? This action cannot be undone.",
+      "activationSuccessToast": "Profile activated successfully",
+      "deactivationSuccessToast": "Profile deactivated successfully"
     }
   }
 }

@@ -4,91 +4,39 @@
   "data": {
     "nav": {
       "start": "Start",
-      "employees": "Pracownicy",
       "offers": "Oferty",
-      "account": "Konto"
+      "account": "Konto",
+      "employees": "Pracownicy"
     },
-    "notification": {
-      "header": "Powiadomienia",
-      "notificationViewTitle": "Powiadomienie",
-      "noNotifications": "Nie masz jeszcze żadnych powiadomień.",
-      "newInvitationTitle": "Nowe zaproszenie",
-      "newInvitationMessage": "Użytkownik {{name}} wysłał Ci zaproszenie do znajomych.",
-      "acceptInvitationTitle": "Zaproszenie zaakceptowane",
-      "acceptInvitationMessage": "Użytkownik {{name}} zaakceptował Twoje zaproszenie do znajomych.",
-      "friendRemovedTitle": "Znajomy usunięty",
-      "friendRemovedMessage": "Użytkownik {{name}} usunął Cię ze znajomych.",
-      "deleteNotification": "Usuń powiadomienie",
-      "deleteConfirmMessage": "Czy na pewno chcesz usunąć to powiadomienie? Tej akcji nie można cofnąć.",
-      "deleteSuccessToast": "Powiadomienie zostało pomyślnie usunięte",
-      "viewProfile": "Zobacz profil {{name}}",
-      "readAt": "Przeczytano: {{date}}",
-      "sentAt": "Otrzymano: {{date}}",
-      "unreadNotificationsOne": "Masz {{count}} nieprzeczytane powiadomienie",
-      "unreadNotificationsFew": "Masz {{count}} nieprzeczytane powiadomienia",
-      "unreadNotificationsMany": "Masz {{count}} nieprzeczytanych powiadomień",
-      "newMessageTitle": "Nowa wiadomość",
-      "error": {
-        "notFound": "Nie można znaleźć powiadomienia o podanym ID"
-      }
+    "pwa": {
+      "install": "Zainstaluj na ekranie głównym",
+      "success": "Aplikacja została pomyślnie zainstalowana",
+      "iosGuide": "Aby zainstalować aplikację na iPhonie, wykonaj poniższe kroki:",
+      "iosStep1": "Naciśnij przycisk Udostępnij w Safari",
+      "iosStep2": "Przewiń w dół i wybierz \"Dodaj do ekranu początkowego\"",
+      "iosStep3": "Naciśnij \"Dodaj\" w prawym górnym rogu"
     },
     "chat": {
-      "typeMessage": "Pisz wiadomość...",
-      "openChat": "Otwórz czat",
       "chats": "Czaty",
       "noChats": "Brak dostępnych czatów",
       "chatMenu": "Menu czatu",
-      "cleanChat": "Wyczyść czat",
+      "joinedAt": "Dołączono: {{date}}",
+      "openChat": "Otwórz czat",
       "blockUser": "Zablokuj użytkownika",
+      "cleanChat": "Wyczyść czat",
       "deleteChat": "Usuń czat",
-      "blockedByMe": "Zablokowane przez Ciebie",
-      "blockedByOther": "Zablokowane przez ",
       "noMessages": "Brak wiadomości",
-      "cleanChatConfirm": "Czy na pewno chcesz wyczyścić historię czatu? Tej akcji nie można cofnąć.",
-      "cleanChatSuccess": "Historia czatu została pomyślnie wyczyszczona",
+      "blockedByMe": "Zablokowane przez Ciebie",
+      "typeMessage": "Pisz wiadomość...",
+      "blockedByOther": "Zablokowane przez ",
       "blockUserConfirm": "Czy na pewno chcesz zablokować tego użytkownika? Nie będziesz mógł wysyłać ani odbierać od niego wiadomości.",
       "blockUserSuccess": "Użytkownik został pomyślnie zablokowany",
-      "unblockUserConfirm": "Czy na pewno chcesz odblokować tego użytkownika? Będziesz mógł ponownie wysyłać i odbierać od niego wiadomości.",
-      "unblockUserSuccess": "Użytkownik został pomyślnie odblokowany",
+      "cleanChatConfirm": "Czy na pewno chcesz wyczyścić historię czatu? Tej akcji nie można cofnąć.",
+      "cleanChatSuccess": "Historia czatu została pomyślnie wyczyszczona",
       "deleteChatConfirm": "Czy na pewno chcesz usunąć ten czat? Tej akcji nie można cofnąć.",
       "deleteChatSuccess": "Czat został pomyślnie usunięty",
-      "joinedAt": "Dołączono: {{date}}"
-    },
-    "account": {
-      "account": "Konto",
-      "showEmployeeProfile": "Pokaż profil pracownika",
-      "createEmployeeProfile": "Utwórz profil pracownika",
-      "offers": "Oferty",
-      "deleteAccountConfirmTitle": "Usuń konto",
-      "deleteAccountConfirmMessage": "Czy na pewno chcesz usunąć swoje konto? Tej akcji nie można cofnąć.",
-      "deleteAccountSuccessToast": "Konto zostało pomyślnie usunięte",
-      "deleteAccountFailed": "Nie udało się usunąć konta",
-      "friends": "Znajomi",
-      "showProfile": "Pokaż profil"
-    },
-    "friends": {
-      "invite": "Zaproś do znajomych",
-      "search": "Szukaj znajomych",
-      "invitationSent": "Zaproszenie wysłane",
-      "friend": "Znajomy",
-      "invited": "Zaproszony przez Ciebie",
-      "accept": "Zaakceptuj",
-      "acceptedToast": "Zaproszenie zaakceptowane",
-      "reject": "Odrzuć zaproszenie",
-      "rejectedToast": "Zaproszenie odrzucone",
-      "endOfResults": "Brak więcej wyników do wyświetlenia.",
-      "invitationReceived": "Otrzymane zaproszenie",
-      "cancel": "Anuluj",
-      "cancelInvitation": "Anuluj zaproszenie",
-      "cancelInvitationConfirm": "Czy na pewno chcesz anulować to zaproszenie?",
-      "cancelInvitationSuccess": "Zaproszenie zostało odrzucone",
-      "noFriends": "Nie masz jeszcze żadnych znajomych. Wyszukaj i dodaj kilku!",
-      "remove": "Usuń znajomego",
-      "removeConfirm": "Czy na pewno chcesz usunąć tego znajomego?",
-      "removeSuccess": "Znajomy został pomyślnie usunięty",
-      "removeFailed": "Nie udało się usunąć znajomego",
-      "inviteReceivedToast": "Użytkownik {{name}} wysłał Ci zaproszenie.",
-      "invitationNotification": "Masz nowe zaproszenie"
+      "unblockUserConfirm": "Czy na pewno chcesz odblokować tego użytkownika? Będziesz mógł ponownie wysyłać i odbierać od niego wiadomości.",
+      "unblockUserSuccess": "Użytkownik został pomyślnie odblokowany"
     },
     "lang": {
       "select": "Wybierz język",
@@ -105,51 +53,24 @@
         "userInitError": "Błąd podczas inicjalizacji kontekstu użytkownika"
       }
     },
+    "error": {
+      "missingUserId": "Brak ID użytkownika",
+      "settingsUpdate": "Nie udało się zaktualizować ustawień",
+      "avatarUploadFailed": "Nie udało się przesłać avatara"
+    },
     "offer": {
       "add": "Dodaj ofertę",
-      "statusActive": "Aktywna",
-      "statusInactive": "Nieaktywna",
-      "management": "Zarządzanie ofertami",
-      "editButton": "Edytuj ofertę",
-      "removeButton": "Usuń ofertę",
-      "unlikeButton": "Usuń polubienie oferty",
-      "likeButton": "Polub ofertę", 
-      "activateButton": "Aktywuj ofertę",
-      "deactivateButton": "Dezaktywuj ofertę",
-      "views": "Wyświetlenia",
-      "likes": "Polubienia",
-      "created": "Dodano",
-      "noOffers": "Nie ma jeszcze żadnych ofert...",
-      "myListTitle": "Moje oferty",
-      "offersList": "Lista ofert",
-      "searchTitle": "Oferty",
-      "offerViewTitle": "Szczegóły oferty",
-      "activationSuccessToast": "Oferta została pomyślnie aktywowana",
-      "deactivationSuccessToast": "Oferta została pomyślnie dezaktywowana",
-      "activationErrorToast": "Błąd podczas zmiany statusu aktywacji oferty",
-      "deleteSuccessToast": "Oferta została pomyślnie usunięta",
-      "deleteConfirmMessage": "Czy na pewno chcesz usunąć tę ofertę? Tej akcji nie można cofnąć.",
-      "likeSuccessToast": "Polubiłeś ofertę",
-      "likeRemoveToast": "Usunąłeś polubienie",
-      "deleteButton": "Usuń ofertę",
-      "offerMenu": "Menu oferty",
-      "filters": {
-        "categories": "Kategorie",
-        "countries": "Kraje",
-        "communicationLanguages": "Języki komunikacji"
-      },
       "form": {
         "title": "Formularz oferty pracy",
         "success": "Oferta została pomyślnie utworzona",
-        "successUpdate": "Oferta została pomyślnie zaktualizowana",
         "STEP_ONE": {
           "label": "Krok 1",
           "title": "Podstawowe informacje"
         },
         "STEP_TWO": {
+          "info": "*Podanie orientacyjnej lokalizacji jest wymagane do działania wyszukiwarki i ułatwia innym znalezienie Twojej oferty.",
           "label": "Krok 2",
-          "title": "Lokalizacja",
-          "info": "*Podanie orientacyjnej lokalizacji jest wymagane do działania wyszukiwarki i ułatwia innym znalezienie Twojej oferty."
+          "title": "Lokalizacja"
         },
         "STEP_FOUR": {
           "label": "Krok 4",
@@ -160,24 +81,56 @@
           "title": "Opis i wynagrodzenie"
         },
         "validation": {
-          "atLeastOneSalaryRequired": "Wymagane jest podanie wynagrodzenia (miesięczne lub godzinowe).",
-          "currencyRequired": "Waluta jest wymagana.",
-          "formInvalid": "Formularz jest nieprawidłowy, sprawdź wszystkie pola.",
+          "notFound": "Nie znaleziono oferty.",
           "createError": "Błąd podczas tworzenia oferty, spróbuj ponownie później.",
-          "notFound": "Nie znaleziono oferty."
-        }
+          "formInvalid": "Formularz jest nieprawidłowy, sprawdź wszystkie pola.",
+          "currencyRequired": "Waluta jest wymagana.",
+          "atLeastOneSalaryRequired": "Wymagane jest podanie wynagrodzenia (miesięczne lub godzinowe)."
+        },
+        "successUpdate": "Oferta została pomyślnie zaktualizowana"
       },
-      "dateRange": "Data rozpoczęcia",
-      "search": "Szukaj ofert",
-      "workCountry": "Kraj pracy",
-      "workCategory": "Kategoria",
-      "languagesRequired": "Wymagane języki",
-      "languagesNiceToHave": "Mile widziane języki",
+      "likes": "Polubienia",
+      "views": "Wyświetlenia",
       "salary": "Stawka godzinowa od",
+      "search": "Szukaj ofert",
+      "created": "Dodano",
+      "filters": {
+        "countries": "Kraje",
+        "categories": "Kategorie",
+        "communicationLanguages": "Języki komunikacji"
+      },
       "currency": "Waluta",
-      "displayName": "Tytuł",
+      "noOffers": "Nie ma jeszcze żadnych ofert...",
+      "dateRange": "Data rozpoczęcia",
+      "offerMenu": "Menu oferty",
+      "editButton": "Edytuj ofertę",
+      "likeButton": "Polub ofertę",
+      "management": "Zarządzanie ofertami",
+      "offersList": "Lista ofert",
       "description": "Krótki opis oferty",
-      "cannotLikeOwnOffer": "Nie możesz polubić własnej oferty"
+      "displayName": "Tytuł",
+      "myListTitle": "Moje oferty",
+      "searchTitle": "Oferty",
+      "workCountry": "Kraj pracy",
+      "deleteButton": "Usuń ofertę",
+      "removeButton": "Usuń ofertę",
+      "statusActive": "Aktywna",
+      "unlikeButton": "Usuń polubienie oferty",
+      "workCategory": "Kategoria",
+      "activateButton": "Aktywuj ofertę",
+      "offerViewTitle": "Szczegóły oferty",
+      "statusInactive": "Nieaktywna",
+      "likeRemoveToast": "Usunąłeś polubienie",
+      "deactivateButton": "Dezaktywuj ofertę",
+      "likeSuccessToast": "Polubiłeś ofertę",
+      "languagesRequired": "Wymagane języki",
+      "cannotLikeOwnOffer": "Nie możesz polubić własnej oferty",
+      "deleteSuccessToast": "Oferta została pomyślnie usunięta",
+      "languagesNiceToHave": "Mile widziane języki",
+      "activationErrorToast": "Błąd podczas zmiany statusu aktywacji oferty",
+      "deleteConfirmMessage": "Czy na pewno chcesz usunąć tę ofertę? Tej akcji nie można cofnąć.",
+      "activationSuccessToast": "Oferta została pomyślnie aktywowana",
+      "deactivationSuccessToast": "Oferta została pomyślnie dezaktywowana"
     },
     "theme": {
       "dark": "Ciemny",
@@ -186,46 +139,42 @@
       "select": "Wybierz motyw",
       "changedTo": "Motyw zmieniony na {{theme}}"
     },
-    "pwa": {
-      "install": "Zainstaluj na ekranie głównym",
-      "success": "Aplikacja została pomyślnie zainstalowana"
-    },
     "common": {
       "h1": "Witamy w FRAT",
       "h2": "Platforma rekrutacyjna dla wysokościowych / pracowników dostępu linowego (rope-access)",
+      "of": "z",
       "ok": "OK",
       "to": "do",
+      "day": "dzień",
       "end": "Koniec",
+      "sww": "Coś poszło nie tak, spróbuj ponownie później.",
       "back": "Wstecz",
       "edit": "Edytuj",
       "from": "Od",
+      "hour": "godzina",
       "next": "Dalej",
+      "page": "Strona",
       "save": "Zapisz",
+      "year": "rok",
       "close": "Zamknij",
+      "items": "elementów",
+      "month": "miesiąc",
       "reset": "Reset",
       "start": "Początek",
       "cancel": "Anuluj",
+      "search": "Szukaj",
       "submit": "Zatwierdź",
       "confirm": "Potwierdź",
       "filters": "Filtry",
+      "options": "Opcje",
+      "anywhere": "Gdziekolwiek",
+      "distance": "Odległość",
       "language": "Język",
-      "items": "elementów",
       "previous": "Wstecz",
-      "page": "Strona",
-      "of": "z",
       "settings": "Ustawienia",
       "noResults": "Brak wyników ;( ",
-      "networkError": "Błąd sieci",
-      "month": "miesiąc",
-      "hour": "godzina",
-      "day": "dzień",
-      "year": "rok",
-      "options": "Opcje",
-      "search": "Szukaj",
-      "anywhere": "Gdziekolwiek",
       "endOfResults": "Brak więcej wyników do wyświetlenia.",
-      "sww": "Coś poszło nie tak, spróbuj ponownie później.",
-      "distance": "Odległość"
+      "networkError": "Błąd sieci"
     },
     "header": {
       "home": "Strona główna",
@@ -234,10 +183,10 @@
       "profile": "Profil"
     },
     "others": {
+      "lessThan": "<{{distance}}{{unit}}",
       "availableAnytime": "Dostępny od zaraz",
-      "availableAnytimeShort": "Od zaraz",
       "fetchLocationError": "Nie można znaleźć lokalizacji.",
-      "lessThan": "<{{distance}}{{unit}}"
+      "availableAnytimeShort": "Od zaraz"
     },
     "report": {
       "send": "Wyślij",
@@ -251,10 +200,12 @@
       "feedbackPopupTitle": "Czy to już na pewno wszystko?"
     },
     "signin": {
+      "pin": "PIN z Telegrama",
       "email": "Email",
       "title": "Logowanie",
       "logout": "Wyloguj się",
       "submit": "Zaloguj się",
+      "openBot": "Otwórz bota Telegram",
       "signout": "Wylogowano!",
       "success": "Zalogowano pomyślnie!",
       "password": "Hasło",
@@ -266,10 +217,8 @@
       "googleProvider": "Zaloguj przez Google",
       "alreadyHaveAccount": "Masz już konto?",
       "forgotPasswordTitle": "Resetowanie hasła",
-      "forgotPasswordSuccess": "Jeśli email istnieje, wysłano link do resetu hasła.",
       "invalidOrExpiredPin": "PIN nieprawidłowy lub wygasł. Spróbuj ponownie.",
-      "openBot": "Otwórz bota Telegram",
-      "pin": "PIN z Telegrama"
+      "forgotPasswordSuccess": "Jeśli email istnieje, wysłano link do resetu hasła."
     },
     "signup": {
       "email": "Email",
@@ -285,18 +234,57 @@
       "errorEmailMatch": "Emaile się nie zgadzają.",
       "errorPasswordMatch": "Hasła się nie zgadzają.",
       "verificationEmailSent": "Email weryfikacyjny został wysłany. Sprawdź swoją skrzynkę.",
-      "emailVerificationRequired": "Wymagana jest weryfikacja email.",
+      "resendVerificationEmail": "Wyślij ponownie email weryfikacyjny",
       "emailVerificationMessage": "Musisz zweryfikować swój adres email, aby uzyskać dostęp do wszystkich funkcji.",
-      "resendVerificationEmail": "Wyślij ponownie email weryfikacyjny"
+      "emailVerificationRequired": "Wymagana jest weryfikacja email."
+    },
+    "account": {
+      "offers": "Oferty",
+      "account": "Konto",
+      "friends": "Znajomi",
+      "showProfile": "Pokaż profil",
+      "deleteAccountFailed": "Nie udało się usunąć konta",
+      "showEmployeeProfile": "Pokaż profil pracownika",
+      "createEmployeeProfile": "Utwórz profil pracownika",
+      "deleteAccountConfirmTitle": "Usuń konto",
+      "deleteAccountSuccessToast": "Konto zostało pomyślnie usunięte",
+      "deleteAccountConfirmMessage": "Czy na pewno chcesz usunąć swoje konto? Tej akcji nie można cofnąć."
     },
     "cookies": {
       "title": "Informacja o plikach cookie",
       "accept": "Akceptuję",
       "description": "Używamy niezbędnych plików cookie, aby zapewnić prawidłowe działanie strony. Te pliki umożliwiają podstawowe funkcje, takie jak nawigacja, uwierzytelnianie i bezpieczeństwo."
     },
+    "friends": {
+      "accept": "Zaakceptuj",
+      "cancel": "Anuluj",
+      "friend": "Znajomy",
+      "invite": "Zaproś do znajomych",
+      "reject": "Odrzuć zaproszenie",
+      "remove": "Usuń znajomego",
+      "search": "Szukaj znajomych",
+      "invited": "Zaproszony przez Ciebie",
+      "noFriends": "Nie masz jeszcze żadnych znajomych. Wyszukaj i dodaj kilku!",
+      "endOfResults": "Brak więcej wyników do wyświetlenia.",
+      "removeFailed": "Nie udało się usunąć znajomego",
+      "acceptedToast": "Zaproszenie zaakceptowane",
+      "rejectedToast": "Zaproszenie odrzucone",
+      "removeConfirm": "Czy na pewno chcesz usunąć tego znajomego?",
+      "removeSuccess": "Znajomy został pomyślnie usunięty",
+      "invitationSent": "Zaproszenie wysłane",
+      "cancelInvitation": "Anuluj zaproszenie",
+      "invitationReceived": "Otrzymane zaproszenie",
+      "inviteReceivedToast": "Użytkownik {{name}} wysłał Ci zaproszenie.",
+      "invitationNotification": "Masz nowe zaproszenie",
+      "cancelInvitationConfirm": "Czy na pewno chcesz anulować to zaproszenie?",
+      "cancelInvitationSuccess": "Zaproszenie zostało odrzucone"
+    },
     "profile": {
       "add": "Dodaj profil",
       "tile": "Twój profil"
+    },
+    "success": {
+      "avatarUploaded": "Avatar został przesłany"
     },
     "authError": {
       "userDisabled": "Konto zablokowane",
@@ -309,9 +297,6 @@
       "passwordResetNotAvailable": "Reset hasła nie jest dostępny dla tego konta."
     },
     "callendar": {
-      "today": "Dzisiaj",
-      "yesterday": "Wczoraj",
-      "tomorrow": "Jutro",
       "at": "o godzinie",
       "month": {
         "0": "Styczeń",
@@ -327,6 +312,7 @@
         "10": "Listopad",
         "11": "Grudzień"
       },
+      "today": "Dzisiaj",
       "control": {
         "anytime": "Kiedykolwiek",
         "rangeEndLabel": "do",
@@ -341,6 +327,8 @@
         "months2": "miesiące",
         "selectLabel": "Wybierz liczbę miesięcy"
       },
+      "tomorrow": "Jutro",
+      "yesterday": "Wczoraj",
       "monthShort": {
         "0": "Sty",
         "1": "Lut",
@@ -382,6 +370,11 @@
         "5": "Pią",
         "6": "Sob"
       }
+    },
+    "cloudinary": {
+      "missingConfig": "Brak konfiguracji Cloudinary",
+      "deletionFailed": "Nie udało się usunąć obrazu z Cloudinary",
+      "missingPublicId": "Brak publicznego ID Cloudinary"
     },
     "dictionary": {
       "SKILLS": {
@@ -449,27 +442,24 @@
       },
       "CERTIFICATES": {
         "NAME": {
-          "ONE": "ONE",
-          "SIX": "SIX",
-          "TWO": "TWO",
-          "FIVE": "FIVE",
-          "FOUR": "FOUR",
-          "SEVEN": "SEVEN",
-          "THREE": "THREE"
+          "IRATA1": "IRATA L1",
+          "IRATA_ONE": "IRATA L1",
+          "IRATA_TWO": "IRATA L2 – Experienced Technician",
+          "IRATA_THREE": "IRATA L3 – Supervisor"
         }
       }
     },
     "validation": {
       "form": {
         "required": "To pole jest wymagane.",
-        "dateRangeRequired": "Daty rozpoczęcia i zakończenia są wymagane.",
-        "dateRangeStartRequired": "Data rozpoczęcia jest wymagana.",
+        "formInvalid": "Formularz jest nieprawidłowy, sprawdź wszystkie pola.",
         "positiveInteger": "Wartość musi być dodatnią liczbą całkowitą.",
-        "phoneNumberTooShort": "Numer telefonu jest za krótki (min. 6 cyfr).",
-        "phoneNumberTooLong": "Numer telefonu jest za długi (maks. 15 cyfr).",
+        "dateRangeRequired": "Daty rozpoczęcia i zakończenia są wymagane.",
         "phoneNumberInvalid": "Nieprawidłowy format numeru telefonu.",
+        "phoneNumberTooLong": "Numer telefonu jest za długi (maks. 15 cyfr).",
         "phoneNumberRequired": "Numer telefonu jest wymagany.",
-        "formInvalid": "Formularz jest nieprawidłowy, sprawdź wszystkie pola."
+        "phoneNumberTooShort": "Numer telefonu jest za krótki (min. 6 cyfr).",
+        "dateRangeStartRequired": "Data rozpoczęcia jest wymagana."
       },
       "view": {
         "title": "Coś poszło nie tak!",
@@ -485,61 +475,50 @@
       "notFound": "Nie znaleziono",
       "required": "Wszystkie pola są wymagane.",
       "emailMatch": "Email i powtórzony email muszą się zgadzać.",
+      "fileTooLarge": "Plik jest za duży. Maksymalny rozmiar: {{max}} MB",
       "firebaseError": "Rejestracja nie powiodła się. Spróbuj ponownie później.",
       "passwordMatch": "Hasło i powtórone hasło muszą się zgadzać.",
-      "dictionaryNotFound": "Nie znaleziono słownika",
       "invalidFileType": "Nieprawidłowy typ pliku. Dozwolone: {{allowed}}",
-      "fileTooLarge": "Plik jest za duży. Maksymalny rozmiar: {{max}} MB"
+      "dictionaryNotFound": "Nie znaleziono słownika"
     },
-    "error": {
-      "missingUserId": "Brak ID użytkownika",
-      "avatarUploadFailed": "Nie udało się przesłać avatara",
-      "settingsUpdate": "Nie udało się zaktualizować ustawień"
-    },
-    "success": {
-      "avatarUploaded": "Avatar został przesłany"
-    },
-    "cloudinary": {
-      "missingConfig": "Brak konfiguracji Cloudinary",
-      "deletionFailed": "Nie udało się usunąć obrazu z Cloudinary",
-      "missingPublicId": "Brak publicznego ID Cloudinary"
+    "notification": {
+      "error": {
+        "notFound": "Nie można znaleźć powiadomienia o podanym ID"
+      },
+      "header": "Powiadomienia",
+      "readAt": "Przeczytano: {{date}}",
+      "sentAt": "Otrzymano: {{date}}",
+      "viewProfile": "Zobacz profil {{name}}",
+      "newMessageTitle": "Nowa wiadomość",
+      "noNotifications": "Nie masz jeszcze żadnych powiadomień.",
+      "deleteNotification": "Usuń powiadomienie",
+      "deleteSuccessToast": "Powiadomienie zostało pomyślnie usunięte",
+      "friendRemovedTitle": "Znajomy usunięty",
+      "newInvitationTitle": "Nowe zaproszenie",
+      "deleteConfirmMessage": "Czy na pewno chcesz usunąć to powiadomienie? Tej akcji nie można cofnąć.",
+      "friendRemovedMessage": "Użytkownik {{name}} usunął Cię ze znajomych.",
+      "newInvitationMessage": "Użytkownik {{name}} wysłał Ci zaproszenie do znajomych.",
+      "acceptInvitationTitle": "Zaproszenie zaakceptowane",
+      "notificationViewTitle": "Powiadomienie",
+      "unreadNotificationsFew": "Masz {{count}} nieprzeczytane powiadomienia",
+      "unreadNotificationsOne": "Masz {{count}} nieprzeczytane powiadomienie",
+      "acceptInvitationMessage": "Użytkownik {{name}} zaakceptował Twoje zaproszenie do znajomych.",
+      "unreadNotificationsMany": "Masz {{count}} nieprzeczytanych powiadomień"
     },
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",
-      "searchTitle": "Specjaliści",
-      "profileMenu": "Menu profilu",
-      "activateButton": "Aktywuj profil",   
-      "deactivateButton": "Dezaktywuj profil",
-      "deleteButton": "Usuń profil",
-      "likeButton": "Polub profil",
-      "unlikeButton": "Usuń polubienie",
-      "activationSuccessToast": "Profil pomyślnie aktywowany",
-      "deactivationSuccessToast": "Profil pomyślnie dezaktywowany",
-      "likeSuccessToast": "Polubiłeś profil",
-      "likeRemoveToast": "Usunąłeś polubienie profilu",
-      "deleteConfirmMessage": "Czy na pewno chcesz usunąć ten profil pracownika? Tej akcji nie można cofnąć.",
-      "deleteSuccessToast": "Profil został pomyślnie usunięty",
-      "deleteErrorToast": "Wystąpił błąd podczas usuwania profilu",
       "form": {
-        "certificateValidityDate": "Data ważności ",
-        "sortOptions": {
-          "title": "Sortuj według",
-          "DISTANCE_ASC": "Odległość: Najbliżej",
-          "CREATED_AT_DESC": "Dołączył: Najnowszy",
-          "CREATED_AT_ASC": "Dołączył: Najstarszy",
-          "START_FROM_DESC": "Dostępność: Najbliższa",
-          "START_FROM_ASC": "Dostępność: Najdalsza",
-          "POPULARITY": "Popularność"
-        },
+        "city": "Miasto",
+        "email": "Email",
         "step1": {
           "label": "Krok 1",
           "title": "Dane osobowe"
         },
         "step2": {
+          "info": "*Podanie orientacyjnej lokalizacji jest wymagane do działania wyszukiwarki i ułatwia innym znalezienie Twojego profilu.",
           "label": "Krok 2",
           "title": "Lokalizacja",
-          "chooseOptions": "Wybierz opcje:",
-          "info": "*Podanie orientacyjnej lokalizacji jest wymagane do działania wyszukiwarki i ułatwia innym znalezienie Twojego profilu."
+          "chooseOptions": "Wybierz opcje:"
         },
         "step3": {
           "label": "Krok 3",
@@ -550,22 +529,41 @@
           "title": "Certyfikaty"
         },
         "title": "Formularz profilu pracownika",
-        "confirmTitle": "Potwierdź zapisanie profilu",
-        "confirmSubmit": "Czy na pewno chcesz zapisać profil pracownika?",
         "radius": "Promień",
-        "experience": "Doświadczenie",
         "address": "Adres",
         "freeText": "Szukaj...",
-        "location": "Lokalizacja",
         "fullName": "Imię i nazwisko",
-        "email": "Email",
-        "phoneNumber": "Numer telefonu",
+        "location": "Lokalizacja",
+        "experience": "Doświadczenie",
         "addLanguage": "Dodaj język",
+        "phoneNumber": "Numer telefonu",
+        "sortOptions": {
+          "title": "Sortuj według",
+          "POPULARITY": "Popularność",
+          "DISTANCE_ASC": "Odległość: Najbliżej",
+          "CREATED_AT_ASC": "Dołączył: Najstarszy",
+          "START_FROM_ASC": "Dostępność: Najdalsza",
+          "CREATED_AT_DESC": "Dołączył: Najnowszy",
+          "START_FROM_DESC": "Dostępność: Najbliższa"
+        },
         "submitError": "Proszę poprawnie wypełnić wszystkie wymagane pola",
         "certificates": "Certyfikaty",
-        "locationPoint": "Dokładna lokalizacja [lat lng]",
-        "submitSuccess": "Profil został zapisany pomyślnie",
+        "confirmTitle": "Potwierdź zapisanie profilu",
+        "rangesOption": {
+          "AVAILABLE_ON": {
+            "msg": "Wybierz daty, w których jesteś dostępny/a do pracy.",
+            "tab": "Dostępny"
+          },
+          "NOT_AVAILABLE_ON": {
+            "msg": "Wybierz daty, w których nie jesteś dostępny/a do pracy.",
+            "tab": "Niedostępny"
+          }
+        },
         "uploadAvatar": "Prześlij avatar",
+        "confirmSubmit": "Czy na pewno chcesz zapisać profil pracownika?",
+        "locationPoint": "Dokładna lokalizacja [lat lng]",
+        "resetLocation": "Resetuj lokalizację",
+        "submitSuccess": "Profil został zapisany pomyślnie",
         "locationOption": {
           "POSITION": {
             "msg": "Będą do Ciebie trafiać oferty na podstawie Twojej lokalizacji i odległości.",
@@ -581,9 +579,7 @@
           }
         },
         "locationCountry": "Kraj lokalizacji",
-        "resetLocation": "Resetuj lokalizację",
         "validationError": "Proszę wypełnić wszystkie wymagane pola w tym kroku",
-        "city": "Miasto",
         "locationCountries": "Kraje",
         "availabilityOption": {
           "ANYTIME": {
@@ -601,31 +597,22 @@
             "label": "Termin"
           }
         },
-        "rangesOption": {
-          "AVAILABLE_ON": {
-            "tab": "Dostępny",
-            "msg": "Wybierz daty, w których jesteś dostępny/a do pracy."
-          },
-          "NOT_AVAILABLE_ON": {
-            "tab": "Niedostępny",
-            "msg": "Wybierz daty, w których nie jesteś dostępny/a do pracy."
-          }
-        },
         "communicationLanguage": "Język komunikacji",
-        "communicationLanguages": "Języki komunikacji"
+        "communicationLanguages": "Języki komunikacji",
+        "certificateValidityDate": "Data ważności "
       },
       "jobs": "Zlecenia ukończone",
       "error": {
-        "getGeocodedLocation": "Błąd podczas pobierania lokalizacji",
+        " equired": "Dane profilu pracownika są wymagane",
         "notFound": "Nie znaleziono profilu",
         "startDate": "Brak daty rozpoczęcia",
         "uidRequired": "UID profilu pracownika jest wymagany",
-        " equired": "Dane profilu pracownika są wymagane",
         "emailRequired": "Email użytkownika jest wymagany do utworzenia profilu pracownika",
         "statusRequired": "Status profilu pracownika jest wymagany",
         "fullNameRequired": "Pełne imię i nazwisko profilu pracownika jest wymagane",
-        "phoneNumberRequired": "Numer telefonu profilu pracownika jest wymagany",
         "avatarRefRequired": "Awatar profilu pracownika jest wymagany",
+        "getGeocodedLocation": "Błąd podczas pobierania lokalizacji",
+        "phoneNumberRequired": "Numer telefonu profilu pracownika jest wymagany",
         "locationOptionRequired": "Opcja lokalizacji profilu pracownika jest wymagana",
         "locationRadiusRequired": "Promień lokalizacji jest wymagany dla opcji lokalizacji na odległość",
         "locationCountryRequired": "Wymagany jest co najmniej jeden kraj lokalizacji dla wybranych krajów",
@@ -646,10 +633,24 @@
       "noChanges": "Brak wykrytych zmian w profilu pracownika",
       "editButton": "Edytuj profil pracownika",
       "experience": "Doświadczenie",
+      "likeButton": "Polub profil",
+      "profileMenu": "Menu profilu",
+      "searchTitle": "Specjaliści",
       "availability": "Dostępność",
+      "deleteButton": "Usuń profil",
+      "unlikeButton": "Usuń polubienie",
       "submitSuccess": "Profil pracownika zapisany pomyślnie.",
+      "activateButton": "Aktywuj profil",
       "alreadyInStatus": "Profil jest już w określonym statusie",
-      "cannotLikeOwnProfile": "Nie możesz polubić własnego profilu"
+      "likeRemoveToast": "Usunąłeś polubienie profilu",
+      "deactivateButton": "Dezaktywuj profil",
+      "deleteErrorToast": "Wystąpił błąd podczas usuwania profilu",
+      "likeSuccessToast": "Polubiłeś profil",
+      "deleteSuccessToast": "Profil został pomyślnie usunięty",
+      "cannotLikeOwnProfile": "Nie możesz polubić własnego profilu",
+      "deleteConfirmMessage": "Czy na pewno chcesz usunąć ten profil pracownika? Tej akcji nie można cofnąć.",
+      "activationSuccessToast": "Profil pomyślnie aktywowany",
+      "deactivationSuccessToast": "Profil pomyślnie dezaktywowany"
     }
   }
 }
