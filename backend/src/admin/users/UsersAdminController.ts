@@ -11,7 +11,7 @@ import { UserEntity } from "user/model/UserEntity";
 @Controller('api/admin/users')
 @UseInterceptors(LogInterceptor)
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRoles.SUPERADMIN)
+@Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
 export class UsersAdminController {
     
     constructor(
@@ -32,6 +32,7 @@ export class UsersAdminController {
 
     @Put(':uid/assign-roles')
     @Serialize(UserEntity)
+    @Roles(UserRoles.SUPERADMIN)
     assignRolesForUser(
         @Param('uid') uid: string,
         @Body() dto: { roles: UserRole[] }

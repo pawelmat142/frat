@@ -95,7 +95,7 @@ const TranslationItemForm: React.FC = () => {
                 ← Back
             </Button>
 
-            <div className="flex flex-col gap-4 p-6 rounded-lg mt-4 max-w-2xl mx-auto mb-20 secondary-bg shadow border border-color">
+            <div className="flex flex-col gap-4 p-6 rounded-lg mt-4 max-w-2xl mx-auto mb-20 shadow border border-color">
 
                 <h2 className="text-lg font-bold primary-text">Edit Translation</h2>
 

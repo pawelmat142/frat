@@ -5,8 +5,8 @@ import { BtnModes, SelectorItem,  } from "global/interface/controls.interface";
 import { UsersAdminService } from "admin/services/UsersAdmin.service";
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
-import SelectorMulti from "global/components/selector/SelectorMulti";
 import { useUserContext } from "user/UserProvider";
+import FloatingSelectorMulti from "global/components/selector/FloatingSelectorMulti";
 
 interface SelectedUserProps {
     user: UserI | null;
@@ -85,7 +85,8 @@ const SelectedUser: React.FC<SelectedUserProps> = ({ user, onRefresh }) => {
             {assignRoleForm && (<>
 
                 <div className="flex gap-5 items-center my-5">
-                    <SelectorMulti<UserRole>
+                    <FloatingSelectorMulti<UserRole>
+                        label="Select roles"
                         fullWidth
                         className="w-1/3"
                         items={items}

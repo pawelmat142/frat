@@ -18,6 +18,9 @@ import { TranslationAdminService } from "admin/services/TranslationAdmin.service
 import { useConfirm } from 'global/providers/PopupProvider';
 import { useNavigate } from 'react-router-dom';
 import { Path } from '../../../path';
+import FloatingInput from 'global/components/controls/FloatingInput';
+import RoleGuard from 'global/components/RoleGuard';
+import { UserRoles } from '@shared/interfaces/UserI';
 
 const TranslationsSection: React.FC = () => {
     const [loading, setLoading] = useState(false);
@@ -99,6 +102,9 @@ const TranslationsSection: React.FC = () => {
 
 
     const removeTranslation = async (key: string) => {
+        if (!selectedTranslation) {
+            return
+        }
         const confirmed = await confirm({
             title: 'Confirm Deletion',
             message: `Are you sure you want to delete the translation for key "${key}"? This action cannot be undone.`,
@@ -106,9 +112,15 @@ const TranslationsSection: React.FC = () => {
             cancelText: 'Cancel',
         });
         if (!confirmed) return;
-        if (selectedTranslation) {
+
+        try {
+            setLoading(true);
+            await TranslationAdminService.removeTranslationForPath(key);
             ObjUtil.deleteValueFromNestedJsonByPath(selectedTranslation.data, key);
             translation.updateTranslation?.(selectedTranslation);
+            toast.success('Translation removed successfully.');
+        } catch (e) { } finally {
+            setLoading(false);
         }
     }
 
@@ -197,7 +209,7 @@ const TranslationsSection: React.FC = () => {
             {/* Search input and Pagination in one row */}
             <div className="flex gap-4 mb-4 items-center">
                 <div className="flex-[1]">
-                    <Input
+                    <FloatingInput
                         name="search"
                         label="Search translations"
                         fullWidth
@@ -273,7 +285,9 @@ const TranslationsSection: React.FC = () => {
                                             <td className="px-6 py-3 border-b border-color primary-text">
                                                 <div className="flex gap-2 justify-end">
                                                     <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => onShowForm(key)} />
-                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => removeTranslation(key)} />
+                                                    <RoleGuard roles={[UserRoles.SUPERADMIN]}>
+                                                        <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => removeTranslation(key)} />
+                                                    </RoleGuard>
                                                 </div>
                                             </td>
                                         </tr>

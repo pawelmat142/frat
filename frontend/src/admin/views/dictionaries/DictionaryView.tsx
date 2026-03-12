@@ -17,6 +17,9 @@ import { AdminImportService } from "admin/services/AdminImport.service";
 import { DictionaryI, DictionaryElement, DictionaryGroup, DictionaryColumnTypes, DictionaryStatuses } from "@shared/interfaces/DictionaryI";
 import { useTranslation } from "react-i18next";
 import { DateUtil } from "@shared/utils/DateUtil";
+import { AppConfig } from "@shared/AppConfig";
+import RoleGuard from "global/components/RoleGuard";
+import { UserRoles } from "@shared/interfaces/UserI";
 
 const DictionaryView: React.FC = () => {
     const navigate = useNavigate();
@@ -121,7 +124,7 @@ const DictionaryView: React.FC = () => {
     const handleEditElement = (elementCode: string) => {
         navigate(Path.getEditDictionaryElementPath(dictionary.code, elementCode));
     }
-    
+
     const onAddElement = () => {
         navigate(Path.getAddDictionaryElementPath(dictionary.code));
     }
@@ -148,13 +151,8 @@ const DictionaryView: React.FC = () => {
     }
 
     const displayElementValue = (value: any, columnType: string, isTranslatable: boolean = false) => {
-        if (isTranslatable && value && typeof value === 'object') {
-            // Show all translations in format: "en: value, pl: wartość"
-            const translations = Object.entries(value)
-                .filter(([_, val]) => val !== undefined && val !== "")
-                .map(([langCode, val]) => `${langCode}: ${val}`)
-                .join(', ');
-            return translations || "-";
+        if (isTranslatable && value) {
+            return t(value, { lang: AppConfig.DEFAULT_LANG_CODE })
         }
 
         if (columnType === DictionaryColumnTypes.DATE) {
@@ -279,12 +277,14 @@ const DictionaryView: React.FC = () => {
                             Export JSON
                         </Button>
 
-                        <Button
-                            onClick={() => handleDelete()}
-                            mode={BtnModes.ERROR}
-                        >
-                            Delete dictionary
-                        </Button>
+                        <RoleGuard roles={[UserRoles.SUPERADMIN]}>
+                            <Button
+                                onClick={() => handleDelete()}
+                                mode={BtnModes.ERROR}
+                            >
+                                Delete dictionary
+                            </Button>
+                        </RoleGuard>
 
                     </div>
                 </div>

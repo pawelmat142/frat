@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Put, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Put, UseGuards, UseInterceptors } from "@nestjs/common";
 import { TranslationService } from "./TranslationService";
 import { TranslationI, TranslationItemDto } from "@shared/interfaces/TranslationI";
 import { TranslationListDto } from "@shared/dto/TranslationListDto";
@@ -45,6 +45,12 @@ export class TranslationController {
     @Serialize(TranslationEntity)
     putTranslation(@Body() dto: TranslationI): Promise<TranslationI> {
         return this.translationService.putTranslation(dto)
+    }
+
+    @Delete(':path')
+    @Roles(UserRoles.SUPERADMIN)
+    removeTranslationForPath(@Param('path') path: string): Promise<void> {
+        return this.translationService.removeTranslationForPath(path)
     }
 
 }

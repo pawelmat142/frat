@@ -26,6 +26,10 @@ export const TranslationAdminService = {
 
 	import(data: any): Promise<any> {
 		return httpClient.post("/admin/import/translations/import", data);
+	},
+	
+	removeTranslationForPath(path: string): Promise<void> {
+		return httpClient.delete<void>(`/admin/translations/${path}`);
 	}
 
 };

@@ -1,6 +1,6 @@
 import Loading from "global/components/Loading";
 import { useEffect, useState } from "react";
-import { UserI, UserStatuses } from "@shared/interfaces/UserI";
+import { UserI, UserRoles } from "@shared/interfaces/UserI";
 import { UsersAdminService } from "admin/services/UsersAdmin.service";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -8,6 +8,7 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
 import SelectedUser from "./SelectedUser";
+import RoleGuard from "global/components/RoleGuard";
 
 const AdminUsers: React.FC = () => {
 
@@ -121,7 +122,9 @@ const AdminUsers: React.FC = () => {
 
                                             <td className="px-6 py-3 border-b border-color primary-text">
                                                 <div className="flex gap-2 justify-end">
-                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => handleRemoveUser(user)} />
+                                                    <RoleGuard roles={[UserRoles.SUPERADMIN]}>
+                                                        <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => handleRemoveUser(user)} />
+                                                    </RoleGuard>
                                                 </div>
                                             </td>
                                         </tr>
@@ -133,7 +136,9 @@ const AdminUsers: React.FC = () => {
 
                 </div>
 
-                <SelectedUser user={selectedUser} onRefresh={handleRefresh} />
+                <RoleGuard roles={[UserRoles.SUPERADMIN]}>
+                    <SelectedUser user={selectedUser} onRefresh={handleRefresh} />
+                </RoleGuard>
 
             </div>
         </div>

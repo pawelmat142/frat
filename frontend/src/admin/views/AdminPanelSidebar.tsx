@@ -7,6 +7,8 @@ import { Ico } from 'global/icon.def';
 
 const AdminPanelSidebar: React.FC = () => {
 
+  const iconSize = 36
+
   return (
     <div className="admin-panel-sidebar">
       <NavLink
@@ -29,7 +31,7 @@ const AdminPanelSidebar: React.FC = () => {
         to={Path.ADMIN_USERS}
         className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
       >
-        <Ico.FRIENDS />
+        <Ico.FRIENDS size={iconSize} />
         <span>Users</span>
       </NavLink>
 
@@ -45,8 +47,8 @@ const AdminPanelSidebar: React.FC = () => {
         to={Path.ADMIN_EMPLOYEE_PROFILES}
         className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
       >
-          <Ico.WORKER />
-        <span>Employee Profiles</span>
+          <Ico.WORKER size={iconSize} />
+        <span>Worker Profiles</span>
       </NavLink>
 
       <NavLink

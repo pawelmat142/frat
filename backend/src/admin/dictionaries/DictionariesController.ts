@@ -22,7 +22,7 @@ import { DictionaryEntity } from './model/DictionaryEntity';
 @Controller('api/admin/dictionaries')
 @UseInterceptors(LogInterceptor)
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRoles.SUPERADMIN)
+@Roles(UserRoles.ADMIN, UserRoles.SUPERADMIN)
 export class DictionariesController {
 
   constructor(private readonly dictionariesService: DictionariesService) { }
@@ -47,6 +47,7 @@ export class DictionariesController {
   }
 
   @Delete(':code')
+  @Roles(UserRoles.SUPERADMIN)
   delete(@Param('code') code: string): Promise<void> {
     return this.dictionariesService.delete(code);
   }

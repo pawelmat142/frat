@@ -6,6 +6,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useConfirm } from "global/providers/PopupProvider";
 import { DictionaryColumnTypes, DictionaryGroup, DictionaryI } from "@shared/interfaces/DictionaryI";
 import { DateUtil } from "@shared/utils/DateUtil";
+import { UserRoles } from "@shared/interfaces/UserI";
+import RoleGuard from "global/components/RoleGuard";
+import { useTranslation } from "react-i18next";
+import { AppConfig } from "@shared/AppConfig";
 
 interface DictionaryGroupsProps {
     dictionary: DictionaryI;
@@ -23,17 +27,19 @@ const DictionaryGroups: React.FC<DictionaryGroupsProps> = ({ dictionary, onRemov
 
     const confirm = useConfirm();
 
+    const { t } = useTranslation()
+
     const handleEditDictionaryGroup = async (group: DictionaryGroup) => {
         onEditGroup?.(group);
     }
-    
+
     const handleRemoveDictionaryGroup = async (group: DictionaryGroup) => {
         const confirmed = await confirm({
             title: "Remove Dictionary Group",
-            message: "Are you sure you want to remove this group?",
+            message: "Are you sure you want to remove this group? Remember, save is required!",
         });
         if (!confirmed) return;
-            onRemoveGroup?.(group);
+        onRemoveGroup?.(group);
     }
 
     return (
@@ -63,7 +69,9 @@ const DictionaryGroups: React.FC<DictionaryGroupsProps> = ({ dictionary, onRemov
                                             <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
                                                 <div className="flex gap-2 justify-end">
                                                     <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditDictionaryGroup(group)} />
-                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => handleRemoveDictionaryGroup(group)} />
+                                                    <RoleGuard roles={[UserRoles.SUPERADMIN]}>
+                                                        <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => handleRemoveDictionaryGroup(group)} />
+                                                    </RoleGuard>
                                                 </div>
                                             </th>
 
@@ -75,7 +83,8 @@ const DictionaryGroups: React.FC<DictionaryGroupsProps> = ({ dictionary, onRemov
                                                 <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text"}>{el.code}</td>
                                                 {dictionary.columns.map(col => (
                                                     <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
-                                                        {col.type === DictionaryColumnTypes.DATE
+                                                        {col.translatable ? t(el.values[col.code], { lang: AppConfig.DEFAULT_LANG_CODE}) :
+                                                        col.type === DictionaryColumnTypes.DATE
                                                             ? DateUtil.displayDate(el.values[col.code])
                                                             : (el.values[col.code] !== undefined && el.values[col.code] !== "" ? el.values[col.code] : "-")}
                                                     </td>
