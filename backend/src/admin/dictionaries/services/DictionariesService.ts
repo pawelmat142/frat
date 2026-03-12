@@ -50,6 +50,8 @@ export class DictionariesService {
 
   public async put(dto: DictionaryI): Promise<DictionaryI> {
     try {
+      // TODO remove
+      this.logger.log(`Putting dictionary with code ${dto.code}`);
       DictionaryValidators.fullValidation(dto);
       return this.repo.put(dto);
     } catch (err: Error | any) {
