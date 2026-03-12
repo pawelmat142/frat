@@ -1,0 +1,69 @@
+{
+  "code": "CERTIFICATES",
+  "description": "Certificates",
+  "version": 7,
+  "status": "INACTIVE",
+  "elements": [
+    {
+      "code": "IRATA_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IRATA_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IRATA L1 - Technician"
+    },
+    {
+      "code": "IRATA_THREE",
+      "active": true,
+      "groups": [
+        "MAIN"
+      ],
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IRATA_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IRATA L3 – Supervisor"
+    },
+    {
+      "code": "IRATA_TWO",
+      "active": true,
+      "groups": [],
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IRATA_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IRATA L2 – Experienced Technician"
+    }
+  ],
+  "columns": [
+    {
+      "code": "NAME",
+      "type": "string",
+      "required": true,
+      "description": "Name",
+      "translatable": true
+    },
+    {
+      "code": "VALIDITY_DATE_REQUIRED",
+      "type": "boolean",
+      "required": false,
+      "description": "Validity date is required",
+      "translatable": false
+    }
+  ],
+  "groups": [
+    {
+      "code": "MAIN",
+      "active": true,
+      "description": "",
+      "elementCodes": [
+        "IRATA_ONE",
+        "IRATA_THREE",
+        "IRATA_TWO"
+      ]
+    }
+  ],
+  "createdAt": "2026-03-11T04:25:00.163Z",
+  "updatedAt": "2026-03-11T05:17:22.611Z"
+}

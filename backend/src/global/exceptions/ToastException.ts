@@ -10,19 +10,19 @@ import { MyHttpCode } from '@shared/def/http.def';
  */
 
 export class ToastException extends HttpException {
-  constructor(message: string, source: any, details?: any) {
+  constructor(message: string, source: any, cause?: Error) {
     super(
       {
         type: 'toast_error',
         message,
-        details,
         timestamp: new Date().toISOString(),
       },
       MyHttpCode.TOAST_ERROR,
+      cause ? { cause } : undefined,
     );
 
     const sourceClassName = source?.constructor?.name || typeof source || 'UNKNOWN';
     const logger = new Logger(sourceClassName);
-    logger.error(`${message}`, details ? JSON.stringify(details) : undefined);
+    logger.error(message, cause?.stack ?? this.stack);
   }
 }

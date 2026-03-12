@@ -52,8 +52,8 @@ export class DictionariesService {
     try {
       DictionaryValidators.fullValidation(dto);
       return this.repo.put(dto);
-    } catch (err: any) {
-      throw new ToastException(err.message, this);
+    } catch (err: Error | any) {
+      throw new ToastException(err.message, this, err);
     }
   }
 

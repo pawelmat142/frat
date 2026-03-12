@@ -9,19 +9,19 @@ import { MyHttpCode } from '@shared/def/http.def';
  * HTTP Status: 461 (Custom Toast Warning)
  */
 export class ToastWarningException extends HttpException {
-  constructor(message: string, source?: any, details?: any) {
+  constructor(message: string, source?: any, cause?: Error) {
     super(
       {
         type: 'toast_warning',
         message,
-        details,
         timestamp: new Date().toISOString(),
       },
       MyHttpCode.TOAST_WARNING,
+      cause ? { cause } : undefined,
     );
 
     const sourceClassName = source?.constructor?.name || typeof source || 'UNKNOWN';
     const logger = new Logger(sourceClassName);
-    logger.warn(`${message}`, details ? JSON.stringify(details) : undefined);
+    logger.warn(message, cause?.stack);
   }
 }
