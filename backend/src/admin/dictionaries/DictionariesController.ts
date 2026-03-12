@@ -43,29 +43,33 @@ export class DictionariesController {
   put(
     @Body() dictionaryDto: DictionaryI
   ): Promise<DictionaryI> {
+    console.log(`put`);
     return this.dictionariesService.put(dictionaryDto);
   }
 
   @Delete(':code')
   @Roles(UserRoles.SUPERADMIN)
   delete(@Param('code') code: string): Promise<void> {
+    console.log(`delete`);
     return this.dictionariesService.delete(code);
   }
-
+  
   @Delete(':code/:elementCode')
   deleteElement(
     @Param('code') code: string,
     @Param('elementCode') elementCode: string
   ): Promise<DictionaryI> {
+    console.log(`deleteElement`);
     return this.dictionariesService.deleteElement(code, elementCode);
   }
-
+  
   @Get(':code/:groupCode')
   @Serialize(DictionaryEntity)
   getDictionaryGroup(
     @Param('code') code: string,
     @Param('groupCode') groupCode: string
   ): Promise<DictionaryI | null> {
+    console.log(`getDictionaryGroup`);
     return this.dictionariesService.getDictionaryGroup(code, groupCode);
   }
 
@@ -74,6 +78,7 @@ export class DictionariesController {
     @Param('dictionaryCode') dictionaryCode: string,
     @Body() element: DictionaryElementWithGroups
   ) {
+    console.log(`putElement`);
     return this.dictionariesService.putElement(element, dictionaryCode)
   }
 
