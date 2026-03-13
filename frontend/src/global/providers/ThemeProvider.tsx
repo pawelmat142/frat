@@ -11,8 +11,6 @@ export const ThemeContext = createContext<ThemeContextValue | undefined>(undefin
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    console.debug('ThemeProvider rendered')
-
     const getPreferredTheme = (): Theme => {
         const saved = localStorage.getItem("theme");
         if (saved === Themes.LIGHT || saved === Themes.DARK) return saved;
@@ -22,7 +20,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const [theme, setTheme] = useState<Theme>(getPreferredTheme());
 
     useEffect(() => {
-        document.documentElement.classList.toggle("dark", theme === Themes.DARK);
+        // Remove all theme classes
+        Object.values(Themes).forEach((themeClass) => {
+            document.documentElement.classList.remove(themeClass);
+        });
+
+        // Add the current theme class
+        document.documentElement.classList.add(theme);
         localStorage.setItem("theme", theme);
     }, [theme]);
 

@@ -188,15 +188,29 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}
 
 	const selectTheme = () => {
-		const items: SelectorItem[] = [{
-			label: t("theme.light"),
-			value: Themes.LIGHT,
-			icon: <FaSun />
-		}, {
-			label: t("theme.dark"),
-			value: Themes.DARK,
-			icon: <FaMoon />
-		}]
+		// const items: SelectorItem[] = [{
+		// 	label: t("theme.light"),
+		// 	value: Themes.LIGHT,
+		// 	icon: <FaSun />
+		// }, {
+		// 	label: t("theme.dark"),
+		// 	value: Themes.DARK,
+		// 	icon: <FaMoon />
+		// }, {
+		// 	label: 'light1',
+		// 	value: Themes.LIGHT1,
+		// 	icon: <FaSun />
+		// }, {
+		// 	label: 'dark1',
+		// 	value: Themes.DARK1,
+		// 	icon: <FaMoon />
+		// }]
+
+		const items: SelectorItem[] = Object.values(Themes).map(item => ({ 
+			label: t(`theme.${item}`), 
+			value: item,
+			icon: item.includes('light') ? <FaSun /> : <FaMoon />
+		})) // translate labels
 		bottomSheet.openSelector({
 			title: t("theme.select"),
 			selectedValues: [theme],
