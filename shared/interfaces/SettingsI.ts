@@ -11,6 +11,12 @@ export const Themes = {
     DARK1: 'dark1',
     LIGHT2: 'light2',
     DARK2: 'dark2',
+    LIGHT3: 'light3',
+    DARK3: 'dark3',
+    LIGHT4: 'light4',
+    DARK4: 'dark4',
+    LIGHT5: 'light5',
+    DARK5: 'dark5',
 } as const;
 
 export type Theme = typeof Themes[keyof typeof Themes];
