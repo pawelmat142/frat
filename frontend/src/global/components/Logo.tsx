@@ -13,19 +13,17 @@ const Logo: React.FC<DrawItLogoProps> = ({
   className = "",
   showName = false
 }) => {
-  const [isDark, setIsDark] = useState(false);
+  const [themeColor, setThemeColor] = useState('#4f46e5');
 
   useEffect(() => {
-    const checkDarkMode = () => {
-      const html = document.documentElement;
-      setIsDark(html.classList.contains('dark'));
+    const readPrimaryColor = () => {
+      const value = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim();
+      if (value) setThemeColor(value);
     };
 
-    // Initial check
-    checkDarkMode();
+    readPrimaryColor();
 
-    // Watch for changes
-    const observer = new MutationObserver(checkDarkMode);
+    const observer = new MutationObserver(readPrimaryColor);
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class']
@@ -34,7 +32,7 @@ const Logo: React.FC<DrawItLogoProps> = ({
     return () => observer.disconnect();
   }, []);
 
-  const logoColor = color || (isDark ? '#8b5cf6' : '#4f46e5');
+  const logoColor = color || themeColor;
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>

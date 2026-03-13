@@ -59,7 +59,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         icon: <Ico.CHAT size={iconSize} />
     }, {
         label: t('account.friends'),
-        active: location.pathname.includes(Path.FRIENDS),
+        active: location.pathname.includes(Path.FRIENDS.split('/:')[0]),
         onClick: () => navigate(Path.getFriendsPath(me?.uid || '')),
         icon: <Ico.FRIENDS size={iconSize} />
     }]
@@ -67,7 +67,8 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     if (me) {
         items.push({
             label: t('nav.account'),
-            active: !!matchPath({ path: Path.PROFILE, end: true }, location.pathname),
+            active: !!matchPath({ path: Path.PROFILE, end: true }, location.pathname)
+             && location.pathname.includes(me.uid),
             onClick: () => navigate(Path.getProfilePath(me.uid)),
             icon: <Ico.ACCOUNT size={iconSize} />
         });
