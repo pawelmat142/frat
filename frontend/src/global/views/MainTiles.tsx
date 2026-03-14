@@ -27,22 +27,22 @@ const MainTiles: React.FC = () => {
             <div className="main-tiles">
 
                 {!me && (
-                    <div className="square-tile col-tile big py-8" onClick={() => navigate(Path.SIGN_IN)}>
+                    <div className="ripple square-tile col-tile big py-8" onClick={() => navigate(Path.SIGN_IN)}>
                         <Ico.SIGN_IN size={iconSize} />
                         <div>{t("signin.submit")}</div>
                     </div>
                 )}
-                <div className="square-tile col-tile" onClick={() => navigate(Path.WORKERS_FILTERS_SEARCH)}>
+                <div className="ripple square-tile col-tile" onClick={() => navigate(Path.WORKERS_FILTERS_SEARCH)}>
                     <Ico.SEARCH size={iconSize} />
                     <div>{t("employeeProfile.search")}</div>
                 </div>
-                <div className="square-tile col-tile" onClick={() => navigate(Path.OFFERS_FILTERS_SEARCH)}>
+                <div className="ripple square-tile col-tile" onClick={() => navigate(Path.OFFERS_FILTERS_SEARCH)}>
                     <Ico.OFFER size={iconSize} />
                     <div>{t("offer.search")}</div>
                 </div>
 
 
-                <div className="square-tile col-tile big">
+                <div className="ripple square-tile col-tile big">
                     <InstallPwaButton />
                 </div>
 
@@ -50,24 +50,24 @@ const MainTiles: React.FC = () => {
                 {!!me && (
                     <>
                         {employeeProfile ? (
-                            <div className="square-tile col-tile" onClick={() => navigate(Path.getWorkerProfilePath(me!.displayName))}>
+                            <div className="ripple square-tile col-tile" onClick={() => navigate(Path.getWorkerProfilePath(me!.displayName))}>
                                 <Ico.WORKER size={iconSize} />
                                 <div>{t("profile.tile")}</div>
                             </div>
                         ) : (
-                            <div className="square-tile col-tile" onClick={() => navigate(Path.WORKER_FORM)}>
+                            <div className="ripple square-tile col-tile" onClick={() => navigate(Path.WORKER_FORM)}>
                                 <Ico.ADD_USER size={iconSize} />
                                 <div>{t("profile.add")}</div>
                             </div>
                         )}
 
                         {hasSomeOffers ? (
-                            <div className="square-tile col-tile" onClick={() => navigate(Path.getOffersPath(me!.uid))}>
+                            <div className="ripple square-tile col-tile" onClick={() => navigate(Path.getOffersPath(me!.uid))}>
                                 <Ico.OFFER size={iconSize} />
                                 <div>{t("offer.management")}</div>
                             </div>
                         ) : (
-                            <div className="square-tile col-tile" onClick={() => navigate(Path.OFFER_FORM)}>
+                            <div className="ripple square-tile col-tile" onClick={() => navigate(Path.OFFER_FORM)}>
                                 <Ico.OFFER size={iconSize} />
                                 <div>{t("offer.add")}</div>
                             </div>
@@ -83,7 +83,7 @@ const MainTiles: React.FC = () => {
                 <div className='desktop-flex'></div>
                 {!me && (<div className=''></div>)}
 
-                {!!me && (<div className="sec-tile-wrapper" onClick={() => navigate(Path.SETTINGS)}>
+                {!!me && (<div className="ripple sec-tile-wrapper" onClick={() => navigate(Path.SETTINGS)}>
                     <div className="square-tile">
                         <Ico.SETTINGS size={iconSize} />
                     </div>
@@ -94,7 +94,7 @@ const MainTiles: React.FC = () => {
 
                 <ThemeSelectTile iconSize={iconSize}></ThemeSelectTile>
 
-                {!!me && (<div className="sec-tile-wrapper" onClick={() => AuthService.logout()}>
+                {!!me && (<div className="ripple sec-tile-wrapper" onClick={() => AuthService.logout()}>
                     <div className="square-tile">
                         <Ico.SIGN_OUT size={iconSize} />
                     </div>

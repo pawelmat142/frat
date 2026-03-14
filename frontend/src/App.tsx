@@ -28,6 +28,7 @@ import WorkerView from 'employee/views/profile/WorkerView';
 import OfferFormView from 'offer/views/form/OfferFormView';
 import UserOffersList from 'offer/views/UserOffersList';
 import OfferView from 'offer/views/offer-view/OfferView';
+import { useRippleEffect } from 'global/hooks/useRippleEffect';
 import OfferSearchView from 'offer/views/search/OfferSearchView';
 import AdminOffers from 'admin/views/offer/AdminOffers';
 import TelegramSignPage from 'auth/views/TelegramSignPage';
@@ -58,6 +59,7 @@ const PageWrapper: React.FC<{ children: React.ReactNode, direction: number }> = 
 
 const App: React.FC = () => {
     const location = useLocation();
+    useRippleEffect();
     const direction = location.state?.direction === 'back' ? -1 : 1;
 
     const popupCtx = usePopup();

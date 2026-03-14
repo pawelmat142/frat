@@ -110,13 +110,6 @@ $headerHeightDesktop: 60px;
     }
 }
 
-.list-view-item-icon {
-    svg {
-        height: 3.5rem;
-        width: 3.5rem;
-    }
-}
-
 .list-view-item {
     display: flex;
     padding: .5rem .5rem;
@@ -345,8 +338,7 @@ $tilePadding: .5rem 1rem;
     right: .5rem;
     background-color: $secondary-bg;
     z-index: 5;
-    border-radius: 30px;
-
+    border-radius: $bottom-bar-radius;
 }
 
 .bottom-bar-shadow {
@@ -373,6 +365,7 @@ $tilePadding: .5rem 1rem;
     justify-content: center;
     padding-top: .6rem;
     padding-bottom: .2rem;
+    border-radius: $bottom-bar-radius;
 
     &.active {
         color: $primary-color;
@@ -492,7 +485,6 @@ $tilePadding: .5rem 1rem;
 
 .square-tile {
     @extend .ripple;
-    @extend .light-ripple;
     display: flex;
     justify-content: center;
     align-items: center;

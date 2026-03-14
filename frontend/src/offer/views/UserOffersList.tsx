@@ -68,7 +68,7 @@ const UserOffersList: React.FC = () => {
     return (
         <div className="list-view flex-1 flex flex-col">
 
-            <div className="results flex flex-col gap-1">
+            <div className="results flex flex-col">
                 {!!globalCtx.dics.languages && offers.map((offer, index) => (
                     <OfferListItem
                         key={offer.offerId}

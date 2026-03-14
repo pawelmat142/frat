@@ -27,13 +27,13 @@ const SettingsView: React.FC = () => {
         userCtx.selectTheme();
     };
 
-    const iconSize = AppConfig.DEFAULT_AVATAR_SIZE;
+    const iconSize = `${AppConfig.DEFAULT_AVATAR_SIZE}rem`;
 
     return (
         <div className="list-view">
             <div onClick={selectLanguage}>
                 <ListItem
-                    imgComponent={<Ico.LANGUAGE />}
+                    imgComponent={<Ico.LANGUAGE size={iconSize} />}
                     topLeft={t('lang.language')}
                     bottomLeft={<span className="primary-color xs-font">{langCode.toUpperCase()}</span>}
                     rightSection={chevron}

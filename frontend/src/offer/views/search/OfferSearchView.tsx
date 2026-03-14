@@ -38,7 +38,7 @@ const OfferSearchView: React.FC = () => {
                     <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
                 </div>
             ) : (
-                <div className="results flex flex-col gap-1">
+                <div className="results flex flex-col">
                     {(ctx.results ?? []).map((offer, index) => (
                         <OfferListItem
                             key={offer.offerId}

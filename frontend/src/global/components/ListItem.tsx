@@ -32,7 +32,7 @@ const ListItem: React.FC<Props> = ({
         topLeft = <span className="font-medium primary-text">{topLeft}</span>
     }
     return (
-        <div className={`list-view-item${first ? ' first' : ''}${last ? ' last' : ''}`}>
+        <div className={`ripple list-view-item${first ? ' first' : ''}${last ? ' last' : ''}`}>
             <ListItemImg imgUrl={imgUrl} component={imgComponent} iconOrAvatarBadge={iconOrAvatarBadge}/>
 
             <div className="w-full flex flex-col justify-center">

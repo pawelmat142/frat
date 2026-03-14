@@ -20,6 +20,7 @@ $success-color: var(--success-color);
 
 $border-color: var(--border-color);
 $tile-radius: 1rem;
+$bottom-bar-radius: 2rem;
 
 $box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 
@@ -183,69 +184,48 @@ $paddingSmall: .5rem;
 }
 
 
-// TODO ripple nie działa...
-$rippleBg: rgba(255, 255, 255, 0.20);
-$rippleBgLight: rgba(0, 0, 0, 0.15);
-
-$rippleBg: white;
-$rippleBgLight: white;
-
-// RIPPLE EFFECT 
+// RIPPLE EFFECT
 .ripple {
   cursor: pointer;
   position: relative;
+  overflow: hidden;
 }
 
-@media (pointer: coarse) {
-  .ripple:active::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 50px;
-    height: 50px;
-    background: $rippleBg;
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    animation: ripple-effect .1s linear;
-    pointer-events: none;
-    z-index: 1;
-  }
+$ripple-color: var(--ripple-color);
 
-  .ripple.light-ripple:active::after {
-    background: $rippleBgLight;
-  }
+// JS-created ripple span (mobile touch)
+.ripple-span {
+  position: absolute;
+  border-radius: 50%;
+  background: $ripple-color;
+  transform: scale(0);
+  animation: ripple-expand 0.45s ease-out forwards;
+  pointer-events: none;
+  z-index: 1;
 }
 
-@keyframes ripple-effect {
+@keyframes ripple-expand {
   to {
-    transform: translate(-50%, -50%) scale(5);
+    transform: scale(1);
     opacity: 0;
   }
 }
 
+// Desktop: subtle hover overlay
 @media screen and (min-width: $desktop) {
   .ripple::after {
-    transition: $transition;
-    // transition: transform 30s ease-out;
     content: '';
     position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 100%;
-    height: 100%;
-    padding: 1rem;
-    background: $rippleBg;
-    border-radius: .5rem;
-    transform: translate(-50%, -50%) scale(0);
+    inset: 0;
+    background: $ripple-color;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
     z-index: 1;
   }
 
   .ripple:hover::after {
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  .ripple.light::after {
-    background: $rippleBgLight;
+    opacity: 1;
   }
 }
