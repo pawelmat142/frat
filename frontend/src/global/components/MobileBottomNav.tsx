@@ -6,7 +6,7 @@ const MobileBottomNav: React.FC = () => {
     const menuCtx = useMenuContext();
 
     return (
-        <nav className="mobile-bottom-nav">
+        <nav className="mobile-bottom-nav bottom-bar-shadow">
             <div className="mobile-bottom-nav-container">
 
                 {menuCtx.items.map((item, index) => (

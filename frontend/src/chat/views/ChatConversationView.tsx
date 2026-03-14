@@ -296,7 +296,7 @@ const ChatConversationView: React.FC = () => {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSendMessage} className={`chat-view-input${inputFocused ? ' focus' : ''}`}>
+            <form onSubmit={handleSendMessage} className={`chat-view-input${inputFocused ? ' focus bottom-bar-shadow' : ''}`}>
 {/* 
                 <div className="chat-view-input-left">
                     <FaSearch size={iconSize} />
