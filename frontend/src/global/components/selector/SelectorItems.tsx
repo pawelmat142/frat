@@ -72,10 +72,12 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                 {items.map((item, index) => {
                     const translatedLabel = translateItems ? t(item.label) : item.label
                     const displayLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
+                    const last = index === items.length - 1;
+
                     return (
                         <div
                             key={index}
-                            className={`bottom-sheet-item ripple${isSelected(item.value) ? ' selected' : ''}`}
+                            className={`bottom-sheet-item ripple${isSelected(item.value) ? ' selected' : ''}${last ? ' last' : ''}`}
                             onClick={() => handleItemClick(item)}
                         >
                             <div className="bottom-sheet-item-content">
