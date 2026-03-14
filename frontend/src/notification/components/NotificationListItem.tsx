@@ -44,12 +44,12 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
     }
 
     const getDateMsg = () => {
-        return <div className="s-font">{notification.requesterName}</div>
+        return <div className="xs-font">{notification.requesterName}</div>
     }
 
     const shortDate = (): React.ReactNode => {
         const date = notification.readAt ? notification.readAt : notification.createdAt;
-        return <span className="s-font">{FrontDateUtil.displayShortDateOrDayOrTimeIfToday(t, date)}</span>
+        return <span className="xs-font">{FrontDateUtil.displayShortDateOrDayOrTimeIfToday(t, date)}</span>
     } 
 
     const getUnreadCount = (): React.ReactNode => {

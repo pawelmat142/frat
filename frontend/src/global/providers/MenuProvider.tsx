@@ -10,6 +10,7 @@ import IconButton from 'global/components/controls/IconButon';
 import { useTranslation } from 'react-i18next';
 import { Ico } from 'global/icon.def';
 import { useUserContext } from 'user/UserProvider';
+import { BtnModes } from 'global/interface/controls.interface';
 
 interface NewMenuItem {
     label: string
@@ -40,7 +41,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const globalCtx = useGlobalContext();
 
     const setupHeaderMenu = (menu: MenuConfig) => {
-        globalCtx.setHeaderMenu(<IconButton icon={<Ico.MENU onClick={() => {
+        globalCtx.setHeaderMenu(<IconButton mode={BtnModes.SECONDARY_TXT} icon={<Ico.MENU onClick={() => {
             bottomSheetCtx.openMenu(menu)
         }} />} />);
     }

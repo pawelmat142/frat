@@ -35,7 +35,7 @@ const Logo: React.FC<DrawItLogoProps> = ({
   const logoColor = color || themeColor;
 
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
+    <div className={`ml-4 flex items-center gap-2 ${className}`}>
       <svg 
         xmlns="http://www.w3.org/2000/svg" 
         version="1.1" 

@@ -29,7 +29,7 @@ const ListItem: React.FC<Props> = ({
 }) => {
 
     if (typeof topLeft === 'string') {
-        topLeft = <span className="btn-font primary-text">{topLeft}</span>
+        topLeft = <span className="font-medium primary-text">{topLeft}</span>
     }
     return (
         <div className={`list-view-item${first ? ' first' : ''}${last ? ' last' : ''}`}>

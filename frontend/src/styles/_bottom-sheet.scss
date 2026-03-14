@@ -113,7 +113,7 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 .bottom-sheet-title {
     margin: 0;
     font-size: $lFont;
-    font-weight: 600;
+    font-weight: $font-medium;
     color: $primary-text;
     padding-top: 0.5rem;
 }
@@ -146,13 +146,12 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     justify-content: space-between;
     cursor: pointer;
     transition: $transition;
-    font-size: $lFont;
     border-radius: .75rem;
 
 
     &.selected {
         color: $primary-color;
-        font-weight: 600;
+        font-weight: $font-medium;
     }
 
     &:last-child {
@@ -181,7 +180,7 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .bottom-sheet-item-image {
-    width: 3rem;
+    width: 2rem;
     border-radius: 0.25rem;
     object-fit: cover;
 }

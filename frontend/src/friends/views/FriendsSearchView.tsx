@@ -102,7 +102,7 @@ const FriendsSearchView: React.FC = () => {
                     <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
                 </div>
             ) : (
-                <div className="px-2 flex flex-col gap-1">
+                <div className="flex flex-col gap-1">
                     {users.map(user => (
                         <div className="list-view-item" key={user.uid}>
                             <UserInvitationListItem

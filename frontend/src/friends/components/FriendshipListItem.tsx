@@ -92,9 +92,9 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
                 user={user}
                 allowNavigate={false}
                 bottomRow={
-                    (isFriend && <div className="primary-color s-font">{t('friends.friend')}</div>)
-                    || (isInvited && <div className="secondary-text s-font">{t('friends.invited')}</div>)
-                    || (isInvitationReceived && <div className="secondary-text s-font">{t('friends.invitationReceived')}</div>)
+                    (isFriend && <div className="primary-color xs-font">{t('friends.friend')}</div>)
+                    || (isInvited && <div className="secondary-text xs-font">{t('friends.invited')}</div>)
+                    || (isInvitationReceived && <div className="secondary-text xs-font">{t('friends.invitationReceived')}</div>)
                 }
             ></UserItem>
 

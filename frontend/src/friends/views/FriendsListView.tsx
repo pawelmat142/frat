@@ -107,7 +107,7 @@ const FriendsListView: React.FC = () => {
     return (
         <div className="list-view">
 
-            <div className="flex flex-col gap-1 mt-2">
+            <div className="flex flex-col gap-1">
 
                 {!friends.length && (
                     <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">

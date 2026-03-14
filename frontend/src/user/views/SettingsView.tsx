@@ -5,6 +5,7 @@ import { FaChevronDown, FaMoon, FaSun } from 'react-icons/fa';
 import ListItem from 'global/components/ListItem';
 import { Themes } from '@shared/interfaces/SettingsI';
 import { useUserContext } from 'user/UserProvider';
+import { AppConfig } from '@shared/AppConfig';
 
 const chevron = <FaChevronDown size={20} className="secondary-text m-auto" />;
 
@@ -26,22 +27,24 @@ const SettingsView: React.FC = () => {
         userCtx.selectTheme();
     };
 
+    const iconSize = AppConfig.DEFAULT_AVATAR_SIZE;
+
     return (
         <div className="list-view">
             <div onClick={selectLanguage}>
                 <ListItem
                     imgComponent={<Ico.LANGUAGE />}
                     topLeft={t('lang.language')}
-                    bottomLeft={<span className="primary-color s-font">{langCode.toUpperCase()}</span>}
+                    bottomLeft={<span className="primary-color xs-font">{langCode.toUpperCase()}</span>}
                     rightSection={chevron}
                     first
                 />
             </div>
             <div onClick={selectTheme}>
                 <ListItem
-                    imgComponent={isDarkMode ? <FaMoon /> : <FaSun />}
+                    imgComponent={isDarkMode ? <FaMoon size={iconSize} /> : <FaSun size={iconSize} />}
                     topLeft={t('theme.title')}
-                    bottomLeft={<span className="primary-color s-font">{isDarkMode ? t('theme.dark') : t('theme.light')}</span>}
+                    bottomLeft={<span className="primary-color xs-font">{isDarkMode ? t('theme.dark') : t('theme.light')}</span>}
                     rightSection={chevron}
                     last
                 />

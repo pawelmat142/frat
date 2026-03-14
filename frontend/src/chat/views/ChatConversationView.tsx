@@ -284,7 +284,7 @@ const ChatConversationView: React.FC = () => {
                                         {!!msg.readAt && !leftSide && (
                                             <span className="primary-color"><Ico.CHECK size={12}/></span>
                                         )}
-                                        <span>{DateUtil.displayTime(msg.createdAt)}</span>
+                                        <span className="xs-font">{DateUtil.displayTime(msg.createdAt)}</span>
                                     </div>
 
                                 </div>

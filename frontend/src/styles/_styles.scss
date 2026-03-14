@@ -13,11 +13,11 @@ $headerHeight: 50px;
 $headerHeightDesktop: 60px;
 
 .header {
-    max-height: $headerHeight;
+    // max-height: $headerHeight;
 
     nav {
         width: 100%;
-        height: $headerHeight;
+        // height: $headerHeight;
         background-color: $secondary-bg;
 
     }
@@ -32,8 +32,10 @@ $headerHeightDesktop: 60px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding-left: .3rem;
+        padding-right: .3rem;
+        padding-top: .5rem;
+        padding-bottom: .5rem;
     }
 
     .header-content-left {
@@ -117,7 +119,7 @@ $headerHeightDesktop: 60px;
 
 .list-view-item {
     display: flex;
-    padding: .5rem 1rem;
+    padding: .5rem .5rem;
     gap: 1rem;
 
     &:not(.last) {
