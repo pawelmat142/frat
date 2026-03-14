@@ -40,6 +40,19 @@ const ChatConversationView: React.FC = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
+    // Scroll to bottom when virtual keyboard opens
+    useEffect(() => {
+        const viewport = window.visualViewport;
+        if (!viewport) return;
+
+        const onResize = () => {
+            scrollToBottom();
+        };
+
+        viewport.addEventListener("resize", onResize);
+        return () => viewport.removeEventListener("resize", onResize);
+    }, []);
+
     const getOtherMember = () => {
         if (!me || !chat || !(chat as ChatWithMembers).members) return null;
         return (chat as ChatWithMembers).members.find((m: ChatMemberWithUserI) => m.uid !== me.uid)?.user;
@@ -314,7 +327,13 @@ const ChatConversationView: React.FC = () => {
                         disabled={sending || !!chat?.blockedByUid}
                         enterKeyHint="send"
                         autoComplete="off"
-                        onFocus={() => setInputFocused(true)}
+                        autoCorrect="off"
+                        autoCapitalize="sentences"
+                        spellCheck={false}
+                        onFocus={() => {
+                            setInputFocused(true);
+                            setTimeout(scrollToBottom, 300);
+                        }}
                         onBlur={() => setInputFocused(false)}
                     />
                 </div>
