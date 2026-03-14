@@ -1,10 +1,11 @@
-:root {
+:root,
+.light {
   --primary-color: #4f46e5;
   --primary-color-active: #7A73EB;
   --primary-color-transparent: rgba(79, 70, 229, 0.3);
 
   --primary-bg: #fbf9fa;
-  --secondary-bg: #fff;
+  --secondary-bg: #f0ecf0;
   --active-bg: #fbf9fa;
 
   --primary-text: #364153;
@@ -25,7 +26,7 @@
   --primary-color-transparent: rgba(122, 115, 235, 0.3);
 
   --primary-bg: #101828;
-  --secondary-bg: #0c1420;
+  --secondary-bg: #1a2540;
   --active-bg: #ffffff0d;
 
   --primary-text: #99a1af;
@@ -46,7 +47,7 @@
   --primary-color-transparent: rgba(37, 211, 102, 0.3);
 
   --primary-bg: #ffffff;
-  --secondary-bg: #f0f0f0;
+  --secondary-bg: #e6e6e6;
   --active-bg: #e8f5e9;
 
   --primary-text: #075E54;
@@ -67,7 +68,7 @@
   --primary-color-transparent: rgba(18, 140, 126, 0.3);
 
   --primary-bg: #0D1418;
-  --secondary-bg: #101D24;
+  --secondary-bg: #162a34;
   --active-bg: #ffffff0d;
 
   --primary-text: #E9EDEF;
@@ -88,7 +89,7 @@
   --primary-color-transparent: rgba(102, 92, 172, 0.3);
 
   --primary-bg: #ffffff;
-  --secondary-bg: #f7f7f7;
+  --secondary-bg: #edeaf4;
   --active-bg: #eae8f4;
 
   --primary-text: #3C3C3C;
@@ -109,7 +110,7 @@
   --primary-color-transparent: rgba(102, 92, 172, 0.3);
 
   --primary-bg: #1E1E1E;
-  --secondary-bg: #2C2C2C;
+  --secondary-bg: #333333;
   --active-bg: #3A3A3A;
 
   --primary-text: #EAEAEA;
@@ -130,7 +131,7 @@
   --primary-color-transparent: rgba(42, 171, 238, 0.3);
 
   --primary-bg: #ffffff;
-  --secondary-bg: #f0f2f5;
+  --secondary-bg: #e4e8ee;
   --active-bg: #e3f2fd;
 
   --primary-text: #232e3c;
@@ -151,7 +152,7 @@
   --primary-color-transparent: rgba(42, 171, 238, 0.3);
 
   --primary-bg: #17212B;
-  --secondary-bg: #0E1621;
+  --secondary-bg: #1e2e3e;
   --active-bg: #1e2c3a;
 
   --primary-text: #F5F5F5;
@@ -172,7 +173,7 @@
   --primary-color-transparent: rgba(29, 185, 84, 0.3);
 
   --primary-bg: #ffffff;
-  --secondary-bg: #f8f8f8;
+  --secondary-bg: #eeeeee;
   --active-bg: #e8f5e9;
 
   --primary-text: #191414;
@@ -193,7 +194,7 @@
   --primary-color-transparent: rgba(29, 185, 84, 0.3);
 
   --primary-bg: #121212;
-  --secondary-bg: #181818;
+  --secondary-bg: #212121;
   --active-bg: #282828;
 
   --primary-text: #B3B3B3;
@@ -214,7 +215,7 @@
   --primary-color-transparent: rgba(240, 185, 11, 0.3);
 
   --primary-bg: #ffffff;
-  --secondary-bg: #FAFAFA;
+  --secondary-bg: #f0eedf;
   --active-bg: #FEF9E7;
 
   --primary-text: #1E2329;
@@ -235,7 +236,7 @@
   --primary-color-transparent: rgba(240, 185, 11, 0.3);
 
   --primary-bg: #181A20;
-  --secondary-bg: #1E2329;
+  --secondary-bg: #272e38;
   --active-bg: #2B3139;
 
   --primary-text: #EAECEF;
