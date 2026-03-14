@@ -14,6 +14,7 @@ import { SelectorItem } from 'global/interface/controls.interface';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import { useTheme } from "global/providers/ThemeProvider";
 import { SettingsService } from './services/SettingsService';
+import { AppConfig } from '@shared/AppConfig';
 
 interface UserContextType {
 	me: UserI | null;
@@ -188,28 +189,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}
 
 	const selectTheme = () => {
-		// const items: SelectorItem[] = [{
-		// 	label: t("theme.light"),
-		// 	value: Themes.LIGHT,
-		// 	icon: <FaSun />
-		// }, {
-		// 	label: t("theme.dark"),
-		// 	value: Themes.DARK,
-		// 	icon: <FaMoon />
-		// }, {
-		// 	label: 'light1',
-		// 	value: Themes.LIGHT1,
-		// 	icon: <FaSun />
-		// }, {
-		// 	label: 'dark1',
-		// 	value: Themes.DARK1,
-		// 	icon: <FaMoon />
-		// }]
+		const iconSize = `${AppConfig.DEFAULT_ICON_SIZE}rem`;
 
 		const items: SelectorItem[] = Object.values(Themes).map(item => ({ 
 			label: t(`theme.${item}`), 
 			value: item,
-			icon: item.includes('light') ? <FaSun /> : <FaMoon />
+			icon: item.includes('light') ? <FaSun size={iconSize} /> : <FaMoon size={iconSize} />
 		})) // translate labels
 		bottomSheet.openSelector({
 			title: t("theme.select"),

@@ -381,6 +381,7 @@ $tilePadding: .5rem 1rem;
 .mobile-bottom-nav-label {
     color: $secondary-text;
     font-size: $sFont;
+    font-weight: $font-medium;
 }
 
 @media screen and (min-width: $desktop) {

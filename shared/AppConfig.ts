@@ -14,6 +14,7 @@ export const AppConfig = {
 
     DEFAULT_LANG_CODE: 'en',
 
-    DEFAULT_AVATAR_SIZE: 3
+    DEFAULT_AVATAR_SIZE: 3,
+    DEFAULT_ICON_SIZE: 2
 
 } as const;
