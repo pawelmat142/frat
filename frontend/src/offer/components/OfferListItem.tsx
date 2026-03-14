@@ -116,17 +116,17 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
             {categoryChip}
             <div>
                 <Visibility fontSize="inherit" className="secondary-text mr-1" />
-                <span className="small-font">{offer.views?.length || 0}</span>
+                <span className="s-font">{offer.views?.length || 0}</span>
             </div>
             <div>
                 <ThumbUp fontSize="inherit" className="secondary-text mr-1" />
-                <span className="small-font">{offer.likes?.length || 0}</span>
+                <span className="s-font">{offer.likes?.length || 0}</span>
             </div>
 
             {!!distance && (
                 <div className="flex items-center">
                     <Ico.MARKER size={14} className="secondary-text mr-1" />
-                    <span className="small-font">{distance}</span>
+                    <span className="s-font">{distance}</span>
                 </div>
             )}
         </div>

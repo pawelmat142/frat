@@ -28,7 +28,7 @@ const UserItem: React.FC<Props> = ({ user, size = 3.5, showNumber = false, allow
                 {bottomRow ? (
                     bottomRow
                 ) : (
-                    showNumber && !!user && <div className="small-font secondary-text">{UserUtil.getContactInfoLine(user)}</div>
+                    showNumber && !!user && <div className="s-font secondary-text">{UserUtil.getContactInfoLine(user)}</div>
                 )}
             </div>
         </span>

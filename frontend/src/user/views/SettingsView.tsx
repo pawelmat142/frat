@@ -32,7 +32,7 @@ const SettingsView: React.FC = () => {
                 <ListItem
                     imgComponent={<Ico.LANGUAGE />}
                     topLeft={t('lang.language')}
-                    bottomLeft={<span className="primary-color small-font">{langCode.toUpperCase()}</span>}
+                    bottomLeft={<span className="primary-color s-font">{langCode.toUpperCase()}</span>}
                     rightSection={chevron}
                     first
                 />
@@ -41,7 +41,7 @@ const SettingsView: React.FC = () => {
                 <ListItem
                     imgComponent={isDarkMode ? <FaMoon /> : <FaSun />}
                     topLeft={t('theme.title')}
-                    bottomLeft={<span className="primary-color small-font">{isDarkMode ? t('theme.dark') : t('theme.light')}</span>}
+                    bottomLeft={<span className="primary-color s-font">{isDarkMode ? t('theme.dark') : t('theme.light')}</span>}
                     rightSection={chevron}
                     last
                 />

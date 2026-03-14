@@ -94,24 +94,24 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
     const bottomLeft = <div className="flex items-center gap-3">
         <div>
             <Visibility fontSize="inherit" className="secondary-text mr-1" />
-            <span className="small-font">{profile.views?.length || 0}</span>
+            <span className="s-font">{profile.views?.length || 0}</span>
         </div>
         <div>
             <ThumbUp fontSize="inherit" className="secondary-text mr-1" />
-            <span className="small-font">{profile.likes?.length || 0}</span>
+            <span className="s-font">{profile.likes?.length || 0}</span>
         </div>
 
         {!!profile.mutualFriendsUids?.length && (
             <div className="flex items-center">
                 <Ico.FRIENDS size={14} className="secondary-text mr-1" />
-                <span className="small-font">{profile.mutualFriendsUids.length}</span>
+                <span className="s-font">{profile.mutualFriendsUids.length}</span>
             </div>
         )}
 
         {!!distance && (
             <div className="flex items-center">
                 <Ico.MARKER size={14} className="secondary-text mr-1" />
-                <span className="small-font">{distance}</span>
+                <span className="s-font">{distance}</span>
             </div>
         )}
     </div>

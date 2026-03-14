@@ -384,14 +384,17 @@ textarea::placeholder,
   border-color: $border-color;
 }
 
+
 // FONT
 $btnFont: 1.1rem;
-$smallFont: .8rem;
-$xsFont: .6rem;
-$lFont: 1.25rem;
-$xlFont: 1.5rem;
+$sFont: .875rem;
+$xsFont: .75rem;
+$lFont: 1.125rem;
+$xlFont: 1.25rem;
 $xxlFont: 1.75rem;
 $xxxlFont: 2.3rem;
+
+
 
 $padding: 1rem;
 $padding2x: 2rem;
@@ -402,8 +405,8 @@ $paddingSmall: .5rem;
   font-size: $xsFont;
 }
 
-.small-font {
-  font-size: $smallFont;
+.s-font {
+  font-size: $sFont;
 }
 
 .btn-font {
@@ -492,74 +495,5 @@ $rippleBgLight: white;
 
   .ripple.light::after {
     background: $rippleBgLight;
-  }
-}
-
-
-// DURATION SLIDER
-
-.duration-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  color: $primary-color;
-  width: 100%;
-  height: 6px;
-  border-radius: 4px;
-  outline: none;
-  margin: 0;
-  padding: 0;
-  border: none;
-  // Dynamiczny kolor aktywnej części toru poprzez CSS variable --slider-progress (ustawiana inline w komponencie)
-  background: linear-gradient(to right,
-      $primary-color 0%,
-      $primary-color var(--slider-progress),
-      $border-color var(--slider-progress),
-      $border-color 100%);
-
-  &::-webkit-slider-runnable-track {
-    height: 6px;
-    border-radius: 4px;
-    background: transparent;
-  }
-
-  &::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: $primary-color;
-    border: none;
-    box-shadow: 0 0 0 2px $primary-color;
-    cursor: pointer;
-    transition: background .15s;
-    margin-top: -6px;
-  }
-
-  &::-webkit-slider-thumb:hover {
-    // Nie można użyć darken() na CSS var; używamy aktywnego koloru
-    background: $primary-color-active;
-  }
-
-  // Firefox
-  &::-moz-range-track {
-    height: 6px;
-    border-radius: 4px;
-    background: $border-color;
-  }
-
-  &::-moz-range-progress {
-    height: 6px;
-    border-radius: 4px;
-    background: $primary-color;
-  }
-
-  &::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
-    border: none;
-    border-radius: 50%;
-    background: $primary-color;
-    box-shadow: 0 0 0 2px $primary-color;
-    cursor: pointer;
   }
 }

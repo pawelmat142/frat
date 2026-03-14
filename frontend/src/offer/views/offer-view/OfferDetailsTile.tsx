@@ -73,15 +73,15 @@ const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
                 </div>
             </div> */}
             {!!offer.displayName && (<div className="primary-text mb-5">{offer.displayName}</div>)}
-            {!!offer.description && (<div className="small-font secondary-text text-left">{offer.description}</div>)}
+            {!!offer.description && (<div className="s-font secondary-text text-left">{offer.description}</div>)}
 
 
-            <div className="mt-2 small-font">
+            <div className="mt-2 s-font">
                 <span className="secondary-text">{t('offer.salary')} </span>
                 <span className="primary-text"> {offer.salary} {offer.currency}</span>
             </div>
 
-            <div className="mt-2 small-font flex items-center gap-1">
+            <div className="mt-2 s-font flex items-center gap-1">
                 <span className="secondary-text">{t('offer.workCategory')} </span>
                 <span className="primary-text"> {categoryChip}</span>
             </div>
@@ -102,7 +102,7 @@ const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
                     {!!distance && (<>
                         <Ico.MARKER size={14} className="mr-1" />
                         <span className="xs-font">{t('common.distance')}: </span>
-                        <span className="primary-text small-font"> {distance}</span>
+                        <span className="primary-text s-font"> {distance}</span>
                     </>
                     )}
                 </div>

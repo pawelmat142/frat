@@ -61,7 +61,7 @@ const EmployeeSearchView: React.FC = () => {
 
             {showEndOfResults && (
                 <div className="flex justify-center py-4">
-                    <span className="secondary-text small-font">{t('common.endOfResults', { defaultValue: 'No more profiles to display.' })}</span>
+                    <span className="secondary-text s-font">{t('common.endOfResults', { defaultValue: 'No more profiles to display.' })}</span>
                 </div>
             )}
 

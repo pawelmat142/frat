@@ -132,7 +132,7 @@ const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
                 )}
             />)}
 
-            <p className={`${msgClass} small-font mt-2 mb-0`}>{t("employeeProfile.form.step2.info")}</p>
+            <p className={`${msgClass} s-font mt-2 mb-0`}>{t("employeeProfile.form.step2.info")}</p>
 
             <div>
                 <Button fullWidth mode={BtnModes.PRIMARY_TXT} onClick={resetLocation}>{t("employeeProfile.form.resetLocation")}</Button>

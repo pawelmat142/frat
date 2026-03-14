@@ -59,7 +59,7 @@ const OfferSearchView: React.FC = () => {
 
             {showEndOfResults && (
                 <div className="flex justify-center py-4">
-                    <span className="secondary-text small-font">{t('common.endOfResults', { defaultValue: 'No more offers to display.' })}</span>
+                    <span className="secondary-text s-font">{t('common.endOfResults', { defaultValue: 'No more offers to display.' })}</span>
                 </div>
             )}
 

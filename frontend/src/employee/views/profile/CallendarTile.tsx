@@ -46,7 +46,7 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ range }) => {
     return (
         <div className="square-tile month-tile ripple p-1" onClick={() => openDialog()}>
 
-            <div className="mb-2 small-font">{t(`callendar.monthShort.${month}`)} {year}</div>
+            <div className="mb-2 s-font">{t(`callendar.monthShort.${month}`)} {year}</div>
 
             <div className="month-tile-wrapper">
                 <MonthCallendar date={date} selectedRange={range} />

@@ -20,7 +20,7 @@ const ChatListItem: React.FC<Props> = ({ chat, otherMember: otherMember, first, 
     const { me } = useUserContext();
     const date = new Date(chat.updatedAt || chat.createdAt)
 
-    const topRight = <span className="small-font">{FrontDateUtil.displayShortDateOrDayOrTimeIfToday(t, date)}</span>
+    const topRight = <span className="s-font">{FrontDateUtil.displayShortDateOrDayOrTimeIfToday(t, date)}</span>
 
     const getReadStatusBadge = (): React.ReactNode => {
         const meAsMember = chat.members?.find(m => m.user?.uid === me?.uid);
@@ -36,7 +36,7 @@ const ChatListItem: React.FC<Props> = ({ chat, otherMember: otherMember, first, 
         return null;
     }
 
-    const bottomLeft = <div className="small-font secondary-text mt-1">
+    const bottomLeft = <div className="s-font secondary-text mt-1">
         {chat.latestMessageContent || t('chat.joinedAt', {date: DateUtil.displayDate(otherMember?.joinedAt || chat.createdAt)})}
     </div>
 

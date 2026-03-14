@@ -128,7 +128,7 @@ const OfferFormStepTwo: React.FC = () => {
                     )}
                 />)}
 
-                <p className={`secondary-text mb-5 small-font mt-2`}>{t("offer.form.STEP_TWO.info")}</p>
+                <p className={`secondary-text mb-5 s-font mt-2`}>{t("offer.form.STEP_TWO.info")}</p>
 
                 <div>
                     <Button fullWidth mode={BtnModes.PRIMARY_TXT} onClick={resetLocation}>{t("employeeProfile.form.resetLocation")}</Button>

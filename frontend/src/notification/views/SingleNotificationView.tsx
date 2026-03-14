@@ -206,9 +206,9 @@ const SingleNotificationView: React.FC = () => {
             </div>
 
             <div>
-                <p className="small-font secondary-text mt-5 mb-1">
+                <p className="s-font secondary-text mt-5 mb-1">
                     {t('notification.sentAt', { date: FrontDateUtil.displayDateWithTime(t, notification.createdAt) })}</p>
-                {!!notification.readAt && (<p className="small-font secondary-text mb-5">
+                {!!notification.readAt && (<p className="s-font secondary-text mb-5">
                     {t('notification.readAt', { date: FrontDateUtil.displayDateWithTime(t, notification.readAt) })}</p>)}
             </div>
 

@@ -88,8 +88,8 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
                 icon={<Ico.ADD_USER size={20} />}
             ></IconButton>}
 
-            {isFriend && <div className="primary-color small-font">{t('friends.friend')}</div>}
-            {isInvited && <div className="primary-color small-font">{t('friends.invited')}</div>}
+            {isFriend && <div className="primary-color s-font">{t('friends.friend')}</div>}
+            {isInvited && <div className="primary-color s-font">{t('friends.invited')}</div>}
             {isInvitationReceived && <Button
                 size={BtnSizes.SMALL}
                 onClick={acceptInvitation}
