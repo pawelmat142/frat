@@ -7,12 +7,11 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-const isIosSafari = (): boolean => {
+const isIosBrowser = (): boolean => {
   const ua = navigator.userAgent;
   const isIos = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const isSafari = /Safari/.test(ua) && !/CriOS|FxiOS|OPiOS|EdgiOS|Chrome/.test(ua);
   const isStandalone = ('standalone' in navigator) && (navigator as unknown as { standalone: boolean }).standalone;
-  return isIos && isSafari && !isStandalone;
+  return isIos && !isStandalone;
 };
 
 /** Captures the `beforeinstallprompt` event and exposes an install trigger. */
@@ -20,7 +19,7 @@ export function usePwaInstall() {
 
     const { t } = useTranslation();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isIos] = useState(() => isIosSafari());
+  const [isIos] = useState(() => isIosBrowser());
 
   useEffect(() => {
     const handler = (e: Event) => {
