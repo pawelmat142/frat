@@ -75,6 +75,11 @@ body {
   width: 100%;
 }
 
+.disable-select {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 ul,
 li,
 p {
