@@ -7,8 +7,6 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('fetch', () => {});
-
 // Handle notification click - open/focus the app on notifications page
 self.addEventListener('notificationclick', (event) => {
 console.log('Notification click received:', event);
