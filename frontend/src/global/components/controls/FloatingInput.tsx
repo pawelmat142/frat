@@ -75,7 +75,7 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
         return (
             <div className={`floating-input-wrapper ${className}${center ? ' mx-auto' : ''}`}>
                 <div className="floating-input-container">
-                    <div className="pp-control pp-input-row">
+                    <div className="pp-control min-height pp-input-row">
                         <input
                             ref={ref}
                             id={id}

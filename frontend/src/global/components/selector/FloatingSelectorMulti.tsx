@@ -21,7 +21,7 @@ function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
 
     const bottomSheet = useBottomSheet();
     
-    let myClass = `pp-control pp-dropdown floating-input`;
+    let myClass = `pp-control min-height pp-dropdown floating-input`;
     if (fullWidth) {
         myClass += ' w-full';
     } else {

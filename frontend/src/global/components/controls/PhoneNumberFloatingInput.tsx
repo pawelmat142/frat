@@ -130,7 +130,7 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
         return (
             <div className={`floating-input-wrapper ${className}${center ? ' mx-auto' : ''}`}>
                 <div className="floating-input-container">
-                    <div className={`pp-control pp-input-row ${containerClass}`}>
+                    <div className={`pp-control min-height pp-input-row ${containerClass}`}>
                         {/* Country selector */}
                         <div
                             className="pp-phone-country-selector"

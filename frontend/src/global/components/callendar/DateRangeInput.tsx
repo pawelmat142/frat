@@ -96,7 +96,7 @@ const DateRangeInput: React.FC<DateRangeProps> = ({
     return (
         <div className={`floating-input-wrapper ${myClass}`}>
             <div className="floating-input-container">
-                <div className="pp-control pp-input-row">
+                <div className="pp-control min-height pp-input-row">
                     <div className="flex items-center gap-2 w-full">
                         <input
                             ref={inputRef}

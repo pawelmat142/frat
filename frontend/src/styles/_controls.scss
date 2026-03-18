@@ -183,16 +183,19 @@ input {
   padding: 0 .75rem;
   display: flex;
   font-size: $lFont;
-  min-height: 60px;
-
+  
   &.focus,
   &:focus {
     outline: $focus-outline
   }
-
+  
   &.focus,
   &:hover {
     box-shadow: $focus-ring;
+  }
+  
+  &.min-height {
+    min-height: 60px;
   }
 }
 

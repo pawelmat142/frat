@@ -239,7 +239,7 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
                 style={{ position: 'relative' }}
             >
                 <div className="floating-input-container">
-                    <div className="pp-control pp-input-row">
+                    <div className="pp-control min-height pp-input-row">
                         <input
                             ref={ref}
                             id={id}
