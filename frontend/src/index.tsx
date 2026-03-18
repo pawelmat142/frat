@@ -52,14 +52,21 @@ root.render(
                                     <OfferSearchProvider>
                                       <WorkersSearchProvider>
                                         <MenuProvider>
+
                                           <div className="app-shell">
+
                                             <GlobalHeader />
+
                                             <NotificationsGlobalBar />
+
                                             <main className="app-main">
                                               <App />
                                             </main>
+
                                             <LayoutFooterSwitch />
+
                                           </div>
+                                          
                                           <CookieBanner />
                                           <ToastContainer
                                             position="top-right"
