@@ -183,6 +183,7 @@ input {
   padding: 0 .75rem;
   display: flex;
   font-size: $lFont;
+  min-height: 60px;
 
   &.focus,
   &:focus {
@@ -260,6 +261,11 @@ input {
   appearance: none;
   padding-right: 2rem;
   position: relative;
+}
+
+.dropdown-selected {
+  display: flex;
+  align-self: flex-end;
 }
 
 .dropdown-arrow {
@@ -374,7 +380,7 @@ input {
   align-items: center;
   padding: .1rem .3rem;
   border-radius: .5rem;
-  font-size: $xsFont;
+  font-size: $sFont;
 
   &.primary {
     color: $primary-color;
@@ -694,7 +700,7 @@ $topLabelOffset: 0.3rem;
   position: absolute;
   left: 0.75rem;
   top: $topLabelOffset;
-  font-size: $xsFont;
+  font-size: $sFont;
   color: $secondary-text;
   pointer-events: none;
   transition: all 0.2s ease;
@@ -708,7 +714,7 @@ $topLabelOffset: 0.3rem;
 
   &.floating-label-active {
     top: $topLabelOffset;
-    font-size: $xsFont;
+    font-size: $sFont;
     transform: translateY(0);
   }
 

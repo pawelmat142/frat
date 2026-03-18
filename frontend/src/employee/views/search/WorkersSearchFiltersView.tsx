@@ -134,7 +134,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                     render={({ field }) => (
                         <DateRangeInputViewSelector
                             label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label") + '*'}
-                            className="w-full mt-5"
+                            className="w-full mt-3"
                             value={prepareDateRange()}
                             error={f.formState.errors.startDate?.message}
                             onChange={(dateRange) => {
@@ -159,7 +159,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                             fullWidth
                             value={field.value ?? undefined}
                             label={t("employeeProfile.form.locationCountry") + '*'}
-                            className="w-full mt-5"
+                            className="w-full mt-3"
                             error={f.formState.errors.locationCountry}
                             onSelect={item => {
                                 f.setValue('locationCountry', item);
@@ -179,7 +179,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                                 fullWidth
                                 displayValue={field.value?.fullAddress || ''}
                                 label={t("employeeProfile.form.city")}
-                                className="w-full mt-5"
+                                className="w-full mt-3"
                                 error={f.formState.errors.geocodedPosition}
                                 onSelect={item => {
                                     updatePosition({ lat: item.lat, lng: item.lng });
@@ -204,7 +204,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                                 onChange={field.onChange}
                                 unit="km"
                                 fullWidth
-                                className="w-full mt-5 px-2 mb-5"
+                                className="w-full mt-3 px-2 mb-5"
                             />
                         )}
                     />
@@ -216,7 +216,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                     render={({ field }) => (
                         <DictionarySelector
                             type='multi'
-                            className="w-full mt-5"
+                            className="w-full mt-3"
                             valueInput={field.value}
                             onSelectMulti={items => {
                                 field.onChange(items);
@@ -235,7 +235,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                     render={({ field }) => (
                         <DictionarySelector
                             type='multi'
-                            className="w-full mt-5"
+                            className="w-full mt-3"
                             valueInput={field.value}
                             onSelectMulti={items => {
                                 field.onChange(items);
@@ -253,7 +253,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                     render={({ field }) => (
                         <DictionarySelector
                             type='multi'
-                            className="w-full mt-5"
+                            className="w-full mt-3"
                             valueInput={field.value}
                             onSelectMulti={items => {
                                 field.onChange(items);
@@ -272,7 +272,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                     control={f.control}
                     render={({ field }) => (
                         <FloatingSelector
-                            className="w-full mt-5"
+                            className="w-full mt-3"
                             items={sortOptionItems}
                             value={sortOptionItems.find(i => i.value === ctx.filters.sortBy) || null}
                             onSelect={item => {

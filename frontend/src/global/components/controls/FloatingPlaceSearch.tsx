@@ -264,14 +264,14 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
                             </span>
                         ) : hasSelection ? (
                             <Close
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 secondary-text cursor-pointer"
                                 style={{ fontSize: '1.2rem' }}
                                 onClick={handleClear}
                             />
                         ) : (
                             icon
-                                ? <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex items-center">{icon}</span>
-                                : <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style={{ fontSize: '1.2rem' }} />
+                                ? <span className="absolute right-3 top-1/2 -translate-y-1/2 secondary-text pointer-events-none flex items-center">{icon}</span>
+                                : <Search className="absolute right-3 top-1/2 -translate-y-1/2 secondary-text pointer-events-none" style={{ fontSize: '1.2rem' }} />
                         )}
                         <FloatingLabel
                             htmlFor={id}
