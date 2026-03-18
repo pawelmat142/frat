@@ -11,7 +11,7 @@ import Button from "global/components/controls/Button";
 import CountrySelector from "global/components/selector/CountrySelector";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import { Ico } from "global/icon.def";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUserContext } from "user/UserProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { toast } from "react-toastify";
@@ -29,6 +29,8 @@ const WorkersSearchFiltersView: React.FC = () => {
 
     const [loadingLocation, setLoadingLocation] = useState(false);
 
+    const hasAutofilledLocation = useRef(false);
+
     const f = useForm<WorkerSearchFilters>({
         defaultValues: ctx.filters
     })
@@ -37,6 +39,7 @@ const WorkersSearchFiltersView: React.FC = () => {
 
     useEffect(() => {
         const autofillLocationCountry = async () => {
+            if (hasAutofilledLocation.current) return; // Prevent re-execution
             if (!formState.geocodedPosition && userCtx.position) {
                 try {
                     setLoadingLocation(true);
@@ -47,6 +50,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                     if (langAllowed) {
                         f.setValue('locationCountry', countryCode || '');
                     }
+                    hasAutofilledLocation.current = true; // Mark as executed
                 }
                 catch (error) {
                     console.error('Error initializing location country:', error);
