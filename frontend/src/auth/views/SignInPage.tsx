@@ -124,17 +124,15 @@ const SignInPage: React.FC = () => {
                 {t("signin.orSignInWith")}
             </div>
 
-            <div className="tiles-center-wrapper pb-5">
+            <div className="flex gap-5 justify-center">
 
-                <div></div>
-
-                <div className="square-tile p-5 col-tile" onClick={() => handleGoogleSignIn()}>
+                <div className="square-tile p-5 col-tile w-32" onClick={() => handleGoogleSignIn()}>
                     <GoogleIcon size={iconSize} />
                     <div className="mt-1">Google</div>
                 </div>
 
-                <div className="square-tile p-5 col-tile" onClick={() => handleTelegramSignIn()}>
-                    <FaTelegram size={iconSize} className="mb-1"/>
+                <div className="square-tile p-5 col-tile w-32" onClick={() => handleTelegramSignIn()}>
+                    <FaTelegram size={iconSize} className="mb-1 shrink-0"/>
                     <div>Telegram</div>
                 </div>
 

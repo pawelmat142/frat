@@ -1,11 +1,9 @@
-import Button from "global/components/controls/Button"
-import { BtnModes } from "global/interface/controls.interface"
-import { Path } from "../../path"
-import { useNavigate, useParams } from "react-router-dom"
+import { FloatingInputModes } from "global/interface/controls.interface"
+import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useUserContext } from "user/UserProvider"
 import { useFriendsContext } from "friends/FriendsProvider"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI"
 import { UserI } from "@shared/interfaces/UserI"
 import FriendshipListItem from "friends/components/FriendshipListItem"
@@ -14,12 +12,16 @@ import Loading from "global/components/Loading"
 import { Ico } from "global/icon.def"
 import { FriendUtil } from "@shared/utils/FriendUtil"
 import { useUsersStorage } from "global/providers/UsersStorageProvider"
+import FloatingInput from "global/components/controls/FloatingInput"
+import { useDebouncedValue } from "global/utils/useDebouncedValue"
+import { Search, Close } from "@mui/icons-material"
+import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter"
+import UserInvitationListItem from "user/components/UserInvitationListItem"
 
 const FriendsListView: React.FC = () => {
 
     const { uid } = useParams<{ uid?: string }>()
     const { t } = useTranslation()
-    const navigate = useNavigate()
     const userCtx = useUserContext()
     const usersStorage = useUsersStorage();
     const friendsCtx = useFriendsContext();
@@ -29,6 +31,19 @@ const FriendsListView: React.FC = () => {
     const [friendships, setFriendships] = useState<FriendshipI[]>([])
     const [friends, setFriends] = useState<{ user: UserI, friendship: FriendshipI }[]>([])
     const [loading, setLoading] = useState(false)
+
+    // Search state
+    const INITIAL_LIMIT = 20;
+    const LOAD_MORE_LIMIT = 10;
+    const MIN_QUERY_LENGTH = 3;
+
+    const [freeTextInput, setFreeTextInput] = useState('');
+    const debouncedQuery = useDebouncedValue(freeTextInput, 500);
+    const [searchUsers, setSearchUsers] = useState<UserI[]>([]);
+    const [searchLoading, setSearchLoading] = useState(false);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(false);
+    const loadingMoreRef = useRef(false);
 
     const isMyFriend = FriendUtil.isFriend(friendsCtx.friendships, uid!)
 
@@ -99,6 +114,52 @@ const FriendsListView: React.FC = () => {
         setFriends(friends);
     }
 
+    // Search logic
+    useEffect(() => {
+        if (debouncedQuery.length < MIN_QUERY_LENGTH) {
+            setSearchUsers([]);
+            setHasMore(false);
+            return;
+        }
+        fetchSearchUsers(debouncedQuery, 0, INITIAL_LIMIT, false);
+    }, [debouncedQuery]);
+
+    const fetchSearchUsers = async (query: string, skip: number, limit: number, isLoadMore: boolean) => {
+        if (isLoadMore) {
+            if (loadingMoreRef.current) return;
+            loadingMoreRef.current = true;
+            setLoadingMore(true);
+        } else {
+            setSearchLoading(true);
+        }
+        try {
+            const result = await FriendsService.searchUsers(query, skip, limit);
+            if (isLoadMore) {
+                setSearchUsers(prev => [...prev, ...result.users]);
+            } else {
+                setSearchUsers(result.users);
+            }
+            setHasMore(skip + limit < result.count);
+        } finally {
+            if (isLoadMore) {
+                setLoadingMore(false);
+                loadingMoreRef.current = false;
+            } else {
+                setSearchLoading(false);
+            }
+        }
+    };
+
+    const loadMore = useCallback(() => {
+        if (loadingMoreRef.current || !hasMore || debouncedQuery.length < MIN_QUERY_LENGTH) return;
+        fetchSearchUsers(debouncedQuery, searchUsers.length, LOAD_MORE_LIMIT, true);
+    }, [debouncedQuery, searchUsers.length, hasMore]);
+
+    const isSearchMode = debouncedQuery.length >= MIN_QUERY_LENGTH;
+    const initialSearchLoading = searchLoading && searchUsers.length === 0;
+    const noSearchResults = !initialSearchLoading && !searchLoading && searchUsers.length === 0 && isSearchMode;
+    const showEndOfResults = !initialSearchLoading && !loadingMore && !hasMore && searchUsers.length > 0;
+
     // TODO szukanie przerobic na floating button albo do headera
 
     if (loading) {
@@ -107,35 +168,75 @@ const FriendsListView: React.FC = () => {
     return (
         <div className="list-view">
 
-            <div className="flex flex-col gap-1">
+            <FloatingInput
+                className="pt-1 pb-5 px-4"
+                mode={FloatingInputModes.THIN}
+                name="freeText"
+                value={freeTextInput}
+                onChange={e => setFreeTextInput(e.target.value)}
+                label={t("employeeProfile.form.freeText")}
+                fullWidth
+                icon={isSearchMode ? <Close /> : <Search />}
+                onIconClick={isSearchMode ? (e) => {
+                    e.preventDefault();
+                    setFreeTextInput('')
+                } : undefined}
+            />
 
-                {!friends.length && (
-                    <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
-                        <Ico.FRIENDS className="mx-auto text-4xl mb-2 opacity-50" />
-                        <div className="secondary-text">{t('friends.noFriends')}</div>
+            {isSearchMode ? (
+                <>
+                    {initialSearchLoading ? (
+                        <div className="flex flex-col items-center justify-center mt-20">
+                            <Loading />
+                        </div>
+                    ) : noSearchResults ? (
+                        <div className="flex flex-col items-center justify-center mt-20">
+                            <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-1">
+                            {searchUsers.map(user => (
+                                <div className="list-view-item" key={user.uid}>
+                                    <UserInvitationListItem user={user} />
+                                </div>
+                            ))}
+                            <InfiniteScrollEventEmitter emitEvent={loadMore} />
+                        </div>
+                    )}
+
+                    {loadingMore && searchUsers.length > 0 && (
+                        <div className="flex justify-center py-6">
+                            <Loading />
+                        </div>
+                    )}
+
+                    {showEndOfResults && (
+                        <div className="flex justify-center py-4">
+                            <span className="secondary-text s-font">{t('common.endOfResults')}</span>
+                        </div>
+                    )}
+                </>
+            ) : (
+                <>
+                    <div className="flex flex-col gap-1">
+                        {!friends.length && (
+                            <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
+                                <Ico.FRIENDS className="mx-auto text-4xl mb-2 opacity-50" />
+                                <div className="secondary-text">{t('friends.noFriends')}</div>
+                            </div>
+                        )}
+
+                        {friends.map(({ user, friendship }) => (
+                            <div className="list-view-item" key={user.uid}>
+                                <FriendshipListItem
+                                    user={user}
+                                    friendship={friendship}
+                                />
+                            </div>
+                        ))}
                     </div>
-                )}  
-
-                {friends.map(({ user, friendship }) => (
-                    <div className="list-view-item" key={user.uid}>
-                        <FriendshipListItem
-                            user={user}
-                            friendship={friendship}
-                        />
-                    </div>
-                ))}
-            </div>
-
-            <div className="flex flex-col gap-3 mt-6 px-5">
-                <Button
-                    fullWidth
-                    mode={BtnModes.SECONDARY}
-                    onClick={() => navigate(Path.FRIENDS_SEARCH)}
-                >
-                    <Ico.SEARCH className="mr-2" />
-                    {t('friends.search')}
-                </Button>
-            </div>
+                </>
+            )}
         </div>
     )
 }

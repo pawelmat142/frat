@@ -1,11 +1,11 @@
-import { ChangeEventHandler, forwardRef, ReactNode, useState } from 'react';
+import React, { ChangeEventHandler, forwardRef, ReactNode, useState } from 'react';
 import { FloatingInputModes, InputInterface } from '../../interface/controls.interface';
 import FormError from './FormError';
 import FloatingLabel from './FloatingLabel';
 
 interface FloatingInputProps extends InputInterface {
     icon?: ReactNode;
-    onIconClick?: () => void;
+    onIconClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
@@ -98,7 +98,9 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
                             placeholder=" "
                         />
                         {icon && (
-                            icon
+                            <div className="floating-input-icon" onClick={onIconClick}>
+                                {icon}
+                            </div>
                         )}
                         <FloatingLabel
                             htmlFor={id}

@@ -36,7 +36,6 @@ import ChatsView from 'chat/views/ChatsView';
 import ChatConversationView from 'chat/views/ChatConversationView';
 import WorkersSearchFiltersView from 'employee/views/search/WorkersSearchFiltersView';
 import FriendsListView from 'friends/views/FriendsListView';
-import FriendsSearchView from 'friends/views/FriendsSearchView';
 import SingleNotificationView from 'notification/views/SingleNotificationView';
 import NotificationsView from 'notification/views/NotificationsView';
 import TranslationItemForm from 'admin/views/translations/TranslationItemForm';
@@ -82,7 +81,6 @@ const App: React.FC = () => {
                 <Route path={Path.CHATS} element={<PageWrapper direction={1}><ProtectedRoute><ChatsView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.CHAT_CONVERSATION} element={<PageWrapper direction={1}><ProtectedRoute><ChatConversationView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.FRIENDS} element={<PageWrapper direction={1}><ProtectedRoute><FriendsListView /></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.FRIENDS_SEARCH} element={<PageWrapper direction={1}><ProtectedRoute><FriendsSearchView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.NOTIFICATIONS} element={<PageWrapper direction={1}><ProtectedRoute><NotificationsView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.NOTIFICATION} element={<PageWrapper direction={1}><ProtectedRoute><SingleNotificationView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.SETTINGS} element={<PageWrapper direction={1}><ProtectedRoute><SettingsView /></ProtectedRoute></PageWrapper>} />

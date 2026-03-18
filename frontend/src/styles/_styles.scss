@@ -125,13 +125,6 @@ $headerHeightDesktop: 60px;
     }
 }
 
-.tiles-center-wrapper {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 1rem;
-}
-
 
 // CHAT
 $chatPadding: .5rem;
