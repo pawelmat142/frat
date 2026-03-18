@@ -61,7 +61,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     }, {
         label: t('account.friends'),
         active: location.pathname.includes(Path.FRIENDS.split('/:')[0]),
-        onClick: () => navigate(Path.getFriendsPath(me?.uid || '')),
+        onClick: () => navigate(Path.getFriendsPath(me?.uid || '*')),
         icon: <Ico.FRIENDS size={iconSize} />
     }]
 

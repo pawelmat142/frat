@@ -15,7 +15,7 @@
 
 *::-webkit-scrollbar-thumb {
   background: $primary-color;
-  border-radius: 8px;
+  border-radius: 2px;
 }
 
 *::-webkit-scrollbar-track {
@@ -73,6 +73,13 @@ body {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  padding-bottom: 4rem;
+}
+
+@media screen and (min-width: $desktop) {
+  .app-main {
+    padding-bottom: 0;
+  }
 }
 
 .disable-select {
