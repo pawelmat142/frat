@@ -80,6 +80,11 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                             className={`bottom-sheet-item ripple${isSelected(item.value) ? ' selected' : ''}${last ? ' last' : ''}`}
                             onClick={() => handleItemClick(item)}
                         >
+                            {multiSelect && (
+                                <div className={`bottom-sheet-checkbox mr-3 ${isSelected(item.value) ? 'checked' : ''}`}>
+                                    {isSelected(item.value) && <FaCheck size={14} />}
+                                </div>
+                            )}
                             <div className="bottom-sheet-item-content">
                                 {item.icon && (
                                     <span className="bottom-sheet-item-icon">{item.icon}</span>
@@ -93,11 +98,6 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                                 )}
                                 <span className="bottom-sheet-item-label">{displayLabel}</span>
                             </div>
-                            {multiSelect && (
-                                <div className={`bottom-sheet-checkbox ${isSelected(item.value) ? 'checked' : ''}`}>
-                                    {isSelected(item.value) && <FaCheck size={14} />}
-                                </div>
-                            )}
                         </div>
                     )
                 }
