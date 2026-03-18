@@ -230,7 +230,7 @@ const DictionaryElementForm: React.FC = () => {
                             {col.translatable ? (
                                 Object.entries(value).map(([langCode, val]) => {
                                     return <FloatingInput
-                                        key={langCode}
+                                        key={`${col.code}_${langCode}`}
                                         name={`${col.code}_${langCode}`}
                                         label={`${langCode}`}
                                         value={String(val)}
@@ -261,6 +261,7 @@ const DictionaryElementForm: React.FC = () => {
 
                         {dictionary.groups.map(group => (
                             <Checkbox
+                                key={group.code}
                                 className="mt-3"
                                 checked={elementForm.groups.includes(group.code)}
                                 onChange={checked => {

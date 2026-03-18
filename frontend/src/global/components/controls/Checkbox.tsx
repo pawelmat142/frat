@@ -28,7 +28,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
         disabled={disabled}
         required={required}
         onChange={e => onChange(e.target.checked)}
-        className="checkbox-input"
+        className="checkbox-input cursor-pointer" // Added cursor-pointer class
       />
       {label && <span className="checkbox-label">{label}</span>}
     </label>

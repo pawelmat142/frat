@@ -84,7 +84,7 @@ const AdminDictionaries: React.FC = () => {
                                 dictionaries.map((dict, idx) => (
                                     <tr
                                         key={idx}
-                                        className="hover:active-bg transition cursor-pointer"
+                                        className="ripple transition cursor-pointer"
                                         onClick={() => handleRowClick(dict.code)}
                                         style={{ userSelect: 'none' }}
                                     >
