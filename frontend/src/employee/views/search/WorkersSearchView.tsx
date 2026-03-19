@@ -3,16 +3,20 @@ import Loading from "global/components/Loading";
 import { useWorkersSearch } from "./WorkersSearchProvider";
 import WorkersSearchFilters from "./WorkersSearchFilters";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
 import { FaUserSlash } from "react-icons/fa";
 import WorkerListItem from "employee/components/WorkerListItem";
+import FloatingActionButton from "global/components/buttons/FloatingActionButton";
+import { useNavigate } from "react-router-dom";
+import { Path } from "../../../path";
+import { Ico } from "global/icon.def";
 
 const EmployeeSearchView: React.FC = () => {
 
     const ctx = useWorkersSearch()
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
+    const navigate = useNavigate();
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading></Loading>
@@ -65,7 +69,9 @@ const EmployeeSearchView: React.FC = () => {
                 </div>
             )}
 
-            <FloatingScrollButton />
+            <FloatingActionButton onClick={() => {
+                navigate(Path.WORKERS_FILTERS_SEARCH)
+            }} icon={<Ico.SEARCH size={30}/>}></FloatingActionButton>
         </div>
 
     )

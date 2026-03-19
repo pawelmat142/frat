@@ -43,16 +43,6 @@ const WorkersSearchFilters: React.FC = () => {
         return result;
     }
 
-    const setupHeaderMenu = () => {
-        globalCtx.setHeaderMenu(<IconButton icon={<FilterList onClick={() => {
-            navigate(Path.WORKERS_FILTERS_SEARCH)
-        }} />} />);
-    }
-    
-    useEffect(() => {
-        setupHeaderMenu();
-    }, [])
-
     return (
         <div className="filters-container">
             <div className="flex gap-3 w-full px-2 pb-1 flex-wrap">
