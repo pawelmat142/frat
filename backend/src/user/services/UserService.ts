@@ -109,4 +109,8 @@ export class UserService {
         this._avatarUpdateRequest$.next({ user, newAvatarRef: avatarRef });
     }
 
+    public async updateLastSeenAt(uid: string): Promise<void> {
+        await this.userRepo.updateLastSeenAt(uid);
+    }
+
 }

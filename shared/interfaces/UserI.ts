@@ -11,6 +11,7 @@ export interface UserI {
     verified: boolean
     photoURL?: string
     avatarRef?: AvatarRef
+    lastSeenAt?: Date
 }
 
 export const UserRoles = {

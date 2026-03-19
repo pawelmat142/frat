@@ -45,6 +45,7 @@
       "notDefined": "Język nie został zdefiniowany"
     },
     "user": {
+      "lastSeen": "Ostatnio widziany",
       "error": {
         "notFound": "Nie znaleziono użytkownika",
         "invalidRole": "Nieprawidłowa rola",

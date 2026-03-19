@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS jh_users (
     photo_url VARCHAR(255),
     avatar_ref JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_seen_at TIMESTAMP
 );
 
 CREATE INDEX IF NOT EXISTS idx_users_uid ON jh_users (uid);

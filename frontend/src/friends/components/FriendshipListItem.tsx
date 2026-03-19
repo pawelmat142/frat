@@ -16,6 +16,7 @@ import Loading from "global/components/Loading";
 import { ChatService } from "chat/services/ChatService";
 import IconButton from "global/components/controls/IconButon";
 import { Ico } from "global/icon.def";
+import { FrontDateUtil } from "global/utils/FrontDateUtil";
 
 interface Props {
     user: UserI,
@@ -86,13 +87,20 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
     const isInvited = friendship?.status === FriendshipStatuses.PENDING && friendship.requesterUid === me?.uid;
     const isInvitationReceived = friendship?.status === FriendshipStatuses.PENDING && friendship.addresseeUid === me?.uid;
 
+    const getLastSeenText = () => {
+        if (!user.lastSeenAt) return '';
+        return `${t('user.lastSeen')} ${FrontDateUtil.displayShortDateOrDayOrTimeIfToday(t, user.lastSeenAt)}`
+    }
+
     return (
         <div className="flex justify-between items-center w-full" onClick={() => navigate(Path.getProfilePath(user.uid))}>
             <UserItem
                 user={user}
                 allowNavigate={false}
                 bottomRow={
-                    (isFriend && <div className="primary-color xs-font">{t('friends.friend')}</div>)
+                    (isFriend && <div className="secondary-text xs-font">
+                        {getLastSeenText()}
+                    </div>)
                     || (isInvited && <div className="secondary-text xs-font">{t('friends.invited')}</div>)
                     || (isInvitationReceived && <div className="secondary-text xs-font">{t('friends.invitationReceived')}</div>)
                 }

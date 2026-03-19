@@ -61,4 +61,8 @@ export class UserEntity implements UserI {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @Column({ name: 'last_seen_at', nullable: true })
+  @Expose()
+  lastSeenAt?: Date;
 }

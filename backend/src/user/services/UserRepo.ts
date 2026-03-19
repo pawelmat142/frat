@@ -70,6 +70,10 @@ export class UserRepo {
         return this.userRepository.save(user)
     }
 
+    public async updateLastSeenAt(uid: string): Promise<void> {
+        await this.userRepository.update({ uid }, { lastSeenAt: new Date() });
+    }
+
     public async searchUsers(query: string, skip: number, limit: number): Promise<{ users: UserEntity[]; count: number }> {
         const qb = this.userRepository.createQueryBuilder('user')
             .where('user.status = :status', { status: UserStatuses.ACTIVE })

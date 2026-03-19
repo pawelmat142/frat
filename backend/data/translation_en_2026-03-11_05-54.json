@@ -46,6 +46,7 @@
       "notDefined": "Language not defined"
     },
     "user": {
+      "lastSeen": "Last seen",
       "error": {
         "notFound": "User not found",
         "invalidRole": "Invalid role",

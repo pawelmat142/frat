@@ -50,7 +50,7 @@ export class UserContextService {
             notifications,
             chats,
         }
-
+        await this.userService.updateLastSeenAt(user.uid);
         return meCtx;
     }
 }
