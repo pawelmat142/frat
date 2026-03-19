@@ -6,7 +6,6 @@ import { WorkerUtil } from "@shared/utils/WorkerUtil";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
-import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 import { AppConfig } from "@shared/AppConfig";
 
 export interface WorkersSearchContextProps {
@@ -21,6 +20,7 @@ export interface WorkersSearchContextProps {
     loadMore: () => void;
     setLoading: (loading: boolean) => void;
     updateOneProfileInResults: (updatedProfile: WorkerI) => void;
+    filtersValid: boolean;
 }
 
 export const WorkerDefaultFilters: WorkerSearchFilters = {
@@ -61,6 +61,8 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const requestIdRef = useRef(0);
     const resultsLengthRef = useRef(0);
     const hasMoreRef = useRef(false);
+
+    const filtersValid = !!filters.startDate && !!filters.locationCountry
 
     const executeSearch = useCallback(async (searchFilters: WorkerSearchFilters, loadMore: boolean) => {
         const requestId = ++requestIdRef.current;
@@ -136,7 +138,6 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         executeSearch(newFilters, false);
     }
 
-
     const setFiltersWithSearchAndNavigate = (newFilters: WorkerSearchFilters) => {
         setFiltersState(newFilters);
         resultsLengthRef.current = 0;
@@ -192,7 +193,8 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setLoading,
             resetFilters,
             defaultFilters: WorkerDefaultFilters,
-            updateOneProfileInResults
+            updateOneProfileInResults,
+            filtersValid
         }}>
             {children}
         </WorkersSearchContext.Provider>

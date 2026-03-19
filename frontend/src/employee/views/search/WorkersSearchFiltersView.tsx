@@ -17,7 +17,7 @@ import { GoogleMapService } from "global/services/GoogleMapService";
 import { toast } from "react-toastify";
 import FloatingPlaceSearch from "global/components/controls/FloatingPlaceSearch";
 import FloatingStepSlider from "global/components/controls/FloatingStepSlider";
-import { GeocodedPosition, Position } from "@shared/interfaces/MapsInterfaces";
+import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 import { AppConfig } from "@shared/AppConfig";
 
 const WorkersSearchFiltersView: React.FC = () => {

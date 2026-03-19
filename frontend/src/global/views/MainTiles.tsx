@@ -9,6 +9,8 @@ import LangSelectTile from 'global/components/tiles/LangSelectTile';
 import ThemeSelectTile from 'global/components/tiles/ThemeSelectTile';
 import { Ico } from 'global/icon.def';
 import InstallPwaButton from "global/components/InstallPwaButton";
+import { useWorkersSearch } from "employee/views/search/WorkersSearchProvider";
+import { useOfferSearch } from "offer/views/search/OfferSearchProvider";
 
 const MainTiles: React.FC = () => {
 
@@ -18,9 +20,27 @@ const MainTiles: React.FC = () => {
     const { t } = useTranslation()
     const { me } = useUserContext()
     const { offers } = useOffersContext()
-    const { worker: employeeProfile } = useWorkerContext()
+    const { worker } = useWorkerContext()
+    const workerSearchCtx = useWorkersSearch()
+    const offerSearchCtx = useOfferSearch()
 
     const hasSomeOffers = !!offers?.length
+
+    const navigateToWorkersSearch = () => {
+        if (workerSearchCtx.filtersValid) {
+            workerSearchCtx.setFiltersWithSearchAndNavigate(workerSearchCtx.filters)
+        } else {
+            navigate(Path.WORKERS_FILTERS_SEARCH)
+        }
+    }
+
+    const navigateToOffersSearch = () => {
+        if (offerSearchCtx.filtersValid) {
+            offerSearchCtx.setFiltersWithSearchAndNavigate(offerSearchCtx.filters)
+        } else {
+            navigate(Path.OFFERS_FILTERS_SEARCH)
+        }
+    }
 
     return (
         <div>
@@ -32,11 +52,11 @@ const MainTiles: React.FC = () => {
                         <div>{t("signin.submit")}</div>
                     </div>
                 )}
-                <div className="ripple square-tile col-tile" onClick={() => navigate(Path.WORKERS_FILTERS_SEARCH)}>
+                <div className="ripple square-tile col-tile" onClick={navigateToWorkersSearch}>
                     <Ico.SEARCH size={iconSize} />
                     <div>{t("employeeProfile.search")}</div>
                 </div>
-                <div className="ripple square-tile col-tile" onClick={() => navigate(Path.OFFERS_FILTERS_SEARCH)}>
+                <div className="ripple square-tile col-tile" onClick={navigateToOffersSearch}>
                     <Ico.OFFER size={iconSize} />
                     <div>{t("offer.search")}</div>
                 </div>
@@ -49,7 +69,7 @@ const MainTiles: React.FC = () => {
 
                 {!!me && (
                     <>
-                        {employeeProfile ? (
+                        {worker ? (
                             <div className="ripple square-tile col-tile" onClick={() => navigate(Path.getWorkerProfilePath(me!.displayName))}>
                                 <Ico.WORKER size={iconSize} />
                                 <div>{t("profile.tile")}</div>

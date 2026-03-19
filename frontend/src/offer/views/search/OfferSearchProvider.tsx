@@ -17,6 +17,7 @@ export interface OfferSearchContextProps {
     hasMore: boolean;
     loadMore: () => void;
     setFiltersWithSearchAndNavigate: (filters: OfferSearchFilters) => void;
+    filtersValid: boolean;
 }
 const INITIAL_LIMIT = 8;
 const LOAD_MORE_LIMIT = 4;
@@ -63,6 +64,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
     const [hasMore, setHasMore] = useState(false);
+    const filtersValid = !!filters.locationCountries?.length
 
     const requestIdRef = useRef(0);
     const requestsLengthRef = useRef(0);
@@ -191,7 +193,8 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
             loadMore,
             resetFilters,
             defaultFilters: defaultOfferFilters,
-            setFiltersWithSearchAndNavigate
+            setFiltersWithSearchAndNavigate,
+            filtersValid
         }}>
             {children}
         </OfferSearchContext.Provider>
