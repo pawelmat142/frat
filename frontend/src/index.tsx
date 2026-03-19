@@ -27,6 +27,21 @@ import { FriendsProvider } from 'friends/FriendsProvider';
 import { OffersProvider } from 'offer/OffersProvider';
 import { WorkerProvider } from 'employee/WorkerProvider';
 import { UsersStorageProvider } from 'global/providers/UsersStorageProvider';
+import { useGlobalContext } from 'global/providers/GlobalProvider';
+
+const AppShell: React.FC = () => {
+  const { state } = useGlobalContext();
+  return (
+    <div className="app-shell">
+      <GlobalHeader />
+      <NotificationsGlobalBar />
+      <main className={`app-main${state.hideFooter ? ' hide-footer' : ''}`}>
+        <App />
+      </main>
+      <LayoutFooterSwitch />
+    </div>
+  );
+};
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -53,19 +68,7 @@ root.render(
                                       <WorkersSearchProvider>
                                         <MenuProvider>
 
-                                          <div className="app-shell">
-
-                                            <GlobalHeader />
-
-                                            <NotificationsGlobalBar />
-
-                                            <main className="app-main">
-                                              <App />
-                                            </main>
-
-                                            <LayoutFooterSwitch />
-
-                                          </div>
+                                          <AppShell />
                                           
                                           <CookieBanner />
                                           <ToastContainer
