@@ -192,14 +192,29 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
         const handleFocus = () => {
             setInputValue('');
             setIsFocused(true);
+            setFocus(true);
             if (predictions.length > 0) {
                 setShowPredictions(true);
             }
         };
 
         const handleBlur = () => {
-            setTimeout(() => setIsFocused(false), 200);
+            setTimeout(() => {
+                setIsFocused(false);
+                setFocus(false);
+            }, 200);
         };
+
+        const setFocus = (set: boolean) => {
+            const ppControlElement = containerRef.current?.querySelector('.pp-control');
+            if (ppControlElement) {
+                if (set) {
+                    ppControlElement.classList.add('focus');
+                } else {
+                    ppControlElement.classList.remove('focus');
+                }
+            }
+        }
 
         const handleClear = () => {
             setInputValue('');

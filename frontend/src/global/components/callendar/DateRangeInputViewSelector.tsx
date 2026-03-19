@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import CallendarsView from './CallendarsView';
+import { set } from 'react-hook-form';
 
 /** Parses local date string (YYYY-MM-DD) to Date object */
 const parseLocalDateString = (dateStr: string): Date => {
@@ -55,6 +56,8 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
         e.stopPropagation();
         if (disabled) return;
 
+        setFocus(true);
+
         fullScreenDialogCtx.open({
             title: label,
             children: <CallendarsView
@@ -64,14 +67,27 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
                 bottomSheetCtx={bottomSheetCtx}
                 onSubmit={(dateRange) => {
                     onChange?.(dateRange);
+                    setFocus(false);
                     fullScreenDialogCtx.close();
                 }}
                 onCancel={() => {
                     onChange?.(null);
+                    setFocus(false);
                     fullScreenDialogCtx.close();
                 }}
             ></CallendarsView>
         })
+    }
+
+    const setFocus = (set: boolean) => {
+        const ppControlElement = inputRef.current?.closest('.pp-control');
+        if (ppControlElement) {
+            if (set) {
+                ppControlElement.classList.add('focus');
+            } else {
+                ppControlElement.classList.remove('focus');
+            }
+        }
     }
 
     let myClass = `pp-date-input ${className}`;

@@ -96,7 +96,7 @@ const FloatingStepSlider: React.FC<FloatingStepSliderProps> = ({
                 <span className="text-sm secondary-text">
                     {label}
                 </span>
-                <span className="text-sm font-semibold primary-color">
+                <span className="s-font font-medium primary-color">
                     {formattedValue}
                 </span>
             </div>

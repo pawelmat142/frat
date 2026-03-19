@@ -134,7 +134,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
 
         <div className="callendars-view-wrapper">
 
-            <div className="callendars-view-header flex flex-col gap-1 px-3">
+            <div className="callendars-view-header flex flex-col gap-1">
                 {selectorMode && (<>
 
                     <CallendarsViewControl
