@@ -48,7 +48,7 @@ const NotificationsGlobalBar: React.FC = () => {
                 animate={{ opacity: 1, height: "auto", marginTop: 4, marginBottom: 4 }}
                 exit={{ opacity: 0, height: 0, marginTop: 0, marginBottom: 0 }}
                 transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-                className="mx-2 overflow-hidden"
+                className="mx-4 overflow-hidden"
             >
                 <div
                     className="px-3 py-2 rounded-md secondary-bg rippple notification-bar"

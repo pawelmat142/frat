@@ -1,29 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useOfferSearch } from "./OfferSearchProvider";
 import { Utils } from "global/utils/utils";
 import { Ico } from "global/icon.def";
 import { Path } from "../../../path";
 import { useNavigate } from "react-router-dom";
-import IconButton from "global/components/controls/IconButon";
-import { FilterList } from "@mui/icons-material";
 
 const OfferSearchFilters: React.FC = () => {
 
     const globalCtx = useGlobalContext();
     const languagesDictionary = globalCtx.dics.languages;
-    const navigate = useNavigate();
     const ctx = useOfferSearch();
-
-    const setupHeaderMenu = () => {
-        globalCtx.setHeaderMenu(<IconButton icon={<FilterList onClick={() => {
-            navigate(Path.OFFERS_FILTERS_SEARCH)
-        }} />} />);
-    }
-
-    useEffect(() => {
-        setupHeaderMenu();
-    }, [])
 
     const flags = languagesDictionary
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.communicationLanguages || [], languagesDictionary))

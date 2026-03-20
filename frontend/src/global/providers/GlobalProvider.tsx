@@ -2,7 +2,7 @@ import { DictionaryI } from "@shared/interfaces/DictionaryI"
 import { DictionaryService } from "global/services/DictionaryService"
 import React from "react"
 import { createContext, useState } from "react"
-import { useLocation, matchPath } from "react-router-dom";
+import { useLocation, matchPath, useNavigate } from "react-router-dom";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { useIsDesktop } from "global/hooks/isMobile";
 import { ViewState as ViewState, STATES } from "global/states";
@@ -28,6 +28,9 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const location = useLocation(); 
     const isDesktop = useIsDesktop();
+    const navigate = useNavigate();
+
+    const states = STATES(navigate);
 
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null)
 
@@ -53,7 +56,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     React.useEffect(() => {
         const pathname = location.pathname
         let resolved: ViewState | undefined
-        for (const [pattern, state] of Object.entries(STATES)) {
+        for (const [pattern, state] of Object.entries(states)) {
             if (matchPath({ path: pattern, end: true }, pathname)) {
                 resolved = state
                 break

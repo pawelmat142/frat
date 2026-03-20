@@ -7,12 +7,17 @@ import OfferSearchFilters from "./OfferSearchFilters";
 import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
 import OfferListItem from "offer/components/OfferListItem";
+import FloatingActionButton from "global/components/buttons/FloatingActionButton";
+import { Ico } from "global/icon.def";
+import { useNavigate } from "react-router-dom";
+import { Path } from "../../../path";
 
 const OfferSearchView: React.FC = () => {
 
     const { t } = useTranslation();
     const globalCtx = useGlobalContext();
     const ctx = useOfferSearch();
+    const navigate = useNavigate();
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading></Loading>
@@ -63,9 +68,10 @@ const OfferSearchView: React.FC = () => {
                 </div>
             )}
 
+            <FloatingActionButton onClick={() => {
+                navigate(Path.OFFERS_FILTERS_SEARCH)
+            }} icon={<Ico.SLIDERS size={32}/>}></FloatingActionButton>
 
-
-            <FloatingScrollButton />
         </div>
     );
 

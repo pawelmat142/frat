@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path";
 import { Ico } from "global/icon.def";
 
-const EmployeeSearchView: React.FC = () => {
+const WorkersSearchView: React.FC = () => {
 
     const ctx = useWorkersSearch()
     const { t } = useTranslation()
@@ -79,4 +79,4 @@ const EmployeeSearchView: React.FC = () => {
 }
 
 
-export default EmployeeSearchView;
+export default WorkersSearchView;
