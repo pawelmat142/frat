@@ -44,7 +44,7 @@ const WorkersSearchFilters: React.FC = () => {
     }
 
     return (
-        <div className="filters-container">
+        <div className="filters-container primary-bg">
             <div className="flex gap-3 w-full px-2 pb-1 flex-wrap">
 
                 {!!ctx.filters.startDate && (

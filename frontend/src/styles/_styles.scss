@@ -341,7 +341,7 @@ $tilePadding: .5rem 1rem;
 
 .bottom-bar-shadow {
     border: 1px solid $primary-color-transparent;
-    box-shadow: 0 2px 8px 0 $primary-color-transparent, 0 2px 8px -2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 15px 0 $primary-color-transparent, 0 2px 8px -2px rgba(0, 0, 0, 0.1);
 }
 
 .mobile-bottom-nav-container {
@@ -364,19 +364,15 @@ $tilePadding: .5rem 1rem;
     padding-top: .6rem;
     padding-bottom: .2rem;
     border-radius: $bottom-bar-radius;
-
+    color: $secondary-text;
+    
     &.active {
         color: $primary-color;
-
-        .mobile-bottom-nav-label {
-            color: $primary-color;
-        }
     }
 
 }
 
 .mobile-bottom-nav-label {
-    color: $secondary-text;
     font-size: $sFont;
     font-weight: $font-medium;
 }

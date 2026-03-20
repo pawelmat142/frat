@@ -83,14 +83,15 @@
     position: fixed;
     right: 1.5rem;
     bottom: 1.5rem;
-    width: 3.75rem;
-    height: 3.75rem;
+    width: 4rem;
+    height: 4rem;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
     background-color: $primary-color;
-    color: $primary-text;
+    color: $secondary-text;
+    // color: #fff;
     cursor: pointer;
     z-index: 35;
     will-change: transform, opacity;
@@ -113,19 +114,19 @@
 
 @keyframes fab-slide-up {
     0% {
-        transform: translateY(140%);
+        transform: translateY(140%) scale(0.6);
         opacity: 0;
         visibility: visible;
     }
 
     70% {
-        transform: translateY(-6%);
+        transform: translateY(-6%) scale(1.05);
         opacity: 1;
         visibility: visible;
     }
 
     100% {
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
         opacity: 1;
         visibility: visible;
     }
@@ -133,19 +134,19 @@
 
 @keyframes fab-slide-down {
     0% {
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
         opacity: 1;
         visibility: visible;
     }
 
     35% {
-        transform: translateY(8%);
+        transform: translateY(8%) scale(0.9);
         opacity: 0.85;
         visibility: visible;
     }
 
     100% {
-        transform: translateY(140%);
+        transform: translateY(140%) scale(0.3);
         opacity: 0;
         visibility: hidden;
     }

@@ -1,9 +1,8 @@
-import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 
 interface FloatingActionButtonProps {
     onClick: () => void;
     icon: ReactNode;
-    scrollContainer?: () => Window | HTMLElement | null | undefined;
     ariaLabel?: string;
     bottomOffset?: number;
     rightOffset?: number;
@@ -19,59 +18,38 @@ const getScrollTop = (container: Window | HTMLElement): number => {
 const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
     onClick,
     icon,
-    scrollContainer,
     ariaLabel = "Action",
     bottomOffset = 84,
     rightOffset = 24,
 }) => {
-    const [visible, setVisibleState] = useState(true);
-    const [hasHidden, setHasHidden] = useState(false);
-    const lastScrollRef = useRef(0);
-    const rafRef = useRef<number>();
-    const visibleRef = useRef(true);
-
-    const setVisible = useCallback((next: boolean) => {
-        visibleRef.current = next;
-        setVisibleState(next);
-        if (!next) setHasHidden(true);
-    }, []);
+    // null = not yet interacted (no animation class applied)
+    const [visible, setVisible] = useState<boolean | null>(null);
+    const lastScrollTop = useRef(0);
 
     useEffect(() => {
-        const container = scrollContainer?.() ?? window;
-        if (!container) return;
-
-        lastScrollRef.current = getScrollTop(container);
-
-        const update = () => {
-            const current = getScrollTop(container);
-            const scrollingDown = current > lastScrollRef.current;
-
-            if (scrollingDown && visibleRef.current) {
-                setVisible(false);
-            } else if (!scrollingDown && !visibleRef.current) {
-                setVisible(true);
-            }
-
-            lastScrollRef.current = current;
-        };
+        // Scroll happens on .app-main, not window
+        const container = document.querySelector<HTMLElement>(".app-main") ?? window;
 
         const handleScroll = () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current);
-            rafRef.current = window.requestAnimationFrame(update);
+            const current = getScrollTop(container);
+            if (current < lastScrollTop.current) {
+                setVisible(true);
+            } else if (current > lastScrollTop.current) {
+                setVisible(false);
+            }
+            lastScrollTop.current = current;
         };
 
         container.addEventListener("scroll", handleScroll, { passive: true });
+        return () => container.removeEventListener("scroll", handleScroll);
+    }, []);
 
-        return () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current);
-            container.removeEventListener("scroll", handleScroll as EventListener);
-        };
-    }, [scrollContainer, setVisible]);
+    const visibilityClass =
+        visible === true ? "fab-visible" : visible === false ? "fab-hidden" : "";
 
-    const className = [
-        "floating-action-btn",
-        visible ? "fab-visible" : hasHidden ? "fab-hidden" : "",
-    ].filter(Boolean).join(" ") + " bottom-bar-shadow";
+    const className = ["floating-action-btn", visibilityClass]
+        .filter(Boolean)
+        .join(" ") + " bottom-bar-shadow";
 
     return (
         <button

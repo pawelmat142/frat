@@ -44,7 +44,8 @@ const EmployeeSearchView: React.FC = () => {
                 </div>
             ) : (
                 <div className="results flex flex-col">
-                    {(ctx.results ?? []).map((profile, index) => (
+                    {([...ctx.results, 
+                    ...ctx.results] ).map((profile, index) => (
                         <WorkerListItem
                             key={index}
                             profile={profile}
@@ -71,7 +72,7 @@ const EmployeeSearchView: React.FC = () => {
 
             <FloatingActionButton onClick={() => {
                 navigate(Path.WORKERS_FILTERS_SEARCH)
-            }} icon={<Ico.SEARCH size={30}/>}></FloatingActionButton>
+            }} icon={<Ico.SLIDERS size={32}/>}></FloatingActionButton>
         </div>
 
     )
