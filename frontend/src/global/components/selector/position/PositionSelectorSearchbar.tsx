@@ -23,6 +23,7 @@ const PositionSelectorSearchbar: React.FC<Props> = ({ mapInstanceRef, onCancel, 
         <div className="position-selector-searchbar w-full mr-2">
             <div className="position-selector-header p-2 flex items-center justify-between border-b primary-bg">
                 <FloatingPlaceSearch
+                    className='w-full'
                     mode={FloatingInputModes.THIN}
                     name="freeText"
                     displayValue={displaValue}

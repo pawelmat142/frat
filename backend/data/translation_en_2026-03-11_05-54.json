@@ -62,6 +62,7 @@
     },
     "offer": {
       "add": "Add offer",
+      "workLocation": "Location",
       "form": {
         "title": "Job offer form",
         "success": "Offer created successfully",

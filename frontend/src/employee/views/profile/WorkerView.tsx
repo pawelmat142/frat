@@ -8,7 +8,6 @@ import { useWorkersSearch } from "../search/WorkersSearchProvider";
 import AvatarTile from "../../../user/components/AvatarTile";
 import CallendarTile from "./CallendarTile";
 import ProfileDataTile from "./ProfileDataTile";
-import AvailabilityTile from "./AvailabilityTile";
 import { useTranslation } from "react-i18next";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import { useGlobalContext } from "global/providers/GlobalProvider";
@@ -28,7 +27,7 @@ const WorkerView: React.FC = () => {
     const displayName = params.displayName
 
     const [loading, setLoading] = useState(false)
-    const [profile, setProfile] = useState<WorkerI | null>(null)
+    const [worker, setProfile] = useState<WorkerI | null>(null)
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -41,6 +40,7 @@ const WorkerView: React.FC = () => {
     const profileCtx = useWorkersSearch();
     const globalCtx = useGlobalContext();
 
+    console.log(worker)
     useEffect(() => {
         const initWorker = async () => {
             if (displayName) {
@@ -62,10 +62,10 @@ const WorkerView: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (profile && me) {
-            menuCtx.setupHeaderMenu(getProfileMenuItems(profile))
+        if (worker && me) {
+            menuCtx.setupHeaderMenu(getProfileMenuItems(worker))
         }
-    }, [profile, me]);
+    }, [worker, me]);
 
     const getProfileMenuItems = (profile: WorkerI): MenuConfig => {
         const isMyProfile = me?.uid === profile.uid;
@@ -104,9 +104,9 @@ const WorkerView: React.FC = () => {
     }
 
     const openChat = async () => {
-        if (!profile) return;
+        if (!worker) return;
         try {
-            const chat = await ChatService.getOrCreateDirectChat(profile.uid)
+            const chat = await ChatService.getOrCreateDirectChat(worker.uid)
             navigate(Path.getConversationPath(chat.chatId))
         } catch (error) {
             console.error('Failed to open chat:', error)
@@ -178,8 +178,6 @@ const WorkerView: React.FC = () => {
         }
     }
 
-
-
     const notifyProfileView = async (profile: WorkerI) => {
         if (profile?.uid) {
             await WorkerService.notifyWorkerView(profile.uid)
@@ -196,7 +194,7 @@ const WorkerView: React.FC = () => {
     if (loading) {
         return <Loading />
     }
-    if (!profile) {
+    if (!worker) {
         return <div className="py-8 text-center secondary-text italic">{t('employeeProfile.notFound')}</div>
     }
 
@@ -204,7 +202,7 @@ const WorkerView: React.FC = () => {
         navigate(Path.WORKER_FORM);
     }
 
-    const range = DateRangeUtil.getFirstRange(profile);
+    const range = DateRangeUtil.getFirstRange(worker);
 
     return (
         <div className="view-container">
@@ -212,18 +210,16 @@ const WorkerView: React.FC = () => {
             <div>
                 <div className="main-tiles">
 
-                    <AvatarTile uid={profile.uid} src={profile.avatarRef?.url} />
+                    <AvatarTile uid={worker.uid} src={worker.avatarRef?.url} />
 
                     <CallendarTile range={range}></CallendarTile>
 
-                    <ProfileDataTile profile={profile} languagesDictionary={globalCtx.dics.languages}></ProfileDataTile>
-
-                    <AvailabilityTile profile={profile} languagesDictionary={globalCtx.dics.languages}></AvailabilityTile>
+                    {/* <ProfileDataTile profile={worker} languagesDictionary={globalCtx.dics.languages}></ProfileDataTile> */}
 
                 </div>
 
                 <div className="mt-5 mb-1">{t('employeeProfile.form.certificates')}: </div>
-                <Chips chips={profile.certificates || []} mode={ChipModes.SECONDARY}></Chips>
+                <Chips chips={worker.certificates || []} mode={ChipModes.SECONDARY}></Chips>
 
                 <div className="mt-5 mb-1">{t('employeeProfile.experience')}: </div>
             </div>

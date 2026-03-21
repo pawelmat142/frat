@@ -61,6 +61,7 @@
     },
     "offer": {
       "add": "Dodaj ofertę",
+      "workLocation": "Lokalizacja",
       "form": {
         "title": "Formularz oferty pracy",
         "success": "Oferta została pomyślnie utworzona",
