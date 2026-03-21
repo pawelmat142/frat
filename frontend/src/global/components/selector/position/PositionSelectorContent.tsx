@@ -7,6 +7,7 @@ import PositionSelectorSearchbar from './PositionSelectorSearchbar';
 import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
 import { GoogleMapService } from 'global/services/GoogleMapService';
 import { Position, GeocodedPosition } from '@shared/interfaces/MapsInterfaces';
+import { AppConfig } from '@shared/AppConfig';
 
 interface PositionSelectorContentProps {
     initialPosition?: Position;
@@ -55,7 +56,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
             createMap(initialPosition);
         } else {
             // Fallback to default position (Warsaw) if no initial position provided
-            const defaultPosition = { lat: 52.2297, lng: 21.0122 };
+            const defaultPosition = AppConfig.DEFAUT_POSITION
             createMap(defaultPosition);
         }
     };

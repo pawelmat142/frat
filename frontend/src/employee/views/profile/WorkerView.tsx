@@ -20,6 +20,7 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { useUserContext } from "user/UserProvider";
 import { useWorkerContext } from "employee/WorkerProvider";
 import { ChatService } from "chat/services/ChatService";
+import PositionWidget from "employee/components/PositionWidget";
 
 const WorkerView: React.FC = () => {
 
@@ -35,7 +36,7 @@ const WorkerView: React.FC = () => {
     const confirm = useConfirm();
     const userCtx = useUserContext();
     const workerCtx = useWorkerContext();
-    const me = userCtx?.me; 
+    const me = userCtx?.me;
 
     const profileCtx = useWorkersSearch();
     const globalCtx = useGlobalContext();
@@ -216,6 +217,11 @@ const WorkerView: React.FC = () => {
 
                     {/* <ProfileDataTile profile={worker} languagesDictionary={globalCtx.dics.languages}></ProfileDataTile> */}
 
+                </div>
+
+
+                <div className="mt-5">
+                    <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>
                 </div>
 
                 <div className="mt-5 mb-1">{t('employeeProfile.form.certificates')}: </div>

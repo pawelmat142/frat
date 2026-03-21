@@ -955,3 +955,10 @@ $cellRadiusBig: 1rem;
         cursor: pointer;
     }
 }
+
+.position-widget {
+    width: 100%;
+    background-color: $secondary-bg;
+    border-radius: $tile-radius;
+    overflow: hidden;
+}
