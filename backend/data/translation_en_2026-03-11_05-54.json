@@ -187,8 +187,10 @@
     "others": {
       "lessThan": "<{{value}}{{unit}}",
       "availableAnytime": "Available anytime",
+      "availableFrom": "Available from",
       "fetchLocationError": "Could not find location.",
-      "availableAnytimeShort": "Anytime"
+      "availableAnytimeShort": "Anytime",
+      "call": "Call"
     },
     "report": {
       "send": "Send",

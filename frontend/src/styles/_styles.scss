@@ -962,3 +962,14 @@ $cellRadiusBig: 1rem;
     border-radius: $tile-radius;
     overflow: hidden;
 }
+
+
+
+// WORKER PROFILE
+
+.worker-avatar {
+    width: 30vw;
+    height: 30vw;
+    overflow: hidden;
+    border-radius: 50%;
+}

@@ -81,11 +81,11 @@ const ProfileView: React.FC = () => {
 
 
     const initUserData = async (user: UserI) => {
-        const [userEmployeeProfile, userOffers] = await Promise.all([
+        const [worker, userOffers] = await Promise.all([
             WorkerService.fetchWorkerByDisplayName(user.displayName),
             OffersService.listUsersOffers(user.uid)
         ])
-        setWorker(userEmployeeProfile)
+        setWorker(worker)
         setOffers(userOffers)
         setLocalLoading(false);
     }
@@ -325,6 +325,17 @@ const ProfileView: React.FC = () => {
                     {t('account.friends')}
                 </Button>}
 
+                {!!worker && (
+                    <Button
+                        fullWidth
+                        mode={BtnModes.SECONDARY}
+                        onClick={openWorkerProfileOrForm}
+                    >
+                        <Ico.WORKER className="mr-2" />
+                        {t('account.showEmployeeProfile')}
+                    </Button>
+                )}
+
                 {isMyAccount ? (
                     <>
                         <Button
@@ -336,6 +347,17 @@ const ProfileView: React.FC = () => {
                             {t('chat.chats')}
                         </Button>
 
+                        {!worker && (
+                            <Button
+                                fullWidth
+                                mode={BtnModes.SECONDARY}
+                                onClick={openWorkerProfileOrForm}
+                            >
+                                <Ico.WORKER className="mr-2" />
+                                {t('account.createEmployeeProfile')}
+                            </Button>
+                        )}
+
                         <Button
                             fullWidth
                             mode={BtnModes.SECONDARY}
@@ -345,29 +367,11 @@ const ProfileView: React.FC = () => {
                             {t('account.offers')} ({offers?.length || 0})
                         </Button>
 
-                        {!worker ? (
-                            <Button
-                                fullWidth
-                                mode={BtnModes.SECONDARY}
-                                onClick={openWorkerProfileOrForm}
-                            >
-                                <Ico.WORKER className="mr-2" />
-                                {t('account.createEmployeeProfile')}
-                            </Button>
-                        ) : (
-                            <Button
-                                fullWidth
-                                mode={BtnModes.SECONDARY}
-                                onClick={openWorkerProfileOrForm}
-                            >
-                                <Ico.WORKER className="mr-2" />
-                                {t('account.showEmployeeProfile')}
-                            </Button>
-                        )}
+
                         <Button
                             fullWidth
                             mode={BtnModes.SECONDARY}
-                            onClick={()=> navigate(Path.SETTINGS)}
+                            onClick={() => navigate(Path.SETTINGS)}
                         >
                             <Ico.SETTINGS className="mr-2" />
                             {t('common.settings')}

@@ -25,7 +25,7 @@ const PositionWidget: React.FC<Props> = ({ position }) => {
 
         await GoogleMapsLoader.load(apiKey)
 
-        const center = { lat: position!.lat, lng: position!.lng };
+        const center = { lat: position!.lat, lng: position!.lng };  
 
         if (!mapInstanceRef.current) {
             mapInstanceRef.current = new google.maps.Map(mapRef.current!, {

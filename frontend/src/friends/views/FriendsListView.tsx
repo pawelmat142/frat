@@ -160,28 +160,29 @@ const FriendsListView: React.FC = () => {
     const noSearchResults = !initialSearchLoading && !searchLoading && searchUsers.length === 0 && isSearchMode;
     const showEndOfResults = !initialSearchLoading && !loadingMore && !hasMore && searchUsers.length > 0;
 
-    // TODO szukanie przerobic na floating button albo do headera
-
     if (loading) {
         return <Loading></Loading>
     }
     return (
         <div className="list-view">
 
-            <FloatingInput
-                className="pt-1 pb-5 px-4"
-                mode={FloatingInputModes.THIN}
-                name="freeText"
-                value={freeTextInput}
-                onChange={e => setFreeTextInput(e.target.value)}
-                label={t("employeeProfile.form.freeText")}
-                fullWidth
-                icon={isSearchMode ? <Close /> : <Search />}
-                onIconClick={isSearchMode ? (e) => {
-                    e.preventDefault();
-                    setFreeTextInput('')
-                } : undefined}
-            />
+            {!!isMyAccount && (
+                <FloatingInput
+                    className="pt-1 pb-5 px-4"
+                    mode={FloatingInputModes.THIN}
+                    name="freeText"
+                    value={freeTextInput}
+                    onChange={e => setFreeTextInput(e.target.value)}
+                    label={t("employeeProfile.form.freeText")}
+                    fullWidth
+                    icon={isSearchMode ? <Close /> : <Search />}
+                    onIconClick={isSearchMode ? (e) => {
+                        e.preventDefault();
+                        setFreeTextInput('')
+                    } : undefined}
+                />
+
+            )}
 
             {isSearchMode ? (
                 <>

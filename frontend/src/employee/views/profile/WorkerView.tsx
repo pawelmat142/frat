@@ -3,13 +3,9 @@ import React, { useEffect, useState } from "react";
 import { WorkerService } from "employee/services/WorkerService";
 import Loading from "global/components/Loading";
 import { useNavigate, useParams } from "react-router-dom";
-import { WorkerI, WorkerStatuses } from "@shared/interfaces/WorkerProfileI";
+import { WorkerAvailabilityOptions, WorkerI, WorkerStatuses } from "@shared/interfaces/WorkerProfileI";
 import { useWorkersSearch } from "../search/WorkersSearchProvider";
-import AvatarTile from "../../../user/components/AvatarTile";
-import CallendarTile from "./CallendarTile";
-import ProfileDataTile from "./ProfileDataTile";
 import { useTranslation } from "react-i18next";
-import Chips, { ChipModes } from "global/components/chips/Chips";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { Path } from "../../../path";
@@ -21,6 +17,12 @@ import { useUserContext } from "user/UserProvider";
 import { useWorkerContext } from "employee/WorkerProvider";
 import { ChatService } from "chat/services/ChatService";
 import PositionWidget from "employee/components/PositionWidget";
+import { Ico } from "global/icon.def";
+import DateDisplay from "global/components/DateDisplay";
+import { useIsDesktop } from "global/hooks/isMobile";
+import DictionaryDisplay from "global/components/DictionaryDisplay";
+import FloatingActionButton from "global/components/buttons/FloatingActionButton";
+import { AVATAR_MOCK } from "user/components/AvatarTile";
 
 const WorkerView: React.FC = () => {
 
@@ -40,6 +42,9 @@ const WorkerView: React.FC = () => {
 
     const profileCtx = useWorkersSearch();
     const globalCtx = useGlobalContext();
+    const isDesktop = useIsDesktop();
+
+    const isMe = me?.uid === worker?.uid;
 
     console.log(worker)
     useEffect(() => {
@@ -205,33 +210,162 @@ const WorkerView: React.FC = () => {
 
     const range = DateRangeUtil.getFirstRange(worker);
 
+    console.log(range)
+    console.log(range)
+
+    const iconSize = `1.5rem`
+
+    const isAnytime = worker.availabilityOption === WorkerAvailabilityOptions.ANYTIME;
+
+    const onAvailabilityClick = () => {
+        if (!isAnytime) {
+            // TODO show callendar view
+        }
+    }
+
+    const openPhoneCall = () => {
+        if (!worker.phoneNumber || isMe) return;
+
+        const number = `${worker.phoneNumber.prefix}${worker.phoneNumber.number}`
+        if (isDesktop) {
+            // copy to clipboard
+            navigator.clipboard.writeText(number);
+            toast.info(t('employeeProfile.phoneNumberCopied', { number }));
+            return;
+        }
+        window.location.href = `tel:${worker.phoneNumber.prefix}${worker.phoneNumber.number}`;
+    }
+
+    const listItemClassName = `flex gap-4 px-5 py-3 items-center`;
+
     return (
-        <div className="view-container">
+        <div className="w-full">
 
-            <div>
-                <div className="main-tiles">
+            <div className="flex gap-5 items-center px-5">
 
-                    <AvatarTile uid={worker.uid} src={worker.avatarRef?.url} />
-
-                    <CallendarTile range={range}></CallendarTile>
-
-                    {/* <ProfileDataTile profile={worker} languagesDictionary={globalCtx.dics.languages}></ProfileDataTile> */}
-
+                <div className="worker-avatar">
+                    <img src={worker.avatarRef?.url || AVATAR_MOCK} alt={worker.displayName} />
                 </div>
 
-
-                <div className="mt-5">
-                    <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>
+                <div className="worker-title ">
+                    <div className="xl-font font-semibold mb-1">{worker.displayName}</div>
+                    <div className="secondary-text">{worker.email}</div>
                 </div>
 
-                <div className="mt-5 mb-1">{t('employeeProfile.form.certificates')}: </div>
-                <Chips chips={worker.certificates || []} mode={ChipModes.SECONDARY}></Chips>
-
-                <div className="mt-5 mb-1">{t('employeeProfile.experience')}: </div>
             </div>
 
+            <div className="mb-5 mt-5">
+                <div className={`${listItemClassName} ${!isAnytime ? 'ripple' : ''}`} onClick={onAvailabilityClick}>
+                    <Ico.CALENDAR size={iconSize}></Ico.CALENDAR>
+                    {isAnytime ? (
+                        <span>{t('others.availableAnytime')}</span>
+                    ) : (
+                        !!worker.startDate &&
+                        (<span>{t('others.availableFrom')} <DateDisplay localDateString={worker.startDate} showYear={false}></DateDisplay></span>)
+                    )}
+
+                    {!isAnytime && (
+                        <Ico.CHEVRON_RIGHT className="ml-auto secondary-text"></Ico.CHEVRON_RIGHT>
+                    )}
+                </div>
+
+                {!!worker.geocodedPosition?.fullAddress && (
+                    <div className={listItemClassName}>
+                        <Ico.MARKER size={iconSize}></Ico.MARKER>
+                        <span>{worker.geocodedPosition.fullAddress}</span>
+                    </div>
+                )}
+
+                {!!worker.phoneNumber && (
+                    <div className={listItemClassName + ' ripple'} onClick={openPhoneCall}>
+                        <Ico.PHONE size={iconSize}></Ico.PHONE>
+                        <span>
+                            <span>{t('employeeProfile.form.phoneNumber')}: </span>
+                            <span>{worker.phoneNumber.prefix} {worker.phoneNumber.number}</span>
+                        </span>
+                        <Ico.CHEVRON_RIGHT className="ml-auto secondary-text"></Ico.CHEVRON_RIGHT>
+                    </div>
+                )}
+
+                <div className={listItemClassName}>
+                    <Ico.EMAIL size={iconSize}></Ico.EMAIL>
+                    <span>
+                        <span>{t("employeeProfile.form.email")}: </span>
+                        <span>{worker.email}</span>
+                    </span>
+                </div>
+
+                {/* TODO model */}
+                {/* TODO dodac krok do wizarda */}
+                {/* TODO translacje */}
+                <div className={listItemClassName}>
+                    <Ico.CLOCK size={iconSize}></Ico.CLOCK>
+                    <span>W branży od: 8 lat</span>
+                </div>
+                <div className={listItemClassName}>
+                    <Ico.RULER size={iconSize}></Ico.RULER>
+                    <span>Max wysokość: 180 m</span>
+                </div>
+                <div className={listItemClassName}>
+                    <Ico.COMPASS size={iconSize}></Ico.COMPASS>
+                    <span>Gotowość do wyjazdów: TAK</span>
+                </div>
+
+                {!!worker.communicationLanguages.length && (
+                    <div className={listItemClassName}>
+                        <Ico.LANGUAGE size={iconSize}></Ico.LANGUAGE>
+                        <span>
+                            <span>Języki: </span>
+                            {worker.communicationLanguages.map(lang => <DictionaryDisplay dictionary="LANGUAGES" value={lang}></DictionaryDisplay>)}
+                        </span>
+                    </div>
+                )}
+
+            </div>
+
+            {worker.certificates?.length && (
+                <div className="mb-10 px-5">
+                    <div className="secondary-text">Uprawnienia:</div>
+
+                    {worker.certificates.map((cert, index) => (<div className="pl-5 pt-3 flex items-center gap-2" key={index}>
+                        <Ico.CHECK className="secondary-text"></Ico.CHECK>
+                        <DictionaryDisplay dictionary="CERTIFICATES" value={cert}></DictionaryDisplay>
+                    </div>))}
+
+                </div>
+            )}
+
+            {/* TODO show if worker experience exists */}
+            <div className="mb-10 px-5">
+                <div className="secondary-text">Umiejętności / doświadczenie:</div>
+                {[
+                    "mycie elewacji",
+                    "montaż reklam",
+                    "serwis turbin wiatrowych",
+                    "spawanie na wysokości"
+                ].map((cert, index) => (<div className="pl-5 pt-2 flex items-center gap-2" key={index}>
+                    <Ico.CHECK className="secondary-text"></Ico.CHECK>
+                    <span className="">{cert}</span>
+                </div>))}
+
+            </div>
+
+            <div className="px-5 mb-10">
+                <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>
+            </div>
+
+            <FloatingActionButton onClick={openChat} icon={<Ico.MSG size={32} />}></FloatingActionButton>
         </div>
     );
 }
+
+// TODO 
+// PORTFOLIO (game changer)
+// [zdjęcie] [zdjęcie] [zdjęcie]
+
+// 💡 UX trick:
+
+// grid 2x2
+// klik = fullscreen
 
 export default WorkerView;

@@ -2,18 +2,12 @@ import React, { useRef } from 'react';
 import FormError from '../controls/FormError';
 import FloatingLabel from '../controls/FloatingLabel';
 import { DateRange } from '@shared/interfaces/WorkerProfileI';
-import { usePopup } from 'global/providers/PopupProvider';
 import { useTranslation } from 'react-i18next';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import CallendarsView from './CallendarsView';
-import { set } from 'react-hook-form';
+import { DateUtil } from '@shared/utils/DateUtil';
 
-/** Parses local date string (YYYY-MM-DD) to Date object */
-const parseLocalDateString = (dateStr: string): Date => {
-    const [year, month, day] = dateStr.split('-').map(Number);
-    return new Date(year, month - 1, day);
-};
 
 interface DateRangeProps {
     /** DateRange with start/end as local date strings in YYYY-MM-DD format */
@@ -104,7 +98,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
     const formatDateRange = (range?: DateRange | null, placeholder?: string): string => {
         if (!range?.start) return placeholder || '';
 
-        const startDate = parseLocalDateString(range.start);
+        const startDate = DateUtil.parseLocalDateString(range.start);
         const startMonth = t(`callendar.monthShort.${startDate.getMonth()}`);
         const startDayNumber = startDate.getDate();
         let result = `${startDayNumber} ${startMonth}`;
@@ -116,7 +110,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
         }
         
         if (range.end) {
-            const endDate = parseLocalDateString(range.end);
+            const endDate = DateUtil.parseLocalDateString(range.end);
             const endMonth = t(`callendar.monthShort.${endDate.getMonth()}`);
             const endDayNumber = endDate.getDate();
             result += ` - ${endDayNumber} ${endMonth} ${endDate.getFullYear()}`;

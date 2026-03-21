@@ -187,8 +187,10 @@
     "others": {
       "lessThan": "<{{distance}}{{unit}}",
       "availableAnytime": "Dostępny od zaraz",
+      "availableFrom": "Dostępny od",
       "fetchLocationError": "Nie można znaleźć lokalizacji.",
-      "availableAnytimeShort": "Od zaraz"
+      "availableAnytimeShort": "Od zaraz",
+      "call": "Zadzwoń"
     },
     "report": {
       "send": "Wyślij",

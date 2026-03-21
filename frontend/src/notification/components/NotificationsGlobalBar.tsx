@@ -45,7 +45,7 @@ const NotificationsGlobalBar: React.FC = () => {
             <motion.div
                 key="notification-bar"
                 initial={{ opacity: 0, height: 0, marginTop: 0, marginBottom: 0 }}
-                animate={{ opacity: 1, height: "auto", marginTop: 4, marginBottom: 4 }}
+                animate={{ opacity: 1, height: "auto", marginTop: 0, marginBottom: 10 }}
                 exit={{ opacity: 0, height: 0, marginTop: 0, marginBottom: 0 }}
                 transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
                 className="mx-4 overflow-hidden"
