@@ -1,4 +1,4 @@
-import { UserI, UserProviders } from "@shared/interfaces/UserI";
+import { UserI, UserProviders } from "../interfaces/UserI";
 
 export abstract class UserUtil {
     public static getContactInfoLine = (user: UserI): string => {

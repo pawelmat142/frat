@@ -21,7 +21,7 @@ export class SettingsEntity implements SettingsI {
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
 
-    @OneToOne(() => UserEntity)
+    @OneToOne(() => UserEntity, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'uid', referencedColumnName: 'uid' })
     user: UserEntity;
 }

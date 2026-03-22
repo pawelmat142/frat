@@ -29,7 +29,7 @@ export abstract class WorkerUtil {
         return {
             startDate: f.startDate || undefined,
             endDate: f.endDate || undefined,
-            locationCountry: f.locationCountry || undefined,
+            locationCountry: f.locationCountry || null,
             lat: f.geocodedPosition?.lat,
             lng: f.geocodedPosition?.lng,
             positionRadiusKm: f.positionRadiusKm,

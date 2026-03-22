@@ -1,4 +1,4 @@
-import { DictionaryElement, DictionaryI } from "@shared/interfaces/DictionaryI";
+import { DictionaryElement, DictionaryI } from "../interfaces/DictionaryI";
 
 export abstract class DictionaryUtil {
 

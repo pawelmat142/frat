@@ -1,4 +1,4 @@
-import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
+import { FriendshipI, FriendshipStatuses } from "../interfaces/FriendshipI";
 
 export abstract class FriendUtil {
 
