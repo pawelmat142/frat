@@ -1,38 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Button from '../controls/Button';
-import { BtnModes, BtnSizes } from 'global/interface/controls.interface';
+import { BtnModes } from 'global/interface/controls.interface';
 import { useTranslation } from 'react-i18next';
 
-interface DateRangePickerSheetProps {
+interface DatePickerSheetProps {
     value?: Date | null;
     onChange: (date: Date | null) => void;
     disabled?: boolean;
-    minDate?: Date | null;
-    maxDate?: Date | null;
-    startDate?: Date | null;
-    endDate?: Date | null;
 }
 
-const DateRangePickerSheet: React.FC<DateRangePickerSheetProps> = ({
+const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
     value,
     onChange,
-    disabled,
-    minDate,
-    maxDate,
-    startDate,
-    endDate
+    disabled
 }) => {
-    const [selectedDate, setSelectedDate] = useState<Date | null>(value || new Date());
+    const [selectedDate, setSelectedDate] = React.useState<Date | null>(value || new Date());
 
     const handleConfirm = () => {
         onChange(selectedDate);
     };
 
     const handleCancel = () => {
-        onChange(null);
-    };
+        onChange(null)
+    }
 
     const { t } = useTranslation();
 
@@ -41,14 +33,9 @@ const DateRangePickerSheet: React.FC<DateRangePickerSheetProps> = ({
             <div className="date-picker-sheet-calendar">
                 <DatePicker
                     selected={selectedDate}
-                    onChange={(date: Date | null) => setSelectedDate(date)}
+                    onChange={(date) => setSelectedDate(date)}
                     inline
                     disabled={disabled}
-                    minDate={minDate || undefined}
-                    maxDate={maxDate || undefined}
-                    startDate={startDate || undefined}
-                    endDate={endDate || undefined}
-                    highlightDates={startDate && !endDate ? [startDate] : undefined}
                 />
             </div>
 
@@ -64,4 +51,4 @@ const DateRangePickerSheet: React.FC<DateRangePickerSheetProps> = ({
     );
 };
 
-export default DateRangePickerSheet;
+export default DatePickerSheet;

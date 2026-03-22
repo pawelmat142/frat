@@ -1,15 +1,14 @@
 import { InputInterface } from '../../interface/controls.interface';
-import Input from './Input';
-import DateInput from './DateInput';
 import { DictionaryColumnTypes } from '@shared/interfaces/DictionaryI';
 import { DateUtil } from '@shared/utils/DateUtil';
 import FloatingInput from './FloatingInput';
 import Checkbox from './Checkbox';
+import FloatingDateInput from '../callendar/FloatingDateInput';
 
 const TypedInput: React.FC<InputInterface> = (param) => {
 
     if (param.valueType === DictionaryColumnTypes.DATE) {
-        return <DateInput 
+        return <FloatingDateInput 
             value={DateUtil.parseDate(param.value)} 
             onChange={param.onDateChange} 
             name={param.name}
