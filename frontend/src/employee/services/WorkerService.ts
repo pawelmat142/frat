@@ -23,6 +23,11 @@ const mapFormToApi = (form: WorkerForm): WorkerFormDto => {
 
 		certificates: form.certificates.certificates,
 		certificateDates: form.certificates.certificateDates,
+
+		careerStartDate: form.career.careerStartDate,
+		maxAltitude: form.career.maxAltitude,
+		readyToTravel: form.career.readyToTravel,
+		categories: form.career.categories,
 	};
 };
 

@@ -22,6 +22,8 @@ const WorkerFormStepCareer: React.FC<Props> = ({ formRef }) => {
                 {t("employeeProfile.form.career.title")}
             </h2>
 
+            <p className="secondary-text s-font">*{t("employeeProfile.form.optionalinfo")}</p>
+
             <div className="flex flex-col gap-5 md:gap-5 mt-5">
                 <Controller
                     name="career.categories"

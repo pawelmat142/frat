@@ -517,6 +517,7 @@
       "form": {
         "city": "Miasto",
         "email": "Email",
+        "optionalinfo": "Informacje opcjonalne - pokażemy je na Twoim profilu jeśli je wypełnisz.",
         "personalData": {
           "label": "Krok 1",
           "title": "Dane osobowe"

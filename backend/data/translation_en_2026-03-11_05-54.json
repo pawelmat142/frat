@@ -522,6 +522,7 @@
       "edit": "Edit employee profile",
       "certificates": "Certificates",
       "form": {
+        "optionalinfo": "Optional information - we will show it on your profile if you fill it out.",
         "city": "City",
         "email": "Email",
         "personalData": {

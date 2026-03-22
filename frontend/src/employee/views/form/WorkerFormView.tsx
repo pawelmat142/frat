@@ -52,7 +52,6 @@ const WorkerFormView: React.FC = () => {
 
     const worker: WorkerWithCertificates | null = workerCtx.worker || null;
 
-    // TODO poprawic animacje przechodzenia miedzy krokami
     const formRef = useForm<WorkerForm>({
         defaultValues: {
             personalData: {
