@@ -4,13 +4,13 @@ import { useTranslation } from "react-i18next";
 import { useOfferSearch } from "./OfferSearchProvider";
 import Loading from "global/components/Loading";
 import OfferSearchFilters from "./OfferSearchFilters";
-import FloatingScrollButton from "global/components/buttons/FloatingScrollButton";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
 import OfferListItem from "offer/components/OfferListItem";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
 import { Ico } from "global/icon.def";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path";
+import { AppConfig } from "@shared/AppConfig";
 
 const OfferSearchView: React.FC = () => {
 
@@ -70,7 +70,7 @@ const OfferSearchView: React.FC = () => {
 
             <FloatingActionButton onClick={() => {
                 navigate(Path.OFFERS_FILTERS_SEARCH)
-            }} icon={<Ico.SLIDERS size={32}/>}></FloatingActionButton>
+            }} icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE}/>}></FloatingActionButton>
 
         </div>
     );

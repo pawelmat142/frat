@@ -23,6 +23,7 @@ import { useIsDesktop } from "global/hooks/isMobile";
 import DictionaryDisplay from "global/components/DictionaryDisplay";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
+import { AppConfig } from "@shared/AppConfig";
 
 const WorkerView: React.FC = () => {
 
@@ -46,7 +47,10 @@ const WorkerView: React.FC = () => {
 
     const isMe = me?.uid === worker?.uid;
 
+    // TODO remove
     console.log(worker)
+
+
     useEffect(() => {
         const initWorker = async () => {
             if (displayName) {
@@ -210,10 +214,7 @@ const WorkerView: React.FC = () => {
 
     const range = DateRangeUtil.getFirstRange(worker);
 
-    console.log(range)
-    console.log(range)
-
-    const iconSize = `1.5rem`
+    const iconSize = `1rem`
 
     const isAnytime = worker.availabilityOption === WorkerAvailabilityOptions.ANYTIME;
 
@@ -236,7 +237,7 @@ const WorkerView: React.FC = () => {
         window.location.href = `tel:${worker.phoneNumber.prefix}${worker.phoneNumber.number}`;
     }
 
-    const listItemClassName = `flex gap-4 px-5 py-3 items-center`;
+    const listItemClassName = `flex gap-4 px-5 py-1 items-center s-font`;
 
     return (
         <div className="w-full">
@@ -247,9 +248,9 @@ const WorkerView: React.FC = () => {
                     <img src={worker.avatarRef?.url || AVATAR_MOCK} alt={worker.displayName} />
                 </div>
 
-                <div className="worker-title ">
-                    <div className="xl-font font-semibold mb-1">{worker.displayName}</div>
-                    <div className="secondary-text">{worker.email}</div>
+                <div className="worker-title">
+                    <div className="l-font font-semibold">{worker.displayName}</div>
+                    <div className="s-font secondary-text">{worker.email}</div>
                 </div>
 
             </div>
@@ -354,7 +355,7 @@ const WorkerView: React.FC = () => {
                 <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>
             </div>
 
-            <FloatingActionButton onClick={openChat} icon={<Ico.MSG size={32} />}></FloatingActionButton>
+            <FloatingActionButton onClick={openChat} icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}></FloatingActionButton>
         </div>
     );
 }

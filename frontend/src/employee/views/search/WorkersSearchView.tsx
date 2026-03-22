@@ -10,6 +10,7 @@ import FloatingActionButton from "global/components/buttons/FloatingActionButton
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../../path";
 import { Ico } from "global/icon.def";
+import { AppConfig } from "@shared/AppConfig";
 
 const WorkersSearchView: React.FC = () => {
 
@@ -72,7 +73,7 @@ const WorkersSearchView: React.FC = () => {
 
             <FloatingActionButton onClick={() => {
                 navigate(Path.WORKERS_FILTERS_SEARCH)
-            }} icon={<Ico.SLIDERS size={32}/>}></FloatingActionButton>
+            }} icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE}/>}></FloatingActionButton>
         </div>
 
     )
