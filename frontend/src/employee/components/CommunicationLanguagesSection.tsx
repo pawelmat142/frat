@@ -6,7 +6,7 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
-import { WorkerForm, WorkerFormStep1 } from "@shared/interfaces/WorkerProfileI";
+import { WorkerForm } from "@shared/interfaces/WorkerI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 
 interface Props {

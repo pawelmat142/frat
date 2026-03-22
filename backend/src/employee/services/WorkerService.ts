@@ -2,8 +2,8 @@
 import { ForbiddenException, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { WorkerRepo } from './WorkerRepo';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
-import { UserI } from '@shared/interfaces/UserI';
-import { WorkerAvailabilityOptions, WorkerFormDto, WorkerI, WorkerStatus, WorkerStatuses, WorkerWithCertificates } from '@shared/interfaces/WorkerProfileI';
+import { AvatarRef, UserI } from '@shared/interfaces/UserI';
+import { WorkerAvailabilityOptions, WorkerFormDto, WorkerI, WorkerSkills, WorkerStatus, WorkerStatuses, WorkerWithCertificates } from '@shared/interfaces/WorkerI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { WorkerUtil } from './WorkerUtil';
 import { DeepPartial } from 'typeorm';
@@ -144,6 +144,41 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         return result;
     }
 
+    public async updateSkills(user: UserI, skills: WorkerSkills): Promise<WorkerEntity> {
+        const profile = await this.workerRepo.findByUid(user.uid);
+        if (!profile) {
+            throw new ToastException('employeeProfile.notFound', this);
+        }
+        profile.skills = skills;
+        const result = await this.workerRepo.update(profile);
+        this.logger.log(`Updated skills for profile ID: ${profile.workerId}, total skills now: ${profile.skills.items.length}`);
+        return result;
+    }
+
+    public async addImage(user: UserI, imageRef: AvatarRef): Promise<WorkerEntity> {
+        const profile = await this.workerRepo.findByUid(user.uid);
+        if (!profile) {
+            throw new ToastException('employeeProfile.notFound', this);
+        }
+        profile.images = profile.images || [];
+        profile.images.push(imageRef);
+        const result = await this.workerRepo.update(profile);
+        this.logger.log(`Added image for profile ID: ${profile.workerId}, total images now: ${profile.images.length}`);
+        return result;
+    }
+
+    public async removeImage(user: UserI, publicId: string): Promise<WorkerEntity> {
+        const profile = await this.workerRepo.findByUid(user.uid);
+        if (!profile) {
+            throw new ToastException('employeeProfile.notFound', this);
+        }
+        profile.images = profile.images || [];
+        profile.images = profile.images.filter(image => image.publicId !== publicId);
+        const result = await this.workerRepo.update(profile);
+        this.logger.log(`Removed image for profile ID: ${profile.workerId}, total images now: ${profile.images.length}`);
+        return result;
+    }
+
 
     private async updateCertificatesValidityDates(uid: string, form: WorkerFormDto): Promise<boolean> {
         const result = await this.certificatesWorkerService.syncCertificates(uid, form);
@@ -214,9 +249,13 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
             communicationLanguages: form.communicationLanguages || [],
             avatarRef: form.avatarRef,
             bio: form.bio,
-            // TODO
-            categories: [],
+
             certificates: form.certificates || [],
+
+            categories: form.categories || [],
+            careerStartDate: form.careerStartDate,
+            maxAltitude: form.maxAltitude,
+            readyToTravel: form.readyToTravel,
         };
 
         this.fillLocationData(result, form);

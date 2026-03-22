@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { WorkerAvailabilityOptions, WorkerI, WorkerStatus } from "@shared/interfaces/WorkerProfileI";
+import { WorkerAvailabilityOptions, WorkerI, WorkerStatus } from "@shared/interfaces/WorkerI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { WorkerEntity } from "employee/model/WorkerEntity";
 import { ToastException } from "global/exceptions/ToastException";
@@ -146,6 +146,30 @@ export class WorkerRepo {
         if (ObjUtil.arrayChanged(worker.categories, newWorker.categories || [])) {
             this.logger.log(`Updating EmployeeProfile categories from ${worker.categories} to ${newWorker.categories}`);
             worker.categories = newWorker.categories || [];
+            updatedFlag = true;
+        }
+
+        if (worker.bio !== newWorker.bio) {
+            this.logger.log(`Updating EmployeeProfile bio from ${worker.bio} to ${newWorker.bio}`);
+            worker.bio = newWorker.bio || '';
+            updatedFlag = true;
+        }
+
+        if (worker.careerStartDate !== newWorker.careerStartDate) {
+            this.logger.log(`Updating EmployeeProfile careerStartDate from ${worker.careerStartDate} to ${newWorker.careerStartDate}`);
+            worker.careerStartDate = newWorker.careerStartDate || null;
+            updatedFlag = true;
+        }
+
+        if (worker.maxAltitude !== newWorker.maxAltitude) {
+            this.logger.log(`Updating EmployeeProfile maxAltitude from ${worker.maxAltitude} to ${newWorker.maxAltitude}`);
+            worker.maxAltitude = newWorker.maxAltitude || null;
+            updatedFlag = true;
+        }
+
+        if (worker.readyToTravel !== newWorker.readyToTravel) {
+            this.logger.log(`Updating EmployeeProfile readyToTravel from ${worker.readyToTravel} to ${newWorker.readyToTravel}`);
+            worker.readyToTravel = newWorker.readyToTravel || null;
             updatedFlag = true;
         }
 

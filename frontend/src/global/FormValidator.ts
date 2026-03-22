@@ -1,4 +1,4 @@
-import { DateRange } from "@shared/interfaces/WorkerProfileI";
+import { DateRange } from "@shared/interfaces/WorkerI";
 
 export abstract class FormValidator {
 

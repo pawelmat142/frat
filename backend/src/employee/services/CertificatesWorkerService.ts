@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CertificatesRepo } from './CertificatesRepo';
 import { CertificateEntity } from 'employee/model/CertificateEntity';
-import { WorkerFormDto } from '@shared/interfaces/WorkerProfileI';
+import { WorkerFormDto } from '@shared/interfaces/WorkerI';
 
 @Injectable()
 export class CertificatesWorkerService {

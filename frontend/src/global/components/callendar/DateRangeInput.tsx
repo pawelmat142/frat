@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import FormError from '../controls/FormError';
 import FloatingLabel from '../controls/FloatingLabel';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import { DateRange } from '@shared/interfaces/WorkerProfileI';
+import { DateRange } from '@shared/interfaces/WorkerI';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import DateRangePickerSheet from './DateRangePickerSheet';
 import { useTranslation } from 'react-i18next';

@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import FilterList from '@mui/icons-material/FilterList';
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import IconButton from "global/components/controls/IconButon";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { FaGlobe } from "react-icons/fa";
 import { Utils } from "global/utils/utils";
-import { DateRange } from "@shared/interfaces/WorkerProfileI";
+import { DateRange } from "@shared/interfaces/WorkerI";
 import { LocationCity, Place } from "@mui/icons-material";
 import Flags from "global/components/Flags";
 import { useNavigate } from "react-router-dom";
-import { Path } from "../../../path";
 import { useWorkersSearch } from "./WorkersSearchProvider";
 import { DateUtil } from "@shared/utils/DateUtil";
 import { Dictionaries, DictionaryUtil } from "@shared/utils/DictionaryUtil";

@@ -1,4 +1,4 @@
-import { ParsedPhoneNumber, Point } from "./WorkerProfileI";
+import { ParsedPhoneNumber, Point } from "./WorkerI";
 import { GeocodedPosition } from "./MapsInterfaces";
 
 export interface OfferI {

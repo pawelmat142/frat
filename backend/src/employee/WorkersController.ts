@@ -13,11 +13,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
-import { UserI, UserRoles } from '@shared/interfaces/UserI';
+import { AvatarRef, UserI, UserRoles } from '@shared/interfaces/UserI';
 import { WorkersService } from './services/WorkerService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
-import { WorkerFormDto, WorkerI, WorkerSearchRequest, WorkerSearchResponse, WorkerStatus, WorkerWithCertificates } from '@shared/interfaces/WorkerProfileI';
-import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
+import { WorkerFormDto, WorkerI, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerStatus, WorkerWithCertificates } from '@shared/interfaces/WorkerI';
 import { Serialize } from 'global/decorators/Serialize';
 import { WorkerEntity } from './model/WorkerEntity';
 import { SearchWorkersService } from './services/SearchWorkerService';
@@ -25,6 +24,7 @@ import { RolesGuard } from 'auth/guards/RolesGuard';
 import { Roles } from 'auth/decorators/RolesDecorator';
 import { Public } from 'auth/decorators/PublicDecorator';
 import { OptionalJwtUser } from 'auth/guards/OptionalJwtUser';
+import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
 
 @Controller('api/worker')
 @UseInterceptors(LogInterceptor)
@@ -118,7 +118,35 @@ export class WorkersController {
     return this.workersService.activation(user);
   }
 
+  @Put("/skills")
+  @UseGuards(JwtAuthGuard)
+  @Serialize(WorkerEntity)
+  updateSkills(
+    @CurrentUser() user: UserI,
+    @Body() skills: WorkerSkills
+  ): Promise<WorkerI> {
+    return this.workersService.updateSkills(user, skills);
+  }
 
+  @Post("/images")
+  @UseGuards(JwtAuthGuard)
+  @Serialize(WorkerEntity)
+  addImage(
+    @CurrentUser() user: UserI,
+    @Body() imageRef: AvatarRef
+  ): Promise<WorkerI> {
+    return this.workersService.addImage(user, imageRef);
+  }
+
+  @Delete("/images/:publicId")
+  @UseGuards(JwtAuthGuard)
+  @Serialize(WorkerEntity)
+  removeImage(
+    @CurrentUser() user: UserI,
+    @Param('publicId') publicId: string
+  ): Promise<WorkerI> {
+    return this.workersService.removeImage(user, publicId);
+  }
 
   // TODO przerobic na admin controller
   // ADMIN MANAGEMENT ACTIONS

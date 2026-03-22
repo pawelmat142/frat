@@ -4,7 +4,7 @@ import { NotificationI } from "./NotificationI";
 import { OfferI } from "./OfferI";
 import { SettingsI } from "./SettingsI";
 import { UserI } from "./UserI";
-import { WorkerWithCertificates } from "./WorkerProfileI";
+import { WorkerWithCertificates } from "./WorkerI";
 
 export interface UserContext {
     user: UserI

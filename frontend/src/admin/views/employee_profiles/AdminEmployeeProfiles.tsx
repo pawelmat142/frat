@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
-import { WorkerAvailabilityOptions, WorkerI } from "@shared/interfaces/WorkerProfileI";
+import { WorkerAvailabilityOptions, WorkerI } from "@shared/interfaces/WorkerI";
 import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdmin.service";
 import SelectedProfile from "./SelectedProfile";
 import { userAdminPanelContext } from "../AdminPanelProvider";

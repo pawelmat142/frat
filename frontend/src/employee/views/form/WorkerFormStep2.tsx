@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
-import { WorkerForm, WorkerLocationOption, WorkerLocationOptions } from "@shared/interfaces/WorkerProfileI";
+import { WorkerForm, WorkerLocationOption, WorkerLocationOptions } from "@shared/interfaces/WorkerI";
 import CountrySelector from "global/components/selector/CountrySelector";
 import { Position } from "@shared/interfaces/MapsInterfaces";
 import TabSwitcher, { TabSwitcherOption } from "employee/components/TabSwitcher";

@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { DateRangeI, WorkerAvailabilityOption, WorkerFormRangesOption, WorkerI, WorkerLocationOption, WorkerStatus, ParsedPhoneNumber, Point } from '@shared/interfaces/WorkerProfileI';
+import { DateRangeI, WorkerAvailabilityOption, WorkerFormRangesOption, WorkerI, WorkerLocationOption, WorkerStatus, ParsedPhoneNumber, Point, WorkerSkills } from '@shared/interfaces/WorkerI';
 import { AvatarRef } from '@shared/interfaces/UserI';
 import { Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
@@ -92,13 +92,31 @@ export class WorkerEntity implements WorkerI {
   @Column({ name: 'start_date', type: 'date', nullable: true })
   startDate: string | null;
   
-  @Column({ name: 'categories', type: 'text', array: true })
-  categories: string[];
+
   
   @Column({ name: 'certificates', type: 'text', array: true })
   certificates: string[];
   
   
+  // 
+  @Column({ name: 'categories', type: 'text', array: true, nullable: true })
+  categories?: string[];
+
+  @Column({ name: 'career_start_date', type: 'date', nullable: true })
+  careerStartDate?: string;
+
+  @Column({ name: 'max_altitude', type: 'int', nullable: true })
+  maxAltitude?: number; //[m]
+
+  @Column({ name: 'ready_to_travel', type: 'boolean', nullable: true })
+  readyToTravel?: boolean;
+
+  @Column({ name: 'skills', type: 'jsonb', nullable: true })
+  skills?: WorkerSkills;
+
+  @Column({ name: 'images', type: 'jsonb', nullable: true })
+  images?: AvatarRef[];
+
 
   // STATS
   @Expose()

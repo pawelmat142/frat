@@ -1,5 +1,5 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
-import { WorkerWithMutualFriends } from "@shared/interfaces/WorkerProfileI"
+import { WorkerWithMutualFriends } from "@shared/interfaces/WorkerI"
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";

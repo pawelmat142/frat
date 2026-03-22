@@ -1,4 +1,4 @@
-import { WorkerI, WorkerStatus } from '@shared/interfaces/WorkerProfileI';
+import { WorkerI, WorkerStatus } from '@shared/interfaces/WorkerI';
 import { httpClient } from 'global/services/http';
 
 export const EmployeeProfilesAdminService = {

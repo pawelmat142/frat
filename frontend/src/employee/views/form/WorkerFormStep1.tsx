@@ -5,7 +5,7 @@ import FloatingInput from "global/components/controls/FloatingInput";
 import { FormValidator } from "global/FormValidator";
 import {
     WorkerForm
-} from "@shared/interfaces/WorkerProfileI";
+} from "@shared/interfaces/WorkerI";
 import CommunicationLanguagesSection from "../../components/CommunicationLanguagesSection";
 import AvatarUploadField from "global/components/controls/AvatarUploadField";
 import PhoneNumberFloatingInput from "global/components/controls/PhoneNumberFloatingInput";

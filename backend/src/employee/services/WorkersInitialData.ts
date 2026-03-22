@@ -1,4 +1,4 @@
-import { DateRangeI, WorkerAvailabilityOptions, WorkerFormRangesOptions, WorkerI, WorkerLocationOptions, WorkerStatuses } from "@shared/interfaces/WorkerProfileI";
+import { DateRangeI, WorkerAvailabilityOptions, WorkerFormRangesOptions, WorkerI, WorkerLocationOptions, WorkerStatuses } from "@shared/interfaces/WorkerI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { DateUtil } from "@shared/utils/DateUtil";
 import { AdminUtil } from "admin/AdminUtil";

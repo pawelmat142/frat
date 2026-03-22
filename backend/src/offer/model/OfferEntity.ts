@@ -1,4 +1,4 @@
-import { ParsedPhoneNumber, Point } from "@shared/interfaces/WorkerProfileI";
+import { ParsedPhoneNumber, Point } from "@shared/interfaces/WorkerI";
 import { Currency, OfferI, OfferStatus } from "@shared/interfaces/OfferI";
 import { Expose } from "class-transformer";
 import { Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";

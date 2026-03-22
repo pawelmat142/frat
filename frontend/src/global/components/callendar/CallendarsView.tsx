@@ -1,4 +1,4 @@
-import { DateRange } from "@shared/interfaces/WorkerProfileI";
+import { DateRange } from "@shared/interfaces/WorkerI";
 import React, { useState, useEffect, useRef } from "react";
 import Button from "global/components/controls/Button";
 import { useTranslation } from "react-i18next";

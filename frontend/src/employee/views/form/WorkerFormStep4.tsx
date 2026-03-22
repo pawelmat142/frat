@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
-import { WorkerForm } from "@shared/interfaces/WorkerProfileI";
+import { WorkerForm } from "@shared/interfaces/WorkerI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import DateInputViewSelector from "global/components/callendar/DateInputViewSelector";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";

@@ -1,4 +1,4 @@
-import { DateRange } from '@shared/interfaces/WorkerProfileI';
+import { DateRange } from '@shared/interfaces/WorkerI';
 import CloseBtn from 'global/components/CloseBtn';
 import Button from 'global/components/controls/Button';
 import { BtnMode, BtnModes } from 'global/interface/controls.interface';

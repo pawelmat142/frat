@@ -1,4 +1,4 @@
-import { DateRange } from "@shared/interfaces/WorkerProfileI";
+import { DateRange } from "@shared/interfaces/WorkerI";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import CallendarDaysHeader from "./CallendarDaysHeader";

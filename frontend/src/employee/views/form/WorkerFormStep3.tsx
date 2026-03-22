@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { DateRange, WorkerAvailabilityOption, WorkerAvailabilityOptions, WorkerForm, WorkerFormRangesOption, WorkerFormRangesOptions } from "@shared/interfaces/WorkerProfileI";
+import { DateRange, WorkerAvailabilityOption, WorkerAvailabilityOptions, WorkerForm, WorkerFormRangesOption, WorkerFormRangesOptions } from "@shared/interfaces/WorkerI";
 import { FormValidator } from "global/FormValidator";
 import TabSwitcher, { TabSwitcherOption } from "../../components/TabSwitcher";
 import IconButton from "global/components/controls/IconButon";

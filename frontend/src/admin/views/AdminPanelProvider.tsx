@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TranslationListDto } from "@shared/dto/TranslationListDto";
 import { TranslationAdminService } from "admin/services/TranslationAdmin.service";
 import { TranslationI } from "@shared/interfaces/TranslationI";
-import { WorkerI } from "@shared/interfaces/WorkerProfileI";
+import { WorkerI } from "@shared/interfaces/WorkerI";
 import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdmin.service";
 import { OfferI } from "@shared/interfaces/OfferI";
 import { OffersAdminService } from "admin/services/OffersAdmin.service";

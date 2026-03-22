@@ -15,7 +15,7 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { UserManagementService } from "user/services/UserManagementService";
 import { FirebaseAuth } from "auth/services/FirebaseAuth";
 import { ChatService } from "chat/services/ChatService";
-import { WorkerI } from "@shared/interfaces/WorkerProfileI";
+import { WorkerI } from "@shared/interfaces/WorkerI";
 import { OfferI } from "@shared/interfaces/OfferI";
 import { WorkerService } from "employee/services/WorkerService";
 import { OffersService } from "offer/services/OffersService";

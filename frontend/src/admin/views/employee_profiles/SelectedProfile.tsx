@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { WorkerI, WorkerStatuses } from "@shared/interfaces/WorkerProfileI";
+import { WorkerI, WorkerStatuses } from "@shared/interfaces/WorkerI";
 import Button from "global/components/controls/Button";
 import { EmployeeProfilesAdminService } from "admin/services/EmployeeProfilesAdmin.service";
 import { userAdminPanelContext } from "../AdminPanelProvider";

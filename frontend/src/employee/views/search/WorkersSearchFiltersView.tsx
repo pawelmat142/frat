@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import Loading from "global/components/Loading";
 import { WorkersSearchContextProps, WorkerDefaultFilters, useWorkersSearch } from "./WorkersSearchProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import { DateRange, WorkerSearchSortOptions, WorkerSearchFilters } from "@shared/interfaces/WorkerProfileI";
+import { DateRange, WorkerSearchSortOptions, WorkerSearchFilters } from "@shared/interfaces/WorkerI";
 import { BtnModes, BtnSizes, SelectorItem } from "global/interface/controls.interface";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 import { Controller, useForm } from "react-hook-form";

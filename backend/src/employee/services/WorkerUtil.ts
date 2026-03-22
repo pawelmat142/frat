@@ -1,4 +1,4 @@
-import { DateRangeI, WorkerAvailabilityOptions, WorkerFormDto, WorkerLocationOptions, WorkerStatus } from "@shared/interfaces/WorkerProfileI";
+import { DateRangeI, WorkerAvailabilityOptions, WorkerFormDto, WorkerLocationOptions, WorkerStatus } from "@shared/interfaces/WorkerI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import { WorkerEntity } from "employee/model/WorkerEntity";

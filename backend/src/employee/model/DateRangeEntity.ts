@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { WorkerEntity } from "./WorkerEntity";
-import { DateRangeI } from "@shared/interfaces/WorkerProfileI";
+import { DateRangeI } from "@shared/interfaces/WorkerI";
 
 /**
  * Encja dla pojedynczego zakresu dostępności pracownika

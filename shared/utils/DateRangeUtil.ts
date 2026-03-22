@@ -1,4 +1,4 @@
-import { DateRange, DateRangeI, WorkerI } from "../interfaces/WorkerProfileI";
+import { DateRange, DateRangeI, WorkerI } from "../interfaces/WorkerI";
 import { DateUtil } from "./DateUtil";
 
 export abstract class DateRangeUtil {

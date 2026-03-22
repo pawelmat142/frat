@@ -1,4 +1,4 @@
-import { WorkerI } from "@shared/interfaces/WorkerProfileI";
+import { WorkerI } from "@shared/interfaces/WorkerI";
 import React from "react";
 import { WorkerUtil } from "@shared/utils/WorkerUtil";
 import { useTranslation } from "react-i18next";

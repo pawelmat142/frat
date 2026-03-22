@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { WorkerService } from "employee/services/WorkerService";
 import Loading from "global/components/Loading";
 import { useNavigate, useParams } from "react-router-dom";
-import { WorkerAvailabilityOptions, WorkerI, WorkerStatuses } from "@shared/interfaces/WorkerProfileI";
+import { WorkerAvailabilityOptions, WorkerI, WorkerStatuses } from "@shared/interfaces/WorkerI";
 import { useWorkersSearch } from "../search/WorkersSearchProvider";
 import { useTranslation } from "react-i18next";
 import { useGlobalContext } from "global/providers/GlobalProvider";
