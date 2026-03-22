@@ -316,7 +316,7 @@ const WorkerView: React.FC = () => {
                         <Ico.LANGUAGE size={iconSize}></Ico.LANGUAGE>
                         <span>
                             <span>Języki: </span>
-                            {worker.communicationLanguages.map(lang => <DictionaryDisplay dictionary="LANGUAGES" value={lang}></DictionaryDisplay>)}
+                            {worker.communicationLanguages.map(lang => <DictionaryDisplay key={lang} dictionary="LANGUAGES" value={lang}></DictionaryDisplay>)}
                         </span>
                     </div>
                 )}

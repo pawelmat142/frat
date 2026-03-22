@@ -70,7 +70,7 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                             className="w-full"
                             valueInput={field.value}
                             onSelectMulti={items => field.onChange(items)}
-                            label={t("employeeProfile.form.certificates")}
+                            label={t("employeeProfile.certificates")}
                             code="CERTIFICATES"
                             fullWidth
                             required

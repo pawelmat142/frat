@@ -176,6 +176,8 @@
       "settings": "Settings",
       "noResults": "No results found... ;(",
       "endOfResults": "No more results to display.",
+      "yes": "Yes",
+      "no": "No",
       "networkError": "Network error"
     },
     "header": {
@@ -518,33 +520,40 @@
     },
     "employeeProfile": {
       "edit": "Edit employee profile",
+      "certificates": "Certificates",
       "form": {
         "city": "City",
         "email": "Email",
-        "step1": {
+        "personalData": {
           "label": "Step 1",
           "title": "Personal Information"
         },
-        "step2": {
+        "location": {
           "info": "*Providing an approximate location is required for the search functionality and helps others find your profile.",
           "label": "Step 2",
           "title": "Location",
           "chooseOptions": "Choose option:"
         },
-        "step3": {
+        "availability": {
           "label": "Step 3",
           "title": "Availability"
         },
-        "step4": {
+        "certificates": {
           "label": "Step 4",
           "title": "Certificates"
+        },
+        "career": {
+          "title": "Career",
+          "categories": "Work categories",
+          "careerStartDate": "Career start date",
+          "maxAltitude": "Maximum working altitude (m)",
+          "readyToTravel": "Ready to travel"
         },
         "title": "Employee Profile Form",
         "radius": "Radius",
         "address": "Address",
         "freeText": "Search...",
         "fullName": "Full name",
-        "location": "Location",
         "experience": "Experience",
         "addLanguage": "Add language",
         "phoneNumber": "Phone number",
@@ -558,7 +567,6 @@
           "START_FROM_DESC": "Availability: Soonest first"
         },
         "submitError": "Please fill in all required fields correctly",
-        "certificates": "Certificates",
         "confirmTitle": "Confirm submission",
         "rangesOption": {
           "AVAILABLE_ON": {

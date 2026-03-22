@@ -23,6 +23,7 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 import WorkerFormStep3 from "./WorkerFormStepAvailability";
 import WorkerFormStepCertificates from "./WorkerFormStepCertificates";
+import WorkerFormStepCareer from "./WorkerFormStepCareer";
 import { UserProviders } from "@shared/interfaces/UserI";
 import { isOneOf } from "@shared/utils/util";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
@@ -60,12 +61,16 @@ const WorkerFormView: React.FC = () => {
                 email: "",
                 communicationLanguages: [""]
             },
+            career: {
+                categories: [],
+                careerStartDate: undefined,
+                maxAltitude: undefined,
+                readyToTravel: undefined,
+            },
             location: {
                 locationOption: WorkerLocationOptions.POSITION,
                 countryCode: undefined,
                 geocodedPosition: null,
-
-
             },
             availability: {
                 availabilityOption: WorkerAvailabilityOptions.FROM_DATE,
@@ -197,6 +202,12 @@ const WorkerFormView: React.FC = () => {
                 rangesOption: worker.rangesOption,
                 startDate: worker.startDate || null,
             },
+            career: {
+                categories: worker.categories || [],
+                careerStartDate: worker.careerStartDate,
+                maxAltitude: worker.maxAltitude,
+                readyToTravel: worker.readyToTravel,
+            },
             certificates: {
                 certificates: worker.certificates || [],
                 certificateDates: worker.certs?.reduce((acc, cert) => {
@@ -273,6 +284,8 @@ const WorkerFormView: React.FC = () => {
         switch (stepKey) {
             case 'personalData':
                 return <WorkerFormpersonalData formRef={formRef} />;
+            case 'career':
+                return <WorkerFormStepCareer formRef={formRef} />;
             case 'location':
                 return <WorkerFormStepLocation formRef={formRef} initPosition={resetPositionFormData} />;
             case 'availability':

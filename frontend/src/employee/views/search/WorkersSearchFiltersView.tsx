@@ -244,7 +244,7 @@ const WorkersSearchFiltersView: React.FC = () => {
                             onSelectMulti={items => {
                                 field.onChange(items);
                             }}
-                            label={t("employeeProfile.form.certificates")}
+                            label={t("employeeProfile.certificates")}
                             code="CERTIFICATES"
                             fullWidth
                         />

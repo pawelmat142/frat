@@ -17,7 +17,7 @@ interface Props {
 }
 
 const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, watch, formState }) => {
-  const communicationLanguages: string[] = watch("step1.communicationLanguages");
+  const communicationLanguages: string[] = watch("personalData.communicationLanguages");
 
   const { t } = useTranslation();
 
@@ -29,7 +29,7 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
         {communicationLanguages.map((lang, idx) => (
           <div key={idx} className="flex gap-2 items-center">
             <Controller
-              name={`step1.communicationLanguages.${idx}` as const}
+              name={`personalData.communicationLanguages.${idx}` as const}
               control={control}
               rules={required}
               render={({ field }) => <DictionarySelector
@@ -54,7 +54,7 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
                 mode={BtnModes.ERROR_TXT}
                 onClick={() => {
                   setValue(
-                    "step1.communicationLanguages",
+                    "personalData.communicationLanguages",
                     communicationLanguages.filter((_, i) => i !== idx)
                   );
                 }}
@@ -68,7 +68,7 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
         size={BtnSizes.SMALL}
         className="ml-auto"
         onClick={() => {
-          setValue("step1.communicationLanguages", [...communicationLanguages, '']);
+          setValue("personalData.communicationLanguages", [...communicationLanguages, '']);
         }}
       >
         {t("employeeProfile.form.addLanguage")}

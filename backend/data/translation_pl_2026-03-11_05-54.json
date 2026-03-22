@@ -176,6 +176,8 @@
       "settings": "Ustawienia",
       "noResults": "Brak wyników ;( ",
       "endOfResults": "Brak więcej wyników do wyświetlenia.",
+      "yes": "Tak",
+      "no": "Nie",
       "networkError": "Błąd sieci"
     },
     "header": {
@@ -511,33 +513,40 @@
     },
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",
+      "certificates": "Certyfikaty",
       "form": {
         "city": "Miasto",
         "email": "Email",
-        "step1": {
+        "personalData": {
           "label": "Krok 1",
           "title": "Dane osobowe"
         },
-        "step2": {
+        "location": {
           "info": "*Podanie orientacyjnej lokalizacji jest wymagane do działania wyszukiwarki i ułatwia innym znalezienie Twojego profilu.",
           "label": "Krok 2",
           "title": "Lokalizacja",
           "chooseOptions": "Wybierz opcje:"
         },
-        "step3": {
+        "availability": {
           "label": "Krok 3",
           "title": "Dostępność"
         },
-        "step4": {
+        "certificates": {
           "label": "Krok 4",
           "title": "Certyfikaty"
+        },
+        "career": {
+          "title": "Kariera",
+          "categories": "Kategorie pracy",
+          "careerStartDate": "Data rozpoczęcia kariery",
+          "maxAltitude": "Maksymalna wysokość pracy (m)",
+          "readyToTravel": "Gotowy do podróży"
         },
         "title": "Formularz profilu pracownika",
         "radius": "Promień",
         "address": "Adres",
         "freeText": "Szukaj...",
         "fullName": "Imię i nazwisko",
-        "location": "Lokalizacja",
         "experience": "Doświadczenie",
         "addLanguage": "Dodaj język",
         "phoneNumber": "Numer telefonu",
@@ -551,7 +560,6 @@
           "START_FROM_DESC": "Dostępność: Najbliższa"
         },
         "submitError": "Proszę poprawnie wypełnić wszystkie wymagane pola",
-        "certificates": "Certyfikaty",
         "confirmTitle": "Potwierdź zapisanie profilu",
         "rangesOption": {
           "AVAILABLE_ON": {
