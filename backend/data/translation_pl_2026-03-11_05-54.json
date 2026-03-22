@@ -193,7 +193,8 @@
       "fetchLocationError": "Nie można znaleźć lokalizacji.",
       "availableAnytimeShort": "Od zaraz",
       "call": "Zadzwoń",
-      "away": "stąd"
+      "away": "stąd",
+      "languages": "Języki"
     },
     "report": {
       "send": "Wyślij",
@@ -515,6 +516,9 @@
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",
       "certificates": "Certyfikaty",
+      "worksInIndurstryYears": "Pracuje w branży od {{years}} lat",
+      "worksInIndurstryMonths": "Pracuje w branży od {{months}} miesięcy",
+      "skills": "Umiejętności / doświadczenie",
       "form": {
         "city": "Miasto",
         "email": "Email",
@@ -542,7 +546,8 @@
           "categories": "Kategorie pracy",
           "careerStartDate": "Data rozpoczęcia kariery",
           "maxAltitude": "Maksymalna wysokość pracy (m)",
-          "readyToTravel": "Gotowy do podróży"
+          "maxAltitudeShort": "Maksymalna wysokość",
+          "readyToTravel": "Gotowość do wyjazdów"
         },
         "title": "Formularz profilu pracownika",
         "radius": "Promień",

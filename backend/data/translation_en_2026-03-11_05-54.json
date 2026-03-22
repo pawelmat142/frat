@@ -193,7 +193,8 @@
       "fetchLocationError": "Could not find location.",
       "availableAnytimeShort": "Anytime",
       "call": "Call",
-      "away": "away"
+      "away": "away",
+      "languages": "Languages"
     },
     "report": {
       "send": "Send",
@@ -522,6 +523,9 @@
     "employeeProfile": {
       "edit": "Edit employee profile",
       "certificates": "Certificates",
+      "worksInIndurstryYears": "Works in the industry for {{years}} years",
+      "worksInIndurstryMonths": "Works in the industry for {{months}} months",
+      "skills": "Skills / experience",
       "form": {
         "optionalinfo": "Optional information - we will show it on your profile if you fill it out.",
         "city": "City",
@@ -549,6 +553,7 @@
           "categories": "Work categories",
           "careerStartDate": "Career start date",
           "maxAltitude": "Maximum working altitude (m)",
+          "maxAltitudeShort": "Max altitude",
           "readyToTravel": "Ready to travel"
         },
         "title": "Employee Profile Form",

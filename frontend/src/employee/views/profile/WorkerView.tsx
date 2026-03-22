@@ -252,6 +252,23 @@ const WorkerView: React.FC = () => {
         window.location.href = `tel:${worker.phoneNumber.prefix}${worker.phoneNumber.number}`;
     }
 
+    const getWorksInIndustry = () => {
+        if (!worker.careerStartDate) {
+            return null;
+        }
+        const start = new Date(worker.careerStartDate);
+        const now = new Date();
+        const years = now.getFullYear() - start.getFullYear();
+
+        if (years > 2) {
+            return t('employeeProfile.career.worksInIndurstryYears', { years });
+        }
+        const months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+        return t('employeeProfile.career.worksInIndurstryMonths', { months });
+    }
+
+    const worksInIndurstry = getWorksInIndustry();
+
     const listItemClassName = `flex gap-4 px-5 py-1 items-center s-font`;
 
     return (
@@ -311,27 +328,24 @@ const WorkerView: React.FC = () => {
                     </span>
                 </div>
 
-                {/* TODO model */}
-                {/* TODO dodac krok do wizarda */}
-                {/* TODO translacje */}
-                <div className={listItemClassName}>
+                {!!worksInIndurstry && (<div className={listItemClassName}>
                     <Ico.CLOCK size={iconSize}></Ico.CLOCK>
-                    <span>W branży od: 8 lat</span>
-                </div>
-                <div className={listItemClassName}>
+                    <span>{worksInIndurstry}</span>
+                </div>)}
+                {worker.maxAltitude && (<div className={listItemClassName}>
                     <Ico.RULER size={iconSize}></Ico.RULER>
-                    <span>Max wysokość: 180 m</span>
-                </div>
-                <div className={listItemClassName}>
+                    <span>{t('employeeProfile.form.career.maxAltitudeShort')}: {worker.maxAltitude} [m]</span>
+                </div>)}
+                {typeof worker.readyToTravel === 'boolean' && (<div className={listItemClassName}>
                     <Ico.COMPASS size={iconSize}></Ico.COMPASS>
-                    <span>Gotowość do wyjazdów: TAK</span>
-                </div>
+                    <span>{t('employeeProfile.form.career.readyToTravel')}: {worker.readyToTravel ? t('common.yes') : t('common.no')}</span>
+                </div>)}
 
                 {!!worker.communicationLanguages.length && (
                     <div className={listItemClassName}>
                         <Ico.LANGUAGE size={iconSize}></Ico.LANGUAGE>
                         <span>
-                            <span>Języki: </span>
+                            <span>{t('others.languages')}: </span>
                             {worker.communicationLanguages.map(lang => <DictionaryDisplay key={lang} dictionary="LANGUAGES" value={lang}></DictionaryDisplay>)}
                         </span>
                     </div>
@@ -341,7 +355,7 @@ const WorkerView: React.FC = () => {
 
             {worker.certificates?.length && (
                 <div className="mb-10 px-5">
-                    <div className="secondary-text">Uprawnienia:</div>
+                    <div className="secondary-text">{t('employeeProfile.form.certificates.title')}</div>
 
                     {worker.certificates.map((cert, index) => (<div className="pl-5 pt-3 flex items-center gap-2" key={index}>
                         <Ico.CHECK className="secondary-text"></Ico.CHECK>
@@ -353,7 +367,7 @@ const WorkerView: React.FC = () => {
 
             {/* TODO show if worker experience exists */}
             <div className="mb-10 px-5">
-                <div className="secondary-text">Umiejętności / doświadczenie:</div>
+                <div className="secondary-text">{t('employeeProfile.skills')}</div>
                 {[
                     "mycie elewacji",
                     "montaż reklam",
