@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { WorkerAvailabilityOptions, WorkerI, WorkerStatus } from "@shared/interfaces/WorkerI";
+import { WorkerAvailabilityOptions, WorkerI, WorkerSkills, WorkerStatus } from "@shared/interfaces/WorkerI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { WorkerEntity } from "employee/model/WorkerEntity";
 import { ToastException } from "global/exceptions/ToastException";
@@ -164,6 +164,12 @@ export class WorkerRepo {
         if (worker.maxAltitude !== newWorker.maxAltitude) {
             this.logger.log(`Updating EmployeeProfile maxAltitude from ${worker.maxAltitude} to ${newWorker.maxAltitude}`);
             worker.maxAltitude = newWorker.maxAltitude || null;
+            updatedFlag = true;
+        }
+
+        if (JSON.stringify(worker.skills) !== JSON.stringify(newWorker.skills)) {
+            this.logger.log(`Updating EmployeeProfile skills from ${JSON.stringify(worker.skills)} to ${JSON.stringify(newWorker.skills)}`);
+            worker.skills = newWorker.skills as WorkerSkills
             updatedFlag = true;
         }
 

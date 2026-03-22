@@ -20,6 +20,10 @@ export const STATES = (navigate: NavigateFunction) => {
             leftBtn: <HeaderBackBtn />,
             title: 'employeeProfile.form.title',
         },
+        [Path.WORKER_SKILLS_FORM]: {
+            leftBtn: <HeaderBackBtn />,
+            title: 'employeeProfile.editSkills',
+        },
         [Path.SIGN_IN]: {
             leftBtn: <HeaderBackBtn />,
             title: 'signin.title',

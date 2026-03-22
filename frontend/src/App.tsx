@@ -21,6 +21,7 @@ import ForgotPassword from 'auth/views/ForgotPassword';
 import { ProtectedRoute } from 'auth/ProtectedRoute';
 import { UserRoles } from '@shared/interfaces/UserI';
 import WorkerFormView from 'employee/views/form/WorkerFormView';
+import WorkerSkillsFormView from 'employee/views/form/WorkerSkillsFormView';
 import AdminFeedbacks from 'admin/views/feedback/AdminFeedbacks';
 import WorkersSearchView from 'employee/views/search/WorkersSearchView';
 import AdminEmployeeProfiles from 'admin/views/employee_profiles/AdminEmployeeProfiles';
@@ -90,6 +91,7 @@ const App: React.FC = () => {
                 <Route path={Path.WORKERS_SEARCH} element={<PageWrapper direction={1}><WorkersSearchView /></PageWrapper>} />
                 <Route path={Path.WORKERS_FILTERS_SEARCH} element={<PageWrapper direction={1}><WorkersSearchFiltersView /></PageWrapper>} />
                 <Route path={Path.WORKER_FORM} element={<PageWrapper direction={1}><ProtectedRoute><WorkerFormView /></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.WORKER_SKILLS_FORM} element={<PageWrapper direction={1}><ProtectedRoute><WorkerSkillsFormView /></ProtectedRoute></PageWrapper>} />
 
                 {/* OFFERS */}
                 <Route path={Path.OFFER_FORM} element={<PageWrapper direction={1}><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />

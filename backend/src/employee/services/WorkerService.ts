@@ -144,15 +144,14 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         return result;
     }
 
-    public async updateSkills(user: UserI, skills: WorkerSkills): Promise<WorkerEntity> {
+    public async updateSkills(user: UserI, skills: WorkerSkills): Promise<void> {
         const profile = await this.workerRepo.findByUid(user.uid);
         if (!profile) {
             throw new ToastException('employeeProfile.notFound', this);
         }
         profile.skills = skills;
-        const result = await this.workerRepo.update(profile);
+        await this.workerRepo.update(profile);
         this.logger.log(`Updated skills for profile ID: ${profile.workerId}, total skills now: ${profile.skills.items.length}`);
-        return result;
     }
 
     public async addImage(user: UserI, imageRef: AvatarRef): Promise<WorkerEntity> {

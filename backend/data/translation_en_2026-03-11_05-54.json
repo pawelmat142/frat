@@ -526,6 +526,9 @@
       "worksInIndurstryYears": "Works in the industry for {{years}} years",
       "worksInIndurstryMonths": "Works in the industry for {{months}} months",
       "skills": "Skills / experience",
+      "editSkills": "Edit skills / experience",
+      "addSkill": "Add element",
+      "skill": "Skill",
       "form": {
         "optionalinfo": "Optional information - we will show it on your profile if you fill it out.",
         "city": "City",

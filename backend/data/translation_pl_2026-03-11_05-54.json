@@ -519,6 +519,9 @@
       "worksInIndurstryYears": "Pracuje w branży od {{years}} lat",
       "worksInIndurstryMonths": "Pracuje w branży od {{months}} miesięcy",
       "skills": "Umiejętności / doświadczenie",
+      "editSkills": "Edytuj umiejętności / doświadczenie",
+      "addSkill": "Dodaj element",
+      "skill": "Umiejętność",
       "form": {
         "city": "Miasto",
         "email": "Email",

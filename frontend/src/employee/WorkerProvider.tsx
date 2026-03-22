@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { WorkerWithCertificates } from "@shared/interfaces/WorkerI";
+import { WorkerI, WorkerWithCertificates } from "@shared/interfaces/WorkerI";
 import { WorkerService } from "employee/services/WorkerService";
 import { useUserContext } from "user/UserProvider";
 

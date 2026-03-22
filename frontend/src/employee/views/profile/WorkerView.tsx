@@ -25,6 +25,7 @@ import FloatingActionButton from "global/components/buttons/FloatingActionButton
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { AppConfig } from "@shared/AppConfig";
 import { PositionUtil } from "@shared/utils/PositionUtil";
+import WorkerSkillsSection from "employee/components/WorkerSkillsSection";
 
 const WorkerView: React.FC = () => {
 
@@ -229,7 +230,6 @@ const WorkerView: React.FC = () => {
 
     const range = DateRangeUtil.getFirstRange(worker);
 
-    const iconSize = `1rem`
 
     const isAnytime = worker.availabilityOption === WorkerAvailabilityOptions.ANYTIME;
 
@@ -261,15 +261,16 @@ const WorkerView: React.FC = () => {
         const years = now.getFullYear() - start.getFullYear();
 
         if (years > 2) {
-            return t('employeeProfile.career.worksInIndurstryYears', { years });
+            return t('employeeProfile.worksInIndurstryYears', { years });
         }
         const months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
-        return t('employeeProfile.career.worksInIndurstryMonths', { months });
+        return t('employeeProfile.worksInIndurstryMonths', { months });
     }
 
     const worksInIndurstry = getWorksInIndustry();
 
-    const listItemClassName = `flex gap-4 px-5 py-1 items-center s-font`;
+    const listItemClassName = `flex gap-4 px-5 py-2 items-center s-font`;
+    const iconSize = `1.2rem`
 
     return (
         <div className="w-full">
@@ -365,20 +366,7 @@ const WorkerView: React.FC = () => {
                 </div>
             )}
 
-            {/* TODO show if worker experience exists */}
-            <div className="mb-10 px-5">
-                <div className="secondary-text">{t('employeeProfile.skills')}</div>
-                {[
-                    "mycie elewacji",
-                    "montaż reklam",
-                    "serwis turbin wiatrowych",
-                    "spawanie na wysokości"
-                ].map((cert, index) => (<div className="pl-5 pt-2 flex items-center gap-2" key={index}>
-                    <Ico.CHECK className="secondary-text"></Ico.CHECK>
-                    <span className="">{cert}</span>
-                </div>))}
-
-            </div>
+            <WorkerSkillsSection worker={worker} />
 
             <div className="px-5 mb-10">
                 <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>

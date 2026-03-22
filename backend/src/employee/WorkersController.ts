@@ -124,7 +124,7 @@ export class WorkersController {
   updateSkills(
     @CurrentUser() user: UserI,
     @Body() skills: WorkerSkills
-  ): Promise<WorkerI> {
+  ): Promise<void> {
     return this.workersService.updateSkills(user, skills);
   }
 

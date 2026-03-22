@@ -18,6 +18,7 @@ export abstract class Path {
     // EMPLOYEE PROFILES
     public static readonly WORKER = '/worker/:displayName';
     public static readonly WORKER_FORM = '/worker-form';
+    public static readonly WORKER_SKILLS_FORM = '/worker-skills-form';
     public static readonly WORKERS_SEARCH = '/workers-search';    
     public static readonly WORKERS_FILTERS_SEARCH = `/workers-filters-search`;
 
