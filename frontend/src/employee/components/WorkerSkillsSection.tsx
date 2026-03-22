@@ -31,7 +31,7 @@ const WorkerSkillsSection: React.FC<Props> = ({ worker }) => {
 
 
             {worker.skills?.items.map((skill, index) => (
-                <div className="pl-5 pt-2 flex items-center gap-2" key={skill.code || index}>
+                <div className="pl-5 pt-2 flex items-center gap-2" key={index}>
                     <Ico.CHECK className="secondary-text" />
                     <span>{skill.name}</span>
                 </div>

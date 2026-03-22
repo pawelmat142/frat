@@ -4,11 +4,12 @@ import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
 import { WorkerForm } from "@shared/interfaces/WorkerI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
-import DateInputViewSelector from "global/components/callendar/DateInputViewSelector";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { DictionaryService } from "global/services/DictionaryService";
 import Loading from "global/components/Loading";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
+import FloatingDateInput, { datepickerWithDaysConfig } from "global/components/callendar/FloatingDateInput";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -86,16 +87,21 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                         name={`certificates.certificateDates.${cert.code}`}
                         control={control}
                         rules={required}
-                        render={({ field }) => (
-                            <DateInputViewSelector
-                                label={`${t('employeeProfile.form.certificateValidityDate')} ${t(DictionaryUtil.getTranslationKey('CERTIFICATES', cert.code))}`}
-                                className="w-full"
-                                value={field.value}
-                                onChange={date => field.onChange(date)}
-                                required
-                                error={formState.errors?.certificates?.certificateDates?.[cert.code]?.message}
-                            />
-                        )}
+                        render={({ field }) => {
+                            return (
+                                <FloatingDateInput
+                                    label={`${t('employeeProfile.form.certificateValidityDate')} ${t(DictionaryUtil.getTranslationKey('CERTIFICATES', cert.code))}`}
+                                    className="w-full"
+                                    value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
+                                    onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? undefined)}
+                                    required
+                                    error={formState.errors?.certificates?.certificateDates?.[cert.code]?.message
+                                        ? { message: formState.errors.certificates.certificateDates[cert.code]!.message }
+                                        : undefined}
+                                    config={datepickerWithDaysConfig}
+                                />
+                            )
+                        }}
                     />
                 ))}
             </div>

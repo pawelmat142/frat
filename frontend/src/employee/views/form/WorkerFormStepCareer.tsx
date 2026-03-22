@@ -7,6 +7,8 @@ import DateInputViewSelector from "global/components/callendar/DateInputViewSele
 import FloatingInput from "global/components/controls/FloatingInput";
 import BooleanSelector from "global/components/controls/BooleanSelector";
 import { FormValidator } from "global/FormValidator";
+import FloatingDateInput from "global/components/callendar/FloatingDateInput";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -45,11 +47,11 @@ const WorkerFormStepCareer: React.FC<Props> = ({ formRef }) => {
                     name="career.careerStartDate"
                     control={control}
                     render={({ field }) => (
-                        <DateInputViewSelector
+                        <FloatingDateInput
                             label={t("employeeProfile.form.career.careerStartDate")}
                             className="w-full"
-                            value={field.value ?? null}
-                            onChange={date => field.onChange(date ?? undefined)}
+                            value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
+                            onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? undefined)}
                         />
                     )}
                 />

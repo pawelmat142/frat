@@ -5,10 +5,38 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import FormError from '../controls/FormError';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import DatePickerSheet from './DatePickerSheet';
+import { useTranslation } from 'react-i18next';
+
+export const DatePickerViews = {
+    YEAR: 'year',
+    MONTH: 'month',
+    DAY: 'day'
+} as const;
+
+export type DatePickerView = typeof DatePickerViews[keyof typeof DatePickerViews];
+
+export interface DatePickerConfig {
+    startView: DatePickerView;
+    disableSelectDays: boolean
+    disableShowDays: boolean;
+}
+
+export const defaultDatePickerConfig: DatePickerConfig = {
+    startView: DatePickerViews.YEAR,
+    disableSelectDays: true,
+    disableShowDays: true,
+}
+
+export const datepickerWithDaysConfig: DatePickerConfig = {
+    startView: DatePickerViews.YEAR,
+    disableSelectDays: false,
+    disableShowDays: false,
+}
 
 interface DateInputProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: Date | null;
     onChange?: (date: Date | null) => void;
+    config?: DatePickerConfig;
 }
 
 const FloatingDateInput: React.FC<DateInputProps> = ({
@@ -24,9 +52,11 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     center,
     onChange,
     error,
+    config = defaultDatePickerConfig
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomSheetCtx = useBottomSheet();
+    const { i18n } = useTranslation();
 
     let myClass = `  ${className}`;
     if (fullWidth) {
@@ -38,12 +68,12 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
         myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
     }
     if (error) {
-        myClass += ' pp-control-error';   
+        myClass += ' pp-control-error';
     }
 
     const handleInputClick = () => {
         if (disabled) return;
-        
+
         bottomSheetCtx?.open({
             title: label,
             showClose: true,
@@ -55,12 +85,17 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
                         bottomSheetCtx.close();
                     }}
                     disabled={disabled}
+                    config={config}
                 />
             )
         });
     };
 
-    const _value = value instanceof Date ? value.toLocaleDateString() : ''
+    const _value = value instanceof Date
+        ? config.disableShowDays
+            ? value.toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' })
+            : value.toLocaleDateString(i18n.language, { month: 'long', year: 'numeric', day: 'numeric' })
+        : ''
 
     const isLabelFloating = !!_value;
 

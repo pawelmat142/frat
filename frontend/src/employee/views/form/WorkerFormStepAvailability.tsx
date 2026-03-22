@@ -9,9 +9,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
-import DateInputViewSelector from "global/components/callendar/DateInputViewSelector";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 import { DateUtil } from "@shared/utils/DateUtil";
+import FloatingDateInput, { datepickerWithDaysConfig } from "global/components/callendar/FloatingDateInput";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -114,7 +114,7 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
     return (
         <>
             <h3 className="form-subheader">
-                {t("employeeProfile.form.step3.title")}
+                {t("employeeProfile.form.availability.title")}
             </h3>
 
             <div className="flex flex-col gap-3 md:gap-3">
@@ -136,26 +136,26 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                     {t("employeeProfile.form.availabilityOption.FROM_DATE.msg")}
                                 </div>
                                 <div>
+
                                     <Controller
-                                        name={`availability.startDate`}
+                                        name="availability.startDate"
                                         control={control}
-                                        rules={startDateRequired}
                                         render={({ field }) => {
                                             const fieldError = (formState?.errors?.availability?.availabilityDateRanges as any)?.[0];
                                             const errorMessage = fieldError?.message as string | undefined;
                                             return (
-                                                <DateInputViewSelector
+                                                <FloatingDateInput
                                                     label={t("employeeProfile.form.availabilityOption.FROM_DATE.startLabel")}
                                                     className="w-full"
-                                                    value={field.value}
-                                                    onChange={(date) => {
-                                                        field.onChange(date);
-                                                    }}
-                                                    error={errorMessage}
+                                                    value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
+                                                    onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? undefined)}
+                                                    error={errorMessage ? { message: errorMessage } : undefined}
+                                                    config={datepickerWithDaysConfig}
                                                 />
                                             )
                                         }}
                                     />
+
                                 </div>
                             </>
                         )}
