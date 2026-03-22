@@ -17,12 +17,12 @@ interface Props {
     formRef: UseFormReturn<WorkerForm>;
 }
 
-const WorkerFormStep3: React.FC<Props> = ({ formRef }) => {
+const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
     const { control, setValue, watch, getValues, formState } = formRef;
     const { t } = useTranslation();
-    const availabilityOption = watch("step3.availabilityOption");
-    const availabilityDateRanges = watch("step3.availabilityDateRanges") || [];
-    const rangesOption = watch("step3.rangesOption");
+    const availabilityOption = watch("availability.availabilityOption");
+    const availabilityDateRanges = watch("availability.availabilityDateRanges") || [];
+    const rangesOption = watch("availability.rangesOption");
 
     const required = FormValidator.dateRangeRequired(t);
     const startDateRequired = FormValidator.required(t);
@@ -41,7 +41,7 @@ const WorkerFormStep3: React.FC<Props> = ({ formRef }) => {
         ) {
             const range = getDefaultDateRange()
             if (range) {
-                setValue("step3.availabilityDateRanges", [range]);
+                setValue("availability.availabilityDateRanges", [range]);
             }
         }
     }, [availabilityOption]);
@@ -70,12 +70,12 @@ const WorkerFormStep3: React.FC<Props> = ({ formRef }) => {
             ...availabilityDateRanges,
             newRange
         ]
-        setValue("step3.availabilityDateRanges", newRanges);
+        setValue("availability.availabilityDateRanges", newRanges);
     }
 
     const removeDateRange = (id?: number) => {
         const ranges = availabilityDateRanges?.filter((r, i) => r && r.id !== id);
-        setValue("step3.availabilityDateRanges", (ranges || []).filter(Boolean));
+        setValue("availability.availabilityDateRanges", (ranges || []).filter(Boolean));
     }
 
     const msgClass = "secondary-text mb-5 mt-4"
@@ -105,9 +105,9 @@ const WorkerFormStep3: React.FC<Props> = ({ formRef }) => {
 
 
     const setAvailabilityOption = (option: WorkerAvailabilityOption) => {
-        setValue("step3.availabilityOption", option);
+        setValue("availability.availabilityOption", option);
         if (option === WorkerAvailabilityOptions.DATE_RANGES && !rangesOption) {
-            setValue("step3.rangesOption", WorkerFormRangesOptions.AVAILABLE_ON);
+            setValue("availability.rangesOption", WorkerFormRangesOptions.AVAILABLE_ON);
         }
     }
 
@@ -137,11 +137,11 @@ const WorkerFormStep3: React.FC<Props> = ({ formRef }) => {
                                 </div>
                                 <div>
                                     <Controller
-                                        name={`step3.startDate`}
+                                        name={`availability.startDate`}
                                         control={control}
                                         rules={startDateRequired}
                                         render={({ field }) => {
-                                            const fieldError = (formState?.errors?.step3?.availabilityDateRanges as any)?.[0];
+                                            const fieldError = (formState?.errors?.availability?.availabilityDateRanges as any)?.[0];
                                             const errorMessage = fieldError?.message as string | undefined;
                                             return (
                                                 <DateInputViewSelector
@@ -165,7 +165,7 @@ const WorkerFormStep3: React.FC<Props> = ({ formRef }) => {
                                 <TabSwitcher
                                     options={rangesOptions}
                                     value={rangesOption!}
-                                    onChange={code => setValue("step3.rangesOption", code as WorkerFormRangesOption)}
+                                    onChange={code => setValue("availability.rangesOption", code as WorkerFormRangesOption)}
                                 />
 
                                 <div className={msgClass}>
@@ -177,12 +177,12 @@ const WorkerFormStep3: React.FC<Props> = ({ formRef }) => {
                                     return (
                                         <div key={dateRange?.id ?? idx} className="flex gap-2 items-end mt-4">
                                             <Controller
-                                                name={`step3.availabilityDateRanges.${idx}` as const}
+                                                name={`availability.availabilityDateRanges.${idx}` as const}
                                                 control={control}
                                                 rules={required}
                                                 render={({ field }) => {
                                                     // Extract string message for this specific range error (RHF stores errors by index/key)
-                                                    const fieldError = (formState?.errors?.step3?.availabilityDateRanges as any)?.[idx];
+                                                    const fieldError = (formState?.errors?.availability?.availabilityDateRanges as any)?.[idx];
                                                     const errorMessage = fieldError?.message as string | undefined;
                                                     return (
                                                         <DateRangeInputViewSelector
@@ -231,4 +231,4 @@ const WorkerFormStep3: React.FC<Props> = ({ formRef }) => {
     );
 };
 
-export default WorkerFormStep3;
+export default WorkerFormStepAvailability;

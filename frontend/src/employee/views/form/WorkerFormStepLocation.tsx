@@ -21,14 +21,14 @@ interface Props {
 }
 
 
-const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
+const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
     const { control, formState, setValue, watch } = formRef;
     const { t } = useTranslation();
     const userCtx = useUserContext();
     const required = FormValidator.required(t);
     const [geoLoading, setGeoLoading] = useState(false);
 
-    const locationOption = watch("step2.locationOption");
+    const locationOption = watch("location.locationOption");
 
     const preparePosition = (): Position => {
         return userCtx.position || DEFAUT_POSITION;
@@ -46,7 +46,7 @@ const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
         try {
             const countryCode = await PositionService.callApiFindCountryByPosition(position);
             if (countryCode) {
-                setValue("step2.countryCode", countryCode);
+                setValue("location.countryCode", countryCode);
             }
         } catch (e) {
             // Intentionally swallow errors – network issues shouldn't break filter sheet.
@@ -75,16 +75,16 @@ const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
 
 
     const handleCountryChange = (newCountryCode: string | null) => {
-        setValue("step2.countryCode", newCountryCode || undefined);
-        setValue("step2.geocodedPosition", undefined);
+        setValue("location.countryCode", newCountryCode || undefined);
+        setValue("location.geocodedPosition", undefined);
     };
 
     const resetLocation = () => {
         if (initPosition) {
             initPosition();
         } else {
-            setValue("step2.countryCode", undefined);
-            setValue("step2.geocodedPosition", undefined);
+            setValue("location.countryCode", undefined);
+            setValue("location.geocodedPosition", undefined);
         }
     }
 
@@ -94,7 +94,7 @@ const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
 
             {/* Country Selector */}
             <Controller
-                name="step2.countryCode"
+                name="location.countryCode"
                 control={control}
                 rules={required}
                 render={({ field }) => (
@@ -107,18 +107,18 @@ const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
                         label={t("employeeProfile.form.locationCountry")}
                         fullWidth
                         required
-                        error={formState.errors.step2?.countryCode}
+                        error={formState.errors.location?.countryCode}
                     />
                 )}
             />
 
             {geoLoading ? (<Loading></Loading>) : (<Controller
-                name="step2.geocodedPosition"
+                name="location.geocodedPosition"
                 control={control}
                 render={({ field }) => (
                     <PositionSelector
                         label={t("offer.workLocation")}
-                        name="step2.geocodedPosition"
+                        name="location.geocodedPosition"
                         className="w-full"
                         value={field.value}
                         initialPosition={preparePosition()}
@@ -127,7 +127,7 @@ const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
                             autofillCountryByPosition(p);
                             field.onChange(p);
                         }}
-                        error={formState.errors.step2?.geocodedPosition}
+                        error={formState.errors.location?.geocodedPosition}
                     />
                 )}
             />)}
@@ -145,7 +145,7 @@ const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
                 <TabSwitcher
                     options={tabOptions}
                     value={locationOption}
-                    onChange={code => setValue("step2.locationOption", code as WorkerLocationOption)}
+                    onChange={code => setValue("location.locationOption", code as WorkerLocationOption)}
                 />
 
                 <div className="w-full flex">
@@ -161,7 +161,7 @@ const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
                                     {t("employeeProfile.form.locationOption.SELECTED_COUNTRIES.msg")}
                                 </div>
                                 <Controller
-                                    name="step2.locationCountries"
+                                    name="location.locationCountries"
                                     control={control}
                                     rules={required}
                                     render={({ field }) => (
@@ -175,7 +175,7 @@ const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
                                             elementLabelTranslationKey="COUNTRY_NAME"
                                             fullWidth
                                             required
-                                            error={formState?.errors.step2?.locationCountries}
+                                            error={formState?.errors.location?.locationCountries}
                                         />
                                     )}
                                 />
@@ -201,4 +201,4 @@ const WorkerFormStep2: React.FC<Props> = ({ formRef, initPosition }) => {
     );
 };
 
-export default WorkerFormStep2;
+export default WorkerFormStepLocation;

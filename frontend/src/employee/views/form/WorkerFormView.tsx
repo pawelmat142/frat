@@ -13,25 +13,25 @@ import { useNavigate } from "react-router-dom";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { Path } from "../../../path";
 import { useWorkersSearch } from "../search/WorkersSearchProvider";
-import WorkerFormStep1 from "./WorkerFormStep1";
-import WorkerFormStep2 from "./WorkerFormStep2";
+import WorkerFormpersonalData from "./WorkerFormStepPersonalData";
+import WorkerFormStepLocation from "./WorkerFormStepLocation";
 import { Utils } from "global/utils/utils";
 import { useConfirm } from "global/providers/PopupProvider";
 import FormWizard from "global/components/FormWizard/FormWizard";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
-import WorkerFormStep3 from "./WorkerFormStep3";
-import WorkerFormStep4 from "./WorkerFormStep4";
+import WorkerFormStep3 from "./WorkerFormStepAvailability";
+import WorkerFormStepCertificates from "./WorkerFormStepCertificates";
 import { UserProviders } from "@shared/interfaces/UserI";
 import { isOneOf } from "@shared/utils/util";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
-type StepKey = 'step1' | 'step2' | 'step3' | 'step4';
+type StepKey = 'personalData' | 'career' | 'location' | 'availability' | 'certificates';
 
-const STEPS_ORDER: StepKey[] = ['step1', 'step2', 'step3', 'step4'];
+const STEPS_ORDER: StepKey[] = ['personalData', 'career', 'location', 'availability', 'certificates'];
 
 const WorkerFormView: React.FC = () => {
 
@@ -54,25 +54,25 @@ const WorkerFormView: React.FC = () => {
     // TODO poprawic animacje przechodzenia miedzy krokami
     const formRef = useForm<WorkerForm>({
         defaultValues: {
-            step1: {
+            personalData: {
                 fullName: "",
                 phoneNumber: { prefix: "+00", number: "" },
                 email: "",
                 communicationLanguages: [""]
             },
-            step2: {
+            location: {
                 locationOption: WorkerLocationOptions.POSITION,
                 countryCode: undefined,
                 geocodedPosition: null,
 
 
             },
-            step3: {
+            availability: {
                 availabilityOption: WorkerAvailabilityOptions.FROM_DATE,
                 availabilityDateRanges: [],
                 startDate: null,
             },
-            step4: {
+            certificates: {
                 certificates: [],
                 certificateDates: {}
             }
@@ -98,21 +98,21 @@ const WorkerFormView: React.FC = () => {
         setLoading(true);
         const position = await getGeoPosition();
 
-        formRef.setValue("step1.fullName", me.displayName)
+        formRef.setValue("personalData.fullName", me.displayName)
 
         if (isOneOf([UserProviders.EMAIL, UserProviders.GOOGLE], me.provider)) {
-            formRef.setValue("step1.email", me.email)
+            formRef.setValue("personalData.email", me.email)
         }
         
         if (me.avatarRef) {
-            formRef.setValue("step1.avatarRef", me.avatarRef);
+            formRef.setValue("personalData.avatarRef", me.avatarRef);
         }
         if (position) {
             const element = DictionaryUtil.getElementByCountryCode(globalCtx.dics.languages!, position.country?.toLocaleLowerCase() || "");
 
             if (element) {
-                formRef.setValue("step1.phoneNumber.prefix", element.values.PHONE_PREFIX);
-                formRef.setValue("step1.communicationLanguages", [element.code]);
+                formRef.setValue("personalData.phoneNumber.prefix", element.values.PHONE_PREFIX);
+                formRef.setValue("personalData.communicationLanguages", [element.code]);
                 setPositionFormDataByLocation(position);
             }
         }
@@ -133,8 +133,8 @@ const WorkerFormView: React.FC = () => {
     const setPositionFormDataByLocation = (position: GeocodedPosition) => {
         const element = getDictionaryElementByPosition(position);
         if (element) {
-            formRef.setValue("step2.countryCode", element.code);
-            formRef.setValue("step2.geocodedPosition", position);
+            formRef.setValue("location.countryCode", element.code);
+            formRef.setValue("location.geocodedPosition", position);
         }
     }
 
@@ -177,7 +177,7 @@ const WorkerFormView: React.FC = () => {
             .filter((r): r is DateRange => r != null);
 
         formRef.reset({
-            step1: {
+            personalData: {
                 fullName: worker.fullName || "",
                 phoneNumber: worker.phoneNumber || { prefix: "+48", number: "" },
                 email: worker.email || "",
@@ -185,19 +185,19 @@ const WorkerFormView: React.FC = () => {
                 avatarRef: worker.avatarRef,
                 bio: worker.bio || ''
             },
-            step2: {
+            location: {
                 locationOption: worker.locationOption || WorkerLocationOptions.POSITION,
                 countryCode: worker.locationCountries?.[0],
                 geocodedPosition: geoPosition,
                 locationCountries: worker.locationCountries || [],
             },
-            step3: {
+            availability: {
                 availabilityOption: worker.availabilityOption || WorkerAvailabilityOptions.ANYTIME,
                 availabilityDateRanges: availabilityDateRanges,
                 rangesOption: worker.rangesOption,
                 startDate: worker.startDate || null,
             },
-            step4: {
+            certificates: {
                 certificates: worker.certificates || [],
                 certificateDates: worker.certs?.reduce((acc, cert) => {
                     acc[cert.code] = cert.validityDate;
@@ -260,9 +260,9 @@ const WorkerFormView: React.FC = () => {
     }
 
     const handleDevFill = () => {
-        formRef.setValue("step1.fullName", "Pawel Malek");
-        formRef.setValue("step4.certificates", ["ONE"]);
-        formRef.setValue("step1.communicationLanguages", ["en", "pl"]);
+        formRef.setValue("personalData.fullName", "Pawel Malek");
+        formRef.setValue("certificates.certificates", ["ONE"]);
+        formRef.setValue("personalData.communicationLanguages", ["en", "pl"]);
     };
 
     if (loading) {
@@ -271,14 +271,14 @@ const WorkerFormView: React.FC = () => {
 
     const renderStepByKey = (stepKey: StepKey) => {
         switch (stepKey) {
-            case 'step1':
-                return <WorkerFormStep1 formRef={formRef} />;
-            case 'step2':
-                return <WorkerFormStep2 formRef={formRef} initPosition={resetPositionFormData} />;
-            case 'step3':
+            case 'personalData':
+                return <WorkerFormpersonalData formRef={formRef} />;
+            case 'location':
+                return <WorkerFormStepLocation formRef={formRef} initPosition={resetPositionFormData} />;
+            case 'availability':
                 return <WorkerFormStep3 formRef={formRef} />;
-            case 'step4':
-                return <WorkerFormStep4 formRef={formRef} />;
+            case 'certificates':
+                return <WorkerFormStepCertificates formRef={formRef} />;
             default:
                 return null;
         }

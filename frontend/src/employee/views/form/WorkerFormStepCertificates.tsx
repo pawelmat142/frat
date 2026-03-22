@@ -14,7 +14,7 @@ interface Props {
     formRef: UseFormReturn<WorkerForm>;
 }
 
-const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
+const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
 
     const { control, formState, watch } = formRef;
     const { t } = useTranslation();
@@ -48,7 +48,7 @@ const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
 
 
     // Get selected certificates and their dictionary definitions
-    const selectedCertificates: string[] = formRef.watch('step4.certificates') || [];
+    const selectedCertificates: string[] = formRef.watch('certificates.certificates') || [];
     const certDictElements = dictionary?.elements || [];
     const certsWithDate = certDictElements.filter(el =>
         el.values?.VALIDITY_DATE_REQUIRED && selectedCertificates.includes(el.code)
@@ -62,7 +62,7 @@ const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
 
             <div className="flex flex-col gap-5 md:gap-5 mt-5">
                 <Controller
-                    name="step4.certificates"
+                    name="certificates.certificates"
                     control={control}
                     render={({ field }) => (
                         <DictionarySelector
@@ -74,7 +74,7 @@ const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
                             code="CERTIFICATES"
                             fullWidth
                             required
-                            error={formState.errors.step4?.certificates}
+                            error={formState.errors.certificates?.certificates}
                         />
                     )}
                 />
@@ -83,7 +83,7 @@ const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
                 {certsWithDate.map(cert => (
                     <Controller
                         key={cert.code}
-                        name={`step4.certificateDates.${cert.code}`}
+                        name={`certificates.certificateDates.${cert.code}`}
                         control={control}
                         rules={required}
                         render={({ field }) => (
@@ -93,7 +93,7 @@ const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
                                 value={field.value}
                                 onChange={date => field.onChange(date)}
                                 required
-                                error={formState.errors?.step4?.certificateDates?.[cert.code]?.message}
+                                error={formState.errors?.certificates?.certificateDates?.[cert.code]?.message}
                             />
                         )}
                     />
@@ -103,4 +103,4 @@ const WorkerFormStep4: React.FC<Props> = ({ formRef }) => {
     );
 };
 
-export default WorkerFormStep4;
+export default WorkerFormStepCertificates;

@@ -15,7 +15,7 @@ interface Props {
     formRef: UseFormReturn<WorkerForm>;
 }
 
-const WorkerFormStep1: React.FC<Props> = ({ formRef }) => {
+const WorkerFormpersonalData: React.FC<Props> = ({ formRef }) => {
     const { t } = useTranslation();
     const { me } = useUserContext();
     const required = FormValidator.required(t);
@@ -24,12 +24,12 @@ const WorkerFormStep1: React.FC<Props> = ({ formRef }) => {
     return (
         <>
             <h2 className="form-subheader">
-                {t("employeeProfile.form.step1.title")}
+                {t("employeeProfile.form.personalData.title")}
             </h2>
             <div className="flex flex-col gap-5 md:gap-5">
 
                 <Controller
-                    name="step1.fullName"
+                    name="personalData.fullName"
                     control={control}
                     rules={required}
                     render={({ field }) => (
@@ -38,13 +38,13 @@ const WorkerFormStep1: React.FC<Props> = ({ formRef }) => {
                             label={t("employeeProfile.form.fullName")}
                             fullWidth
                             required
-                            error={formState.errors.step1?.fullName}
+                            error={formState.errors.personalData?.fullName}
                         />
                     )}
                 />
 
                 <Controller
-                    name="step1.phoneNumber"
+                    name="personalData.phoneNumber"
                     control={control}
                     rules={{
                         ...required,
@@ -56,13 +56,13 @@ const WorkerFormStep1: React.FC<Props> = ({ formRef }) => {
                             label={t("employeeProfile.form.phoneNumber")}
                             fullWidth
                             required
-                            error={formState.errors.step1?.phoneNumber}
+                            error={formState.errors.personalData?.phoneNumber}
                         />
                     )}
                 />
 
                 <Controller
-                    name="step1.email"
+                    name="personalData.email"
                     control={control}
                     rules={required}
                     render={({ field }) => (
@@ -71,7 +71,7 @@ const WorkerFormStep1: React.FC<Props> = ({ formRef }) => {
                             label={t("employeeProfile.form.email")}
                             fullWidth
                             required
-                            error={formState.errors.step1?.email}
+                            error={formState.errors.personalData?.email}
                         />
                     )}
                 />
@@ -84,7 +84,7 @@ const WorkerFormStep1: React.FC<Props> = ({ formRef }) => {
                 />  
 
                 <Controller
-                    name="step1.avatarRef"
+                    name="personalData.avatarRef"
                     control={control}
                     rules={required}
                     render={({ field }) => (
@@ -92,7 +92,7 @@ const WorkerFormStep1: React.FC<Props> = ({ formRef }) => {
                             value={field.value}
                             onChange={field.onChange}
                             uid={me?.uid}
-                            error={formState.errors.step1?.avatarRef}
+                            error={formState.errors.personalData?.avatarRef}
                             required
                         />
                     )}
@@ -102,4 +102,4 @@ const WorkerFormStep1: React.FC<Props> = ({ formRef }) => {
     );
 };
 
-export default WorkerFormStep1;
+export default WorkerFormpersonalData;

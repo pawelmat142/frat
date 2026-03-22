@@ -4,25 +4,25 @@ import { WorkerForm, WorkerFormDto, WorkerI, WorkerSearchFilters, WorkerSearchRe
 // Mapper to convert nested form structure to flat API structure
 const mapFormToApi = (form: WorkerForm): WorkerFormDto => {
 	return {
-		fullName: form.step1.fullName,
-		phoneNumber: form.step1.phoneNumber,
-		email: form.step1.email,
-		communicationLanguages: form.step1.communicationLanguages,
-		avatarRef: form.step1.avatarRef,
-		bio: form.step1.bio,
+		fullName: form.personalData.fullName,
+		phoneNumber: form.personalData.phoneNumber,
+		email: form.personalData.email,
+		communicationLanguages: form.personalData.communicationLanguages,
+		avatarRef: form.personalData.avatarRef,
+		bio: form.personalData.bio,
 
-		locationOption: form.step2.locationOption,
-		countryCode: form.step2.countryCode,
-		geocodedPosition: form.step2.geocodedPosition || undefined,
-		locationCountries: form.step2.locationCountries,
+		locationOption: form.location.locationOption,
+		countryCode: form.location.countryCode,
+		geocodedPosition: form.location.geocodedPosition || undefined,
+		locationCountries: form.location.locationCountries,
 
-		availabilityOption: form.step3.availabilityOption,
-		availabilityDateRanges: form.step3.availabilityDateRanges,
-		rangesOption: form.step3.rangesOption,
-		startDate: form.step3.startDate || undefined,
+		availabilityOption: form.availability.availabilityOption,
+		availabilityDateRanges: form.availability.availabilityDateRanges,
+		rangesOption: form.availability.rangesOption,
+		startDate: form.availability.startDate || undefined,
 
-		certificates: form.step4.certificates,
-		certificateDates: form.step4.certificateDates,
+		certificates: form.certificates.certificates,
+		certificateDates: form.certificates.certificateDates,
 	};
 };
 

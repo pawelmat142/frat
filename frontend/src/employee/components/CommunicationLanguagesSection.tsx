@@ -42,7 +42,7 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
                 fullWidth
                 required
                 disabledValues={communicationLanguages.filter((_, i) => i !== idx && communicationLanguages[i])}
-                error={formState?.errors.step1?.communicationLanguages?.[idx]}
+                error={formState?.errors.personalData?.communicationLanguages?.[idx]}
               />
               }
             />
