@@ -13,6 +13,7 @@ import Loading from "global/components/Loading";
 import { WorkerSkills } from "@shared/interfaces/WorkerI";
 import i18n from "global/i18n";
 import { WorkerService } from "employee/services/WorkerService";
+import { Ico } from "global/icon.def";
 
 interface SkillsForm {
     items: { name: string }[];
@@ -104,6 +105,7 @@ const WorkerSkillsFormView: React.FC = () => {
                     className="ml-auto pt-5"
                     onClick={() => append({ name: "" })}
                 >
+                    <Ico.PLUS className="w-4 h-4" />
                     {t("employeeProfile.addSkill")}
                 </Button>
 
