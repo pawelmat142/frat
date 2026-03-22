@@ -187,12 +187,13 @@
       "profile": "Profile"
     },
     "others": {
-      "lessThan": "<{{value}}{{unit}}",
+      "lessThan": "< {{value}} {{unit}}",
       "availableAnytime": "Available anytime",
       "availableFrom": "Available from",
       "fetchLocationError": "Could not find location.",
       "availableAnytimeShort": "Anytime",
-      "call": "Call"
+      "call": "Call",
+      "away": "away"
     },
     "report": {
       "send": "Send",

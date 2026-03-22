@@ -24,6 +24,7 @@ import DictionaryDisplay from "global/components/DictionaryDisplay";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { AppConfig } from "@shared/AppConfig";
+import { PositionUtil } from "@shared/utils/PositionUtil";
 
 const WorkerView: React.FC = () => {
 
@@ -49,6 +50,7 @@ const WorkerView: React.FC = () => {
 
     // TODO remove
     console.log(worker)
+
 
 
     useEffect(() => {
@@ -201,6 +203,19 @@ const WorkerView: React.FC = () => {
         }
     }
 
+    const getDistanceInfo = (): string => {
+        if (!worker?.point) {
+            return '';
+        }
+
+        const distanceInfo = userCtx.getDistanceInfo(PositionUtil.fromGeoPoint(worker.point));
+        if (!distanceInfo) {
+            return '';
+        }
+
+        return `(${distanceInfo} ${t('others.away')})`;
+    }
+
     if (loading) {
         return <Loading />
     }
@@ -273,7 +288,7 @@ const WorkerView: React.FC = () => {
                 {!!worker.geocodedPosition?.fullAddress && (
                     <div className={listItemClassName}>
                         <Ico.MARKER size={iconSize}></Ico.MARKER>
-                        <span>{worker.geocodedPosition.fullAddress}</span>
+                        <span>{worker.geocodedPosition.fullAddress} {getDistanceInfo()}</span>
                     </div>
                 )}
 

@@ -49,7 +49,7 @@ const WorkersSearchView: React.FC = () => {
                     ...ctx.results] ).map((profile, index) => (
                         <WorkerListItem
                             key={index}
-                            profile={profile}
+                            worker={profile}
                             languagesDictionary={globalCtx.dics.languages!}
                             first={index === 0}
                             last={index === (ctx.results?.length ?? 0) - 1}

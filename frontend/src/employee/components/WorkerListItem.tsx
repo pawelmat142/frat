@@ -16,7 +16,7 @@ import { PositionUtil } from "@shared/utils/PositionUtil";
 import { AppConfig } from "@shared/AppConfig";
 
 interface Props {
-    profile: WorkerWithMutualFriends,
+    worker: WorkerWithMutualFriends,
     languagesDictionary: DictionaryI
     first?: boolean,
     last?: boolean,
@@ -24,7 +24,7 @@ interface Props {
 
 const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS; 
 
-const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, last }) => {
+const WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first, last }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -32,30 +32,25 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
     const { me } = userCtx
 
     const isDesktop = useIsDesktop();
-    const isMyProfile = me?.uid === profile.uid;
+    const isMyProfile = me?.uid === worker.uid;
 
     const goToProfileView = () => {
-        navigate(Path.getWorkerProfilePath(profile.displayName!));
+        navigate(Path.getWorkerProfilePath(worker.displayName!));
     }
 
     const getDistanceInfo = (): string => {
-        if (!userCtx.position || !profile.point) {
+        if (!worker.point) {
             return '';
         }
-        const meters = PositionUtil.getDistanceFromToInMeters(userCtx.position, PositionUtil.fromGeoPoint(profile.point));
-
-        if (meters < MINIMUM_DISTANCE_FOR_DISPLAY_METERS) { 
-            return t("others.lessThan", { distance: MINIMUM_DISTANCE_FOR_DISPLAY_METERS / 1000, unit: 'km' });
-        }
-        return `${PositionUtil.displayDistance(meters)}`;
+        return userCtx.getDistanceInfo(PositionUtil.fromGeoPoint(worker.point));
     }
 
     const distance = getDistanceInfo();
 
     const openChat = async () => {
-        if (!profile) return;
+        if (!worker) return;
         try {
-            const chat = await ChatService.getOrCreateDirectChat(profile.uid)
+            const chat = await ChatService.getOrCreateDirectChat(worker.uid)
             navigate(Path.getConversationPath(chat.chatId))
         } catch (error) {
             console.error('Failed to open chat:', error)
@@ -64,16 +59,16 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
     }
 
     const openPhoneCall = () => {
-        if (!profile.phoneNumber) return;
+        if (!worker.phoneNumber) return;
 
-        const number = `${profile.phoneNumber.prefix}${profile.phoneNumber.number}`
+        const number = `${worker.phoneNumber.prefix}${worker.phoneNumber.number}`
         if (isDesktop) {
             // copy to clipboard
             navigator.clipboard.writeText(number);
             toast.info(t('employeeProfile.phoneNumberCopied', { number }));
             return;
         }
-        window.location.href = `tel:${profile.phoneNumber.prefix}${profile.phoneNumber.number}`;
+        window.location.href = `tel:${worker.phoneNumber.prefix}${worker.phoneNumber.number}`;
     }
 
     const rightSection = isMyProfile ? null : <div className="flex justify-end items-center gap-2">
@@ -94,17 +89,17 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
     const bottomLeft = <div className="flex items-center gap-3">
         <div>
             <Visibility fontSize="inherit" className="secondary-text mr-1" />
-            <span className="xs-font">{profile.views?.length || 0}</span>
+            <span className="xs-font">{worker.views?.length || 0}</span>
         </div>
         <div>
             <ThumbUp fontSize="inherit" className="secondary-text mr-1" />
-            <span className="xs-font">{profile.likes?.length || 0}</span>
+            <span className="xs-font">{worker.likes?.length || 0}</span>
         </div>
 
-        {!!profile.mutualFriendsUids?.length && (
+        {!!worker.mutualFriendsUids?.length && (
             <div className="flex items-center">
                 <Ico.FRIENDS size={14} className="secondary-text mr-1" />
-                <span className="xs-font">{profile.mutualFriendsUids.length}</span>
+                <span className="xs-font">{worker.mutualFriendsUids.length}</span>
             </div>
         )}
 
@@ -119,8 +114,8 @@ const WorkerListItem: React.FC<Props> = ({ profile, languagesDictionary, first, 
     return (
         <div onClick={goToProfileView}>
             <ListItem
-                imgUrl={profile.avatarRef?.url || AVATAR_MOCK}
-                topLeft={profile.displayName}
+                imgUrl={worker.avatarRef?.url || AVATAR_MOCK}
+                topLeft={worker.displayName}
                 bottomLeft={bottomLeft}
                 first={first}
                 last={last}

@@ -15,6 +15,7 @@ import { FaMoon, FaSun } from 'react-icons/fa';
 import { useTheme } from "global/providers/ThemeProvider";
 import { SettingsService } from './services/SettingsService';
 import { AppConfig } from '@shared/AppConfig';
+import { PositionUtil } from '@shared/utils/PositionUtil';
 
 interface UserContextType {
 	me: UserI | null;
@@ -28,6 +29,7 @@ interface UserContextType {
 	setLoading: (loading: boolean) => void;
 	selectLanguage: () => void;
 	selectTheme: () => void;
+	getDistanceInfo: (_position: Position) => string
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -151,6 +153,18 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		}
 	}
 
+	const getDistanceInfo = (_position: Position): string => {
+		if (!_position || !position) {
+			return '';
+		}
+		const meters = PositionUtil.getDistanceFromToInMeters(position, _position);
+
+		if (meters < AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS) {
+			return t("others.lessThan", { value: AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS / 1000, unit: 'km' });
+		}
+		return `${PositionUtil.displayDistance(meters)}`;
+	}
+
 	const locationErrorToast = () => {
 		toast.warn(t('common.others.fetchLocationError'));
 	}
@@ -191,8 +205,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const selectTheme = () => {
 		const iconSize = `${AppConfig.DEFAULT_ICON_SIZE}rem`;
 
-		const items: SelectorItem[] = Object.values(Themes).map(item => ({ 
-			label: t(`theme.${item}`), 
+		const items: SelectorItem[] = Object.values(Themes).map(item => ({
+			label: t(`theme.${item}`),
 			value: item,
 			icon: item.includes('light') ? <FaSun size={iconSize} /> : <FaMoon size={iconSize} />
 		})) // translate labels
@@ -233,7 +247,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			setLoading: setLoading,
 			position,
 			selectLanguage,
-			selectTheme
+			selectTheme,
+			getDistanceInfo
 		}}>
 			{children}
 		</UserContext.Provider>
