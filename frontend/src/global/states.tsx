@@ -46,10 +46,6 @@ export const STATES = (navigate: NavigateFunction) => {
             }} />,
             title: 'employeeProfile.searchTitle',
         },
-        [Path.OFFERS_FILTERS_SEARCH]: {
-            leftBtn: <HeaderBackBtn />,
-            title: 'offer.searchTitle',
-        },
         [Path.WORKER]: {
             leftBtn: <HeaderBackBtn />,
             title: 'employeeProfile.title',

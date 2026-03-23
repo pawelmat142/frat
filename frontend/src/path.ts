@@ -26,7 +26,6 @@ export abstract class Path {
     public static readonly OFFER_FORM_EDIT = '/offer-form/:offerId';
     public static readonly OFFERS_SEARCH = '/offers-search';
     public static readonly OFFER = '/offer/:offerId';
-    public static readonly OFFERS_FILTERS_SEARCH = `/offers-filters-search`;
     public static readonly USER_OFFERS = '/offers/:uid';
 
     public static readonly ERROR_PAGE = '/error';

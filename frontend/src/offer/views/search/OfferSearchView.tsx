@@ -69,7 +69,7 @@ const OfferSearchView: React.FC = () => {
             )}
 
             <FloatingActionButton onClick={() => {
-                navigate(Path.OFFERS_FILTERS_SEARCH)
+                ctx.setOpenPseudoView(true)
             }} icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE}/>}></FloatingActionButton>
 
         </div>

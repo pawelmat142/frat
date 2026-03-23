@@ -31,8 +31,6 @@ interface PendingImage {
 const MAX_IMAGES = 6;
 const HOLD_MS = 600;
 
-// TODO reuzyc efekt pseudowidoku do filtrow worker i oferty
-
 const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
     const { t } = useTranslation();
     const userCtx = useUserContext();

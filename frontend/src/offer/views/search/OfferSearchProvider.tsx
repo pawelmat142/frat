@@ -5,6 +5,11 @@ import { OfferI, OfferSearchFilters } from "@shared/interfaces/OfferI";
 import { OfferUtil } from "@shared/utils/OfferUtil";
 import { OffersService } from "offer/services/OffersService";
 import { Path } from "../../../path";
+import PseudoView from "global/components/PseudoView";
+import OfferSearchFiltersView from "./OfferSearchFiltersView";
+import App from "App";
+import { AppConfig } from "@shared/AppConfig";
+import { wait } from "global/utils/utils";
 
 export interface OfferSearchContextProps {
     filters: OfferSearchFilters;
@@ -18,6 +23,7 @@ export interface OfferSearchContextProps {
     loadMore: () => void;
     setFiltersWithSearchAndNavigate: (filters: OfferSearchFilters) => void;
     filtersValid: boolean;
+    setOpenPseudoView: (open: boolean) => void;
 }
 const INITIAL_LIMIT = 8;
 const LOAD_MORE_LIMIT = 4;
@@ -64,19 +70,24 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
     const [hasMore, setHasMore] = useState(false);
+    const [openPseudoView, setOpenPseudoView] = useState(false);
+
     const filtersValid = !!filters.locationCountries?.length
 
     const requestIdRef = useRef(0);
     const requestsLengthRef = useRef(0);
     const hasMoreRef = useRef(false);
 
-    const setFiltersWithSearchAndNavigate = (newFilters: OfferSearchFilters) => {
+    const setFiltersWithSearchAndNavigate = async (newFilters: OfferSearchFilters) => {
         setFiltersState(newFilters);
         requestsLengthRef.current = 0;
         hasMoreRef.current = false;
 
         const searchStr = OfferUtil.prepareUrlParams(newFilters, defaultOfferFilters);
         const newUrl = searchStr ? `?${searchStr}` : '';
+
+        setOpenPseudoView(false);
+        await wait(AppConfig.ROUTER_ANIMATION_DURATION);
 
         if (newUrl !== location.search) {
             navigate({ pathname: Path.OFFERS_SEARCH, search: newUrl });
@@ -194,9 +205,15 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
             resetFilters,
             defaultFilters: defaultOfferFilters,
             setFiltersWithSearchAndNavigate,
-            filtersValid
+            filtersValid,
+            setOpenPseudoView
         }}>
-            {children}
+            <>
+                {children}
+                <PseudoView show={openPseudoView}>
+                    <OfferSearchFiltersView onClose={() => setOpenPseudoView(false)} />
+                </PseudoView>
+            </>
         </OfferSearchContext.Provider>
     );
 };

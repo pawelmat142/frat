@@ -84,7 +84,6 @@ const App: React.FC = () => {
                 <Route path={Path.OFFER_FORM} element={<PageWrapper><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.OFFER_FORM_EDIT} element={<PageWrapper><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.USER_OFFERS} element={<PageWrapper><ProtectedRoute><UserOffersList/></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.OFFERS_FILTERS_SEARCH} element={<PageWrapper><ProtectedRoute><OfferSearchFiltersView/></ProtectedRoute></PageWrapper>} />
                 {/* unprotected */}
                 <Route path={Path.OFFER} element={<PageWrapper><OfferView/></PageWrapper>} />
                 <Route path={Path.OFFERS_SEARCH} element={<PageWrapper><OfferSearchView/></PageWrapper>} />

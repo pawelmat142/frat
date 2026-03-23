@@ -38,7 +38,7 @@ const MainTiles: React.FC = () => {
         if (offerSearchCtx.filtersValid) {
             offerSearchCtx.setFiltersWithSearchAndNavigate(offerSearchCtx.filters)
         } else {
-            navigate(Path.OFFERS_FILTERS_SEARCH)
+            offerSearchCtx.setOpenPseudoView(true)
         }
     }
 

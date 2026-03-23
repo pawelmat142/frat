@@ -12,8 +12,13 @@ import { Ico } from "global/icon.def";
 import { useEffect, useState } from "react";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { useUserContext } from "user/UserProvider";
+import Header from "global/components/Header";
 
-const OfferSearchFiltersView: React.FC = () => {
+interface Props {
+    onClose?: () => void;
+}
+
+const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
 
     const { t } = useTranslation();
     const globalCtx = useGlobalContext();
@@ -63,7 +68,10 @@ const OfferSearchFiltersView: React.FC = () => {
     }
 
     return (
-        <div className="form-view relative flex flex-col">
+        <div className="form-view relative flex flex-col primary-bg">
+
+            <Header onBack={() => onClose?.()} title={t("offer.searchTitle")} />
+
             <form className='flex flex-col flex-1'
                 noValidate
                 onSubmit={f.handleSubmit(submit)}
