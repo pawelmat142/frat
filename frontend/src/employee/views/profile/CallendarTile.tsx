@@ -1,11 +1,11 @@
 import { DateRange } from "@shared/interfaces/WorkerI";
 import MonthCallendar from "global/components/callendar/MonthCallendar";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useFullScreenDialog } from "global/providers/FullScreenDialogProvider";
 import CallendarsView from "global/components/callendar/CallendarsView";
 import { useBottomSheet } from "global/providers/BottomSheetProvider";
 import { DateUtil } from "@shared/utils/DateUtil";
+import PseudoView from "global/components/PseudoView";
 
 interface CallendarTileProps {
     range: DateRange | null;
@@ -14,6 +14,8 @@ interface CallendarTileProps {
 const CallendarTile: React.FC<CallendarTileProps> = ({ range }) => {
 
     const { t } = useTranslation();
+
+    const [openPseudoView, setOpenPseudoView] = useState(false);
 
     const dateStr = range?.start || null;
 
@@ -29,31 +31,34 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ range }) => {
     const month = date.getMonth();
     const year = date.getFullYear();
 
-    const fullScreenDialogCtx = useFullScreenDialog();
     const bottomSheetCtx = useBottomSheet();
 
-
     const openDialog = () => {
-        fullScreenDialogCtx.open({
-            title: t("employeeProfile.availability"),
-            children: <CallendarsView
-                title={t("employeeProfile.availability")} 
-                range={range!}
-                bottomSheetCtx={bottomSheetCtx}
-            />,
-        });
+        setOpenPseudoView(true);
     }
 
     return (
-        <div className="square-tile month-tile ripple p-1" onClick={() => openDialog()}>
+        <>
+            <div className="square-tile month-tile ripple p-1" onClick={() => openDialog()}>
 
-            <div className="mb-2 s-font">{t(`callendar.monthShort.${month}`)} {year}</div>
+                <div className="mb-2 s-font">{t(`callendar.monthShort.${month}`)} {year}</div>
 
-            <div className="month-tile-wrapper">
-                <MonthCallendar date={date} selectedRange={range} />
+                <div className="month-tile-wrapper">
+                    <MonthCallendar date={date} selectedRange={range} />
+                </div>
             </div>
 
-        </div>
+            <PseudoView show={openPseudoView}>
+                <CallendarsView
+                    title={t("employeeProfile.availability")}
+                    range={range!}
+                    bottomSheetCtx={bottomSheetCtx}
+                    onClose={() => {
+                        setOpenPseudoView(false)
+                    }}
+                />
+            </PseudoView>
+        </>
     );
 }
 

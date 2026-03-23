@@ -16,7 +16,6 @@ import { UserProvider } from 'user/UserProvider';
 import { BottomSheetProvider } from 'global/providers/BottomSheetProvider';
 import DrawerProvider from 'global/providers/DrawerProvider';
 import WorkersSearchProvider from 'employee/views/search/WorkersSearchProvider';
-import { FullScreenDialogProvider } from 'global/providers/FullScreenDialogProvider';
 import { GlobalProvider } from 'global/providers/GlobalProvider';
 import GlobalHeader from 'global/components/GlobalHeader';
 import OfferSearchProvider from 'offer/views/search/OfferSearchProvider';
@@ -50,7 +49,6 @@ root.render(
   <React.StrictMode>
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <GlobalProvider>
-        <FullScreenDialogProvider>
           <PopupProvider>
             <BottomSheetProvider>
               <DrawerProvider>
@@ -99,7 +97,6 @@ root.render(
               </DrawerProvider>
             </BottomSheetProvider>
           </PopupProvider>
-        </FullScreenDialogProvider>
       </GlobalProvider>
     </BrowserRouter>
   </React.StrictMode>

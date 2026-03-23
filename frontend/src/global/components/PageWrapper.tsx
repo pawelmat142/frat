@@ -1,3 +1,4 @@
+import { AppConfig } from "@shared/AppConfig";
 import { motion } from "framer-motion";
 
 interface Props {
@@ -11,7 +12,7 @@ const PageWrapper: React.FC<Props> = ({ children, direction = 1, className = "w-
         initial={{ x: 100 * direction, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: -100 * direction, opacity: 0 }}
-        transition={{ duration: 0.15, ease: 'easeInOut' }}
+        transition={{ duration: AppConfig.ROUTER_ANIMATION_DURATION / 1000, ease: 'easeInOut' }}
         className={className}
     >
         {children}

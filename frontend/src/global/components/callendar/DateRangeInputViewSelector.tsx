@@ -7,6 +7,8 @@ import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import CallendarsView from './CallendarsView';
 import { DateUtil } from '@shared/utils/DateUtil';
 import PseudoView from '../PseudoView';
+import { AppConfig } from '@shared/AppConfig';
+import { wait } from 'global/utils/utils';
 
 
 interface DateRangeProps {
@@ -138,14 +140,16 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
                     selectorMode={true}
                     singleDateMode={singleDateMode}
                     bottomSheetCtx={bottomSheetCtx}
-                    onSubmit={(dateRange) => {
+                    onSubmit={async (dateRange) => {
                         onChange?.(dateRange);
                         setFocus(false);
+                        await wait(AppConfig.ROUTER_ANIMATION_DURATION);
                         setOpenPseudoView(false);
                     }}
-                    onCancel={() => {
+                    onCancel={async () => {
                         onChange?.(null);
                         setFocus(false);
+                        await wait(AppConfig.ROUTER_ANIMATION_DURATION);
                         setOpenPseudoView(false);
                     }}
                     onClose={() => {

@@ -32,7 +32,6 @@ const MAX_IMAGES = 6;
 const HOLD_MS = 600;
 
 // TODO reuzyc efekt pseudowidoku do filtrow worker i oferty
-// TODO reuzyc efekt pseudowidoku do map selectora - google maps
 
 const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
     const { t } = useTranslation();

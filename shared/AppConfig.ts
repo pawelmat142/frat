@@ -21,5 +21,6 @@ export const AppConfig = {
     UPLOAD_IMG_MAX_SIZE_MB: 5,
     AVATAR_PLACEHOLDER: "/assets/img/default-avatar.png",
 
+    ROUTER_ANIMATION_DURATION: 150, // ms
 
 } as const;

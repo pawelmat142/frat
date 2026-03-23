@@ -41,3 +41,5 @@ export abstract class Utils {
     }
 
 }
+
+export const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

@@ -2,10 +2,12 @@ import { useState, useEffect, forwardRef } from 'react';
 import { InputInterface } from '../../../interface/controls.interface';
 import FloatingLabel from '../../controls/FloatingLabel';
 import FormError from '../../controls/FormError';
-import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import PositionSelectorContent from './PositionSelectorContent';
 import { PositionUtil } from '@shared/utils/PositionUtil';
 import { GeocodedPosition, Position } from '@shared/interfaces/MapsInterfaces';
+import PseudoView from 'global/components/PseudoView';
+import { wait } from 'global/utils/utils';
+import { AppConfig } from '@shared/AppConfig';
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: GeocodedPosition | null;
@@ -30,12 +32,12 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
     }, ref) => {
 
         const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(value || null);
-        const fullScreenDialogCtx = useFullScreenDialog();
+        const [openPseudoView, setOpenPseudoView] = useState(false);
 
         useEffect(() => {
             setSelectedPosition(value || null);
         }, [value]);
-        
+
         let myClass = `pp-control pp-position-selector floating-input ${className}`;
         if (fullWidth) {
             myClass += ' w-full';
@@ -48,20 +50,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
 
         const handleInputClick = async () => {
             if (disabled) return;
-
-            await fullScreenDialogCtx.open({
-                children: <PositionSelectorContent
-                    initialPosition={initialPosition}
-                    onChange={(position) => {
-                        fullScreenDialogCtx.close();
-                        onChange?.(position);
-                        setSelectedPosition(position);
-                    }}
-                    onCancel={() => {
-                        fullScreenDialogCtx.close();
-                    }}
-                ></PositionSelectorContent>
-            })
+            setOpenPseudoView(true);
         };
 
         const displayValue = selectedPosition
@@ -104,6 +93,21 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                     />
                 </div>
                 <FormError error={error} />
+
+                <PseudoView show={openPseudoView}>
+                    <PositionSelectorContent
+                        initialPosition={initialPosition}
+                        onChange={async (position) => {
+                            setOpenPseudoView(false);
+                            await wait(AppConfig.ROUTER_ANIMATION_DURATION);
+                            onChange?.(position);
+                            setSelectedPosition(position);
+                        }}
+                        onCancel={() => {
+                            setOpenPseudoView(false);
+                        }}
+                    ></PositionSelectorContent>
+                </PseudoView>
             </div>
         );
     });
