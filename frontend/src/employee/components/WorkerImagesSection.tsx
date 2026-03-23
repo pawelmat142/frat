@@ -31,7 +31,6 @@ interface PendingImage {
 const MAX_IMAGES = 6;
 const HOLD_MS = 600;
 
-// TODO translacje
 // TODO wyciagnac do komponentu efekt z lightboxa - pseudowidok - bez nawigacji
 // TODO reuzyc efekt psudowidoku do datepickera duzego 
 // TODO reuzyc efekt pseudowidoku do filtrow worker i oferty
@@ -43,7 +42,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const [pending, setPending] = useState<PendingImage | null>(null);
-    const [processing, setProcessing] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
     const confirm = useConfirm();
@@ -79,7 +78,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
             return;
         }
 
-        setProcessing(true);
+        setLoading(true);
         try {
             const optimized = await FileUtil.resizeForMobile(file);
             const previewUrl = URL.createObjectURL(optimized);
@@ -87,7 +86,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
         } catch {
             toast.error(t('error.imageProcessingFailed'));
         } finally {
-            setProcessing(false);
+            setLoading(false);
         }
     };
 
@@ -101,6 +100,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
 
         try {
             setSaving(true);
+            setLoading(true);
 
             // Upload to Cloudinary
             const folder = `${CloudinaryFolderNames.WORKER_PROFILE}/${worker.uid}`;
@@ -113,23 +113,28 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
             await workerCtx.initWorker();
         } finally {
             setSaving(false);
+            setLoading(false);
         }
         handleCancelPending();
     };
 
     const handleRemove = async (publicId: string) => {
         try {
+            setLoading(true);
             await WorkerService.removeImage(publicId);
             await workerCtx.initWorker();
         } catch {
             toast.error(t('error.imageRemoveFailed'));
         }
+        finally {
+            setLoading(false);
+        }
     };
 
     const confirmRemove = async (publicId: string) => {
         const ok = await confirm({
-            title: t('gallery.delete.title'),
-            message: t('gallery.delete.message'),
+            title: t('gallery.deleteTitle'),
+            message: t('gallery.deleteMessage'),
         });
         if (ok) handleRemove(publicId);
     };
@@ -140,7 +145,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
         }
     };
 
-    if (processing) {
+    if (loading) {
         return <Loading />;
     }
 

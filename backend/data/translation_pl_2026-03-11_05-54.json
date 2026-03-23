@@ -57,7 +57,9 @@
     "error": {
       "missingUserId": "Brak ID użytkownika",
       "settingsUpdate": "Nie udało się zaktualizować ustawień",
-      "avatarUploadFailed": "Nie udało się przesłać avatara"
+      "avatarUploadFailed": "Nie udało się przesłać avatara",
+      "imageProcessingFailed": "Błąd podczas przetwarzania obrazu",
+      "imageRemoveFailed": "Błąd podczas usuwania obrazu"
     },
     "offer": {
       "add": "Dodaj ofertę",
@@ -512,6 +514,12 @@
       "unreadNotificationsOne": "Masz {{count}} nieprzeczytane powiadomienie",
       "acceptInvitationMessage": "Użytkownik {{name}} zaakceptował Twoje zaproszenie do znajomych.",
       "unreadNotificationsMany": "Masz {{count}} nieprzeczytanych powiadomień"
+    },
+    "gallery": {
+      "deleteTitle": "Usuń obraz",
+      "deleteMessage": "Czy na pewno chcesz usunąć ten obraz? Tej akcji nie można cofnąć.",
+      "title": "Galeria",
+      "addImage": "Dodaj obraz"
     },
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",
