@@ -7,7 +7,6 @@ import { useUserContext } from "user/UserProvider";
 import { FileUtil } from "global/utils/FileUtil";
 import { WorkerService } from "employee/services/WorkerService";
 import { toast } from "react-toastify";
-import { AnimatePresence } from "framer-motion";
 import Loading from "global/components/Loading";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
@@ -17,6 +16,7 @@ import { useWorkerContext } from "employee/WorkerProvider";
 import GallerySwiper from "global/components/img/GallerySwiper";
 import { useConfirm } from "global/providers/PopupProvider";
 import LongTapHandler from "global/components/LongTapHandler";
+import PseudoView from "global/components/PseudoView";
 
 interface Props {
     worker: WorkerI;
@@ -231,15 +231,13 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
             />
 
             {/* Lightbox */}
-            <AnimatePresence>
-                {lightboxIndex !== null && (
-                    <GallerySwiper
-                        images={allDisplayUrls}
-                        startIndex={lightboxIndex}
-                        onClose={() => setLightboxIndex(null)}
-                    />
-                )}
-            </AnimatePresence>
+            <PseudoView show={lightboxIndex !== null}>
+                <GallerySwiper
+                    images={allDisplayUrls}
+                    startIndex={lightboxIndex ?? 0}
+                    onClose={() => setLightboxIndex(null)}
+                />
+            </PseudoView>
         </div>
     );
 };

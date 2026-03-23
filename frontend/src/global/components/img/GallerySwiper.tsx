@@ -21,12 +21,7 @@ const GallerySwiper: React.FC<Props> = ({ images, startIndex, onClose }) => {
     };
 
     return (
-        <motion.div
-            className="fixed inset-0 z-50 flex flex-col bg-black"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-        >
+        <>
             {/* Close */}
             <button
                 className="absolute top-4 right-4 z-10 text-white text-2xl p-2"
@@ -71,7 +66,7 @@ const GallerySwiper: React.FC<Props> = ({ images, startIndex, onClose }) => {
                     ))}
                 </div>
             )}
-        </motion.div>
+        </>
     );
 };
 
