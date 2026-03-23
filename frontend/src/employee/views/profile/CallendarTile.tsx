@@ -37,6 +37,7 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ range }) => {
         fullScreenDialogCtx.open({
             title: t("employeeProfile.availability"),
             children: <CallendarsView
+                title={t("employeeProfile.availability")} 
                 range={range!}
                 bottomSheetCtx={bottomSheetCtx}
             />,

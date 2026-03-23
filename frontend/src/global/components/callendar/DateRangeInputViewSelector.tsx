@@ -1,12 +1,12 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import FormError from '../controls/FormError';
 import FloatingLabel from '../controls/FloatingLabel';
 import { DateRange } from '@shared/interfaces/WorkerI';
 import { useTranslation } from 'react-i18next';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
-import { useFullScreenDialog } from 'global/providers/FullScreenDialogProvider';
 import CallendarsView from './CallendarsView';
 import { DateUtil } from '@shared/utils/DateUtil';
+import PseudoView from '../PseudoView';
 
 
 interface DateRangeProps {
@@ -36,8 +36,9 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomSheetCtx = useBottomSheet();
-    const fullScreenDialogCtx = useFullScreenDialog();
     const { t } = useTranslation();
+
+    const [openPseudoView, setOpenPseudoView] = useState(false);
 
     // Value is already in string format (YYYY-MM-DD), pass through directly
     const _value: DateRange = {
@@ -49,28 +50,8 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
     const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (disabled) return;
-
         setFocus(true);
-
-        fullScreenDialogCtx.open({
-            title: label,
-            children: <CallendarsView
-                range={_value}
-                selectorMode={true}
-                singleDateMode={singleDateMode}
-                bottomSheetCtx={bottomSheetCtx}
-                onSubmit={(dateRange) => {
-                    onChange?.(dateRange);
-                    setFocus(false);
-                    fullScreenDialogCtx.close();
-                }}
-                onCancel={() => {
-                    onChange?.(null);
-                    setFocus(false);
-                    fullScreenDialogCtx.close();
-                }}
-            ></CallendarsView>
-        })
+        setOpenPseudoView(true);
     }
 
     const setFocus = (set: boolean) => {
@@ -102,13 +83,13 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
         const startMonth = t(`callendar.monthShort.${startDate.getMonth()}`);
         const startDayNumber = startDate.getDate();
         let result = `${startDayNumber} ${startMonth}`;
-        
+
         // In single date mode, just show the date with year
         if (singleDateMode) {
             result += ` ${startDate.getFullYear()}`;
             return result;
         }
-        
+
         if (range.end) {
             const endDate = DateUtil.parseLocalDateString(range.end);
             const endMonth = t(`callendar.monthShort.${endDate.getMonth()}`);
@@ -149,6 +130,29 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
                 </div>
             </div>
             <FormError error={error ? { message: error } : undefined} />
+
+            <PseudoView show={openPseudoView}>
+                <CallendarsView
+                    title={label || ''}
+                    range={_value}
+                    selectorMode={true}
+                    singleDateMode={singleDateMode}
+                    bottomSheetCtx={bottomSheetCtx}
+                    onSubmit={(dateRange) => {
+                        onChange?.(dateRange);
+                        setFocus(false);
+                        setOpenPseudoView(false);
+                    }}
+                    onCancel={() => {
+                        onChange?.(null);
+                        setFocus(false);
+                        setOpenPseudoView(false);
+                    }}
+                    onClose={() => {
+                        setOpenPseudoView(false)
+                    }}
+                ></CallendarsView>
+            </PseudoView>
         </div>
     );
 };

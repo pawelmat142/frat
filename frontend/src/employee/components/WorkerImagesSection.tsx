@@ -31,9 +31,8 @@ interface PendingImage {
 const MAX_IMAGES = 6;
 const HOLD_MS = 600;
 
-// TODO wyciagnac do komponentu efekt z lightboxa - pseudowidok - bez nawigacji
-// TODO reuzyc efekt psudowidoku do datepickera duzego 
 // TODO reuzyc efekt pseudowidoku do filtrow worker i oferty
+// TODO reuzyc efekt pseudowidoku do map selectora - google maps
 
 const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
     const { t } = useTranslation();

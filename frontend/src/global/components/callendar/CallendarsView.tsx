@@ -9,20 +9,23 @@ import CallendarsViewControl from "./CallendarsViewControl";
 import CallendarViewDurationSelector from "./CallendarViewDurationSelector";
 import { BottomSheetContextType } from "global/providers/BottomSheetProvider";
 import { DateUtil } from "@shared/utils/DateUtil";
+import Header from "../Header";
 
 
 interface CallendarsViewProps {
     range?: DateRange | null;
     onSubmit?: (result?: DateRange | null) => void;
     onCancel?: () => void;
+    onClose?: () => void;
     selectorMode?: boolean;
     /** When true, only single date selection is allowed (end date is ignored) */
     singleDateMode?: boolean;
     bottomSheetCtx: BottomSheetContextType;
+    title: string
 }
 
-const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCancel, selectorMode, singleDateMode, bottomSheetCtx }) => {
-
+const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCancel, onClose, selectorMode, singleDateMode, bottomSheetCtx, title }) => {
+    
     const { t } = useTranslation();
 
     const date = range?.start ? DateUtil.parseLocalDateString(range.start) : null;
@@ -132,7 +135,9 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
 
     return (
 
-        <div className="callendars-view-wrapper">
+        <div className="callendars-view-wrapper primary-bg">
+
+            <Header onBack={() => onClose?.()} title={title} />
 
             <div className="callendars-view-header flex flex-col gap-1">
                 {selectorMode && (<>
