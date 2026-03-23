@@ -77,7 +77,6 @@ const App: React.FC = () => {
                 {/* EMPLOYEE PROFILE */}
                 <Route path={Path.WORKER} element={<PageWrapper><WorkerView /></PageWrapper>} />
                 <Route path={Path.WORKERS_SEARCH} element={<PageWrapper><WorkersSearchView /></PageWrapper>} />
-                <Route path={Path.WORKERS_FILTERS_SEARCH} element={<PageWrapper><WorkersSearchFiltersView /></PageWrapper>} />
                 <Route path={Path.WORKER_FORM} element={<PageWrapper><ProtectedRoute><WorkerFormView /></ProtectedRoute></PageWrapper>} />
                 <Route path={Path.WORKER_SKILLS_FORM} element={<PageWrapper><ProtectedRoute><WorkerSkillsFormView /></ProtectedRoute></PageWrapper>} />
 

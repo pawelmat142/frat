@@ -7,8 +7,6 @@ import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmi
 import { FaUserSlash } from "react-icons/fa";
 import WorkerListItem from "employee/components/WorkerListItem";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
-import { useNavigate } from "react-router-dom";
-import { Path } from "../../../path";
 import { Ico } from "global/icon.def";
 import { AppConfig } from "@shared/AppConfig";
 
@@ -17,7 +15,6 @@ const WorkersSearchView: React.FC = () => {
     const ctx = useWorkersSearch()
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
-    const navigate = useNavigate();
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading></Loading>
@@ -72,7 +69,7 @@ const WorkersSearchView: React.FC = () => {
             )}
 
             <FloatingActionButton onClick={() => {
-                navigate(Path.WORKERS_FILTERS_SEARCH)
+                ctx.setOpenPseudoView(true)
             }} icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE}/>}></FloatingActionButton>
         </div>
 

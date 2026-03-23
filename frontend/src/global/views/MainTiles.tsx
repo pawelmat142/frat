@@ -30,7 +30,7 @@ const MainTiles: React.FC = () => {
         if (workerSearchCtx.filtersValid) {
             workerSearchCtx.setFiltersWithSearchAndNavigate(workerSearchCtx.filters)
         } else {
-            navigate(Path.WORKERS_FILTERS_SEARCH)
+            workerSearchCtx.setOpenPseudoView(true)
         }
     }
 

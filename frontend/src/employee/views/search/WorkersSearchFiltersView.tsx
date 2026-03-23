@@ -19,8 +19,13 @@ import FloatingPlaceSearch from "global/components/controls/FloatingPlaceSearch"
 import FloatingStepSlider from "global/components/controls/FloatingStepSlider";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 import { AppConfig } from "@shared/AppConfig";
+import Header from "global/components/Header";
 
-const WorkersSearchFiltersView: React.FC = () => {
+interface Props {
+    onClose?: () => void;
+}
+
+const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
 
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
@@ -126,7 +131,9 @@ const WorkersSearchFiltersView: React.FC = () => {
     }
 
     return (
-        <div className="form-view relative flex flex-col">
+        <div className="form-view relative flex flex-col primary-bg">
+            <Header onBack={() => onClose?.()} title={t("employeeProfile.searchTitle")} />
+
             <form className='flex flex-col flex-1'
                 noValidate
                 onSubmit={f.handleSubmit(submit)}

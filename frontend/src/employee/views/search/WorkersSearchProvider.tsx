@@ -7,6 +7,9 @@ import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { AppConfig } from "@shared/AppConfig";
+import PseudoView from "global/components/PseudoView";
+import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
+import { wait } from "global/utils/utils";
 
 export interface WorkersSearchContextProps {
     filters: WorkerSearchFilters;
@@ -21,6 +24,7 @@ export interface WorkersSearchContextProps {
     setLoading: (loading: boolean) => void;
     updateOneProfileInResults: (updatedProfile: WorkerI) => void;
     filtersValid: boolean;
+    setOpenPseudoView: (open: boolean) => void;
 }
 
 export const WorkerDefaultFilters: WorkerSearchFilters = {
@@ -57,6 +61,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [results, setResults] = useState<WorkerWithMutualFriends[]>([]);
     const [loading, setLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
+    const [openPseudoView, setOpenPseudoView] = useState(false);
 
     const requestIdRef = useRef(0);
     const resultsLengthRef = useRef(0);
@@ -138,7 +143,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         executeSearch(newFilters, false);
     }
 
-    const setFiltersWithSearchAndNavigate = (newFilters: WorkerSearchFilters) => {
+    const setFiltersWithSearchAndNavigate = async (newFilters: WorkerSearchFilters) => {
         setFiltersState(newFilters);
         resultsLengthRef.current = 0;
         hasMoreRef.current = false;
@@ -146,7 +151,11 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         const searchStr = WorkerUtil.prepareUrlParams(newFilters, WorkerDefaultFilters)
         const newUrl = searchStr ? `?${searchStr}` : ''
 
-        if (newUrl !== location.search) {
+        const isOnSearchPage = newUrl === location.search
+
+        setOpenPseudoView(false)
+        await wait(AppConfig.ROUTER_ANIMATION_DURATION) // Wait for animation to finish before executing search
+        if (!isOnSearchPage) {
             navigate({ pathname: Path.WORKERS_SEARCH, search: newUrl })
         }
     }
@@ -194,9 +203,16 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             resetFilters,
             defaultFilters: WorkerDefaultFilters,
             updateOneProfileInResults,
-            filtersValid
-        }}>
+            filtersValid,
+            setOpenPseudoView
+        }}><>
             {children}
+            <PseudoView show={openPseudoView}>
+                <WorkersSearchFiltersView onClose={() => {
+                    setOpenPseudoView(false)
+                }}></WorkersSearchFiltersView>
+            </PseudoView>
+        </>
         </WorkersSearchContext.Provider>
     );
 };

@@ -20,7 +20,6 @@ export abstract class Path {
     public static readonly WORKER_FORM = '/worker-form';
     public static readonly WORKER_SKILLS_FORM = '/worker-skills-form';
     public static readonly WORKERS_SEARCH = '/workers-search';    
-    public static readonly WORKERS_FILTERS_SEARCH = `/workers-filters-search`;
 
     // OFFERS
     public static readonly OFFER_FORM = '/offer-form';
