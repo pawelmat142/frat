@@ -4,6 +4,7 @@ import { AvatarRef, UserI } from '@shared/interfaces/UserI';
 import { UserService } from '../services/UserService';
 import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
 import { Subscription } from 'rxjs';
+import { CloudinaryTags } from '@shared/utils/CloudinaryUtil';
 
 
 @Injectable()
@@ -78,7 +79,7 @@ export class UserManagementService implements OnModuleInit, OnModuleDestroy {
         }
         
         // Delete old avatar assets from Cloudinary, keeping the new one
-        await this.cloudinaryService.deleteUserAvatarAssets(user.uid, newPublicId);
+        await this.deleteUserAvatarAssets(user.uid, newPublicId);
         
         // Update user entity - DB trigger will sync to jh_workers automatically
         userEntity.avatarRef = newAvatarRef;
@@ -88,4 +89,8 @@ export class UserManagementService implements OnModuleInit, OnModuleDestroy {
         return updatedUser;
     }
 
+    private async deleteUserAvatarAssets(uid: string, exceptPublicId?: string): Promise<void> {
+        await this.cloudinaryService.deleteImagesWithTags([CloudinaryTags.uid(uid), CloudinaryTags.USER_AVATAR], exceptPublicId);
+    }
+    
 }

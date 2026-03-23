@@ -72,13 +72,9 @@ export class WorkerRepo {
         return saved;
     }
 
-    public async delete(workerId: number): Promise<void> {
-        const profile = await this.woerkersRepository.findOne({ where: { workerId } });
-        if (!profile) {
-            throw new NotFoundException("employeeProfile.notFound");
-        }
+    public async delete(profile: WorkerEntity): Promise<void> {
         await this.woerkersRepository.remove(profile);
-        this.logger.log(`Deleted EmployeeProfile id=${workerId}`);
+        this.logger.log(`Deleted EmployeeProfile id=${profile.workerId}`);
     }
 
     public async deleteAllProfiles(): Promise<void> {

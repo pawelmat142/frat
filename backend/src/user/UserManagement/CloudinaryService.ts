@@ -57,69 +57,52 @@ export class CloudinaryService {
     }
 
     /**
-     * Deletes all user avatar assets for a specific UID
-     * Targets assets with both `uid:${uid}` and `user-avatar` tags
-     * @param uid - User UID
-     * @param exceptPublicId - Optional publicId to exclude from deletion (e.g. the new avatar)
+     * Deletes all Cloudinary assets matching ALL provided tags.
+     * @param tags - Every tag must be present on the asset (AND logic)
+     * @param exceptPublicId - Optional publicId to exclude from deletion
      */
-    public async deleteUserAvatarAssets(uid: string, exceptPublicId?: string): Promise<void> {
+    public async deleteImagesWithTags(tags: string[], exceptPublicId?: string): Promise<void> {
         this.validateConfig();
         const auth = Buffer.from(`${this.apiKey}:${this.apiSecret}`).toString('base64');
 
-        const uidTag = CloudinaryTags.uid(uid);
+        const expression = tags.map(tag => `tags="${tag}"`).join(' AND ');
         try {
-            // Search for assets with both tags using Cloudinary Search API
-            // Tags with special characters (like colon) must be quoted
             const searchResponse = await axios.post(
                 `${BASE_URL}/${this.cloudName}/resources/search`,
-                {
-                    expression: `tags="${uidTag}" AND tags="${CloudinaryTags.USER_AVATAR}"`,
-                    max_results: 100,
-                },
-                {
-                    headers: {
-                        Authorization: `Basic ${auth}`,
-                        'Content-Type': 'application/json',
-                    }
-                }
+                { expression, max_results: 100 },
+                { headers: { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' } }
             );
 
-            const resources = searchResponse.data.resources || [];
+            const resources: { public_id: string }[] = searchResponse.data.resources || [];
             if (resources.length === 0) {
-                this.logger.log(`No user avatar assets found for UID: ${uid}`);
+                this.logger.log(`No assets found for tags: ${tags.join(', ')}`);
                 return;
             }
 
-            // Extract public_ids, excluding the one we want to keep
-            const publicIds: string[] = resources
-                .map((r: { public_id: string }) => r.public_id)
-                .filter((id: string) => id !== exceptPublicId);
+            const publicIds = resources
+                .map(r => r.public_id)
+                .filter(id => id !== exceptPublicId);
 
             if (publicIds.length === 0) {
-                this.logger.log(`No old avatar assets to delete for UID: ${uid} (keeping ${exceptPublicId})`);
+                this.logger.log(`No assets to delete for tags: ${tags.join(', ')}${exceptPublicId ? ` (keeping ${exceptPublicId})` : ''}`);
                 return;
             }
-            
+
             const deleteResponse = await axios.delete(
                 `${BASE_URL}/${this.cloudName}/resources/image/upload`,
                 {
-                    headers: {
-                        Authorization: `Basic ${auth}`,
-                        'Content-Type': 'application/json',
-                    },
-                    data: {
-                        public_ids: publicIds,
-                    }
+                    headers: { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' },
+                    data: { public_ids: publicIds },
                 }
             );
 
-            this.logger.log(`Deleted ${publicIds.length} user avatar assets for UID: ${uid}${exceptPublicId ? ` (kept ${exceptPublicId})` : ''}, result: ${JSON.stringify(deleteResponse.data)}`);
+            this.logger.log(`Deleted ${publicIds.length} assets for tags: ${tags.join(', ')}, result: ${JSON.stringify(deleteResponse.data)}`);
         } catch (error: any) {
             if (error.response?.status === 404) {
-                this.logger.log(`No user avatar assets found for UID: ${uid}`);
+                this.logger.log(`No assets found for tags: ${tags.join(', ')}`);
                 return;
             }
-            this.logger.error(`Error deleting user avatar assets for UID: ${uid}`, error);
+            this.logger.error(`Error deleting assets for tags: ${tags.join(', ')}`, error);
             throw new ToastException('cloudinary.deletionFailed', this);
         }
     }

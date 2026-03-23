@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { ForbiddenException, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, NotFoundException, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { WorkerRepo } from './WorkerRepo';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { AvatarRef, UserI } from '@shared/interfaces/UserI';
@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { UserService } from 'user/services/UserService';
 import { CertificatesWorkerService } from './CertificatesWorkerService';
 import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
+import { CloudinaryTags } from '@shared/utils/CloudinaryUtil';
 
 @Injectable()
 export class WorkersService implements OnModuleInit, OnModuleDestroy {
@@ -76,8 +77,13 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         return this.workerRepo.activation(id, status);
     }
 
-    public deleteProfile(workerId: number): Promise<void> {
-        return this.workerRepo.delete(workerId);
+    public async deleteProfile(workerId: number): Promise<void> {
+        const profile = await this.workerRepo.getById(workerId);
+        if (!profile) {
+            throw new NotFoundException("employeeProfile.notFound");
+        }
+        await this.deleteAllWorkerProfileImages(profile.uid);
+        return this.workerRepo.delete(profile);
     }
 
     public deleteAllProfiles(): Promise<void> {
@@ -181,6 +187,9 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         this.logger.log(`Removed image for profile ID: ${profile.workerId}, total images now: ${profile.images.length}`);
     }
 
+    private async deleteAllWorkerProfileImages(uid: string): Promise<void> {
+        await this.cloudinaryService.deleteImagesWithTags([CloudinaryTags.uid(uid), CloudinaryTags.WORKER_PROFILE]);
+    }
 
     private async updateCertificatesValidityDates(uid: string, form: WorkerFormDto): Promise<boolean> {
         const result = await this.certificatesWorkerService.syncCertificates(uid, form);
