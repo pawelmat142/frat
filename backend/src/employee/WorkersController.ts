@@ -134,7 +134,7 @@ export class WorkersController {
   addImage(
     @CurrentUser() user: UserI,
     @Body() imageRef: AvatarRef
-  ): Promise<WorkerI> {
+  ): Promise<void> {
     return this.workersService.addImage(user, imageRef);
   }
 
@@ -144,7 +144,7 @@ export class WorkersController {
   removeImage(
     @CurrentUser() user: UserI,
     @Param('publicId') publicId: string
-  ): Promise<WorkerI> {
+  ): Promise<void> {
     return this.workersService.removeImage(user, publicId);
   }
 

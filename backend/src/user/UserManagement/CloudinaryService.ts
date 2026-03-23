@@ -1,9 +1,13 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AppConfig } from '@shared/AppConfig';
+import { CloudinaryTags } from '@shared/utils/CloudinaryUtil';
 import axios from 'axios';
 import * as crypto from 'crypto';
 import { ToastException } from 'global/exceptions/ToastException';
+
+const BASE_URL = AppConfig.CLOUDINARY_BASE_URL;
 
 @Injectable()
 export class CloudinaryService {
@@ -27,13 +31,13 @@ export class CloudinaryService {
 
     public async deleteAllAssetsForUid(uid: string): Promise<void> {
         this.validateConfig();
-        const tag = `uid:${uid}`;
+        const tag = CloudinaryTags.uid(uid);
         try {
             // Admin API uses Basic Auth
             const auth = Buffer.from(`${this.apiKey}:${this.apiSecret}`).toString('base64');
             
             const response = await axios.delete(
-                `https://api.cloudinary.com/v1_1/${this.cloudName}/resources/image/tags/${tag}`,
+                `${BASE_URL}/${this.cloudName}/resources/image/tags/${tag}`,
                 {
                     headers: {
                         Authorization: `Basic ${auth}`,
@@ -62,13 +66,14 @@ export class CloudinaryService {
         this.validateConfig();
         const auth = Buffer.from(`${this.apiKey}:${this.apiSecret}`).toString('base64');
 
+        const uidTag = CloudinaryTags.uid(uid);
         try {
             // Search for assets with both tags using Cloudinary Search API
             // Tags with special characters (like colon) must be quoted
             const searchResponse = await axios.post(
-                `https://api.cloudinary.com/v1_1/${this.cloudName}/resources/search`,
+                `${BASE_URL}/${this.cloudName}/resources/search`,
                 {
-                    expression: `tags="uid:${uid}" AND tags="user-avatar"`,
+                    expression: `tags="${uidTag}" AND tags="${CloudinaryTags.USER_AVATAR}"`,
                     max_results: 100,
                 },
                 {
@@ -96,7 +101,7 @@ export class CloudinaryService {
             }
             
             const deleteResponse = await axios.delete(
-                `https://api.cloudinary.com/v1_1/${this.cloudName}/resources/image/upload`,
+                `${BASE_URL}/${this.cloudName}/resources/image/upload`,
                 {
                     headers: {
                         Authorization: `Basic ${auth}`,
@@ -134,7 +139,7 @@ export class CloudinaryService {
             const signature = this.generateSignature({ publicId, timestamp });
 
             const response = await axios.post(
-                `https://api.cloudinary.com/v1_1/${this.cloudName}/image/destroy`,
+                `${BASE_URL}/${this.cloudName}/image/destroy`,
                 {
                     public_id: publicId,
                     api_key: this.apiKey,

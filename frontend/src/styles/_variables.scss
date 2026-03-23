@@ -133,6 +133,10 @@ textarea::placeholder,
   border-color: $border-color;
 }
 
+.tile-radius {
+  border-radius: $tile-radius;
+}
+
 
 // FONT
 $btnFont: 1.1rem;

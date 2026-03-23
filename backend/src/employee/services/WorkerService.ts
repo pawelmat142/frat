@@ -154,28 +154,26 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         this.logger.log(`Updated skills for profile ID: ${profile.workerId}, total skills now: ${profile.skills.items.length}`);
     }
 
-    public async addImage(user: UserI, imageRef: AvatarRef): Promise<WorkerEntity> {
+    public async addImage(user: UserI, imageRef: AvatarRef): Promise<void> {
         const profile = await this.workerRepo.findByUid(user.uid);
         if (!profile) {
             throw new ToastException('employeeProfile.notFound', this);
         }
         profile.images = profile.images || [];
         profile.images.push(imageRef);
-        const result = await this.workerRepo.update(profile);
+        await this.workerRepo.update(profile);
         this.logger.log(`Added image for profile ID: ${profile.workerId}, total images now: ${profile.images.length}`);
-        return result;
     }
 
-    public async removeImage(user: UserI, publicId: string): Promise<WorkerEntity> {
+    public async removeImage(user: UserI, publicId: string): Promise<void> {
         const profile = await this.workerRepo.findByUid(user.uid);
         if (!profile) {
             throw new ToastException('employeeProfile.notFound', this);
         }
         profile.images = profile.images || [];
         profile.images = profile.images.filter(image => image.publicId !== publicId);
-        const result = await this.workerRepo.update(profile);
+        await this.workerRepo.update(profile);
         this.logger.log(`Removed image for profile ID: ${profile.workerId}, total images now: ${profile.images.length}`);
-        return result;
     }
 
 

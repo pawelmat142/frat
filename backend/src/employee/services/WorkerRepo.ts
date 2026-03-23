@@ -271,6 +271,12 @@ export class WorkerRepo {
             updatedFlag = true;
         }
 
+        if (this.imagesChanges(newWorker, worker)) {
+            this.logger.log(`Updating EmployeeProfile images from ${JSON.stringify(worker.images)} to ${JSON.stringify(newWorker.images)}`);
+            worker.images = newWorker.images.map(i => ({ publicId: i.publicId ?? '', url: i.url ?? '' }));
+            updatedFlag = true;
+        }
+
         if (!updatedFlag && !anotherChange) {
             throw new ToastException("employeeProfile.noChanges", this);
         }
@@ -278,6 +284,12 @@ export class WorkerRepo {
         const saved = await this.woerkersRepository.save(worker);
         this.logger.log(`Updated Employee Profile: ${saved.workerId}, uid: ${saved.uid}, version: ${saved.version}`);
         return saved;
+    }
+
+    private imagesChanges(newProfile: DeepPartial<WorkerEntity>, profile: WorkerEntity): boolean {
+        const newIds = newProfile.images?.map(i => i.publicId) || [];
+        const oldIds = profile.images?.map(i => i.publicId) || [];
+        return ObjUtil.arrayChanged(newIds, oldIds);
     }
 
     private dateRangesChanged(newProfile: DeepPartial<WorkerEntity>, profile: WorkerEntity): boolean {

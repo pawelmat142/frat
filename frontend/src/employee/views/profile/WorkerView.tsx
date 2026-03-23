@@ -26,6 +26,7 @@ import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { AppConfig } from "@shared/AppConfig";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import WorkerSkillsSection from "employee/components/WorkerSkillsSection";
+import WorkerImagesSection from "employee/components/WorkerImagesSection";
 
 const WorkerView: React.FC = () => {
 
@@ -367,6 +368,8 @@ const WorkerView: React.FC = () => {
             )}
 
             <WorkerSkillsSection worker={worker} />
+
+            <WorkerImagesSection worker={worker} onWorkerUpdate={_setProfile} />
 
             <div className="px-5 mb-10">
                 <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>

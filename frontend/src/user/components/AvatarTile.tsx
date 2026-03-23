@@ -1,12 +1,13 @@
 import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { AvatarService } from "user/services/AvatarService";
+import { AVATAR_SIZE, CloudinaryService } from "user/services/CloudinaryService";
 import { Save, Close, Edit } from "@mui/icons-material";
 import Loading from "global/components/Loading";
 import IconButton from "global/components/controls/IconButon";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
+import { FileUtil } from "global/utils/FileUtil";
 
 interface AvatarTileProps {
     src?: string;
@@ -70,7 +71,7 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
         }
 
         setIsUploading(true);
-        const optimizedFile = await AvatarService.resizeAndCropImage(file);
+        const optimizedFile = await FileUtil.resizeAndCropSquare(file, AVATAR_SIZE);
         setIsUploading(false);
 
         // Show preview and store file for later upload
@@ -92,7 +93,7 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
 
         setIsUploading(true);
         try {
-            const result = await AvatarService.uploadAvatar(pendingFile, uid)
+            const result = await CloudinaryService.uploadAvatar(pendingFile, uid)
 
             if (result) {
                 userCtx.updateMe(result);

@@ -1,15 +1,14 @@
 import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { AvatarService } from "user/services/AvatarService";
-import { Upload, Close } from "@mui/icons-material";
+import { AVATAR_SIZE, CloudinaryService } from "user/services/CloudinaryService";
 import Loading from "global/components/Loading";
-import IconButton from "global/components/controls/IconButon";
-import { BtnModes, BtnSizes } from "global/interface/controls.interface";
+import { BtnModes } from "global/interface/controls.interface";
 import { AvatarRef } from "@shared/interfaces/UserI";
 import FormError from "./FormError";
 import Button from "./Button";
-import RemoveButton from "../buttons/RemoveButton";
+import { AppConfig } from "@shared/AppConfig";
+import { FileUtil } from "global/utils/FileUtil";
 
 interface AvatarUploadFieldProps {
     value: AvatarRef | null;
@@ -19,9 +18,8 @@ interface AvatarUploadFieldProps {
     required?: boolean;
 }
 
-export const AVATAR_PLACEHOLDER = "/assets/img/default-avatar.png";
-const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-const MAX_FILE_SIZE_MB = 5;
+const AVATAR_PLACEHOLDER = AppConfig.AVATAR_PLACEHOLDER;
+const ALLOWED_EXTENSIONS = [...AppConfig.UPLOAD_IMG_ALLOWED_EXTENSIONS] as string[];
 
 const AvatarUploadField: React.FC<AvatarUploadFieldProps> = ({
     value,
@@ -35,23 +33,6 @@ const AvatarUploadField: React.FC<AvatarUploadFieldProps> = ({
     const [isUploading, setIsUploading] = useState(false);
     const [previewSrc, setPreviewSrc] = useState<string | null>(null);
 
-    const validateFile = (file: File): string | null => {
-        const extension = file.name.split('.').pop()?.toLowerCase();
-
-        if (!extension || !ALLOWED_EXTENSIONS.includes(extension)) {
-            return t('validation.invalidFileType', {
-                allowed: ALLOWED_EXTENSIONS.join(', ')
-            });
-        }
-
-        const fileSizeMB = file.size / (1024 * 1024);
-        if (fileSizeMB > MAX_FILE_SIZE_MB) {
-            return t('validation.fileTooLarge', { max: MAX_FILE_SIZE_MB });
-        }
-
-        return null;
-    };
-
     const handleClick = () => {
         if (!isUploading) {
             fileInputRef.current?.click();
@@ -62,16 +43,16 @@ const AvatarUploadField: React.FC<AvatarUploadFieldProps> = ({
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const validationError = validateFile(file);
+        const validationError = FileUtil.validateImage(file);
         if (validationError) {
-            toast.error(validationError);
+            toast.error(t(validationError));
             e.target.value = '';
             return;
         }
 
         setIsUploading(true);
         try {
-            const optimizedFile = await AvatarService.resizeAndCropImage(file);
+            const optimizedFile = await FileUtil.resizeAndCropSquare(file, AVATAR_SIZE);
 
             // Show preview immediately
             const previewUrl = URL.createObjectURL(optimizedFile);
@@ -80,7 +61,7 @@ const AvatarUploadField: React.FC<AvatarUploadFieldProps> = ({
             // Upload to Cloudinary
             const folder = uid ? `avatars/${uid}` : 'avatars/temp';
             const tags = uid ? ['avatar', 'user-avatar', `uid:${uid}`] : ['avatar', 'temp'];
-            const avatarRef = await AvatarService.uploadImage(optimizedFile, folder, tags);
+            const avatarRef = await CloudinaryService.uploadImage(optimizedFile, folder, tags);
 
             // Update form value
             onChange(avatarRef);
