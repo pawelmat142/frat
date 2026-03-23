@@ -14,7 +14,7 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { CloudinaryService } from "user/services/CloudinaryService";
 import { CloudinaryFolderNames, CloudinaryTags } from "@shared/utils/CloudinaryUtil";
 import { useWorkerContext } from "employee/WorkerProvider";
-import Lightbox from "global/components/img/LightBox";
+import GallerySwiper from "global/components/img/GallerySwiper";
 import { useConfirm } from "global/providers/PopupProvider";
 import LongTapHandler from "global/components/LongTapHandler";
 
@@ -233,7 +233,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
             {/* Lightbox */}
             <AnimatePresence>
                 {lightboxIndex !== null && (
-                    <Lightbox
+                    <GallerySwiper
                         images={allDisplayUrls}
                         startIndex={lightboxIndex}
                         onClose={() => setLightboxIndex(null)}

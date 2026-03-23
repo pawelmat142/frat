@@ -8,7 +8,7 @@ interface Props {
     onClose: () => void;
 }
 
-const Lightbox: React.FC<Props> = ({ images, startIndex, onClose }) => {
+const GallerySwiper: React.FC<Props> = ({ images, startIndex, onClose }) => {
     const [index, setIndex] = useState(startIndex);
 
     const prev = () => setIndex((i) => (i - 1 + images.length) % images.length);
@@ -75,4 +75,4 @@ const Lightbox: React.FC<Props> = ({ images, startIndex, onClose }) => {
     );
 };
 
-export default Lightbox;
+export default GallerySwiper;

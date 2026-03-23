@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { WorkerAvailabilityOptions, WorkerI, WorkerStatuses } from "@shared/interfaces/WorkerI";
 import { useWorkersSearch } from "../search/WorkersSearchProvider";
 import { useTranslation } from "react-i18next";
-import { useGlobalContext } from "global/providers/GlobalProvider";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { Path } from "../../../path";
 import { useMenuContext } from "global/providers/MenuProvider";
@@ -45,15 +44,9 @@ const WorkerView: React.FC = () => {
     const me = userCtx?.me;
 
     const profileCtx = useWorkersSearch();
-    const globalCtx = useGlobalContext();
     const isDesktop = useIsDesktop();
 
     const isMe = me?.uid === worker?.uid;
-
-    // TODO remove
-    console.log(worker)
-
-
 
     useEffect(() => {
         const initWorker = async () => {
@@ -379,14 +372,5 @@ const WorkerView: React.FC = () => {
         </div>
     );
 }
-
-// TODO 
-// PORTFOLIO (game changer)
-// [zdjęcie] [zdjęcie] [zdjęcie]
-
-// 💡 UX trick:
-
-// grid 2x2
-// klik = fullscreen
 
 export default WorkerView;
