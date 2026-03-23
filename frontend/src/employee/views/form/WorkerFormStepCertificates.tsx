@@ -58,7 +58,7 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
     return (
         <>
             <h3 className="form-subheader">
-                {t("employeeProfile.form.step4.title")}
+                {t("employeeProfile.form.certificates.title")}
             </h3>
 
             <div className="flex flex-col gap-5 md:gap-5 mt-5">
