@@ -81,7 +81,7 @@ export const WorkerService = {
 	},
 
 	removeImage(publicId: string): Promise<WorkerI> {
-		return httpClient.delete<WorkerI>(`/worker/images/${encodeURIComponent(publicId)}`);
+		return httpClient.delete<WorkerI>(`/worker/images`, { params: { publicId } });
 	},
 
 };

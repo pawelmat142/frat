@@ -14,6 +14,7 @@ import { GeoPointService } from './services/GeoPointService';
 import { SearchWorkersService } from './services/SearchWorkerService';
 import { DateRangeEntity } from './model/DateRangeEntity';
 import { UserModule } from 'user/UserModule';
+import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
 
 @Module({
     imports: [
@@ -25,7 +26,8 @@ import { UserModule } from 'user/UserModule';
 
         AuthModule,
         DictionariesModule,
-        UserModule
+        UserModule,
+        UserManagementModule
     ],
     providers: [
         WorkerRepo,

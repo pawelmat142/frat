@@ -18,5 +18,8 @@ import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
     controllers: [
         UserManagementController
     ],
+    exports: [
+        CloudinaryService,
+    ]
 })
 export class UserManagementModule { }

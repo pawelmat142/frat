@@ -138,12 +138,12 @@ export class WorkersController {
     return this.workersService.addImage(user, imageRef);
   }
 
-  @Delete("/images/:publicId")
+  @Delete("/images")
   @UseGuards(JwtAuthGuard)
   @Serialize(WorkerEntity)
   removeImage(
     @CurrentUser() user: UserI,
-    @Param('publicId') publicId: string
+    @Query('publicId') publicId: string
   ): Promise<void> {
     return this.workersService.removeImage(user, publicId);
   }

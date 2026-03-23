@@ -13,6 +13,7 @@ import { WorkersInitialData } from './WorkersInitialData';
 import { Subscription } from 'rxjs';
 import { UserService } from 'user/services/UserService';
 import { CertificatesWorkerService } from './CertificatesWorkerService';
+import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
 
 @Injectable()
 export class WorkersService implements OnModuleInit, OnModuleDestroy {
@@ -25,6 +26,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         private readonly workerRepo: WorkerRepo,
         private readonly userService: UserService,
         private readonly certificatesWorkerService: CertificatesWorkerService,
+        private readonly cloudinaryService: CloudinaryService,
     ) { }
 
     onModuleInit() {
@@ -170,6 +172,9 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         if (!profile) {
             throw new ToastException('employeeProfile.notFound', this);
         }
+
+        await this.cloudinaryService.deleteImage(publicId);
+
         profile.images = profile.images || [];
         profile.images = profile.images.filter(image => image.publicId !== publicId);
         await this.workerRepo.update(profile);

@@ -7,7 +7,7 @@ import { useUserContext } from "user/UserProvider";
 import { FileUtil } from "global/utils/FileUtil";
 import { WorkerService } from "employee/services/WorkerService";
 import { toast } from "react-toastify";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import Loading from "global/components/Loading";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
@@ -15,6 +15,7 @@ import { CloudinaryService } from "user/services/CloudinaryService";
 import { CloudinaryFolderNames, CloudinaryTags } from "@shared/utils/CloudinaryUtil";
 import { useWorkerContext } from "employee/WorkerProvider";
 import Lightbox from "global/components/img/LightBox";
+import { useConfirm } from "global/providers/PopupProvider";
 
 interface Props {
     worker: WorkerI;
@@ -27,6 +28,15 @@ interface PendingImage {
 }
 
 const MAX_IMAGES = 6;
+const HOLD_MS = 200;
+
+// TODO usuwanie
+// TODO usuwanie profilu - usuwa wszystkie zdjecia z cloudinary
+// TODO wyciagnac do komponentu efekty przytrzymania
+// TODO translacje
+// TODO wyciagnac do komponentu efekt z lightboxa - pseudowidok - bez nawigacji
+// TODO reuzyc efekt psudowidoku do datepickera duzego 
+// TODO reuzyc efekt pseudowidoku do filtrow worker i oferty
 
 const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
     const { t } = useTranslation();
@@ -38,11 +48,14 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
     const [processing, setProcessing] = useState(false);
     const [saving, setSaving] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+    const [holdingId, setHoldingId] = useState<string | null>(null);
+    const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const confirm = useConfirm();
 
     const me = userCtx.me;
     const isMyProfile = me?.uid === worker.uid;
 
-    const savedImages: AvatarRef[] = worker.images || [];
+    const savedImages: AvatarRef[] = workerCtx.worker?.images ?? worker.images ?? [];
     const canAddMore = savedImages.length < MAX_IMAGES;
 
     const allDisplayUrls = [
@@ -110,13 +123,44 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
 
     const handleRemove = async (publicId: string) => {
         try {
-            // TODO remove from cloudinary 
-            const updated = await WorkerService.removeImage(publicId);
-            // TODO refresh worker
-
+            // TODO remove from cloudinary
+            await WorkerService.removeImage(publicId);
+            await workerCtx.initWorker();
         } catch {
             toast.error(t('error.imageRemoveFailed'));
         }
+    };
+
+    const startHold = (e: React.PointerEvent, publicId: string) => {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        setHoldingId(publicId);
+        holdTimer.current = setTimeout(async () => {
+            holdTimer.current = null;
+            setHoldingId(null);
+            const ok = await confirm({
+                title: t('gallery.delete.title'),
+                message: t('gallery.delete.message'),
+            });
+            if (ok) handleRemove(publicId);
+        }, HOLD_MS);
+    };
+
+    // Released before threshold — was a tap, open lightbox
+    const endHold = (e: React.PointerEvent, index: number) => {
+        if (holdTimer.current) {
+            clearTimeout(holdTimer.current);
+            holdTimer.current = null;
+            setHoldingId(null);
+            openLightbox(index);
+        }
+    };
+
+    const cancelHold = () => {
+        if (holdTimer.current) {
+            clearTimeout(holdTimer.current);
+            holdTimer.current = null;
+        }
+        setHoldingId(null);
     };
 
     const openLightbox = (index: number) => {
@@ -131,6 +175,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
 
     return (
         <div className="mb-10 px-5">
+            <style>{`@keyframes holdRing { from { stroke-dashoffset: 163.4; } to { stroke-dashoffset: 0; } }`}</style>
             <div className="secondary-text mb-3">{t('gallery.title')}</div>
 
             <div className="grid grid-cols-2 gap-2">
@@ -138,23 +183,27 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
                 {savedImages.map((img, i) => (
                     <div
                         key={img.publicId}
-                        className="relative aspect-square tile-radius overflow-hidden secondary-bg cursor-pointer"
-                        onClick={() => openLightbox(i)}
+                        className="relative aspect-square tile-radius overflow-hidden secondary-bg cursor-pointer select-none"
+                        style={isMyProfile ? { touchAction: 'none' } : undefined}
+                        onClick={isMyProfile ? undefined : () => openLightbox(i)}
+                        onPointerDown={isMyProfile ? (e) => startHold(e, img.publicId) : undefined}
+                        onPointerUp={isMyProfile ? (e) => endHold(e, i) : undefined}
+                        onPointerLeave={isMyProfile ? cancelHold : undefined}
+                        onPointerCancel={isMyProfile ? cancelHold : undefined}
+                        onContextMenu={isMyProfile ? (e) => e.preventDefault() : undefined}
                     >
                         <img
                             src={img.url}
                             alt=""
                             className="w-full h-full object-cover"
                         />
-                        {isMyProfile && (
-                            <Button
-                                mode={BtnModes.ERROR}
-                                size={BtnSizes.SMALL}
-                                className="absolute top-2 right-2 p-2"
-                                onClick={(e) => { e?.stopPropagation(); handleRemove(img.publicId); }}
-                            >
-                                <Ico.CANCEL size={12} />
-                            </Button>
+                        {holdingId === img.publicId && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                <svg width="60" height="60" viewBox="0 0 60 60" className="-rotate-90">
+                                    <circle cx="30" cy="30" r="26" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="3" />
+                                    <circle cx="30" cy="30" r="26" fill="none" stroke="white" strokeWidth="3" strokeDasharray="163.4" style={{ animation: `holdRing ${HOLD_MS}ms linear forwards` }} />
+                                </svg>
+                            </div>
                         )}
                     </div>
                 ))}
