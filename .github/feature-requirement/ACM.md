@@ -5,8 +5,8 @@
 ### [ACM.1] Registration
 
 #### [ACM.1.1] TODO - presentation
-#### [ACM.1.2] On registration, user receives role USER_FREE by default
-#### [ACM.1.3] Registration is possible via two methods described in ACM.2
+#### [ACM.1.2] On registration, user receives role USER by default
+#### [ACM.1.3] Registration is possible via methods described in ACM.2
 #### [ACM.1.4] After registration, a new entry is created in the `users` collection
 
 ---
@@ -22,6 +22,11 @@
 - a. Google email must be unique and not used by email registration
 - b. Full name and languages fields are required to fill after registration but, but pre-filled with data from Google if available
 
+#### [ACM.2.3] Telegram
+- a. Registration is handled via a Telegram bot.
+- b. The bot collects the user's Telegram username and generates an account using the Google provider under the hood.
+- c. A unique `telegramChannelId` is stored to ensure user identification.
+
 ---
 
 ### [ACM.3] Login
@@ -31,22 +36,27 @@
 - a. User must provide email and password
 - b. The last used email is suggested from browser/device cache
 
+#### [ACM.3.3] Telegram login
+- a. The Telegram bot generates a one-time PIN for authentication.
+- b. The user enters the PIN on the login page to complete the login process.
+- c. The `telegramChannelId` is used to link the Telegram account to the user profile.
+
 ---
 
 ### [ACM.4] Roles
 
-#### [ACM.4.1] USER_FREE
+#### [ACM.4.1] USER
 - a. Default role for all new users (assigned on registration)
 
 #### [ACM.4.2] USER_PREMIUM
 - a. Role may be assigned manually by SYSTEM_ADMIN
-- b. Upgrade possible via TODO
+- b. Upgrade possible via TODO (payment in the future)
 
-#### [ACM.4.3] BUSINESS_ADMIN
+#### [ACM.4.3] ADMIN
 - a. Role assigned manually by SYSTEM_ADMIN
 - b. Permissions to manage employee profile fields and admin panel
 
-#### [ACM.4.4] SYSTEM_ADMIN
+#### [ACM.4.4] SUPER_ADMIN
 - a. Role assigned manually by SYSTEM_ADMIN
 - b. Permissions to EVERYTHING
 
