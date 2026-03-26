@@ -1,6 +1,6 @@
-# JobHigh — Professional Network for the High-Altitude Industry
+# FRAT — Find High-Altitude Technicians
 
-> **Note:** JobHigh is a **Progressive Web App (PWA)** designed primarily for mobile devices. Full responsive desktop layout is on the roadmap and will be refined in a soon iteration.
+> **Note:** FRAT is a **Progressive Web App (PWA)** designed primarily for mobile devices. Full responsive desktop layout is on the roadmap and will be refined in a soon iteration.
 
 A fullstack web application connecting rope access technicians, industrial climbers, wind turbine specialists, and other height work professionals with employers, training providers, and equipment suppliers.
 
@@ -8,11 +8,11 @@ A fullstack web application connecting rope access technicians, industrial climb
 
 The high-altitude work industry — rope access, industrial climbing, wind energy, facade work — is a tight-knit but fragmented niche. Finding qualified specialists, assembling project teams, and staying in touch with the right people still happens largely through informal networks: word of mouth, Facebook groups, and phone calls.
 
-This project was born out of a real need raised by colleagues working in the field. There was no dedicated platform to streamline how professionals in this industry find work, build teams, and communicate. **JobHigh** is the answer to that gap.
+This project was born out of a real need raised by colleagues working in the field. There was no dedicated platform to streamline how professionals in this industry find work, build teams, and communicate. **FRAT** is the answer to that gap.
 
 ## What It Does
 
-JobHigh is a professional networking and job marketplace platform tailored specifically to the high-altitude industry. Unlike generic job boards, it understands the domain — from certifications (IRATA, SPRAT) and work categories to availability windows and willingness to travel.
+FRAT is a professional networking and job marketplace platform tailored specifically to the high-altitude industry. Unlike generic job boards, it understands the domain — from certifications (IRATA, SPRAT) and work categories to availability windows and willingness to travel.
 
 ## Core Features
 
@@ -39,7 +39,7 @@ JobHigh is a professional networking and job marketplace platform tailored speci
 ## Project Structure
 
 ```
-jobHigh/
+frat/
 ├── backend/          # NestJS backend application
 ├── frontend/         # React frontend application
 ├── db/               # Database init scripts and migrations
