@@ -567,7 +567,7 @@
           "maxAltitudeShort": "Max altitude",
           "readyToTravel": "Ready to travel"
         },
-        "title": "Employee Profile Form",
+        "title": "Worker profile form",
         "radius": "Radius",
         "address": "Address",
         "freeText": "Search...",
@@ -672,7 +672,7 @@
       "experience": "Experience",
       "likeButton": "Like Profile",
       "profileMenu": "Profile menu",
-      "searchTitle": "Workers search filters",
+      "searchTitle": "Workers filters",
       "availability": "Availability",
       "deleteButton": "Delete Profile",
       "unlikeButton": "Unlike Profile",
