@@ -10,6 +10,7 @@ interface NotificationsContextType {
     notifications: NotificationI[];
     notificationDeleted: (notificationId: number) => void;
     notificationReceived: (notification: NotificationI) => void;
+    unreadCount: number;
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
@@ -24,6 +25,7 @@ export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({
 
     // Notifications stored in database
     const [nativeNotifications, setNativeNotifications] = useState<NotificationI[]>([])
+    const [unreadCount, setUnreadCount] = useState<number>(0)
 
     // All notifications merged and sorted by createdAt
     const [notifications, setNotifications] = useState<NotificationI[]>([])
@@ -47,6 +49,7 @@ export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({
         const unreadCount = notifications.filter(n => !n.readAt).length
         if (unreadCount !== prevUnreadCount.current) {
             prevUnreadCount.current = unreadCount
+            setUnreadCount(unreadCount)
             NativeNotificationService.updateUnreadNotification(unreadCount)
         }
     }, [notifications])
@@ -93,7 +96,8 @@ export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({
         loading: loading,
         notifications,
         notificationDeleted,
-        notificationReceived
+        notificationReceived,
+        unreadCount
     }}>{children}</NotificationsContext.Provider>)
 }
 

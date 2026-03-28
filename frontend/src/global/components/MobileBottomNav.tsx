@@ -14,6 +14,7 @@ const MobileBottomNav: React.FC = () => {
                     <div key={index} className={`mobile-bottom-nav-item ripple${item.active ? ' active' : ''}`} onClick={item.onClick}>
                         {item.icon && <item.icon size={iconSize} />}
                         <div className="mobile-bottom-nav-label">{item.label}</div>
+                        {item.badge && <div className="mobile-bottom-nav-badge">{item.badge}</div>}
                     </div>
                 ))}
             </div>

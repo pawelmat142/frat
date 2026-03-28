@@ -370,6 +370,21 @@ $tilePadding: .5rem 1rem;
         color: $primary-color;
     }
 
+    position: relative;
+    .mobile-bottom-nav-badge {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: .3rem;
+        right: .8rem;
+        background-color: $error-color;
+        color: white;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        font-weight: bold;
+    }
 }
 
 .mobile-bottom-nav-label {

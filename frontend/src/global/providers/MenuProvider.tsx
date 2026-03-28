@@ -13,6 +13,7 @@ import { useUserContext } from 'user/UserProvider';
 import { BtnModes, MenuItem } from 'global/interface/controls.interface';
 import { useWorkersSearch } from 'employee/views/search/WorkersSearchProvider';
 import { useOfferSearch } from 'offer/views/search/OfferSearchProvider';
+import { useNotificationsContext } from 'notification/NotificationsProvider';
 
 
 
@@ -38,6 +39,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const globalCtx = useGlobalContext();
     const workerSearchCtx = useWorkersSearch()
     const offerSearchCtx = useOfferSearch()
+    const notificationsCtx = useNotificationsContext();
     
     const setupHeaderMenu = (menu: MenuConfig) => {
         globalCtx.setHeaderMenu(<IconButton mode={BtnModes.SECONDARY_TXT} icon={<Ico.MENU onClick={() => {
@@ -47,6 +49,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
 
     const items: MenuItem[] = [{
         label: t('nav.start'),
+        badge: notificationsCtx.unreadCount > 0 ? notificationsCtx.unreadCount.toString() : undefined,
         active: !!matchPath({ path: Path.HOME, end: true }, location.pathname),
         onClick: () => {
             navigate(Path.HOME)

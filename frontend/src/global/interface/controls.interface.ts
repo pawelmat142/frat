@@ -141,5 +141,6 @@ export interface MenuItem {
     icon?: IconType,
     rightIcon?: IconType
     className?: string
+    badge?: string
     onClick?: (e?: React.MouseEvent) => void
 }
