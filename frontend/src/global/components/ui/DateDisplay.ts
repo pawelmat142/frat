@@ -1,17 +1,19 @@
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-    date?: Date
+    date?: Date;
     localDateString?: string;
-    className?: string;
     showYear?: boolean;
     showYearIfNotCurrent?: boolean;
+    t: any
 }
 
-const DateDisplay: React.FC<Props> = ({ date, localDateString, className, showYear = false, showYearIfNotCurrent = true }) => {
-
-
-    const { t } = useTranslation();
+const DateDisplay = (props: Props): string | null => {
+    const date = props.date;
+    const showYear = props.showYear;
+    const showYearIfNotCurrent = props.showYearIfNotCurrent;
+    const localDateString = props.localDateString;
+    const t = props.t;
 
     const currentYear = new Date().getFullYear();
 
@@ -22,18 +24,17 @@ const DateDisplay: React.FC<Props> = ({ date, localDateString, className, showYe
         const year = date.getFullYear();
         const displayYear = showYear || (showYearIfNotCurrent && year !== currentYear);
 
-        return <span className={className}>{`${day} ${month}${displayYear ? ` ${year}` : ''}`}</span>
+        return `${day} ${month}${displayYear ? ` ${year}` : ''}`;
     }
 
     if (localDateString) {
         const [year, month, day] = localDateString.split('-').map(Number);
         const monthName = t(`callendar.monthShort.${month - 1}`);
         const displayYear = showYear || (showYearIfNotCurrent && year !== currentYear);
-        return <span className={className}>{`${day} ${monthName}${displayYear ? ` ${year}` : ''}`}</span>
+        return `${day} ${monthName}${displayYear ? ` ${year}` : ''}`;
     }
 
-
-    return null
-}
+    return null;
+};
 
 export default DateDisplay;

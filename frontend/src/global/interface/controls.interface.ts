@@ -1,4 +1,5 @@
 import { DictionaryColumnType, DictionaryElement } from "@shared/interfaces/DictionaryI";
+import { IconType } from "react-icons/lib/cjs/iconBase";
 
 export interface BtnInterface {
     to?: string;
@@ -135,6 +136,8 @@ export interface SelectorItem<T extends SelectorValue = SelectorValue> {
 export interface MenuItem {
     label: string
     src?: string
-    icon?: React.ReactNode
-    onClick?: () => void
+    if?: any
+    icon?: IconType
+    rightIcon?: IconType
+    onClick?: (e?: React.MouseEvent) => void
 }

@@ -17,7 +17,7 @@ import { useWorkerContext } from "employee/WorkerProvider";
 import { ChatService } from "chat/services/ChatService";
 import PositionWidget from "employee/components/PositionWidget";
 import { Ico } from "global/icon.def";
-import DateDisplay from "global/components/DateDisplay";
+import DateDisplay from "global/components/ui/DateDisplay";
 import { useIsDesktop } from "global/hooks/isMobile";
 import DictionaryDisplay from "global/components/DictionaryDisplay";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
@@ -26,6 +26,8 @@ import { AppConfig } from "@shared/AppConfig";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import WorkerSkillsSection from "employee/components/WorkerSkillsSection";
 import WorkerImagesSection from "employee/components/WorkerImagesSection";
+import { MenuItem } from "global/interface/controls.interface";
+import ListUi from "global/components/ui/ListUi";
 
 const WorkerView: React.FC = () => {
 
@@ -266,6 +268,51 @@ const WorkerView: React.FC = () => {
     const listItemClassName = `flex gap-4 px-5 py-2 items-center s-font`;
     const iconSize = `1.2rem`
 
+    const getListItems = (): MenuItem[] => {
+        const items: MenuItem[] = [{
+            if: isAnytime,
+            label: t('others.availableAnytime'),
+            icon: Ico.CALENDAR
+        }, {
+            if: !isAnytime && worker.startDate,
+            label: `${t('others.availableFrom')} ${DateDisplay({
+                date: new Date(worker.startDate!),
+                showYear: false, t
+            })}`,
+            icon: Ico.CALENDAR,
+            onClick: onAvailabilityClick
+        }, {
+            if: worker.geocodedPosition?.fullAddress,
+            label: `${worker.geocodedPosition!.fullAddress} ${getDistanceInfo()}`,
+            icon: Ico.MARKER
+        }, {
+            if: worker.phoneNumber,
+            label: `${t('employeeProfile.form.phoneNumber')}: ${worker.phoneNumber.prefix} ${worker.phoneNumber.number}`,
+            icon: Ico.PHONE,
+            onClick: openPhoneCall
+        }, {
+            label: `${t("employeeProfile.form.email")}: ${worker.email}`,
+            icon: Ico.EMAIL
+        }, {
+            if: worksInIndurstry,
+            label: worksInIndurstry,
+            icon: Ico.CLOCK
+        }, {
+            if: worker.maxAltitude,
+            label: `${t('employeeProfile.form.career.maxAltitudeShort')}: ${worker.maxAltitude}[m]`,
+            icon: Ico.RULER
+        }, {
+            if: typeof worker.readyToTravel === 'boolean',
+            label: `${t('employeeProfile.form.career.readyToTravel')}: ${worker.readyToTravel ? t('common.yes') : t('common.no')}`,
+            icon: Ico.COMPASS
+        }, {
+            if: !!worker.communicationLanguages.length,
+            label: `${t('others.languages')}: ${worker.communicationLanguages.map(lang => <DictionaryDisplay key={lang} dictionary="LANGUAGES" value={lang}></DictionaryDisplay>)}`,
+            icon: Ico.LANGUAGE
+        }];
+        return items;
+    }
+
     return (
         <div className="w-full">
 
@@ -283,69 +330,7 @@ const WorkerView: React.FC = () => {
             </div>
 
             <div className="mb-5 mt-5">
-                <div className={`${listItemClassName} ${!isAnytime ? 'ripple' : ''}`} onClick={onAvailabilityClick}>
-                    <Ico.CALENDAR size={iconSize}></Ico.CALENDAR>
-                    {isAnytime ? (
-                        <span>{t('others.availableAnytime')}</span>
-                    ) : (
-                        !!worker.startDate &&
-                        (<span>{t('others.availableFrom')} <DateDisplay localDateString={worker.startDate} showYear={false}></DateDisplay></span>)
-                    )}
-
-                    {!isAnytime && (
-                        <Ico.CHEVRON_RIGHT className="ml-auto secondary-text"></Ico.CHEVRON_RIGHT>
-                    )}
-                </div>
-
-                {!!worker.geocodedPosition?.fullAddress && (
-                    <div className={listItemClassName}>
-                        <Ico.MARKER size={iconSize}></Ico.MARKER>
-                        <span>{worker.geocodedPosition.fullAddress} {getDistanceInfo()}</span>
-                    </div>
-                )}
-
-                {!!worker.phoneNumber && (
-                    <div className={listItemClassName + ' ripple'} onClick={openPhoneCall}>
-                        <Ico.PHONE size={iconSize}></Ico.PHONE>
-                        <span>
-                            <span>{t('employeeProfile.form.phoneNumber')}: </span>
-                            <span>{worker.phoneNumber.prefix} {worker.phoneNumber.number}</span>
-                        </span>
-                        <Ico.CHEVRON_RIGHT className="ml-auto secondary-text"></Ico.CHEVRON_RIGHT>
-                    </div>
-                )}
-
-                <div className={listItemClassName}>
-                    <Ico.EMAIL size={iconSize}></Ico.EMAIL>
-                    <span>
-                        <span>{t("employeeProfile.form.email")}: </span>
-                        <span>{worker.email}</span>
-                    </span>
-                </div>
-
-                {!!worksInIndurstry && (<div className={listItemClassName}>
-                    <Ico.CLOCK size={iconSize}></Ico.CLOCK>
-                    <span>{worksInIndurstry}</span>
-                </div>)}
-                {worker.maxAltitude && (<div className={listItemClassName}>
-                    <Ico.RULER size={iconSize}></Ico.RULER>
-                    <span>{t('employeeProfile.form.career.maxAltitudeShort')}: {worker.maxAltitude} [m]</span>
-                </div>)}
-                {typeof worker.readyToTravel === 'boolean' && (<div className={listItemClassName}>
-                    <Ico.COMPASS size={iconSize}></Ico.COMPASS>
-                    <span>{t('employeeProfile.form.career.readyToTravel')}: {worker.readyToTravel ? t('common.yes') : t('common.no')}</span>
-                </div>)}
-
-                {!!worker.communicationLanguages.length && (
-                    <div className={listItemClassName}>
-                        <Ico.LANGUAGE size={iconSize}></Ico.LANGUAGE>
-                        <span>
-                            <span>{t('others.languages')}: </span>
-                            {worker.communicationLanguages.map(lang => <DictionaryDisplay key={lang} dictionary="LANGUAGES" value={lang}></DictionaryDisplay>)}
-                        </span>
-                    </div>
-                )}
-
+                <ListUi items={getListItems()}></ListUi>
             </div>
 
             {worker.certificates?.length && (

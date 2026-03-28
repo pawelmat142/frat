@@ -35,7 +35,7 @@ const MenuItems = ({
                         >
                             <div className="bottom-sheet-item-content">
                                 {item.icon && (
-                                    <span className="bottom-sheet-item-icon">{item.icon}</span>
+                                    <span className="bottom-sheet-item-icon">{<item.icon />}</span>
                                 )}
                                 {item.src && (
                                     <img
