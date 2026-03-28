@@ -3,9 +3,10 @@ import { MenuItem } from "global/interface/controls.interface";
 
 interface Props {
     items: MenuItem[];
+    className?: string;
 }
 
-const ListUi: React.FC<Props> = ({ items }) => {
+const ListUi: React.FC<Props> = ({ items, className }) => {
 
     if (!items.length) {
         return null;
@@ -33,12 +34,12 @@ const ListUi: React.FC<Props> = ({ items }) => {
     const defaultClassName = "flex gap-4 px-5 py-2 items-center s-font"
 
     return (
-        <>
+        <div className={className ? className : ""}>
             {items.filter(item => item.if === undefined || !!item.if).map((item, index) => {
 
-                const className = `${defaultClassName}${item.onClick ? " ripple" : ""}`;
+                const itemClassName = `${defaultClassName}${item.onClick ? " ripple" : ""}${item.className ? ` ${item.className}` : ""}`;
 
-                return <div key={index} className={className} onClick={(e) => onItemClick(e, item)}>
+                return <div key={index} className={itemClassName} onClick={(e) => onItemClick(e, item)}>
 
                     {item.icon && <item.icon size={iconSize} />}
 
@@ -48,8 +49,8 @@ const ListUi: React.FC<Props> = ({ items }) => {
 
                 </div>
             })}
-        </>
-    );
+        </div>
+    )
 };
 
 export default ListUi;

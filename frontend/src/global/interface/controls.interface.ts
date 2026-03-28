@@ -139,5 +139,6 @@ export interface MenuItem {
     if?: any
     icon?: IconType
     rightIcon?: IconType
+    className?: string
     onClick?: (e?: React.MouseEvent) => void
 }
