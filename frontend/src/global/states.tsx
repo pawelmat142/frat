@@ -1,7 +1,7 @@
 import MainHeaderState from "./header-state/MainHeaderState";
 import HeaderBackBtn from "./header-state/HeaderBackBtn";
 import { Path } from "../path";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 
 export interface ViewState {
     title?: string;
@@ -13,9 +13,6 @@ export interface ViewState {
 
 export const STATES = (navigate: NavigateFunction) => {
     return {
-        [Path.HOME]: {
-            leftBtn: <MainHeaderState />,
-        },
         [Path.WORKER_FORM]: {
             leftBtn: <HeaderBackBtn />,
             title: 'employeeProfile.form.title',
@@ -41,9 +38,7 @@ export const STATES = (navigate: NavigateFunction) => {
             title: 'signin.forgotPasswordTitle',
         },
         [Path.WORKERS_SEARCH]: {
-            leftBtn: <HeaderBackBtn onBack={() => {
-                navigate(Path.HOME, { state: { direction: 'back' } });
-            }} />,
+            leftBtn: <HeaderBackBtn />,
             title: 'employeeProfile.searchTitle',
         },
         [Path.WORKER]: {
@@ -59,9 +54,7 @@ export const STATES = (navigate: NavigateFunction) => {
             title: 'offer.form.title',
         },
         [Path.OFFERS_SEARCH]: {
-            leftBtn: <HeaderBackBtn onBack={() => {
-                navigate(Path.HOME);
-            }}/>,
+            leftBtn: <HeaderBackBtn/>,
             title: 'offer.searchTitle',
         },
         [Path.OFFER]: {

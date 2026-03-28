@@ -253,8 +253,8 @@
       "friends": "Friends",
       "showProfile": "Show profile",
       "deleteAccountFailed": "Failed to delete account",
-      "showWorkerProfile": "Show Worker Profile",
-      "createWorkerProfile": "Create Worker Profile",
+      "showEmployeeProfile": "Show Employee Profile",
+      "createEmployeeProfile": "Create Employee Profile",
       "deleteAccountConfirmTitle": "Delete Account",
       "deleteAccountSuccessToast": "Account deleted successfully",
       "deleteAccountConfirmMessage": "Are you sure you want to delete your account? This action cannot be undone."

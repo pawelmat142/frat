@@ -19,7 +19,6 @@ import WorkersSearchProvider from 'employee/views/search/WorkersSearchProvider';
 import { GlobalProvider } from 'global/providers/GlobalProvider';
 import GlobalHeader from 'global/components/GlobalHeader';
 import OfferSearchProvider from 'offer/views/search/OfferSearchProvider';
-import NotificationsGlobalBar from 'notification/components/NotificationsGlobalBar';
 import { ChatsProvider } from 'chat/ChatsProvider';
 import { NotificationsProvider } from 'notification/NotificationsProvider';
 import { FriendsProvider } from 'friends/FriendsProvider';
@@ -33,8 +32,8 @@ const AppShell: React.FC = () => {
   return (
     <div className="app-shell">
       <GlobalHeader />
-      <NotificationsGlobalBar />
-      <main className={`app-main${state.hideFooter ? ' hide-footer' : ''}`}>
+      {/* <NotificationsGlobalBar /> */}
+      <main className={`app-main${state?.hideFooter ? ' hide-footer' : ''}`}>
         <App />
       </main>
       <LayoutFooterSwitch />

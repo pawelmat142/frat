@@ -30,7 +30,7 @@ const LayoutFooterSwitch: React.FC = () => {
     return <Footer />;
   }
 
-  if (globalCtx.state.hideFooter || isKeyboardOpen) {
+  if (globalCtx.state?.hideFooter || isKeyboardOpen) {
     return null;
   }
   return <MobileBottomNav />;

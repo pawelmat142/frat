@@ -1,14 +1,16 @@
 import { AppConfig } from "@shared/AppConfig";
+import { ProtectedRoute } from "auth/ProtectedRoute";
 import { motion } from "framer-motion";
 
 interface Props {
     children: React.ReactNode;
     direction?: number;
     className?: string;
+    isProtected?: boolean;
 }
 
-const PageWrapper: React.FC<Props> = ({ children, direction = 1, className = "w-full flex flex-col items-center flex-1" }) => (
-    <motion.div
+const PageWrapper: React.FC<Props> = ({ children, direction = 1, className = "w-full flex flex-col items-center flex-1", isProtected }) => {
+    const motionDiv = <motion.div
         initial={{ x: 100 * direction, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: -100 * direction, opacity: 0 }}
@@ -17,6 +19,11 @@ const PageWrapper: React.FC<Props> = ({ children, direction = 1, className = "w-
     >
         {children}
     </motion.div>
-);
+
+    if (isProtected) {
+        return <ProtectedRoute>{motionDiv}</ProtectedRoute>
+    }
+    return motionDiv;
+}
 
 export default PageWrapper;

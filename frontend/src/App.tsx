@@ -36,14 +36,13 @@ import AdminOffers from 'admin/views/offer/AdminOffers';
 import TelegramSignPage from 'auth/views/TelegramSignPage';
 import ChatsView from 'chat/views/ChatsView';
 import ChatConversationView from 'chat/views/ChatConversationView';
-import WorkersSearchFiltersView from 'employee/views/search/WorkersSearchFiltersView';
 import FriendsListView from 'friends/views/FriendsListView';
 import SingleNotificationView from 'notification/views/SingleNotificationView';
 import NotificationsView from 'notification/views/NotificationsView';
 import TranslationItemForm from 'admin/views/translations/TranslationItemForm';
 import SettingsView from 'user/views/SettingsView';
-import OfferSearchFiltersView from 'offer/views/search/OfferSearchFiltersView';
 import DictionaryElementForm from 'admin/views/dictionaries/DictionaryElementForm';
+import DashboardView from 'dashboard/DashboardView';
 
 const App: React.FC = () => {
     const location = useLocation();
@@ -66,24 +65,24 @@ const App: React.FC = () => {
 
                 <Route path={Path.HOME} element={<PageWrapper direction={-1}><HomePage /></PageWrapper>} />
 
-                <Route path={Path.PROFILE} element={<PageWrapper><ProtectedRoute><ProfileView /></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.CHATS} element={<PageWrapper><ProtectedRoute><ChatsView /></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.CHAT_CONVERSATION} element={<PageWrapper><ProtectedRoute><ChatConversationView /></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.FRIENDS} element={<PageWrapper ><ProtectedRoute><FriendsListView /></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.NOTIFICATIONS} element={<PageWrapper><ProtectedRoute><NotificationsView /></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.NOTIFICATION} element={<PageWrapper><ProtectedRoute><SingleNotificationView /></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.SETTINGS} element={<PageWrapper><ProtectedRoute><SettingsView /></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.PROFILE} element={<PageWrapper isProtected><ProfileView /></PageWrapper>} />
+                <Route path={Path.CHATS} element={<PageWrapper isProtected><ChatsView /></PageWrapper>} />
+                <Route path={Path.CHAT_CONVERSATION} element={<PageWrapper isProtected><ChatConversationView /></PageWrapper>} />
+                <Route path={Path.FRIENDS} element={<PageWrapper isProtected><FriendsListView /></PageWrapper>} />
+                <Route path={Path.NOTIFICATIONS} element={<PageWrapper isProtected><NotificationsView /></PageWrapper>} />
+                <Route path={Path.NOTIFICATION} element={<PageWrapper isProtected><SingleNotificationView /></PageWrapper>} />
+                <Route path={Path.SETTINGS} element={<PageWrapper isProtected><SettingsView /></PageWrapper>} />
 
                 {/* EMPLOYEE PROFILE */}
                 <Route path={Path.WORKER} element={<PageWrapper><WorkerView /></PageWrapper>} />
                 <Route path={Path.WORKERS_SEARCH} element={<PageWrapper><WorkersSearchView /></PageWrapper>} />
-                <Route path={Path.WORKER_FORM} element={<PageWrapper><ProtectedRoute><WorkerFormView /></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.WORKER_SKILLS_FORM} element={<PageWrapper><ProtectedRoute><WorkerSkillsFormView /></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.WORKER_FORM} element={<PageWrapper isProtected><WorkerFormView /></PageWrapper>} />
+                <Route path={Path.WORKER_SKILLS_FORM} element={<PageWrapper isProtected><WorkerSkillsFormView /></PageWrapper>} />
 
                 {/* OFFERS */}
-                <Route path={Path.OFFER_FORM} element={<PageWrapper><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.OFFER_FORM_EDIT} element={<PageWrapper><ProtectedRoute><OfferFormView/></ProtectedRoute></PageWrapper>} />
-                <Route path={Path.USER_OFFERS} element={<PageWrapper><ProtectedRoute><UserOffersList/></ProtectedRoute></PageWrapper>} />
+                <Route path={Path.OFFER_FORM} element={<PageWrapper isProtected><OfferFormView/></PageWrapper>} />
+                <Route path={Path.OFFER_FORM_EDIT} element={<PageWrapper isProtected><OfferFormView/></PageWrapper>} />
+                <Route path={Path.USER_OFFERS} element={<PageWrapper isProtected><UserOffersList/></PageWrapper>} />
                 {/* unprotected */}
                 <Route path={Path.OFFER} element={<PageWrapper><OfferView/></PageWrapper>} />
                 <Route path={Path.OFFERS_SEARCH} element={<PageWrapper><OfferSearchView/></PageWrapper>} />

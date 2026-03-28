@@ -19,7 +19,7 @@ const UserItem: React.FC<Props> = ({ user, size = AppConfig.DEFAULT_AVATAR_SIZE,
     const navigate = useNavigate();
 
     return (
-        <span className="ripple flex gap-3 items-center w-full" onClick={() => {
+        <span className={`flex gap-3 items-center w-full ${allowNavigate ? 'ripple' : ''}`} onClick={() => {
             if (!allowNavigate) return;
             navigate(Path.getProfilePath(user?.uid))
         }}>

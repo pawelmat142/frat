@@ -51,7 +51,9 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const items: NewMenuItem[] = [{
         label: t('nav.start'),
         active: !!matchPath({ path: Path.HOME, end: true }, location.pathname),
-        onClick: () => navigate(Path.HOME),
+        onClick: () => {
+            navigate(Path.HOME)
+        },
         icon: <Ico.HOME size={iconSize} />
     }, {
         label: t('chat.chats'),
@@ -69,7 +71,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         items.push({
             label: t('nav.account'),
             active: !!matchPath({ path: Path.PROFILE, end: true }, location.pathname)
-             && location.pathname.includes(me.uid),
+                && location.pathname.includes(me.uid),
             onClick: () => navigate(Path.getProfilePath(me.uid)),
             icon: <Ico.ACCOUNT size={iconSize} />
         });

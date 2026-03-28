@@ -42,11 +42,11 @@ export const useAuth = () => {
                 return;
             }
 
+            navigate(Path.HOME, { replace: true });
+
             if (newFirebaseUser) {
-                navigate(Path.HOME, { replace: true });
                 toast.success(t('signin.success'));
             } else {
-                navigate(Path.HOME, { replace: true });
                 toast.success(t('signin.signout'));
             }
 		});

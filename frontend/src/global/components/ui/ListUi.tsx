@@ -4,9 +4,10 @@ import { MenuItem } from "global/interface/controls.interface";
 interface Props {
     items: MenuItem[];
     className?: string;
+    itemClassName?: string;
 }
 
-const ListUi: React.FC<Props> = ({ items, className }) => {
+const ListUi: React.FC<Props> = ({ items, className, itemClassName }) => {
 
     if (!items.length) {
         return null;
@@ -37,9 +38,9 @@ const ListUi: React.FC<Props> = ({ items, className }) => {
         <div className={className ? className : ""}>
             {items.filter(item => item.if === undefined || !!item.if).map((item, index) => {
 
-                const itemClassName = `${defaultClassName}${item.onClick ? " ripple" : ""}${item.className ? ` ${item.className}` : ""}`;
+                const _itemClassName = `${defaultClassName}${item.onClick ? " ripple" : ""}${item.className ? ` ${item.className}` : ""}${itemClassName ? ` ${itemClassName}` : ""}`;
 
-                return <div key={index} className={itemClassName} onClick={(e) => onItemClick(e, item)}>
+                return <div key={index} className={_itemClassName} onClick={(e) => onItemClick(e, item)}>
 
                     {item.icon && <item.icon size={iconSize} />}
 

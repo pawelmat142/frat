@@ -9,6 +9,11 @@ const GlobalHeader: React.FC = () => {
     const globalCtx = useGlobalContext();
 
     const stickyHeader = globalCtx?.state?.stickyHeader;
+
+    if (!globalCtx?.state) {
+        return null;
+    }
+
     return (
         <header className={`header relative`}>
             <nav className={` h-full ${stickyHeader ? 'sticky-header' : ''}`}>

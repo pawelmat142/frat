@@ -12,7 +12,7 @@ interface GlobalContextType {
     isDesktop: boolean;
     dics: Dictionaries;
     loading: boolean;
-    state: ViewState,
+    state: ViewState | null,
     setHeaderMenu: (menu: React.ReactNode) => void;
     setViewState: (state: ViewState) => void;
     getLanguagesList: () => string[];
@@ -35,7 +35,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null)
 
     const [loading, setLoading] = useState(false)
-    const [state, setState] = useState<ViewState>({})
+    const [state, setState] = useState<ViewState | null>(null)
 
     React.useEffect(() => {
         const initLanguagesDictionary = async () => {
@@ -65,7 +65,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (resolved) {
             setState(resolved)
         } else {
-            setState({ leftBtn: <HeaderBackBtn /> })
+            setState(null)
         }
     }, [location.pathname])
 

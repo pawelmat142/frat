@@ -84,6 +84,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		setMe(null);
 		cleanPosition()
 		WebSocketService.getInstance().disconnect();
+		setLoading(false);
 	}
 
 	const updateMe = (user: UserI) => {

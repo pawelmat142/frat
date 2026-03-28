@@ -48,15 +48,15 @@ const NotificationsGlobalBar: React.FC = () => {
                 animate={{ opacity: 1, height: "auto", marginTop: 0, marginBottom: 10 }}
                 exit={{ opacity: 0, height: 0, marginTop: 0, marginBottom: 0 }}
                 transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-                className="mx-4 overflow-hidden"
+                className="mx-2 overflow-hidden"
             >
                 <div
-                    className="px-3 py-2 rounded-md secondary-bg rippple notification-bar"
+                    className="px-2 py-3 rounded-md secondary-bg rippple notification-bar"
                     onClick={() => navigate(Path.NOTIFICATIONS)}
                 >
-                    <div className="flex items-center gap-3 primary-color">
-                        <Ico.NOTIFICATION size={24} />
-                        <h2 className="">{getMessage()}</h2>
+                    <div className="flex items-center gap-3">
+                        <Ico.NOTIFICATION size={24} className="primary-color"/>
+                        <h2 className="font-medium">{getMessage()}</h2>
                     </div>
                 </div>
             </motion.div>
