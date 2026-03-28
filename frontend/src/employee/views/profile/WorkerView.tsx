@@ -19,7 +19,7 @@ import PositionWidget from "employee/components/PositionWidget";
 import { Ico } from "global/icon.def";
 import DateDisplay from "global/components/ui/DateDisplay";
 import { useIsDesktop } from "global/hooks/isMobile";
-import DictionaryDisplay from "global/components/DictionaryDisplay";
+import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { AppConfig } from "@shared/AppConfig";
@@ -28,6 +28,7 @@ import WorkerSkillsSection from "employee/components/WorkerSkillsSection";
 import WorkerImagesSection from "employee/components/WorkerImagesSection";
 import { MenuItem } from "global/interface/controls.interface";
 import ListUi from "global/components/ui/ListUi";
+import ChecklistUi from "global/components/ui/ChecklistUi";
 
 const WorkerView: React.FC = () => {
 
@@ -224,9 +225,6 @@ const WorkerView: React.FC = () => {
         navigate(Path.WORKER_FORM);
     }
 
-    const range = DateRangeUtil.getFirstRange(worker);
-
-
     const isAnytime = worker.availabilityOption === WorkerAvailabilityOptions.ANYTIME;
 
     const onAvailabilityClick = () => {
@@ -265,11 +263,8 @@ const WorkerView: React.FC = () => {
 
     const worksInIndurstry = getWorksInIndustry();
 
-    const listItemClassName = `flex gap-4 px-5 py-2 items-center s-font`;
-    const iconSize = `1.2rem`
-
     const getListItems = (): MenuItem[] => {
-        const items: MenuItem[] = [{
+        return[{
             if: isAnytime,
             label: t('others.availableAnytime'),
             icon: Ico.CALENDAR
@@ -307,10 +302,9 @@ const WorkerView: React.FC = () => {
             icon: Ico.COMPASS
         }, {
             if: !!worker.communicationLanguages.length,
-            label: `${t('others.languages')}: ${worker.communicationLanguages.map(lang => <DictionaryDisplay key={lang} dictionary="LANGUAGES" value={lang}></DictionaryDisplay>)}`,
+            label: `${t('others.languages')}: ${worker.communicationLanguages.map(lang => DictionaryDisplay({ dictionary: "LANGUAGES", value: lang, t }))}`,
             icon: Ico.LANGUAGE
         }];
-        return items;
     }
 
     return (
@@ -333,17 +327,9 @@ const WorkerView: React.FC = () => {
                 <ListUi items={getListItems()}></ListUi>
             </div>
 
-            {worker.certificates?.length && (
-                <div className="mb-10 px-5">
-                    <div className="secondary-text">{t('employeeProfile.form.certificates.title')}</div>
-
-                    {worker.certificates.map((cert, index) => (<div className="pl-5 pt-3 flex items-center gap-2" key={index}>
-                        <Ico.CHECK className="secondary-text"></Ico.CHECK>
-                        <DictionaryDisplay dictionary="CERTIFICATES" value={cert}></DictionaryDisplay>
-                    </div>))}
-
-                </div>
-            )}
+            <ChecklistUi icon={Ico.CHECK} title={t('employeeProfile.form.certificates.title')}
+                items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []} 
+            ></ChecklistUi>
 
             <WorkerSkillsSection worker={worker} />
 
