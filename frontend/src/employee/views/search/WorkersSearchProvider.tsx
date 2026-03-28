@@ -25,6 +25,7 @@ export interface WorkersSearchContextProps {
     updateOneProfileInResults: (updatedProfile: WorkerI) => void;
     filtersValid: boolean;
     setOpenPseudoView: (open: boolean) => void;
+    navToSearch: () => void;
 }
 
 export const WorkerDefaultFilters: WorkerSearchFilters = {
@@ -68,6 +69,15 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const hasMoreRef = useRef(false);
 
     const filtersValid = !!filters.startDate && !!filters.locationCountry
+
+
+    const navToSearch = () => {
+        if (filtersValid) {
+            setFiltersWithSearchAndNavigate(filters)
+        } else {
+            setOpenPseudoView(true)
+        }
+    }
 
     const executeSearch = useCallback(async (searchFilters: WorkerSearchFilters, loadMore: boolean) => {
         const requestId = ++requestIdRef.current;
@@ -181,10 +191,11 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const updateOneProfileInResults = (updatedProfile: WorkerI) => {
         if (results.map(profile => profile.uid).includes(updatedProfile.uid)) {
             setResults(profiles => {
-                return profiles.map(profile => profile.uid === updatedProfile.uid 
-                    ? {...updatedProfile, 
+                return profiles.map(profile => profile.uid === updatedProfile.uid
+                    ? {
+                        ...updatedProfile,
                         mutualFriendsUids: profile.mutualFriendsUids
-                    } 
+                    }
                     : profile);
             });
         }
@@ -204,15 +215,16 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             defaultFilters: WorkerDefaultFilters,
             updateOneProfileInResults,
             filtersValid,
-            setOpenPseudoView
+            setOpenPseudoView,
+            navToSearch
         }}><>
-            {children}
-            <PseudoView show={openPseudoView}>
-                <WorkersSearchFiltersView onClose={() => {
-                    setOpenPseudoView(false)
-                }}></WorkersSearchFiltersView>
-            </PseudoView>
-        </>
+                {children}
+                <PseudoView show={openPseudoView}>
+                    <WorkersSearchFiltersView onClose={() => {
+                        setOpenPseudoView(false)
+                    }}></WorkersSearchFiltersView>
+                </PseudoView>
+            </>
         </WorkersSearchContext.Provider>
     );
 };

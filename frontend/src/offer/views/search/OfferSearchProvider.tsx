@@ -24,6 +24,7 @@ export interface OfferSearchContextProps {
     setFiltersWithSearchAndNavigate: (filters: OfferSearchFilters) => void;
     filtersValid: boolean;
     setOpenPseudoView: (open: boolean) => void;
+    navToSearch: () => void;
 }
 const INITIAL_LIMIT = 8;
 const LOAD_MORE_LIMIT = 4;
@@ -77,6 +78,14 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const requestIdRef = useRef(0);
     const requestsLengthRef = useRef(0);
     const hasMoreRef = useRef(false);
+
+    const navToSearch = () => {
+        if (filtersValid) {
+            setFiltersWithSearchAndNavigate(filters)
+        } else {
+            setOpenPseudoView(true)
+        }
+    }
 
     const setFiltersWithSearchAndNavigate = async (newFilters: OfferSearchFilters) => {
         setFiltersState(newFilters);
@@ -206,7 +215,8 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
             defaultFilters: defaultOfferFilters,
             setFiltersWithSearchAndNavigate,
             filtersValid,
-            setOpenPseudoView
+            setOpenPseudoView,
+            navToSearch
         }}>
             <>
                 {children}

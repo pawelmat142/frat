@@ -6,7 +6,7 @@
       "start": "Start",
       "offers": "Offers",
       "account": "Account",
-      "employees": "Workers"
+      "employees": "Technicians"
     },
     "pwa": {
       "install": "Install on home screen",
@@ -17,10 +17,10 @@
       "iosStep3": "Tap \"Add\" in the top right corner"
     },
     "chat": {
-      "chats": "Chats",
+      "chats": "Messages",
       "noChats": "No chats available",
       "chatMenu": "Chat menu",
-      "fratChat": "FRAT Chat",
+      "fratChat": "Messages",
       "joinedAt": "Join at {{date}}",
       "openChat": "Open chat",
       "blockUser": "Block user",

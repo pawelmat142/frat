@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 import { Ico } from 'global/icon.def';
 import { useUserContext } from 'user/UserProvider';
 import { BtnModes, MenuItem } from 'global/interface/controls.interface';
+import { useWorkersSearch } from 'employee/views/search/WorkersSearchProvider';
+import { useOfferSearch } from 'offer/views/search/OfferSearchProvider';
 
 
 
@@ -34,13 +36,14 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
 
     const bottomSheetCtx = useBottomSheet();
     const globalCtx = useGlobalContext();
-
+    const workerSearchCtx = useWorkersSearch()
+    const offerSearchCtx = useOfferSearch()
+    
     const setupHeaderMenu = (menu: MenuConfig) => {
         globalCtx.setHeaderMenu(<IconButton mode={BtnModes.SECONDARY_TXT} icon={<Ico.MENU onClick={() => {
             bottomSheetCtx.openMenu(menu)
         }} />} />);
     }
-
 
     const items: MenuItem[] = [{
         label: t('nav.start'),
@@ -50,24 +53,27 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         },
         icon: Ico.HOME
     }, {
-        label: t('chat.chats'),
-        active: location.pathname.includes(Path.CHATS),
-        onClick: () => navigate(Path.CHATS),
-        icon: Ico.CHAT
+        label: t('nav.employees'),
+        active: location.pathname.includes("workers"),
+        onClick: () => {
+            workerSearchCtx.navToSearch()
+        },
+        icon: Ico.SEARCH
     }, {
-        label: t('account.friends'),
-        active: location.pathname.includes(Path.FRIENDS.split('/:')[0]),
-        onClick: () => navigate(Path.getFriendsPath(me?.uid || '*')),
-        icon: Ico.FRIENDS
+        label: t('nav.offers'),
+        active: location.pathname.includes("offers"),
+        onClick: () => {
+            offerSearchCtx.navToSearch()
+        },
+        icon: Ico.OFFER
     }]
 
     if (me) {
         items.push({
-            label: t('nav.account'),
-            active: !!matchPath({ path: Path.PROFILE, end: true }, location.pathname)
-                && location.pathname.includes(me.uid),
-            onClick: () => navigate(Path.getProfilePath(me.uid)),
-            icon: Ico.ACCOUNT
+            label: t('chat.chats'),
+            active: location.pathname.includes(Path.CHATS),
+            onClick: () => navigate(Path.CHATS),
+            icon: Ico.CHAT
         });
     } else {
         items.push({

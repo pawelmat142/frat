@@ -6,7 +6,7 @@
       "start": "Start",
       "offers": "Oferty",
       "account": "Konto",
-      "employees": "Pracownicy"
+      "employees": "Technicy"
     },
     "pwa": {
       "install": "Zainstaluj na ekranie głównym",
@@ -17,9 +17,10 @@
       "iosStep3": "Naciśnij \"Dodaj\" w prawym górnym rogu"
     },
     "chat": {
-      "chats": "Czaty",
+      "chats": "Wiadomości",
       "noChats": "Brak dostępnych czatów",
       "chatMenu": "Menu czatu",
+      "fratChat": "Wiadomości",
       "joinedAt": "Dołączono: {{date}}",
       "openChat": "Otwórz czat",
       "blockUser": "Zablokuj użytkownika",

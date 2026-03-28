@@ -26,20 +26,13 @@ const MainTiles: React.FC = () => {
 
     const hasSomeOffers = !!offers?.length
 
+
     const navigateToWorkersSearch = () => {
-        if (workerSearchCtx.filtersValid) {
-            workerSearchCtx.setFiltersWithSearchAndNavigate(workerSearchCtx.filters)
-        } else {
-            workerSearchCtx.setOpenPseudoView(true)
-        }
+        workerSearchCtx.navToSearch()
     }
 
     const navigateToOffersSearch = () => {
-        if (offerSearchCtx.filtersValid) {
-            offerSearchCtx.setFiltersWithSearchAndNavigate(offerSearchCtx.filters)
-        } else {
-            offerSearchCtx.setOpenPseudoView(true)
-        }
+        offerSearchCtx.navToSearch()
     }
 
     return (

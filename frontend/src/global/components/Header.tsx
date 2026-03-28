@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ onBack, title }) => {
                         <HeaderBackBtn  onBack={onBack}/>
 
                         {title && (
-                            <div className="header-title ml-4 l-font primary-color">
+                            <div className="header-title ml-2 btn-font">
                                 {title}
                             </div>
                         )}

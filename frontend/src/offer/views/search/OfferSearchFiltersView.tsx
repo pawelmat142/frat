@@ -68,7 +68,7 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
     }
 
     return (
-        <div className="form-view relative flex flex-col primary-bg">
+        <div className="form-view relative flex flex-col primary-bg h-full">
 
             <Header onBack={() => onClose?.()} title={t("offer.searchTitle")} />
 

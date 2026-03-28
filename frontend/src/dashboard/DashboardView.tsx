@@ -1,21 +1,25 @@
-import { UserUtil } from "@shared/utils/UserUtil";
 import Loading from "global/components/Loading";
 import ListUi from "global/components/ui/ListUi";
 import { Ico } from "global/icon.def";
 import NotificationsGlobalBar from "notification/components/NotificationsGlobalBar";
 import { Path } from "../path";
 import { useNavigate } from "react-router-dom";
-import UserItem from "user/components/UserItem";
 import { useUserContext } from "user/UserProvider";
 import { AuthService } from "auth/services/AuthService";
 import { useConfirm } from "global/providers/PopupProvider";
 import { MenuItem } from "global/interface/controls.interface";
+import ReportForm from "global/components/ReportForm";
+import UserProfileItem from "user/components/UserProfileItem";
+import { useTranslation } from "react-i18next";
+import EmailVerificationWarning from "./EmailVerificationWarning";
 
 const DashboardView: React.FC = () => {
 
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const userCtx = useUserContext();
     const confirm = useConfirm()
+
     const me = userCtx.me;
 
     if (userCtx.loading || !me) {
@@ -87,18 +91,22 @@ const DashboardView: React.FC = () => {
 
     return (<div className="w-full">
 
-        <div className="px-2 py-3">
-            <UserItem user={me} size={5} allowNavigate={false}
-            bottomRow={<span>{UserUtil.getContactInfoLine(me)}</span>}></UserItem>
-        </div>
+        <UserProfileItem user={me}></UserProfileItem>
 
         <NotificationsGlobalBar />
+
+        <EmailVerificationWarning></EmailVerificationWarning>
 
         <ListUi items={quickActions} itemClassName="m-font py-3"></ListUi>
 
 
         <div className="px-5 mt-10">
             <div>Proponowane oferty:</div>
+            <div>kiedyś...</div>
+        </div>
+
+        <div className="px-5">
+            <ReportForm />
         </div>
 
     </div>)
