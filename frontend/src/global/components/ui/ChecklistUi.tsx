@@ -25,14 +25,14 @@ const ChecklistUi: React.FC<Props> = ({ items, icon: Icon, className, title }) =
         return null;
     }
 
-    return <div className={className ? className : "mb-10 px-5"}>
+    return <div className={className ? className : "mb-5 px-5"}>
 
         {title && <div className="secondary-text">{title}</div>}
         
         {items.map((item, index) => {
 
             const itemClassName = `pl-5 pt-3 flex items-center gap-2${item.className ? ` ${item.className}` : ""}`;
-            
+
             return <div className={itemClassName} key={index}>
                 {getIcon(item)}
                 <span>{item.label}</span>
