@@ -13,6 +13,8 @@ import UserProfileItem from "user/components/UserProfileItem";
 import { useTranslation } from "react-i18next";
 import EmailVerificationWarning from "./EmailVerificationWarning";
 import { usePwaInstall } from "global/hooks/usePwaInstall";
+import { Util } from "@shared/utils/util";
+import { UserRoles } from "@shared/interfaces/UserI";
 
 const DashboardView: React.FC = () => {
 
@@ -41,6 +43,11 @@ const DashboardView: React.FC = () => {
 
     // TODO translacje
     const quickActions: MenuItem[] = [{
+        label: "Admin panel",
+        icon: Ico.SETTINGS,
+        if: Util.hasPermission([UserRoles.ADMIN, UserRoles.SUPERADMIN], me),
+        onClick: () => navigate(Path.ADMIN_DICTIONARIES)
+    }, {
         label: t("pwa.install"),
         if: isInstallable,
         icon: Ico.DOWNLOAD,

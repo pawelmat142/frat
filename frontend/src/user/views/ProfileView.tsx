@@ -28,7 +28,7 @@ import { MenuItem } from "global/interface/controls.interface";
 
 const ProfileView: React.FC = () => {
 
-    const { loading, firebaseUser } = useAuthContext()
+    const { loading } = useAuthContext()
     const userCtx = useUserContext()
     const friendsCtx = useFriendsContext();
     const offersCtx = useOffersContext();
