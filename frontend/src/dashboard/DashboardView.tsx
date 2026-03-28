@@ -12,6 +12,7 @@ import ReportForm from "global/components/ReportForm";
 import UserProfileItem from "user/components/UserProfileItem";
 import { useTranslation } from "react-i18next";
 import EmailVerificationWarning from "./EmailVerificationWarning";
+import { usePwaInstall } from "global/hooks/usePwaInstall";
 
 const DashboardView: React.FC = () => {
 
@@ -19,7 +20,8 @@ const DashboardView: React.FC = () => {
     const { t } = useTranslation();
     const userCtx = useUserContext();
     const confirm = useConfirm()
-
+    const { isInstallable, install } = usePwaInstall();
+    
     const me = userCtx.me;
 
     if (userCtx.loading || !me) {
@@ -39,6 +41,11 @@ const DashboardView: React.FC = () => {
 
     // TODO translacje
     const quickActions: MenuItem[] = [{
+        label: t("pwa.install"),
+        if: isInstallable,
+        icon: Ico.DOWNLOAD,
+        onClick: install
+    }, {
         label: "Znajdź technika",
         icon: Ico.SEARCH,
         onClick: () => navigate(Path.WORKERS_SEARCH)
@@ -86,8 +93,6 @@ const DashboardView: React.FC = () => {
         icon: Ico.SIGN_OUT,
         onClick: logout
     }]
-
-    // TODO do ustawien dodaj usun konto i 
 
     return (<div className="w-full">
 

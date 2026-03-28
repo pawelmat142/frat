@@ -21,7 +21,7 @@ const ThemeSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
 
     return (
         <div className="sec-tile-wrapper" onClick={() => { selectTheme() }}>
-            <div className="ripple square-tile">
+            <div className="ripple square-tile bottom-bar-shadow">
                 {isDarkMode
                     ? <FaMoon size={iconSize} />
                     : <FaSun size={iconSize} />

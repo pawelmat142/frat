@@ -15,8 +15,6 @@ import { useWorkersSearch } from 'employee/views/search/WorkersSearchProvider';
 import { useOfferSearch } from 'offer/views/search/OfferSearchProvider';
 import { useNotificationsContext } from 'notification/NotificationsProvider';
 
-
-
 interface MenuContextType {
     setupHeaderMenu: (menu: MenuConfig) => void;
     items: MenuItem[]

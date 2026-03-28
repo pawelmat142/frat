@@ -14,7 +14,8 @@
       "iosGuide": "To install the app on your iPhone, follow these steps:",
       "iosStep1": "Tap the Share button in Safari",
       "iosStep2": "Scroll down and tap \"Add to Home Screen\"",
-      "iosStep3": "Tap \"Add\" in the top right corner"
+      "iosStep3": "Tap \"Add\" in the top right corner",
+      "installed": "App is already installed"
     },
     "chat": {
       "chats": "Messages",
@@ -144,8 +145,6 @@
       "changedTo": "Theme changed to {{theme}}"
     },
     "common": {
-      "h1": "Welcome to FRAT",
-      "h2": "A recruitment platform for high-altitude / industrial rope-access workers",
       "of": "of",
       "ok": "OK",
       "to": "to",

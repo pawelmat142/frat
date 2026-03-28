@@ -6,6 +6,7 @@ import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import DashboardView from "dashboard/DashboardView";
 import Logo from "global/components/Logo";
+import Header from "global/components/Header";
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
@@ -20,22 +21,24 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <div className="view-container">
+    <div className="w-full">
 
-      <div className="flex justify-center pb-2 items-center gap-2">
-        <Logo></Logo>
-        <div className="primary-color xl-font font-bold">FRAT</div>
-      </div>
-      <div className="flex justify-center pb-10">Find High Altiture Technican</div>
-
-      <div className="desktop-flex flex-col items-center mb-20 mt-20  w-full">
-        <h1 className="xxxl-font mb-5">{t('common.h1')}</h1>
-        <h2 className="l-font">{t('common.h2')}</h2>
+      <div className="header">
+        <div className="header-content">
+          <div className="header-content-left">
+            <Logo></Logo>
+            <div className="primary-color xl-font font-bold ml-3">FRAT</div>
+          </div>
+        </div>
       </div>
 
-      <MainTiles />
+      <div className="view-container">
+        <MainTiles />
 
-      <ReportForm />
+        <ReportForm />
+      </div>
+
+
 
     </div>
   );

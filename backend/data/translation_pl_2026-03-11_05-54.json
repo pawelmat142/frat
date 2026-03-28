@@ -14,7 +14,8 @@
       "iosGuide": "Aby zainstalować aplikację na iPhonie, wykonaj poniższe kroki:",
       "iosStep1": "Naciśnij przycisk Udostępnij w Safari",
       "iosStep2": "Przewiń w dół i wybierz \"Dodaj do ekranu początkowego\"",
-      "iosStep3": "Naciśnij \"Dodaj\" w prawym górnym rogu"
+      "iosStep3": "Naciśnij \"Dodaj\" w prawym górnym rogu",
+      "installed": "Aplikacja jest już zainstalowana"
     },
     "chat": {
       "chats": "Wiadomości",
@@ -145,8 +146,6 @@
       "changedTo": "Motyw zmieniony na {{theme}}"
     },
     "common": {
-      "h1": "Witamy w FRAT",
-      "h2": "Platforma rekrutacyjna dla wysokościowych / pracowników dostępu linowego (rope-access)",
       "of": "z",
       "ok": "OK",
       "to": "do",

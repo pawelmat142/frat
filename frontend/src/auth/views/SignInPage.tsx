@@ -126,12 +126,12 @@ const SignInPage: React.FC = () => {
 
             <div className="flex gap-5 justify-center">
 
-                <div className="square-tile p-5 col-tile w-32" onClick={() => handleGoogleSignIn()}>
+                <div className="square-tile p-5 col-tile w-32 bottom-bar-shadow" onClick={() => handleGoogleSignIn()}>
                     <GoogleIcon size={iconSize} />
                     <div className="mt-1">Google</div>
                 </div>
 
-                <div className="square-tile p-5 col-tile w-32" onClick={() => handleTelegramSignIn()}>
+                <div className="square-tile p-5 col-tile w-32 bottom-bar-shadow" onClick={() => handleTelegramSignIn()}>
                     <FaTelegram size={iconSize} className="mb-1 shrink-0"/>
                     <div>Telegram</div>
                 </div>
