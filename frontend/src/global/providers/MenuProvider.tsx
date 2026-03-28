@@ -10,18 +10,13 @@ import IconButton from 'global/components/controls/IconButon';
 import { useTranslation } from 'react-i18next';
 import { Ico } from 'global/icon.def';
 import { useUserContext } from 'user/UserProvider';
-import { BtnModes } from 'global/interface/controls.interface';
+import { BtnModes, MenuItem } from 'global/interface/controls.interface';
 
-interface NewMenuItem {
-    label: string
-    active: boolean
-    icon: ReactNode,
-    onClick: () => void
-}
+
 
 interface MenuContextType {
     setupHeaderMenu: (menu: MenuConfig) => void;
-    items: NewMenuItem[]
+    items: MenuItem[]
 }
 
 const MenuContext = createContext<MenuContextType | undefined>(undefined)
@@ -46,25 +41,24 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         }} />} />);
     }
 
-    const iconSize = 22
 
-    const items: NewMenuItem[] = [{
+    const items: MenuItem[] = [{
         label: t('nav.start'),
         active: !!matchPath({ path: Path.HOME, end: true }, location.pathname),
         onClick: () => {
             navigate(Path.HOME)
         },
-        icon: <Ico.HOME size={iconSize} />
+        icon: Ico.HOME
     }, {
         label: t('chat.chats'),
         active: location.pathname.includes(Path.CHATS),
         onClick: () => navigate(Path.CHATS),
-        icon: <Ico.CHAT size={iconSize} />
+        icon: Ico.CHAT
     }, {
         label: t('account.friends'),
         active: location.pathname.includes(Path.FRIENDS.split('/:')[0]),
         onClick: () => navigate(Path.getFriendsPath(me?.uid || '*')),
-        icon: <Ico.FRIENDS size={iconSize} />
+        icon: Ico.FRIENDS
     }]
 
     if (me) {
@@ -73,14 +67,14 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
             active: !!matchPath({ path: Path.PROFILE, end: true }, location.pathname)
                 && location.pathname.includes(me.uid),
             onClick: () => navigate(Path.getProfilePath(me.uid)),
-            icon: <Ico.ACCOUNT size={iconSize} />
+            icon: Ico.ACCOUNT
         });
     } else {
         items.push({
             label: t('signin.submit'),
             active: !!matchPath({ path: Path.SIGN_IN, end: true }, location.pathname),
             onClick: () => navigate(Path.SIGN_IN),
-            icon: <Ico.SIGN_IN size={iconSize} />
+            icon: Ico.SIGN_IN
         });
     }
 
@@ -92,7 +86,6 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
             label: t('header.admin'),
             active: false,
             onClick: () => navigate(Path.ADMIN_DICTIONARIES),
-            icon: null
         });
     }
 

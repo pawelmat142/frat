@@ -2,7 +2,6 @@ import { UserUtil } from "@shared/utils/UserUtil";
 import Loading from "global/components/Loading";
 import ListUi from "global/components/ui/ListUi";
 import { Ico } from "global/icon.def";
-import { MenuItem } from "global/interface/controls.interface";
 import NotificationsGlobalBar from "notification/components/NotificationsGlobalBar";
 import { Path } from "../path";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +9,7 @@ import UserItem from "user/components/UserItem";
 import { useUserContext } from "user/UserProvider";
 import { AuthService } from "auth/services/AuthService";
 import { useConfirm } from "global/providers/PopupProvider";
+import { MenuItem } from "global/interface/controls.interface";
 
 const DashboardView: React.FC = () => {
 

@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import DashboardView from "dashboard/DashboardView";
-import { useGlobalContext } from "global/providers/GlobalProvider";
 import Logo from "global/components/Logo";
 
 const HomePage: React.FC = () => {

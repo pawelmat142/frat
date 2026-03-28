@@ -26,9 +26,9 @@ import { AppConfig } from "@shared/AppConfig";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import WorkerSkillsSection from "employee/components/WorkerSkillsSection";
 import WorkerImagesSection from "employee/components/WorkerImagesSection";
-import { MenuItem } from "global/interface/controls.interface";
 import ListUi from "global/components/ui/ListUi";
 import ChecklistUi from "global/components/ui/ChecklistUi";
+import { MenuItem } from "global/interface/controls.interface";
 
 const WorkerView: React.FC = () => {
 

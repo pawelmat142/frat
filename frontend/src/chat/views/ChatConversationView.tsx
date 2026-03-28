@@ -9,7 +9,6 @@ import Button from "global/components/controls/Button";
 import { Path } from "../../path";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
-import { BtnModes, MenuItem } from "global/interface/controls.interface";
 import { DateUtil } from "@shared/utils/DateUtil";
 import { useMenuContext } from "global/providers/MenuProvider";
 import { useConfirm } from "global/providers/PopupProvider";
@@ -17,6 +16,7 @@ import { toast } from "react-toastify";
 import UserItem from "user/components/UserItem";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
+import { BtnModes, MenuItem } from "global/interface/controls.interface";
 
 const ChatConversationView: React.FC = () => {
     const { t } = useTranslation();

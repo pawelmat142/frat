@@ -135,9 +135,10 @@ export interface SelectorItem<T extends SelectorValue = SelectorValue> {
 
 export interface MenuItem {
     label: string
+    active?: boolean
+    if?: any,
     src?: string
-    if?: any
-    icon?: IconType
+    icon?: IconType,
     rightIcon?: IconType
     className?: string
     onClick?: (e?: React.MouseEvent) => void
