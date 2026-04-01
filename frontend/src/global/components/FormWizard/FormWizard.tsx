@@ -96,6 +96,9 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
 
     return (
         <div className="form-view relative flex flex-col">
+            <div className="sticky top-0 z-10 primary-bg py-5">
+                <Stepper stepsOrder={stepsOrder} currentStep={currentStep}></Stepper>
+            </div>
             <form className='flex flex-col flex-1'
                 onSubmit={formRef.handleSubmit(() => { }, (errors) => {
                     console.log('Form errors', errors)
@@ -103,13 +106,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
                 })}
                 noValidate
             >
-
-
                 <div className="flex-1">
-
-                    <div className='py-10'>
-                        <Stepper stepsOrder={stepsOrder} currentStep={currentStep}></Stepper>
-                    </div>
 
                     <AnimatePresence mode="wait" custom={directionRef.current}>
                         <motion.div

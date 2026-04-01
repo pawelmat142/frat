@@ -90,7 +90,7 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
 
     return (
         <>
-            <h2 className="form-subheader">{t("employeeProfile.form.step2.title")}</h2>
+            <h2 className="form-subheader">{t("employeeProfile.form.location.title")}</h2>
 
             {/* Country Selector */}
             <Controller
@@ -132,14 +132,14 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
                 )}
             />)}
 
-            <p className={`${msgClass} s-font mt-2 mb-0`}>{t("employeeProfile.form.step2.info")}</p>
+            <p className={`${msgClass} s-font mt-2 mb-0`}>{t("employeeProfile.form.location.info")}</p>
 
             <div>
                 <Button fullWidth mode={BtnModes.PRIMARY_TXT} onClick={resetLocation}>{t("employeeProfile.form.resetLocation")}</Button>
             </div>
 
 
-            <h2 className="form-subheader mt-10">{t("employeeProfile.form.step2.chooseOptions")}</h2>
+            <h2 className="form-subheader mt-10">{t("employeeProfile.form.location.chooseOptions")}</h2>
 
             <div className="flex flex-col gap-5 md:gap-5 mt-5">
                 <TabSwitcher
