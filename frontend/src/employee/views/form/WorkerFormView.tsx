@@ -21,12 +21,12 @@ import FormWizard from "global/components/FormWizard/FormWizard";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
-import WorkerFormStep3 from "./WorkerFormStepAvailability";
 import WorkerFormStepCertificates from "./WorkerFormStepCertificates";
 import WorkerFormStepCareer from "./WorkerFormStepCareer";
 import { UserProviders } from "@shared/interfaces/UserI";
 import { isOneOf } from "@shared/utils/util";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
+import WorkerFormStepAvailability from "./WorkerFormStepAvailability";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -107,7 +107,7 @@ const WorkerFormView: React.FC = () => {
         if (isOneOf([UserProviders.EMAIL, UserProviders.GOOGLE], me.provider)) {
             formRef.setValue("personalData.email", me.email)
         }
-        
+
         if (me.avatarRef) {
             formRef.setValue("personalData.avatarRef", me.avatarRef);
         }
@@ -288,7 +288,7 @@ const WorkerFormView: React.FC = () => {
             case 'location':
                 return <WorkerFormStepLocation formRef={formRef} initPosition={resetPositionFormData} />;
             case 'availability':
-                return <WorkerFormStep3 formRef={formRef} />;
+                return <WorkerFormStepAvailability formRef={formRef} />;
             case 'certificates':
                 return <WorkerFormStepCertificates formRef={formRef} />;
             default:
@@ -308,6 +308,7 @@ const WorkerFormView: React.FC = () => {
             {
                 <>
                     {renderStepByKey(step)}
+
                     {isDevMode && (
                         <div className="flex items-center justify-end">
                             <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>

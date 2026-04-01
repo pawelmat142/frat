@@ -5,6 +5,8 @@ import Button from 'global/components/controls/Button';
 import { BtnModes, BtnSizes } from 'global/interface/controls.interface';
 import { useTranslation } from 'react-i18next';
 import Stepper from './Stepper';
+import { AnimatePresence, motion } from 'framer-motion';
+import { AppConfig } from '@shared/AppConfig';
 
 type FormWizardProps<TForm extends FieldValues, TStep extends string> = {
     localStorageKey: string;
@@ -27,6 +29,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
 }: FormWizardProps<TForm, TStep>) {
 
     const { t } = useTranslation();
+    const directionRef = React.useRef<1 | -1>(1);
 
     const saveFormToLocalStorage = React.useCallback(() => {
         try {
@@ -56,6 +59,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
             saveFormToLocalStorage();
             const currentIndex = stepsOrder.indexOf(currentStep);
             if (currentIndex < stepsOrder.length - 1) {
+                directionRef.current = 1;
                 const step = stepsOrder[currentIndex + 1];
                 onSelectStep(step);
             }
@@ -66,6 +70,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
         saveFormToLocalStorage();
         const currentIndex = stepsOrder.indexOf(currentStep);
         if (currentIndex > 0) {
+            directionRef.current = -1;
             const step = stepsOrder[currentIndex - 1];
             onSelectStep(step);
         }
@@ -75,6 +80,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
         const targetIndex = stepsOrder.indexOf(targetStep);
         const currentIndex = stepsOrder.indexOf(currentStep);
         if (targetIndex < currentIndex) {
+            directionRef.current = -1;
             onSelectStep?.(targetStep);
             return;
         }
@@ -82,6 +88,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
             const ok = await validateCurrentStep();
             if (ok) {
                 saveFormToLocalStorage();
+                directionRef.current = 1;
                 onSelectStep?.(targetStep);
             }
         }
@@ -104,7 +111,23 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
                         <Stepper stepsOrder={stepsOrder} currentStep={currentStep}></Stepper>
                     </div>
 
-                    {children}
+                    <AnimatePresence mode="wait" custom={directionRef.current}>
+                        <motion.div
+                            key={currentStep}
+                            custom={directionRef.current}
+                            variants={{
+                                enter: (d: number) => ({ x: 80 * d, opacity: 0 }),
+                                center: { x: 0, opacity: 1 },
+                                exit: (d: number) => ({ x: -80 * d, opacity: 0 }),
+                            }}
+                            initial="enter"
+                            animate="center"
+                            exit="exit"
+                            transition={{ duration: AppConfig.ROUTER_ANIMATION_DURATION / 1000, ease: 'easeInOut' }}
+                        >
+                            {children}
+                        </motion.div>
+                    </AnimatePresence>
 
                 </div>
 
