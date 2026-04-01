@@ -859,7 +859,8 @@ $topLabelOffset: 0.3rem;
 }
 
 .floating-label-required {
-  color: $error-color;
+  // color: $error-color;
+  color: $primary-color;
   margin-right: 0.15rem;
   opacity: .7;
 }

@@ -74,7 +74,6 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                             label={t("employeeProfile.certificates")}
                             code="CERTIFICATES"
                             fullWidth
-                            required
                             error={formState.errors.certificates?.certificates}
                         />
                     )}

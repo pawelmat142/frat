@@ -146,6 +146,7 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                             const errorMessage = fieldError?.message as string | undefined;
                                             return (
                                                 <FloatingDateInput
+                                                    required
                                                     label={t("employeeProfile.form.availabilityOption.FROM_DATE.startLabel")}
                                                     className="w-full"
                                                     value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
@@ -187,6 +188,7 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                                     const errorMessage = fieldError?.message as string | undefined;
                                                     return (
                                                         <DateRangeInputViewSelector
+                                                            required
                                                             label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label") + (availabilityDateRanges.length ? ` #${idx + 1}` : "") + ` (${t(`employeeProfile.form.rangesOption.${rangesOption}.tab`)})`}
                                                             className="w-full"
                                                             value={field.value || getDefaultDateRange()}

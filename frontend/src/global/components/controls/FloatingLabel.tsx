@@ -24,8 +24,8 @@ const FloatingLabel: React.FC<FloatingLabelProps> = ({
             htmlFor={htmlFor} 
             className={`floating-label ${isActive ? 'floating-label-active' : ''} ${error ? 'floating-label-error' : ''} ${className}`}
         >
+            {required && <span className="floating-label-required">*</span>}
             {label}
-            {/* {required && <span className="floating-label-required">*</span>} */}
         </label>
     );
 };
