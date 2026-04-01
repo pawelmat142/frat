@@ -104,6 +104,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                             setSelectedPosition(position);
                         }}
                         onCancel={() => {
+                            onChange?.(null);
                             setOpenPseudoView(false);
                         }}
                     ></PositionSelectorContent>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import CloseIcon from '@mui/icons-material/Close';
 import FloatingPlaceSearch, { PlaceSearchResult } from 'global/components/controls/FloatingPlaceSearch';
 import { FloatingInputModes } from 'global/interface/controls.interface';
 
@@ -32,13 +31,6 @@ const PositionSelectorSearchbar: React.FC<Props> = ({ mapInstanceRef, onCancel, 
                     label={label || t('employeeProfile.form.freeText')}
                     fullWidth
                 />
-
-                <button
-                    onClick={() => onCancel()}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                    <CloseIcon />
-                </button>
             </div>
         </div>
     );

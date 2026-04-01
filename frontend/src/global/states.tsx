@@ -74,7 +74,7 @@ export const STATES = (navigate: NavigateFunction) => {
         },
         [Path.CHATS]: {
             leftBtn: <HeaderBackBtn />,
-            title: 'FRAT Chat',
+            title: 'chat.chats',
         },
         [Path.FRIENDS]: {
             leftBtn: <HeaderBackBtn />,

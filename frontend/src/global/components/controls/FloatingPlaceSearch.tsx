@@ -64,9 +64,13 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
         const [selectedPrediction, setSelectedPrediction] = useState<PlacePrediction | null>(null);
 
         const containerRef = useRef<HTMLDivElement>(null);
+        const isClearedRef = useRef(false);
         const debouncedInputValue = useDebouncedValue(inputValue, 500);
 
         useEffect(() => {
+            if (displayValue) {
+                isClearedRef.current = false;
+            }
             if (!displayValue && selectedPrediction) {
                 setSelectedPrediction(null);
             }
@@ -217,6 +221,7 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
         }
 
         const handleClear = () => {
+            isClearedRef.current = true;
             setInputValue('');
             setSelectedPrediction(null);
             setPredictions([]);
@@ -239,7 +244,7 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
             inputClass += ' pp-control-error';
         }
 
-        const currentValue = (isFocused || selectedPrediction) ? inputValue : (displayValue || '');
+        const currentValue = (isFocused || selectedPrediction) ? inputValue : (isClearedRef.current ? '' : (displayValue || ''));
 
         const hasValue = (): boolean => {
             return currentValue !== '';
@@ -280,7 +285,7 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
                         ) : hasSelection ? (
                             <Close
                                 className="absolute right-3 top-1/2 -translate-y-1/2 secondary-text cursor-pointer"
-                                style={{ fontSize: '1.2rem' }}
+                                style={{ fontSize: '1.4rem', fontWeight: 'bold' }}
                                 onClick={handleClear}
                             />
                         ) : (
