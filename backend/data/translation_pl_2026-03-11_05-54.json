@@ -593,6 +593,7 @@
         "confirmSubmit": "Czy na pewno chcesz zapisać profil pracownika?",
         "locationPoint": "Dokładna lokalizacja [lat lng]",
         "resetLocation": "Resetuj lokalizację",
+        "noLocationAccess": "Brak dostępu do lokalizacji. Włącz uprawnienia do lokalizacji w przeglądarce.",
         "submitSuccess": "Profil został zapisany pomyślnie",
         "locationOption": {
           "POSITION": {

@@ -599,6 +599,7 @@
         "confirmSubmit": "Are you sure you want to save the worker profile?",
         "locationPoint": "Exact location [lat, lng]",
         "resetLocation": "Reset location",
+        "noLocationAccess": "Location access is not available. Please enable location permissions in your browser.",
         "submitSuccess": "Profile saved successfully",
         "locationOption": {
           "POSITION": {

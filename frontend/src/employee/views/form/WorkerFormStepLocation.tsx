@@ -14,6 +14,7 @@ import { useUserContext } from "user/UserProvider";
 import { DEFAUT_POSITION } from "offer/views/form/OfferFormStepOne";
 import Loading from "global/components/Loading";
 import { PositionService } from "global/services/PositionService";
+import { toast } from "react-toastify";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -80,6 +81,10 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
     };
 
     const resetLocation = () => {
+        if (!userCtx.position) {
+            toast.error(t("employeeProfile.form.noLocationAccess"));
+            return;
+        }
         if (initPosition) {
             initPosition();
         } else {
