@@ -80,7 +80,6 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                     )}
                 />
 
-                {/* Dynamic date inputs for certificates with VALIDITY_DATE_REQUIRED */}
                 {certsWithDate.map(cert => (
                     <Controller
                         key={cert.code}
@@ -93,7 +92,7 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                                     label={`${t('employeeProfile.form.certificateValidityDate')} ${t(DictionaryUtil.getTranslationKey('CERTIFICATES', cert.code))}`}
                                     className="w-full"
                                     value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
-                                    onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? undefined)}
+                                    onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? null)}
                                     required
                                     error={formState.errors?.certificates?.certificateDates?.[cert.code]?.message
                                         ? { message: formState.errors.certificates.certificateDates[cert.code]!.message }

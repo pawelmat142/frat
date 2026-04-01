@@ -12,6 +12,7 @@ import { isOneOf } from '@shared/utils/util';
 interface DatePickerSheetProps {
     value?: Date | null;
     onChange: (date: Date | null) => void;
+    reset: () => void;
     disabled?: boolean;
     config?: DatePickerConfig;
 }
@@ -19,6 +20,7 @@ interface DatePickerSheetProps {
 const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
     value,
     onChange,
+    reset,
     disabled,
     config = defaultDatePickerConfig
 }) => {
@@ -35,10 +37,6 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
     const handleConfirm = () => {
         onChange(selectedDate);
     };
-
-    const handleCancel = () => {
-        onChange(null)
-    }
 
     const { t } = useTranslation();
 
@@ -110,8 +108,8 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
             </div>
 
             <div className="date-picker-sheet-actions">
-                <Button onClick={handleCancel} mode={BtnModes.SECONDARY_TXT} fullWidth={true}>
-                    {t("common.cancel")}
+                <Button onClick={reset} mode={BtnModes.SECONDARY_TXT} fullWidth={true}>
+                    {t("common.reset")}
                 </Button>
                 <Button onClick={handleConfirm} mode={BtnModes.PRIMARY} fullWidth={true}>
                     {t("common.confirm")}

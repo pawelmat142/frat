@@ -51,7 +51,9 @@ const WorkerFormStepCareer: React.FC<Props> = ({ formRef }) => {
                             label={t("employeeProfile.form.career.careerStartDate")}
                             className="w-full"
                             value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
-                            onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? undefined)}
+                            onChange={date => {
+                                field.onChange(DateUtil.toLocalDateString(date) ?? null)
+                            }}
                         />
                     )}
                 />

@@ -140,15 +140,16 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                     <Controller
                                         name="availability.startDate"
                                         control={control}
+                                        rules={startDateRequired}
                                         render={({ field }) => {
-                                            const fieldError = (formState?.errors?.availability?.availabilityDateRanges as any)?.[0];
+                                            const fieldError = formState?.errors?.availability?.startDate;
                                             const errorMessage = fieldError?.message as string | undefined;
                                             return (
                                                 <FloatingDateInput
                                                     label={t("employeeProfile.form.availabilityOption.FROM_DATE.startLabel")}
                                                     className="w-full"
                                                     value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
-                                                    onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? undefined)}
+                                                    onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? null)}
                                                     error={errorMessage ? { message: errorMessage } : undefined}
                                                     config={datepickerWithDaysConfig}
                                                 />

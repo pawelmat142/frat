@@ -674,6 +674,11 @@ input {
   padding: 1rem 0;
 }
 
+.react-datepicker__current-month,
+.react-datepicker__header.react-datepicker-year-header {
+  color: $secondary-text;
+}
+
 .react-datepicker__day,
 .react-datepicker__day-name {
   color: $primary-text;

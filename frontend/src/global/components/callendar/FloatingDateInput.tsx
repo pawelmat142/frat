@@ -84,6 +84,11 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
                         if (onChange) onChange(date);
                         bottomSheetCtx.close();
                     }}
+                    reset={() => {
+                        if (onChange) onChange(null);
+                        bottomSheetCtx.close();
+                    }}
+
                     disabled={disabled}
                     config={config}
                 />
