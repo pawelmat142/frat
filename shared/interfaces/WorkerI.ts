@@ -43,7 +43,6 @@ export interface WorkerI {
   //
   categories?: string[];
   /** Local date string in YYYY-MM-DD format */
-  // TODO prepare date month selector
   careerStartDate?: string
   maxAltitude?: number; //[m]
   readyToTravel?: boolean;

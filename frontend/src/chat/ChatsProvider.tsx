@@ -10,8 +10,6 @@ interface ChatsContextType {
     unreadMsgNotifications: NotificationI[],
 }
 
-// TODO bug kiedy otwieram chat z app 1, potem otwieram go z app 2 to na app 2 wybucha
-
 const ChatsContext = createContext<ChatsContextType | undefined>(undefined);
 
 export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

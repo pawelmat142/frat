@@ -21,9 +21,6 @@ export class ToastException extends HttpException {
       cause ? { cause } : undefined,
     );
 
-    // TODO remove
-    console.log(cause)
-
     const sourceClassName = source?.constructor?.name || typeof source || 'UNKNOWN';
     const logger = new Logger(sourceClassName);
     logger.error(message, cause?.stack ?? this.stack);

@@ -10,9 +10,12 @@ const useIsKeyboardOpen = (): boolean => {
     const vv = window.visualViewport;
     if (!vv) return;
 
+    // Capture reference height before keyboard ever opens.
+    // window.innerHeight is unreliable — on Android Chrome it also shrinks with the keyboard.
+    const baseHeight = vv.height;
+
     const handleResize = () => {
-      // Keyboard is considered open when visual viewport is significantly smaller than layout height
-      setIsOpen(vv.height < window.innerHeight * 0.75);
+      setIsOpen(vv.height < baseHeight * 0.75);
     };
 
     vv.addEventListener('resize', handleResize);
