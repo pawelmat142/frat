@@ -15,7 +15,13 @@ const GlobalHeader: React.FC = () => {
     }
 
     return (
-        <header className={`header relative`}>
+        <motion.header
+            className={`header relative`}
+            initial={{ y: '-100%', opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: '-100%', opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
             <nav className={` h-full ${stickyHeader ? 'sticky-header' : ''}`}>
 
                 <AnimatePresence mode="wait">
@@ -46,7 +52,7 @@ const GlobalHeader: React.FC = () => {
                 </AnimatePresence>
 
             </nav>
-        </header>
+        </motion.header>
     );
 }
 

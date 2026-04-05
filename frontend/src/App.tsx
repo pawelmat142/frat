@@ -42,7 +42,6 @@ import NotificationsView from 'notification/views/NotificationsView';
 import TranslationItemForm from 'admin/views/translations/TranslationItemForm';
 import SettingsView from 'user/views/SettingsView';
 import DictionaryElementForm from 'admin/views/dictionaries/DictionaryElementForm';
-import DashboardView from 'dashboard/DashboardView';
 
 const App: React.FC = () => {
     const location = useLocation();
