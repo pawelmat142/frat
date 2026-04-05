@@ -14,6 +14,7 @@ import { BtnModes, MenuItem } from 'global/interface/controls.interface';
 import { useWorkersSearch } from 'employee/views/search/WorkersSearchProvider';
 import { useOfferSearch } from 'offer/views/search/OfferSearchProvider';
 import { useNotificationsContext } from 'notification/NotificationsProvider';
+import { NavBus } from 'global/utils/PseudoViewBus';
 
 interface MenuContextType {
     setupHeaderMenu: (menu: MenuConfig) => void;
@@ -50,6 +51,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         badge: notificationsCtx.unreadCount > 0 ? notificationsCtx.unreadCount.toString() : undefined,
         active: !!matchPath({ path: Path.HOME, end: true }, location.pathname),
         onClick: () => {
+            NavBus.emit('start');
             navigate(Path.HOME)
         },
         icon: Ico.HOME
@@ -57,6 +59,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         label: t('nav.employees'),
         active: location.pathname.includes("workers"),
         onClick: () => {
+            NavBus.emit('workers');
             workerSearchCtx.navToSearch()
         },
         icon: Ico.SEARCH
@@ -64,6 +67,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         label: t('nav.offers'),
         active: location.pathname.includes("offers"),
         onClick: () => {
+            NavBus.emit('offers');
             offerSearchCtx.navToSearch()
         },
         icon: Ico.OFFER
@@ -73,14 +77,14 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         items.push({
             label: t('chat.chats'),
             active: location.pathname.includes(Path.CHATS),
-            onClick: () => navigate(Path.CHATS),
+            onClick: () => { NavBus.emit('chats'); navigate(Path.CHATS); },
             icon: Ico.CHAT
         });
     } else {
         items.push({
             label: t('signin.submit'),
             active: !!matchPath({ path: Path.SIGN_IN, end: true }, location.pathname),
-            onClick: () => navigate(Path.SIGN_IN),
+            onClick: () => { NavBus.emit('signin'); navigate(Path.SIGN_IN); },
             icon: Ico.SIGN_IN
         });
     }

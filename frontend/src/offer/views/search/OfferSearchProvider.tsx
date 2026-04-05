@@ -9,6 +9,7 @@ import PseudoView from "global/components/PseudoView";
 import OfferSearchFiltersView from "./OfferSearchFiltersView";
 import { AppConfig } from "@shared/AppConfig";
 import { wait } from "global/utils/utils";
+import { NavBus } from "global/utils/PseudoViewBus";
 
 export interface OfferSearchContextProps {
     filters: OfferSearchFilters;
@@ -73,6 +74,14 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [hasMore, setHasMore] = useState(false);
     const [openPseudoView, setOpenPseudoView] = useState(false);
 
+    React.useEffect(() => {
+        return NavBus.subscribe(() => setOpenPseudoView(false));
+    }, []);
+
+    const openOfferPseudoView = (open: boolean) => {
+        setOpenPseudoView(open);
+    };
+
     const filtersValid = !!filters.locationCountries?.length
 
     const requestIdRef = useRef(0);
@@ -83,7 +92,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (filtersValid) {
             setFiltersWithSearchAndNavigate(filters)
         } else {
-            setOpenPseudoView(true)
+            openOfferPseudoView(true)
         }
     }
 
@@ -215,14 +224,14 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
             defaultFilters: defaultOfferFilters,
             setFiltersWithSearchAndNavigate,
             filtersValid,
-            setOpenPseudoView,
+            setOpenPseudoView: openOfferPseudoView,
             navToSearch,
             openPseudoView
         }}>
             <>
                 {children}
                 <PseudoView show={openPseudoView}>
-                    <OfferSearchFiltersView onClose={() => setOpenPseudoView(false)} />
+                    <OfferSearchFiltersView onClose={() => openOfferPseudoView(false)} />
                 </PseudoView>
             </>
         </OfferSearchContext.Provider>

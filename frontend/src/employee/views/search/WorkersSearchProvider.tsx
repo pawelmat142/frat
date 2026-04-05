@@ -10,6 +10,7 @@ import { AppConfig } from "@shared/AppConfig";
 import PseudoView from "global/components/PseudoView";
 import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
 import { wait } from "global/utils/utils";
+import { NavBus } from "global/utils/PseudoViewBus";
 
 export interface WorkersSearchContextProps {
     filters: WorkerSearchFilters;
@@ -64,6 +65,14 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [loadingMore, setLoadingMore] = useState(false);
     const [openPseudoView, setOpenPseudoView] = useState(false);
 
+    React.useEffect(() => {
+        return NavBus.subscribe(() => setOpenPseudoView(false));
+    }, []);
+
+    const openWorkersPseudoView = (open: boolean) => {
+        setOpenPseudoView(open);
+    };
+
     const requestIdRef = useRef(0);
     const resultsLengthRef = useRef(0);
     const hasMoreRef = useRef(false);
@@ -75,7 +84,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (filtersValid) {
             setFiltersWithSearchAndNavigate(filters)
         } else {
-            setOpenPseudoView(true)
+            openWorkersPseudoView(true)
         }
     }
 
@@ -163,8 +172,8 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
         const isOnSearchPage = newUrl === location.search
 
-        setOpenPseudoView(false)
-        await wait(AppConfig.ROUTER_ANIMATION_DURATION) // Wait for animation to finish before executing search
+        openWorkersPseudoView(false)
+        await wait(AppConfig.ROUTER_ANIMATION_DURATION)
         if (!isOnSearchPage) {
             navigate({ pathname: Path.WORKERS_SEARCH, search: newUrl })
         }
@@ -215,13 +224,13 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             defaultFilters: WorkerDefaultFilters,
             updateOneProfileInResults,
             filtersValid,
-            setOpenPseudoView,
+            setOpenPseudoView: openWorkersPseudoView,
             navToSearch
         }}><>
                 {children}
                 <PseudoView show={openPseudoView}>
                     <WorkersSearchFiltersView onClose={() => {
-                        setOpenPseudoView(false)
+                        openWorkersPseudoView(false)
                     }}></WorkersSearchFiltersView>
                 </PseudoView>
             </>
