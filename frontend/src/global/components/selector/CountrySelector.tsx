@@ -6,6 +6,7 @@ import Loading from '../Loading';
 import { useTranslation } from 'react-i18next';
 import FloatingSelector from './FloatingSelector';
 import { DictionaryUtil } from '@shared/utils/DictionaryUtil';
+import SkeletonControl from '../controls/SkeletonControl';
 
 interface CountrySelectorProps {
     /** Currently selected country code (e.g., 'pl', 'de', 'gb') */
@@ -64,7 +65,7 @@ const CountrySelector = forwardRef((
     }, [groupCode]);
 
     if (loading) {
-        return <Loading />;
+        return <SkeletonControl fullWidth={fullWidth} className={className} />;
     }
 
     if (!dictionary) {

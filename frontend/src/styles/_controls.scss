@@ -748,6 +748,32 @@ input {
   position: relative;
 }
 
+.skeleton-control {
+  border-radius: .5rem;
+  min-height: 60px;
+  background-color: $secondary-bg;
+  overflow: hidden;
+  position: relative;
+}
+
+.skeleton-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, $primary-text, transparent 85%) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-sweep 1.6s ease-in-out infinite;
+}
+
+@keyframes skeleton-sweep {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 .floating-input-container {
   position: relative;
 }
