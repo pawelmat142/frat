@@ -9,6 +9,7 @@ import { DateUtil } from '@shared/utils/DateUtil';
 import PseudoView from '../PseudoView';
 import { AppConfig } from '@shared/AppConfig';
 import { wait } from 'global/utils/utils';
+import { useGlobalContext } from 'global/providers/GlobalProvider';
 
 
 interface DateRangeProps {
@@ -38,6 +39,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomSheetCtx = useBottomSheet();
+    const globalCtx = useGlobalContext();
     const { t } = useTranslation();
 
     const [openPseudoView, setOpenPseudoView] = useState(false);
@@ -54,6 +56,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
         if (disabled) return;
         setFocus(true);
         setOpenPseudoView(true);
+        globalCtx.hideFooter();
     }
 
     const setFocus = (set: boolean) => {
@@ -145,15 +148,18 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
                         setFocus(false);
                         await wait(AppConfig.ROUTER_ANIMATION_DURATION);
                         setOpenPseudoView(false);
+                        globalCtx.showFooter();
                     }}
                     onCancel={async () => {
                         onChange?.(null);
                         setFocus(false);
                         await wait(AppConfig.ROUTER_ANIMATION_DURATION);
                         setOpenPseudoView(false);
+                        globalCtx.showFooter();
                     }}
                     onClose={() => {
                         setOpenPseudoView(false)
+                        globalCtx.showFooter();
                     }}
                 ></CallendarsView>
             </PseudoView>

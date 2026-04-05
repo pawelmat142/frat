@@ -6,6 +6,8 @@ interface FloatingActionButtonProps {
     ariaLabel?: string;
     bottomOffset?: number;
     rightOffset?: number;
+    forceVisible?: boolean;
+    hidden?: boolean;
 }
 
 const getScrollTop = (container: Window | HTMLElement): number => {
@@ -21,6 +23,8 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
     ariaLabel = "Action",
     bottomOffset = 84,
     rightOffset = 24,
+    forceVisible,
+    hidden = false,
 }) => {
     // null = not yet interacted (no animation class applied)
     const [visible, setVisible] = useState<boolean | null>(null);
@@ -45,7 +49,11 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
     }, []);
 
     const visibilityClass =
-        visible === true ? "fab-visible" : visible === false ? "fab-hidden" : "";
+        forceVisible !== undefined
+            ? forceVisible ? "fab-visible" : "fab-hidden"
+            : visible === true ? "fab-visible" : visible === false ? "fab-hidden" : "";
+
+    if (hidden) return null;
 
     const className = ["floating-action-btn", visibilityClass]
         .filter(Boolean)

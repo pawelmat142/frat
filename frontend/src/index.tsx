@@ -28,12 +28,12 @@ import { UsersStorageProvider } from 'global/providers/UsersStorageProvider';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
 
 const AppShell: React.FC = () => {
-  const { state } = useGlobalContext();
+  const { state, isFooterHidden } = useGlobalContext();
   return (
     <div className="app-shell">
       <GlobalHeader />
       {/* <NotificationsGlobalBar /> */}
-      <main className={`app-main${state?.hideFooter ? ' hide-footer' : ''}`}>
+      <main className={`app-main${isFooterHidden ? ' hide-footer' : ''}`}>
         <App />
       </main>
       <LayoutFooterSwitch />

@@ -17,10 +17,12 @@ import GallerySwiper from "global/components/img/GallerySwiper";
 import { useConfirm } from "global/providers/PopupProvider";
 import LongTapHandler from "global/components/LongTapHandler";
 import PseudoView from "global/components/PseudoView";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 interface Props {
     worker: WorkerI;
     onWorkerUpdate?: (updated: WorkerI) => void;
+    onOpenCloseLightbox?: (open: boolean) => void;
 }
 
 interface PendingImage {
@@ -31,10 +33,11 @@ interface PendingImage {
 const MAX_IMAGES = 6;
 const HOLD_MS = 600;
 
-const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
+const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) => {
     const { t } = useTranslation();
     const userCtx = useUserContext();
     const workerCtx = useWorkerContext();
+    const globalCtx = useGlobalContext();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const [pending, setPending] = useState<PendingImage | null>(null);
@@ -138,6 +141,8 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
     const openLightbox = (index: number) => {
         if (allDisplayUrls.length > 0) {
             setLightboxIndex(index);
+            globalCtx.hideFooter();
+            onOpenCloseLightbox?.(true);
         }
     };
 
@@ -231,7 +236,11 @@ const WorkerImagesSection: React.FC<Props> = ({ worker }) => {
                 <GallerySwiper
                     images={allDisplayUrls}
                     startIndex={lightboxIndex ?? 0}
-                    onClose={() => setLightboxIndex(null)}
+                    onClose={() => {
+                        setLightboxIndex(null);
+                        globalCtx.showFooter();
+                        onOpenCloseLightbox?.(false);
+                    }}
                 />
             </PseudoView>
         </div>

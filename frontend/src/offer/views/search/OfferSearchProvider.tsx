@@ -7,7 +7,6 @@ import { OffersService } from "offer/services/OffersService";
 import { Path } from "../../../path";
 import PseudoView from "global/components/PseudoView";
 import OfferSearchFiltersView from "./OfferSearchFiltersView";
-import App from "App";
 import { AppConfig } from "@shared/AppConfig";
 import { wait } from "global/utils/utils";
 
@@ -25,6 +24,7 @@ export interface OfferSearchContextProps {
     filtersValid: boolean;
     setOpenPseudoView: (open: boolean) => void;
     navToSearch: () => void;
+    openPseudoView: boolean;
 }
 const INITIAL_LIMIT = 8;
 const LOAD_MORE_LIMIT = 4;
@@ -216,7 +216,8 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setFiltersWithSearchAndNavigate,
             filtersValid,
             setOpenPseudoView,
-            navToSearch
+            navToSearch,
+            openPseudoView
         }}>
             <>
                 {children}

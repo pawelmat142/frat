@@ -8,8 +8,6 @@ import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmi
 import OfferListItem from "offer/components/OfferListItem";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
 import { Ico } from "global/icon.def";
-import { useNavigate } from "react-router-dom";
-import { Path } from "../../../path";
 import { AppConfig } from "@shared/AppConfig";
 
 const OfferSearchView: React.FC = () => {
@@ -17,7 +15,6 @@ const OfferSearchView: React.FC = () => {
     const { t } = useTranslation();
     const globalCtx = useGlobalContext();
     const ctx = useOfferSearch();
-    const navigate = useNavigate();
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading></Loading>
@@ -68,9 +65,10 @@ const OfferSearchView: React.FC = () => {
                 </div>
             )}
 
-            <FloatingActionButton onClick={() => {
+            <FloatingActionButton forceVisible={!ctx.openPseudoView} onClick={() => {
                 ctx.setOpenPseudoView(true)
             }} icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE}/>}></FloatingActionButton>
+
 
         </div>
     );

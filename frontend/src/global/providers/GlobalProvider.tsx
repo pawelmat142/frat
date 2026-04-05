@@ -13,9 +13,12 @@ interface GlobalContextType {
     dics: Dictionaries;
     loading: boolean;
     state: ViewState | null,
+    isFooterHidden: boolean;
     setHeaderMenu: (menu: React.ReactNode) => void;
     setViewState: (state: ViewState) => void;
     getLanguagesList: () => string[];
+    hideFooter: () => void;
+    showFooter: () => void;
 }
 
 interface Dictionaries {
@@ -36,6 +39,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const [loading, setLoading] = useState(false)
     const [state, setState] = useState<ViewState | null>(null)
+    const [isFooterHidden, setIsFooterHidden] = useState(false)
 
     React.useEffect(() => {
         const initLanguagesDictionary = async () => {
@@ -64,8 +68,10 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
         if (resolved) {
             setState(resolved)
+            setIsFooterHidden(resolved.hideFooter ?? false)
         } else {
             setState(null)
+            setIsFooterHidden(false)
         }
     }, [location.pathname])
 
@@ -78,11 +84,15 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const setViewState = (state: ViewState): void => {
         setState(state)
+        setIsFooterHidden(state.hideFooter ?? false)
     }
 
     const getLanguagesList = (): string[] => {
         return languagesDictionary?.groups.find(g => g.code === 'TRANSLATIONS')?.elementCodes || []
     }
+
+    const hideFooter = () => setIsFooterHidden(true)
+    const showFooter = () => setIsFooterHidden(false)
 
     return (
         <GlobalContext.Provider value={{
@@ -92,9 +102,12 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             },
             loading: loading,
             state,
+            isFooterHidden,
             setHeaderMenu,
             setViewState,
-            getLanguagesList
+            getLanguagesList,
+            hideFooter,
+            showFooter,
         }}>
             {children}
         </GlobalContext.Provider>

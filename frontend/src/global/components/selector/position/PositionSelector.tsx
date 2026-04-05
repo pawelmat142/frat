@@ -8,6 +8,7 @@ import { GeocodedPosition, Position } from '@shared/interfaces/MapsInterfaces';
 import PseudoView from 'global/components/PseudoView';
 import { wait } from 'global/utils/utils';
 import { AppConfig } from '@shared/AppConfig';
+import { useGlobalContext } from 'global/providers/GlobalProvider';
 
 interface PositionSelectorProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: GeocodedPosition | null;
@@ -31,6 +32,8 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         error,
     }, ref) => {
 
+        const globalCtx = useGlobalContext();
+
         const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(value || null);
         const [openPseudoView, setOpenPseudoView] = useState(false);
 
@@ -51,6 +54,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         const handleInputClick = async () => {
             if (disabled) return;
             setOpenPseudoView(true);
+            globalCtx.hideFooter();
         };
 
         const displayValue = selectedPosition
@@ -102,10 +106,13 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                             await wait(AppConfig.ROUTER_ANIMATION_DURATION);
                             onChange?.(position);
                             setSelectedPosition(position);
+                            globalCtx.showFooter();
                         }}
-                        onCancel={() => {
+                        onCancel={async () => {
                             onChange?.(null);
                             setOpenPseudoView(false);
+                            await wait(AppConfig.ROUTER_ANIMATION_DURATION);
+                            globalCtx.showFooter();
                         }}
                     ></PositionSelectorContent>
                 </PseudoView>

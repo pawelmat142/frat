@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
 import Footer from './Footer';
 import MobileBottomNav from './MobileBottomNav';
+import { AnimatePresence } from 'framer-motion';
 
 const useIsKeyboardOpen = (): boolean => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,10 +34,13 @@ const LayoutFooterSwitch: React.FC = () => {
     return <Footer />;
   }
 
-  if (globalCtx.state?.hideFooter || isKeyboardOpen) {
-    return null;
-  }
-  return <MobileBottomNav />;
+  const show = !globalCtx.isFooterHidden && !isKeyboardOpen;
+
+  return (
+    <AnimatePresence>
+      {show && <MobileBottomNav />}
+    </AnimatePresence>
+  );
 };
 
 export default LayoutFooterSwitch;

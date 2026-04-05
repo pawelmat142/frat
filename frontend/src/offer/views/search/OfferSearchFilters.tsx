@@ -3,8 +3,6 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useOfferSearch } from "./OfferSearchProvider";
 import { Utils } from "global/utils/utils";
 import { Ico } from "global/icon.def";
-import { Path } from "../../../path";
-import { useNavigate } from "react-router-dom";
 
 const OfferSearchFilters: React.FC = () => {
 

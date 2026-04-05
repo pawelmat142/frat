@@ -37,6 +37,7 @@ const WorkerView: React.FC = () => {
 
     const [loading, setLoading] = useState(false)
     const [worker, setProfile] = useState<WorkerI | null>(null)
+    const [hideFloatingBtn, setHideFloatingBtn] = useState(false);
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -333,13 +334,15 @@ const WorkerView: React.FC = () => {
 
             <WorkerSkillsSection worker={worker} />
 
-            <WorkerImagesSection worker={worker} onWorkerUpdate={_setProfile} />
+            <WorkerImagesSection worker={worker} onWorkerUpdate={_setProfile} onOpenCloseLightbox={(open) => {
+                setHideFloatingBtn(open);
+            }}/>
 
             <div className="px-5 mb-10">
                 <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>
             </div>
 
-            <FloatingActionButton onClick={openChat} icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}></FloatingActionButton>
+            <FloatingActionButton onClick={openChat} hidden={hideFloatingBtn} icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE}/>}></FloatingActionButton>
         </div>
     );
 }
