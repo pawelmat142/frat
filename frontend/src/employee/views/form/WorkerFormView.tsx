@@ -50,6 +50,13 @@ const WorkerFormView: React.FC = () => {
 
     const [step, setStep] = React.useState<StepKey>(STEPS_ORDER[0]);
 
+    useEffect(() => {
+        globalCtx.hideFooter();
+        return () => {
+            globalCtx.showFooter();
+        }
+    }, [])
+
     const worker: WorkerWithCertificates | null = workerCtx.worker || null;
 
     const formRef = useForm<WorkerForm>({

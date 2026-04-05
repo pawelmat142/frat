@@ -41,6 +41,13 @@ const OfferFormContent: React.FC = () => {
     const param = useParams<{ offerId?: string }>();
     const offerId = param.offerId;
 
+    useEffect(() => {
+        globalCtx.hideFooter();
+        return () => {
+            globalCtx.showFooter();
+        }
+    }, [])
+
     const initFormIfEditMode = async (offerId?: string) => {
         if (!offerId) {
             prefillFormIfNewOffer()
