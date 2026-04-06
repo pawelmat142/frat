@@ -1,4 +1,4 @@
-import { Theme, Themes } from "@shared/interfaces/SettingsI";
+import { defaultTheme, Theme, Themes } from "@shared/interfaces/SettingsI";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 
@@ -13,8 +13,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const getPreferredTheme = (): Theme => {
         const saved = localStorage.getItem("theme");
-        if (saved === Themes.LIGHT || saved === Themes.DARK) return saved;
-        return window.matchMedia("(prefers-color-scheme: dark)").matches ? Themes.DARK : Themes.LIGHT;
+        if (saved === defaultTheme.dark || saved === defaultTheme.light) return saved;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? defaultTheme.dark : defaultTheme.light;
     };
 
     const [theme, setTheme] = useState<Theme>(getPreferredTheme());

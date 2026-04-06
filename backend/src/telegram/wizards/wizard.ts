@@ -49,10 +49,20 @@ export class Wizard {
     this.modified = new Date();
   }
 
-  protected getLoginViewUrl = (): string => {
+  // Telegram requires a publicly accessible HTTPS URL for inline keyboard buttons.
+  // Returns null when the configured URL is localhost or non-HTTPS (e.g. in dev).
+  protected getLoginViewUrl = (): string | null => {
     const loginViewUrl = this.services.configService.get<string>('LOGIN_BY_TELEGRAM_URL');
     if (!loginViewUrl) {
       throw new Error('LOGIN_BY_TELEGRAM_URL is not defined in environment variables');
+    }
+    try {
+      const parsed = new URL(loginViewUrl);
+      if (parsed.protocol !== 'https:' || parsed.hostname === 'localhost') {
+        return null;
+      }
+    } catch {
+      return null;
     }
     return loginViewUrl;
   }

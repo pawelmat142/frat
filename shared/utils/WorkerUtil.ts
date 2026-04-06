@@ -136,5 +136,4 @@ export abstract class WorkerUtil {
         if (f1.sortBy !== f2.sortBy) return false;
         return true;
     }
-
 }

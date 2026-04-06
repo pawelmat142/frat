@@ -15,7 +15,7 @@ const AdminPanelSidebar: React.FC = () => {
         to={Path.ADMIN_DICTIONARIES}
         className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}
       >
-        <HomeIcon />
+        <Ico.SETTINGS size={iconSize} />
         <span>Dictionaries</span>
       </NavLink>
 
@@ -23,7 +23,7 @@ const AdminPanelSidebar: React.FC = () => {
         to={Path.ADMIN_TRANSLATIONS}
         className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}
       >
-        <TranslateIcon />
+        <Ico.LANGUAGE size={iconSize} />
         <span>Translations</span>
       </NavLink>
 
@@ -39,7 +39,7 @@ const AdminPanelSidebar: React.FC = () => {
         to={Path.ADMIN_FEEDBACKS}
         className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
       >
-          <MessageIcon />
+          <Ico.MSG size={iconSize} />
         <span>Feedbacks</span>
       </NavLink>
 
@@ -57,6 +57,14 @@ const AdminPanelSidebar: React.FC = () => {
       > 
         <Ico.OFFER className="svg-icon" />
         <span>Offers</span>
+      </NavLink>
+
+      <NavLink
+        to={Path.HOME}
+        className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
+      > 
+        <Ico.HOME className="svg-icon" />
+        <span>HOME</span>
       </NavLink>
     </div>
   );

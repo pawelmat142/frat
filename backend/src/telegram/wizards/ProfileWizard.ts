@@ -27,7 +27,7 @@ export class ProfileWizard extends Wizard {
     if (!this.user && user) {
       this.user = user;
     }
-    this.processLoginStep()
+    this.order = await this.processLoginStep()
   }
 
   public getProfile(): UserI {
@@ -41,10 +41,9 @@ export class ProfileWizard extends Wizard {
     return this.STEP.LOGIN
   }
 
-
-
   public getSteps(): WizardStep[] {
     const pin = this.services.exportedAuthService.getLoginPin(this.user.telegramChannelId!);
+    const loginUrl = this.getLoginViewUrl();
     return [
       {
         order: this.STEP.LOGIN,
@@ -57,10 +56,10 @@ export class ProfileWizard extends Wizard {
         }], [{
           text: `🔄 New PIN`,
           process: () => this.processLoginStep(),
-        }], [{
+        }], ...(loginUrl ? [[{
           text: `🌐 Open login page`,
-          url: this.getLoginViewUrl(),
-        }], [
+          url: loginUrl,
+        }]] : []), [
           {
             text: 'Delete account',
             process: async () => this.STEP.ENSURE,

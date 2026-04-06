@@ -21,8 +21,13 @@ export const Themes = {
 
 export type Theme = typeof Themes[keyof typeof Themes];
 
+export const defaultTheme = {
+    light: Themes.LIGHT4,
+    dark: Themes.DARK4,
+};
+
 export const defaultSettings: SettingsI = {
     uid: '',
-    theme: Themes.LIGHT,
+    theme: defaultTheme.dark,
     languageCode: 'en',
 }

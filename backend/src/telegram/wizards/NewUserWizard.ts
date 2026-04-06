@@ -61,7 +61,10 @@ export class NewUserWizard extends Wizard {
       {
         order: this.STEP.ERROR,
         message: [this.error],
-        close: true,
+        buttons: [[{
+          text: `Try again`,
+          process: async () => this.STEP.START,
+        }]]
       },
       {
         order: this.STEP.CONFIRM,

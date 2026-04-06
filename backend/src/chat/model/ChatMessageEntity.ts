@@ -32,7 +32,7 @@ export class ChatMessageEntity implements ChatMessageI {
   @JoinColumn({ name: 'chat_id' })
   chat: ChatEntity;
 
-  @ManyToOne(() => UserEntity, { onDelete: 'SET NULL' })
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'sender_uid', referencedColumnName: 'uid' })
   sender: UserEntity;
 }

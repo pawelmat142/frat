@@ -15,6 +15,7 @@ import EmailVerificationWarning from "./EmailVerificationWarning";
 import { usePwaInstall } from "global/hooks/usePwaInstall";
 import { Util } from "@shared/utils/util";
 import { UserRoles } from "@shared/interfaces/UserI";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 const DashboardView: React.FC = () => {
 
@@ -23,6 +24,7 @@ const DashboardView: React.FC = () => {
     const userCtx = useUserContext();
     const confirm = useConfirm()
     const { isInstallable, install } = usePwaInstall();
+    const { isDesktop } = useGlobalContext();
     
     const me = userCtx.me;
 
@@ -45,7 +47,7 @@ const DashboardView: React.FC = () => {
     const quickActions: MenuItem[] = [{
         label: "Admin panel",
         icon: Ico.SETTINGS,
-        if: Util.hasPermission([UserRoles.ADMIN, UserRoles.SUPERADMIN], me),
+        if: isDesktop && Util.hasPermission([UserRoles.ADMIN, UserRoles.SUPERADMIN], me),
         onClick: () => navigate(Path.ADMIN_DICTIONARIES)
     }, {
         label: t("pwa.install"),
