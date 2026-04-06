@@ -19,7 +19,7 @@ const OfferSearchFilters: React.FC = () => {
         : [];
 
     return (
-        <div className="filters-container">
+        <div className="filters-container primary-bg">
             <div className="flex gap-x-3 flex-wrap items-center pb-1">
                 {(!!ctx.filters.categories?.length) && (
                     <div className="chip-container ml-2">

@@ -1,3 +1,4 @@
+import { AppConfig } from "@shared/AppConfig";
 import { Ico } from "global/icon.def";
 import NotificationListItem from "notification/components/NotificationListItem";
 import { useNotificationsContext } from "notification/NotificationsProvider";
@@ -25,11 +26,14 @@ const NotificationsView: React.FC = () => {
 
     useEffect(() => { }, [notificationsCtx.notifications])
 
+    const iconSize = `${AppConfig.DEFAULT_AVATAR_SIZE}rem`;
+
+
     return <div className="list-view">
 
         {!notifications.length && (
             <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
-                <Ico.NOTIFICATION size={48} className="secondary-text" />
+                <Ico.NOTIFICATION size={iconSize} className="secondary-text" />
                 <div className="secondary-text">{t('notification.noNotifications')}</div>
             </div>
         )}
