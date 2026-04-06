@@ -26,6 +26,7 @@ export interface WorkersSearchContextProps {
     updateOneProfileInResults: (updatedProfile: WorkerI) => void;
     filtersValid: boolean;
     setOpenPseudoView: (open: boolean) => void;
+    openPseudoView: boolean;
     navToSearch: () => void;
 }
 
@@ -225,7 +226,8 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             updateOneProfileInResults,
             filtersValid,
             setOpenPseudoView: openWorkersPseudoView,
-            navToSearch
+            navToSearch,
+            openPseudoView
         }}><>
                 {children}
                 <PseudoView show={openPseudoView}>

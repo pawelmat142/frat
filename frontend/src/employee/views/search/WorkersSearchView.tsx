@@ -68,7 +68,7 @@ const WorkersSearchView: React.FC = () => {
                 </div>
             )}
 
-            <FloatingActionButton onClick={() => {
+            <FloatingActionButton forceVisible={!ctx.openPseudoView} onClick={() => {
                 ctx.setOpenPseudoView(true)
             }} icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE}/>}></FloatingActionButton>
         </div>
