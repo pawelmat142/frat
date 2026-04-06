@@ -26,8 +26,6 @@ import { OffersProvider } from 'offer/OffersProvider';
 import { WorkerProvider } from 'employee/WorkerProvider';
 import { UsersStorageProvider } from 'global/providers/UsersStorageProvider';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
-import Button from 'global/components/controls/Button';
-import { httpClient } from 'global/services/http';
 
 const AppShell: React.FC = () => {
   const { state, isFooterHidden } = useGlobalContext();
@@ -67,30 +65,6 @@ root.render(
                                     <WorkersSearchProvider>
                                       <MenuProvider>
 
-                                        {/* TODO remove these buttons! */}
-
-                                        <div className="flex gap-2 flex-wrap p-2">
-                                          <Button onClick={async () => {
-                                            httpClient.get('/test')
-                                          }}>test</Button>
-
-                                          <Button onClick={async () => {
-                                            httpClient.get('/sww')
-                                          }}>sww</Button>
-
-                                          <Button onClick={async () => {
-                                            httpClient.get('/toast')
-                                          }}>toast</Button>
-
-                                          <Button onClick={async () => {
-                                            httpClient.get('/popup')
-                                          }}>popup</Button>
-
-                                          <Button onClick={async () => {
-                                            httpClient.get('/warning')
-                                          }}>warnings</Button>
-                                        </div>
-
                                         <AppShell />
 
                                         <CookieBanner />
@@ -104,7 +78,6 @@ root.render(
                                           pauseOnFocusLoss
                                           draggable
                                           pauseOnHover
-                                          theme="light"
                                         />
                                       </MenuProvider>
                                     </WorkersSearchProvider>

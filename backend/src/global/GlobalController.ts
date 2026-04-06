@@ -8,12 +8,8 @@ import { DictionariesPublicService } from "admin/dictionaries/services/Dictionar
 import { Serialize } from "./decorators/Serialize";
 import { TranslationEntity } from "admin/dictionaries/model/TranslationEntity";
 import { DictionaryEntity } from "admin/dictionaries/model/DictionaryEntity";
-import { SWWException } from "./exceptions/SWWException";
 import { GeocodingService } from "./services/GeocodingService";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
-import { ToastException } from "./exceptions/ToastException";
-import { ToastWarningException } from "./exceptions/ToastWarningException";
-import { PopupException } from "./exceptions/PopupException";
 
 @Controller('api')
 @UseInterceptors(LogInterceptor)
@@ -25,37 +21,6 @@ export class GlobalController {
         private readonly geocodingService: GeocodingService,
     ) {}
 
-    @Get('/test')
-    test() {
-        console.log('Hello world!');
-        return { test: 'hello world!'}
-    }
-// TODO remove!
-    @Get('/testtwo')
-    testTwo() {
-        throw new ToastException(`Test Toast Exception`, this);
-    }
-    
-    @Get('/toast')
-    testThree() {
-        throw new ToastException(`Test Toast Exception`, this);
-    }
-    
-    @Get('/sww')
-    testSww() {
-        throw new SWWException(`Test SWW Exception`, this);
-    }
-    
-    @Get('/warning')
-    testWarning() {
-        throw new ToastWarningException(`Test Warning Exception`, this);
-    }
-    
-    @Get('/popup')
-    testPopup() {
-        throw new PopupException(`Test Popup Exception`, this);
-    }
-    
     @Get('get-translations/:langCode')
     @Serialize(TranslationEntity)
     getTranslation(@Param('langCode') langCode: string): Promise<TranslationI> {

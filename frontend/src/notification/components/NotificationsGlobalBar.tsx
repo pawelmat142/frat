@@ -44,11 +44,11 @@ const NotificationsGlobalBar: React.FC = () => {
         {isVisible && (
             <motion.div
                 key="notification-bar"
-                initial={{ opacity: 0, height: 0, marginTop: 0, marginBottom: 0 }}
-                animate={{ opacity: 1, height: "auto", marginTop: 0, marginBottom: 10 }}
-                exit={{ opacity: 0, height: 0, marginTop: 0, marginBottom: 0 }}
+                initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                animate={{ opacity: 1, height: "auto", marginBottom: 10 }}
+                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                 transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-                className="mx-2 overflow-hidden"
+                className="m-2 overflow-hidden"
             >
                 <div
                     className="px-2 py-3 rounded-md secondary-bg rippple notification-bar"

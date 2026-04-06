@@ -103,9 +103,9 @@ const DashboardView: React.FC = () => {
 
     return (<div className="w-full">
 
-        <UserProfileItem user={me}></UserProfileItem>
-
         <NotificationsGlobalBar />
+
+        <UserProfileItem user={me}></UserProfileItem>
 
         <EmailVerificationWarning></EmailVerificationWarning>
 
