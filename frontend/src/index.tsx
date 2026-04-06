@@ -26,6 +26,8 @@ import { OffersProvider } from 'offer/OffersProvider';
 import { WorkerProvider } from 'employee/WorkerProvider';
 import { UsersStorageProvider } from 'global/providers/UsersStorageProvider';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
+import Button from 'global/components/controls/Button';
+import { httpClient } from 'global/services/http';
 
 const AppShell: React.FC = () => {
   const { state, isFooterHidden } = useGlobalContext();
@@ -48,54 +50,78 @@ root.render(
   <React.StrictMode>
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <GlobalProvider>
-          <PopupProvider>
-            <BottomSheetProvider>
-              <DrawerProvider>
-                <ThemeProvider>
-                  <UsersStorageProvider>
-                    <CookieProvider>
-                      <AuthProvider>
-                        <UserProvider>
-                          <FriendsProvider>
-                            <OffersProvider>
-                              <WorkerProvider>
-                                <ChatsProvider>
-                                  <NotificationsProvider>
-                                    <OfferSearchProvider>
-                                      <WorkersSearchProvider>
-                                        <MenuProvider>
+        <PopupProvider>
+          <BottomSheetProvider>
+            <DrawerProvider>
+              <ThemeProvider>
+                <UsersStorageProvider>
+                  <CookieProvider>
+                    <AuthProvider>
+                      <UserProvider>
+                        <FriendsProvider>
+                          <OffersProvider>
+                            <WorkerProvider>
+                              <ChatsProvider>
+                                <NotificationsProvider>
+                                  <OfferSearchProvider>
+                                    <WorkersSearchProvider>
+                                      <MenuProvider>
 
-                                          <AppShell />
-                                          
-                                          <CookieBanner />
-                                          <ToastContainer
-                                            position="top-right"
-                                            autoClose={3000}
-                                            hideProgressBar={false}
-                                            newestOnTop={false}
-                                            closeOnClick
-                                            rtl={false}
-                                            pauseOnFocusLoss
-                                            draggable
-                                            pauseOnHover
-                                            theme="light"
-                                          />
-                                        </MenuProvider>
-                                      </WorkersSearchProvider>
-                                    </OfferSearchProvider>
-                                  </NotificationsProvider>
-                                </ChatsProvider>
-                              </WorkerProvider>
-                            </OffersProvider>
-                          </FriendsProvider>
-                        </UserProvider>
-                      </AuthProvider>
-                    </CookieProvider>
-                  </UsersStorageProvider>
-                </ThemeProvider>
-              </DrawerProvider>
-            </BottomSheetProvider>
-          </PopupProvider>
+                                        {/* TODO remove these buttons! */}
+
+                                        <div className="flex gap-2 flex-wrap p-2">
+                                          <Button onClick={async () => {
+                                            httpClient.get('/test')
+                                          }}>test</Button>
+
+                                          <Button onClick={async () => {
+                                            httpClient.get('/sww')
+                                          }}>sww</Button>
+
+                                          <Button onClick={async () => {
+                                            httpClient.get('/toast')
+                                          }}>toast</Button>
+
+                                          <Button onClick={async () => {
+                                            httpClient.get('/popup')
+                                          }}>popup</Button>
+
+                                          <Button onClick={async () => {
+                                            httpClient.get('/warning')
+                                          }}>warnings</Button>
+                                        </div>
+
+                                        <AppShell />
+
+                                        <CookieBanner />
+                                        <ToastContainer
+                                          position="top-right"
+                                          autoClose={3000}
+                                          hideProgressBar={false}
+                                          newestOnTop={false}
+                                          closeOnClick
+                                          rtl={false}
+                                          pauseOnFocusLoss
+                                          draggable
+                                          pauseOnHover
+                                          theme="light"
+                                        />
+                                      </MenuProvider>
+                                    </WorkersSearchProvider>
+                                  </OfferSearchProvider>
+                                </NotificationsProvider>
+                              </ChatsProvider>
+                            </WorkerProvider>
+                          </OffersProvider>
+                        </FriendsProvider>
+                      </UserProvider>
+                    </AuthProvider>
+                  </CookieProvider>
+                </UsersStorageProvider>
+              </ThemeProvider>
+            </DrawerProvider>
+          </BottomSheetProvider>
+        </PopupProvider>
       </GlobalProvider>
     </BrowserRouter>
   </React.StrictMode>

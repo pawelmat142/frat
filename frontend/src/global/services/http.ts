@@ -7,6 +7,7 @@ import { PopupHandler } from 'global/providers/PopupProvider';
 import { BtnModes } from 'global/interface/controls.interface';
 import { Path } from '../../path';
 import { FirebaseAuth } from 'auth/services/FirebaseAuth';
+import { DateUtil } from '@shared/utils/DateUtil';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -28,34 +29,6 @@ export class HttpClient {
 
   setNavigate(navigate: (path: string, options?: { replace?: boolean }) => void) {
     this.navigate = navigate;
-  }
-
-  private static isIsoDateString(value: unknown): boolean {
-    return (
-      typeof value === 'string' &&
-      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z?$/.test(value)
-    );
-  }
-
-  private static reviveDatesDeep<T>(data: T): T {
-    if (Array.isArray(data)) {
-      return data.map(item => HttpClient.reviveDatesDeep(item)) as unknown as T;
-    }
-    if (data && typeof data === 'object') {
-      const result: any = Array.isArray(data) ? [] : {};
-      for (const key in data as any) {
-        if (Object.prototype.hasOwnProperty.call(data, key)) {
-          const val = (data as any)[key];
-          if (HttpClient.isIsoDateString(val)) {
-            result[key] = new Date(val as string);
-          } else {
-            result[key] = HttpClient.reviveDatesDeep(val);
-          }
-        }
-      }
-      return result as T;
-    }
-    return data;
   }
 
   constructor() {
@@ -87,17 +60,18 @@ export class HttpClient {
     this.axiosInstance.interceptors.response.use(
       response => {
         if (response && response.data && !(response.data instanceof Blob)) {
-          response.data = HttpClient.reviveDatesDeep(response.data);
+          response.data = DateUtil.reviveDatesDeep(response.data);
         }
         return response;
       },
       error => {
         if (error.response?.data instanceof Blob) {
           this.handleFileError(error);
-          return Promise.reject(error); // zawsze propaguj błąd po handleFileError
+          return Promise.reject(error);
         } else {
-          this.handleError(error);
-          return Promise.reject(error); // jeśli handleError nie zwrócił nic, propaguj oryginalny błąd
+          const handled = this.handleError(error);
+          // propaguj błąd tylko jeśli nie został obsłużony (np. toast, redirect)
+          if (!handled) return Promise.reject(error);
         }
       }
     );
@@ -175,35 +149,37 @@ export class HttpClient {
       : error.message;
   }
 
-  private handleError(error: AxiosError) {
+  private handleError(error: AxiosError): boolean {
     if (error.response) {
       const status = error.response.status;
       switch (status) {
         case MyHttpCode.TOAST_ERROR: //460
           toast.error(this.getErrorMsg(error));
-          break;
+          return true;
         case MyHttpCode.TOAST_WARNING: //461
           toast.warning(this.getErrorMsg(error));
-          break;
+          return true;
         case MyHttpCode.SWW: //599
           this.handleSWW(error);
-          break;
-          case MyHttpCode.POPUP_ERROR: //462
+          return true;
+        case MyHttpCode.POPUP_ERROR: //462
           this.handlePopupException(error);
-          break;
+          return true;
 
-          case 401: // Unauthorized
+        case 401: // Unauthorized
           FirebaseAuth.getAuth().signOut();
           toast.warn(String(t('authError.sessionExpired')));
           if (this.navigate) {
             this.navigate(Path.SIGN_IN);
           }
-          break;
-          default:
+          return true;
+        default:
           this.handleSWW(error);
+          return true;
       }
     } else {
       toast.error(String(t('common.networkError')));
+      return false;
     }
   }
 
@@ -231,9 +207,3 @@ export class HttpClient {
 }
 
 export const httpClient = new HttpClient();
-
-// Usage: wrap your app with <QueryClientProvider client={queryClient}> in index.tsx
-// Example hooks:
-// import { useQuery, useMutation } from '@tanstack/react-query';
-// useQuery(['dictionaries'], () => httpClient.get('/dictionaries'));
-// useMutation((data) => httpClient.put('/dictionaries', data));

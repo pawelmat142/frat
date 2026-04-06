@@ -11,6 +11,9 @@ import { DictionaryEntity } from "admin/dictionaries/model/DictionaryEntity";
 import { SWWException } from "./exceptions/SWWException";
 import { GeocodingService } from "./services/GeocodingService";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
+import { ToastException } from "./exceptions/ToastException";
+import { ToastWarningException } from "./exceptions/ToastWarningException";
+import { PopupException } from "./exceptions/PopupException";
 
 @Controller('api')
 @UseInterceptors(LogInterceptor)
@@ -26,6 +29,31 @@ export class GlobalController {
     test() {
         console.log('Hello world!');
         return { test: 'hello world!'}
+    }
+// TODO remove!
+    @Get('/testtwo')
+    testTwo() {
+        throw new ToastException(`Test Toast Exception`, this);
+    }
+    
+    @Get('/toast')
+    testThree() {
+        throw new ToastException(`Test Toast Exception`, this);
+    }
+    
+    @Get('/sww')
+    testSww() {
+        throw new SWWException(`Test SWW Exception`, this);
+    }
+    
+    @Get('/warning')
+    testWarning() {
+        throw new ToastWarningException(`Test Warning Exception`, this);
+    }
+    
+    @Get('/popup')
+    testPopup() {
+        throw new PopupException(`Test Popup Exception`, this);
     }
     
     @Get('get-translations/:langCode')
@@ -51,10 +79,6 @@ export class GlobalController {
         return this.dictionariesPublicService.getDictionary(code, groupCode);
     }
 
-    @Get('/test-sww')
-    testSww() {
-        throw new SWWException(`Test SWW Exception`, this);
-    }
 
     @Get('geocode/reverse')
     async reverseGeocode(

@@ -1,5 +1,12 @@
 export abstract class DateUtil {
 
+    public static isIsoDateString(value: unknown): boolean {
+        return (
+            typeof value === 'string' &&
+            /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z?$/.test(value)
+        );
+    }
+
     // without date
     public static displayDate(date: Date | string): string {
         const d = date instanceof Date ? date : new Date(date);
@@ -29,7 +36,7 @@ export abstract class DateUtil {
             date.getMonth() === tomorrow.getMonth() &&
             date.getFullYear() === tomorrow.getFullYear();
     }
-    
+
     public static isYesterday(date: Date): boolean {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
