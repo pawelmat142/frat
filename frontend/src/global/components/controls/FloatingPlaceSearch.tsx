@@ -305,17 +305,17 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
                 </div>
 
                 {showPredictions && predictions.length > 0 && (
-                    <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                    <ul className="pp-dropdown-list">
                         {predictions.map(p => (
-                            <div
+                            <li
                                 key={p.place_id}
                                 onClick={() => selectPrediction(p)}
-                                className="px-4 py-3 hover:bg-gray-100 cursor-pointer text-sm border-b border-gray-100 last:border-b-0"
+                                className="dropdown-item"
                             >
                                 {p.description}
-                            </div>
+                            </li>
                         ))}
-                    </div>
+                    </ul>
                 )}
 
                 <FormError error={error} />
