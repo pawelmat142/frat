@@ -267,9 +267,9 @@ export class WorkerRepo {
             updatedFlag = true;
         }
 
-        if (this.imagesChanges(newWorker, worker)) {
+        if (newWorker?.images?.length && this.imagesChanges(newWorker, worker)) {
             this.logger.log(`Updating EmployeeProfile images from ${JSON.stringify(worker.images)} to ${JSON.stringify(newWorker.images)}`);
-            worker.images = newWorker.images.map(i => ({ publicId: i.publicId ?? '', url: i.url ?? '' }));
+            worker.images = newWorker?.images?.map(i => ({ publicId: i.publicId ?? '', url: i.url ?? '' })) || [];
             updatedFlag = true;
         }
 
