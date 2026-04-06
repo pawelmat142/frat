@@ -8,6 +8,7 @@ import CountrySelector from 'global/components/selector/CountrySelector';
 import FloatingPlaceSearch, { PlaceSearchResult } from './FloatingPlaceSearch';
 import FloatingStepSlider from './FloatingStepSlider';
 import SkeletonControl from './SkeletonControl';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export interface LocationFilterValue {
     locationCountry: string | null;
@@ -37,6 +38,7 @@ const LocationFilterSelector: React.FC<LocationFilterSelectorProps> = ({
 }) => {
     const { t } = useTranslation();
     const [loadingCity, setLoadingCity] = useState(false);
+    const [cityAnimating, setCityAnimating] = useState(false);
 
     const handleCountryChange = (countryCode: string | null) => {
         onChange({
@@ -81,34 +83,74 @@ const LocationFilterSelector: React.FC<LocationFilterSelectorProps> = ({
                 onSelect={(countryCode) => handleCountryChange(countryCode)}
             />
 
-            {!!value.locationCountry && (
-                loadingCity ? (
-                    <SkeletonControl label={t('employeeProfile.form.city')} />
-                ) : (
-                    <FloatingPlaceSearch
-                        fullWidth
-                        displayValue={value.geocodedPosition?.fullAddress || ''}
-                        label={t('employeeProfile.form.city')}
-                        className="w-full mt-3"
-                        error={errors?.geocodedPosition}
-                        countryRestriction={value.locationCountry}
-                        onSelect={handleCitySelect}
-                        onClear={handleCityClear}
-                    />
-                )
-            )}
+            <AnimatePresence
+                onExitComplete={() => setCityAnimating(false)}
+            >
+                {!!value.locationCountry && (
+                    <motion.div
+                        key="city-control"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.35, ease: [0.22, 0.7, 0.3, 1] }}
+                        style={{ overflow: cityAnimating ? 'hidden' : 'visible' }}
+                        onAnimationStart={() => setCityAnimating(true)}
+                        onAnimationComplete={() => setCityAnimating(false)}
+                        className="mt-3"
+                    >
+                        <motion.div
+                            initial={{ y: 20, scale: 0.96 }}
+                            animate={{ y: 0, scale: 1 }}
+                            exit={{ y: 12, scale: 0.97 }}
+                            transition={{ duration: 0.35, ease: [0.22, 0.7, 0.3, 1] }}
+                        >
+                            {loadingCity ? (
+                                <SkeletonControl label={t('employeeProfile.form.city')} />
+                            ) : (
+                                <FloatingPlaceSearch
+                                    fullWidth
+                                    displayValue={value.geocodedPosition?.fullAddress || ''}
+                                    label={t('employeeProfile.form.city')}
+                                    error={errors?.geocodedPosition}
+                                    countryRestriction={value.locationCountry}
+                                    onSelect={handleCitySelect}
+                                    onClear={handleCityClear}
+                                />
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-            {!!value.geocodedPosition && (
-                <FloatingStepSlider
-                    label={t('employeeProfile.form.radius')}
-                    steps={radiusSteps}
-                    value={value.positionRadiusKm}
-                    onChange={(val) => onChange({ ...value, positionRadiusKm: val })}
-                    unit="km"
-                    fullWidth
-                    className="w-full mt-3 px-2 mb-5"
-                />
-            )}
+            <AnimatePresence>
+                {!!value.geocodedPosition && (
+                    <motion.div
+                        key="radius-control"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.35, ease: [0.22, 0.7, 0.3, 1] }}
+                        style={{ overflow: 'hidden' }}
+                        className="mt-3 px-2 mb-5"
+                    >
+                        <motion.div
+                            initial={{ y: 20, scale: 0.96 }}
+                            animate={{ y: 0, scale: 1 }}
+                            exit={{ y: 12, scale: 0.97 }}
+                            transition={{ duration: 0.35, ease: [0.22, 0.7, 0.3, 1] }}
+                        >
+                            <FloatingStepSlider
+                                label={t('employeeProfile.form.radius')}
+                                steps={radiusSteps}
+                                value={value.positionRadiusKm}
+                                onChange={(val) => onChange({ ...value, positionRadiusKm: val })}
+                                unit="km"
+                                fullWidth
+                            />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

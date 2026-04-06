@@ -126,7 +126,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                 />
 
                 <LocationFilterSelector
-                    className="w-full mt-3"
+                    className="w-full mt-5"
                     value={{
                         locationCountry: formState.locationCountry ?? null,
                         geocodedPosition: formState.geocodedPosition ?? null,
@@ -146,7 +146,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                     render={({ field }) => (
                         <DictionarySelector
                             type='multi'
-                            className="w-full mt-3"
+                            className="w-full mt-5"
                             valueInput={field.value}
                             onSelectMulti={items => {
                                 field.onChange(items);
