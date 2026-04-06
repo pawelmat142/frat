@@ -24,6 +24,7 @@ interface UserContextType {
 	position: Position | null;
 
 	updateMe: (user: UserI) => void;
+	updateMeCtx: (ctx: MeUserContext) => void;
 
 	loading: boolean;
 	setLoading: (loading: boolean) => void;
@@ -91,6 +92,10 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		setMe(user);
 	}
 
+	const updateMeCtx = (ctx: MeUserContext) => {
+		setMeCtx(ctx);
+	}
+	
 	const initLocation = async (init?: boolean) => {
 		try {
 			const status = await navigator.permissions.query({ name: 'geolocation' });
@@ -249,7 +254,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			position,
 			selectLanguage,
 			selectTheme,
-			getDistanceInfo
+			getDistanceInfo,
+			updateMeCtx
 		}}>
 			{children}
 		</UserContext.Provider>

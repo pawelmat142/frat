@@ -10,6 +10,7 @@ import { UserContextService } from './UserContextService';
 import { WorkerModule } from 'employee/WorkerModule';
 import { UserContextController } from './UserContextController';
 import { AuthModule } from 'auth/AuthModule';
+import { UserListedModule } from 'user/user-listed-module/UserListedModule';
 
 @Module({
     imports: [
@@ -21,6 +22,7 @@ import { AuthModule } from 'auth/AuthModule';
         SettingsModule,
         NotificationModule,
         ChatModule,
+        UserListedModule
     ],
     controllers: [
         UserContextController,

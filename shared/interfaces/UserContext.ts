@@ -4,6 +4,7 @@ import { NotificationI } from "./NotificationI";
 import { OfferI } from "./OfferI";
 import { SettingsI } from "./SettingsI";
 import { UserI } from "./UserI";
+import { UserListedItem } from "./UserListedItem";
 import { WorkerWithCertificates } from "./WorkerI";
 
 export interface UserContext {
@@ -11,6 +12,7 @@ export interface UserContext {
     friendships: FriendshipI[]
     offers: OfferI[]
     workerProfile?: WorkerWithCertificates
+    listedItems?: UserListedItem[]
 }
 
 export interface MeUserContext extends UserContext {

@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { MeUserContext, UserContext } from "@shared/interfaces/UserContext";
 import { UserI } from "@shared/interfaces/UserI";
+import { UserListedItemTypes } from "@shared/interfaces/UserListedItem";
 import { ChatService } from "chat/services/ChatService";
 import { WorkersService } from "employee/services/WorkerService";
 import { FriendshipService } from "friends/services/FriendshipService";
@@ -8,6 +9,7 @@ import { NotificationService } from "notification/services/NotificationService";
 import { OffersService } from "offer/services/OffersService";
 import { UserService } from "user/services/UserService";
 import { SettingsService } from "user/settings-module/services/SettingsService";
+import { UserListedItemService } from "user/user-listed-module/services/UserListedItemService";
 
 @Injectable()
 export class UserContextService {
@@ -19,6 +21,7 @@ export class UserContextService {
         private readonly settingsService: SettingsService,
         private readonly notificationService: NotificationService,
         private readonly chatService: ChatService,
+        private readonly userListedItemService: UserListedItemService,
     ) { }
 
     public async getUserContext(user: UserI, uid: string): Promise<UserContext> {
@@ -26,12 +29,14 @@ export class UserContextService {
         const friendships = await this.friendshipService.getFriendships(uid);
         const offers = await this.offersService.listOffersByUid(uid);
         const workerProfile = await this.workersService.getWorkerWithCertificates(user);
+        const listedItems = await this.userListedItemService.listUserItems(uid, UserListedItemTypes.DEFAULT);
 
         const ctx: UserContext = {
             user,
             friendships,
             offers,
             workerProfile,
+            listedItems,
         }
 
         return ctx;

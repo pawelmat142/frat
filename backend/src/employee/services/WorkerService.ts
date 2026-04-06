@@ -105,6 +105,10 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         return this.workerRepo.findByUid(user.uid);
     }
 
+    public getWorkerById(id: number): Promise<WorkerEntity | null> {
+        return this.workerRepo.getById(id);
+    }
+
     public async getWorkerWithCertificates(user: UserI): Promise<WorkerWithCertificates | null> {
         const worker = await this.getWorker(user);
         if (!worker) {

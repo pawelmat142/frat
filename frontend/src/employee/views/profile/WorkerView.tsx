@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { WorkerAvailabilityOptions, WorkerI, WorkerStatuses } from "@shared/interfaces/WorkerI";
 import { useWorkersSearch } from "../search/WorkersSearchProvider";
 import { useTranslation } from "react-i18next";
-import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { Path } from "../../../path";
 import { useMenuContext } from "global/providers/MenuProvider";
 import { MenuConfig } from "global/components/selector/MenuItems";
@@ -28,7 +27,10 @@ import WorkerSkillsSection from "employee/components/WorkerSkillsSection";
 import WorkerImagesSection from "employee/components/WorkerImagesSection";
 import ListUi from "global/components/ui/ListUi";
 import ChecklistUi from "global/components/ui/ChecklistUi";
-import { MenuItem } from "global/interface/controls.interface";
+import { BtnModes, BtnSizes, MenuItem } from "global/interface/controls.interface";
+import Button from "global/components/controls/Button";
+import { UserListedItemReferenceTypes } from "@shared/interfaces/UserListedItem";
+import { UserListedItemService } from "user/services/UserListedItemService";
 
 const WorkerView: React.FC = () => {
 
@@ -51,6 +53,8 @@ const WorkerView: React.FC = () => {
     const isDesktop = useIsDesktop();
 
     const isMe = me?.uid === worker?.uid;
+    const isSavedOnList = (userCtx.meCtx?.listedItems ?? [])
+        .some(item => item.reference === worker?.workerId.toString() && item.referenceType === UserListedItemReferenceTypes.WORKER);
 
     useEffect(() => {
         const initWorker = async () => {
@@ -110,6 +114,17 @@ const WorkerView: React.FC = () => {
                 label: t('chat.openChat'),
                 onClick: openChat
             })
+            if (isSavedOnList) {
+                menu.items.push({
+                    label: t('Usuń z listy zapisanych'),
+                    onClick: removeListItem
+                })
+            } else {
+                menu.items.push({
+                    label: t('Zapisz na liście'),
+                    onClick: addListItem
+                })
+            }
         }
         return menu;
     }
@@ -264,8 +279,48 @@ const WorkerView: React.FC = () => {
 
     const worksInIndurstry = getWorksInIndustry();
 
+    const addListItem = async () => {
+        if (isMe || !userCtx.meCtx) return;
+        const meCtx = userCtx.meCtx;
+        try {
+            setLoading(true);
+            const item = await UserListedItemService.addItem({
+                reference: worker.workerId.toString(),
+                referenceType: UserListedItemReferenceTypes.WORKER,
+            });
+            userCtx.updateMeCtx({
+                ...meCtx,
+                listedItems: [...(meCtx.listedItems ?? []), item]
+            });
+            toast.success("Dodano wpis do Twojej listy");
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
+    const removeListItem = async () => {
+        if (isMe || !userCtx.meCtx) return;
+        const listItem = (userCtx.meCtx.listedItems ?? [])
+            .find(item => item.reference === worker.workerId.toString() && item.referenceType === UserListedItemReferenceTypes.WORKER);
+        if (!listItem) return;
+        const meCtx = userCtx.meCtx;
+        try {
+            setLoading(true);
+            await UserListedItemService.removeItem(listItem.id.toString());
+            userCtx.updateMeCtx({
+                ...meCtx,
+                listedItems: (meCtx.listedItems ?? []).filter(item => item.id !== listItem.id)
+            } as Parameters<typeof userCtx.updateMeCtx>[0]);
+            toast.success("Usunięto wpis z Twojej listy");
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
     const getListItems = (): MenuItem[] => {
-        return[{
+        return [{
             if: isAnytime,
             label: t('others.availableAnytime'),
             icon: Ico.CALENDAR
@@ -279,7 +334,7 @@ const WorkerView: React.FC = () => {
             onClick: onAvailabilityClick
         }, {
             if: worker.geocodedPosition?.fullAddress,
-            label: `${worker.geocodedPosition!.fullAddress} ${getDistanceInfo()}`,
+            label: `${worker.geocodedPosition?.fullAddress} ${getDistanceInfo()}`,
             icon: Ico.MARKER
         }, {
             if: worker.phoneNumber,
@@ -324,25 +379,43 @@ const WorkerView: React.FC = () => {
 
             </div>
 
+            {/* TODO translacje */}
+           {!isMe && <div className="flex justify-end">
+
+                {isSavedOnList ? (
+                    <Button onClick={removeListItem}
+                        mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="gap-2">
+                        <Ico.BOOKMARK size={14} />
+                        Usuń z listy
+                    </Button>
+                ) : (
+                    <Button onClick={addListItem}
+                        mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="gap-2">
+                        <Ico.BOOKMARK size={14} />
+                        Zapisz na liście
+                    </Button>
+                )}
+            </div>}
+
             <div className="mb-5 mt-5">
                 <ListUi items={getListItems()}></ListUi>
             </div>
 
             <ChecklistUi icon={Ico.CHECK} title={t('employeeProfile.form.certificates.title')}
-                items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []} 
+                items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []}
             ></ChecklistUi>
 
             <WorkerSkillsSection worker={worker} />
 
             <WorkerImagesSection worker={worker} onWorkerUpdate={_setProfile} onOpenCloseLightbox={(open) => {
                 setHideFloatingBtn(open);
-            }}/>
+            }} />
 
             <div className="px-5 mb-10">
                 <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>
             </div>
 
-            <FloatingActionButton onClick={openChat} hidden={hideFloatingBtn} icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE}/>}></FloatingActionButton>
+            <FloatingActionButton onClick={openChat} hidden={hideFloatingBtn} icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}></FloatingActionButton>
         </div>
     );
 }
