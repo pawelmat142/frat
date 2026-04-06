@@ -2,7 +2,6 @@ import { useState, useEffect, forwardRef } from 'react';
 import { SelectorItem, SelectorValue } from 'global/interface/controls.interface';
 import { DictionaryElement, DictionaryI } from '@shared/interfaces/DictionaryI';
 import { DictionaryService } from 'global/services/DictionaryService';
-import Loading from '../Loading';
 import { useTranslation } from 'react-i18next';
 import FloatingSelector from './FloatingSelector';
 import { DictionaryUtil } from '@shared/utils/DictionaryUtil';

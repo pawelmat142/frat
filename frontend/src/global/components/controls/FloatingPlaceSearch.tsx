@@ -34,6 +34,8 @@ interface FloatingPlaceSearchProps {
     className?: string;
     error?: { message?: string } | null;
     mode?: FloatingInputMode;
+    /** ISO 3166-1 alpha-2 country code to restrict autocomplete results (e.g. 'pl', 'de') */
+    countryRestriction?: string;
 }
 
 const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProps>(
@@ -53,6 +55,7 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
         className = '',
         error,
         mode = FloatingInputModes.DEFAULT,
+        countryRestriction,
     }, ref) => {
         const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '';
 
@@ -123,7 +126,7 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
                 const ServiceCtor = places.AutocompleteService;
                 if (ServiceCtor) {
                     const service = new ServiceCtor();
-                    service.getPlacePredictions({ input }, (preds: any[], status: any) => {
+                    service.getPlacePredictions({ input, ...(countryRestriction ? { componentRestrictions: { country: countryRestriction } } : {}) }, (preds: any[], status: any) => {
                         setIsLoading(false);
                         if (status === google.maps.places.PlacesServiceStatus.OK && preds) {
                             setPredictions(preds);

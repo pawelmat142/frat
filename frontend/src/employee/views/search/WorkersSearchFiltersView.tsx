@@ -8,16 +8,12 @@ import DateRangeInputViewSelector from "global/components/callendar/DateRangeInp
 import { Controller, useForm } from "react-hook-form";
 import { FormValidator } from "global/FormValidator";
 import Button from "global/components/controls/Button";
-import CountrySelector from "global/components/selector/CountrySelector";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import { Ico } from "global/icon.def";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useUserContext } from "user/UserProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
-import { toast } from "react-toastify";
-import FloatingPlaceSearch from "global/components/controls/FloatingPlaceSearch";
-import FloatingStepSlider from "global/components/controls/FloatingStepSlider";
-import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
+import LocationFilterSelector, { LocationFilterValue } from "global/components/controls/LocationFilterSelector";
 import { AppConfig } from "@shared/AppConfig";
 import Header from "global/components/Header";
 
@@ -32,8 +28,6 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
     const userCtx = useUserContext();
     const ctx: WorkersSearchContextProps = useWorkersSearch()
 
-    const [loadingLocation, setLoadingLocation] = useState(false);
-
     const hasAutofilledLocation = useRef(false);
 
     const f = useForm<WorkerSearchFilters>({
@@ -47,7 +41,6 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
             if (hasAutofilledLocation.current) return; // Prevent re-execution
             if (!formState.geocodedPosition && userCtx.position) {
                 try {
-                    setLoadingLocation(true);
                     const geoPosition = await GoogleMapService.getGeoPosition(userCtx.position);
                     const countryCode = geoPosition?.country?.toLocaleLowerCase();
                     const languages = globalCtx.dics.languages!;
@@ -59,8 +52,6 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                 }
                 catch (error) {
                     console.error('Error initializing location country:', error);
-                } finally {
-                    setLoadingLocation(false);
                 }
             }
         }
@@ -72,7 +63,6 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
     }
 
     const startDateRequired = FormValidator.required(t);
-    const required = FormValidator.required(t);
 
     const submit = async () => {
         ctx.setFiltersWithSearchAndNavigate(formState);
@@ -99,36 +89,11 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
         }
     }
 
-    const updatePosition = async (position: { lat: number; lng: number }) => {
-        const geoPosition = await updateFormPosition(position);
-        if (geoPosition?.country?.toLocaleLowerCase() !== formState.locationCountry?.toLocaleLowerCase()) {
-            f.setValue('locationCountry', null);
-        }
+    const updateLocationFilter = (loc: LocationFilterValue) => {
+        f.setValue('locationCountry', loc.locationCountry);
+        f.setValue('geocodedPosition', loc.geocodedPosition);
+        f.setValue('positionRadiusKm', loc.positionRadiusKm);
     };
-
-    const updateFormPosition = async (position: { lat: number; lng: number }): Promise<GeocodedPosition | null> => {
-        try {
-            setLoadingLocation(true);
-            const geoPosition = await GoogleMapService.getGeoPosition(position);
-            setGeoPosition(geoPosition);
-            return geoPosition;
-        } catch (error) {
-            console.error('Geocoding error:', error);
-            toast.error(t('employeeProfile.error.getGeocodedLocation'));
-            return null;
-        } finally {
-            setLoadingLocation(false);
-        }
-    }
-
-    const setGeoPosition = async (position?: GeocodedPosition | null) => {
-        f.setValue('geocodedPosition', position);
-        if (!position) {
-            f.setValue('positionRadiusKm', undefined);
-        } else {
-            f.setValue('positionRadiusKm', AppConfig.RADIUS_STEPS_KM[0]);
-        }
-    }
 
     return (
         <div className="relative flex flex-col primary-bg h-full">
@@ -160,66 +125,20 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                     )}
                 />
 
-                <Controller
-                    name="locationCountry"
-                    control={f.control}
-                    rules={required}
-                    render={({ field }) => (
-                        <CountrySelector
-                            {...field}
-                            fullWidth
-                            value={field.value ?? undefined}
-                            label={t("employeeProfile.form.locationCountry") + '*'}
-                            className="w-full mt-3"
-                            error={f.formState.errors.locationCountry}
-                            onSelect={item => {
-                                f.setValue('locationCountry', item);
-                                setGeoPosition(null);
-                            }}
-                        />
-                    )}
+                <LocationFilterSelector
+                    className="w-full mt-3"
+                    value={{
+                        locationCountry: formState.locationCountry ?? null,
+                        geocodedPosition: formState.geocodedPosition ?? null,
+                        positionRadiusKm: formState.positionRadiusKm,
+                    }}
+                    onChange={updateLocationFilter}
+                    errors={{
+                        locationCountry: f.formState.errors.locationCountry,
+                        geocodedPosition: f.formState.errors.geocodedPosition as { message?: string } | undefined,
+                    }}
+                    radiusSteps={[...AppConfig.RADIUS_STEPS_KM]}
                 />
-
-                {loadingLocation ? (<Loading></Loading>) : (
-                    <Controller
-                        name="geocodedPosition"
-                        control={f.control}
-                        render={({ field }) => (
-                            <FloatingPlaceSearch
-                                {...field}
-                                fullWidth
-                                displayValue={field.value?.fullAddress || ''}
-                                label={t("employeeProfile.form.city")}
-                                className="w-full mt-3"
-                                error={f.formState.errors.geocodedPosition}
-                                onSelect={item => {
-                                    updatePosition({ lat: item.lat, lng: item.lng });
-                                }}
-                                onClear={() => {
-                                    setGeoPosition(null);
-                                }}
-                            ></FloatingPlaceSearch>
-                        )}
-                    />
-                )}
-
-                {!!formState.geocodedPosition && (
-                    <Controller
-                        name="positionRadiusKm"
-                        control={f.control}
-                        render={({ field }) => (
-                            <FloatingStepSlider
-                                label={t('employeeProfile.form.radius')}
-                                steps={[...AppConfig.RADIUS_STEPS_KM]}
-                                value={field.value}
-                                onChange={field.onChange}
-                                unit="km"
-                                fullWidth
-                                className="w-full mt-3 px-2 mb-5"
-                            />
-                        )}
-                    />
-                )}
 
                 <Controller
                     name="categories"
@@ -235,7 +154,6 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                             label={t("offer.filters.categories")}
                             code="WORK_CATEGORY"
                             fullWidth
-                            required
                         />
                     )}
                 />
