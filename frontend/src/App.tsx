@@ -42,6 +42,7 @@ import NotificationsView from 'notification/views/NotificationsView';
 import TranslationItemForm from 'admin/views/translations/TranslationItemForm';
 import SettingsView from 'user/views/SettingsView';
 import DictionaryElementForm from 'admin/views/dictionaries/DictionaryElementForm';
+import MyListedItemsView from 'user/views/MyListedItemsView';
 
 const App: React.FC = () => {
     const location = useLocation();
@@ -71,6 +72,7 @@ const App: React.FC = () => {
                 <Route path={Path.NOTIFICATIONS} element={<PageWrapper isProtected><NotificationsView /></PageWrapper>} />
                 <Route path={Path.NOTIFICATION} element={<PageWrapper isProtected><SingleNotificationView /></PageWrapper>} />
                 <Route path={Path.SETTINGS} element={<PageWrapper isProtected><SettingsView /></PageWrapper>} />
+                <Route path={Path.MY_LIST} element={<PageWrapper isProtected><MyListedItemsView /></PageWrapper>} />
 
                 {/* EMPLOYEE PROFILE */}
                 <Route path={Path.WORKER} element={<PageWrapper><WorkerView /></PageWrapper>} />

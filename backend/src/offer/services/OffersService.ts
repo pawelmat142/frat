@@ -55,6 +55,10 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         return this.offersRepo.listOffersByUid(uid);
     }
 
+    public getOffersByIds(offerIds: number[]): Promise<OfferI[]> {
+        return this.offersRepo.getByIds(offerIds);
+    }
+
     public async activation(user: UserI, offerId: number): Promise<OfferI> {
         const offer = await this.offersRepo.getById(offerId);
         if (offer.uid !== user.uid) {

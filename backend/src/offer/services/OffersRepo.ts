@@ -22,6 +22,10 @@ export class OffersRepo {
         return this.offerRepository.findOneBy({ offerId });
     }
 
+    public async getByIds(offerIds: number[]): Promise<OfferEntity[]> {
+        return this.offerRepository.findByIds(offerIds);
+    }
+
     public update(offer: OfferEntity): Promise<OfferEntity> {
         return this.offerRepository.save(offer);
     }

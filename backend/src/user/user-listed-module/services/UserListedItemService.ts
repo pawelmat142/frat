@@ -21,10 +21,27 @@ export class UserListedItemService {
     ) { }
 
     public async listUserItems(uid: string, listedType?: UserListedItemType): Promise<UserListedItem[]> {
-        if (listedType) {
-            return this.repository.find({ where: { uid, listedType } });
-        }
-        return this.repository.find({ where: { uid } });
+        const result = await (listedType 
+        ? this.repository.find({ where: { uid, listedType } })
+        : this.repository.find({ where: { uid } }));
+        
+        const workerIds = result.filter(i => i.referenceType === UserListedItemReferenceTypes.WORKER).map(i => Number(i.reference));
+        const offerIds = result.filter(i => i.referenceType === UserListedItemReferenceTypes.OFFER).map(i => Number(i.reference));
+        
+        const workersMap = new Map((await this.workersService.getWorkersByIds(workerIds)).map(w => [w.workerId, w]));
+        const offersMap = new Map((await this.offersService.getOffersByIds(offerIds)).map(o => [o.offerId, o]));
+        result.forEach(item => {
+            if (item.referenceType === UserListedItemReferenceTypes.WORKER) {
+                item.data = workersMap.get(Number(item.reference));
+            }
+            else if (item.referenceType === UserListedItemReferenceTypes.OFFER) {
+                item.data = offersMap.get(Number(item.reference));
+            }
+        });
+
+        this.logger.log(`Listed items for user ${uid}, listedType: ${listedType}, result:`, result);
+        
+        return result;
     }
 
     public async addItem(uid: string, item: AddUserListedItemDto): Promise<UserListedItem> {

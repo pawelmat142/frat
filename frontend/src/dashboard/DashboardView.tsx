@@ -27,6 +27,7 @@ const DashboardView: React.FC = () => {
     const { isDesktop } = useGlobalContext();
     
     const me = userCtx.me;
+    const myListedItems = userCtx.meCtx?.listedItems;
 
     if (userCtx.loading || !me) {
         return <Loading></Loading>
@@ -49,6 +50,11 @@ const DashboardView: React.FC = () => {
         icon: Ico.SETTINGS,
         if: isDesktop && Util.hasPermission([UserRoles.ADMIN, UserRoles.SUPERADMIN], me),
         onClick: () => navigate(Path.ADMIN_DICTIONARIES)
+    }, {
+        label: "Moja lista",
+        icon: Ico.BOOKMARK,
+        if: myListedItems?.length,
+        onClick: () => navigate(Path.MY_LIST)
     }, {
         label: t("pwa.install"),
         if: isInstallable,

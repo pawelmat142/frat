@@ -1,5 +1,5 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
-import { WorkerWithMutualFriends } from "@shared/interfaces/WorkerI"
+import { WorkerI, WorkerWithMutualFriends } from "@shared/interfaces/WorkerI"
 import { Path } from "../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -13,16 +13,13 @@ import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import { PositionUtil } from "@shared/utils/PositionUtil";
-import { AppConfig } from "@shared/AppConfig";
 
 interface Props {
-    worker: WorkerWithMutualFriends,
+    worker: WorkerI,
     languagesDictionary: DictionaryI
     first?: boolean,
     last?: boolean,
 }
-
-const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS; 
 
 const WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first, last }) => {
 
@@ -71,6 +68,12 @@ const WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first, l
         window.location.href = `tel:${worker.phoneNumber.prefix}${worker.phoneNumber.number}`;
     }
 
+    const getMutualFriendsUids = (worker: WorkerI): string[] => {
+        const w = worker as WorkerWithMutualFriends;
+        return w.mutualFriendsUids || [];
+    }
+    const mutualFriendsUids = getMutualFriendsUids(worker);
+
     const rightSection = isMyProfile ? null : <div className="flex justify-end items-center gap-2">
         <IconButton onClick={(e) => {
             e.stopPropagation();
@@ -96,10 +99,10 @@ const WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first, l
             <span className="xs-font">{worker.likes?.length || 0}</span>
         </div>
 
-        {!!worker.mutualFriendsUids?.length && (
+        {!!mutualFriendsUids.length && (
             <div className="flex items-center">
                 <Ico.FRIENDS size={14} className="secondary-text mr-1" />
-                <span className="xs-font">{worker.mutualFriendsUids.length}</span>
+                <span className="xs-font">{mutualFriendsUids.length}</span>
             </div>
         )}
 

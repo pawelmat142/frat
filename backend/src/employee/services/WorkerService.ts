@@ -3,10 +3,10 @@ import { ForbiddenException, Injectable, Logger, NotFoundException, OnModuleDest
 import { WorkerRepo } from './WorkerRepo';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { AvatarRef, UserI } from '@shared/interfaces/UserI';
-import { WorkerAvailabilityOptions, WorkerFormDto, WorkerI, WorkerSkills, WorkerStatus, WorkerStatuses, WorkerWithCertificates } from '@shared/interfaces/WorkerI';
+import { WorkerAvailabilityOptions, WorkerFormDto, WorkerI, WorkerSkills, WorkerStatus, WorkerStatuses, WorkerWithCertificates, WorkerWithMutualFriends } from '@shared/interfaces/WorkerI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { WorkerUtil } from './WorkerUtil';
-import { DeepPartial } from 'typeorm';
+import { DeepPartial, In } from 'typeorm';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { DateUtil } from '@shared/utils/DateUtil';
 import { WorkersInitialData } from './WorkersInitialData';
@@ -71,6 +71,11 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         const result = await this.workerRepo.update(profile);
         this.logger.log(`Toggled activation for profile ID: ${profile.workerId}, new status: ${result.status}`);
         return result;
+    }
+
+    public async getWorkersByIds(workerIds: number[]): Promise<WorkerI[]> {
+        const workers = await this.workerRepo.findAll({ where: { workerId: In(workerIds) } });
+        return workers
     }
 
     public activationByAdmin(id: number, status: WorkerStatus): Promise<WorkerEntity> {

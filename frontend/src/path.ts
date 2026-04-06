@@ -15,6 +15,7 @@ export abstract class Path {
     public static readonly NOTIFICATIONS = '/notifications';
     public static readonly NOTIFICATION = '/notifications/:notificationId';
     public static readonly SETTINGS = '/settings';
+    public static readonly MY_LIST = '/my-list';
 
     // EMPLOYEE PROFILES
     public static readonly WORKER = '/workers/:displayName';
