@@ -54,7 +54,7 @@ const WorkerView: React.FC = () => {
 
     const isMe = me?.uid === worker?.uid;
     const isSavedOnList = (userCtx.meCtx?.listedItems ?? [])
-        .some(item => item.reference === worker?.workerId.toString() && item.referenceType === UserListedItemReferenceTypes.WORKER);
+        .some(item => item.reference === worker?.workerId?.toString() && item.referenceType === UserListedItemReferenceTypes.WORKER);
 
     useEffect(() => {
         const initWorker = async () => {
@@ -289,6 +289,10 @@ const WorkerView: React.FC = () => {
                 referenceType: UserListedItemReferenceTypes.WORKER,
                 listedType: UserListedItemTypes.DEFAULT
             });
+            if (!item) {
+                toast.error("Nie można dodać tego wpisu do listy");
+                return;
+            }
             userCtx.updateMeCtx({
                 ...meCtx,
                 listedItems: [...(meCtx.listedItems ?? []), item]

@@ -19,9 +19,10 @@ interface Props {
     languagesDictionary: DictionaryI
     first?: boolean,
     last?: boolean,
+    className?: string,
 }
 
-const WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first, last }) => {
+const WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first, last, className }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -115,7 +116,7 @@ const WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first, l
     </div>
 
     return (
-        <div onClick={goToProfileView}>
+        <div onClick={goToProfileView} className={className}>
             <ListItem
                 imgUrl={worker.avatarRef?.url || AVATAR_MOCK}
                 topLeft={worker.displayName}
