@@ -29,7 +29,7 @@ import ListUi from "global/components/ui/ListUi";
 import ChecklistUi from "global/components/ui/ChecklistUi";
 import { BtnModes, BtnSizes, MenuItem } from "global/interface/controls.interface";
 import Button from "global/components/controls/Button";
-import { UserListedItemReferenceTypes } from "@shared/interfaces/UserListedItem";
+import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/interfaces/UserListedItem";
 import { UserListedItemService } from "user/services/UserListedItemService";
 
 const WorkerView: React.FC = () => {
@@ -206,7 +206,7 @@ const WorkerView: React.FC = () => {
 
     const notifyProfileView = async (profile: WorkerI) => {
         if (profile?.uid) {
-            await WorkerService.notifyWorkerView(profile.uid)
+            await WorkerService.notifyWorkerView(profile.workerId)
         }
     }
 
@@ -287,6 +287,7 @@ const WorkerView: React.FC = () => {
             const item = await UserListedItemService.addItem({
                 reference: worker.workerId.toString(),
                 referenceType: UserListedItemReferenceTypes.WORKER,
+                listedType: UserListedItemTypes.DEFAULT
             });
             userCtx.updateMeCtx({
                 ...meCtx,

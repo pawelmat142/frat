@@ -56,8 +56,8 @@ export const WorkerService = {
 		return httpClient.get<WorkerSearchResponse>(`/worker/search/list`, { params, skipAuth });
 	},
 
-	notifyWorkerView(uid: string): Promise<void> {
-		return httpClient.get<void>(`/worker/notify-profile-view/${uid}`);
+	notifyWorkerView(workerId: number): Promise<void> {
+		return httpClient.get<void>(`/worker/notify-profile-view/${workerId}`);
 	},
 
 	notifyWorkerLike(workerId: number): Promise<string[]> {

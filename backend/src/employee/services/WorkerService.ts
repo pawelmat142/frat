@@ -106,8 +106,12 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         }
     }
 
+    public getWorkerByUid(uid: string): Promise<WorkerEntity | null> {
+        return this.workerRepo.findByUid(uid);
+    }
+
     public getWorker(user: UserI): Promise<WorkerEntity | null> {
-        return this.workerRepo.findByUid(user.uid);
+        return this.getWorkerByUid(user.uid);
     }
 
     public getWorkerById(id: number): Promise<WorkerEntity | null> {
@@ -206,21 +210,22 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         return result;
     }
 
-    public async notifyWorkerView(uid: string, viewerUid: string): Promise<void> {
-        const profile = await this.workerRepo.findByUid(uid);
-        if (uid === viewerUid) {
-            this.logger.log(`Viewer ${viewerUid} viewed own profile, skipping view increment`);
+    public async notifyWorkerView(workerId: number, user: UserI): Promise<void> {
+        const profile = await this.workerRepo.getById(workerId);
+
+        if (profile.uid === user.uid) {
+            this.logger.log(`Viewer ${user.uid} viewed own profile, skipping view increment`);
             return;
         }
         if (!profile) {
             throw new ToastException('employeeProfile.exists', this);
         }
 
-        if (profile.views.includes(viewerUid)) {
-            this.logger.log(`Viewer ${viewerUid} viewed profile ${uid}, skipping view increment`);
+        if (profile.views.includes(user.uid)) {
+            this.logger.log(`Viewer ${user.uid} viewed profile ${workerId}, skipping view increment`);
         } else {
-            this.logger.log(`Viewer ${viewerUid} viewed profile ${uid}, incrementing views`);
-            profile?.views.push(viewerUid);
+            this.logger.log(`Viewer ${user.uid} viewed profile ${workerId}, incrementing views`);
+            profile?.views.push(user.uid);
             await this.workerRepo.update(profile);
         }
     }

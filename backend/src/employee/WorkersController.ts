@@ -83,13 +83,13 @@ export class WorkersController {
     return this.searchWorkerService.searchWorkers(filters, user);
   }
   
-  @Get("/notify-profile-view/:uid")
+  @Get("/notify-profile-view/:workerId")
   @UseGuards(JwtAuthGuard)
   notifyWorkerView(
-    @Param('uid') uid: string,
+    @Param('workerId') workerId: string,
     @CurrentUser() user: UserI,
   ): Promise<void> {
-    return this.workersService.notifyWorkerView(uid, user.uid);
+    return this.workersService.notifyWorkerView(Number(workerId), user);
   }
   
   @Get("/notify-profile-like/:workerId")
