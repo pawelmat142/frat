@@ -201,7 +201,7 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config, classN
         className={`${className} primary-bg rounded-lg shadow-lg pt-4 min-w-[300px] transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}
       >
 
-        <div className="popup-header flex items-start justify-between mb-5 gap-2">
+        <div className="flex items-start justify-between mb-5 gap-2">
           {config?.title && <h2 className="text-lg font-semibold ">{t(config.title)}</h2>}
           {config?.showClose && (<CloseBtn size={24} onClick={() => {
             onClose(false)

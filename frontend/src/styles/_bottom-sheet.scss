@@ -151,7 +151,7 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     transition: $transition;
     border-radius: .75rem;
-    
+
     &.selected {
         color: $primary-color;
         font-weight: $font-medium;
@@ -160,7 +160,7 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     &:last-child {
         border-bottom: none;
     }
-    
+
     .bottom-sheet-item-label {
         width: 100%;
         padding: .75rem 0;
@@ -243,10 +243,13 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 }
 
-.popup-header {
-    padding: 0 1rem;
-}
-
 .pp-confirm-popup {
     padding: 1rem;
+    max-width: 90vw;
+}
+
+@media screen and (min-width: $desktop) {
+    .pp-confirm-popup {
+        max-width: unset;
+    }
 }

@@ -76,7 +76,7 @@ const DashboardView: React.FC = () => {
     }, {
         if: !userCtx.meCtx?.workerProfile,
         icon: Ico.ADD_USER,
-        label: "Dodaj swój profil technika`",
+        label: "Dodaj swój profil technika",
         onClick: () => navigate(Path.WORKER_FORM)
     }, {
         label: "Dodaj ofertę",
