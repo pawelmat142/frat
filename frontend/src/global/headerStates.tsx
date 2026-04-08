@@ -11,7 +11,7 @@ export interface ViewState {
     stickyHeader?: boolean;
 }
 
-export const STATES = (navigate: NavigateFunction) => {
+export const HEADER_STATES = (navigate: NavigateFunction) => {
     return {
         [Path.WORKER_FORM]: {
             leftBtn: <HeaderBackBtn />,
@@ -87,6 +87,11 @@ export const STATES = (navigate: NavigateFunction) => {
         [Path.SETTINGS]: {
             leftBtn: <HeaderBackBtn />,
             title: 'common.settings',
+        },
+        [Path.MY_LIST]: {
+            leftBtn: <HeaderBackBtn />,
+            // TODO translacja
+            title: 'Moja lista',
         }
     }
 }
