@@ -12,10 +12,25 @@ const MobileBottomNav: React.FC = () => {
         <motion.nav
             style={{ zIndex: Z_INDEX.BOTTOM_BAR }}
             className="mobile-bottom-nav bottom-bar-shadow disable-select"
-            initial={{ y: '120%', opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: '120%', opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+            initial={{ y: '140%', opacity: 0 }}
+            animate={{
+                y: ['140%', '-4%', '0%'],
+                opacity: [0, 1, 1],
+                transition: {
+                    duration: 0.45,
+                    ease: [0.22, 0.7, 0.3, 0.94],
+                    times: [0, 0.7, 1],
+                }
+            }}
+            exit={{
+                y: ['0%', '6%', '140%'],
+                opacity: [1, 0.9, 0],
+                transition: {
+                    duration: 0.38,
+                    ease: [0.55, 0.06, 0.68, 0.19],
+                    times: [0, 0.25, 1],
+                }
+            }}
         >
             <div className="mobile-bottom-nav-container">
 

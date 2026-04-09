@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import Loading from "global/components/Loading";
 import { UserI } from "@shared/interfaces/UserI";
 import { useNavigate, useParams } from "react-router-dom";
@@ -23,6 +23,7 @@ import { useUsersStorage } from "global/providers/UsersStorageProvider";
 import UserProfileItem from "user/components/UserProfileItem";
 import ListUi from "global/components/ui/ListUi";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 import { AppConfig } from "@shared/AppConfig";
 import { MenuItem } from "global/interface/controls.interface";
 
@@ -40,6 +41,8 @@ const ProfileView: React.FC = () => {
     const navigate = useNavigate()
     const confirm = useConfirm()
     const userStorage = useUsersStorage();
+    const globalCtx = useGlobalContext();
+    const fabId = useId();
 
     const [localLoading, setLocalLoading] = useState(true);
     const [worker, setWorker] = useState<WorkerI | null>(null)
@@ -92,6 +95,32 @@ const ProfileView: React.FC = () => {
         setLocalLoading(loading);
     }, [loading]);
 
+    const openChat = async () => {
+        if (!user) return;
+        try {
+            const chat = await ChatService.getOrCreateDirectChat(user.uid);
+            navigate(Path.getConversationPath(chat.chatId));
+        } catch (error) {
+            console.error('Failed to open chat:', error);
+            toast.error(t('chat.error.cannotOpen'));
+        }
+    }
+
+    useEffect(() => {
+        globalCtx.setFloatingButton(
+            <FloatingActionButton
+                forceVisible={!isMyAccount}
+                onClick={openChat}
+                icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
+            />,
+            fabId
+        );
+    }, [user, isMyAccount]);
+
+    useEffect(() => {
+        return () => globalCtx.setFloatingButton(null);
+    }, []);
+
     if (localLoading) {
         return <Loading />;
     }
@@ -130,16 +159,7 @@ const ProfileView: React.FC = () => {
         navigate(Path.getOffersPath(user.uid));
     };
 
-    const openChat = async () => {
-        if (!user) return;
-        try {
-            const chat = await ChatService.getOrCreateDirectChat(user.uid);
-            navigate(Path.getConversationPath(chat.chatId));
-        } catch (error) {
-            console.error('Failed to open chat:', error);
-            toast.error(t('chat.error.cannotOpen'));
-        }
-    }
+
 
     const removeFriend = async (friendship: FriendshipI) => {
         const confirmed = await confirm({
@@ -233,8 +253,6 @@ const ProfileView: React.FC = () => {
             <UserProfileItem user={user}></UserProfileItem>
 
             <ListUi items={menuItems} itemClassName="m-font py-3"></ListUi>
-
-            {!isMyAccount && <FloatingActionButton onClick={openChat} icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}></FloatingActionButton>}
 
         </div>
     );
