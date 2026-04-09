@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useIsPresent } from "framer-motion";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 interface FloatingActionButtonProps {
     onClick: () => void;
@@ -33,6 +34,8 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
     const lastScrollTop = useRef(0);
     const isPresent = useIsPresent();
 
+    const globalCtx = useGlobalContext();
+    
     // Delay initial render to avoid flash during router navigation
     useEffect(() => {
         const timer = setTimeout(() => setMounted(true), 500);
@@ -57,12 +60,16 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
         return () => container.removeEventListener("scroll", handleScroll);
     }, []);
 
+    useEffect(() => {
+        setVisible(!globalCtx.hideFloatingButton);
+    }, [globalCtx.hideFloatingButton])
+
     // When AnimatePresence starts exit transition, immediately hide the FAB
-    const visibilityClass = !isPresent
+    const visibilityClass = !isPresent || !visible
         ? "fab-hidden"
-        : forceVisible !== undefined
-            ? forceVisible ? "fab-visible" : "fab-hidden"
-            : visible === true ? "fab-visible" : visible === false ? "fab-hidden" : "";
+        : (forceVisible)
+            ? "fab-visible"
+            : "";
 
     if (hidden || !mounted) return null;
 

@@ -11,6 +11,7 @@ import PseudoView from "global/components/PseudoView";
 import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
 import { wait } from "global/utils/utils";
 import { NavBus } from "global/utils/PseudoViewBus";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 export interface WorkersSearchContextProps {
     filters: WorkerSearchFilters;
@@ -58,6 +59,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const location = useLocation();
     const navigate = useNavigate();
     const userCtx = useUserContext();
+    const globalCtx = useGlobalContext();
 
     const [filters, setFiltersState] = useState<WorkerSearchFilters>(WorkerUtil.parseFiltersFromSearch(location.search, WorkerDefaultFilters))
 
@@ -71,6 +73,11 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }, []);
 
     const openWorkersPseudoView = (open: boolean) => {
+        if (open) {
+            globalCtx.setHideFloatingButton(true);
+        } else {
+            globalCtx.setHideFloatingButton(false);
+        }
         setOpenPseudoView(open);
     };
 

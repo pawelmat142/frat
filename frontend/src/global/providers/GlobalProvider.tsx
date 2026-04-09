@@ -22,6 +22,8 @@ interface GlobalContextType {
     setFloatingButton: (button: React.ReactNode, registrationId?: string) => void;
     floatingButton: React.ReactNode;
     floatingButtonKey: number;
+    hideFloatingButton: boolean;
+    setHideFloatingButton: (hide: boolean) => void;
 }
 
 interface Dictionaries {
@@ -46,6 +48,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const [floatingButton, setFloatingButtonState] = useState<React.ReactNode>(null)
     const [floatingButtonKey, setFloatingButtonKey] = useState(0)
+    const [hideFloatingButton, setHideFloatingButton] = useState(false)
     const floatingButtonIdRef = useRef<string | undefined>(undefined)
 
     const setFloatingButton = (button: React.ReactNode, registrationId?: string) => {
@@ -131,6 +134,8 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setFloatingButton,
             floatingButton,
             floatingButtonKey,
+            hideFloatingButton,
+            setHideFloatingButton
         }}>
             {children}
         </GlobalContext.Provider>
