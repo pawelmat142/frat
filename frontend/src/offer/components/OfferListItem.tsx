@@ -21,11 +21,12 @@ interface Props {
     offer: OfferI,
     first?: boolean,
     last?: boolean,
+    disableDefaultBorder?: boolean
 }
 
 const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS; 
 
-const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
+const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -144,6 +145,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last }) => {
                 first={first}
                 last={last}
                 rightSection={rightSection}
+                disableDefaultBorder={disableDefaultBorder}
             />
         </div>
     )

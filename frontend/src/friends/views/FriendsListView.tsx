@@ -196,8 +196,8 @@ const FriendsListView: React.FC = () => {
                         </div>
                     ) : (
                         <div className="flex flex-col gap-1">
-                            {searchUsers.map(user => (
-                                <div className="list-view-item" key={user.uid}>
+                            {searchUsers.map((user, index) => (
+                                <div className={`list-view-item list-item-border${index === 0 ? " first" : ""}${index === (searchUsers.length ?? 0) - 1 ? " last" : ""}`} key={user.uid}>
                                     <UserInvitationListItem user={user} />
                                 </div>
                             ))}
@@ -227,8 +227,8 @@ const FriendsListView: React.FC = () => {
                             </div>
                         )}
 
-                        {friends.map(({ user, friendship }) => (
-                            <div className="list-view-item" key={user.uid}>
+                        {friends.map(({ user, friendship }, index) => (
+                            <div className={`list-view-item list-item-border${index === 0 ? " first" : ""}${index === (friends.length ?? 0) - 1 ? " last" : ""}`} key={user.uid}>
                                 <FriendshipListItem
                                     user={user}
                                     friendship={friendship}

@@ -20,9 +20,10 @@ interface Props {
     first?: boolean,
     last?: boolean,
     className?: string,
+    disableDefaultBorder?: boolean
 }
 
-const WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first, last, className }) => {
+const   WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first, last, className, disableDefaultBorder }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -124,6 +125,7 @@ const WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first, l
                 first={first}
                 last={last}
                 rightSection={rightSection}
+                disableDefaultBorder={disableDefaultBorder}
             ></ListItem>
         </div>
 

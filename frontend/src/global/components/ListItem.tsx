@@ -13,6 +13,7 @@ interface Props {
 
     rightSection?: React.ReactNode
     iconOrAvatarBadge?: React.ReactNode
+    disableDefaultBorder?: boolean
 }
 
 const ListItem: React.FC<Props> = ({
@@ -25,14 +26,15 @@ const ListItem: React.FC<Props> = ({
     first,
     last,
     rightSection,
-    iconOrAvatarBadge
+    iconOrAvatarBadge,
+    disableDefaultBorder
 }) => {
 
     if (typeof topLeft === 'string') {
         topLeft = <span className="font-medium primary-text">{topLeft}</span>
     }
     return (
-        <div className={`ripple list-view-item${first ? ' first' : ''}${last ? ' last' : ''}`}>
+        <div className={`ripple list-view-item ${disableDefaultBorder ? '' : 'list-item-border'}${first ? ' first' : ''}${last ? ' last' : ''}`}>
             <ListItemImg imgUrl={imgUrl} component={imgComponent} iconOrAvatarBadge={iconOrAvatarBadge}/>
 
             <div className="w-full flex flex-col justify-center">

@@ -1,7 +1,8 @@
+import React, { useRef, useState } from "react";
 import { UserListedItem, UserListedItemReferenceTypes } from "@shared/interfaces/UserListedItem";
 import { WorkerI } from "@shared/interfaces/WorkerI";
 import WorkerListItem from "employee/components/WorkerListItem";
-import SwipeableRow from "global/components/SwipeableRow";
+import SwipeableRow, { SwipeableRowRef } from "global/components/SwipeableRow";
 import IconButton from "global/components/controls/IconButon";
 import { Ico } from "global/icon.def";
 import Loading from "global/components/Loading";
@@ -15,6 +16,7 @@ import { BtnModes } from "global/interface/controls.interface";
 import { UserListedItemService } from "user/services/UserListedItemService";
 import { toast } from "react-toastify";
 import { useConfirm } from "global/providers/PopupProvider";
+import ListedItemNoteField from "user/components/ListedItemNoteField";
 
 const MyListedItemsView: React.FC = () => {
 
@@ -23,6 +25,8 @@ const MyListedItemsView: React.FC = () => {
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
     const confirm = useConfirm()
+    const [openNoteItemId, setOpenNoteItemId] = useState<number | null>(null);
+    const swipeRefs = useRef<Map<number, SwipeableRowRef>>(new Map());
 
     const noResults = !userCtx.meCtx?.listedItems?.length;
 
@@ -50,6 +54,15 @@ const MyListedItemsView: React.FC = () => {
         toast.success("Usunięto wpis z Twojej listy");
     }
 
+    const openNoteFiledForItem = (item: UserListedItem) => {
+        setOpenNoteItemId(prev => prev === item.id ? null : item.id);
+        closeItemSwiperRow(item);
+    }
+
+    const closeItemSwiperRow = (item: UserListedItem) => {
+        swipeRefs.current.get(item.id)?.close();
+    }
+
     return (
         <div className="list-view pt-0">
 
@@ -68,7 +81,7 @@ const MyListedItemsView: React.FC = () => {
                             <>
                                 <IconButton className="p-3"
                                     icon={<Ico.BOOKMARK />}
-                                    onClick={() => console.log('bookmark', item)}
+                                    onClick={() => openNoteFiledForItem(item)}
                                 />
                                 <IconButton className="p-3" mode={BtnModes.ERROR_TXT}
                                     icon={<Ico.DELETE />}
@@ -79,26 +92,48 @@ const MyListedItemsView: React.FC = () => {
 
                         if (item.referenceType === UserListedItemReferenceTypes.WORKER) {
                             return (
-                                <SwipeableRow key={index} actions={rowActions}>
-                                    <WorkerListItem className="primary-bg"
-                                        worker={item.data as WorkerI}
-                                        languagesDictionary={globalCtx.dics.languages!}
-                                        first={index === 0}
-                                        last={index === (items?.length ?? 0) - 1}
-                                    ></WorkerListItem>
-                                </SwipeableRow>
+                                <div key={index} className={`list-item-border${index === 0 ? " first" : ""}${index === (items?.length ?? 0) - 1 ? " last" : ""}`}>
+                                    <SwipeableRow ref={el => el ? swipeRefs.current.set(item.id, el) : swipeRefs.current.delete(item.id)} actions={rowActions}>
+                                        <WorkerListItem className="primary-bg"
+                                            worker={item.data as WorkerI}
+                                            languagesDictionary={globalCtx.dics.languages!}
+                                            disableDefaultBorder
+                                        ></WorkerListItem>
+                                    </SwipeableRow>
+                                    <ListedItemNoteField
+                                        item={item}
+                                        open={openNoteItemId === item.id}
+                                        onClose={() => setOpenNoteItemId(null)}
+                                        onSave={async (_item, note) => {
+                                            // TODO: replace with real API call
+                                            toast.success("Notatka zapisana");
+                                        }}
+                                    />
+                                </div>
                             )
                         }
 
                         if (item.referenceType === UserListedItemReferenceTypes.OFFER) {
                             return (
-                                <SwipeableRow key={item.data.offerId} actions={rowActions}>
-                                    <OfferListItem
-                                        offer={item.data}
-                                        first={index === 0}
-                                        last={index === (items?.length ?? 0) - 1}
-                                    ></OfferListItem>
-                                </SwipeableRow>
+                                <React.Fragment key={item.data.offerId}>
+                                    <SwipeableRow ref={el => el ? swipeRefs.current.set(item.id, el) : swipeRefs.current.delete(item.id)} actions={rowActions}>
+                                        <OfferListItem
+                                            offer={item.data}
+                                            first={index === 0}
+                                            last={index === (items?.length ?? 0) - 1}
+                                            disableDefaultBorder
+                                        ></OfferListItem>
+                                    </SwipeableRow>
+                                    <ListedItemNoteField
+                                        item={item}
+                                        open={openNoteItemId === item.id}
+                                        onClose={() => setOpenNoteItemId(null)}
+                                        onSave={async (_item, note) => {
+                                            // TODO: replace with real API call
+                                            toast.success("Notatka zapisana");
+                                        }}
+                                    />
+                                </React.Fragment>
                             )
                         }
                         return null;

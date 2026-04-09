@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 const SWIPE_THRESHOLD = 60;
 const ACTIONS_WIDTH = 120;
@@ -8,11 +8,22 @@ interface SwipeableRowProps {
     actions: React.ReactNode;
 }
 
-const SwipeableRow: React.FC<SwipeableRowProps> = ({ children, actions }) => {
+export interface SwipeableRowRef {
+    close: () => void;
+}
+
+const SwipeableRow = forwardRef<SwipeableRowRef, SwipeableRowProps>(({ children, actions }, ref) => {
     const [offset, setOffset] = useState(0);
     const [revealed, setRevealed] = useState(false);
     const startXRef = useRef<number | null>(null);
     const currentOffsetRef = useRef(0);
+
+    useImperativeHandle(ref, () => ({
+        close: () => {
+            setOffset(0);
+            setRevealed(false);
+        },
+    }));
 
     const handleTouchStart = (e: React.TouchEvent) => {
         startXRef.current = e.touches[0].clientX;
@@ -68,7 +79,7 @@ const SwipeableRow: React.FC<SwipeableRowProps> = ({ children, actions }) => {
         >
             {/* Actions revealed behind the row */}
             <div
-                className="absolute right-0 top-0 h-full flex items-center justify-end gap-1 px-2"
+                className="absolute right-0 top-0 h-full flex items-center justify-end gap-1 px-2 secondary-bg"
                 style={{ width: ACTIONS_WIDTH }}
             >
                 {actions}
@@ -76,7 +87,7 @@ const SwipeableRow: React.FC<SwipeableRowProps> = ({ children, actions }) => {
 
             {/* Swipeable content */}
             <div
-                className="relative bg-inherit select-none"
+                className="relative bg-inherit select-none border-swiper-row"
                 style={{
                     transform: `translateX(-${offset}px)`,
                     transition: startXRef.current === null ? 'transform 0.2s ease' : 'none',
@@ -90,6 +101,6 @@ const SwipeableRow: React.FC<SwipeableRowProps> = ({ children, actions }) => {
             </div>
         </div>
     );
-};
+});
 
 export default SwipeableRow;
