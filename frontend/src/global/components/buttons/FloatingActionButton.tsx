@@ -28,7 +28,14 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
 }) => {
     // null = not yet interacted (no animation class applied)
     const [visible, setVisible] = useState<boolean | null>(null);
+    const [mounted, setMounted] = useState(false);
     const lastScrollTop = useRef(0);
+
+    // Delay initial render to avoid flash during router navigation
+    useEffect(() => {
+        const timer = setTimeout(() => setMounted(true), 500);
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         // Scroll happens on .app-main, not window
@@ -53,7 +60,7 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
             ? forceVisible ? "fab-visible" : "fab-hidden"
             : visible === true ? "fab-visible" : visible === false ? "fab-hidden" : "";
 
-    if (hidden) return null;
+    if (hidden || !mounted) return null;
 
     const className = ["floating-action-btn", visibilityClass]
         .filter(Boolean)
