@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useId } from "react";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useTranslation } from "react-i18next";
 import { useOfferSearch } from "./OfferSearchProvider";
@@ -15,6 +15,23 @@ const OfferSearchView: React.FC = () => {
     const { t } = useTranslation();
     const globalCtx = useGlobalContext();
     const ctx = useOfferSearch();
+    const fabId = useId();
+
+    useEffect(() => {
+        globalCtx.setFloatingButton(
+            <FloatingActionButton
+                forceVisible={!ctx.openPseudoView}
+                onClick={() => ctx.setOpenPseudoView(true)}
+                icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE} />}
+            />,
+            fabId
+        );
+    }, [ctx.openPseudoView]);
+
+    // Cleanup only on unmount — avoids null flash when openPseudoView changes
+    useEffect(() => {
+        return () => globalCtx.setFloatingButton(null);
+    }, []);
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading></Loading>
@@ -64,11 +81,6 @@ const OfferSearchView: React.FC = () => {
                     <span className="secondary-text s-font">{t('common.endOfResults', { defaultValue: 'No more offers to display.' })}</span>
                 </div>
             )}
-
-            <FloatingActionButton forceVisible={!ctx.openPseudoView} onClick={() => {
-                ctx.setOpenPseudoView(true)
-            }} icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE}/>}></FloatingActionButton>
-
 
         </div>
     );

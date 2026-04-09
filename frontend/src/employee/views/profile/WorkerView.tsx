@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 
 import { WorkerService } from "employee/services/WorkerService";
 import Loading from "global/components/Loading";
@@ -20,6 +20,7 @@ import DateDisplay from "global/components/ui/DateDisplay";
 import { useIsDesktop } from "global/hooks/isMobile";
 import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { AppConfig } from "@shared/AppConfig";
 import { PositionUtil } from "@shared/utils/PositionUtil";
@@ -47,7 +48,9 @@ const WorkerView: React.FC = () => {
     const confirm = useConfirm();
     const userCtx = useUserContext();
     const workerCtx = useWorkerContext();
+    const globalCtx = useGlobalContext();
     const me = userCtx?.me;
+    const fabId = useId();
 
     const profileCtx = useWorkersSearch();
     const isDesktop = useIsDesktop();
@@ -81,6 +84,22 @@ const WorkerView: React.FC = () => {
             menuCtx.setupHeaderMenu(getProfileMenuItems(worker))
         }
     }, [worker, me]);
+
+    useEffect(() => {
+        if (!worker || isMe) return;
+        globalCtx.setFloatingButton(
+            <FloatingActionButton
+                forceVisible={!hideFloatingBtn}
+                onClick={openChat}
+                icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
+            />,
+            fabId
+        );
+    }, [worker, isMe, hideFloatingBtn]);
+
+    useEffect(() => {
+        return () => globalCtx.setFloatingButton(null);
+    }, []);
 
     const getProfileMenuItems = (profile: WorkerI): MenuConfig => {
         const isMyProfile = me?.uid === profile.uid;
@@ -420,7 +439,6 @@ const WorkerView: React.FC = () => {
                 <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>
             </div>
 
-            <FloatingActionButton onClick={openChat} hidden={hideFloatingBtn} icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}></FloatingActionButton>
         </div>
     );
 }

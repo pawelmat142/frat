@@ -1,3 +1,4 @@
+import React, { useEffect, useId } from "react";
 import { useTranslation } from "react-i18next";
 import Loading from "global/components/Loading";
 import { useWorkersSearch } from "./WorkersSearchProvider";
@@ -15,6 +16,23 @@ const WorkersSearchView: React.FC = () => {
     const ctx = useWorkersSearch()
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
+    const fabId = useId()
+
+    useEffect(() => {
+        globalCtx.setFloatingButton(
+            <FloatingActionButton
+                forceVisible={!ctx.openPseudoView}
+                onClick={() => ctx.setOpenPseudoView(true)}
+                icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE} />}
+            />,
+            fabId
+        );
+    }, [ctx.openPseudoView]);
+
+    // Cleanup only on unmount — avoids null flash when openPseudoView changes
+    useEffect(() => {
+        return () => globalCtx.setFloatingButton(null);
+    }, []);
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading></Loading>
@@ -68,9 +86,6 @@ const WorkersSearchView: React.FC = () => {
                 </div>
             )}
 
-            <FloatingActionButton forceVisible={!ctx.openPseudoView} onClick={() => {
-                ctx.setOpenPseudoView(true)
-            }} icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE}/>}></FloatingActionButton>
         </div>
 
     )

@@ -1,7 +1,7 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI"
 import { DictionaryService } from "global/services/DictionaryService"
 import React from "react"
-import { createContext, useState } from "react"
+import { createContext, useRef, useState } from "react"
 import { useLocation, matchPath, useNavigate } from "react-router-dom";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { useIsDesktop } from "global/hooks/isMobile";
@@ -19,6 +19,9 @@ interface GlobalContextType {
     getLanguagesList: () => string[];
     hideFooter: () => void;
     showFooter: () => void;
+    setFloatingButton: (button: React.ReactNode, registrationId?: string) => void;
+    floatingButton: React.ReactNode;
+    floatingButtonKey: number;
 }
 
 interface Dictionaries {
@@ -40,6 +43,23 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [loading, setLoading] = useState(false)
     const [state, setState] = useState<ViewState | null>(null)
     const [isFooterHidden, setIsFooterHidden] = useState(false)
+
+    const [floatingButton, setFloatingButtonState] = useState<React.ReactNode>(null)
+    const [floatingButtonKey, setFloatingButtonKey] = useState(0)
+    const floatingButtonIdRef = useRef<string | undefined>(undefined)
+
+    const setFloatingButton = (button: React.ReactNode, registrationId?: string) => {
+        if (button === null) {
+            floatingButtonIdRef.current = undefined
+            setFloatingButtonState(null)
+        } else {
+            if (registrationId !== floatingButtonIdRef.current) {
+                floatingButtonIdRef.current = registrationId
+                setFloatingButtonKey(k => k + 1)
+            }
+            setFloatingButtonState(button)
+        }
+    }
 
     React.useEffect(() => {
         const initLanguagesDictionary = async () => {
@@ -108,6 +128,9 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             getLanguagesList,
             hideFooter,
             showFooter,
+            setFloatingButton,
+            floatingButton,
+            floatingButtonKey,
         }}>
             {children}
         </GlobalContext.Provider>

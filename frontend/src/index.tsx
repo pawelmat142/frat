@@ -26,6 +26,7 @@ import { OffersProvider } from 'offer/OffersProvider';
 import { WorkerProvider } from 'employee/WorkerProvider';
 import { UsersStorageProvider } from 'global/providers/UsersStorageProvider';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
+import FloatingButtonWrapper from 'global/components/buttons/FloatingButtonWrapper';
 
 const AppShell: React.FC = () => {
   const { state, isFooterHidden } = useGlobalContext();
@@ -37,6 +38,7 @@ const AppShell: React.FC = () => {
         <App />
       </main>
       <LayoutFooterSwitch />
+      <FloatingButtonWrapper />
     </div>
   );
 };

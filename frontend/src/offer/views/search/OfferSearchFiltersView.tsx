@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { useUserContext } from "user/UserProvider";
 import Header from "global/components/Header";
+import SkeletonControl from "global/components/controls/SkeletonControl";
 
 interface Props {
     onClose?: () => void;
@@ -76,24 +77,30 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                 noValidate
                 onSubmit={f.handleSubmit(submit)}
             >
-                <Controller
-                    name="locationCountries"
-                    control={f.control}
-                    rules={required}
-                    render={({ field }) => (
-                        <CountrySelector
-                            {...field}
-                            fullWidth
-                            value={field.value?.[0] ?? undefined}
-                            label={t("employeeProfile.form.locationCountry") + '*'}
-                            className="w-full mt-5"
-                            onSelect={item => {
-                                f.setValue('locationCountries', item ? [item] : []);
-                            }}
-                        />
-                    )}
-                />
 
+                {loadingLocation ? (
+                    <SkeletonControl />
+                ) : (
+                    <Controller
+                        name="locationCountries"
+                        control={f.control}
+                        rules={required}
+                        render={({ field }) => (
+                            <CountrySelector
+                                {...field}
+                                fullWidth
+                                value={field.value?.[0] ?? undefined}
+                                label={t("employeeProfile.form.locationCountry") + '*'}
+                                className="w-full mt-5"
+                                onSelect={item => {
+                                    f.setValue('locationCountries', item ? [item] : []);
+                                }}
+                            />
+                        )}
+                    />
+                    
+                )}
+                
                 <Controller
                     name="categories"
                     control={f.control}
