@@ -107,14 +107,16 @@ const ProfileView: React.FC = () => {
     }
 
     useEffect(() => {
-        globalCtx.setFloatingButton(
-            <FloatingActionButton
-                forceVisible={!isMyAccount}
-                onClick={openChat}
-                icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
-            />,
-            fabId
-        );
+        if (!isMyAccount) {
+            globalCtx.setFloatingButton(
+                <FloatingActionButton
+                    onClick={openChat}
+                    icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
+                />,
+                fabId
+            );
+        }
+        globalCtx.setHideFloatingButton(!isMyAccount);
     }, [user, isMyAccount]);
 
     useEffect(() => {

@@ -101,6 +101,11 @@ const WorkerView: React.FC = () => {
         return () => globalCtx.setFloatingButton(null);
     }, []);
 
+    const goToUserProfile = () => {
+        if (!worker) return;
+        navigate(Path.getProfilePath(worker?.uid));
+    }
+
     const getProfileMenuItems = (profile: WorkerI): MenuConfig => {
         const isMyProfile = me?.uid === profile.uid;
 
@@ -111,6 +116,7 @@ const WorkerView: React.FC = () => {
             items: []
         }
 
+        // TODO translacje
         if (isMyProfile) {
             menu.items.push({
                 label: t('employeeProfile.editButton'),
@@ -145,6 +151,10 @@ const WorkerView: React.FC = () => {
                 })
             }
         }
+        menu.items.push({
+            label: "Otwórz profil użytkownika",
+            onClick: goToUserProfile
+        })
         return menu;
     }
 
@@ -392,7 +402,7 @@ const WorkerView: React.FC = () => {
 
             <div className="flex gap-5 items-center px-5">
 
-                <div className="worker-avatar">
+                <div className="worker-avatar" onClick={goToUserProfile}>
                     <img src={worker.avatarRef?.url || AVATAR_MOCK} alt={worker.displayName} />
                 </div>
 
