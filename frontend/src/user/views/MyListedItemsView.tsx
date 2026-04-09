@@ -104,10 +104,6 @@ const MyListedItemsView: React.FC = () => {
                                         item={item}
                                         open={openNoteItemId === item.id}
                                         onClose={() => setOpenNoteItemId(null)}
-                                        onSave={async (_item, note) => {
-                                            // TODO: replace with real API call
-                                            toast.success("Notatka zapisana");
-                                        }}
                                     />
                                 </div>
                             )
@@ -128,10 +124,6 @@ const MyListedItemsView: React.FC = () => {
                                         item={item}
                                         open={openNoteItemId === item.id}
                                         onClose={() => setOpenNoteItemId(null)}
-                                        onSave={async (_item, note) => {
-                                            // TODO: replace with real API call
-                                            toast.success("Notatka zapisana");
-                                        }}
                                     />
                                 </React.Fragment>
                             )

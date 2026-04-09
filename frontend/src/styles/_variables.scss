@@ -191,6 +191,10 @@ $paddingSmall: .5rem;
   font-size: $xxxlFont;
 }
 
+.transition {
+  transition: $transition;
+}
+
 
 // RIPPLE EFFECT
 .ripple {

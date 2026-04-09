@@ -6,8 +6,15 @@ export interface UserListedItem {
     listedAt: Date;
     listedType: UserListedItemType;
     data?: any
+    notes?: ListedItemNote[]
 }
 
+export interface ListedItemNote {
+    id: string
+    note: string
+    date: Date
+    modifiedDate?: Date
+}
 
 export const UserListedItemTypes = {
     LIKE: 'LIKE',
@@ -28,4 +35,10 @@ export interface AddUserListedItemDto {
     referenceType: UserListedItemReferenceType;
 
     listedType: UserListedItemType
+}
+
+export interface AddNoteDto {
+    noteId?: string // id when edit, not present when adding new note
+    listItemId: number
+    note: string;
 }

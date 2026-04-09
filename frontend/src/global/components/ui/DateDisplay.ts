@@ -1,10 +1,12 @@
-import { useTranslation } from 'react-i18next';
+import { FrontDateUtil } from "global/utils/FrontDateUtil";
 
 interface Props {
     date?: Date;
     localDateString?: string;
     showYear?: boolean;
     showYearIfNotCurrent?: boolean;
+    showTimeIfToday?: boolean;
+
     t: any
 }
 
@@ -16,6 +18,10 @@ const DateDisplay = (props: Props): string | null => {
     const t = props.t;
 
     const currentYear = new Date().getFullYear();
+
+    if (props.showTimeIfToday && date) {
+        return FrontDateUtil.displayShortDateOrDayOrTimeIfToday(t, date);
+    }
 
     if (date) {
         const day = date.getDate();

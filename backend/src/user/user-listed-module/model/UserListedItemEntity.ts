@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { UserListedItem, UserListedItemReferenceType, UserListedItemType } from '@shared/interfaces/UserListedItem';
+import { ListedItemNote, UserListedItem, UserListedItemReferenceType, UserListedItemType } from '@shared/interfaces/UserListedItem';
 import { UserEntity } from 'user/model/UserEntity';
 
 @Entity('jh_user_listed_items')
@@ -30,4 +30,8 @@ export class UserListedItemEntity implements UserListedItem {
     @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'uid', referencedColumnName: 'uid' })
     user: UserEntity;
+
+    @Column({ name: 'notes', type: 'jsonb', nullable: true, default: null })
+    notes?: ListedItemNote[]
+    
 }

@@ -1,12 +1,13 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger } from '@nestjs/common';
-import { AddUserListedItemDto, UserListedItem, UserListedItemReferenceTypes, UserListedItemType, UserListedItemTypes } from '@shared/interfaces/UserListedItem';
+import { AddNoteDto, AddUserListedItemDto, ListedItemNote, UserListedItem, UserListedItemReferenceTypes, UserListedItemType, UserListedItemTypes } from '@shared/interfaces/UserListedItem';
 import { WorkersService } from 'employee/services/WorkerService';
 import { ToastException } from 'global/exceptions/ToastException';
 import { UserListedItemEntity } from '../model/UserListedItemEntity';
 import { Repository } from 'typeorm/repository/Repository.js';
 import { InjectRepository } from '@nestjs/typeorm/dist/common/typeorm.decorators';
 import { OffersService } from 'offer/services/OffersService';
+import { UserI } from '@shared/interfaces/UserI';
 
 @Injectable()
 export class UserListedItemService {
@@ -78,6 +79,74 @@ export class UserListedItemService {
         result.data = data;
         this.logger.log('result: ', result);
         return result;
+    }
+
+    public async addNote(user: UserI, dto: AddNoteDto): Promise<ListedItemNote> {
+        const item = await this.repository.findOne({ where: { id: dto.listItemId, uid: user.uid } });
+        if (!item) {
+            throw new ToastException(`Listed item with ID ${dto.listItemId} not found for user ${user.uid}`, this);
+        }
+
+        const note: ListedItemNote = {
+            id: this.newId(item.notes || []),
+            note: dto.note,
+            date: new Date()
+        };
+        const notes = item.notes || [];
+        notes.push(note);
+        item.notes = notes;
+
+        await this.repository.save(item);
+        this.logger.log(`User ${user.uid} added note to listed item ${item.id}: ${dto.note}`);
+        return note;
+    }
+
+    public async removeNote(user: UserI, itemId: number, noteId: string): Promise<void> {
+        const item = await this.repository.findOne({ where: { id: itemId, uid: user.uid } });
+        if (!item) {
+            throw new ToastException(`Listed item with ID ${itemId} not found for user ${user.uid}`, this);
+        }
+        const notes = item.notes || [];
+        const noteIndex = notes.findIndex(n => n.id === noteId);
+        if (noteIndex === -1) {
+            throw new ToastException(`Note with ID ${noteId} not found for listed item ${itemId}`, this);
+        }
+        notes.splice(noteIndex, 1);
+        item.notes = notes;
+        await this.repository.save(item);
+        this.logger.log(`User ${user.uid} removed note ${noteId} from listed item ${itemId}`);
+    }
+
+    public async updateNote(user: UserI, dto: AddNoteDto): Promise<ListedItemNote> {
+        if (!dto.noteId) {
+            throw new ToastException(`Note ID is required for updating a note`, this);
+        }
+        const item = await this.repository.findOne({ where: { id: dto.listItemId, uid: user.uid } });
+        if (!item) {
+            throw new ToastException(`Listed item with ID ${dto.listItemId} not found for user ${user.uid}`, this);
+        }
+
+        const notes = item.notes || [];
+        const noteIndex = notes.findIndex(n => n.id === dto.noteId);
+        if (noteIndex === -1) {
+            throw new ToastException(`Note with ID ${dto.noteId} not found for listed item ${item.id}`, this);
+        }
+
+        notes[noteIndex] = { ...notes[noteIndex], note: dto.note, modifiedDate: new Date() };
+        item.notes = notes;
+
+        await this.repository.save(item);
+        this.logger.log(`User ${user.uid} updated note ${dto.noteId} for listed item ${item.id}: ${dto.note}`);
+        return notes[noteIndex];
+    }
+
+
+    private newId = (notes: ListedItemNote[]): string => {
+        const existingIds = notes.map(n => Number(n.id)).filter(n => !isNaN(n));
+        if (!existingIds.length) {
+            return '1';
+        }
+        return `${Math.max(...existingIds) + 1}`;
     }
 
     private async validateExistingItem(uid: string, item: AddUserListedItemDto): Promise<void> {
