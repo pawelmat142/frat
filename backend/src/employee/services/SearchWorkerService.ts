@@ -208,7 +208,7 @@ export class SearchWorkersService {
 
         // add views count sorting
         idsQueryBuilder
-            .addOrderBy('array_length(profile.views, 1)', SearchUtil.DESC, 'NULLS LAST');
+            .addOrderBy('profile.unique_views_count', SearchUtil.DESC, 'NULLS LAST');
     }
 
     /** Preserve order from paginated IDs query using CASE expression */

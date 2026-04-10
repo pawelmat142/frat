@@ -49,7 +49,7 @@ export interface WorkerI {
   skills?: WorkerSkills
   images?: AvatarRef[]
 
-  views: string[];
+  uniqueViewsCount: number;
   jobs: string[];
   likes: string[];
 

@@ -15,6 +15,8 @@ import { UserService } from 'user/services/UserService';
 import { CertificatesWorkerService } from './CertificatesWorkerService';
 import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
 import { CloudinaryTags } from '@shared/utils/CloudinaryUtil';
+import { EntityInteractionService } from 'entity-interaction/services/EntityInteractionService';
+import { EntityInteractionEntityTypes } from '@shared/interfaces/EntityInteractionI';
 
 @Injectable()
 export class WorkersService implements OnModuleInit, OnModuleDestroy {
@@ -28,6 +30,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         private readonly userService: UserService,
         private readonly certificatesWorkerService: CertificatesWorkerService,
         private readonly cloudinaryService: CloudinaryService,
+        private readonly entityInteractionService: EntityInteractionService,
     ) { }
 
     onModuleInit() {
@@ -212,21 +215,22 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
 
     public async notifyWorkerView(workerId: number, user: UserI): Promise<void> {
         const profile = await this.workerRepo.getById(workerId);
-
+        if (!profile) {
+            throw new ToastException('employeeProfile.notFound', this);
+        }
         if (profile.uid === user.uid) {
-            this.logger.log(`Viewer ${user.uid} viewed own profile, skipping view increment`);
+            this.logger.log(`Viewer ${user.uid} viewed own profile, skipping`);
             return;
         }
-        if (!profile) {
-            throw new ToastException('employeeProfile.exists', this);
-        }
 
-        if (profile.views.includes(user.uid)) {
-            this.logger.log(`Viewer ${user.uid} viewed profile ${workerId}, skipping view increment`);
-        } else {
-            this.logger.log(`Viewer ${user.uid} viewed profile ${workerId}, incrementing views`);
-            profile?.views.push(user.uid);
-            await this.workerRepo.update(profile);
+        const isNew = await this.entityInteractionService.recordView(
+            EntityInteractionEntityTypes.WORKER,
+            workerId,
+            user.uid,
+        );
+
+        if (isNew) {
+            await this.workerRepo.incrementUniqueViewsCount(workerId);
         }
     }
     

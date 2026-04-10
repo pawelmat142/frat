@@ -120,9 +120,9 @@ export class WorkerEntity implements WorkerI {
 
   // STATS
   @Expose()
-  @Column({ name: 'views', type: 'text', array: true, default: [] })
-  views: string[];
-  
+  @Column({ name: 'unique_views_count', type: 'int', default: 0 })
+  uniqueViewsCount: number;
+
   @Expose()
   @Column({ name: 'jobs', type: 'text', array: true, default: [] })
   jobs: string[];

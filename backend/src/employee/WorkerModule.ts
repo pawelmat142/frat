@@ -15,6 +15,7 @@ import { SearchWorkersService } from './services/SearchWorkerService';
 import { DateRangeEntity } from './model/DateRangeEntity';
 import { UserModule } from 'user/UserModule';
 import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
+import { EntityInteractionModule } from 'entity-interaction/EntityInteractionModule';
 
 @Module({
     imports: [
@@ -27,7 +28,8 @@ import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
         AuthModule,
         DictionariesModule,
         UserModule,
-        UserManagementModule
+        UserManagementModule,
+        EntityInteractionModule,
     ],
     providers: [
         WorkerRepo,

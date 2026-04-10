@@ -303,7 +303,7 @@ export const WorkersInitialData = (): DeepPartial<WorkerEntity>[] => {
                 : availabilityOption === WorkerAvailabilityOptions.ANYTIME 
                 ? DateUtil.toLocalDateString(new Date()) : undefined,
             jobs: numberToStringList(getRandomNumberFromTo(0, 20, globalIndex)).map(n => `job-${n}`),
-            views: numberToStringList(getRandomNumberFromTo(30, 100, globalIndex)).map(n => `view-${n}`),
+            uniqueViewsCount: getRandomNumberFromTo(30, 100, globalIndex),
             fullAddress: adress.fullAddress,
         };
 

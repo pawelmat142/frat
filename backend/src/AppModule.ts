@@ -21,6 +21,7 @@ import { GeocodingService } from 'global/services/GeocodingService';
 import { SettingsModule } from 'user/settings-module/SettingsModule';
 import { UserContextModule } from 'user/user-context-module/UserContextModule';
 import { UserListedModule } from 'user/user-listed-module/UserListedModule';
+import { EntityInteractionModule } from 'entity-interaction/EntityInteractionModule';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { UserListedModule } from 'user/user-listed-module/UserListedModule';
     SettingsModule,
     UserContextModule,
     UserListedModule,
+    EntityInteractionModule,
   ],
   controllers: [
     GlobalController,

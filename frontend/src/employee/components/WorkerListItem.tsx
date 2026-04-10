@@ -94,7 +94,7 @@ const   WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first,
     const bottomLeft = <div className="flex items-center gap-3">
         <div>
             <Visibility fontSize="inherit" className="secondary-text mr-1" />
-            <span className="xs-font">{worker.views?.length || 0}</span>
+            <span className="xs-font">{worker.uniqueViewsCount || 0}</span>
         </div>
         <div>
             <ThumbUp fontSize="inherit" className="secondary-text mr-1" />

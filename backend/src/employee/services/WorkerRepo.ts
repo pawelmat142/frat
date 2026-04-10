@@ -187,12 +187,6 @@ export class WorkerRepo {
             updatedFlag = true;
         }
 
-        if (ObjUtil.arrayChanged(worker.views, newWorker.views || [])) {
-            this.logger.log(`Updating EmployeeProfile views from ${worker.views} to ${newWorker.views}`);
-            worker.views = newWorker.views || [];
-            updatedFlag = true;
-        }
-
         if (ObjUtil.arrayChanged(worker.jobs, newWorker.jobs || [])) {
             this.logger.log(`Updating EmployeeProfile jobs from ${worker.jobs} to ${newWorker.jobs}`);
             worker.jobs = newWorker.jobs || [];
@@ -308,6 +302,13 @@ export class WorkerRepo {
             'DELETE FROM jh_employee_profile_availability_date_ranges WHERE employee_profile_id = $1',
             [profileId]
         );
+    }
+
+    public incrementUniqueViewsCount(workerId: number): Promise<void> {
+        return this.woerkersRepository.increment({ workerId }, 'uniqueViewsCount', 1)
+            .then(() => {
+                this.logger.log(`Incremented uniqueViewsCount for worker ${workerId}`);
+            });
     }
 
     public getQueryBuilder(): SelectQueryBuilder<WorkerEntity> {
