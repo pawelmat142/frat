@@ -1,5 +1,5 @@
-import { AnimatePresence } from "framer-motion";
-import PageWrapper from "global/components/PageWrapper";
+import { AnimatePresence, motion } from "framer-motion";
+import { AppConfig } from "@shared/AppConfig";
 import { Z_INDEX } from "global/def";
 
 interface Props {
@@ -17,9 +17,16 @@ const PseudoView: React.FC<Props> = ({ show, children, className = "bg-black" })
     return (
         <AnimatePresence>
             {show && (
-                <PageWrapper style={{ zIndex }} className={`fixed inset-0 flex flex-col ${className}`}>
+                <motion.div
+                    initial={{ x: "100%", opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: "100%", opacity: 0 }}
+                    transition={{ duration: AppConfig.ROUTER_ANIMATION_DURATION / 1000, ease: "easeInOut" }}
+                    style={{ zIndex }}
+                    className={`fixed inset-0 flex flex-col ${className}`}
+                >
                     {children}
-                </PageWrapper>
+                </motion.div>
             )}
         </AnimatePresence>
     );
