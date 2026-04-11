@@ -33,6 +33,7 @@ const DashboardView: React.FC = () => {
         return <Loading></Loading>
     }
 
+    // TODO translacje
     const logout = async () => {
         const confirmed = await confirm({
             title: "Czy na pewno chcesz się wylogować?",

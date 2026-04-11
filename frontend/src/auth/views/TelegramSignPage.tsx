@@ -89,6 +89,15 @@ const TelegramSignPage: React.FC = () => {
                     />
                 </div>
 
+                <div className="flex justify-end">
+                    <Button mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} onClick={() => {
+                        navigator.clipboard.readText().then(text => {
+                            setPin(text);
+                        })
+                        // TODO
+                    }}>Paste from clipboard</Button>
+                </div>
+
                 <Button
                     onClick={handleSubmit}
                     mode={BtnModes.PRIMARY}
