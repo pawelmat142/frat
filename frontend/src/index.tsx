@@ -25,6 +25,7 @@ import { FriendsProvider } from 'friends/FriendsProvider';
 import { UsersStorageProvider } from 'global/providers/UsersStorageProvider';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
 import FloatingButtonWrapper from 'global/components/buttons/FloatingButtonWrapper';
+import { motion } from 'framer-motion';
 
 const AppShell: React.FC = () => {
   const { state, isFooterHidden } = useGlobalContext();
@@ -32,9 +33,9 @@ const AppShell: React.FC = () => {
     <div className="app-shell">
       <GlobalHeader />
       {/* <NotificationsGlobalBar /> */}
-      <main className={`app-main${isFooterHidden ? ' hide-footer' : ''}`}>
+      <motion.main layout transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }} className={`app-main${isFooterHidden ? ' hide-footer' : ''}`}>
         <App />
-      </main>
+      </motion.main>
       <LayoutFooterSwitch />
       <FloatingButtonWrapper />
     </div>
