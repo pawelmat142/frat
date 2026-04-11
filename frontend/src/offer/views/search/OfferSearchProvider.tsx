@@ -111,8 +111,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const searchStr = OfferUtil.prepareUrlParams(newFilters, defaultOfferFilters);
         const newUrl = searchStr ? `?${searchStr}` : '';
 
-        setOpenPseudoView(false);
-        await wait(AppConfig.ROUTER_ANIMATION_DURATION);
+        openOfferPseudoView(false);
 
         if (newUrl !== location.search) {
             navigate({ pathname: Path.OFFERS_SEARCH, search: newUrl });

@@ -181,7 +181,6 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         const isOnSearchPage = newUrl === location.search
 
         openWorkersPseudoView(false)
-        await wait(AppConfig.ROUTER_ANIMATION_DURATION)
         if (!isOnSearchPage) {
             navigate({ pathname: Path.WORKERS_SEARCH, search: newUrl })
         }
