@@ -23,7 +23,6 @@ import { ChatsProvider } from 'chat/ChatsProvider';
 import { NotificationsProvider } from 'notification/NotificationsProvider';
 import { FriendsProvider } from 'friends/FriendsProvider';
 import { OffersProvider } from 'offer/OffersProvider';
-import { WorkerProvider } from 'employee/WorkerProvider';
 import { UsersStorageProvider } from 'global/providers/UsersStorageProvider';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
 import FloatingButtonWrapper from 'global/components/buttons/FloatingButtonWrapper';
@@ -60,7 +59,6 @@ root.render(
                       <UserProvider>
                         <FriendsProvider>
                           <OffersProvider>
-                            <WorkerProvider>
                               <ChatsProvider>
                                 <NotificationsProvider>
                                   <OfferSearchProvider>
@@ -86,7 +84,6 @@ root.render(
                                   </OfferSearchProvider>
                                 </NotificationsProvider>
                               </ChatsProvider>
-                            </WorkerProvider>
                           </OffersProvider>
                         </FriendsProvider>
                       </UserProvider>

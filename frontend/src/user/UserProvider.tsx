@@ -16,6 +16,7 @@ import { useTheme } from "global/providers/ThemeProvider";
 import { SettingsService } from './services/SettingsService';
 import { AppConfig } from '@shared/AppConfig';
 import { PositionUtil } from '@shared/utils/PositionUtil';
+import { WorkerService } from 'employee/services/WorkerService';
 
 interface UserContextType {
 	me: UserI | null;
@@ -31,6 +32,7 @@ interface UserContextType {
 	selectLanguage: () => void;
 	selectTheme: () => void;
 	getDistanceInfo: (_position: Position) => string
+	initWorker: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -95,7 +97,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const updateMeCtx = (ctx: MeUserContext) => {
 		setMeCtx(ctx);
 	}
-	
+
 	const initLocation = async (init?: boolean) => {
 		try {
 			const status = await navigator.permissions.query({ name: 'geolocation' });
@@ -243,6 +245,19 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	}
 
+	const initWorker = async () => {
+		try {
+			const result = await WorkerService.getWorker();
+			if (result) {
+				setMeCtx(prev => prev ? { ...prev, workerProfile: result } : null);
+			} else {
+				setMeCtx(prev => prev ? { ...prev, workerProfile: undefined } : null);
+			}
+		} catch {
+			setMeCtx(prev => prev ? { ...prev, workerProfile: undefined } : null);
+		}
+	};
+
 	return (
 		<UserContext.Provider value={{
 			me,
@@ -255,7 +270,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			selectLanguage,
 			selectTheme,
 			getDistanceInfo,
-			updateMeCtx
+			updateMeCtx,
+			initWorker
 		}}>
 			{children}
 		</UserContext.Provider>

@@ -74,11 +74,11 @@ export const PopupProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       message: options.message,
 
       buttons: [{
-        text: options.cancelText || 'Anuluj',
+        text: options.cancelText || 'common.cancel',
         mode: BtnModes.ERROR_TXT,
         action: () => false
       }, {
-        text: options.confirmText || 'Potwierdź',
+        text: options.confirmText || 'common.confirm',
         mode: BtnModes.PRIMARY,
         action: () => true
       }]

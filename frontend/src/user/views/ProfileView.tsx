@@ -18,14 +18,13 @@ import { FriendsService } from "friends/services/FriendsService";
 import { Ico } from "global/icon.def";
 import { useFriendsContext } from "friends/FriendsProvider";
 import { useOffersContext } from "offer/OffersProvider";
-import { useWorkerContext } from "employee/WorkerProvider";
-import { useUsersStorage } from "global/providers/UsersStorageProvider";
 import UserProfileItem from "user/components/UserProfileItem";
 import ListUi from "global/components/ui/ListUi";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { AppConfig } from "@shared/AppConfig";
 import { MenuItem } from "global/interface/controls.interface";
+import { useUsersStorage } from "global/providers/UsersStorageProvider";
 
 const ProfileView: React.FC = () => {
 
@@ -33,7 +32,6 @@ const ProfileView: React.FC = () => {
     const userCtx = useUserContext()
     const friendsCtx = useFriendsContext();
     const offersCtx = useOffersContext();
-    const workerCtx = useWorkerContext();
     const me = userCtx.me;
     const [user, setUser] = useState<UserI | null>(null)
     const { uid } = useParams<{ uid?: string }>()
@@ -73,7 +71,7 @@ const ProfileView: React.FC = () => {
 
         if (user.uid === me?.uid) {
             setOffers(offersCtx.offers)
-            setWorker(workerCtx.worker)
+            setWorker(userCtx.meCtx?.workerProfile || null)
             setLocalLoading(false);
         } else {
             initUserData(user);

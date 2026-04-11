@@ -12,7 +12,6 @@ import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { CloudinaryService } from "user/services/CloudinaryService";
 import { CloudinaryFolderNames, CloudinaryTags } from "@shared/utils/CloudinaryUtil";
-import { useWorkerContext } from "employee/WorkerProvider";
 import GallerySwiper from "global/components/img/GallerySwiper";
 import { useConfirm } from "global/providers/PopupProvider";
 import LongTapHandler from "global/components/LongTapHandler";
@@ -36,7 +35,6 @@ const HOLD_MS = 600;
 const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) => {
     const { t } = useTranslation();
     const userCtx = useUserContext();
-    const workerCtx = useWorkerContext();
     const globalCtx = useGlobalContext();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -49,7 +47,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) =
     const me = userCtx.me;
     const isMyProfile = me?.uid === worker.uid;
 
-    const savedImages: AvatarRef[] = workerCtx.worker?.images ?? worker.images ?? [];
+    const savedImages: AvatarRef[] = userCtx.meCtx?.workerProfile?.images ?? worker.images ?? [];
     const canAddMore = savedImages.length < MAX_IMAGES;
 
     const allDisplayUrls = [
@@ -109,7 +107,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) =
             ]
             const avatarRef = await CloudinaryService.uploadImage(pending.file, folder, tags);
             await WorkerService.addImage(avatarRef);
-            await workerCtx.initWorker();
+            await userCtx.initWorker();
         } finally {
             setSaving(false);
             setLoading(false);
@@ -121,7 +119,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) =
         try {
             setLoading(true);
             await WorkerService.removeImage(publicId);
-            await workerCtx.initWorker();
+            await userCtx.initWorker();
         } catch {
             toast.error(t('error.imageRemoveFailed'));
         }

@@ -7,13 +7,13 @@ import IconButton from "global/components/controls/IconButon";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { FormValidator } from "global/FormValidator";
-import { useWorkerContext } from "employee/WorkerProvider";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Loading from "global/components/Loading";
 import { WorkerSkills } from "@shared/interfaces/WorkerI";
 import i18n from "global/i18n";
 import { WorkerService } from "employee/services/WorkerService";
 import { Ico } from "global/icon.def";
+import { useUserContext } from "user/UserProvider";
 
 interface SkillsForm {
     items: { name: string }[];
@@ -22,8 +22,8 @@ interface SkillsForm {
 const WorkerSkillsFormView: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const workerCtx = useWorkerContext();
-    const worker = workerCtx.worker;
+    const userCtx = useUserContext();
+    const worker = userCtx.meCtx?.workerProfile || null;
 
     const [loading, setLoading] = React.useState(false);
 
@@ -55,7 +55,7 @@ const WorkerSkillsFormView: React.FC = () => {
                 providedInLanguage: i18n.language
             }
             await WorkerService.updateSkills(request);
-            await workerCtx.initWorker();
+            await userCtx.initWorker();
             navigate(-1);
         } catch (error) {
 

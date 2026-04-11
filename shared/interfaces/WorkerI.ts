@@ -65,7 +65,7 @@ export interface WorkerSkills {
 }
 
 export interface WorkerWithCertificates extends WorkerI {
-  certs: CertificateI[];
+  certs?: CertificateI[];
 }
 
 export interface WorkerWithMutualFriends extends WorkerI {

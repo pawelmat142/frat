@@ -8,7 +8,6 @@ import { WorkerService } from "employee/services/WorkerService";
 import Loading from "global/components/Loading";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
-import { useWorkerContext } from "employee/WorkerProvider";
 import { useNavigate } from "react-router-dom";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { Path } from "../../../path";
@@ -39,7 +38,6 @@ const WorkerFormView: React.FC = () => {
     const { t } = useTranslation();
     const [loading, setLoading] = React.useState<boolean>(false);
     const userCtx = useUserContext();
-    const workerCtx = useWorkerContext();
     const navigate = useNavigate();
     const profileCtx = useWorkersSearch();
     const isDevMode = Utils.isDevMode();
@@ -57,7 +55,7 @@ const WorkerFormView: React.FC = () => {
         }
     }, [])
 
-    const worker: WorkerWithCertificates | null = workerCtx.worker || null;
+    const worker: WorkerWithCertificates | null = userCtx?.meCtx?.workerProfile || null;
 
     const formRef = useForm<WorkerForm>({
         defaultValues: {
@@ -235,8 +233,6 @@ const WorkerFormView: React.FC = () => {
         const confirmed = await confirm({
             title: 'employeeProfile.form.confirmTitle',
             message: 'employeeProfile.form.confirmSubmit',
-            confirmText: 'common.confirm',
-            cancelText: 'common.cancel'
         });
         if (!confirmed) return;
 
@@ -249,7 +245,7 @@ const WorkerFormView: React.FC = () => {
         try {
             setLoading(true);
             const result = await WorkerService.createWorker(form);
-            workerCtx.initWorker();
+            userCtx.initWorker();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
             navigate(Path.getWorkerProfilePath(`${result.displayName}`), { replace: true });
@@ -265,7 +261,7 @@ const WorkerFormView: React.FC = () => {
             setLoading(true);
             const result = await WorkerService.updateWorker(form);
             profileCtx.updateOneProfileInResults(result);
-            workerCtx.initWorker();
+            userCtx.initWorker();
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             toast.success(t("employeeProfile.form.submitSuccess"));
             navigate(Path.getWorkerProfilePath(result.displayName), { replace: true });
