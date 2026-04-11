@@ -8,17 +8,18 @@ import { GoogleMapService } from 'global/services/GoogleMapService';
 import { Position, GeocodedPosition } from '@shared/interfaces/MapsInterfaces';
 import { AppConfig } from '@shared/AppConfig';
 import FloatingPlaceSearch from 'global/components/controls/FloatingPlaceSearch';
+import HeaderBackBtn from 'global/header-state/HeaderBackBtn';
 
 interface PositionSelectorContentProps {
     initialPosition?: Position;
     onChange: (position: GeocodedPosition | null) => void;
-    onCancel: () => void;
+    close: () => void;
 }
 
 const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     initialPosition,
     onChange,
-    onCancel,
+    close,
 }) => {
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''; // provide via .env.local
     if (!apiKey) {
@@ -117,7 +118,10 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
         <div className="position-selector-popup-overlay fixed inset-0 z-50 flex items-center justify-center bg-opacity-50">
             <div className="position-selector-popup secondary-bg rounded-lg shadow-xl w-full h-full md:w-[90%] md:h-[90%] max-w-6xl flex flex-col">
 
-                <div className='p-2 primary-bg'>
+                <div className='px-2 py-1 primary-bg flex items-center'>
+
+                    <HeaderBackBtn onBack={() => close()}/>
+        
                     <FloatingPlaceSearch
                         className='w-full'
                         mode={FloatingInputModes.THIN}
@@ -131,8 +135,6 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
                 </div>
 
                 <div className="position-selector-map-container flex-1 relative">
-
-
                     <div ref={mapRef} className="w-full h-full" />
                 </div>
 

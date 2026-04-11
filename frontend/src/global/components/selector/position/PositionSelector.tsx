@@ -108,10 +108,8 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                             setSelectedPosition(position);
                             globalCtx.showFooter();
                         }}
-                        onCancel={async () => {
-                            onChange?.(null);
+                        close={() => {
                             setOpenPseudoView(false);
-                            await wait(AppConfig.ROUTER_ANIMATION_DURATION);
                             globalCtx.showFooter();
                         }}
                     ></PositionSelectorContent>

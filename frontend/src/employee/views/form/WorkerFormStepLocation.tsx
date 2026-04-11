@@ -15,6 +15,7 @@ import { DEFAUT_POSITION } from "offer/views/form/OfferFormStepOne";
 import Loading from "global/components/Loading";
 import { PositionService } from "global/services/PositionService";
 import { toast } from "react-toastify";
+import SkeletonControl from "global/components/controls/SkeletonControl";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -32,6 +33,11 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
     const locationOption = watch("location.locationOption");
 
     const preparePosition = (): Position => {
+        const result = watch("location.geocodedPosition");
+        if (result) {
+            return result;
+        }
+
         return userCtx.position || DEFAUT_POSITION;
     }
 
@@ -117,7 +123,7 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
                 )}
             />
 
-            {geoLoading ? (<Loading></Loading>) : (<Controller
+            {geoLoading ? (<SkeletonControl label={t("offer.workLocation")}></SkeletonControl>) : (<Controller
                 name="location.geocodedPosition"
                 control={control}
                 render={({ field }) => (
