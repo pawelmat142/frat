@@ -185,4 +185,24 @@ export abstract class GoogleMapService {
 
 		return out;
 	}
+
+	/**
+	 * Returns the approximate coordinates of a country's capital city using the restcountries public API.
+	 */
+	static async geocodeCountryCenter(countryCode: string): Promise<Position | null> {
+		try {
+			const res = await fetch(`https://restcountries.com/v3.1/alpha/${encodeURIComponent(countryCode.toUpperCase())}?fields=capitalInfo`);
+			if (!res.ok) return null;
+			const data = await res.json();
+			// API returns either an object or an array with one element
+			const entry = Array.isArray(data) ? data[0] : data;
+			const latlng = entry?.capitalInfo?.latlng;
+			if (Array.isArray(latlng) && latlng.length === 2) {
+				return { lat: latlng[0], lng: latlng[1] };
+			}
+			return null;
+		} catch {
+			return null;
+		}
+	}
 }

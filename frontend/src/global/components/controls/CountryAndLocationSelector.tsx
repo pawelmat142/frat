@@ -58,6 +58,19 @@ const CountryAndLocationSelector: React.FC<Props> = ({
     const [loadingCity, setLoadingCity] = useState(false);
     const [cityAnimating, setCityAnimating] = useState(false);
     const [geoLoading, setGeoLoading] = useState(false);
+    const [countryCenter, setCountryCenter] = useState<Position | null>(null);
+
+    React.useEffect(() => {
+        if (!value.locationCountry || value.geocodedPosition) {
+            setCountryCenter(null);
+            return;
+        }
+        let cancelled = false;
+        GoogleMapService.geocodeCountryCenter(value.locationCountry).then((pos) => {
+            if (!cancelled) setCountryCenter(pos);
+        });
+        return () => { cancelled = true; };
+    }, [value.locationCountry]);
 
     const handleCountryChange = (countryCode: string | null) => {
         onChange({
@@ -116,8 +129,7 @@ const CountryAndLocationSelector: React.FC<Props> = ({
     }
 
     const preparePosition = (): Position => {
-
-        return value.geocodedPosition || userCtx.position || DEFAUT_POSITION;
+        return value.geocodedPosition || countryCenter || userCtx.position || DEFAUT_POSITION;
     }
 
     return (
