@@ -13,7 +13,7 @@ const mapFormToApi = (form: WorkerForm): WorkerFormDto => {
 		bio: form.personalData.bio,
 
 		locationOption: form.location.locationOption,
-		countryCode: form.location.countryCode,
+		countryCode: form.location.countryCode || undefined,
 		geocodedPosition: form.location.geocodedPosition || undefined,
 		locationCountries: form.location.locationCountries,
 

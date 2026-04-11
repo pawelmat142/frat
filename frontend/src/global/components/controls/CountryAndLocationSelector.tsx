@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GeocodedPosition } from '@shared/interfaces/MapsInterfaces';
+import { GeocodedPosition, Position } from '@shared/interfaces/MapsInterfaces';
 import { AppConfig } from '@shared/AppConfig';
 import { GoogleMapService } from 'global/services/GoogleMapService';
 import { toast } from 'react-toastify';
@@ -9,6 +9,10 @@ import FloatingPlaceSearch, { PlaceSearchResult } from './FloatingPlaceSearch';
 import FloatingStepSlider from './FloatingStepSlider';
 import SkeletonControl from './SkeletonControl';
 import { AnimatePresence, motion } from 'framer-motion';
+import { PositionService } from 'global/services/PositionService';
+import PositionSelector from '../selector/position/PositionSelector';
+import { DEFAUT_POSITION } from 'offer/views/form/OfferFormStepOne';
+import { useUserContext } from 'user/UserProvider';
 
 export interface LocationFilterValue {
     locationCountry: string | null;
@@ -16,7 +20,17 @@ export interface LocationFilterValue {
     positionRadiusKm?: number;
 }
 
-interface LocationFilterSelectorProps {
+export interface Config {
+    locationOption: 'map' | 'searchbar',
+    showRadiusSlider?: boolean;
+}
+
+export const defaultConfig: Config = {
+    locationOption: 'searchbar',
+    showRadiusSlider: true,
+}
+
+interface Props {
     value: LocationFilterValue;
     onChange: (value: LocationFilterValue) => void;
     errors?: {
@@ -26,19 +40,24 @@ interface LocationFilterSelectorProps {
     className?: string;
     radiusSteps?: number[];
     countryRequired?: boolean;
+    config?: Config;
 }
 
-const LocationFilterSelector: React.FC<LocationFilterSelectorProps> = ({
+const CountryAndLocationSelector: React.FC<Props> = ({
     value,
     onChange,
     errors,
     className = '',
     radiusSteps = [...AppConfig.RADIUS_STEPS_KM],
     countryRequired = true,
+    config = defaultConfig,
 }) => {
     const { t } = useTranslation();
+    const userCtx = useUserContext();
+
     const [loadingCity, setLoadingCity] = useState(false);
     const [cityAnimating, setCityAnimating] = useState(false);
+    const [geoLoading, setGeoLoading] = useState(false);
 
     const handleCountryChange = (countryCode: string | null) => {
         onChange({
@@ -72,6 +91,35 @@ const LocationFilterSelector: React.FC<LocationFilterSelectorProps> = ({
         onChange({ ...value, geocodedPosition: null, positionRadiusKm: undefined });
     };
 
+    /**
+     * Attempt to reverse geocode the provided lat/lng and update country filter automatically.
+     * Uses OpenStreetMap Nominatim (public) – consider proxying via backend for production to respect rate limits.
+     */
+    const autofillCountryByPosition = async (position?: GeocodedPosition | null) => {
+        if (!position) {
+            return;
+        }
+        setGeoLoading(true);
+        try {
+            const countryCode = await PositionService.callApiFindCountryByPosition(position);
+            if (countryCode) {
+                onChange({ ...value, locationCountry: countryCode, geocodedPosition: position });
+            } else {
+                onChange({ ...value, geocodedPosition: position });
+            }
+        } catch (e) {
+            onChange({ ...value, geocodedPosition: position });
+            // Intentionally swallow errors – network issues shouldn't break filter sheet.
+        } finally {
+            setGeoLoading(false);
+        }
+    }
+
+    const preparePosition = (): Position => {
+
+        return value.geocodedPosition || userCtx.position || DEFAUT_POSITION;
+    }
+
     return (
         <div className={className}>
             <CountrySelector
@@ -104,9 +152,9 @@ const LocationFilterSelector: React.FC<LocationFilterSelectorProps> = ({
                             exit={{ y: 12, scale: 0.97 }}
                             transition={{ duration: 0.35, ease: [0.22, 0.7, 0.3, 1] }}
                         >
-                            {loadingCity ? (
+                            {(loadingCity || geoLoading) ? (
                                 <SkeletonControl label={t('employeeProfile.form.city')} />
-                            ) : (
+                            ) : config.locationOption === 'searchbar' ? (
                                 <FloatingPlaceSearch
                                     fullWidth
                                     displayValue={value.geocodedPosition?.fullAddress || ''}
@@ -116,14 +164,27 @@ const LocationFilterSelector: React.FC<LocationFilterSelectorProps> = ({
                                     onSelect={handleCitySelect}
                                     onClear={handleCityClear}
                                 />
-                            )}
+                            ) : config.locationOption === 'map' ? (
+                                <PositionSelector
+                                    label={t("offer.workLocation")}
+                                    name="location.geocodedPosition"
+                                    className="w-full"
+                                    value={value.geocodedPosition}
+                                    initialPosition={preparePosition()}
+                                    required
+                                    onChange={(p) => {
+                                        autofillCountryByPosition(p);
+                                    }}
+                                    error={errors?.geocodedPosition}
+                                />
+                            ) : null}
                         </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
             <AnimatePresence>
-                {!!value.geocodedPosition && (
+                {!!value.geocodedPosition && config.showRadiusSlider && (
                     <motion.div
                         key="radius-control"
                         initial={{ height: 0, opacity: 0 }}
@@ -155,4 +216,4 @@ const LocationFilterSelector: React.FC<LocationFilterSelectorProps> = ({
     );
 };
 
-export default LocationFilterSelector;
+export default CountryAndLocationSelector;

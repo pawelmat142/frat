@@ -13,7 +13,7 @@ import { Ico } from "global/icon.def";
 import { useEffect, useRef } from "react";
 import { useUserContext } from "user/UserProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
-import LocationFilterSelector, { LocationFilterValue } from "global/components/controls/LocationFilterSelector";
+import CountryAndLocationSelector, { LocationFilterValue } from "global/components/controls/CountryAndLocationSelector";
 import { AppConfig } from "@shared/AppConfig";
 import Header from "global/components/Header";
 
@@ -125,7 +125,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                     )}
                 />
 
-                <LocationFilterSelector
+                <CountryAndLocationSelector
                     className="w-full mt-5"
                     value={{
                         locationCountry: formState.locationCountry ?? null,

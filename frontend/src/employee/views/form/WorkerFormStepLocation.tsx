@@ -1,68 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
 import { WorkerForm, WorkerLocationOption, WorkerLocationOptions } from "@shared/interfaces/WorkerI";
-import CountrySelector from "global/components/selector/CountrySelector";
-import { Position } from "@shared/interfaces/MapsInterfaces";
 import TabSwitcher, { TabSwitcherOption } from "employee/components/TabSwitcher";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
-import PositionSelector from "global/components/selector/position/PositionSelector";
 import { useUserContext } from "user/UserProvider";
-import { DEFAUT_POSITION } from "offer/views/form/OfferFormStepOne";
-import Loading from "global/components/Loading";
-import { PositionService } from "global/services/PositionService";
 import { toast } from "react-toastify";
-import SkeletonControl from "global/components/controls/SkeletonControl";
+import CountryAndLocationSelector from "global/components/controls/CountryAndLocationSelector";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
     initPosition?: () => void;
 }
 
-
 const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
-    const { control, formState, setValue, watch } = formRef;
+    const { control, formState, setValue, watch, register } = formRef;
     const { t } = useTranslation();
     const userCtx = useUserContext();
     const required = FormValidator.required(t);
-    const [geoLoading, setGeoLoading] = useState(false);
+
+    register("location.countryCode", required);
+    register("location.geocodedPosition", required);
 
     const locationOption = watch("location.locationOption");
-
-    const preparePosition = (): Position => {
-        const result = watch("location.geocodedPosition");
-        if (result) {
-            return result;
-        }
-
-        return userCtx.position || DEFAUT_POSITION;
-    }
-
-    /**
-     * Attempt to reverse geocode the provided lat/lng and update country filter automatically.
-     * Uses OpenStreetMap Nominatim (public) – consider proxying via backend for production to respect rate limits.
-     */
-    const autofillCountryByPosition = async (position?: Position | null) => {
-        if (!position) {
-            return;
-        }
-        setGeoLoading(true);
-        try {
-            const countryCode = await PositionService.callApiFindCountryByPosition(position);
-            if (countryCode) {
-                setValue("location.countryCode", countryCode);
-            }
-        } catch (e) {
-            // Intentionally swallow errors – network issues shouldn't break filter sheet.
-        } finally {
-            setGeoLoading(false);
-        }
-    }
-
-    const state = watch()
 
     const tabOptions: TabSwitcherOption[] = [
         {
@@ -79,12 +42,6 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
         },
     ];
     const msgClass = "secondary-text mb-5"
-
-
-    const handleCountryChange = (newCountryCode: string | null) => {
-        setValue("location.countryCode", newCountryCode || undefined);
-        setValue("location.geocodedPosition", undefined);
-    };
 
     const resetLocation = () => {
         if (!userCtx.position) {
@@ -103,45 +60,23 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
         <>
             <h2 className="form-subheader">{t("employeeProfile.form.location.title")}</h2>
 
-            {/* Country Selector */}
-            <Controller
-                name="location.countryCode"
-                control={control}
-                rules={required}
-                render={({ field }) => (
-                    <CountrySelector
-                        className="w-full mb-2"
-                        value={field.value ?? ""}
-                        onSelect={(countryCode) => {
-                            handleCountryChange(countryCode);
-                        }}
-                        label={t("employeeProfile.form.locationCountry")}
-                        fullWidth
-                        required
-                        error={formState.errors.location?.countryCode}
-                    />
-                )}
-            />
-
-            {geoLoading ? (<SkeletonControl label={t("offer.workLocation")}></SkeletonControl>) : (<Controller
-                name="location.geocodedPosition"
-                control={control}
-                render={({ field }) => (
-                    <PositionSelector
-                        label={t("offer.workLocation")}
-                        name="location.geocodedPosition"
-                        className="w-full"
-                        value={field.value}
-                        initialPosition={preparePosition()}
-                        required
-                        onChange={(p) => {
-                            autofillCountryByPosition(p);
-                            field.onChange(p);
-                        }}
-                        error={formState.errors.location?.geocodedPosition}
-                    />
-                )}
-            />)}
+            <CountryAndLocationSelector
+                value={{
+                    locationCountry: watch("location.countryCode") || null,
+                    geocodedPosition: watch("location.geocodedPosition") || null,
+                }}
+                onChange={(val) => {
+                    setValue("location.countryCode", val.locationCountry || undefined, { shouldValidate: true });
+                    setValue("location.geocodedPosition", val.geocodedPosition || undefined, { shouldValidate: true });
+                }}
+                config={{
+                    locationOption: 'map',
+                }}
+                errors={{
+                    locationCountry: formState.errors.location?.countryCode,
+                    geocodedPosition: formState.errors.location?.geocodedPosition as { message?: string } | undefined,
+                }}
+            ></CountryAndLocationSelector>
 
             <p className={`${msgClass} s-font mt-2 mb-0`}>{t("employeeProfile.form.location.info")}</p>
 

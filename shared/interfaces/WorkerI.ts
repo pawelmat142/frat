@@ -119,7 +119,7 @@ export interface WorkerFormStepCareer {
 
 export interface WorkerFormStepLocation {
   locationOption: WorkerLocationOption;
-  countryCode?: string;
+  countryCode?: string | null;
   geocodedPosition?: GeocodedPosition | null;
   locationCountries?: string[];
 }

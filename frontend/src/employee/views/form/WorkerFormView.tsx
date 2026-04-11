@@ -73,7 +73,7 @@ const WorkerFormView: React.FC = () => {
             },
             location: {
                 locationOption: WorkerLocationOptions.POSITION,
-                countryCode: undefined,
+                countryCode: null,
                 geocodedPosition: null,
             },
             availability: {
