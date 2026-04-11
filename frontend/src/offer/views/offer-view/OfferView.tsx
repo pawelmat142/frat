@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
-import { useOffersContext } from "offer/OffersProvider";
 import OfferDetailsTile from "./OfferDetailsTile";
 import { MenuConfig } from "global/components/selector/MenuItems";
 import { useMenuContext } from "global/providers/MenuProvider";
@@ -28,7 +27,6 @@ const OfferView: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const userCtx = useUserContext();
-    const offersCtx = useOffersContext();
     const me = userCtx?.me;
     const globalCtx = useGlobalContext();
     const menuCtx = useMenuContext();
@@ -77,7 +75,7 @@ const OfferView: React.FC = () => {
         const initOffer = async () => {
             const oid = Number(offerId);
             if (oid) {
-                const o = offersCtx.offers?.find(o => o.offerId === oid);
+                const o = userCtx.meCtx?.offers.find(o => o.offerId === oid);
                 if (o) {
                     _setOffer(o);
                     return;
@@ -124,7 +122,7 @@ const OfferView: React.FC = () => {
         try {
             setLoading(true);
             await OffersService.deleteOffer(offer.offerId);
-            await offersCtx.initOffers();
+            await userCtx.initOffers();
             toast.success(t('offer.deleteSuccessToast'));
             navigate(-1);
         }

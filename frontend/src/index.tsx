@@ -22,7 +22,6 @@ import OfferSearchProvider from 'offer/views/search/OfferSearchProvider';
 import { ChatsProvider } from 'chat/ChatsProvider';
 import { NotificationsProvider } from 'notification/NotificationsProvider';
 import { FriendsProvider } from 'friends/FriendsProvider';
-import { OffersProvider } from 'offer/OffersProvider';
 import { UsersStorageProvider } from 'global/providers/UsersStorageProvider';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
 import FloatingButtonWrapper from 'global/components/buttons/FloatingButtonWrapper';
@@ -58,33 +57,31 @@ root.render(
                     <AuthProvider>
                       <UserProvider>
                         <FriendsProvider>
-                          <OffersProvider>
-                              <ChatsProvider>
-                                <NotificationsProvider>
-                                  <OfferSearchProvider>
-                                    <WorkersSearchProvider>
-                                      <MenuProvider>
+                          <ChatsProvider>
+                            <NotificationsProvider>
+                              <OfferSearchProvider>
+                                <WorkersSearchProvider>
+                                  <MenuProvider>
 
-                                        <AppShell />
+                                    <AppShell />
 
-                                        <CookieBanner />
-                                        <ToastContainer
-                                          position="top-right"
-                                          autoClose={3000}
-                                          hideProgressBar={false}
-                                          newestOnTop={false}
-                                          closeOnClick
-                                          rtl={false}
-                                          pauseOnFocusLoss
-                                          draggable
-                                          pauseOnHover
-                                        />
-                                      </MenuProvider>
-                                    </WorkersSearchProvider>
-                                  </OfferSearchProvider>
-                                </NotificationsProvider>
-                              </ChatsProvider>
-                          </OffersProvider>
+                                    <CookieBanner />
+                                    <ToastContainer
+                                      position="top-right"
+                                      autoClose={3000}
+                                      hideProgressBar={false}
+                                      newestOnTop={false}
+                                      closeOnClick
+                                      rtl={false}
+                                      pauseOnFocusLoss
+                                      draggable
+                                      pauseOnHover
+                                    />
+                                  </MenuProvider>
+                                </WorkersSearchProvider>
+                              </OfferSearchProvider>
+                            </NotificationsProvider>
+                          </ChatsProvider>
                         </FriendsProvider>
                       </UserProvider>
                     </AuthProvider>

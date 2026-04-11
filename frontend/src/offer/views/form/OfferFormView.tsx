@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import Loading from "global/components/Loading";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
-import { useOffersContext } from "offer/OffersProvider";
 import { OfferUtil } from "@shared/utils/OfferUtil";
 import { Utils } from "global/utils/utils";
 import FormWizard from "global/components/FormWizard/FormWizard";
@@ -34,7 +33,6 @@ const OfferFormContent: React.FC = () => {
     const { t } = useTranslation();
     const ctx = useOfferForm();
     const userCtx = useUserContext();
-    const offersCtx = useOffersContext();
     const globalCtx = useGlobalContext();
     const [loading, setLoading] = useState(false);
 
@@ -85,7 +83,7 @@ const OfferFormContent: React.FC = () => {
             ctx.formCtx.setValue("STEP_TWO.locationCountry", countryCode)
         }
 
-        const phoneNumber =  offersCtx.offers.find(o => o.phoneNumber)?.phoneNumber
+        const phoneNumber =  userCtx.meCtx?.offers.find(o => o.phoneNumber)?.phoneNumber
         if (phoneNumber) {
             ctx.formCtx.setValue("STEP_ONE.phoneNumber", phoneNumber)
         }
@@ -134,7 +132,7 @@ const OfferFormContent: React.FC = () => {
                     throw new Error(t("offer.form.validation.createError"));
                 }
             }
-            await offersCtx.initOffers();
+            await userCtx.initOffers();
             userCtx.setLoading(false);
             if (offerId) {
                 toast.success(t("offer.form.successUpdate"));
