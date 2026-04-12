@@ -114,7 +114,6 @@ const WorkerView: React.FC = () => {
             items: []
         }
 
-        // TODO translacje
         if (isMyProfile) {
             menu.items.push({
                 label: t('employeeProfile.editButton'),
@@ -139,18 +138,18 @@ const WorkerView: React.FC = () => {
             })
             if (isSavedOnList) {
                 menu.items.push({
-                    label: t('Usuń z listy zapisanych'),
+                    label: t('user.removeFromList'),
                     onClick: removeListItem
                 })
             } else {
                 menu.items.push({
-                    label: t('Zapisz na liście'),
+                    label: t('user.addToList'),
                     onClick: addListItem
                 })
             }
         }
         menu.items.push({
-            label: "Otwórz profil użytkownika",
+            label: t('user.openProfile'),
             onClick: goToUserProfile
         })
         return menu;
@@ -409,20 +408,19 @@ const WorkerView: React.FC = () => {
 
             </div>
 
-            {/* TODO translacje */}
            {!isMe && <div className="flex justify-end">
 
                 {isSavedOnList ? (
                     <Button onClick={removeListItem}
                         mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="gap-2">
                         <Ico.BOOKMARK size={14} />
-                        Usuń z listy
+                        {t('user.removeFromList')}
                     </Button>
                 ) : (
                     <Button onClick={addListItem}
                         mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="gap-2">
                         <Ico.BOOKMARK size={14} />
-                        Zapisz na liście
+                        {t('user.addToList')}
                     </Button>
                 )}
             </div>}

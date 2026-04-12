@@ -60,8 +60,7 @@ const WorkersSearchView: React.FC = () => {
                 </div>
             ) : (
                 <div className="results flex flex-col">
-                    {([...ctx.results, 
-                    ...ctx.results] ).map((profile, index) => (
+                    {(ctx.results).map((profile, index) => (
                         <WorkerSearchListItem
                             key={index}
                             worker={profile}

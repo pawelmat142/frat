@@ -54,8 +54,6 @@ const ListedItemNoteField: React.FC<ListedItemNoteFieldProps> = ({ item, open, o
         setNote('');
         setEditingNoteId(null);
         onClose();
-        // TODO translacje
-        toast.success("Notatka zapisana");
     }
 
     const editNoteProcess = async (newContent: string) => {

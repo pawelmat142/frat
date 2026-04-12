@@ -94,8 +94,7 @@ const TelegramSignPage: React.FC = () => {
                         navigator.clipboard.readText().then(text => {
                             setPin(text);
                         })
-                        // TODO
-                    }}>Paste from clipboard</Button>
+                    }}>{t("signin.pasteFromClipboard")}</Button>
                 </div>
 
                 <Button

@@ -90,8 +90,7 @@ export const HEADER_STATES = (navigate: NavigateFunction) => {
         },
         [Path.MY_LIST]: {
             leftBtn: <HeaderBackBtn />,
-            // TODO translacja
-            title: 'Moja lista',
+            title: 'user.myList',
         }
     }
 }

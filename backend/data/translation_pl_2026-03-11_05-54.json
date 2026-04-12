@@ -48,13 +48,23 @@
     },
     "user": {
       "lastSeen": "Ostatnio widziany",
+      "openProfile": "Otwórz profil użytkownika",
       "error": {
         "notFound": "Nie znaleziono użytkownika",
         "invalidRole": "Nieprawidłowa rola",
         "cannotDelete": "Nie można usunąć użytkownika",
         "missingRoles": "Brak ról",
         "userInitError": "Błąd podczas inicjalizacji kontekstu użytkownika"
-      }
+      },
+      "myList": "Moja lista",
+      "removeFromList": "Usuń z mojej listy",
+      "addToList": "Dodaj do mojej listy",
+      "removeFromListPopupMessage": "Potwierdź usunięcie z listy",
+      "findTechnician": "Znajdź technika",
+      "browseOffers": "Przeglądaj oferty",
+      "myWorkerProfile": "Mój profil technika",
+      "addWorkerProfile": "Dodaj swój profil technika",
+      "addOffer": "Dodaj nową ofertę"
     },
     "error": {
       "missingUserId": "Brak ID użytkownika",
@@ -66,6 +76,7 @@
     "offer": {
       "add": "Dodaj ofertę",
       "workLocation": "Lokalizacja",
+      "recentlySeen": "Ostatnio oglądane oferty",
       "form": {
         "title": "Formularz oferty pracy",
         "success": "Oferta została pomyślnie utworzona",
@@ -228,7 +239,11 @@
       "alreadyHaveAccount": "Masz już konto?",
       "forgotPasswordTitle": "Resetowanie hasła",
       "invalidOrExpiredPin": "PIN nieprawidłowy lub wygasł. Spróbuj ponownie.",
-      "forgotPasswordSuccess": "Jeśli email istnieje, wysłano link do resetu hasła."
+      "forgotPasswordSuccess": "Jeśli email istnieje, wysłano link do resetu hasła.",
+      "logoutPopupTitle": "Potwierdzenie wylogowania",
+      "logoutPopupMessage": "Czy na pewno chcesz się wylogować?",
+      "logoutPopupConfirm": "Wyloguj się",
+      "pasteFromClipboard": "Wklej ze schowka"
     },
     "signup": {
       "email": "Email",
@@ -524,6 +539,7 @@
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",
       "certificates": "Certyfikaty",
+      "recentlySeen": "Ostatnio oglądani technicy",
       "worksInIndurstryYears": "Pracuje w branży od {{years}} lat",
       "worksInIndurstryMonths": "Pracuje w branży od {{months}} miesięcy",
       "skills": "Umiejętności / doświadczenie",

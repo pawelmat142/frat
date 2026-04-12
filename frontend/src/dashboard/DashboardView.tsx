@@ -35,26 +35,24 @@ const DashboardView: React.FC = () => {
         return <Loading></Loading>
     }
 
-    // TODO translacje
     const logout = async () => {
         const confirmed = await confirm({
-            title: "Czy na pewno chcesz się wylogować?",
-            message: "Potwierdź, aby kontynuować.",
-            confirmText: "Wyloguj się",
+            title: t("signin.logoutPopupTitle"),
+            message: t("signin.logoutPopupMessage"),
+            confirmText: t("signin.logoutPopupConfirm"),
         })
         if (confirmed) {
             AuthService.logout();
         }
     }
 
-    // TODO translacje
     const quickActions: MenuItem[] = [{
         label: "Admin panel",
         icon: Ico.SETTINGS,
         if: isDesktop && Util.hasPermission([UserRoles.ADMIN, UserRoles.SUPERADMIN], me),
         onClick: () => navigate(Path.ADMIN_DICTIONARIES)
     }, {
-        label: "Moja lista",
+        label: t("user.myList"),
         icon: Ico.BOOKMARK,
         if: myListedItems?.length,
         onClick: () => navigate(Path.MY_LIST)
@@ -64,50 +62,50 @@ const DashboardView: React.FC = () => {
         icon: Ico.DOWNLOAD,
         onClick: install
     }, {
-        label: "Znajdź technika",
+        label: t("user.findTechnician"),
         icon: Ico.SEARCH,
         onClick: () => navigate(Path.WORKERS_SEARCH)
     }, {
-        label: "Przeglądaj oferty",
+        label: t("user.browseOffers"),
         icon: Ico.CATEGORIES,
         onClick: () => navigate(Path.OFFERS_SEARCH)
     }, {
         if: userCtx.meCtx?.workerProfile,
         icon: Ico.EDIT,
-        label: "Mój profil technika",
+        label: t("user.myWorkerProfile"),
         onClick: () => navigate(Path.getWorkerProfilePath(userCtx.meCtx!.workerProfile!.displayName)),
     }, {
         if: !userCtx.meCtx?.workerProfile,
         icon: Ico.ADD_USER,
-        label: "Dodaj swój profil technika",
+        label: t("user.addWorkerProfile"),
         onClick: () => navigate(Path.WORKER_FORM)
     }, {
-        label: "Dodaj ofertę",
+        label: t("user.addOffer"),
         icon: Ico.OFFER,
         onClick: () => navigate(Path.OFFER_FORM)
     }, {
         if: userCtx.meCtx?.offers?.length,
         icon: Ico.OFFER,
-        label: "Moje oferty",
+        label: t("user.myOffers"),
         onClick: () => navigate(Path.getOffersPath(me.uid))
     }, {
         icon: Ico.CHAT,
-        label: "Wiadomości",
+        label: t("chat.chats"),
         onClick: () => navigate(Path.CHATS)
     }, {
         icon: Ico.FRIENDS,
-        label: "Znajomi",
+        label: t("account.friends"),
         onClick: () => navigate(Path.getFriendsPath(me.uid))
     }, {
-        label: "Powiadomienia",
+        label: t("notification.header"),
         icon: Ico.NOTIFICATION,
         onClick: () => navigate(Path.NOTIFICATIONS)
     }, {
-        label: "Ustawienia",
+        label: t("common.settings"),
         icon: Ico.SETTINGS,
         onClick: () => navigate(Path.SETTINGS)
     }, {
-        label: "Wyloguj się",
+        label: t("signin.logout"),
         icon: Ico.SIGN_OUT,
         onClick: logout
     }]

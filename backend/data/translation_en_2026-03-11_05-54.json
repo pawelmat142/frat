@@ -48,13 +48,24 @@
     },
     "user": {
       "lastSeen": "Last seen",
+      "openProfile": "Open user profile",
       "error": {
         "notFound": "User not found",
         "invalidRole": "Invalid role",
         "cannotDelete": "Cannot delete user",
         "missingRoles": "Missing roles",
         "userInitError": "Error initializing user context"
-      }
+      },
+      "myList": "My list",
+      "removeFromList": "Remove from my list",
+      "addToList": "Add to my list",
+      "removeFromListPopupMessage": "Confirm removal from list",
+      "findTechnician": "Find technician",
+      "browseOffers": "Browse offers",
+      "myWorkerProfile": "My worker profile",
+      "addWorkerProfile": "Add worker profile",
+      "addOffer": "Add new offer"
+
     },
     "error": {
       "missingUserId": "User ID is missing",
@@ -66,6 +77,7 @@
     "offer": {
       "add": "Add offer",
       "workLocation": "Location",
+      "recentlySeen": "Recently seen offers",
       "form": {
         "title": "Job offer form",
         "success": "Offer created successfully",
@@ -226,7 +238,11 @@
       "alreadyHaveAccount": "Already have an account?",
       "forgotPasswordTitle": "Password reset",
       "invalidOrExpiredPin": "Invalid or expired PIN. Please try again.",
-      "forgotPasswordSuccess": "If the email exists, a reset link has been sent."
+      "forgotPasswordSuccess": "If the email exists, a reset link has been sent.",
+      "logoutPopupTitle": "Logout confirmation",
+      "logoutPopupMessage": "Are you sure you want to log out?",
+      "logoutPopupConfirm": "Logout",
+      "pasteFromClipboard": "Paste from clipboard"
     },
     "signup": {
       "email": "Email",
@@ -530,6 +546,7 @@
     "employeeProfile": {
       "edit": "Edit worker profile",
       "certificates": "Certificates",
+      "recentlySeen": "Recently seen technicians",
       "worksInIndurstryYears": "Works in the industry for {{years}} years",
       "worksInIndurstryMonths": "Works in the industry for {{months}} months",
       "skills": "Skills / experience",
