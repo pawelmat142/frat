@@ -55,7 +55,9 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                 }
             }
         }
-        autofillLocationCountry();
+        if (!ctx.filters.locationCountry) {
+            autofillLocationCountry();
+        }
     }, [userCtx.position])
 
     if (globalCtx.loading || !globalCtx.dics.languages) {

@@ -29,17 +29,7 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
 
     const getIcon = (): React.ReactNode => {
         const result = notification.avatarRef ? null : NotificationFrontUtil.getIcon(notification)
-        console.log('getIcon result', result)
         return result;
-    }
-
-    const getMessage = () => {
-        const lettersLimit = 35
-        let msg = t(notification.message, notification.messageParams)
-        if (msg.length > lettersLimit) {
-            msg = msg.slice(0, lettersLimit) + '...'
-        }
-        return <div className="s-font">{msg}</div>
     }
 
     const getDateMsg = () => {

@@ -56,7 +56,9 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                 }
             }
         }
-        autofillLocationCountry();
+        if (!ctx.filters.locationCountries?.length) {
+            autofillLocationCountry();
+        }
     }, [userCtx.position])
 
     const submit = async () => {
