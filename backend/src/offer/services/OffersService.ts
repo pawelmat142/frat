@@ -8,6 +8,8 @@ import { ToastException } from "global/exceptions/ToastException";
 import { OffersInitialData } from "./OffersInitialData";
 import { Subscription } from "rxjs/internal/Subscription";
 import { UserService } from "user/services/UserService";
+import { EntityInteractionService } from "entity-interaction/services/EntityInteractionService";
+import { EntityInteractionEntityTypes } from "@shared/interfaces/EntityInteractionI";
 
 @Injectable()
 export class OffersService implements OnModuleInit, OnModuleDestroy {
@@ -20,6 +22,7 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         private readonly offersRepo: OffersRepo,
         private readonly createOfferService: CreateOfferService,
         private readonly userService: UserService,
+        private readonly entityInteractionService: EntityInteractionService,
     ) { }
 
     onModuleInit() {
@@ -120,21 +123,24 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         }
     }
 
-    async notifyOfferView(offerId: number, viewerUid: string): Promise<void> {
+    async notifyOfferView(offerId: number, user: UserI): Promise<void> {
         const offer = await this.offersRepo.getById(offerId);
-        if (offer.uid === viewerUid) {
-            this.logger.log(`Viewer ${viewerUid} viewed own offer ${offerId}, skipping view increment`);
+        if (offer.uid === user.uid) {
+            this.logger.log(`Viewer ${user.uid} viewed own offer ${offerId}, skipping view increment`);
             return;
         }
         if (!offer) {
             throw new ToastException('employeeProfile.exists', this);
         }
-        if (offer.views.includes(viewerUid)) {
-            this.logger.log(`Viewer ${viewerUid} viewed offer ${offerId}, skipping view increment`);
-        } else {
-            this.logger.log(`Viewer ${viewerUid} viewed offer ${offerId}, incrementing views`);
-            offer?.views.push(viewerUid);
-            await this.offersRepo.update(offer);
+
+        const isNew = await this.entityInteractionService.recordView(
+            EntityInteractionEntityTypes.OFFER,
+            offerId,
+            user.uid
+        )
+
+        if (isNew) {
+            this.offersRepo.incrementUniqueViewsCount(offerId);
         }
     }
 

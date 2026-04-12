@@ -98,7 +98,7 @@ export class OffersController {
         @CurrentUser() user: UserI,
         @Param('offerId') offerId: number
     ): Promise<void> {
-        return this.offersService.notifyOfferView(offerId, user.uid);
+        return this.offersService.notifyOfferView(offerId, user);
     }
     
     @Get('notify-offer-like/:offerId')

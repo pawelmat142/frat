@@ -96,10 +96,10 @@ export class OfferEntity implements OfferI {
 
 
 
-    // AUDIT FIELDS
-    @Column({ name: 'views', type: 'text', array: true, default: [] })
+    // STATS
+    @Column({ name: 'unique_views_count', type: 'int', default: 0 })
     @Expose()
-    views: string[];
+    uniqueViewsCount: number;
 
     @Column({ name: 'likes', type: 'text', array: true, default: [] })
     @Expose()

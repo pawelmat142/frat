@@ -30,8 +30,8 @@ export interface OfferI {
     acceptedSlots: number
 
 
-    // AUDIT FIELDS
-    views: string[]     //uids of profiles who viewed the offer
+    // STATS
+    uniqueViewsCount: number;    
     likes: string[]     //uids of profiles who liked the offer
     // TODO power fields
     shares: string[]    //uids of profiles who shared the offer

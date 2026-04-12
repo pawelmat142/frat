@@ -89,7 +89,7 @@ const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
             <div className="flex w-full justify-between mt-2">
                 <span className="xs-font secondary-text">
                     <Visibility fontSize="small" className="secondary-text mr-1" />
-                    {t('offer.views')}: {offer.views?.length || 0}
+                    {t('offer.views')}: {offer.uniqueViewsCount || 0}
                 </span>
                 <span className="xs-font secondary-text">
                     {t('offer.likes')}: {offer.likes?.length || 0}

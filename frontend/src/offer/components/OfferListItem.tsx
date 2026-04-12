@@ -117,7 +117,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
             {categoryChip}
             <div>
                 <Visibility fontSize="inherit" className="secondary-text mr-1" />
-                <span className="xs-font">{offer.views?.length || 0}</span>
+                <span className="xs-font">{offer.uniqueViewsCount || 0}</span>
             </div>
             <div>
                 <ThumbUp fontSize="inherit" className="secondary-text mr-1" />

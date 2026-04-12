@@ -57,4 +57,10 @@ export class OffersRepo {
         await this.offerRepository.save(offers);
     }
 
+    public incrementUniqueViewsCount(offerId: number): Promise<void> {
+        return this.offerRepository.increment({ offerId }, 'uniqueViewsCount', 1)
+            .then(() => {
+                this.logger.log(`Incremented uniqueViewsCount for offer ${offerId}`);
+            });
+    }
 }

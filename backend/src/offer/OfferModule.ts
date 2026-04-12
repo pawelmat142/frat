@@ -11,6 +11,7 @@ import { CreateOfferService } from './services/CreateOfferService';
 import { OffersSearchService } from './services/OffersSearchService';
 import { AdminOffersController } from './AdminOffersController';
 import { UserModule } from 'user/UserModule';
+import { EntityInteractionModule } from 'entity-interaction/EntityInteractionModule';
 
 @Module({
     imports: [
@@ -20,7 +21,8 @@ import { UserModule } from 'user/UserModule';
 
         AuthModule,
         DictionariesModule,
-        UserModule
+        UserModule,
+        EntityInteractionModule,
     ],
     providers: [
         OffersService,
