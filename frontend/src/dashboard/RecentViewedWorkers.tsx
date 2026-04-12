@@ -11,9 +11,9 @@ const RecentViewedWorkers: React.FC = () => {
     }
 
     // TODO translate
-    return (<div className="pt-10">
+    return (<div className="pt-7">
 
-        <div className="px-5 pb-3 secondary-text">Ostatnio przeglądani technicy:</div>
+        <div className="px-5 pb-2 secondary-text">Ostatnio przeglądani technicy:</div>
 
         {userCtx.meCtx.recentViewedWorkers.map(item => {
             const worker = item.data as WorkerI;

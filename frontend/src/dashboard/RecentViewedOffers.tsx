@@ -11,9 +11,9 @@ const RecentViewedOffers: React.FC = () => {
     }
 
     // TODO translate
-    return (<div className="pt-10">
+    return (<div className="pt-7">
 
-        <div className="px-5 pb-3 secondary-text">Ostatnio przeglądane oferty:</div>
+        <div className="px-5 pb-2 secondary-text">Ostatnio przeglądane oferty:</div>
 
         {userCtx.meCtx.recentViewedOffers.map(item => {
             const offer = item.data as OfferI;

@@ -17,6 +17,8 @@ import { UserListedItemService } from "user/services/UserListedItemService";
 import { toast } from "react-toastify";
 import { useConfirm } from "global/providers/PopupProvider";
 import ListedItemNoteField from "user/components/ListedItemNoteField";
+import WorkerRecentViewListItem from "employee/components/ListItems/WorkerRecentViewListItem";
+import OfferRecentViewListItem from "offer/components/ListItems/OfferRecentViewListItem";
 
 const MyListedItemsView: React.FC = () => {
 
@@ -94,10 +96,11 @@ const MyListedItemsView: React.FC = () => {
                             return (
                                 <div key={index} className={`list-item-border${index === 0 ? " first" : ""}${index === (items?.length ?? 0) - 1 ? " last" : ""}`}>
                                     <SwipeableRow ref={el => el ? swipeRefs.current.set(item.id, el) : swipeRefs.current.delete(item.id)} actions={rowActions}>
-                                        <WorkerListItem className="primary-bg"
+                                        <WorkerRecentViewListItem className="primary-bg"
                                             worker={item.data as WorkerI}
                                             disableDefaultBorder
-                                        ></WorkerListItem>
+                                            date={item.listedAt}
+                                        ></WorkerRecentViewListItem>
                                     </SwipeableRow>
                                     <ListedItemNoteField
                                         item={item}
@@ -112,12 +115,13 @@ const MyListedItemsView: React.FC = () => {
                             return (
                                 <React.Fragment key={item.data.offerId}>
                                     <SwipeableRow ref={el => el ? swipeRefs.current.set(item.id, el) : swipeRefs.current.delete(item.id)} actions={rowActions}>
-                                        <OfferSearchListItem
+                                        <OfferRecentViewListItem
                                             offer={item.data}
                                             first={index === 0}
                                             last={index === (items?.length ?? 0) - 1}
                                             disableDefaultBorder
-                                        ></OfferSearchListItem>
+                                            date={item.listedAt}
+                                        ></OfferRecentViewListItem>
                                     </SwipeableRow>
                                     <ListedItemNoteField
                                         item={item}
