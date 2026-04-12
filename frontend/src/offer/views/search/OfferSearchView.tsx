@@ -5,7 +5,7 @@ import { useOfferSearch } from "./OfferSearchProvider";
 import Loading from "global/components/Loading";
 import OfferSearchFilters from "./OfferSearchFilters";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
-import OfferListItem from "offer/components/OfferListItem";
+import OfferSearchListItem from "offer/components/ListItems/OfferSearchListItem";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
 import { Ico } from "global/icon.def";
 import { AppConfig } from "@shared/AppConfig";
@@ -59,7 +59,7 @@ const OfferSearchView: React.FC = () => {
             ) : (
                 <div className="results flex flex-col">
                     {(ctx.results ?? []).map((offer, index) => (
-                        <OfferListItem
+                        <OfferSearchListItem
                             key={offer.offerId}
                             offer={offer}
                             first={index === 0}

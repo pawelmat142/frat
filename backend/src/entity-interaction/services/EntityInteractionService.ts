@@ -57,4 +57,12 @@ export class EntityInteractionService {
       limit
     );
   }
+
+  public async getRecentOffersViews(uid: string, limit = 3): Promise<EntityInteractionI[]> {
+    return this.repo.findRecentInteractions(uid,
+      EntityInteractionEntityTypes.OFFER,
+      EntityInteractionEventTypes.VIEW,
+      limit
+     );
+  }
 }

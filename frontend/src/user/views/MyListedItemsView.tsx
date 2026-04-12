@@ -7,7 +7,7 @@ import IconButton from "global/components/controls/IconButon";
 import { Ico } from "global/icon.def";
 import Loading from "global/components/Loading";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import OfferListItem from "offer/components/OfferListItem";
+import OfferSearchListItem from "offer/components/ListItems/OfferSearchListItem";
 import { useTranslation } from "react-i18next";
 import { FaUserSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -112,12 +112,12 @@ const MyListedItemsView: React.FC = () => {
                             return (
                                 <React.Fragment key={item.data.offerId}>
                                     <SwipeableRow ref={el => el ? swipeRefs.current.set(item.id, el) : swipeRefs.current.delete(item.id)} actions={rowActions}>
-                                        <OfferListItem
+                                        <OfferSearchListItem
                                             offer={item.data}
                                             first={index === 0}
                                             last={index === (items?.length ?? 0) - 1}
                                             disableDefaultBorder
-                                        ></OfferListItem>
+                                        ></OfferSearchListItem>
                                     </SwipeableRow>
                                     <ListedItemNoteField
                                         item={item}

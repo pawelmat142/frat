@@ -1,21 +1,20 @@
-import { WorkerI } from "@shared/interfaces/WorkerI"
+import { OfferI } from "@shared/interfaces/OfferI"
 import { useTranslation } from "react-i18next";
-import WorkerListItem from "./WorkerListItem";
+import OfferListItem from "./OfferListItem";
 import DateDisplay from "global/components/ui/DateDisplay";
 
 interface Props {
-    worker: WorkerI,
+    offer: OfferI,
     first?: boolean,
     last?: boolean,
-    className?: string,
     disableDefaultBorder?: boolean
     date: Date
 }
 
-const WorkerRecentViewListItem: React.FC<Props> = ({ worker, first, last, className, disableDefaultBorder, date }) => {
+const OfferRecentViewListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder, date }) => {
 
     const { t } = useTranslation();
-
+    
     const rightSection = <div className="flex justify-end items-center gap-2">
         <div className="secondary-text s-font no-wrap pr-3">{DateDisplay({
             date,
@@ -23,15 +22,14 @@ const WorkerRecentViewListItem: React.FC<Props> = ({ worker, first, last, classN
         })} </div>
     </div>
 
-    return <WorkerListItem
-        worker={worker}
+    return <OfferListItem
+        offer={offer}
         first={first}
         last={last}
-        className={className}
         disableDefaultBorder={disableDefaultBorder}
         rightSection={rightSection}
-    ></WorkerListItem>
+    ></OfferListItem>
 
 }
 
-export default WorkerRecentViewListItem;
+export default OfferRecentViewListItem;

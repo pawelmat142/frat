@@ -50,6 +50,7 @@ export class UserContextService {
         const chats = await this.chatService.getUserChats(user.uid);
         const listedItems = await this.userListedItemService.listUserItems(user.uid, UserListedItemTypes.DEFAULT);
         const recentViewedWorkers = await this.getRecentViewedWorkersListedItems(user.uid);
+        const recentViewedOffers = await this.getRecentViewedOffersListedItems(user.uid);
 
         const meCtx: MeUserContext = {
             ...ctx,
@@ -58,6 +59,7 @@ export class UserContextService {
             chats,
             listedItems,
             recentViewedWorkers,
+            recentViewedOffers
         }
         await this.userService.updateLastSeenAt(user.uid);
         return meCtx;
@@ -77,5 +79,21 @@ export class UserContextService {
             listedAt: recentViews.find(v => v.entityId === profile.workerId)?.date,
         }))
         return recentViewedWorkers;
+    }
+
+    private async getRecentViewedOffersListedItems(uid: string): Promise<UserListedItem[]> {
+        const recentViews = await this.entityInteractionService.getRecentOffersViews(uid);
+        const recentViewedOfferIds = recentViews.map(v => v.entityId);
+        const recentViewedOffersEntities = await this.offersService.getOffersByIds(recentViewedOfferIds);
+        const recentViewedOffers: UserListedItem[] = recentViewedOffersEntities.map(offer => ({
+            id: recentViews.find(v => v.entityId === offer.offerId)?.id || 0,
+            uid: uid,
+            reference: String(offer.offerId),
+            referenceType: UserListedItemReferenceTypes.OFFER,
+            listedType: UserListedItemTypes.VIEW,
+            data: offer,
+            listedAt: recentViews.find(v => v.entityId === offer.offerId)?.date,
+        }))
+        return recentViewedOffers;
     }
 }

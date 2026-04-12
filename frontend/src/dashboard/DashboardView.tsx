@@ -17,6 +17,7 @@ import { Util } from "@shared/utils/util";
 import { UserRoles } from "@shared/interfaces/UserI";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import RecentViewedWorkers from "./RecentViewedWorkers";
+import RecentViewedOffers from "./RecentViewedOffers";
 
 const DashboardView: React.FC = () => {
 
@@ -122,6 +123,8 @@ const DashboardView: React.FC = () => {
         <ListUi items={quickActions} itemClassName="m-font py-3"></ListUi>
 
         <RecentViewedWorkers></RecentViewedWorkers>
+
+        <RecentViewedOffers></RecentViewedOffers>
 
         <div className="px-5">
             <ReportForm />

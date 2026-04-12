@@ -9,7 +9,7 @@ import { BtnSizes } from "global/interface/controls.interface";
 import { useEffect, useState } from "react";
 import { OfferI } from "@shared/interfaces/OfferI";
 import { OffersService } from "offer/services/OffersService";
-import OfferListItem from "offer/components/OfferListItem";
+import OfferSearchListItem from "offer/components/ListItems/OfferSearchListItem";
 
 const UserOffersList: React.FC = () => {
 
@@ -68,12 +68,12 @@ const UserOffersList: React.FC = () => {
 
             <div className="results flex flex-col">
                 {!!globalCtx.dics.languages && offers.map((offer, index) => (
-                    <OfferListItem
+                    <OfferSearchListItem
                         key={offer.offerId}
                         offer={offer}
                         first={index === 0}
                         last={index === offers.length - 1}
-                    ></OfferListItem>
+                    ></OfferSearchListItem>
                 ))}
             </div>
 

@@ -1,10 +1,9 @@
 import { OfferI } from "@shared/interfaces/OfferI"
-import { Path } from "../../path";
+import { Path } from "../../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ThumbUp, Visibility } from "@mui/icons-material";
 import ListItem from "global/components/ListItem";
-import IconButton from "global/components/controls/IconButon";
 import { ChatService } from "chat/services/ChatService";
 import { toast } from "react-toastify";
 import { useIsDesktop } from "global/hooks/isMobile";
@@ -22,11 +21,12 @@ interface Props {
     first?: boolean,
     last?: boolean,
     disableDefaultBorder?: boolean
+    rightSection?: React.ReactNode
 }
 
 const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS; 
 
-const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder }) => {
+const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder, rightSection }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -79,23 +79,6 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
         }
         window.location.href = `tel:${offer.phoneNumber.prefix}${offer.phoneNumber.number}`;
     }
-
-    const rightSection = isMyOffer ? null : <div className="flex justify-end items-center gap-2">
-        {offer.phoneNumber && (
-            <IconButton onClick={(e) => {
-                e.stopPropagation();
-                openPhoneCall();
-            }}
-                icon={<Ico.PHONE size={20} />}
-            />
-        )}
-        <IconButton onClick={(e) => {
-            e.stopPropagation();
-            openChat();
-        }}
-            icon={<Ico.MSG size={20} />}
-        />
-    </div>
 
     const categoryChip = offer.category ? (
         <Chips

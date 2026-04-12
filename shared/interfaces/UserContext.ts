@@ -21,4 +21,5 @@ export interface MeUserContext extends UserContext {
     listedItems?: UserListedItem[]
 
     recentViewedWorkers?: UserListedItem[]
+    recentViewedOffers?: UserListedItem[]
 }
