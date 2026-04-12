@@ -1,11 +1,9 @@
-import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { WorkerI, WorkerWithMutualFriends } from "@shared/interfaces/WorkerI"
-import { Path } from "../../path";
+import { Path } from "../../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ThumbUp, Visibility } from "@mui/icons-material";
 import ListItem from "global/components/ListItem";
-import IconButton from "global/components/controls/IconButon";
 import { ChatService } from "chat/services/ChatService";
 import { toast } from "react-toastify";
 import { useIsDesktop } from "global/hooks/isMobile";
@@ -16,14 +14,14 @@ import { PositionUtil } from "@shared/utils/PositionUtil";
 
 interface Props {
     worker: WorkerI,
-    languagesDictionary: DictionaryI
     first?: boolean,
     last?: boolean,
     className?: string,
     disableDefaultBorder?: boolean
+    rightSection?: React.ReactNode
 }
 
-const   WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first, last, className, disableDefaultBorder }) => {
+const WorkerListItem: React.FC<Props> = ({ worker, first, last, className, disableDefaultBorder, rightSection }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -76,20 +74,6 @@ const   WorkerListItem: React.FC<Props> = ({ worker, languagesDictionary, first,
     }
     const mutualFriendsUids = getMutualFriendsUids(worker);
 
-    const rightSection = isMyProfile ? null : <div className="flex justify-end items-center gap-2">
-        <IconButton onClick={(e) => {
-            e.stopPropagation();
-            openPhoneCall();
-        }}
-            icon={<Ico.PHONE size={20} />}
-        ></IconButton>
-        <IconButton onClick={(e) => {
-            e.stopPropagation();
-            openChat();
-        }}
-            icon={<Ico.MSG size={20} />}
-        ></IconButton>
-    </div>
 
     const bottomLeft = <div className="flex items-center gap-3">
         <div>

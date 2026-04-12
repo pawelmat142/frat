@@ -12,11 +12,13 @@ export interface UserContext {
     friendships: FriendshipI[]
     offers: OfferI[]
     workerProfile?: WorkerWithCertificates
-    listedItems?: UserListedItem[]
 }
 
 export interface MeUserContext extends UserContext {
     settings: SettingsI
     notifications: NotificationI[]
     chats: ChatWithMembers[]
+    listedItems?: UserListedItem[]
+
+    recentViewedWorkers?: UserListedItem[]
 }

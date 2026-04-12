@@ -79,6 +79,10 @@ body {
   }
 }
 
+.no-wrap {
+  white-space: nowrap;
+}
+
 @media screen and (min-width: $desktop) {
   .app-main {
     padding-bottom: 0;

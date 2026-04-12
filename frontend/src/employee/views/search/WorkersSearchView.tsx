@@ -6,10 +6,10 @@ import WorkersSearchFilters from "./WorkersSearchFilters";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
 import { FaUserSlash } from "react-icons/fa";
-import WorkerListItem from "employee/components/WorkerListItem";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
 import { Ico } from "global/icon.def";
 import { AppConfig } from "@shared/AppConfig";
+import WorkerSearchListItem from "employee/components/ListItems/WorkerSearchListItem";
 
 const WorkersSearchView: React.FC = () => {
 
@@ -62,13 +62,12 @@ const WorkersSearchView: React.FC = () => {
                 <div className="results flex flex-col">
                     {([...ctx.results, 
                     ...ctx.results] ).map((profile, index) => (
-                        <WorkerListItem
+                        <WorkerSearchListItem
                             key={index}
                             worker={profile}
-                            languagesDictionary={globalCtx.dics.languages!}
                             first={index === 0}
                             last={index === (ctx.results?.length ?? 0) - 1}
-                        ></WorkerListItem>
+                        ></WorkerSearchListItem>
                     ))}
                     <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} />
                 </div>

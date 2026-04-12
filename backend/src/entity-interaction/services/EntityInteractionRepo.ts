@@ -32,6 +32,16 @@ export class EntityInteractionRepo {
       .getOne();
   }
 
+  public findRecentInteractions(uid: string, entityType: EntityInteractionEntityType, eventType: EntityInteractionEventType, limit: number): Promise<EntityInteractionEntity[]> {
+    return this.repository.createQueryBuilder('i')
+      .where('i.entity_type = :entityType', { entityType })
+      .andWhere('i.event_type = :eventType', { eventType })
+      .andWhere('i.user_uid = :uid', { uid })
+      .orderBy('i.date', 'DESC')
+      .limit(limit)
+      .getMany();
+  }
+
   public save(interaction: Partial<EntityInteractionEntity>): Promise<EntityInteractionEntity> {
     return this.repository.save(this.repository.create(interaction));
   }

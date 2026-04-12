@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { UserListedItem, UserListedItemReferenceTypes } from "@shared/interfaces/UserListedItem";
 import { WorkerI } from "@shared/interfaces/WorkerI";
-import WorkerListItem from "employee/components/WorkerListItem";
+import WorkerListItem from "employee/components/ListItems/WorkerListItem";
 import SwipeableRow, { SwipeableRowRef } from "global/components/SwipeableRow";
 import IconButton from "global/components/controls/IconButon";
 import { Ico } from "global/icon.def";
@@ -96,7 +96,6 @@ const MyListedItemsView: React.FC = () => {
                                     <SwipeableRow ref={el => el ? swipeRefs.current.set(item.id, el) : swipeRefs.current.delete(item.id)} actions={rowActions}>
                                         <WorkerListItem className="primary-bg"
                                             worker={item.data as WorkerI}
-                                            languagesDictionary={globalCtx.dics.languages!}
                                             disableDefaultBorder
                                         ></WorkerListItem>
                                     </SwipeableRow>

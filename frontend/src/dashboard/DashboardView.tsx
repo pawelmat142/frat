@@ -16,6 +16,7 @@ import { usePwaInstall } from "global/hooks/usePwaInstall";
 import { Util } from "@shared/utils/util";
 import { UserRoles } from "@shared/interfaces/UserI";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import RecentViewedWorkers from "./RecentViewedWorkers";
 
 const DashboardView: React.FC = () => {
 
@@ -120,11 +121,7 @@ const DashboardView: React.FC = () => {
 
         <ListUi items={quickActions} itemClassName="m-font py-3"></ListUi>
 
-
-        <div className="px-5 mt-10">
-            <div>Proponowane oferty:</div>
-            <div>kiedyś...</div>
-        </div>
+        <RecentViewedWorkers></RecentViewedWorkers>
 
         <div className="px-5">
             <ReportForm />

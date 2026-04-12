@@ -11,6 +11,7 @@ import { WorkerModule } from 'employee/WorkerModule';
 import { UserContextController } from './UserContextController';
 import { AuthModule } from 'auth/AuthModule';
 import { UserListedModule } from 'user/user-listed-module/UserListedModule';
+import { EntityInteractionModule } from 'entity-interaction/EntityInteractionModule';
 
 @Module({
     imports: [
@@ -22,7 +23,8 @@ import { UserListedModule } from 'user/user-listed-module/UserListedModule';
         SettingsModule,
         NotificationModule,
         ChatModule,
-        UserListedModule
+        UserListedModule,
+        EntityInteractionModule,
     ],
     controllers: [
         UserContextController,

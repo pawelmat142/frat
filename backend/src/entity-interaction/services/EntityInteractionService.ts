@@ -2,7 +2,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
   EntityInteractionEntityType,
+  EntityInteractionEntityTypes,
   EntityInteractionEventTypes,
+  EntityInteractionI,
   VIEW_DEDUP_WINDOW_DAYS,
 } from '@shared/interfaces/EntityInteractionI';
 import { EntityInteractionRepo } from './EntityInteractionRepo';
@@ -46,5 +48,13 @@ export class EntityInteractionService {
 
     this.logger.log(`Recorded view (counted): ${userUid} → ${entityType}#${entityId}`);
     return true;
+  }
+
+  public async getRecentWorkersViews(uid: string, limit = 3): Promise<EntityInteractionI[]> {
+    return this.repo.findRecentInteractions(uid,
+      EntityInteractionEntityTypes.WORKER,
+      EntityInteractionEventTypes.VIEW,
+      limit
+    );
   }
 }
