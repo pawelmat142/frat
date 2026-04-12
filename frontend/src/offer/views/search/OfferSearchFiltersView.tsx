@@ -81,7 +81,7 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
             >
 
                 {loadingLocation ? (
-                    <SkeletonControl />
+                    <SkeletonControl className="w-full mt-5" />
                 ) : (
                     <Controller
                         name="locationCountries"
