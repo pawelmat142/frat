@@ -78,6 +78,8 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
 
     const startDateRequired = FormValidator.required(t);
 
+    f.register('locationCountry', FormValidator.required(t));
+
     const submit = async () => {
         ctx.setFiltersWithSearchAndNavigate(formState);
     }

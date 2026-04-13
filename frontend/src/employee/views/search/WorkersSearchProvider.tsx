@@ -9,7 +9,6 @@ import { GoogleMapService } from "global/services/GoogleMapService";
 import { AppConfig } from "@shared/AppConfig";
 import PseudoView from "global/components/PseudoView";
 import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
-import { wait } from "global/utils/utils";
 import { NavBus } from "global/utils/PseudoViewBus";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 
