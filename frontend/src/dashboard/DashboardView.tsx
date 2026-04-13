@@ -70,7 +70,7 @@ const DashboardView: React.FC = () => {
         icon: Ico.CATEGORIES,
         onClick: () => navigate(Path.OFFERS_SEARCH)
     }, {
-        if: userCtx.meCtx?.workerProfile,
+        if: !!userCtx.meCtx?.workerProfile,
         icon: Ico.EDIT,
         label: t("user.myWorkerProfile"),
         onClick: () => navigate(Path.getWorkerProfilePath(userCtx.meCtx!.workerProfile!.displayName)),

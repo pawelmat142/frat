@@ -22,28 +22,55 @@ export class UserListedItemService {
     ) { }
 
     public async listUserItems(uid: string, listedType?: UserListedItemType): Promise<UserListedItem[]> {
-        const result = await (listedType
+        const items = await (listedType
             ? this.repository.find({ where: { uid, listedType } })
             : this.repository.find({ where: { uid } }));
 
-        const workerIds = result.filter(i => i.referenceType === UserListedItemReferenceTypes.WORKER).map(i => Number(i.reference));
-        const offerIds = result.filter(i => i.referenceType === UserListedItemReferenceTypes.OFFER).map(i => Number(i.reference));
+        const workerIds = items.filter(i => i.referenceType === UserListedItemReferenceTypes.WORKER).map(i => Number(i.reference));
+        const offerIds = items.filter(i => i.referenceType === UserListedItemReferenceTypes.OFFER).map(i => Number(i.reference));
 
         const workersMap = new Map((await this.workersService.getWorkersByIds(workerIds)).map(w => [w.workerId, w]));
         const offersMap = new Map((await this.offersService.getOffersByIds(offerIds)).map(o => [o.offerId, o]));
-        result.forEach(item => {
+
+        const result: UserListedItem[] = [];
+
+        const itemsWithDataIds: number[] = [];
+
+        items.forEach(item => {
             if (item.referenceType === UserListedItemReferenceTypes.WORKER) {
-                item.data = workersMap.get(Number(item.reference));
+                const data = workersMap.get(Number(item.reference));
+                if (data) {
+                    item.data = data;
+                    result.push(item);
+                } else {
+                    itemsWithDataIds.push(item.id);
+                }
             }
             else if (item.referenceType === UserListedItemReferenceTypes.OFFER) {
-                item.data = offersMap.get(Number(item.reference));
+                const data = offersMap.get(Number(item.reference));
+                if (data) {
+                    item.data = data;
+                    result.push(item);
+                } else {
+                    itemsWithDataIds.push(item.id);
+                }
             }
         });
 
         this.logger.log(`Listed items for user ${uid}, listedType: ${listedType}, result:`, result);
 
+        await this.removeItemsWithMissingData(itemsWithDataIds);
+
         return result;
     }
+
+    private removeItemsWithMissingData = async (ids: number[]): Promise<void> => {
+        if (ids.length) {
+            await this.repository.delete(ids);
+            this.logger.warn(`Removed listed items with missing data, ids: ${ids.join(', ')}`);
+        }
+    }
+
 
     public async addItem(uid: string, item: AddUserListedItemDto): Promise<UserListedItem> {
         let data: any;

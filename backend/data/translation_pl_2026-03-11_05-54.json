@@ -57,6 +57,7 @@
         "userInitError": "Błąd podczas inicjalizacji kontekstu użytkownika"
       },
       "myList": "Moja lista",
+      "myOffers": "Moje oferty",
       "removeFromList": "Usuń z mojej listy",
       "addToList": "Dodaj do mojej listy",
       "removeFromListPopupMessage": "Potwierdź usunięcie z listy",

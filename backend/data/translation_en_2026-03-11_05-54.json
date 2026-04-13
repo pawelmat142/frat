@@ -57,6 +57,7 @@
         "userInitError": "Error initializing user context"
       },
       "myList": "My list",
+      "myOffers": "My offers",
       "removeFromList": "Remove from my list",
       "addToList": "Add to my list",
       "removeFromListPopupMessage": "Confirm removal from list",
