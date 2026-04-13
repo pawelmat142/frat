@@ -6,6 +6,7 @@ import { useDebouncedValue } from 'global/utils/useDebouncedValue';
 import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
 import { Close, Search } from '@mui/icons-material';
 import SkeletonControl from './SkeletonControl';
+import { AppConfig } from '@shared/AppConfig';
 
 interface PlacePrediction {
     place_id: string;
@@ -236,13 +237,15 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
         const hasSelection = !!selectedPrediction || !!displayValue;
 
         let inputClass = `pp-control-bg pp-input floating-input ${mode}`;
+
+        let myClass = 'pp-control min-height pp-input-row'
         if (fullWidth) {
             inputClass += ' w-full';
         } else {
             inputClass += ' w-fit';
         }
         if (disabled) {
-            inputClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+            myClass += AppConfig.CONTROL_DISABLED_CLASS;
         }
         if (error) {
             inputClass += ' pp-control-error';
@@ -267,7 +270,7 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
                 style={{ position: 'relative' }}
             >
                 <div className="floating-input-container">
-                    <div className="pp-control min-height pp-input-row">
+                    <div className={myClass}>
                         <input
                             ref={ref}
                             id={id}

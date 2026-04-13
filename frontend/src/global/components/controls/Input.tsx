@@ -2,6 +2,7 @@ import { ChangeEventHandler, forwardRef } from 'react';
 import { InputInterface } from '../../interface/controls.interface';
 import ControlLabel from './ControlLabel';
 import FormError from './FormError';
+import { AppConfig } from '@shared/AppConfig';
 
 const Input = forwardRef<HTMLInputElement, InputInterface>(
     ({
@@ -29,7 +30,7 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
         myClass += ' w-fit';
     }
     if (disabled) {
-        myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+        myClass += AppConfig.CONTROL_DISABLED_CLASS;
     }
     if (error) {
         myClass += ' pp-control-error';   

@@ -23,4 +23,6 @@ export const AppConfig = {
 
     ROUTER_ANIMATION_DURATION: 150, // ms
 
+    CONTROL_DISABLED_CLASS: " opacity-30 pointer-events-none cursor-not-allowed"
+
 } as const;

@@ -38,6 +38,9 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
 
     useEffect(() => {
         const autofillLocationCountry = async () => {
+            if (!userCtx.position) {
+                return;
+            }
             if (hasAutofilledLocation.current) return; // Prevent re-execution
             if (!formState.geocodedPosition && userCtx.position) {
                 try {
@@ -58,7 +61,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
         if (!ctx.filters.locationCountry) {
             autofillLocationCountry();
         }
-    }, [userCtx.position])
+    }, [])
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading></Loading>

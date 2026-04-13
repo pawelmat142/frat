@@ -6,6 +6,7 @@ import FormError from '../controls/FormError';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import DatePickerSheet from './DatePickerSheet';
 import { useTranslation } from 'react-i18next';
+import { AppConfig } from '@shared/AppConfig';
 
 export const DatePickerViews = {
     YEAR: 'year',
@@ -65,7 +66,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
         myClass += ' w-fit';
     }
     if (disabled) {
-        myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+        myClass += AppConfig.CONTROL_DISABLED_CLASS;
     }
     if (error) {
         myClass += ' pp-control-error';

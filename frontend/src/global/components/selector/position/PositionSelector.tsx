@@ -41,6 +41,8 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
             setSelectedPosition(value || null);
         }, [value]);
 
+        let inputClass = ''
+
         let myClass = `pp-control pp-position-selector floating-input ${className}`;
         if (fullWidth) {
             myClass += ' w-full';
@@ -48,7 +50,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
             myClass += ' w-fit';
         }
         if (disabled) {
-            myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+            myClass += AppConfig.CONTROL_DISABLED_CLASS;
         }
 
         const handleInputClick = async () => {
@@ -81,7 +83,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                             name={name || id}
                             type="text"
                             value={displayValue}
-                            className=""
+                            className={inputClass}
                             disabled={disabled}
                             required={required}
                             readOnly

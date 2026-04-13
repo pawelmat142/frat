@@ -2,6 +2,7 @@ import { BtnInterface, BtnModes, BtnSizes } from '../../interface/controls.inter
 import { Link } from 'react-router-dom';
 import { MouseEventHandler } from 'react';
 import { isOneOf } from '@shared/utils/util';
+import { AppConfig } from '@shared/AppConfig';
 
 const Button: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, size=BtnSizes.MEDIUM, children, fullWidth=false, className, disabled, onlyMobile, onlyDesktop, mode=BtnModes.PRIMARY }) => {
 
@@ -32,7 +33,7 @@ const Button: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, size=
         myClass += ' w-fit';
     }
     if (disabled) {
-        myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+        myClass += AppConfig.CONTROL_DISABLED_CLASS;
     }
 
     const handleClick: MouseEventHandler = (event: React.MouseEvent<HTMLButtonElement>) => {

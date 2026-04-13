@@ -4,6 +4,7 @@ import FloatingLabel from '../controls/FloatingLabel';
 import { SelectorValue, SelectorInterface, SelectorItem } from 'global/interface/controls.interface';
 import FormError from '../controls/FormError';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
+import { AppConfig } from '@shared/AppConfig';
 
 const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -36,7 +37,7 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
         myClass += ' w-fit';
     }
     if (disabled) {
-        myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+        myClass += AppConfig.CONTROL_DISABLED_CLASS;
     }
     if (error) {
         myClass += ' pp-control-error';

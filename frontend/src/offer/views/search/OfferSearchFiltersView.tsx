@@ -38,6 +38,9 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
 
     useEffect(() => {
         const autofillLocationCountry = async () => {
+            if (!userCtx.position) {
+                return;
+            }
             if (!formState.locationCountries?.length && userCtx.position) {
                 try {
                     setLoadingLocation(true);
@@ -59,7 +62,7 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
         if (!ctx.filters.locationCountries?.length) {
             autofillLocationCountry();
         }
-    }, [userCtx.position])
+    }, [])
 
     const submit = async () => {
         ctx.setFiltersWithSearchAndNavigate(formState)

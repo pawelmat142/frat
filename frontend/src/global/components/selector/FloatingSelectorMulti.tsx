@@ -3,6 +3,7 @@ import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import ArrowIcon from '../controls/ArrowIcon';
 import FloatingLabel from '../controls/FloatingLabel';
 import FormError from '../controls/FormError';
+import { AppConfig } from '@shared/AppConfig';
 
 function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
     items,
@@ -28,7 +29,7 @@ function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
         myClass += ' w-fit';
     }
     if (disabled) {
-        myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+        myClass += AppConfig.CONTROL_DISABLED_CLASS;
     }
     if (error) {
         myClass += ' pp-control-error';

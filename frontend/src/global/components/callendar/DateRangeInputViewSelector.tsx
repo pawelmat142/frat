@@ -72,7 +72,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
 
     let myClass = `pp-date-input ${className}`;
     if (disabled) {
-        myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+        myClass += AppConfig.CONTROL_DISABLED_CLASS;
     }
     if (error) {
         myClass += ' pp-control-error';

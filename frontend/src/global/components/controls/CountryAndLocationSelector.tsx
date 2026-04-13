@@ -138,63 +138,41 @@ const CountryAndLocationSelector: React.FC<Props> = ({
                 fullWidth
                 value={value.locationCountry ?? undefined}
                 label={t('employeeProfile.form.locationCountry') + (countryRequired ? '*' : '')}
-                className="w-full"
+                className="w-full mb-3"
                 error={errors?.locationCountry}
                 onSelect={(countryCode) => handleCountryChange(countryCode)}
             />
 
-            <AnimatePresence
-                onExitComplete={() => setCityAnimating(false)}
-            >
-                {!!value.locationCountry && (
-                    <motion.div
-                        key="city-control"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.35, ease: [0.22, 0.7, 0.3, 1] }}
-                        style={{ overflow: cityAnimating ? 'hidden' : 'visible' }}
-                        onAnimationStart={() => setCityAnimating(true)}
-                        onAnimationComplete={() => setCityAnimating(false)}
-                        className="mt-3"
-                    >
-                        <motion.div
-                            initial={{ y: 20, scale: 0.96 }}
-                            animate={{ y: 0, scale: 1 }}
-                            exit={{ y: 12, scale: 0.97 }}
-                            transition={{ duration: 0.35, ease: [0.22, 0.7, 0.3, 1] }}
-                        >
-                            {(loadingCity || geoLoading) ? (
-                                <SkeletonControl label={t('employeeProfile.form.city')} />
-                            ) : config.locationOption === 'searchbar' ? (
-                                <FloatingPlaceSearch
-                                    fullWidth
-                                    displayValue={value.geocodedPosition?.fullAddress || ''}
-                                    label={t('employeeProfile.form.city')}
-                                    error={errors?.geocodedPosition}
-                                    countryRestriction={value.locationCountry}
-                                    onSelect={handleCitySelect}
-                                    onClear={handleCityClear}
-                                />
-                            ) : config.locationOption === 'map' ? (
-                                <PositionSelector
-                                    label={t("offer.workLocation")}
-                                    name="location.geocodedPosition"
-                                    className="w-full"
-                                    value={value.geocodedPosition}
-                                    initialPosition={preparePosition()}
-                                    required
-                                    onChange={(p) => {
-                                        autofillCountryByPosition(p);
-                                    }}
-                                    error={errors?.geocodedPosition}
-                                />
-                            ) : null}
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
+            {(
+                (loadingCity || geoLoading) ? (
+                    <SkeletonControl label={t('employeeProfile.form.city')} />
+                ) : config.locationOption === 'searchbar' ? (
+                    <FloatingPlaceSearch
+                        fullWidth
+                        displayValue={value.geocodedPosition?.fullAddress || ''}
+                        label={t('employeeProfile.form.city')}
+                        error={errors?.geocodedPosition}
+                        countryRestriction={value.locationCountry || 'pl'}
+                        disabled={!value.locationCountry}
+                        onSelect={handleCitySelect}
+                        onClear={handleCityClear}
+                    />
+                ) : config.locationOption === 'map' ? (
+                    <PositionSelector
+                        label={t("offer.workLocation")}
+                        name="location.geocodedPosition"
+                        className="w-full"
+                        value={value.geocodedPosition}
+                        initialPosition={preparePosition()}
+                        disabled={!value.locationCountry}
+                        required
+                        onChange={(p) => {
+                            autofillCountryByPosition(p);
+                        }}
+                        error={errors?.geocodedPosition}
+                    />
+                ) : null
+            )}
             <AnimatePresence>
                 {!!value.geocodedPosition && config.showRadiusSlider && (
                     <motion.div

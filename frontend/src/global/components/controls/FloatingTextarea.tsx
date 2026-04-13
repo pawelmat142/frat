@@ -2,6 +2,7 @@ import { ChangeEventHandler, forwardRef, ReactNode, useState, useRef, useEffect 
 import { FloatingInputModes, InputInterface } from '../../interface/controls.interface';
 import FormError from './FormError';
 import FloatingLabel from './FloatingLabel';
+import { AppConfig } from '@shared/AppConfig';
 
 interface FloatingTextareaProps extends InputInterface {
     icon?: ReactNode;
@@ -38,7 +39,7 @@ const FloatingTextarea = forwardRef<HTMLTextAreaElement, FloatingTextareaProps>(
             myClass += ' w-fit';
         }
         if (disabled) {
-            myClass += ' opacity-50 pointer-events-none cursor-not-allowed';
+            myClass += AppConfig.CONTROL_DISABLED_CLASS;
         }
         if (error) {
             myClass += ' pp-control-error';
