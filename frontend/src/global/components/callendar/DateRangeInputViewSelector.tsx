@@ -72,7 +72,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
 
     let myClass = `pp-date-input ${className}`;
     if (disabled) {
-        myClass += AppConfig.CONTROL_DISABLED_CLASS;
+        myClass += ' control-disabled';
     }
     if (error) {
         myClass += ' pp-control-error';

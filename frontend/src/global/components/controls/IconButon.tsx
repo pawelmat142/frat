@@ -1,4 +1,3 @@
-import { AppConfig } from '@shared/AppConfig';
 import { BtnMode, BtnModes, BtnSize, BtnSizes } from '../../interface/controls.interface';
 import { MouseEventHandler } from 'react';
 
@@ -24,7 +23,7 @@ const IconButton: React.FC<IconBtnInterface> = ({
         myClass += ` ${className}`;
     }
     if (disabled) {
-        myClass += AppConfig.CONTROL_DISABLED_CLASS;
+        myClass += ' control-disabled';
         }
 
     const handleClick: MouseEventHandler = (event: React.MouseEvent<HTMLButtonElement>) => {

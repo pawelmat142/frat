@@ -6,7 +6,6 @@ import { useDebouncedValue } from 'global/utils/useDebouncedValue';
 import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
 import { Close, Search } from '@mui/icons-material';
 import SkeletonControl from './SkeletonControl';
-import { AppConfig } from '@shared/AppConfig';
 
 interface PlacePrediction {
     place_id: string;
@@ -245,7 +244,7 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
             inputClass += ' w-fit';
         }
         if (disabled) {
-            myClass += AppConfig.CONTROL_DISABLED_CLASS;
+            myClass += ' control-disabled';
         }
         if (error) {
             inputClass += ' pp-control-error';

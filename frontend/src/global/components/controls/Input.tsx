@@ -30,7 +30,7 @@ const Input = forwardRef<HTMLInputElement, InputInterface>(
         myClass += ' w-fit';
     }
     if (disabled) {
-        myClass += AppConfig.CONTROL_DISABLED_CLASS;
+        myClass += ' control-disabled';
     }
     if (error) {
         myClass += ' pp-control-error';   

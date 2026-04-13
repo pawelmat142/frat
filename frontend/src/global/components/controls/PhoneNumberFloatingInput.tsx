@@ -7,7 +7,6 @@ import { DictionaryService } from 'global/services/DictionaryService';
 import { DictionaryElement, DictionaryI } from '@shared/interfaces/DictionaryI';
 import { useTranslation } from 'react-i18next';
 import { ParsedPhoneNumber } from '@shared/interfaces/WorkerI';
-import { AppConfig } from '@shared/AppConfig';
 
 interface PhoneNumberFloatingInputProps {
     id?: string;
@@ -122,7 +121,7 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
             containerClass += ' w-fit';
         }
         if (disabled) {
-            containerClass += AppConfig.CONTROL_DISABLED_CLASS;
+            containerClass += ' control-disabled';
         }
         if (error) {
             containerClass += ' pp-control-error';

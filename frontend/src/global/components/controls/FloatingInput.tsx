@@ -2,7 +2,6 @@ import React, { ChangeEventHandler, forwardRef, ReactNode, useState } from 'reac
 import { FloatingInputModes, InputInterface } from '../../interface/controls.interface';
 import FormError from './FormError';
 import FloatingLabel from './FloatingLabel';
-import { AppConfig } from '@shared/AppConfig';
 
 interface FloatingInputProps extends InputInterface {
     icon?: ReactNode;
@@ -41,7 +40,7 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
             myClass += ' w-fit';
         }
         if (disabled) {
-            myClass += AppConfig.CONTROL_DISABLED_CLASS;
+            myClass += ' control-disabled';
         }
         if (error) {
             myClass += ' pp-control-error';

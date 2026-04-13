@@ -19,6 +19,12 @@ input[type="number"] {
 $btnPaddingX: 0.75rem;
 $btnPaddingY: 0.375rem;
 
+.control-disabled {
+  opacity: .2;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 .icon-btn {
   display: flex;
   align-items: center;

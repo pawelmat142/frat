@@ -41,6 +41,7 @@ interface Props {
     radiusSteps?: number[];
     countryRequired?: boolean;
     config?: Config;
+    loadingInput?: boolean;
 }
 
 const CountryAndLocationSelector: React.FC<Props> = ({
@@ -51,12 +52,12 @@ const CountryAndLocationSelector: React.FC<Props> = ({
     radiusSteps = [...AppConfig.RADIUS_STEPS_KM],
     countryRequired = true,
     config = defaultConfig,
+    loadingInput = false
 }) => {
     const { t } = useTranslation();
     const userCtx = useUserContext();
 
     const [loadingCity, setLoadingCity] = useState(false);
-    const [cityAnimating, setCityAnimating] = useState(false);
     const [geoLoading, setGeoLoading] = useState(false);
     const [countryCenter, setCountryCenter] = useState<Position | null>(null);
 
@@ -144,7 +145,7 @@ const CountryAndLocationSelector: React.FC<Props> = ({
             />
 
             {(
-                (loadingCity || geoLoading) ? (
+                (loadingCity || geoLoading || loadingInput) ? (
                     <SkeletonControl label={t('employeeProfile.form.city')} />
                 ) : config.locationOption === 'searchbar' ? (
                     <FloatingPlaceSearch

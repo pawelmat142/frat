@@ -18,12 +18,16 @@ import { UserRoles } from "@shared/interfaces/UserI";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import RecentViewedWorkers from "./RecentViewedWorkers";
 import RecentViewedOffers from "./RecentViewedOffers";
+import { useWorkersSearch } from "employee/views/search/WorkersSearchProvider";
+import { useOfferSearch } from "offer/views/search/OfferSearchProvider";
 
 const DashboardView: React.FC = () => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
     const userCtx = useUserContext();
+    const workerSearchCtx = useWorkersSearch();
+    const offerSearchCtx = useOfferSearch();
     const confirm = useConfirm()
     const { isInstallable, install } = usePwaInstall();
     const { isDesktop } = useGlobalContext();
@@ -64,11 +68,15 @@ const DashboardView: React.FC = () => {
     }, {
         label: t("user.findTechnician"),
         icon: Ico.SEARCH,
-        onClick: () => navigate(Path.WORKERS_SEARCH)
+        onClick: () => {
+            workerSearchCtx.navToSearch()
+        }
     }, {
         label: t("user.browseOffers"),
         icon: Ico.CATEGORIES,
-        onClick: () => navigate(Path.OFFERS_SEARCH)
+        onClick: () => {
+            offerSearchCtx.navToSearch()
+        }
     }, {
         if: !!userCtx.meCtx?.workerProfile,
         icon: Ico.EDIT,

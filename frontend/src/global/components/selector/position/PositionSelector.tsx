@@ -50,7 +50,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
             myClass += ' w-fit';
         }
         if (disabled) {
-            myClass += AppConfig.CONTROL_DISABLED_CLASS;
+            myClass += ' control-disabled';
         }
 
         const handleInputClick = async () => {

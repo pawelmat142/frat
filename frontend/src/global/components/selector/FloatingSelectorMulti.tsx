@@ -29,7 +29,7 @@ function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
         myClass += ' w-fit';
     }
     if (disabled) {
-        myClass += AppConfig.CONTROL_DISABLED_CLASS;
+        myClass += ' opacity-20';
     }
     if (error) {
         myClass += ' pp-control-error';

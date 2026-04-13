@@ -10,12 +10,13 @@ import { FormValidator } from "global/FormValidator";
 import Button from "global/components/controls/Button";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import { Ico } from "global/icon.def";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUserContext } from "user/UserProvider";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import CountryAndLocationSelector, { LocationFilterValue } from "global/components/controls/CountryAndLocationSelector";
 import { AppConfig } from "@shared/AppConfig";
 import Header from "global/components/Header";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface Props {
     onClose?: () => void;
@@ -29,6 +30,8 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
     const ctx: WorkersSearchContextProps = useWorkersSearch()
 
     const hasAutofilledLocation = useRef(false);
+
+    const [loadingCountry, setLoadingCountry] = useState(false);
 
     const f = useForm<WorkerSearchFilters>({
         defaultValues: ctx.filters
@@ -44,6 +47,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
             if (hasAutofilledLocation.current) return; // Prevent re-execution
             if (!formState.geocodedPosition && userCtx.position) {
                 try {
+                    setLoadingCountry(true);
                     const geoPosition = await GoogleMapService.getGeoPosition(userCtx.position);
                     const countryCode = geoPosition?.country?.toLocaleLowerCase();
                     const languages = globalCtx.dics.languages!;
@@ -55,11 +59,16 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                 }
                 catch (error) {
                     console.error('Error initializing location country:', error);
+                } finally {
+                    setLoadingCountry(false);
                 }
             }
         }
         if (!ctx.filters.locationCountry) {
             autofillLocationCountry();
+        }
+        if (!ctx.filters.startDate) {
+            f.setValue('startDate', DateUtil.toLocalDateString(new Date()));
         }
     }, [])
 
@@ -137,6 +146,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                         geocodedPosition: formState.geocodedPosition ?? null,
                         positionRadiusKm: formState.positionRadiusKm,
                     }}
+                    loadingInput={loadingCountry}
                     onChange={updateLocationFilter}
                     errors={{
                         locationCountry: f.formState.errors.locationCountry,
