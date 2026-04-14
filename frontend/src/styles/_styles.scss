@@ -390,8 +390,8 @@ $tilePadding: .5rem 1rem;
 }
 
 .mobile-bottom-nav-label {
-    font-size: $sFont;
-    font-weight: $font-medium;
+    font-size: $xsFont;
+    font-weight: $font-normal;
 }
 
 @media screen and (min-width: $desktop) {
