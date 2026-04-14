@@ -17,8 +17,6 @@ export const CookieContext = createContext<CookieContextValue | undefined>(undef
 
 export const CookieProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-  console.debug('CookieProvider rendered');
-
   const [consent, setConsent] = useState<CookieConsent | null>(null);
   const [showBanner, setShowBanner] = useState(false);
 
