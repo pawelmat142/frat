@@ -14,6 +14,7 @@ import i18n from "global/i18n";
 import { WorkerService } from "employee/services/WorkerService";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
+import Header from "global/components/Header";
 
 interface SkillsForm {
     items: { name: string }[];
@@ -68,8 +69,11 @@ const WorkerSkillsFormView: React.FC = () => {
         return <Loading />;
     }
 
-    return (
-        <div className="w-full max-w-lg px-5 py-6">
+    return (<>
+
+        <Header title={t("employeeProfile.editSkills")}></Header>
+        
+        <div className="w-full max-w-lg px-3 py-6">
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-3">
@@ -119,6 +123,7 @@ const WorkerSkillsFormView: React.FC = () => {
                 </div>
             </form>
         </div>
+    </>
     );
 };
 

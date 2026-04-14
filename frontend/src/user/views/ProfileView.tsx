@@ -24,6 +24,7 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { AppConfig } from "@shared/AppConfig";
 import { MenuItem } from "global/interface/controls.interface";
 import { useUsersStorage } from "global/providers/UsersStorageProvider";
+import Header from "global/components/Header";
 
 const ProfileView: React.FC = () => {
 
@@ -246,13 +247,17 @@ const ProfileView: React.FC = () => {
 
 
     return (
-        <div className="w-full">
+        <>
+            <Header title={t('account.profile')}></Header>
+            
+            <div className="w-full">
 
-            <UserProfileItem user={user}></UserProfileItem>
+                <UserProfileItem user={user}></UserProfileItem>
 
-            <ListUi items={menuItems} itemClassName="m-font py-3"></ListUi>
+                <ListUi items={menuItems} itemClassName="m-font py-3"></ListUi>
 
-        </div>
+            </div>
+        </>
     );
 };
 

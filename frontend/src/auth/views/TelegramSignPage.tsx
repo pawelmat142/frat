@@ -1,6 +1,7 @@
 import { AuthService } from "auth/services/AuthService";
 import Button from "global/components/controls/Button";
 import FloatingInput from "global/components/controls/FloatingInput";
+import Header from "global/components/Header";
 import Loading from "global/components/Loading";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useEffect, useState } from "react";
@@ -13,7 +14,6 @@ const TELEGRAM_BOT_USERNAME = process.env.REACT_APP_TELEGRAM_BOT_USERNAME;
 const TelegramSignPage: React.FC = () => {
 
     const { t } = useTranslation();
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [pin, setPin] = useState("");
 
@@ -73,53 +73,57 @@ const TelegramSignPage: React.FC = () => {
     }
 
     return (
-        <div className="form-view relative">
+        <>
+            <Header title={t("signin.title")}></Header>
+            
+            <div className="form-view relative">
 
-            <form className="mt-10" onSubmit={handleSubmit}>
+                <form className="mt-10" onSubmit={handleSubmit}>
 
-                <div className="flex flex-col gap-5 md:gap-5">
-                    <FloatingInput
-                        name="pin"
-                        label={t("signin.pin")}
-                        type="text"
-                        value={pin}
-                        onChange={e => setPin(e.target.value)}
-                        required
-                        fullWidth
-                    />
-                </div>
+                    <div className="flex flex-col gap-5 md:gap-5">
+                        <FloatingInput
+                            name="pin"
+                            label={t("signin.pin")}
+                            type="text"
+                            value={pin}
+                            onChange={e => setPin(e.target.value)}
+                            required
+                            fullWidth
+                        />
+                    </div>
 
-                <div className="flex justify-end">
-                    <Button mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} onClick={() => {
-                        navigator.clipboard.readText().then(text => {
-                            setPin(text);
-                        })
-                    }}>{t("signin.pasteFromClipboard")}</Button>
-                </div>
+                    <div className="flex justify-end">
+                        <Button mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} onClick={() => {
+                            navigator.clipboard.readText().then(text => {
+                                setPin(text);
+                            })
+                        }}>{t("signin.pasteFromClipboard")}</Button>
+                    </div>
 
-                <Button
-                    onClick={handleSubmit}
-                    mode={BtnModes.PRIMARY}
-                    size={BtnSizes.LARGE}
-                    fullWidth={true}
-                    className="mt-5"
-                    disabled={!pin}
-                >
-                    {t("signin.submit")}
-                </Button>
-                <Button
-                    mode={BtnModes.SECONDARY}
-                    size={BtnSizes.LARGE}
-                    fullWidth={true}
-                    className="mt-5"
-                    onClick={handleTelegramNav}
-                >
-                    {t("signin.openBot")}
-                </Button>
+                    <Button
+                        onClick={handleSubmit}
+                        mode={BtnModes.PRIMARY}
+                        size={BtnSizes.LARGE}
+                        fullWidth={true}
+                        className="mt-5"
+                        disabled={!pin}
+                    >
+                        {t("signin.submit")}
+                    </Button>
+                    <Button
+                        mode={BtnModes.SECONDARY}
+                        size={BtnSizes.LARGE}
+                        fullWidth={true}
+                        className="mt-5"
+                        onClick={handleTelegramNav}
+                    >
+                        {t("signin.openBot")}
+                    </Button>
 
-            </form>
+                </form>
 
-        </div>
+            </div>
+        </>
     );
 }
 

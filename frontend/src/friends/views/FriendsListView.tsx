@@ -17,6 +17,7 @@ import { useDebouncedValue } from "global/utils/useDebouncedValue"
 import { Search, Close } from "@mui/icons-material"
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter"
 import UserInvitationListItem from "user/components/UserInvitationListItem"
+import Header from "global/components/Header"
 
 const FriendsListView: React.FC = () => {
 
@@ -164,81 +165,85 @@ const FriendsListView: React.FC = () => {
         return <Loading></Loading>
     }
     return (
-        <div className="list-view">
+        <>
+            <Header title={t('friends.header')}></Header>
+            
+            <div className="list-view">
 
-            {!!isMyAccount && (
-                <FloatingInput
-                    className="pt-1 pb-5 px-4"
-                    mode={FloatingInputModes.THIN}
-                    name="freeText"
-                    value={freeTextInput}
-                    onChange={e => setFreeTextInput(e.target.value)}
-                    label={t("employeeProfile.form.freeText")}
-                    fullWidth
-                    icon={isSearchMode ? <Close /> : <Search />}
-                    onIconClick={isSearchMode ? (e) => {
-                        e.preventDefault();
-                        setFreeTextInput('')
-                    } : undefined}
-                />
+                {!!isMyAccount && (
+                    <FloatingInput
+                        className="pt-1 pb-5 px-4"
+                        mode={FloatingInputModes.THIN}
+                        name="freeText"
+                        value={freeTextInput}
+                        onChange={e => setFreeTextInput(e.target.value)}
+                        label={t("employeeProfile.form.freeText")}
+                        fullWidth
+                        icon={isSearchMode ? <Close /> : <Search />}
+                        onIconClick={isSearchMode ? (e) => {
+                            e.preventDefault();
+                            setFreeTextInput('')
+                        } : undefined}
+                    />
 
-            )}
+                )}
 
-            {isSearchMode ? (
-                <>
-                    {initialSearchLoading ? (
-                        <div className="flex flex-col items-center justify-center mt-20">
-                            <Loading />
-                        </div>
-                    ) : noSearchResults ? (
-                        <div className="flex flex-col items-center justify-center mt-20">
-                            <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
-                        </div>
-                    ) : (
-                        <div className="flex flex-col gap-1">
-                            {searchUsers.map((user, index) => (
-                                <div className={`list-view-item list-item-border${index === 0 ? " first" : ""}${index === (searchUsers.length ?? 0) - 1 ? " last" : ""}`} key={user.uid}>
-                                    <UserInvitationListItem user={user} />
-                                </div>
-                            ))}
-                            <InfiniteScrollEventEmitter emitEvent={loadMore} />
-                        </div>
-                    )}
-
-                    {loadingMore && searchUsers.length > 0 && (
-                        <div className="flex justify-center py-6">
-                            <Loading />
-                        </div>
-                    )}
-
-                    {showEndOfResults && (
-                        <div className="flex justify-center py-4">
-                            <span className="secondary-text s-font">{t('common.endOfResults')}</span>
-                        </div>
-                    )}
-                </>
-            ) : (
-                <>
-                    <div className="flex flex-col gap-1">
-                        {!friends.length && (
-                            <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
-                                <Ico.FRIENDS className="mx-auto text-4xl mb-2 opacity-50" />
-                                <div className="secondary-text">{t('friends.noFriends')}</div>
+                {isSearchMode ? (
+                    <>
+                        {initialSearchLoading ? (
+                            <div className="flex flex-col items-center justify-center mt-20">
+                                <Loading />
+                            </div>
+                        ) : noSearchResults ? (
+                            <div className="flex flex-col items-center justify-center mt-20">
+                                <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col gap-1">
+                                {searchUsers.map((user, index) => (
+                                    <div className={`list-view-item list-item-border${index === 0 ? " first" : ""}${index === (searchUsers.length ?? 0) - 1 ? " last" : ""}`} key={user.uid}>
+                                        <UserInvitationListItem user={user} />
+                                    </div>
+                                ))}
+                                <InfiniteScrollEventEmitter emitEvent={loadMore} />
                             </div>
                         )}
 
-                        {friends.map(({ user, friendship }, index) => (
-                            <div className={`list-view-item list-item-border${index === 0 ? " first" : ""}${index === (friends.length ?? 0) - 1 ? " last" : ""}`} key={user.uid}>
-                                <FriendshipListItem
-                                    user={user}
-                                    friendship={friendship}
-                                />
+                        {loadingMore && searchUsers.length > 0 && (
+                            <div className="flex justify-center py-6">
+                                <Loading />
                             </div>
-                        ))}
-                    </div>
-                </>
-            )}
-        </div>
+                        )}
+
+                        {showEndOfResults && (
+                            <div className="flex justify-center py-4">
+                                <span className="secondary-text s-font">{t('common.endOfResults')}</span>
+                            </div>
+                        )}
+                    </>
+                ) : (
+                    <>
+                        <div className="flex flex-col gap-1">
+                            {!friends.length && (
+                                <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
+                                    <Ico.FRIENDS className="mx-auto text-4xl mb-2 opacity-50" />
+                                    <div className="secondary-text">{t('friends.noFriends')}</div>
+                                </div>
+                            )}
+
+                            {friends.map(({ user, friendship }, index) => (
+                                <div className={`list-view-item list-item-border${index === 0 ? " first" : ""}${index === (friends.length ?? 0) - 1 ? " last" : ""}`} key={user.uid}>
+                                    <FriendshipListItem
+                                        user={user}
+                                        friendship={friendship}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
+            </div>
+        </>
     )
 }
 

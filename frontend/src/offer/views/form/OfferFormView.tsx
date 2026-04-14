@@ -22,6 +22,7 @@ import { GoogleMapService } from "global/services/GoogleMapService";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import { AppConfig } from "@shared/AppConfig";
+import Header from "global/components/Header";
 
 const DEFAUT_POSITION = AppConfig.DEFAUT_POSITION;
 
@@ -182,26 +183,30 @@ const OfferFormContent: React.FC = () => {
     }
 
     return (
-        <FormWizard
-            localStorageKey={LOCAL_STORAGE_KEY}
-            formRef={ctx.formCtx}
-            stepsOrder={OFFER_STEPS_ORDER}
-            currentStep={ctx.form.currentStep}
-            onFinalSubmit={onSubmit}
-            onSelectStep={ctx.selectStep}
-        >
-            <>
-                {renderStep()}
+        <>
+            <Header title={t('offer.form.title')} />
+            
+            <FormWizard
+                localStorageKey={LOCAL_STORAGE_KEY}
+                formRef={ctx.formCtx}
+                stepsOrder={OFFER_STEPS_ORDER}
+                currentStep={ctx.form.currentStep}
+                onFinalSubmit={onSubmit}
+                onSelectStep={ctx.selectStep}
+            >
+                <>
+                    {renderStep()}
 
-                {isDevMode && (
-                    <div className="flex items-center justify-end">
-                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
-                            DEV FILL
-                        </Button>
-                    </div>
-                )}
-            </>
-        </FormWizard>
+                    {isDevMode && (
+                        <div className="flex items-center justify-end">
+                            <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
+                                DEV FILL
+                            </Button>
+                        </div>
+                    )}
+                </>
+            </FormWizard>
+        </>
     );
 }
 

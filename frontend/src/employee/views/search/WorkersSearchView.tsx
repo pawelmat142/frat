@@ -10,6 +10,7 @@ import FloatingActionButton from "global/components/buttons/FloatingActionButton
 import { Ico } from "global/icon.def";
 import { AppConfig } from "@shared/AppConfig";
 import WorkerSearchListItem from "employee/components/ListItems/WorkerSearchListItem";
+import Header from "global/components/Header";
 
 const WorkersSearchView: React.FC = () => {
 
@@ -42,7 +43,9 @@ const WorkersSearchView: React.FC = () => {
     const noResults = !initialLoading && ctx.results.length === 0;
     const showEndOfResults = !initialLoading && !ctx.loadingMore && !ctx.hasMore && ctx.results.length > 0;
 
-    return (
+    return (<>
+        <Header title={t('employeeProfile.title')}></Header>
+
         <div className="list-view pt-0">
 
             <div className="infinite-scroll-filters">
@@ -85,6 +88,7 @@ const WorkersSearchView: React.FC = () => {
             )}
 
         </div>
+    </>
 
     )
 }

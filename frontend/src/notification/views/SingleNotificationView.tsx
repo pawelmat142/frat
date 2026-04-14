@@ -2,9 +2,7 @@ import { NotificationI, NotificationTypes } from "@shared/interfaces/Notificatio
 import { FriendsService } from "friends/services/FriendsService";
 import Button from "global/components/controls/Button";
 import Loading from "global/components/Loading";
-import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { BtnModes } from "global/interface/controls.interface";
-import { useGlobalContext } from "global/providers/GlobalProvider";
 import { NotificationService } from "notification/services/NotificationService";
 import { Path } from "../../path";
 import { useEffect, useState } from "react";
@@ -19,10 +17,10 @@ import { useNotificationsContext } from "notification/NotificationsProvider";
 import { Ico } from "global/icon.def";
 import { ChatService } from "chat/services/ChatService";
 import { useUserContext } from "user/UserProvider";
+import Header from "global/components/Header";
 
 const SingleNotificationView: React.FC = () => {
 
-    const globalCtx = useGlobalContext();
     const notificationsCtx = useNotificationsContext();
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -41,7 +39,6 @@ const SingleNotificationView: React.FC = () => {
         if (!notification) {
             return
         }
-        setViewState()
         markNotificationAsRead()
     }, [notification])
 
@@ -68,15 +65,6 @@ const SingleNotificationView: React.FC = () => {
         finally {
             setLoading(false)
         }
-    }
-
-    const setViewState = () => {
-        globalCtx.setViewState({
-            leftBtn: <div className="flex gap-2 items-center">
-                <HeaderBackBtn />
-                <div>{t(notification?.title)}</div>
-            </div>
-        })
     }
 
     const markNotificationAsRead = async () => {
@@ -186,38 +174,44 @@ const SingleNotificationView: React.FC = () => {
         return <Loading></Loading>
     }
 
-    return (<div className="view-container">
+    return (
+        <>
+            <Header title={t(notification.title)}></Header>
+            
+            <div className="view-container">
 
-        <div className="flex flex-col justify-center gap-4 mb-6">
+                <div className="flex flex-col justify-center gap-4 mb-6">
 
-            {notification.avatarRef ? (<div className="notification-avatar-wrapper" onClick={goToRequesterProfile}>
-                <AvatarTile
-                    src={notification.avatarRef?.url}
-                    editable={false}
-                    uid={""}
-                />
-            </div>) : (
-                <div className="notification-view-icon mt-5">{NotificationFrontUtil.getIcon(notification)}</div>
-            )}
+                    {notification.avatarRef ? (<div className="notification-avatar-wrapper" onClick={goToRequesterProfile}>
+                        <AvatarTile
+                            src={notification.avatarRef?.url}
+                            editable={false}
+                            uid={""}
+                        />
+                    </div>) : (
+                        <div className="notification-view-icon mt-5">{NotificationFrontUtil.getIcon(notification)}</div>
+                    )}
 
-            <div className="text-center mx-10">
-                <h2 className="text-xl font-bold mt-5">{t(notification.title)}</h2>
-                <p className="secondary-text mt-5 mb-5 ">{t(notification.message, notification.messageParams)}</p>
+                    <div className="text-center mx-10">
+                        <h2 className="text-xl font-bold mt-5">{t(notification.title)}</h2>
+                        <p className="secondary-text mt-5 mb-5 ">{t(notification.message, notification.messageParams)}</p>
+                    </div>
+
+                    <div>
+                        <p className="s-font secondary-text mt-5 mb-1">
+                            {t('notification.sentAt', { date: FrontDateUtil.displayDateWithTime(t, notification.createdAt) })}</p>
+                        {!!notification.readAt && (<p className="s-font secondary-text mb-5">
+                            {t('notification.readAt', { date: FrontDateUtil.displayDateWithTime(t, notification.readAt) })}</p>)}
+                    </div>
+
+                    <div className="flex flex-col gap-3 mt-6">
+                        {getActions()}
+                    </div>
+                </div>
+
             </div>
-
-            <div>
-                <p className="s-font secondary-text mt-5 mb-1">
-                    {t('notification.sentAt', { date: FrontDateUtil.displayDateWithTime(t, notification.createdAt) })}</p>
-                {!!notification.readAt && (<p className="s-font secondary-text mb-5">
-                    {t('notification.readAt', { date: FrontDateUtil.displayDateWithTime(t, notification.readAt) })}</p>)}
-            </div>
-
-            <div className="flex flex-col gap-3 mt-6">
-                {getActions()}
-            </div>
-        </div>
-
-    </div>)
+        </>
+    )
 }
 
 export default SingleNotificationView;

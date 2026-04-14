@@ -7,16 +7,15 @@ import { chatSocket } from "../services/ChatSocketService";
 import Loading from "global/components/Loading";
 import Button from "global/components/controls/Button";
 import { Path } from "../../path";
-import { useGlobalContext } from "global/providers/GlobalProvider";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { DateUtil } from "@shared/utils/DateUtil";
-import { useMenuContext } from "global/providers/MenuProvider";
 import { useConfirm } from "global/providers/PopupProvider";
 import { toast } from "react-toastify";
 import UserItem from "user/components/UserItem";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import { BtnModes, MenuItem } from "global/interface/controls.interface";
+import Header from "global/components/Header";
 
 const ChatConversationView: React.FC = () => {
     const { t } = useTranslation();
@@ -59,8 +58,6 @@ const ChatConversationView: React.FC = () => {
     };
 
     const otherUser = getOtherMember();
-    const globalCtx = useGlobalContext();
-    const menuCtx = useMenuContext();
     const confirm = useConfirm();
 
     const blockedByMe = chat?.blockedByUid === me?.uid;
@@ -141,24 +138,6 @@ const ChatConversationView: React.FC = () => {
         return items;
     }
 
-    const setViewState = (chat: ChatWithMembers) => {
-        if (!otherUser) return;
-        const chatViewHeaderContent = <div className="flex gap-2 items-center">
-            <HeaderBackBtn></HeaderBackBtn>
-            <UserItem user={otherUser} size={2.5}></UserItem>
-        </div>
-
-        globalCtx.setViewState({
-            leftBtn: chatViewHeaderContent,
-            hideFooter: true,
-            stickyHeader: true,
-        })
-        menuCtx.setupHeaderMenu({
-            title: t('chat.chatMenu'),
-            items: prepareChatMenu(chat)
-        })
-    }
-
     useEffect(() => {
         if (!chatId || isInitialized.current) return;
         isInitialized.current = true;
@@ -224,7 +203,6 @@ const ChatConversationView: React.FC = () => {
 
     useEffect(() => {
         if (chat) {
-            setViewState(chat);
             refreshMessages(chat);
         }
     }, [chat]);
@@ -269,8 +247,17 @@ const ChatConversationView: React.FC = () => {
     }
 
     const iconSize = 22
-
-    return (
+    
+    return (<>
+        {!!chat && !!otherUser && (
+            <Header leftBtn={<div className="flex gap-2 items-center">
+                <HeaderBackBtn></HeaderBackBtn>
+                <UserItem user={otherUser} size={2.5}></UserItem>
+            </div>} menu={{
+                title: t('chat.chatMenu'),
+                items: prepareChatMenu(chat)
+            }}></Header>
+        )}
         <div className="chat-view">
 
             {/* Messages */}
@@ -295,7 +282,7 @@ const ChatConversationView: React.FC = () => {
                                     <p>{msg.content}</p>
                                     <div className={`chat-view-message-info`}>
                                         {!!msg.readAt && !leftSide && (
-                                            <span className="primary-color"><Ico.CHECK size={12}/></span>
+                                            <span className="primary-color"><Ico.CHECK size={12} /></span>
                                         )}
                                         <span className="xs-font">{DateUtil.displayTime(msg.createdAt)}</span>
                                     </div>
@@ -310,7 +297,7 @@ const ChatConversationView: React.FC = () => {
 
             {/* Input */}
             <form onSubmit={handleSendMessage} className={`chat-view-input${inputFocused ? ' focus bottom-bar-shadow' : ''}`}>
-{/* 
+                {/* 
                 <div className="chat-view-input-left">
                     <FaSearch size={iconSize} />
                     <FaBriefcase size={iconSize} />
@@ -353,7 +340,9 @@ const ChatConversationView: React.FC = () => {
 
             </form>
         </div>
-    );
+
+    </>)
+
 };
 
 export default ChatConversationView;

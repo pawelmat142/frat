@@ -3,21 +3,18 @@ import { matchPath, useNavigate } from 'react-router-dom';
 import { Path } from '../../path';
 import { UserRoles } from '@shared/interfaces/UserI';
 import { isOneOf } from '@shared/utils/util';
-import { MenuConfig } from 'global/components/selector/MenuItems';
-import { useBottomSheet } from './BottomSheetProvider';
 import { useGlobalContext } from './GlobalProvider';
-import IconButton from 'global/components/controls/IconButon';
 import { useTranslation } from 'react-i18next';
 import { Ico } from 'global/icon.def';
 import { useUserContext } from 'user/UserProvider';
-import { BtnModes, MenuItem, MenuItemIdentifier, MenuItemIdentifiers } from 'global/interface/controls.interface';
+import { MenuItem, MenuItemIdentifier, MenuItemIdentifiers } from 'global/interface/controls.interface';
 import { useWorkersSearch } from 'employee/views/search/WorkersSearchProvider';
 import { useOfferSearch } from 'offer/views/search/OfferSearchProvider';
 import { useNotificationsContext } from 'notification/NotificationsProvider';
 import { NavBus } from 'global/utils/PseudoViewBus';
+import { useAuthContext } from 'auth/AuthProvider';
 
 interface MenuContextType {
-    setupHeaderMenu: (menu: MenuConfig) => void;
     items: MenuItem[],
     setActiveBottomBarItem: (id: MenuItemIdentifier) => void;
 }
@@ -32,10 +29,10 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     children,
 }) => {
     const { me } = useUserContext();
+    const authCtx = useAuthContext();
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const bottomSheetCtx = useBottomSheet();
     const globalCtx = useGlobalContext();
     const workerSearchCtx = useWorkersSearch()
     const offerSearchCtx = useOfferSearch()
@@ -72,7 +69,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
             icon: Ico.OFFER
         }]
 
-        if (me) {
+        if (authCtx.isAuthenticated) {
             items.push({
                 label: t('chat.chats'),
                 id: MenuItemIdentifiers.MESSAGES,
@@ -108,28 +105,19 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const [items, setItems] = useState<MenuItem[]>(getItems());
 
     useEffect(() => {
+        setItems(getItems());
         return NavBus.subscribe((id) => {
             setItems(getItems(id));
         });
-    }, [])
-
-    const setupHeaderMenu = (menu: MenuConfig) => {
-        globalCtx.setHeaderMenu(<IconButton mode={BtnModes.SECONDARY_TXT} icon={<Ico.MENU onClick={() => {
-            bottomSheetCtx.openMenu(menu)
-        }} />} />);
-    }
+    }, [authCtx.isAuthenticated, me])
 
     const setActiveBottomBarItem = (id: MenuItemIdentifier) => {
         items.forEach(item => item.active = false);
         console.log('Setting active menu item:', id);
     }
 
-
-
-
     const value: MenuContextType = {
         items,
-        setupHeaderMenu,
         setActiveBottomBarItem
     };
 

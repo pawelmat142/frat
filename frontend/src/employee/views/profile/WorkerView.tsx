@@ -7,7 +7,6 @@ import { WorkerAvailabilityOptions, WorkerI, WorkerStatuses } from "@shared/inte
 import { useWorkersSearch } from "../search/WorkersSearchProvider";
 import { useTranslation } from "react-i18next";
 import { Path } from "../../../path";
-import { useMenuContext } from "global/providers/MenuProvider";
 import { MenuConfig } from "global/components/selector/MenuItems";
 import { toast } from "react-toastify";
 import { useConfirm } from "global/providers/PopupProvider";
@@ -31,6 +30,7 @@ import { BtnModes, BtnSizes, MenuItem } from "global/interface/controls.interfac
 import Button from "global/components/controls/Button";
 import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/interfaces/UserListedItem";
 import { UserListedItemService } from "user/services/UserListedItemService";
+import Header from "global/components/Header";
 
 const WorkerView: React.FC = () => {
 
@@ -43,7 +43,6 @@ const WorkerView: React.FC = () => {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const menuCtx = useMenuContext();
     const confirm = useConfirm();
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
@@ -76,12 +75,6 @@ const WorkerView: React.FC = () => {
         }
         initWorker()
     }, []);
-
-    useEffect(() => {
-        if (worker && me) {
-            menuCtx.setupHeaderMenu(getProfileMenuItems(worker))
-        }
-    }, [worker, me]);
 
     useEffect(() => {
         if (!worker || isMe) return;
@@ -392,7 +385,9 @@ const WorkerView: React.FC = () => {
         }];
     }
 
-    return (
+    return (<>
+        <Header title={t('employeeProfile.title')} menu={getProfileMenuItems(worker)}></Header>
+
         <div className="w-full">
 
             <div className="flex gap-5 items-center px-5">
@@ -444,7 +439,7 @@ const WorkerView: React.FC = () => {
             </div>
 
         </div>
-    );
+    </>);
 }
 
 export default WorkerView;

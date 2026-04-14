@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { OfferI } from "@shared/interfaces/OfferI";
 import { OffersService } from "offer/services/OffersService";
 import OfferSearchListItem from "offer/components/ListItems/OfferSearchListItem";
+import Header from "global/components/Header";
 
 const UserOffersList: React.FC = () => {
 
@@ -64,22 +65,26 @@ const UserOffersList: React.FC = () => {
     }
 
     return (
-        <div className="list-view flex-1 flex flex-col">
+        <>
+            <Header title={t("offer.offersList")}></Header>
+            
+            <div className="list-view flex-1 flex flex-col">
 
-            <div className="results flex flex-col">
-                {!!globalCtx.dics.languages && offers.map((offer, index) => (
-                    <OfferSearchListItem
-                        key={offer.offerId}
-                        offer={offer}
-                        first={index === 0}
-                        last={index === offers.length - 1}
-                    ></OfferSearchListItem>
-                ))}
+                <div className="results flex flex-col">
+                    {!!globalCtx.dics.languages && offers.map((offer, index) => (
+                        <OfferSearchListItem
+                            key={offer.offerId}
+                            offer={offer}
+                            first={index === 0}
+                            last={index === offers.length - 1}
+                        ></OfferSearchListItem>
+                    ))}
+                </div>
+
+                {createBtn}
+                    
             </div>
-
-            {createBtn}
-                
-        </div>
+        </>
     )
 }
 

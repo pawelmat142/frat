@@ -9,6 +9,7 @@ import OfferSearchListItem from "offer/components/ListItems/OfferSearchListItem"
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
 import { Ico } from "global/icon.def";
 import { AppConfig } from "@shared/AppConfig";
+import Header from "global/components/Header";
 
 const OfferSearchView: React.FC = () => {
 
@@ -42,47 +43,51 @@ const OfferSearchView: React.FC = () => {
     const showEndOfResults = !initialLoading && !ctx.loadingMore && !ctx.hasMore && ctx.results.length > 0;
 
     return (
-        <div className="list-view pt-0">
+        <>
+            <Header title={t('offer.searchTitle')} />
+            
+            <div className="list-view pt-0">
 
-            <div className="infinite-scroll-filters">
-                <OfferSearchFilters />
+                <div className="infinite-scroll-filters">
+                    <OfferSearchFilters />
+                </div>
+
+                {initialLoading ? (
+                    <div className="flex flex-col items-center justify-center mt-20">
+                        <Loading></Loading>
+                    </div>
+                ) : noResults ? (
+                    <div className="flex flex-col items-center justify-center mt-20">
+                        <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
+                    </div>
+                ) : (
+                    <div className="results flex flex-col">
+                        {(ctx.results ?? []).map((offer, index) => (
+                            <OfferSearchListItem
+                                key={offer.offerId}
+                                offer={offer}
+                                first={index === 0}
+                                last={index === (ctx.results?.length ?? 0) - 1}
+                            />
+                        ))}
+                        <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} />
+                    </div>
+                )}
+
+                {ctx.loadingMore && ctx.results.length > 0 && (
+                    <div className="flex justify-center py-6">
+                        <Loading></Loading>
+                    </div>
+                )}
+
+                {showEndOfResults && (
+                    <div className="flex justify-center py-4">
+                        <span className="secondary-text s-font">{t('common.endOfResults', { defaultValue: 'No more offers to display.' })}</span>
+                    </div>
+                )}
+
             </div>
-
-            {initialLoading ? (
-                <div className="flex flex-col items-center justify-center mt-20">
-                    <Loading></Loading>
-                </div>
-            ) : noResults ? (
-                <div className="flex flex-col items-center justify-center mt-20">
-                    <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
-                </div>
-            ) : (
-                <div className="results flex flex-col">
-                    {(ctx.results ?? []).map((offer, index) => (
-                        <OfferSearchListItem
-                            key={offer.offerId}
-                            offer={offer}
-                            first={index === 0}
-                            last={index === (ctx.results?.length ?? 0) - 1}
-                        />
-                    ))}
-                    <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} />
-                </div>
-            )}
-
-            {ctx.loadingMore && ctx.results.length > 0 && (
-                <div className="flex justify-center py-6">
-                    <Loading></Loading>
-                </div>
-            )}
-
-            {showEndOfResults && (
-                <div className="flex justify-center py-4">
-                    <span className="secondary-text s-font">{t('common.endOfResults', { defaultValue: 'No more offers to display.' })}</span>
-                </div>
-            )}
-
-        </div>
+        </>
     );
 
 }

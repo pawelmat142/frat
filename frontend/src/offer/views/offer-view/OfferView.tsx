@@ -11,13 +11,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
 import OfferDetailsTile from "./OfferDetailsTile";
 import { MenuConfig } from "global/components/selector/MenuItems";
-import { useMenuContext } from "global/providers/MenuProvider";
 import { toast } from "react-toastify";
 import { useConfirm } from "global/providers/PopupProvider";
 import { Path } from "../../../path";
 import { Utils } from "global/utils/utils";
 import UserItemTile from "user/components/UserItemTile";
 import { DateUtil } from "@shared/utils/DateUtil";
+import Header from "global/components/Header";
 
 const OfferView: React.FC = () => {
 
@@ -29,17 +29,10 @@ const OfferView: React.FC = () => {
     const userCtx = useUserContext();
     const me = userCtx?.me;
     const globalCtx = useGlobalContext();
-    const menuCtx = useMenuContext();
     const confirm = useConfirm();
 
     const [offer, setOffer] = useState<OfferI | null>(null);
     const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        if (offer && me) {
-            menuCtx.setupHeaderMenu(getOfferMenuItems(offer))
-        }
-    }, [offer, me]);
 
     const getOfferMenuItems = (offer: OfferI): MenuConfig => {
         const isMyOffer = me?.uid === offer!.uid;
@@ -169,44 +162,48 @@ const OfferView: React.FC = () => {
     const isMyOffer = me?.uid === offer.uid;
 
     return (
-        <div className="view-container-two">
+        <>
+            <Header title={t('offer.offerViewTitle')} menu={getOfferMenuItems(offer)}/>
+            
+            <div className="view-container-two">
 
-            <div>
-                <div className="my-2">
-                    <UserItemTile
-                        uid={offer.uid}
-                        size={2.5}
-                        showNumber={true}
-                        showChat={true}></UserItemTile>
-                </div>
-
-                <div className="main-tiles">
-
-                    <OfferDetailsTile offer={offer} />
-
-                    <CallendarTile range={{ start: DateUtil.toLocalDateString(offer.startDate) }}></CallendarTile>
-
-                    {/* TODO map tile */}
-                    <div className="square-tile col-tile"></div>
-
-                </div>
-
-
-                {!!offer.languagesRequired?.length && (<div>
-                    <div className="mt-5 mb-1 secondary-text">{t('offer.languagesRequired')}: </div>
-                    <Flags languages={offer.languagesRequired!} />
-                    <div className="mt-1 xs-font secondary-text">{Utils.prepareLanguageNames(t, offer.languagesRequired!, globalCtx.dics.languages!)}</div>
-                </div>)}
-
-                {isMyOffer && (
-                    <div className="mt-10 mb-10">
-                        <EditButton onClick={() => goToEditForm(offer)} label={t('offer.editButton')}></EditButton>
+                <div>
+                    <div className="my-2">
+                        <UserItemTile
+                            uid={offer.uid}
+                            size={2.5}
+                            showNumber={true}
+                            showChat={true}></UserItemTile>
                     </div>
-                )}
+
+                    <div className="main-tiles">
+
+                        <OfferDetailsTile offer={offer} />
+
+                        <CallendarTile range={{ start: DateUtil.toLocalDateString(offer.startDate) }}></CallendarTile>
+
+                        {/* TODO map tile */}
+                        <div className="square-tile col-tile"></div>
+
+                    </div>
 
 
+                    {!!offer.languagesRequired?.length && (<div>
+                        <div className="mt-5 mb-1 secondary-text">{t('offer.languagesRequired')}: </div>
+                        <Flags languages={offer.languagesRequired!} />
+                        <div className="mt-1 xs-font secondary-text">{Utils.prepareLanguageNames(t, offer.languagesRequired!, globalCtx.dics.languages!)}</div>
+                    </div>)}
+
+                    {isMyOffer && (
+                        <div className="mt-10 mb-10">
+                            <EditButton onClick={() => goToEditForm(offer)} label={t('offer.editButton')}></EditButton>
+                        </div>
+                    )}
+
+
+                </div>
             </div>
-        </div>
+        </>
 
     )
 }

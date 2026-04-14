@@ -13,6 +13,7 @@ import Logo from "global/components/Logo";
 import IconButton from "global/components/controls/IconButon";
 import FloatingInput from "global/components/controls/FloatingInput";
 import { Utils } from "global/utils/utils";
+import Header from "global/components/Header";
 
 const SignUpPage: React.FC = () => {
     const { t } = useTranslation();
@@ -67,80 +68,84 @@ const SignUpPage: React.FC = () => {
     }
 
     return (
-        <div className="form-view relative">
+        <>
+            <Header title={t("signup.title")}></Header>
 
-            <form className="mt-10" onSubmit={handleSubmit}>
+            <div className="form-view relative">
 
-                {isDevMode && (
-                    <div className="flex items-center justify-end">
-                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
-                            DEV FILL
-                        </Button>
+                <form className="mt-10" onSubmit={handleSubmit}>
+
+                    {isDevMode && (
+                        <div className="flex items-center justify-end">
+                            <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
+                                DEV FILL
+                            </Button>
+                        </div>
+                    )}
+
+                    <div className="flex flex-col gap-5 md:gap-5">
+                        <FloatingInput
+                            name="email"
+                            label={t("signup.email")}
+                            type="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            required
+                            fullWidth
+                        />
+                        <FloatingInput
+                            name="repeatEmail"
+                            label={t("signup.repeatEmail")}
+                            type="email"
+                            value={repeatEmail}
+                            onChange={e => setRepeatEmail(e.target.value)}
+                            required
+                            fullWidth
+                        />
+                        <FloatingInput
+                            className="mt-3"
+                            name="password"
+                            label={t("signup.password")}
+                            type="password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            required
+                            fullWidth
+                        />
+                        <FloatingInput
+                            name="repeatPassword"
+                            label={t("signup.repeatPassword")}
+                            type="password"
+                            value={repeatPassword}
+                            onChange={e => setRepeatPassword(e.target.value)}
+                            required
+                            fullWidth
+                        />
                     </div>
-                )}
 
-                <div className="flex flex-col gap-5 md:gap-5">
-                    <FloatingInput
-                        name="email"
-                        label={t("signup.email")}
-                        type="email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        required
-                        fullWidth
-                    />
-                    <FloatingInput
-                        name="repeatEmail"
-                        label={t("signup.repeatEmail")}
-                        type="email"
-                        value={repeatEmail}
-                        onChange={e => setRepeatEmail(e.target.value)}
-                        required
-                        fullWidth
-                    />
-                    <FloatingInput
-                        className="mt-3"
-                        name="password"
-                        label={t("signup.password")}
-                        type="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        required
-                        fullWidth
-                    />
-                    <FloatingInput
-                        name="repeatPassword"
-                        label={t("signup.repeatPassword")}
-                        type="password"
-                        value={repeatPassword}
-                        onChange={e => setRepeatPassword(e.target.value)}
-                        required
-                        fullWidth
-                    />
+                    <Button
+                        mode={BtnModes.PRIMARY}
+                        size={BtnSizes.LARGE}
+                        fullWidth={true}
+                        className="mt-8"
+                        type="submit"
+                        disabled={loading || !email || !repeatEmail || !password || !repeatPassword}
+                    >
+                        {loading ? t("signup.registering") : t("signup.submit")}
+                    </Button>
+
+                </form>
+
+                <div className="flex items-center cursor-pointer mx-auto w-full justify-center mt-10 mb-10" onClick={() => {
+                    navigate(Path.SIGN_IN);
+                }}>
+                    <span className="">{t("signin.alreadyHaveAccount")}</span>
+                    <Button mode={BtnModes.PRIMARY_TXT} fullWidth={false} >
+                        {t("signin.submit")}
+                    </Button>
                 </div>
-
-                <Button
-                    mode={BtnModes.PRIMARY}
-                    size={BtnSizes.LARGE}
-                    fullWidth={true}
-                    className="mt-8"
-                    type="submit"
-                    disabled={loading || !email || !repeatEmail || !password || !repeatPassword}
-                >
-                    {loading ? t("signup.registering") : t("signup.submit")}
-                </Button>
-
-            </form>
-
-            <div className="flex items-center cursor-pointer mx-auto w-full justify-center mt-10 mb-10" onClick={() => {
-                navigate(Path.SIGN_IN);
-            }}>
-                <span className="">{t("signin.alreadyHaveAccount")}</span>
-                <Button mode={BtnModes.PRIMARY_TXT} fullWidth={false} >
-                    {t("signin.submit")}
-                </Button>
             </div>
-        </div>
+        </>
     );
 };
 

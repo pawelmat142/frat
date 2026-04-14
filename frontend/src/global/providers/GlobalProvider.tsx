@@ -2,10 +2,8 @@ import { DictionaryI } from "@shared/interfaces/DictionaryI"
 import { DictionaryService } from "global/services/DictionaryService"
 import React from "react"
 import { createContext, useRef, useState } from "react"
-import { useLocation, matchPath, useNavigate } from "react-router-dom";
-import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import { useIsDesktop } from "global/hooks/isMobile";
-import { ViewState as ViewState, HEADER_STATES } from "global/headerStates";
+import { ViewState as ViewState, } from "global/headerStates";
 import { Dictionaries } from "@shared/utils/DictionaryUtil";
 
 interface GlobalContextType {
@@ -14,8 +12,6 @@ interface GlobalContextType {
     loading: boolean;
     state: ViewState | null,
     isFooterHidden: boolean;
-    setHeaderMenu: (menu: React.ReactNode) => void;
-    setViewState: (state: ViewState) => void;
     getLanguagesList: () => string[];
     hideFooter: () => void;
     showFooter: () => void;
@@ -34,11 +30,7 @@ const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    const location = useLocation(); 
     const isDesktop = useIsDesktop();
-    const navigate = useNavigate();
-
-    const headerStates = HEADER_STATES(navigate);
 
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null)
 
@@ -80,36 +72,6 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         initLanguagesDictionary()
     }, []);
 
-    React.useEffect(() => {
-        const pathname = location.pathname
-        let resolved: ViewState | undefined
-        for (const [pattern, state] of Object.entries(headerStates)) {
-            if (matchPath({ path: pattern, end: true }, pathname)) {
-                resolved = state
-                break
-            }
-        }
-        if (resolved) {
-            setState(resolved)
-            setIsFooterHidden(resolved.hideFooter ?? false)
-        } else {
-            setState(null)
-            setIsFooterHidden(false)
-        }
-    }, [location.pathname])
-
-    const setHeaderMenu = (menu: React.ReactNode): void => {
-        setState(state => ({
-            ...state,
-            rightBtn: menu,
-        }))  
-    }
-
-    const setViewState = (state: ViewState): void => {
-        setState(state)
-        setIsFooterHidden(state.hideFooter ?? false)
-    }
-
     const getLanguagesList = (): string[] => {
         return languagesDictionary?.groups.find(g => g.code === 'TRANSLATIONS')?.elementCodes || []
     }
@@ -126,8 +88,6 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             loading: loading,
             state,
             isFooterHidden,
-            setHeaderMenu,
-            setViewState,
             getLanguagesList,
             hideFooter,
             showFooter,

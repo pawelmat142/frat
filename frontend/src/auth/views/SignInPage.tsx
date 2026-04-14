@@ -12,6 +12,7 @@ import { FaTelegram } from "react-icons/fa";
 import GoogleIcon from "global/components/icons/GoogleIcon";
 import FloatingInput from "global/components/controls/FloatingInput";
 import { Utils } from "global/utils/utils";
+import Header from "global/components/Header";
 
 const SignInPage: React.FC = () => {
     const { t } = useTranslation();
@@ -64,89 +65,93 @@ const SignInPage: React.FC = () => {
     const iconSize = 42
 
     return (
-        <div className="form-view relative">
+        <>
+            <Header title={t("signin.title")}></Header>
+            
+            <div className="form-view relative">
 
-            <form className="mt-10" onSubmit={handleSubmit}>
-                {isDevMode && (
-                    <div className="flex items-center justify-end">
-                        <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
-                            DEV FILL
-                        </Button>
+                <form className="mt-10" onSubmit={handleSubmit}>
+                    {isDevMode && (
+                        <div className="flex items-center justify-end">
+                            <Button onClick={handleDevFill} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY_TXT}>
+                                DEV FILL
+                            </Button>
+                        </div>
+                    )}
+
+                    <div className="flex flex-col gap-5 md:gap-5">
+                        <FloatingInput
+                            name="email"
+                            label={t("signin.email")}
+                            type="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            required
+                            fullWidth
+                        />
+                        <FloatingInput
+                            name="password"
+                            label={t("signin.password")}
+                            type="password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            required
+                            fullWidth
+                        />
                     </div>
-                )}
 
-                <div className="flex flex-col gap-5 md:gap-5">
-                    <FloatingInput
-                        name="email"
-                        label={t("signin.email")}
-                        type="email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        required
-                        fullWidth
-                    />
-                    <FloatingInput
-                        name="password"
-                        label={t("signin.password")}
-                        type="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        required
-                        fullWidth
-                    />
+                    <Button
+                        mode={BtnModes.SECONDARY_TXT}
+                        size={BtnSizes.SMALL}
+                        className="ml-auto mb-10 md:mb-5 secondary-text"
+                        onClick={() => {
+                            navigate(Path.FORGOT_PASSWORD);
+                        }}
+                    >
+                        {t("signin.forgotPassword")}
+                    </Button>
+
+                    <Button
+                        mode={BtnModes.PRIMARY}
+                        size={BtnSizes.LARGE}
+                        fullWidth={true}
+                        className="mt-5"
+                        type="submit"
+                        disabled={loading || !email || !password}
+                    >
+                        {loading ? t("signin.signingIn") : t("signin.submit")}
+                    </Button>
+
+                </form>
+
+                <div className="text-center mt-10 mb-4">
+                    {t("signin.orSignInWith")}
                 </div>
 
-                <Button
-                    mode={BtnModes.SECONDARY_TXT}
-                    size={BtnSizes.SMALL}
-                    className="ml-auto mb-10 md:mb-5 secondary-text"
-                    onClick={() => {
-                        navigate(Path.FORGOT_PASSWORD);
-                    }}
-                >
-                    {t("signin.forgotPassword")}
-                </Button>
+                <div className="flex gap-5 justify-center">
 
-                <Button
-                    mode={BtnModes.PRIMARY}
-                    size={BtnSizes.LARGE}
-                    fullWidth={true}
-                    className="mt-5"
-                    type="submit"
-                    disabled={loading || !email || !password}
-                >
-                    {loading ? t("signin.signingIn") : t("signin.submit")}
-                </Button>
+                    <div className="square-tile p-5 col-tile w-32 bottom-bar-shadow" onClick={() => handleGoogleSignIn()}>
+                        <GoogleIcon size={iconSize} />
+                        <div className="mt-1">Google</div>
+                    </div>
 
-            </form>
+                    <div className="square-tile p-5 col-tile w-32 bottom-bar-shadow" onClick={() => handleTelegramSignIn()}>
+                        <FaTelegram size={iconSize} className="mb-1 shrink-0" />
+                        <div>Telegram</div>
+                    </div>
 
-            <div className="text-center mt-10 mb-4">
-                {t("signin.orSignInWith")}
-            </div>
-
-            <div className="flex gap-5 justify-center">
-
-                <div className="square-tile p-5 col-tile w-32 bottom-bar-shadow" onClick={() => handleGoogleSignIn()}>
-                    <GoogleIcon size={iconSize} />
-                    <div className="mt-1">Google</div>
                 </div>
 
-                <div className="square-tile p-5 col-tile w-32 bottom-bar-shadow" onClick={() => handleTelegramSignIn()}>
-                    <FaTelegram size={iconSize} className="mb-1 shrink-0"/>
-                    <div>Telegram</div>
+                <div className="flex items-center cursor-pointer mx-auto w-full justify-center mt-10 mb-10" onClick={() => {
+                    navigate(Path.SIGN_UP);
+                }}>
+                    <span className="">{t("signin.noAccount")}</span>
+                    <Button mode={BtnModes.PRIMARY_TXT} fullWidth={false} >
+                        {t("signup.title")}
+                    </Button>
                 </div>
-
             </div>
-
-            <div className="flex items-center cursor-pointer mx-auto w-full justify-center mt-10 mb-10" onClick={() => {
-                navigate(Path.SIGN_UP);
-            }}>
-                <span className="">{t("signin.noAccount")}</span>
-                <Button mode={BtnModes.PRIMARY_TXT} fullWidth={false} >
-                    {t("signup.title")}
-                </Button>
-            </div>
-        </div>
+        </>
     );
 };
 

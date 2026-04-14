@@ -7,6 +7,7 @@ import Loading from "global/components/Loading";
 import { AuthService } from "auth/services/AuthService";
 import { toast } from "react-toastify";
 import FloatingInput from "global/components/controls/FloatingInput";
+import Header from "global/components/Header";
 
 const ForgotPassword: React.FC = () => {
     const { t } = useTranslation();
@@ -31,40 +32,44 @@ const ForgotPassword: React.FC = () => {
     }
 
     return (
-        <div className="form-view relative">
+        <>
+            <Header title={t("signin.forgotPasswordTitle")}></Header>
 
-            <form className="mt-10" onSubmit={handleSubmit}>
+            <div className="form-view relative">
 
-                <div className="flex flex-col gap-5 md:gap-5">
-                    <FloatingInput
-                        name="email"
-                        label={t("signin.email")}
-                        type="email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        required
-                        fullWidth
-                    />
+                <form className="mt-10" onSubmit={handleSubmit}>
+
+                    <div className="flex flex-col gap-5 md:gap-5">
+                        <FloatingInput
+                            name="email"
+                            label={t("signin.email")}
+                            type="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            required
+                            fullWidth
+                        />
+                    </div>
+                    <Button
+                        mode={BtnModes.PRIMARY}
+                        size={BtnSizes.LARGE}
+                        fullWidth={true}
+                        className="mt-8"
+                        type="submit"
+                        disabled={!email}
+                    >
+                        {t("signin.sendResetLink", "Send reset link")}
+                    </Button>
+                </form>
+                <div className="flex items-center cursor-pointer mx-auto w-full justify-center mt-5 mb-10" onClick={() => {
+                    navigate(-1);
+                }}>
+                    <Button mode={BtnModes.PRIMARY_TXT} fullWidth={true} >
+                        {t("common.back")}
+                    </Button>
                 </div>
-                <Button
-                    mode={BtnModes.PRIMARY}
-                    size={BtnSizes.LARGE}
-                    fullWidth={true}
-                    className="mt-8"
-                    type="submit"
-                    disabled={!email}
-                >
-                    {t("signin.sendResetLink", "Send reset link")}
-                </Button>
-            </form>
-            <div className="flex items-center cursor-pointer mx-auto w-full justify-center mt-5 mb-10" onClick={() => {
-                navigate(-1);
-            }}>
-                <Button mode={BtnModes.PRIMARY_TXT} fullWidth={true} >
-                    {t("common.back")}
-                </Button>
             </div>
-        </div>
+        </>
     );
 };
 

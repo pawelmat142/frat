@@ -26,6 +26,7 @@ import { UserProviders } from "@shared/interfaces/UserI";
 import { isOneOf } from "@shared/utils/util";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import WorkerFormStepAvailability from "./WorkerFormStepAvailability";
+import Header from "global/components/Header";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -299,7 +300,8 @@ const WorkerFormView: React.FC = () => {
         }
     }
 
-    return (
+    return (<>
+        <Header title={t("employeeProfile.form.title")}></Header>
         <FormWizard
             localStorageKey={LOCAL_STORAGE_KEY}
             formRef={formRef}
@@ -322,6 +324,7 @@ const WorkerFormView: React.FC = () => {
                 </>
             }
         </FormWizard>
+    </>
     );
 }
 

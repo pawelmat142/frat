@@ -15,6 +15,7 @@ import ListedItemNoteField from "user/components/ListedItemNoteField";
 import WorkerRecentViewListItem from "employee/components/ListItems/WorkerRecentViewListItem";
 import OfferRecentViewListItem from "offer/components/ListItems/OfferRecentViewListItem";
 import { useTranslation } from "react-i18next";
+import Header from "global/components/Header";
 
 const MyListedItemsView: React.FC = () => {
 
@@ -56,80 +57,83 @@ const MyListedItemsView: React.FC = () => {
     }
 
     return (
-        <div className="list-view pt-0">
+        <>
+            <Header title={t('user.myList')}></Header>
+            <div className="list-view pt-0">
 
-            {noResults ? (
-                <div className="flex flex-col items-center justify-center mt-20">
-                    <FaUserSlash className="mx-auto text-4xl mb-2 opacity-50" />
-                    <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
-                </div>
-            ) : (
+                {noResults ? (
+                    <div className="flex flex-col items-center justify-center mt-20">
+                        <FaUserSlash className="mx-auto text-4xl mb-2 opacity-50" />
+                        <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
+                    </div>
+                ) : (
 
-                <div className="results flex flex-col">
+                    <div className="results flex flex-col">
 
-                    {([...items]).map((item, index) => {
+                        {([...items]).map((item, index) => {
 
-                        const rowActions = (
-                            <>
-                                <IconButton className="p-3"
-                                    icon={<Ico.BOOKMARK />}
-                                    onClick={() => openNoteFiledForItem(item)}
-                                />
-                                <IconButton className="p-3" mode={BtnModes.ERROR_TXT}
-                                    icon={<Ico.DELETE />}
-                                    onClick={() => unmark(item)}
-                                />
-                            </>
-                        );
-
-                        if (item.referenceType === UserListedItemReferenceTypes.WORKER) {
-                            return (
-                                <div key={index} className={`list-item-border${index === 0 ? " first" : ""}${index === (items?.length ?? 0) - 1 ? " last" : ""}`}>
-                                    <SwipeableRow ref={el => el ? swipeRefs.current.set(item.id, el) : swipeRefs.current.delete(item.id)} actions={rowActions}>
-                                        <WorkerRecentViewListItem className="primary-bg"
-                                            worker={item.data as WorkerI}
-                                            disableDefaultBorder
-                                            date={item.listedAt}
-                                        ></WorkerRecentViewListItem>
-                                    </SwipeableRow>
-                                    <ListedItemNoteField
-                                        item={item}
-                                        open={openNoteItemId === item.id}
-                                        onClose={() => setOpenNoteItemId(null)}
+                            const rowActions = (
+                                <>
+                                    <IconButton className="p-3"
+                                        icon={<Ico.BOOKMARK />}
+                                        onClick={() => openNoteFiledForItem(item)}
                                     />
-                                </div>
-                            )
-                        }
-
-                        if (item.referenceType === UserListedItemReferenceTypes.OFFER) {
-                            return (
-                                <React.Fragment key={item.data.offerId}>
-                                    <SwipeableRow ref={el => el ? swipeRefs.current.set(item.id, el) : swipeRefs.current.delete(item.id)} actions={rowActions}>
-                                        <OfferRecentViewListItem
-                                            offer={item.data}
-                                            first={index === 0}
-                                            last={index === (items?.length ?? 0) - 1}
-                                            disableDefaultBorder
-                                            date={item.listedAt}
-                                        ></OfferRecentViewListItem>
-                                    </SwipeableRow>
-                                    <ListedItemNoteField
-                                        item={item}
-                                        open={openNoteItemId === item.id}
-                                        onClose={() => setOpenNoteItemId(null)}
+                                    <IconButton className="p-3" mode={BtnModes.ERROR_TXT}
+                                        icon={<Ico.DELETE />}
+                                        onClick={() => unmark(item)}
                                     />
-                                </React.Fragment>
-                            )
-                        }
-                        return null;
+                                </>
+                            );
 
-                    })}
+                            if (item.referenceType === UserListedItemReferenceTypes.WORKER) {
+                                return (
+                                    <div key={index} className={`list-item-border${index === 0 ? " first" : ""}${index === (items?.length ?? 0) - 1 ? " last" : ""}`}>
+                                        <SwipeableRow ref={el => el ? swipeRefs.current.set(item.id, el) : swipeRefs.current.delete(item.id)} actions={rowActions}>
+                                            <WorkerRecentViewListItem className="primary-bg"
+                                                worker={item.data as WorkerI}
+                                                disableDefaultBorder
+                                                date={item.listedAt}
+                                            ></WorkerRecentViewListItem>
+                                        </SwipeableRow>
+                                        <ListedItemNoteField
+                                            item={item}
+                                            open={openNoteItemId === item.id}
+                                            onClose={() => setOpenNoteItemId(null)}
+                                        />
+                                    </div>
+                                )
+                            }
+
+                            if (item.referenceType === UserListedItemReferenceTypes.OFFER) {
+                                return (
+                                    <React.Fragment key={item.data.offerId}>
+                                        <SwipeableRow ref={el => el ? swipeRefs.current.set(item.id, el) : swipeRefs.current.delete(item.id)} actions={rowActions}>
+                                            <OfferRecentViewListItem
+                                                offer={item.data}
+                                                first={index === 0}
+                                                last={index === (items?.length ?? 0) - 1}
+                                                disableDefaultBorder
+                                                date={item.listedAt}
+                                            ></OfferRecentViewListItem>
+                                        </SwipeableRow>
+                                        <ListedItemNoteField
+                                            item={item}
+                                            open={openNoteItemId === item.id}
+                                            onClose={() => setOpenNoteItemId(null)}
+                                        />
+                                    </React.Fragment>
+                                )
+                            }
+                            return null;
+
+                        })}
 
 
-                </div>
+                    </div>
 
-            )}
-        </div>
+                )}
+            </div>
+        </>
 
     )
 }

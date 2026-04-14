@@ -13,6 +13,7 @@ import { FirebaseAuth } from 'auth/services/FirebaseAuth';
 import { toast } from 'react-toastify';
 import { MenuItem } from 'global/interface/controls.interface';
 import ListUi from 'global/components/ui/ListUi';
+import Header from 'global/components/Header';
 
 const chevron = <FaChevronDown size={20} className="secondary-text m-auto" />;
 
@@ -79,10 +80,13 @@ const SettingsView: React.FC = () => {
         return <Loading></Loading>
     }
 
-    return (
+    return (<>
+        <Header title={t('common.settings')}></Header>
+        
         <div className="list-view">
             <ListUi items={items} itemClassName="m-font py-3"></ListUi>
         </div>
+    </>
     );
 };
 

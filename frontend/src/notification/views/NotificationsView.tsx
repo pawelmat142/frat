@@ -1,4 +1,5 @@
 import { AppConfig } from "@shared/AppConfig";
+import Header from "global/components/Header";
 import { Ico } from "global/icon.def";
 import NotificationListItem from "notification/components/NotificationListItem";
 import { useNotificationsContext } from "notification/NotificationsProvider";
@@ -29,27 +30,30 @@ const NotificationsView: React.FC = () => {
     const iconSize = `${AppConfig.DEFAULT_AVATAR_SIZE}rem`;
 
 
-    return <div className="list-view">
+    return <>
+        <Header title={t('notification.header')}></Header>
+        
+        <div className="list-view">
 
-        {!notifications.length && (
-            <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
-                <Ico.NOTIFICATION size={iconSize} className="secondary-text" />
-                <div className="secondary-text">{t('notification.noNotifications')}</div>
-            </div>
-        )}
+            {!notifications.length && (
+                <div className="flex flex-col items-center gap-3 mt-10 px-5 text-center">
+                    <Ico.NOTIFICATION size={iconSize} className="secondary-text" />
+                    <div className="secondary-text">{t('notification.noNotifications')}</div>
+                </div>
+            )}
 
-        {(notifications ?? []).map((notification, index) => (
-            <NotificationListItem
-                key={index}
-                notification={notification}
-                first={index === 0}
-                last={index === (notifications?.length ?? 0) - 1}
-            ></NotificationListItem>
-        ))}
-        {/* <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} /> */}
+            {(notifications ?? []).map((notification, index) => (
+                <NotificationListItem
+                    key={index}
+                    notification={notification}
+                    first={index === 0}
+                    last={index === (notifications?.length ?? 0) - 1}
+                ></NotificationListItem>
+            ))}
+            {/* <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} /> */}
 
-    </div>
-
+        </div>
+    </>
 }
 
 export default NotificationsView;
