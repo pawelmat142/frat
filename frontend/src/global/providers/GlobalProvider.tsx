@@ -3,14 +3,12 @@ import { DictionaryService } from "global/services/DictionaryService"
 import React from "react"
 import { createContext, useRef, useState } from "react"
 import { useIsDesktop } from "global/hooks/isMobile";
-import { ViewState as ViewState, } from "global/headerStates";
 import { Dictionaries } from "@shared/utils/DictionaryUtil";
 
 interface GlobalContextType {
     isDesktop: boolean;
     dics: Dictionaries;
     loading: boolean;
-    state: ViewState | null,
     isFooterHidden: boolean;
     getLanguagesList: () => string[];
     hideFooter: () => void;
@@ -35,7 +33,6 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null)
 
     const [loading, setLoading] = useState(false)
-    const [state, setState] = useState<ViewState | null>(null)
     const [isFooterHidden, setIsFooterHidden] = useState(false)
 
     const [floatingButton, setFloatingButtonState] = useState<React.ReactNode>(null)
@@ -86,7 +83,6 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 languages: languagesDictionary,
             },
             loading: loading,
-            state,
             isFooterHidden,
             getLanguagesList,
             hideFooter,

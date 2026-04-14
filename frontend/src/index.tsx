@@ -17,7 +17,6 @@ import { BottomSheetProvider } from 'global/providers/BottomSheetProvider';
 import DrawerProvider from 'global/providers/DrawerProvider';
 import WorkersSearchProvider from 'employee/views/search/WorkersSearchProvider';
 import { GlobalProvider } from 'global/providers/GlobalProvider';
-import GlobalHeader from 'global/components/GlobalHeader';
 import OfferSearchProvider from 'offer/views/search/OfferSearchProvider';
 import { ChatsProvider } from 'chat/ChatsProvider';
 import { NotificationsProvider } from 'notification/NotificationsProvider';
@@ -28,11 +27,9 @@ import FloatingButtonWrapper from 'global/components/buttons/FloatingButtonWrapp
 import { motion } from 'framer-motion';
 
 const AppShell: React.FC = () => {
-  const { state, isFooterHidden } = useGlobalContext();
+  const { isFooterHidden } = useGlobalContext();
   return (
     <div className="app-shell">
-      <GlobalHeader />
-      {/* <NotificationsGlobalBar /> */}
       <motion.main layout transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }} className={`app-main${isFooterHidden ? ' hide-footer' : ''}`}>
         <App />
       </motion.main>
