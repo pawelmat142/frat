@@ -11,6 +11,7 @@ import PseudoView from "global/components/PseudoView";
 import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
 import { NavBus } from "global/utils/PseudoViewBus";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import { MenuItemIdentifiers } from "global/interface/controls.interface";
 
 export interface WorkersSearchContextProps {
     filters: WorkerSearchFilters;
@@ -72,6 +73,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }, []);
 
     const openWorkersPseudoView = (open: boolean) => {
+        NavBus.emit(MenuItemIdentifiers.WORKERS);
         if (open) {
             globalCtx.setHideFloatingButton(true);
         } else {

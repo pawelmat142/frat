@@ -11,6 +11,7 @@ import { AppConfig } from "@shared/AppConfig";
 import { wait } from "global/utils/utils";
 import { NavBus } from "global/utils/PseudoViewBus";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import { MenuItemIdentifiers } from "global/interface/controls.interface";
 
 export interface OfferSearchContextProps {
     filters: OfferSearchFilters;
@@ -96,6 +97,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const hasMoreRef = useRef(false);
 
     const navToSearch = () => {
+        NavBus.emit(MenuItemIdentifiers.OFFERS);
         if (filtersValid) {
             setFiltersWithSearchAndNavigate(filters)
         } else {

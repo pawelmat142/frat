@@ -135,6 +135,7 @@ export interface SelectorItem<T extends SelectorValue = SelectorValue> {
 
 export interface MenuItem {
     label: string
+    id?: MenuItemIdentifier // specific for bottom bar, used to set active state
     active?: boolean
     if?: any,
     src?: string
@@ -144,3 +145,13 @@ export interface MenuItem {
     badge?: string
     onClick?: (e?: React.MouseEvent) => void
 }
+
+export const MenuItemIdentifiers = {
+    START: 'start',
+    WORKERS: 'workers',
+    OFFERS: 'offers',
+    MESSAGES: 'messages',
+    SIGN_IN: 'sign_in',
+} as const
+
+export type MenuItemIdentifier = typeof MenuItemIdentifiers[keyof typeof MenuItemIdentifiers];
