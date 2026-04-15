@@ -446,6 +446,13 @@ const WorkerView: React.FC = () => {
                 setHideFloatingBtn(open);
             }} />
 
+            {!!worker.bio && (
+                <div className="mb-10 px-5">
+                    <div className="secondary-text mb-3">{t('employeeProfile.form.bioLabel')}</div>
+                    <div className="s-font font-light">{worker.bio}</div>
+                </div>
+            )}
+
             <div className="px-5 mb-10">
                 <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>
             </div>
