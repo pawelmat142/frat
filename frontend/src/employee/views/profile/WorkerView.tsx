@@ -31,6 +31,8 @@ import Button from "global/components/controls/Button";
 import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/interfaces/UserListedItem";
 import { UserListedItemService } from "user/services/UserListedItemService";
 import Header from "global/components/Header";
+import WorkerStatItems from "employee/components/WorkerStatItems";
+import CategoriesChips from "global/components/chips/CategoriesChips";
 
 const WorkerView: React.FC = () => {
 
@@ -222,7 +224,7 @@ const WorkerView: React.FC = () => {
     }
 
     const notifyProfileView = async (profile: WorkerI) => {
-        if (profile?.uid) {
+        if (me && profile?.uid) {
             await WorkerService.notifyWorkerView(profile.workerId)
         }
     }
@@ -388,22 +390,32 @@ const WorkerView: React.FC = () => {
     return (<>
         <Header title={t('employeeProfile.title')} menu={getProfileMenuItems(worker)}></Header>
 
-        <div className="w-full">
+        <div className="w-full flex flex-col flex-1">
 
-            <div className="flex gap-5 items-center px-5">
+            <div className="flex gap-5 items-center px-5 flex-1">
 
                 <div className="worker-avatar" onClick={goToUserProfile}>
                     <img src={worker.avatarRef?.url || AVATAR_MOCK} alt={worker.displayName} />
                 </div>
 
-                <div className="worker-title">
-                    <div className="l-font font-semibold">{worker.displayName}</div>
-                    <div className="s-font secondary-text">{worker.email}</div>
+                <div className="worker-profile-top">
+                    <div className="worker-profile-top-row one">
+                        <CategoriesChips categories={worker.categories} />
+                    </div>
+                    <div className="worker-profile-top-row two">
+                        <div>
+                            <div className="l-font font-semibold">{worker.displayName}</div>
+                            <div className="s-font secondary-text">{worker.email}</div>
+                        </div>
+                    </div>
+                    <div className="worker-profile-top-row three">
+                        <WorkerStatItems worker={worker} />
+                    </div>
                 </div>
 
             </div>
 
-           {!isMe && <div className="flex justify-end">
+            {!isMe && <div className="flex justify-end">
 
                 {isSavedOnList ? (
                     <Button onClick={removeListItem}

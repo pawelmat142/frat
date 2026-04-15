@@ -23,6 +23,13 @@ export abstract class Util {
         return[UserRoles.ADMIN, UserRoles.SUPERADMIN].some(role => user.roles.includes(role));
     }
 
+    public static captializeFirstLetter(str: string): string {
+        if (!str) {
+            return str;
+        }
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
 }
 
 export const isOneOf = (list: any[], item: any): boolean => {

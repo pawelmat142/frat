@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useWorkersSearch } from "./WorkersSearchProvider";
 import { DateUtil } from "@shared/utils/DateUtil";
 import { Dictionaries, DictionaryUtil } from "@shared/utils/DictionaryUtil";
+import CategoriesChips from "global/components/chips/CategoriesChips";
 
 const WorkersSearchFilters: React.FC = () => {
 
@@ -74,17 +75,7 @@ const WorkersSearchFilters: React.FC = () => {
                     </div>
                 )}
 
-                {(!!ctx.filters.categories?.length) && (
-                    <div className="flex items-center">
-                        <div className="chip-container">
-                            {(ctx.filters.categories || []).map(category => (
-                                <div key={category} className="search-chip tertiary">
-                                    {t(DictionaryUtil.getTranslationKey(Dictionaries.WORK_CATEGORY, category))}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
+                <CategoriesChips categories={ctx.filters.categories} />
 
                 {(!!ctx.filters.certificates?.length) && (
                     <div className="flex items-center">

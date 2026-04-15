@@ -991,6 +991,27 @@ $cellRadiusBig: 1rem;
     border-radius: 50%;
 }
 
+.worker-profile-top {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    height: 100%;
+
+    .worker-profile-top-row {
+        display: flex;
+        flex: 2;
+        &.one {
+            flex: 1;
+            justify-content: flex-end;
+        }
+        &.three {
+            flex: 1;
+            justify-content: flex-end;
+        }
+    }
+}
+
 
 
 .border-swiper-row {
