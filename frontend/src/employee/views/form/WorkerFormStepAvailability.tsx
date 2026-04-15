@@ -43,6 +43,10 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
             if (range) {
                 setValue("availability.availabilityDateRanges", [range]);
             }
+        } else if (availabilityOption === WorkerAvailabilityOptions.FROM_DATE) {
+            if (!getValues("availability.startDate")) {
+                setValue("availability.startDate", DateUtil.toLocalDateString(new Date()));
+            }
         }
     }, [availabilityOption]);
 
