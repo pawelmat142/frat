@@ -193,7 +193,6 @@ const WorkerFormView: React.FC = () => {
                 email: worker.email || "",
                 communicationLanguages: worker.communicationLanguages || [""],
                 avatarRef: worker.avatarRef,
-                bio: worker.bio || ''
             },
             location: {
                 locationOption: worker.locationOption || WorkerLocationOptions.POSITION,
@@ -212,6 +211,7 @@ const WorkerFormView: React.FC = () => {
                 careerStartDate: worker.careerStartDate,
                 maxAltitude: worker.maxAltitude,
                 readyToTravel: worker.readyToTravel,
+                bio: worker.bio || ''
             },
             certificates: {
                 certificates: worker.certificates || [],

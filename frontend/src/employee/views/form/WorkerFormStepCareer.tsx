@@ -3,12 +3,12 @@ import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { WorkerForm } from "@shared/interfaces/WorkerI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
-import DateInputViewSelector from "global/components/callendar/DateInputViewSelector";
 import FloatingInput from "global/components/controls/FloatingInput";
 import BooleanSelector from "global/components/controls/BooleanSelector";
 import { FormValidator } from "global/FormValidator";
 import FloatingDateInput from "global/components/callendar/FloatingDateInput";
 import { DateUtil } from "@shared/utils/DateUtil";
+import FloatingTextarea from "global/components/controls/FloatingTextarea";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -87,6 +87,21 @@ const WorkerFormStepCareer: React.FC<Props> = ({ formRef }) => {
                             label={t("employeeProfile.form.career.readyToTravel")}
                             labelTrue={t("common.yes")}
                             labelFalse={t("common.no")}
+                        />
+                    )}
+                />
+
+                <p className="secondary-text s-font">*{t("employeeProfile.form.bioDesc")}</p>
+
+                <Controller
+                    name="career.bio"
+                    control={control}
+                    render={({ field }) => (
+                        <FloatingTextarea
+                            label={t("employeeProfile.form.bioLabel")}
+                            className="w-full"
+                            value={field.value ?? ''}
+                            onChange={e => field.onChange(e.target.value)}
                         />
                     )}
                 />

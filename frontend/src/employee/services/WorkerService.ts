@@ -10,25 +10,25 @@ const mapFormToApi = (form: WorkerForm): WorkerFormDto => {
 		email: form.personalData.email,
 		communicationLanguages: form.personalData.communicationLanguages,
 		avatarRef: form.personalData.avatarRef,
-		bio: form.personalData.bio,
-
+		
 		locationOption: form.location.locationOption,
 		countryCode: form.location.countryCode || undefined,
 		geocodedPosition: form.location.geocodedPosition || undefined,
 		locationCountries: form.location.locationCountries,
-
+		
 		availabilityOption: form.availability.availabilityOption,
 		availabilityDateRanges: form.availability.availabilityDateRanges,
 		rangesOption: form.availability.rangesOption,
 		startDate: form.availability.startDate || undefined,
-
+		
 		certificates: form.certificates.certificates,
 		certificateDates: form.certificates.certificateDates,
-
+		
 		careerStartDate: form.career.careerStartDate,
 		maxAltitude: form.career.maxAltitude,
 		readyToTravel: form.career.readyToTravel,
 		categories: form.career.categories,
+		bio: form.career.bio,
 	};
 };
 

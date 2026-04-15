@@ -551,6 +551,8 @@
         "city": "Miasto",
         "email": "Email",
         "optionalinfo": "Informacje opcjonalne - pokażemy je na Twoim profilu jeśli je wypełnisz.",
+        "bioDesc": "Możesz dodać krótki opis siebie, swoich umiejętności i doświadczenia.",
+        "bioLabel": "O mnie",
         "personalData": {
           "label": "Krok 1",
           "title": "Dane osobowe"

@@ -558,6 +558,8 @@
         "optionalinfo": "Optional information - we will show it on your profile if you fill it out.",
         "city": "City",
         "email": "Email",
+        "bioDesc": "You can add a short description about yourself, your skills and experience.",
+        "bioLabel": "About me",
         "personalData": {
           "label": "Step 1",
           "title": "Personal Information"

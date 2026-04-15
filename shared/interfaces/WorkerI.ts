@@ -106,8 +106,6 @@ export interface WorkerFormStepPersonalData {
   email: string;
   communicationLanguages: string[];
   avatarRef: AvatarRef;
-  // TODO - add step for bio and move it there
-  bio?: string;
 }
 
 export interface WorkerFormStepCareer {
@@ -115,6 +113,7 @@ export interface WorkerFormStepCareer {
   careerStartDate?: string;
   maxAltitude?: number; //[m]
   readyToTravel?: boolean;
+  bio?: string;
 }
 
 export interface WorkerFormStepLocation {
