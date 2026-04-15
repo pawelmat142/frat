@@ -111,6 +111,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
         f.setValue('positionRadiusKm', loc.positionRadiusKm);
     };
 
+
     return (
         <div className="relative flex flex-col primary-bg h-full">
             <Header onBack={() => onClose?.()} title={t("employeeProfile.searchTitle")} />

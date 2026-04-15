@@ -10,9 +10,13 @@ type NavListener = (item: MenuItemIdentifier) => void;
 const navListeners = new Set<NavListener>();
 
 export const NavBus = {
+    
     emit: (item: MenuItemIdentifier): void => {
-        navListeners.forEach(fn => fn(item));
+        navListeners.forEach(fn => {
+            return fn(item)
+        });
     },
+
     subscribe: (fn: NavListener): (() => void) => {
         navListeners.add(fn);
         return () => navListeners.delete(fn);

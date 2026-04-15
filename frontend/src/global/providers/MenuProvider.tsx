@@ -1,5 +1,5 @@
 import React, { createContext, useContext, ReactNode, useEffect, useState } from 'react';
-import { matchPath, useNavigate } from 'react-router-dom';
+import { matchPath, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { Path } from '../../path';
 import { UserRoles } from '@shared/interfaces/UserI';
 import { isOneOf } from '@shared/utils/util';
@@ -37,6 +37,9 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const workerSearchCtx = useWorkersSearch()
     const offerSearchCtx = useOfferSearch()
     const notificationsCtx = useNotificationsContext();
+
+    const location = useLocation();
+    const navType = useNavigationType(); // 'POP' | 'PUSH' | 'REPLACE'
 
     const getItems = (id?: MenuItemIdentifier): MenuItem[] => {
         const isAdmin = me?.roles.some(role => isOneOf([UserRoles.ADMIN, UserRoles.SUPERADMIN], role));
@@ -104,21 +107,30 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
 
     const [items, setItems] = useState<MenuItem[]>(getItems());
 
+    const refreshItems = (id?: MenuItemIdentifier) => {
+        setItems(getItems(id));
+    }
+
     useEffect(() => {
-        setItems(getItems());
+        refreshItems();
         return NavBus.subscribe((id) => {
-            setItems(getItems(id));
+            refreshItems(id);
         });
     }, [authCtx.isAuthenticated, me])
+    
+    useEffect(() => {
+        if (navType === 'POP') {
+            refreshItems();
+        }
+    }, [location, navType]);
 
     const setActiveBottomBarItem = (id: MenuItemIdentifier) => {
         items.forEach(item => item.active = false);
-        console.log('Setting active menu item:', id);
     }
 
     const value: MenuContextType = {
         items,
-        setActiveBottomBarItem
+        setActiveBottomBarItem,
     };
 
     return (
