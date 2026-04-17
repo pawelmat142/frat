@@ -99,7 +99,7 @@ const WorkersSearchView: React.FC = () => {
         }
     }
 
-            return (<>
+    return (<>
         <Header title={t('employeeProfile.title')}></Header>
 
         <div className="list-view pt-0">
