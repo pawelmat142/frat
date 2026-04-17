@@ -1,6 +1,5 @@
 import { AddNoteDto, AddUserListedItemDto, ListedItemNote, UserListedItem } from "@shared/interfaces/UserListedItem";
 import { httpClient } from "global/services/http";
-import { remove } from "remove-accents";
 
 export const UserListedItemService = {
 

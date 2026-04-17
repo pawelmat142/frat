@@ -298,6 +298,7 @@ const WorkerView: React.FC = () => {
 
     const worksInIndurstry = getWorksInIndustry();
 
+    // TODO translacje
     const addListItem = async () => {
         if (isMe || !userCtx.meCtx) return;
         const meCtx = userCtx.meCtx;

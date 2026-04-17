@@ -6,13 +6,14 @@ const ACTIONS_WIDTH = 120;
 interface SwipeableRowProps {
     children: React.ReactNode;
     actions: React.ReactNode;
+    disable?: boolean;
 }
 
 export interface SwipeableRowRef {
     close: () => void;
 }
 
-const SwipeableRow = forwardRef<SwipeableRowRef, SwipeableRowProps>(({ children, actions }, ref) => {
+const SwipeableRow = forwardRef<SwipeableRowRef, SwipeableRowProps>(({ children, actions, disable }, ref) => {
     const [offset, setOffset] = useState(0);
     const [revealed, setRevealed] = useState(false);
     const startXRef = useRef<number | null>(null);
@@ -24,6 +25,8 @@ const SwipeableRow = forwardRef<SwipeableRowRef, SwipeableRowProps>(({ children,
             setRevealed(false);
         },
     }));
+
+
 
     const handleTouchStart = (e: React.TouchEvent) => {
         startXRef.current = e.touches[0].clientX;
@@ -69,6 +72,10 @@ const SwipeableRow = forwardRef<SwipeableRowRef, SwipeableRowProps>(({ children,
         setRevealed(snap > 0);
         startXRef.current = null;
     };
+
+    if (disable) {
+        return <>{children}</>;
+    }
 
     return (
         <div
