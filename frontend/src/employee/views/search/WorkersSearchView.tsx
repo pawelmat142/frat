@@ -100,7 +100,7 @@ const WorkersSearchView: React.FC = () => {
     }
 
     return (<>
-        <Header title={t('employeeProfile.title')}></Header>
+        <Header title={t('employeeProfile.searchTitle')}></Header>
 
         <div className="list-view pt-0">
 

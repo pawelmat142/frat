@@ -71,7 +71,7 @@ const DashboardView: React.FC = () => {
         label: t("account.friends"),
         onClick: () => navigate(Path.getFriendsPath(me.uid))
     }, {
-        label: t("user.findTechnician"),
+        label: t("employeeProfile.search"),
         icon: Ico.SEARCH,
         onClick: () => workerSearchCtx.navToSearch()
     }, {

@@ -114,7 +114,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
 
     return (
         <div className="relative flex flex-col primary-bg h-full">
-            <Header onBack={() => onClose?.()} title={t("employeeProfile.searchTitle")} />
+            <Header onBack={() => onClose?.()} title={t("employeeProfile.filtersTitle")} />
 
             <form className='flex flex-col flex-1 form-view'
                 noValidate
