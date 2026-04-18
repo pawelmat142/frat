@@ -183,7 +183,7 @@ const OfferView: React.FC = () => {
                         <CallendarTile range={{ start: DateUtil.toLocalDateString(offer.startDate) }}></CallendarTile>
 
                         {/* TODO map tile */}
-                        <div className="square-tile col-tile"></div>
+                        <div className="p-tile square-tile col-tile"></div>
 
                     </div>
 

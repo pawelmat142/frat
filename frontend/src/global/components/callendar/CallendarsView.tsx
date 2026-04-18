@@ -121,7 +121,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
 
     if (!selectorMode && !date) {
         return (
-            <div className="square-tile col-tile px-5">
+            <div className="p-tile square-tile col-tile px-5">
                 {t("others.availableAnytime")}
             </div>
         )

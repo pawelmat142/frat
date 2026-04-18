@@ -193,7 +193,8 @@
       "yes": "Yes",
       "no": "No",
       "networkError": "Network error",
-      "showMore": "Show more"
+      "showMore": "Show more",
+      "menu": "Menu"
     },
     "header": {
       "home": "Home",

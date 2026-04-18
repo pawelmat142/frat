@@ -19,25 +19,26 @@ const MainTiles: React.FC = () => {
     const workerSearchCtx = useWorkersSearch()
     const offerSearchCtx = useOfferSearch()
 
+    const tileClass = "p-tile square-tile col-tile bottom-bar-shadow primary-color gap-1"
     return (
         <div>
             <div className="main-tiles">
 
-                <div className="ripple square-tile col-tile bottom-bar-shadow" onClick={() => navigate(Path.SIGN_IN)}>
+                <div className={tileClass} onClick={() => navigate(Path.SIGN_IN)}>
                     <Ico.SIGN_IN size={iconSize} />
                     <div >{t("signin.submit")}</div>
                 </div>
 
-                <div className="ripple square-tile col-tile bottom-bar-shadow" onClick={install}>
+                <div className={tileClass} onClick={install}>
                     <Ico.DOWNLOAD size={iconSize} />
                     <div className="px-5">{t("pwa.install")}</div>
                 </div>
 
-                <div className="ripple square-tile col-tile bottom-bar-shadow" onClick={workerSearchCtx.navToSearch}>
+                <div className={tileClass} onClick={workerSearchCtx.navToSearch}>
                     <Ico.SEARCH size={iconSize} />
                     <div>{t("employeeProfile.search")}</div>
                 </div>
-                <div className="ripple square-tile col-tile bottom-bar-shadow" onClick={offerSearchCtx.navToSearch}>
+                <div className={tileClass} onClick={offerSearchCtx.navToSearch}>
                     <Ico.OFFER size={iconSize} />
                     <div>{t("offer.search")}</div>
                 </div>

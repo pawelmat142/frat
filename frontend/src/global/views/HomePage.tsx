@@ -1,15 +1,12 @@
 
 import ReportForm from "global/components/ReportForm";
 import MainTiles from "./MainTiles";
-import { useTranslation } from "react-i18next";
 import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import DashboardView from "dashboard/DashboardView";
 import Logo from "global/components/Logo";
-import Header from "global/components/Header";
 
 const HomePage: React.FC = () => {
-  const { t } = useTranslation();
   const authCtx = useAuthContext();
 
   if (authCtx.loading) {

@@ -24,7 +24,7 @@ const ProfileDataTile: React.FC<ProfileDataTileProps> = ({ profile, languagesDic
     const languageNames = Utils.prepareLanguageNames(t, profile.communicationLanguages, languagesDictionary);
 
     return (
-        <div className="square-tile data-tile p-1">
+        <div className="p-tile square-tile data-tile p-1">
 
             <div>
                 <div>

@@ -133,7 +133,7 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
 
     return (
         <div
-            className={`square-tile col-tile avatar-tile`}
+            className={`p-tile square-tile col-tile avatar-tile`}
         >
             <img src={displaySrc} alt={alt} />
             {isUploading && <div className="avatar-loader" />}

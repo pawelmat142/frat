@@ -65,7 +65,7 @@ const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
     const distance = getDistanceInfo();
 
     return (
-        <div className="square-tile col-tile big offer-details-tile">
+        <div className="p-tile square-tile col-tile big offer-details-tile">
             {/* <div className="w-full flex justify-between">
                 <div className="mb-1 primary-text">{category}</div>
                 <div className="text-right">

@@ -426,10 +426,7 @@ $tilePadding: .5rem 1rem;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
 
-    .square-tile {
-        color: $primary-color;
-        gap: .5rem;
-
+    .p-tile {
         &.big {
             grid-column: span 2;
             aspect-ratio: unset;
@@ -439,7 +436,7 @@ $tilePadding: .5rem 1rem;
     @media screen and (min-width: $tablet) {
         grid-template-columns: 1fr 1fr 1fr 1fr;
 
-        .square-tile {
+        .p-tile {
             &.big {
                 aspect-ratio: unset;
             }
@@ -472,7 +469,7 @@ $tilePadding: .5rem 1rem;
         width: 100%;
     }
 
-    .square-tile {
+    .p-tile {
         width: 100%;
         border-radius: .6rem;
     }
@@ -494,12 +491,11 @@ $tilePadding: .5rem 1rem;
     }
 }
 
-.square-tile {
+.p-tile {
     @extend .ripple;
     display: flex;
     justify-content: center;
     align-items: center;
-    aspect-ratio: 1 / 1;
     background-color: $secondary-bg;
     border-radius: $tile-radius;
 
@@ -507,6 +503,14 @@ $tilePadding: .5rem 1rem;
         flex-direction: column;
         text-align: center;
     }
+}
+
+.dashboard-tile {
+    letter-spacing: 0;
+}
+
+.square-tile {
+    aspect-ratio: 1 / 1;
 }
 
 .avatar-tile {
@@ -542,7 +546,7 @@ $tilePadding: .5rem 1rem;
 
 
 // CALLENDAR
-.square-tile.data-tile {
+.p-tile.data-tile {
     color: $primary-text;
     font-size: $sFont;
     justify-content: flex-start;
@@ -559,7 +563,7 @@ $tilePadding: .5rem 1rem;
     border-radius: calc($tile-radius - .35rem);
 }
 
-.square-tile.month-tile {
+.p-tile.month-tile {
     display: flex;
     flex-direction: column;
     justify-content: space-between;

@@ -21,7 +21,7 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ range }) => {
 
     if (!dateStr) {
         return (
-            <div className="square-tile col-tile px-5">
+            <div className="p-tile square-tile col-tile px-5">
                 {t("others.availableAnytime")}
             </div>
         )
@@ -39,7 +39,7 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ range }) => {
 
     return (
         <>
-            <div className="square-tile month-tile ripple p-1" onClick={() => openDialog()}>
+            <div className="p-tile square-tile month-tile ripple p-1" onClick={() => openDialog()}>
 
                 <div className="mb-2 s-font">{t(`callendar.monthShort.${month}`)} {year}</div>
 
