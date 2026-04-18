@@ -4,9 +4,10 @@ import { useTranslation } from "react-i18next";
 
 interface Props {
     categories?: string[]
+    smaller?: boolean;
 }
 
-const CategoriesChips: React.FC<Props> = ({ categories }) => {
+const CategoriesChips: React.FC<Props> = ({ categories, smaller }) => {
 
     const { t } = useTranslation();
 
@@ -18,7 +19,7 @@ const CategoriesChips: React.FC<Props> = ({ categories }) => {
         <div className="flex items-center">
             <div className="chip-container">
                 {(categories || []).map(category => (
-                    <div key={category} className="search-chip tertiary">
+                    <div key={category} className={`search-chip tertiary${smaller ? ' smaller' : ''}`}>
                         {Util.captializeFirstLetter(t(DictionaryUtil.getTranslationKey(Dictionaries.WORK_CATEGORY, category)))}
                     </div>
                 ))}

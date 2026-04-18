@@ -2,11 +2,20 @@ import { ThumbUp, Visibility } from "@mui/icons-material";
 import { WorkerI, WorkerWithMutualFriends } from "@shared/interfaces/WorkerI";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import { Ico } from "global/icon.def";
+import { IconType } from "react-icons";
 import { useUserContext } from "user/UserProvider";
+
+interface StatItem {
+    icon: IconType,
+    display: string | number
+    if: any
+}
 
 interface Props {
     worker: WorkerI,
 }
+
+const iconSize = 14;
 
 const WorkerStatItems: React.FC<Props> = ({ worker }) => {
 
@@ -27,30 +36,32 @@ const WorkerStatItems: React.FC<Props> = ({ worker }) => {
 
     const distance = getDistanceInfo();
 
+    const items: StatItem[] = [{
+        icon: Ico.VIEWS,
+        if: true,
+        display: worker.uniqueViewsCount || 0,
+    }, {
+        icon: Ico.LIKES,
+        if: worker.likes?.length,
+        display: worker.likes?.length || 0,
+    }, {
+        icon: Ico.FRIENDS,
+        if: mutualFriendsUids.length,
+        display: mutualFriendsUids.length,
+    }, {
+        icon: Ico.MARKER,
+        if: distance,
+        display: distance,
+    }]
 
-    return (<div className="flex items-center gap-3">
-        <div>
-            <Visibility fontSize="inherit" className="secondary-text mr-1" />
-            <span className="xs-font">{worker.uniqueViewsCount || 0}</span>
-        </div>
-        <div>
-            <ThumbUp fontSize="inherit" className="secondary-text mr-1" />
-            <span className="xs-font">{worker.likes?.length || 0}</span>
-        </div>
+    return (<div className="flex items-center gap-2">
 
-        {!!mutualFriendsUids.length && (
-            <div className="flex items-center">
-                <Ico.FRIENDS size={14} className="secondary-text mr-1" />
-                <span className="xs-font">{mutualFriendsUids.length}</span>
-            </div>
-        )}
-
-        {!!distance && (
-            <div className="flex items-center">
-                <Ico.MARKER size={14} className="secondary-text mr-1" />
-                <span className="xs-font">{distance}</span>
-            </div>
-        )}
+        {items.filter(i => !!i.if).map(i => {
+            return (<div className="flex items-center gap05" key={i.icon.toString()}>
+                <i.icon size={iconSize} className="secondary-text" />
+                <span className="xs-font">{i.display}</span>
+            </div>)
+        })}
     </div>)
 }
 

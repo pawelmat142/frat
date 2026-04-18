@@ -409,6 +409,11 @@ input {
     color: $secondary-text;
     border: .5px solid $secondary-text;
   }
+
+  &.smaller {
+    font-size: $xsFont;
+    padding: .05rem .25rem;
+  }
 }
 
 

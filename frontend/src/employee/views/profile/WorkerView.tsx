@@ -401,12 +401,11 @@ const WorkerView: React.FC = () => {
 
                 <div className="worker-profile-top">
                     <div className="worker-profile-top-row one">
-                        <CategoriesChips categories={worker.categories} />
+                        <CategoriesChips categories={worker.categories} smaller />
                     </div>
                     <div className="worker-profile-top-row two">
                         <div>
                             <div className="l-font font-semibold">{worker.displayName}</div>
-                            <div className="s-font secondary-text">{worker.email}</div>
                         </div>
                     </div>
                     <div className="worker-profile-top-row three">
@@ -415,23 +414,6 @@ const WorkerView: React.FC = () => {
                 </div>
 
             </div>
-
-            {!isMe && <div className="flex justify-end">
-
-                {isSavedOnList ? (
-                    <Button onClick={removeListItem}
-                        mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="gap-2">
-                        <Ico.BOOKMARK size={14} />
-                        {t('user.removeFromList')}
-                    </Button>
-                ) : (
-                    <Button onClick={addListItem}
-                        mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} className="gap-2">
-                        <Ico.BOOKMARK size={14} />
-                        {t('user.addToList')}
-                    </Button>
-                )}
-            </div>}
 
             <div className="mb-5 mt-5">
                 <ListUi items={getListItems()}></ListUi>

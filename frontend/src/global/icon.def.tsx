@@ -1,5 +1,6 @@
 import { IconType } from "react-icons";
 import { FaBan, FaBars, FaBell, FaBookmark, FaBriefcase, FaCalendarAlt, FaCheck, FaChevronRight, FaCog, FaComments, FaDownload, FaEdit, FaEllipsisV, FaFilter, FaGlobe, FaHome, FaIdCard, FaMapMarker, FaMapMarkerAlt, FaMarker, FaPaperPlane, FaPhone, FaPlus, FaRegBookmark, FaRegClock, FaRegCompass, FaRegEnvelope, FaRulerVertical, FaSearch, FaSignInAlt, FaSignOutAlt, FaSlidersH, FaStar, FaStream, FaTags, FaTimes, FaTrash, FaUserCircle, FaUserFriends, FaUserPlus } from "react-icons/fa";
+import { MdThumbUp, MdVisibility } from "react-icons/md";
 
 export const Ico = {
     HOME: FaHome,
@@ -39,4 +40,6 @@ export const Ico = {
     BOOKMARK: FaBookmark,
     BOOKMARK_OUTLINE: FaRegBookmark ,
     FEATURED: FaStar,
+    VIEWS: MdVisibility,
+    LIKES: MdThumbUp,
 } as const satisfies Record<string, IconType>

@@ -7,7 +7,7 @@ interface Props {
     iconOrAvatarBadge?: React.ReactNode
 }
 
-const ListItemImg: React.FC<Props> = ({ imgUrl, component, size = 3, iconOrAvatarBadge }) => {
+const ListItemImg: React.FC<Props> = ({ imgUrl, component, size = 3.5, iconOrAvatarBadge }) => {
 
     if (!imgUrl && !component) return null;
 

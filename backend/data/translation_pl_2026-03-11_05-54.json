@@ -203,7 +203,7 @@
       "profile": "Profil"
     },
     "others": {
-      "lessThan": "< {{value}} {{unit}}",
+      "lessThan": "<{{value}} {{unit}}",
       "availableAnytime": "Dostępny od zaraz",
       "availableFrom": "Dostępny od",
       "fetchLocationError": "Nie można znaleźć lokalizacji.",
