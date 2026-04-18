@@ -20,6 +20,7 @@ import RecentViewedWorkers from "./RecentViewedWorkers";
 import RecentViewedOffers from "./RecentViewedOffers";
 import { useWorkersSearch } from "employee/views/search/WorkersSearchProvider";
 import { useOfferSearch } from "offer/views/search/OfferSearchProvider";
+import MyListDashboard from "./MyListDashboard";
 
 const DashboardView: React.FC = () => {
 
@@ -55,11 +56,6 @@ const DashboardView: React.FC = () => {
         icon: Ico.SETTINGS,
         if: isDesktop && Util.hasPermission([UserRoles.ADMIN, UserRoles.SUPERADMIN], me),
         onClick: () => navigate(Path.ADMIN_DICTIONARIES)
-    }, {
-        label: t("user.myList"),
-        icon: Ico.BOOKMARK,
-        if: myListedItems?.length,
-        onClick: () => navigate(Path.MY_LIST)
     }, {
         label: t("pwa.install"),
         if: isInstallable,
@@ -127,6 +123,8 @@ const DashboardView: React.FC = () => {
         <EmailVerificationWarning></EmailVerificationWarning>
 
         <ListUi items={quickActions} itemClassName="m-font py-3"></ListUi>
+
+        <MyListDashboard></MyListDashboard>
 
         <RecentViewedWorkers></RecentViewedWorkers>
 

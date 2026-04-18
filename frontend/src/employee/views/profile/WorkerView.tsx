@@ -393,7 +393,7 @@ const WorkerView: React.FC = () => {
 
         <div className="w-full flex flex-col flex-1">
 
-            <div className="flex gap-5 items-center px-5 flex-1">
+            <div className="flex gap-5 items-center px-5">
 
                 <div className="worker-avatar" onClick={goToUserProfile}>
                     <img src={worker.avatarRef?.url || AVATAR_MOCK} alt={worker.displayName} />

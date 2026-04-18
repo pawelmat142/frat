@@ -192,7 +192,8 @@
       "endOfResults": "Brak więcej wyników do wyświetlenia.",
       "yes": "Tak",
       "no": "Nie",
-      "networkError": "Błąd sieci"
+      "networkError": "Błąd sieci",
+      "showMore": "Pokaż więcej"
     },
     "header": {
       "home": "Strona główna",

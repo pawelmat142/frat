@@ -192,7 +192,8 @@
       "endOfResults": "No more results to display.",
       "yes": "Yes",
       "no": "No",
-      "networkError": "Network error"
+      "networkError": "Network error",
+      "showMore": "Show more"
     },
     "header": {
       "home": "Home",

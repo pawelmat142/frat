@@ -157,6 +157,8 @@ $btnPaddingY: 0.375rem;
 
   &.small {
     font-size: $sFont;
+    gap: .25rem;
+
 
     .svg-icon,
     .MuiSvgIcon-root {

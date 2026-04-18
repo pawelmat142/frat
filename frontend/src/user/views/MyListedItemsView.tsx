@@ -70,7 +70,7 @@ const MyListedItemsView: React.FC = () => {
 
                     <div className="results flex flex-col">
 
-                        {([...items]).map((item, index) => {
+                        {items.map((item, index) => {
 
                             const rowActions = (
                                 <>
