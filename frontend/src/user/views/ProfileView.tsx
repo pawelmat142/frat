@@ -113,12 +113,7 @@ const ProfileView: React.FC = () => {
                 fabId
             );
         }
-        globalCtx.setHideFloatingButton(!isMyAccount);
     }, [user, isMyAccount]);
-
-    useEffect(() => {
-        return () => globalCtx.setFloatingButton(null);
-    }, []);
 
     if (localLoading) {
         return <Loading />;
@@ -157,8 +152,6 @@ const ProfileView: React.FC = () => {
     const goToUserOffers = () => {
         navigate(Path.getOffersPath(user.uid));
     };
-
-
 
     const removeFriend = async (friendship: FriendshipI) => {
         const confirmed = await confirm({

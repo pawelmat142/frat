@@ -41,6 +41,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const floatingButtonIdRef = useRef<string | undefined>(undefined)
 
     const setFloatingButton = (button: React.ReactNode, registrationId?: string) => {
+        setHideFloatingButton(false)
         if (button === null) {
             floatingButtonIdRef.current = undefined
             setFloatingButtonState(null)

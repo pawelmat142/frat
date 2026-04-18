@@ -91,7 +91,7 @@ const WorkerView: React.FC = () => {
     }, [worker, isMe, hideFloatingBtn]);
 
     useEffect(() => {
-        return () => globalCtx.setFloatingButton(null);
+        return () => globalCtx.setHideFloatingButton(true);
     }, []);
 
     const goToUserProfile = () => {

@@ -16,10 +16,12 @@ import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import { BtnModes, MenuItem } from "global/interface/controls.interface";
 import Header from "global/components/Header";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 const ChatConversationView: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const globalCtx = useGlobalContext();
     const { chatId } = useParams<{ chatId: string }>();
     const userCtx = useUserContext();
     const me = userCtx?.me;
@@ -51,6 +53,14 @@ const ChatConversationView: React.FC = () => {
         viewport.addEventListener("resize", onResize);
         return () => viewport.removeEventListener("resize", onResize);
     }, []);
+
+    useEffect(() => {
+        globalCtx.hideFooter();
+        return () => {
+            globalCtx.showFooter();
+        }
+    }, []);
+
 
     const getOtherMember = () => {
         if (!me || !chat || !(chat as ChatWithMembers).members) return null;
