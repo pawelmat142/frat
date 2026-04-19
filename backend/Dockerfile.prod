@@ -18,6 +18,7 @@ COPY shared ./shared
 
 # Zbuduj aplikację
 WORKDIR /app/backend
+RUN npm test
 RUN npm run build
 
 FROM node:20-alpine AS production

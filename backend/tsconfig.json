@@ -12,6 +12,7 @@
     "rootDir": "..",
     "incremental": true,
     "skipLibCheck": true,
+    "types": ["jest"],
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,

@@ -29,10 +29,9 @@ async function bootstrap() {
 
   // Swagger documentation
   const config = new DocumentBuilder()
-    .setTitle('JobHigh API')
+    .setTitle('FRAT API')
     .setDescription('High-Altitude Work Professional Network Platform API')
     .setVersion('1.0')
-    .addTag('dictionaries')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

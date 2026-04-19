@@ -57,7 +57,3 @@ docker compose -f docker-compose.dev.yml up
 # Production
 docker compose up
 ```
-
-## API Documentation
-
-TODO Swagger documentation
