@@ -14,10 +14,11 @@ interface Props {
     offer: OfferI,
     first?: boolean,
     last?: boolean,
-    disableDefaultBorder?: boolean
+    disableDefaultBorder?: boolean,
+    className?: string
 }
 
-const OfferSearchListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder }) => {
+const OfferSearchListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder, className }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -69,6 +70,7 @@ const OfferSearchListItem: React.FC<Props> = ({ offer, first, last, disableDefau
     </div>
 
     return <OfferListItem
+        className={className}
         offer={offer}
         first={first}
         last={last}

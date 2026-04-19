@@ -135,7 +135,7 @@ const OfferSearchView: React.FC = () => {
                                 <SwipeableRow disable={offer.uid === userCtx.me?.uid}
                                     key={offer.offerId}
                                     ref={el => el ? swipeRefs.current.set(offer.offerId, el) : swipeRefs.current.delete(offer.offerId)} actions={rowActions}>
-                                    <OfferSearchListItem
+                                    <OfferSearchListItem className="primary-bg"
                                         key={offer.offerId}
                                         offer={offer}
                                         first={index === 0}

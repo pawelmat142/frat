@@ -4,16 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ThumbUp, Visibility } from "@mui/icons-material";
 import ListItem from "global/components/ListItem";
-import { ChatService } from "chat/services/ChatService";
-import { toast } from "react-toastify";
-import { useIsDesktop } from "global/hooks/isMobile";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
-import { useState } from "react";
 import Chips, { ChipModes } from "global/components/chips/Chips";
-import Loading from "global/components/Loading";
 import { AppConfig } from "@shared/AppConfig";
 
 interface Props {
@@ -21,22 +16,17 @@ interface Props {
     first?: boolean,
     last?: boolean,
     disableDefaultBorder?: boolean
-    rightSection?: React.ReactNode
+    rightSection?: React.ReactNode,
+    className?: string
 }
 
 const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS; 
 
-const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder, rightSection }) => {
+const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder, rightSection, className }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
     const userCtx = useUserContext();
-    const { me } = userCtx;
-
-    const isDesktop = useIsDesktop();
-    const isMyOffer = me?.uid === offer.uid;
-
-    const [loading, setLoading] = useState(false);
 
     const goToOfferView = () => {
         navigate(Path.getOfferPath(offer.offerId));
@@ -55,30 +45,6 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
     }
 
     const distance = getDistanceInfo();
-
-    const openChat = async () => {
-        if (!offer || isMyOffer) return;
-        try {
-            const chat = await ChatService.getOrCreateDirectChat(offer.uid)
-            navigate(Path.getConversationPath(chat.chatId))
-        } catch (error) {
-            console.error('Failed to open chat:', error)
-            toast.error(t('chat.error.cannotOpen'))
-        }
-    }
-
-    const openPhoneCall = () => {
-        if (!offer.phoneNumber || isMyOffer) return;
-
-        const number = `${offer.phoneNumber.prefix}${offer.phoneNumber.number}`
-        if (isDesktop) {
-            // copy to clipboard
-            navigator.clipboard.writeText(number);
-            toast.info(t('employeeProfile.phoneNumberCopied', { number }));
-            return;
-        }
-        window.location.href = `tel:${offer.phoneNumber.prefix}${offer.phoneNumber.number}`;
-    }
 
     const categoryChip = offer.category ? (
         <Chips
@@ -116,12 +82,8 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
         </div>
     </div>
 
-    if (loading) {
-        return <Loading></Loading>
-    }
-
     return (
-        <div onClick={goToOfferView}>
+        <div onClick={goToOfferView} className={className}>
             <ListItem
                 topLeft={topLeft}
                 bottomLeft={bottomLeft}
