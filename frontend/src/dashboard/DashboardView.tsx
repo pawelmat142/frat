@@ -140,7 +140,7 @@ const DashboardView: React.FC = () => {
         onClick: () => navigate(Path.getFriendsPath(me.uid))
     }]
 
-    const menu = <IconButton icon={<Ico.BURGER />} mode={BtnModes.SECONDARY_TXT} onClick={() => {
+    const menu = <IconButton className="py-3 px-3" icon={<Ico.BURGER />} mode={BtnModes.SECONDARY_TXT} onClick={() => {
         drawer.open({
             showClose: true,
             title: t("common.menu"),
@@ -156,7 +156,7 @@ const DashboardView: React.FC = () => {
 
         <EmailVerificationWarning></EmailVerificationWarning>
 
-        <div className="main-tiles px-3 py-7">
+        <div className="main-tiles view-margin py-7">
             {quickActions.filter(item => item.if === undefined || !!item.if).map((action, index) => {
                 return (<div className="ripple p-tile dashboard-tile col-tile bottom-bar-shadow py-2" onClick={action.onClick} key={index}>
                     {action.icon && <action.icon size={32} className="primary-color" />}
@@ -171,7 +171,7 @@ const DashboardView: React.FC = () => {
 
         <RecentViewedOffers></RecentViewedOffers>
 
-        <div className="px-5">
+        <div className="view-margin">
             <ReportForm />
         </div>
 

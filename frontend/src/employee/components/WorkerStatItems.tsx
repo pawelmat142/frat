@@ -54,7 +54,7 @@ const WorkerStatItems: React.FC<Props> = ({ worker }) => {
         display: distance,
     }]
 
-    return (<div className="flex items-center gap-2">
+    return (<div className="flex items-center gap-2 letter-spacing-0">
 
         {items.filter(i => !!i.if).map(i => {
             return (<div className="flex items-center gap05" key={i.icon.toString()}>

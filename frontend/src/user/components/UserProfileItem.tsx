@@ -8,7 +8,7 @@ interface Props {
     topRightComponent?: React.ReactNode
 }
 
-const UserProfileItem: React.FC<Props> = ({ user, className = "px-2 py-3", topRightComponent }) => {
+const UserProfileItem: React.FC<Props> = ({ user, className = "view-margin py-3", topRightComponent }) => {
 
     return (
         <div className={className}>
@@ -18,7 +18,7 @@ const UserProfileItem: React.FC<Props> = ({ user, className = "px-2 py-3", topRi
                     allowNavigate={false}
                     bottomRow={<span className="secondary-text s-font">{UserUtil.getContactInfoLine(user)}</span>}
                 ></UserItem>
-                {topRightComponent && <div className="pr-2 pt-1">{topRightComponent}</div>}
+                {topRightComponent && <div>{topRightComponent}</div>}
             </div>
         </div>
     )

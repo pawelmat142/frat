@@ -149,7 +149,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) =
     }
 
     return (
-        <div className="mb-10 px-5">
+        <div className="mb-10 view-margin">
             <div className="secondary-text mb-3">{t('gallery.title')}</div>
 
             <div className="grid grid-cols-2 gap-2">

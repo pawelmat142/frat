@@ -51,7 +51,7 @@ const NotificationsGlobalBar: React.FC = () => {
                 className="m-2 overflow-hidden"
             >
                 <div
-                    className="px-2 py-3 rounded-md secondary-bg rippple notification-bar"
+                    className="view-margin py-3 rounded-md secondary-bg rippple notification-bar"
                     onClick={() => navigate(Path.NOTIFICATIONS)}
                 >
                     <div className="flex items-center gap-3">

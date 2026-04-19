@@ -32,7 +32,7 @@ const ListUi: React.FC<Props> = ({ items, className, itemClassName }) => {
         item.onClick?.(e);
     }
 
-    const defaultClassName = "flex gap-4 px-5 py-2 items-center s-font"
+    const defaultClassName = "flex gap-4 view-margin py-2 items-center s-font"
 
     return (
         <div className={className ? className : ""}>

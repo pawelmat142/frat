@@ -153,10 +153,12 @@ $font-medium: 500;
 $font-semibold: 600;
 $font-bold: 700;
 
-$padding: 1rem;
-$padding2x: 2rem;
-$padding4x: 4rem;
-$paddingSmall: .5rem;
+$view-margin: .75rem;
+
+.view-margin {
+  padding-left: $view-margin;
+  padding-right: $view-margin;
+}
 
 .xs-font {
   font-size: $xsFont;

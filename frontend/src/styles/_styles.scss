@@ -69,17 +69,6 @@ $headerHeightDesktop: 60px;
     background-color: $secondary-bg;
 }
 
-.footer-container {
-    display: flex;
-    flex-direction: column;
-    gap: $padding;
-    justify-content: space-between;
-    margin-left: auto;
-    padding: 0 $padding;
-}
-
-
-
 // general views
 .p-container {
     width: 100%;
@@ -405,12 +394,6 @@ $tilePadding: .5rem 1rem;
             gap: 1rem;
             align-items: center;
         }
-    }
-
-    .footer-container {
-        flex-direction: row;
-        padding: 0;
-        align-items: center;
     }
 
     .mobile-menu {

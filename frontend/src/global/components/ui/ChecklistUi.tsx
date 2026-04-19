@@ -25,7 +25,7 @@ const ChecklistUi: React.FC<Props> = ({ items, icon: Icon, className, title }) =
         return null;
     }
 
-    return <div className={className ? className : "mb-5 px-5"}>
+    return <div className={className ? className : "mb-5 view-margin"}>
 
         {title && <div className="secondary-text">{title}</div>}
         

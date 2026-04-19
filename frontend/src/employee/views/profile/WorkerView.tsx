@@ -393,7 +393,7 @@ const WorkerView: React.FC = () => {
 
         <div className="w-full flex flex-col flex-1">
 
-            <div className="flex gap-5 items-center px-5">
+            <div className="flex gap-3 items-center view-margin">
 
                 <div className="worker-avatar" onClick={goToUserProfile}>
                     <img src={worker.avatarRef?.url || AVATAR_MOCK} alt={worker.displayName} />
@@ -430,13 +430,13 @@ const WorkerView: React.FC = () => {
             }} />
 
             {!!worker.bio && (
-                <div className="mb-10 px-5">
+                <div className="mb-10 view-margin">
                     <div className="secondary-text mb-3">{t('employeeProfile.form.bioLabel')}</div>
                     <div className="s-font font-light">{worker.bio}</div>
                 </div>
             )}
 
-            <div className="px-5 mb-10">
+            <div className="view-margin mb-10">
                 <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>
             </div>
 
