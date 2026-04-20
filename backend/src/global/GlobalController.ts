@@ -8,8 +8,6 @@ import { DictionariesPublicService } from "admin/dictionaries/services/Dictionar
 import { Serialize } from "./decorators/Serialize";
 import { TranslationEntity } from "admin/dictionaries/model/TranslationEntity";
 import { DictionaryEntity } from "admin/dictionaries/model/DictionaryEntity";
-import { GeocodingService } from "./services/GeocodingService";
-import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 
 @Controller('api')
 @UseInterceptors(LogInterceptor)
@@ -18,7 +16,6 @@ export class GlobalController {
     constructor(
         private readonly translationPublicService: TranslationPublicService,
         private readonly dictionariesPublicService: DictionariesPublicService,
-        private readonly geocodingService: GeocodingService,
     ) {}
 
     @Get('get-translations/:langCode')
@@ -42,22 +39,6 @@ export class GlobalController {
         @Param('groupCode') groupCode?: string
     ): Promise<DictionaryI> {
         return this.dictionariesPublicService.getDictionary(code, groupCode);
-    }
-
-
-    @Get('geocode/reverse')
-    async reverseGeocode(
-        @Query('lat') lat: string,
-        @Query('lng') lng: string,
-    ): Promise<GeocodedPosition | null> {
-        const latNum = parseFloat(lat);
-        const lngNum = parseFloat(lng);
-        
-        if (isNaN(latNum) || isNaN(lngNum)) {
-            return null;
-        }
-        
-        return this.geocodingService.reverseGeocode(latNum, lngNum);
     }
 
 }
