@@ -128,6 +128,16 @@ export class WorkersController {
     return this.workersService.updateSkills(user, skills);
   }
 
+  @Put("/bio")
+  @UseGuards(JwtAuthGuard)
+  @Serialize(WorkerEntity)
+  updateBio(
+    @CurrentUser() user: UserI,
+    @Body() bio: { value: string }
+  ): Promise<void> {
+    return this.workersService.updateBio(user, bio.value);
+  }
+
   @Post("/images")
   @UseGuards(JwtAuthGuard)
   @Serialize(WorkerEntity)

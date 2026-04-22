@@ -672,6 +672,7 @@
       "worksInIndurstryMonths": "Works in the industry for {{months}} months",
       "skills": "Skills / experience",
       "editSkills": "Edit skills / experience",
+      "editBio": "Edit about me",
       "addSkill": "Add element",
       "skill": "Skill",
       "form": {

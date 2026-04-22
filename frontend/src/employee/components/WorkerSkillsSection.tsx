@@ -34,7 +34,7 @@ const WorkerSkillsSection: React.FC<Props> = ({ worker }) => {
             title={t('employeeProfile.skills')}
             items={items}
             icon={Ico.CHECK}
-            className="px-5"
+            className="view-margin"
         ></ChecklistUi>
 
         <Button mode={BtnModes.PRIMARY_TXT} className="ml-auto mt-5" size={BtnSizes.SMALL} onClick={() => navigate(Path.WORKER_SKILLS_FORM)}>

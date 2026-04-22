@@ -33,6 +33,7 @@ import { UserListedItemService } from "user/services/UserListedItemService";
 import Header from "global/components/Header";
 import WorkerStatItems from "employee/components/WorkerStatItems";
 import CategoriesChips from "global/components/chips/CategoriesChips";
+import WorkerBioSection from "employee/components/WorkerBioSection";
 
 const WorkerView: React.FC = () => {
 
@@ -429,12 +430,7 @@ const WorkerView: React.FC = () => {
                 setHideFloatingBtn(open);
             }} />
 
-            {!!worker.bio && (
-                <div className="mb-10 view-margin">
-                    <div className="secondary-text mb-3">{t('employeeProfile.form.bioLabel')}</div>
-                    <div className="s-font font-light">{worker.bio}</div>
-                </div>
-            )}
+            <WorkerBioSection worker={worker} />
 
             <div className="view-margin mb-10">
                 <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>

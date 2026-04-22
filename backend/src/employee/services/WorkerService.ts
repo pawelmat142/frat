@@ -178,6 +178,16 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         this.logger.log(`Updated skills for profile ID: ${profile.workerId}, total skills now: ${profile.skills.items.length}`);
     }
 
+    public async updateBio(user: UserI, bio: string): Promise<void> {
+        const profile = await this.workerRepo.findByUid(user.uid);
+        if (!profile) {
+            throw new ToastException('employeeProfile.notFound', this);
+        }
+        profile.bio = bio;
+        await this.workerRepo.update(profile);
+        this.logger.log(`Updated bio for profile ID: ${profile.workerId}`);
+    }
+
     public async addImage(user: UserI, imageRef: AvatarRef): Promise<void> {
         const profile = await this.workerRepo.findByUid(user.uid);
         if (!profile) {
@@ -277,7 +287,6 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
             email: form.email,
             communicationLanguages: form.communicationLanguages || [],
             avatarRef: form.avatarRef,
-            bio: form.bio,
 
             certificates: form.certificates || [],
 

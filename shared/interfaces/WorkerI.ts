@@ -113,7 +113,6 @@ export interface WorkerFormStepCareer {
   careerStartDate?: string;
   maxAltitude?: number; //[m]
   readyToTravel?: boolean;
-  bio?: string;
 }
 
 export interface WorkerFormStepLocation {
@@ -170,7 +169,6 @@ export interface WorkerFormDto {
   email: string;
   communicationLanguages: string[];
   avatarRef: AvatarRef;
-  bio?: string;
 
   locationOption: WorkerLocationOption;
   // WorkerLocationOptions.POSITION

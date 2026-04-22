@@ -212,7 +212,6 @@ const WorkerFormView: React.FC = () => {
                 careerStartDate: worker.careerStartDate,
                 maxAltitude: worker.maxAltitude,
                 readyToTravel: worker.readyToTravel,
-                bio: worker.bio || ''
             },
             certificates: {
                 certificates: worker.certificates || [],

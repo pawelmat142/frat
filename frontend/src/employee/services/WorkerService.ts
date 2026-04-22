@@ -76,6 +76,10 @@ export const WorkerService = {
 		return httpClient.put<WorkerI>(`/worker/skills`, skills);
 	},
 
+	updateBio(bio: string): Promise<WorkerI> {
+		return httpClient.put<WorkerI>(`/worker/bio`, { value: bio });
+	},
+
 	addImage(imageRef: AvatarRef): Promise<WorkerI> {
 		return httpClient.post<WorkerI>(`/worker/images`, imageRef);
 	},

@@ -8,7 +8,6 @@ import BooleanSelector from "global/components/controls/BooleanSelector";
 import { FormValidator } from "global/FormValidator";
 import FloatingDateInput from "global/components/callendar/FloatingDateInput";
 import { DateUtil } from "@shared/utils/DateUtil";
-import FloatingTextarea from "global/components/controls/FloatingTextarea";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -91,20 +90,6 @@ const WorkerFormStepCareer: React.FC<Props> = ({ formRef }) => {
                     )}
                 />
 
-                <p className="secondary-text s-font">*{t("employeeProfile.form.bioDesc")}</p>
-
-                <Controller
-                    name="career.bio"
-                    control={control}
-                    render={({ field }) => (
-                        <FloatingTextarea
-                            label={t("employeeProfile.form.bioLabel")}
-                            className="w-full"
-                            value={field.value ?? ''}
-                            onChange={e => field.onChange(e.target.value)}
-                        />
-                    )}
-                />
             </div>
         </>
     );
