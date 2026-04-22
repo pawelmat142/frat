@@ -21,6 +21,7 @@ import { SettingsModule } from 'user/settings-module/SettingsModule';
 import { UserContextModule } from 'user/user-context-module/UserContextModule';
 import { UserListedModule } from 'user/user-listed-module/UserListedModule';
 import { EntityInteractionModule } from 'entity-interaction/EntityInteractionModule';
+import { GeocodingService } from 'global/services/GeocodingService';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { EntityInteractionModule } from 'entity-interaction/EntityInteractionMod
     GlobalController,
   ],
   providers: [
+    GeocodingService
   ],
 })
 export class AppModule {}

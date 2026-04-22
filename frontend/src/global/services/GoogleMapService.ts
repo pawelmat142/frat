@@ -188,4 +188,21 @@ export abstract class GoogleMapService {
 			return null;
 		}
 	}
+
+	/**
+	 * Reverse geocode coordinates using the backend API.
+	 * This avoids API key restrictions on the frontend.
+	 */
+	static async reverseGeocodeViaBackend(coords: { lat: number; lng: number }): Promise<GeocodedPosition | null> {
+		try {
+			const result = await httpClient.get<GeocodedPosition | null>(
+				`/geocode/reverse?lat=${encodeURIComponent(coords.lat)}&lng=${encodeURIComponent(coords.lng)}`,
+				{ skipAuth: true }
+			);
+			return result;
+		} catch (e) {
+			console.warn('[GoogleMapService] Backend geocoding failed:', e);
+			return null;
+		}
+	}
 }

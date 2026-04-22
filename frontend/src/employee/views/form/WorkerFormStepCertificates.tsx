@@ -10,6 +10,8 @@ import Loading from "global/components/Loading";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import FloatingDateInput, { datepickerWithDaysConfig } from "global/components/callendar/FloatingDateInput";
 import { DateUtil } from "@shared/utils/DateUtil";
+import { SelectorItem } from "global/interface/controls.interface";
+import SkeletonControl from "global/components/controls/SkeletonControl";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -44,7 +46,11 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
     }, [])
 
     if (loading) {
-        return <Loading></Loading>
+        return <SkeletonControl></SkeletonControl>
+    }
+
+    if (!dictionary) {
+        return <div>{t("common.sww")}</div>
     }
 
 
@@ -54,6 +60,18 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
     const certsWithDate = certDictElements.filter(el =>
         el.values?.VALIDITY_DATE_REQUIRED && selectedCertificates.includes(el.code)
     );
+
+    const items: SelectorItem<string>[] = dictionary.elements.map(element => {
+        const translationKey = `dictionary.${dictionary.code}.NAME.${element.code}`;
+        const translatedLabel = t(translationKey);
+        const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
+        return {
+            label: capitalizedLabel,
+            value: String(element.code),
+            src: element.values.SRC,
+        };
+    });
+
 
     return (
         <>
