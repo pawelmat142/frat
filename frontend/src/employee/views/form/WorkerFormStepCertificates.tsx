@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
 import { WorkerForm } from "@shared/interfaces/WorkerI";
-import DictionarySelector from "global/components/selector/DictionarySelector";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { DictionaryService } from "global/services/DictionaryService";
-import Loading from "global/components/Loading";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import FloatingDateInput, { datepickerWithDaysConfig } from "global/components/callendar/FloatingDateInput";
 import { DateUtil } from "@shared/utils/DateUtil";
-import { SelectorItem } from "global/interface/controls.interface";
+import { FloatingInputModes, SelectorItem } from "global/interface/controls.interface";
 import SkeletonControl from "global/components/controls/SkeletonControl";
+import SelectorItems from "global/components/selector/SelectorItems";
+import { useDebouncedValue } from "global/utils/useDebouncedValue";
+import FloatingInput from "global/components/controls/FloatingInput";
+import { Close, Search } from "@mui/icons-material";
+
+const MIN_QUERY_LENGTH = 1;
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -19,12 +23,30 @@ interface Props {
 
 const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
 
-    const { control, formState, watch } = formRef;
+    const { control, formState } = formRef;
     const { t } = useTranslation();
     const required = FormValidator.required(t);
 
     const [loading, setLoading] = useState(false);
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
+
+    const [freeTextInput, setFreeTextInput] = useState('');
+    const debouncedQuery = useDebouncedValue(freeTextInput, 500);
+
+    const isSearchMode = debouncedQuery.length >= MIN_QUERY_LENGTH;
+
+    const dictionaryItems: SelectorItem<string>[] = dictionary?.elements.map(element => {
+        const translationKey = `dictionary.${dictionary.code}.NAME.${element.code}`;
+        const translatedLabel = t(translationKey);
+        const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
+        return {
+            label: capitalizedLabel,
+            value: String(element.code),
+            src: element.values.SRC,
+        };
+    }) ?? [];
+
+    const selectedCertificates: string[] = formRef.watch('certificates.certificates') || [];
 
     useEffect(() => {
         const initDictionary = async () => {
@@ -45,82 +67,106 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
         initDictionary();
     }, [])
 
-    if (loading) {
-        return <SkeletonControl></SkeletonControl>
-    }
-
-    if (!dictionary) {
-        return <div>{t("common.sww")}</div>
-    }
-
-
     // Get selected certificates and their dictionary definitions
-    const selectedCertificates: string[] = formRef.watch('certificates.certificates') || [];
     const certDictElements = dictionary?.elements || [];
-    const certsWithDate = certDictElements.filter(el =>
-        el.values?.VALIDITY_DATE_REQUIRED && selectedCertificates.includes(el.code)
+    const certElementsByCode = useMemo(
+        () => new Map(certDictElements.map(el => [String(el.code), el])),
+        [certDictElements],
     );
 
-    const items: SelectorItem<string>[] = dictionary.elements.map(element => {
-        const translationKey = `dictionary.${dictionary.code}.NAME.${element.code}`;
-        const translatedLabel = t(translationKey);
-        const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
-        return {
-            label: capitalizedLabel,
-            value: String(element.code),
-            src: element.values.SRC,
-        };
-    });
+    const mainGroupElementCodes = useMemo(() => {
+        const mainGroup = dictionary?.groups?.find(group => group.code === 'MAIN');
+        return new Set((mainGroup?.elementCodes || []).map(code => String(code)));
+    }, [dictionary]);
 
+    const displayItems = useMemo(() => {
+        const selectedSet = new Set(selectedCertificates);
+
+        if (debouncedQuery.length < MIN_QUERY_LENGTH) {
+            const selectedItems = dictionaryItems.filter(item => selectedSet.has(item.value));
+            const mainUnselectedItems = dictionaryItems.filter(
+                item => mainGroupElementCodes.has(item.value) && !selectedSet.has(item.value),
+            );
+
+            return [...selectedItems, ...mainUnselectedItems];
+        }
+
+        const query = debouncedQuery.toLowerCase();
+
+        return dictionaryItems
+            .filter(item => selectedSet.has(item.value) || item.label.toLowerCase().includes(query));
+    }, [debouncedQuery, dictionaryItems, mainGroupElementCodes, selectedCertificates]);
 
     return (
         <>
-            <h3 className="form-subheader">
-                {t("employeeProfile.form.certificates.title")}
-            </h3>
+            {loading ? (
+                <SkeletonControl></SkeletonControl>
+            ) : (
+                <>
+                    <h3 className="form-subheader">
+                        {t("employeeProfile.form.certificates.title")}
+                    </h3>
 
-            <div className="flex flex-col gap-5 md:gap-5 mt-5">
-                <Controller
-                    name="certificates.certificates"
-                    control={control}
-                    render={({ field }) => (
-                        <DictionarySelector
-                            type="multi"
-                            className="w-full"
-                            valueInput={field.value}
-                            onSelectMulti={items => field.onChange(items)}
-                            label={t("employeeProfile.certificates")}
-                            code="CERTIFICATES"
-                            fullWidth
-                            error={formState.errors.certificates?.certificates}
-                        />
-                    )}
-                />
-
-                {certsWithDate.map(cert => (
-                    <Controller
-                        key={cert.code}
-                        name={`certificates.certificateDates.${cert.code}`}
-                        control={control}
-                        rules={required}
-                        render={({ field }) => {
-                            return (
-                                <FloatingDateInput
-                                    label={`${t('employeeProfile.form.certificateValidityDate')} ${t(DictionaryUtil.getTranslationKey('CERTIFICATES', cert.code))}`}
-                                    className="w-full"
-                                    value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
-                                    onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? null)}
-                                    required
-                                    error={formState.errors?.certificates?.certificateDates?.[cert.code]?.message
-                                        ? { message: formState.errors.certificates.certificateDates[cert.code]!.message }
-                                        : undefined}
-                                    config={datepickerWithDaysConfig}
-                                />
-                            )
-                        }}
+                    <FloatingInput
+                        mode={FloatingInputModes.THIN}
+                        name="freeText"
+                        value={freeTextInput}
+                        onChange={e => setFreeTextInput(e.target.value)}
+                        label={t("employeeProfile.form.freeText")}
+                        fullWidth
+                        icon={isSearchMode ? <Close /> : <Search />}
+                        onIconClick={isSearchMode ? (e) => {
+                            e.preventDefault();
+                            setFreeTextInput('')
+                        } : undefined}
                     />
-                ))}
-            </div>
+
+                    <SelectorItems
+                        items={displayItems}
+                        selectedValues={selectedCertificates}
+                        multiSelect
+                        automatedMode
+                        translateItems
+                        onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
+                        onClean={() => formRef.setValue('certificates.certificates', [])}
+                        renderAfterItem={(item, isSelected) => {
+                            if (!isSelected) {
+                                return null;
+                            }
+
+                            const cert = certElementsByCode.get(item.value);
+                            if (!cert?.values?.VALIDITY_DATE_REQUIRED) {
+                                return null;
+                            }
+
+                            return (
+                                <div className="px-1">
+                                    <Controller
+                                        name={`certificates.certificateDates.${cert.code}`}
+                                        control={control}
+                                        rules={required}
+                                        render={({ field }) => {
+                                            return (
+                                                <FloatingDateInput
+                                                    label={`${t('employeeProfile.form.certificateValidityDate')} ${t(DictionaryUtil.getTranslationKey('CERTIFICATES', cert.code))}`}
+                                                    className="w-full"
+                                                    value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
+                                                    onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? null)}
+                                                    required
+                                                    error={formState.errors?.certificates?.certificateDates?.[cert.code]?.message
+                                                        ? { message: formState.errors.certificates.certificateDates[cert.code]!.message }
+                                                        : undefined}
+                                                    config={datepickerWithDaysConfig}
+                                                />
+                                            )
+                                        }}
+                                    />
+                                </div>
+                            );
+                        }}
+                    ></SelectorItems>
+                </>
+            )}
         </>
     );
 };

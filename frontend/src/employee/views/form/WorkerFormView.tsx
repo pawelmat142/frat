@@ -43,8 +43,6 @@ const WorkerFormView: React.FC = () => {
 
     const me = userCtx?.me;
 
-    const [step, setStep] = React.useState<WorkerFormStep>(WORKER_FORM_STEPS_ORDER[0]);
-
     useEffect(() => {
         globalCtx.hideFooter();
         return () => {
@@ -189,6 +187,7 @@ const WorkerFormView: React.FC = () => {
             .filter((r): r is DateRange => r != null);
 
         formCtx.reset({
+            currentStep: WORKER_FORM_STEPS_ORDER[0],
             personalData: {
                 fullName: worker.fullName || "",
                 phoneNumber: worker.phoneNumber || { prefix: "+48", number: "" },
@@ -229,7 +228,7 @@ const WorkerFormView: React.FC = () => {
     const onSubmit = async (validateFn: () => Promise<boolean>) => {
         const valid = await validateFn();
         if (!valid) {
-            toast.error(t("employeeProfile.form.validationError"));
+            // toast.error(t("employeeProfile.form.validationError"));
             return;
         }
 

@@ -76,24 +76,6 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
         }
     };
 
-    const selectStep = async (targetStep: TStep) => {
-        const targetIndex = stepsOrder.indexOf(targetStep);
-        const currentIndex = stepsOrder.indexOf(currentStep);
-        if (targetIndex < currentIndex) {
-            directionRef.current = -1;
-            onSelectStep?.(targetStep);
-            return;
-        }
-        if (targetIndex > currentIndex) {
-            const ok = await validateCurrentStep();
-            if (ok) {
-                saveFormToLocalStorage();
-                directionRef.current = 1;
-                onSelectStep?.(targetStep);
-            }
-        }
-    };
-
     return (
         <div className="form-view relative flex flex-col">
             <div className="sticky top-0 z-10 primary-bg py-5">

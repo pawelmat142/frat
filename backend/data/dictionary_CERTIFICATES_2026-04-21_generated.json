@@ -1,0 +1,1134 @@
+{
+  "code": "CERTIFICATES",
+  "description": "Certificates",
+  "version": 1,
+  "status": "ACTIVE",
+  "elements": [
+    {
+      "code": "IRATA_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IRATA_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IRATA L1 – Technician"
+    },
+    {
+      "code": "IRATA_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IRATA_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IRATA L2 – Experienced Technician"
+    },
+    {
+      "code": "IRATA_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IRATA_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IRATA L3 – Supervisor"
+    },
+    {
+      "code": "IRATA_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IRATA_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IRATA Instructor"
+    },
+    {
+      "code": "IRATA_ASSESSOR_EXAMINER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IRATA_ASSESSOR_EXAMINER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IRATA Assessor / Examiner"
+    },
+    {
+      "code": "SPRAT_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SPRAT_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SPRAT L1 – Technician"
+    },
+    {
+      "code": "SPRAT_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SPRAT_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SPRAT L2 – Lead Technician"
+    },
+    {
+      "code": "SPRAT_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SPRAT_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SPRAT L3 – Supervisor"
+    },
+    {
+      "code": "SPRAT_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SPRAT_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SPRAT Instructor"
+    },
+    {
+      "code": "SPRAT_ASSESSOR_EXAMINER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SPRAT_ASSESSOR_EXAMINER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SPRAT Assessor / Examiner"
+    },
+    {
+      "code": "OTDL_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.OTDL_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "OTDL L1"
+    },
+    {
+      "code": "OTDL_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.OTDL_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "OTDL L2"
+    },
+    {
+      "code": "OTDL_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.OTDL_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "OTDL L3"
+    },
+    {
+      "code": "OTDL_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.OTDL_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "OTDL Instructor"
+    },
+    {
+      "code": "OTDL_ASSESSOR_EXAMINER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.OTDL_ASSESSOR_EXAMINER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "OTDL Assessor / Examiner"
+    },
+    {
+      "code": "FISAT_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.FISAT_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "FISAT L1"
+    },
+    {
+      "code": "FISAT_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.FISAT_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "FISAT L2"
+    },
+    {
+      "code": "FISAT_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.FISAT_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "FISAT L3"
+    },
+    {
+      "code": "FISAT_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.FISAT_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "FISAT Instructor"
+    },
+    {
+      "code": "FISAT_ASSESSOR_EXAMINER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.FISAT_ASSESSOR_EXAMINER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "FISAT Assessor / Examiner"
+    },
+    {
+      "code": "SOFT_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SOFT_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SOFT L1"
+    },
+    {
+      "code": "SOFT_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SOFT_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SOFT L2"
+    },
+    {
+      "code": "SOFT_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SOFT_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SOFT L3"
+    },
+    {
+      "code": "SOFT_FOUR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SOFT_FOUR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SOFT L4"
+    },
+    {
+      "code": "SOFT_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SOFT_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SOFT Instructor"
+    },
+    {
+      "code": "SOFT_ASSESSOR_EXAMINER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SOFT_ASSESSOR_EXAMINER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SOFT Assessor / Examiner"
+    },
+    {
+      "code": "ANETVA_BASIC",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ANETVA_BASIC",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ANETVA Basic"
+    },
+    {
+      "code": "ANETVA_AVANZADO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ANETVA_AVANZADO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ANETVA Avanzado"
+    },
+    {
+      "code": "ANETVA_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ANETVA_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ANETVA Instructor"
+    },
+    {
+      "code": "ANETVA_ASSESSOR_EXAMINER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ANETVA_ASSESSOR_EXAMINER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ANETVA Assessor / Examiner"
+    },
+    {
+      "code": "DPMC_CQP_BASE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.DPMC_CQP_BASE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "DPMC/CQP Cordiste – Base"
+    },
+    {
+      "code": "DPMC_CQP_INTERMEDIATE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.DPMC_CQP_INTERMEDIATE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "DPMC/CQP Cordiste – Intermediate"
+    },
+    {
+      "code": "DPMC_CQP_ADVANCED",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.DPMC_CQP_ADVANCED",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "DPMC/CQP Cordiste – Advanced"
+    },
+    {
+      "code": "DPMC_CQP_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.DPMC_CQP_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "DPMC/CQP Instructor"
+    },
+    {
+      "code": "DPMC_CQP_ASSESSOR_EXAMINER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.DPMC_CQP_ASSESSOR_EXAMINER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "DPMC/CQP Assessor / Examiner"
+    },
+    {
+      "code": "NETRA_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.NETRA_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "NETRA L1"
+    },
+    {
+      "code": "NETRA_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.NETRA_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "NETRA L2"
+    },
+    {
+      "code": "NETRA_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.NETRA_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "NETRA L3"
+    },
+    {
+      "code": "NETRA_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.NETRA_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "NETRA Instructor"
+    },
+    {
+      "code": "NETRA_ASSESSOR_EXAMINER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.NETRA_ASSESSOR_EXAMINER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "NETRA Assessor / Examiner"
+    },
+    {
+      "code": "ARAA_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ARAA_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ARAA L1"
+    },
+    {
+      "code": "ARAA_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ARAA_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ARAA L2"
+    },
+    {
+      "code": "ARAA_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ARAA_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ARAA L3"
+    },
+    {
+      "code": "ARAA_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ARAA_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ARAA Instructor"
+    },
+    {
+      "code": "ARAA_ASSESSOR_EXAMINER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ARAA_ASSESSOR_EXAMINER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ARAA Assessor / Examiner"
+    },
+    {
+      "code": "IPAF_STATIC_VERTICAL",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IPAF_STATIC_VERTICAL",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IPAF 1a – Static Vertical Platforms"
+    },
+    {
+      "code": "IPAF_STATIC_BOOM",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IPAF_STATIC_BOOM",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IPAF 1b – Static Boom Platforms"
+    },
+    {
+      "code": "IPAF_MOBILE_SCISSOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IPAF_MOBILE_SCISSOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IPAF 3a – Mobile Scissor Lifts"
+    },
+    {
+      "code": "IPAF_MOBILE_BOOM",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IPAF_MOBILE_BOOM",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IPAF 3b – Mobile Boom Lifts"
+    },
+    {
+      "code": "IPAF_PAV",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IPAF_PAV",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IPAF PAV – Push Around Vertical"
+    },
+    {
+      "code": "IPAF_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IPAF_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "IPAF Instructor"
+    },
+    {
+      "code": "PASMA_TOWER_USERS",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.PASMA_TOWER_USERS",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "PASMA Tower for Users"
+    },
+    {
+      "code": "PASMA_LOW_LEVEL",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.PASMA_LOW_LEVEL",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "PASMA Low Level Access"
+    },
+    {
+      "code": "PASMA_TOWERS_MANAGERS",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.PASMA_TOWERS_MANAGERS",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "PASMA Towers for Managers"
+    },
+    {
+      "code": "PASMA_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.PASMA_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "PASMA Instructor"
+    },
+    {
+      "code": "STEIGERBOUWER_A",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.STEIGERBOUWER_A",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Steigerbouwer A"
+    },
+    {
+      "code": "STEIGERBOUWER_B",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.STEIGERBOUWER_B",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Steigerbouwer B"
+    },
+    {
+      "code": "STEIGERBOUWER_C",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.STEIGERBOUWER_C",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Steigerbouwer C"
+    },
+    {
+      "code": "CISRS_SCAFFOLDER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.CISRS_SCAFFOLDER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "CISRS Scaffolder"
+    },
+    {
+      "code": "CISRS_ADVANCED_SCAFFOLDER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.CISRS_ADVANCED_SCAFFOLDER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "CISRS Advanced Scaffolder"
+    },
+    {
+      "code": "CISRS_SUPERVISOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.CISRS_SUPERVISOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "CISRS Scaffolding Supervisor"
+    },
+    {
+      "code": "CISRS_INSPECTION",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.CISRS_INSPECTION",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "CISRS Inspection"
+    },
+    {
+      "code": "CISRS_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.CISRS_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "CISRS Instructor"
+    },
+    {
+      "code": "UDT_IP",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.UDT_IP",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "UDT IP – Mobile Elevated Work Platforms"
+    },
+    {
+      "code": "UDT_II_W",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.UDT_II_W",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "UDT II W – Winches and Hoists"
+    },
+    {
+      "code": "UDT_CRANE_OPERATOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.UDT_CRANE_OPERATOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "UDT Crane Operator"
+    },
+    {
+      "code": "UDT_CRANE_SLINGER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.UDT_CRANE_SLINGER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "UDT Crane Slinger"
+    },
+    {
+      "code": "UDT_CRANE_SIGNALMAN",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.UDT_CRANE_SIGNALMAN",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "UDT Crane Signalman"
+    },
+    {
+      "code": "ITRA_ROPE_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_ROPE_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA Rope 1"
+    },
+    {
+      "code": "ITRA_ROPE_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_ROPE_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA Rope 2"
+    },
+    {
+      "code": "ITRA_ROPE_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_ROPE_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA Rope 3"
+    },
+    {
+      "code": "ITRA_CONFINED_SPACE_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_CONFINED_SPACE_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA Confined Space 1"
+    },
+    {
+      "code": "ITRA_CONFINED_SPACE_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_CONFINED_SPACE_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA Confined Space 2"
+    },
+    {
+      "code": "ITRA_CONFINED_SPACE_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_CONFINED_SPACE_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA Confined Space 3"
+    },
+    {
+      "code": "ITRA_SWIFTWATER_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_SWIFTWATER_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA Swiftwater/Flood 1"
+    },
+    {
+      "code": "ITRA_SWIFTWATER_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_SWIFTWATER_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA Swiftwater/Flood 2"
+    },
+    {
+      "code": "ITRA_SWIFTWATER_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_SWIFTWATER_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA Swiftwater/Flood 3"
+    },
+    {
+      "code": "ITRA_USAR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_USAR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA USAR"
+    },
+    {
+      "code": "ITRA_INSTRUCTOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_INSTRUCTOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA Instructor"
+    },
+    {
+      "code": "ITRA_ASSESSOR_EXAMINER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.ITRA_ASSESSOR_EXAMINER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "ITRA Assessor / Examiner"
+    },
+    {
+      "code": "TRR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.TRR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "TRR – Technical Rope Rescuer"
+    },
+    {
+      "code": "SRR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.SRR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "SRR – Specialist Rescue Rescuer"
+    },
+    {
+      "code": "CONFINED_SPACE_RESCUE_TECHNICIAN",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.CONFINED_SPACE_RESCUE_TECHNICIAN",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Confined Space Rescue Technician"
+    },
+    {
+      "code": "HIGH_ANGLE_RESCUE_TECHNICIAN",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.HIGH_ANGLE_RESCUE_TECHNICIAN",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "High Angle Rescue Technician"
+    },
+    {
+      "code": "GOPR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GOPR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GOPR full mountain rescue training"
+    },
+    {
+      "code": "TOPR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.TOPR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "TOPR full mountain rescue training"
+    },
+    {
+      "code": "PSP_SGRW",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.PSP_SGRW",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "PSP SGRW modules"
+    },
+    {
+      "code": "BOSIET",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.BOSIET",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "BOSIET"
+    },
+    {
+      "code": "FOET",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.FOET",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "FOET"
+    },
+    {
+      "code": "HUET",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.HUET",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "HUET"
+    },
+    {
+      "code": "CA_EBS",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.CA_EBS",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "CA‑EBS / EBS"
+    },
+    {
+      "code": "MIST",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.MIST",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "MIST"
+    },
+    {
+      "code": "IMIST",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.IMIST",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "iMIST"
+    },
+    {
+      "code": "HS_AWARENESS",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.HS_AWARENESS",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "H2S Awareness"
+    },
+    {
+      "code": "BANKSMAN_SLINGER_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.BANKSMAN_SLINGER_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Banksman & Slinger Stage 1"
+    },
+    {
+      "code": "BANKSMAN_SLINGER_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.BANKSMAN_SLINGER_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Banksman & Slinger Stage 2"
+    },
+    {
+      "code": "BANKSMAN_SLINGER_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.BANKSMAN_SLINGER_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Banksman & Slinger Stage 3"
+    },
+    {
+      "code": "BANKSMAN_SLINGER_FOUR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.BANKSMAN_SLINGER_FOUR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Banksman & Slinger Stage 4"
+    },
+    {
+      "code": "RIGGER_ONE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.RIGGER_ONE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Rigger Stage 1"
+    },
+    {
+      "code": "RIGGER_TWO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.RIGGER_TWO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Rigger Stage 2"
+    },
+    {
+      "code": "RIGGER_THREE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.RIGGER_THREE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Rigger Stage 3"
+    },
+    {
+      "code": "RIGGER_FOUR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.RIGGER_FOUR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "Rigger Stage 4"
+    },
+    {
+      "code": "HDA",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.HDA",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "HDA – Helideck Assistant"
+    },
+    {
+      "code": "HLO",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.HLO",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "HLO – Helideck Landing Officer"
+    },
+    {
+      "code": "OERTM",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.OERTM",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "OERTM"
+    },
+    {
+      "code": "OERTL",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.OERTL",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "OERTL"
+    },
+    {
+      "code": "OPITO_INSTRUCTOR_ASSESSOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.OPITO_INSTRUCTOR_ASSESSOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "OPITO Instructor / Assessor"
+    },
+    {
+      "code": "GWO_BST_WAH",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_BST_WAH",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO BST – WAH"
+    },
+    {
+      "code": "GWO_BST_FA",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_BST_FA",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO BST – FA"
+    },
+    {
+      "code": "GWO_BST_FAW",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_BST_FAW",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO BST – FAW"
+    },
+    {
+      "code": "GWO_BST_MH",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_BST_MH",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO BST – MH"
+    },
+    {
+      "code": "GWO_BST_SS",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_BST_SS",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO BST – SS"
+    },
+    {
+      "code": "GWO_BTT_MECHANICAL",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_BTT_MECHANICAL",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO BTT – Mechanical"
+    },
+    {
+      "code": "GWO_BTT_ELECTRICAL",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_BTT_ELECTRICAL",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO BTT – Electrical"
+    },
+    {
+      "code": "GWO_BTT_HYDRAULIC",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_BTT_HYDRAULIC",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO BTT – Hydraulic"
+    },
+    {
+      "code": "GWO_BTT_INSTALLATION",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_BTT_INSTALLATION",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO BTT – Installation"
+    },
+    {
+      "code": "GWO_ART_HUB",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_ART_HUB",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO ART – Hub/Spinner/Inside Blade Rescue"
+    },
+    {
+      "code": "GWO_ART_NACELLE",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_ART_NACELLE",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO ART – Nacelle/Tower/Basement Rescue"
+    },
+    {
+      "code": "GWO_BLADE_REPAIR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_BLADE_REPAIR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO Blade Repair"
+    },
+    {
+      "code": "GWO_EFA",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_EFA",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO EFA"
+    },
+    {
+      "code": "GWO_SLINGER_SIGNALLER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_SLINGER_SIGNALLER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO Slinger Signaller"
+    },
+    {
+      "code": "GWO_LIFT_USER",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_LIFT_USER",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO Lift User"
+    },
+    {
+      "code": "GWO_INSTRUCTOR_ASSESSOR",
+      "active": true,
+      "values": {
+        "NAME": "dictionary.CERTIFICATES.NAME.GWO_INSTRUCTOR_ASSESSOR",
+        "VALIDITY_DATE_REQUIRED": true
+      },
+      "description": "GWO Instructor / Assessor"
+    }
+  ],
+  "columns": [
+    {
+      "code": "NAME",
+      "type": "string",
+      "required": true,
+      "description": "Name",
+      "translatable": true
+    },
+    {
+      "code": "VALIDITY_DATE_REQUIRED",
+      "type": "boolean",
+      "required": false,
+      "description": "Validity date is required",
+      "translatable": false
+    }
+  ],
+  "groups": [],
+  "createdAt": "2026-04-21T00:00:00.000Z",
+  "updatedAt": "2026-04-21T00:00:00.000Z"
+}

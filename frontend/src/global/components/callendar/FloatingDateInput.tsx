@@ -52,7 +52,8 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     center,
     onChange,
     error,
-    config = defaultDatePickerConfig
+    config = defaultDatePickerConfig,
+    mode
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomSheetCtx = useBottomSheet();
@@ -115,7 +116,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
                         type="text"
                         value={_value}
                         onClick={handleInputClick}
-                        className={`floating-input pr-10 primary-text`}
+                        className={`floating-input pr-10 primary-text ${mode}`}
                         disabled={disabled}
                         required={required}
                         autoComplete={autoComplete}

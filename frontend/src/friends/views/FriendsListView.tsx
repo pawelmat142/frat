@@ -40,6 +40,7 @@ const FriendsListView: React.FC = () => {
 
     const [freeTextInput, setFreeTextInput] = useState('');
     const debouncedQuery = useDebouncedValue(freeTextInput, 500);
+
     const [searchUsers, setSearchUsers] = useState<UserI[]>([]);
     const [searchLoading, setSearchLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);

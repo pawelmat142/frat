@@ -104,7 +104,8 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
             title: params.title,
             showClose: true,
             children: <SelectorItems
-                items={params.items} selectedValues={params.selectedValues}
+                items={params.items} 
+                selectedValues={params.selectedValues}
                 multiSelect={params.multiSelect}
                 translateItems={params.translateItems}
                 onSelect={(item) => {

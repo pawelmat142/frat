@@ -1,5 +1,5 @@
 import { BtnModes, SelectorItem, SelectorValue } from "global/interface/controls.interface";
-import { useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCheck } from "react-icons/fa";
 import Button from "../controls/Button";
@@ -13,6 +13,8 @@ interface Props<T extends SelectorValue = SelectorValue> {
     multiSelect?: boolean;
     translateItems?: boolean
     onClean?: () => void;
+    automatedMode?: boolean; // If true, will call onSelect/onSelectMulti immediately on click without confirm button
+    renderAfterItem?: (item: SelectorItem<T>, isSelected: boolean) => ReactNode;
 }
 
 const SelectorItems = <T extends SelectorValue = SelectorValue>({
@@ -23,11 +25,17 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     selectedValues = [],
     translateItems = false,
     onClose,
-    onClean
+    onClean,
+    automatedMode = false,
+    renderAfterItem,
 }: Props<T>) => {
     const { t } = useTranslation();
 
     const [localSelectedValues, setLocalSelectedValues] = useState<T[]>(selectedValues);
+
+    useEffect(() => {
+        setLocalSelectedValues(selectedValues);
+    }, [selectedValues]);
 
     const handleItemClick = (item: SelectorItem<T>) => {
         if (multiSelect) {
@@ -44,6 +52,10 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
             }
 
             setLocalSelectedValues(newValues);
+            if (automatedMode && onSelectMulti) {
+                const selectedItems = items.filter(item => newValues.includes(item.value));
+                onSelectMulti(selectedItems.map(item => item.value));
+            }
         } else {
             onSelect?.(item.value);
         }
@@ -73,31 +85,34 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                     const translatedLabel = translateItems ? t(item.label) : item.label
                     const displayLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
                     const last = index === items.length - 1;
+                    const selected = isSelected(item.value);
 
                     return (
-                        <div
-                            key={index}
-                            className={`bottom-sheet-item ripple${isSelected(item.value) ? ' selected' : ''}${last ? ' last' : ''}`}
-                            onClick={() => handleItemClick(item)}
-                        >
-                            {multiSelect && (
-                                <div className={`bottom-sheet-checkbox mr-3 ${isSelected(item.value) ? 'checked' : ''}`}>
-                                    {isSelected(item.value) && <FaCheck size={14} />}
+                        <div key={index}>
+                            <div
+                                className={`bottom-sheet-item ripple${selected ? ' selected' : ''}${last ? ' last' : ''}`}
+                                onClick={() => handleItemClick(item)}
+                            >
+                                {multiSelect && (
+                                    <div className={`bottom-sheet-checkbox mr-3 ${selected ? 'checked' : ''}`}>
+                                        {selected && <FaCheck size={14} />}
+                                    </div>
+                                )}
+                                <div className="bottom-sheet-item-content">
+                                    {item.icon && (
+                                        <span className="bottom-sheet-item-icon">{item.icon}</span>
+                                    )}
+                                    {item.src && (
+                                        <img
+                                            src={item.src}
+                                            alt={displayLabel}
+                                            className="bottom-sheet-item-image"
+                                        />
+                                    )}
+                                    <span className="bottom-sheet-item-label">{displayLabel}</span>
                                 </div>
-                            )}
-                            <div className="bottom-sheet-item-content">
-                                {item.icon && (
-                                    <span className="bottom-sheet-item-icon">{item.icon}</span>
-                                )}
-                                {item.src && (
-                                    <img
-                                        src={item.src}
-                                        alt={displayLabel}
-                                        className="bottom-sheet-item-image"
-                                    />
-                                )}
-                                <span className="bottom-sheet-item-label">{displayLabel}</span>
                             </div>
+                            {renderAfterItem?.(item, selected)}
                         </div>
                     )
                 }
@@ -107,8 +122,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
             </div>
 
 
-            <div className="flex gap-2 bottom-sheet-footer py-3">
-
+            {!automatedMode && (<div className="flex gap-2 bottom-sheet-footer py-3">
                 {onClean && (
                     <Button onClick={handleClean} mode={BtnModes.ERROR_TXT} fullWidth={true}>
                         {t("common.reset")}
@@ -120,7 +134,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                         {t("common.confirm")}
                     </Button>
                 )}
-            </div>
+            </div>)}
         </>
     )
 }
