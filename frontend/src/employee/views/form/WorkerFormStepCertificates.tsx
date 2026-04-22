@@ -6,7 +6,7 @@ import { WorkerForm } from "@shared/interfaces/WorkerI";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { DictionaryService } from "global/services/DictionaryService";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
-import FloatingDateInput, { datepickerWithDaysConfig } from "global/components/callendar/FloatingDateInput";
+import FloatingDateInput, { datepickerWithDaysConfig, datepickerWithDaysConfigFutureOnly } from "global/components/callendar/FloatingDateInput";
 import { DateUtil } from "@shared/utils/DateUtil";
 import { FloatingInputModes, SelectorItem } from "global/interface/controls.interface";
 import SkeletonControl from "global/components/controls/SkeletonControl";
@@ -26,6 +26,8 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
     const { control, formState } = formRef;
     const { t } = useTranslation();
     const required = FormValidator.required(t);
+
+    const tomorrow = useMemo(() => { const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(0, 0, 0, 0); return d; }, []);
 
     const [loading, setLoading] = useState(false);
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
@@ -156,10 +158,11 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                                                     value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
                                                     onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? null)}
                                                     required
+                                                    minDate={tomorrow}
                                                     error={formState.errors?.certificates?.certificateDates?.[cert.code]?.message
                                                         ? { message: formState.errors.certificates.certificateDates[cert.code]!.message }
                                                         : undefined}
-                                                    config={datepickerWithDaysConfig}
+                                                    config={datepickerWithDaysConfigFutureOnly}
                                                 />
                                             )
                                         }}

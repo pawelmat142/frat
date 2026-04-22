@@ -19,6 +19,7 @@ export interface DatePickerConfig {
     startView: DatePickerView;
     disableSelectDays: boolean
     disableShowDays: boolean;
+    futureDatesOnly?: boolean;
 }
 
 export const defaultDatePickerConfig: DatePickerConfig = {
@@ -33,10 +34,16 @@ export const datepickerWithDaysConfig: DatePickerConfig = {
     disableShowDays: false,
 }
 
+export const datepickerWithDaysConfigFutureOnly: DatePickerConfig = {
+    ...datepickerWithDaysConfig,
+    futureDatesOnly: true,
+}
+
 interface DateInputProps extends Omit<InputInterface, 'type' | 'value' | 'onChange'> {
     value?: Date | null;
     onChange?: (date: Date | null) => void;
     config?: DatePickerConfig;
+    minDate?: Date;
 }
 
 const FloatingDateInput: React.FC<DateInputProps> = ({
@@ -53,7 +60,8 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     onChange,
     error,
     config = defaultDatePickerConfig,
-    mode
+    mode,
+    minDate,
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomSheetCtx = useBottomSheet();
@@ -92,6 +100,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
 
                     disabled={disabled}
                     config={config}
+                    minDate={minDate}
                 />
             )
         });

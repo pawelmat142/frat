@@ -15,6 +15,7 @@ interface DatePickerSheetProps {
     reset: () => void;
     disabled?: boolean;
     config?: DatePickerConfig;
+    minDate?: Date;
 }
 
 const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
@@ -22,8 +23,12 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
     onChange,
     reset,
     disabled,
-    config = defaultDatePickerConfig
+    config = defaultDatePickerConfig,
+    minDate,
 }) => {
+    const today = React.useMemo(() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; }, []);
+    const effectiveMinDate = config.futureDatesOnly ? today : minDate;
+
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(value || new Date());
     const [view, setView] = React.useState<DatePickerView>(config.startView);
     const [direction, setDirection] = React.useState<1 | -1>(1);
@@ -67,6 +72,7 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
                                 showYearPicker
                                 inline
                                 disabled={disabled}
+                                minDate={config.futureDatesOnly ? today : minDate}
                             />
                         )}
                         {view === DatePickerViews.MONTH && (
@@ -85,6 +91,7 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
                                 showMonthYearPicker
                                 inline
                                 disabled={disabled}
+                                minDate={config.futureDatesOnly ? today : minDate}
                             />
                         )}
                         {view === DatePickerViews.DAY && (
@@ -93,6 +100,7 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
                                 onChange={(date) => setSelectedDate(date)}
                                 inline
                                 disabled={disabled}
+                                minDate={effectiveMinDate}
                             />
                         )}
 
