@@ -1,4 +1,5 @@
 const path = require('path');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   webpack: {
@@ -6,6 +7,10 @@ module.exports = {
       '@shared': path.resolve(__dirname, '../shared'),
     },
     configure: (webpackConfig) => {
+      // Disable fork-ts-checker-webpack-plugin to avoid crash on Node.js v20+
+      webpackConfig.plugins = webpackConfig.plugins.filter(
+        (plugin) => !(plugin instanceof ForkTsCheckerWebpackPlugin)
+      );
       // Remove react-refresh plugin in production
       if (process.env.NODE_ENV === 'production') {
         // Remove react-refresh from babel-loader options
