@@ -696,7 +696,8 @@
         },
         "certificates": {
           "label": "Step 4",
-          "title": "Certificates"
+          "title": "Certificates - optional",
+          "main": "Most common certificates"
         },
         "career": {
           "title": "Career",

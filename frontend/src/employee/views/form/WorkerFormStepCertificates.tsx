@@ -79,23 +79,25 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
         return new Set((mainGroup?.elementCodes || []).map(code => String(code)));
     }, [dictionary]);
 
-    const displayItems = useMemo(() => {
+    const topSectionItems = useMemo(() => {
         const selectedSet = new Set(selectedCertificates);
 
         if (debouncedQuery.length < MIN_QUERY_LENGTH) {
-            const selectedItems = dictionaryItems.filter(item => selectedSet.has(item.value));
-            const mainUnselectedItems = dictionaryItems.filter(
-                item => mainGroupElementCodes.has(item.value) && !selectedSet.has(item.value),
-            );
-
-            return [...selectedItems, ...mainUnselectedItems];
+            return dictionaryItems.filter(item => selectedSet.has(item.value));
         }
 
         const query = debouncedQuery.toLowerCase();
+        return dictionaryItems.filter(item => selectedSet.has(item.value) || item.label.toLowerCase().includes(query));
+    }, [debouncedQuery, dictionaryItems, selectedCertificates]);
 
-        return dictionaryItems
-            .filter(item => selectedSet.has(item.value) || item.label.toLowerCase().includes(query));
-    }, [debouncedQuery, dictionaryItems, mainGroupElementCodes, selectedCertificates]);
+    const mainSectionItems = useMemo(() => {
+        const selectedSet = new Set(selectedCertificates);
+        const topSectionCodes = new Set(topSectionItems.map(item => item.value));
+
+        return dictionaryItems.filter(
+            item => mainGroupElementCodes.has(item.value) && !selectedSet.has(item.value) && !topSectionCodes.has(item.value),
+        );
+    }, [dictionaryItems, mainGroupElementCodes, selectedCertificates, topSectionItems]);
 
     return (
         <>
@@ -122,11 +124,12 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                     />
 
                     <SelectorItems
-                        items={displayItems}
+                        items={topSectionItems}
                         selectedValues={selectedCertificates}
                         multiSelect
                         automatedMode
                         translateItems
+                        emitAllSelectedValues
                         onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
                         onClean={() => formRef.setValue('certificates.certificates', [])}
                         renderAfterItem={(item, isSelected) => {
@@ -164,6 +167,20 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                                 </div>
                             );
                         }}
+                    ></SelectorItems>
+
+                    <h3 className="form-subheader mt-5">
+                        {t("employeeProfile.form.certificates.main")}
+                    </h3>
+
+                    <SelectorItems
+                        items={mainSectionItems}
+                        selectedValues={selectedCertificates}
+                        multiSelect
+                        automatedMode
+                        translateItems
+                        emitAllSelectedValues
+                        onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
                     ></SelectorItems>
                 </>
             )}

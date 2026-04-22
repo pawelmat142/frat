@@ -15,6 +15,7 @@ interface Props<T extends SelectorValue = SelectorValue> {
     onClean?: () => void;
     automatedMode?: boolean; // If true, will call onSelect/onSelectMulti immediately on click without confirm button
     renderAfterItem?: (item: SelectorItem<T>, isSelected: boolean) => ReactNode;
+    emitAllSelectedValues?: boolean;
 }
 
 const SelectorItems = <T extends SelectorValue = SelectorValue>({
@@ -28,6 +29,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     onClean,
     automatedMode = false,
     renderAfterItem,
+    emitAllSelectedValues = false,
 }: Props<T>) => {
     const { t } = useTranslation();
 
@@ -40,9 +42,9 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     const handleItemClick = (item: SelectorItem<T>) => {
         if (multiSelect) {
             const newValues = [...localSelectedValues];
-            const isSelected = newValues.includes(item.value);
+            const selected = newValues.includes(item.value);
 
-            if (isSelected) {
+            if (selected) {
                 const index = newValues.indexOf(item.value);
                 if (index > -1) {
                     newValues.splice(index, 1);
@@ -53,8 +55,12 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
             setLocalSelectedValues(newValues);
             if (automatedMode && onSelectMulti) {
-                const selectedItems = items.filter(item => newValues.includes(item.value));
-                onSelectMulti(selectedItems.map(item => item.value));
+                if (emitAllSelectedValues) {
+                    onSelectMulti(newValues);
+                } else {
+                    const selectedItems = items.filter((listItem) => newValues.includes(listItem.value));
+                    onSelectMulti(selectedItems.map((listItem) => listItem.value));
+                }
             }
         } else {
             onSelect?.(item.value);
@@ -63,8 +69,12 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
     const handleConfirm = () => {
         if (multiSelect && onSelectMulti) {
-            const selectedItems = items.filter(item => localSelectedValues.includes(item.value));
-            onSelectMulti(selectedItems.map(item => item.value));
+            if (emitAllSelectedValues) {
+                onSelectMulti(localSelectedValues);
+            } else {
+                const selectedItems = items.filter((item) => localSelectedValues.includes(item.value));
+                onSelectMulti(selectedItems.map((item) => item.value));
+            }
         }
         onClose?.();
     };
@@ -82,7 +92,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
         <>
             <div className="bottom-sheet-content">
                 {items.map((item, index) => {
-                    const translatedLabel = translateItems ? t(item.label) : item.label
+                    const translatedLabel = translateItems ? t(item.label) : item.label;
                     const displayLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
                     const last = index === items.length - 1;
                     const selected = isSelected(item.value);
@@ -114,29 +124,27 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                             </div>
                             {renderAfterItem?.(item, selected)}
                         </div>
-                    )
-                }
-
-                )}
-
+                    );
+                })}
             </div>
 
+            {!automatedMode && (
+                <div className="flex gap-2 bottom-sheet-footer py-3">
+                    {onClean && (
+                        <Button onClick={handleClean} mode={BtnModes.ERROR_TXT} fullWidth={true}>
+                            {t("common.reset")}
+                        </Button>
+                    )}
 
-            {!automatedMode && (<div className="flex gap-2 bottom-sheet-footer py-3">
-                {onClean && (
-                    <Button onClick={handleClean} mode={BtnModes.ERROR_TXT} fullWidth={true}>
-                        {t("common.reset")}
-                    </Button>
-                )}
-
-                {multiSelect && (
-                    <Button onClick={handleConfirm} mode={BtnModes.PRIMARY_TXT} fullWidth={true}>
-                        {t("common.confirm")}
-                    </Button>
-                )}
-            </div>)}
+                    {multiSelect && (
+                        <Button onClick={handleConfirm} mode={BtnModes.PRIMARY_TXT} fullWidth={true}>
+                            {t("common.confirm")}
+                        </Button>
+                    )}
+                </div>
+            )}
         </>
-    )
+    );
 }
 
 export default SelectorItems;

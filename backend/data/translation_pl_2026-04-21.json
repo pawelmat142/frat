@@ -690,7 +690,8 @@
         },
         "certificates": {
           "label": "Krok 4",
-          "title": "Certyfikaty"
+          "title": "Certyfikaty - nieobowiązkowe",
+          "main": "Najczęściej wybierane certyfikaty"
         },
         "career": {
           "title": "Kariera",
