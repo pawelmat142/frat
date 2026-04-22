@@ -113,8 +113,8 @@ const OfferFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }
             // Going forward - validate current step
             const isValid = await validateCurrentStep();
             if (isValid) {
-                saveFormToLocalStorage(form);
                 setCurrentStep(targetStep);
+                saveFormToLocalStorage(formCtx.watch());
             }
         }
     }

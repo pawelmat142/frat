@@ -2,7 +2,7 @@ import Button from "global/components/controls/Button";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import React, { useEffect } from "react";
-import { DateRange, WorkerAvailabilityOptions, WorkerForm, WorkerLocationOptions, WorkerWithCertificates } from "@shared/interfaces/WorkerI";
+import { DateRange, WORKER_FORM_STEPS_ORDER, WorkerAvailabilityOptions, WorkerForm, WorkerFormStep, WorkerFormSteps, WorkerLocationOptions, WorkerWithCertificates } from "@shared/interfaces/WorkerI";
 import { toast } from "react-toastify";
 import { WorkerService } from "employee/services/WorkerService";
 import Loading from "global/components/Loading";
@@ -30,10 +30,6 @@ import Header from "global/components/Header";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
-type StepKey = 'personalData' | 'career' | 'location' | 'availability' | 'certificates';
-
-const STEPS_ORDER: StepKey[] = ['personalData', 'career', 'location', 'availability', 'certificates'];
-
 const WorkerFormView: React.FC = () => {
 
     const { t } = useTranslation();
@@ -47,7 +43,7 @@ const WorkerFormView: React.FC = () => {
 
     const me = userCtx?.me;
 
-    const [step, setStep] = React.useState<StepKey>(STEPS_ORDER[0]);
+    const [step, setStep] = React.useState<WorkerFormStep>(WORKER_FORM_STEPS_ORDER[0]);
 
     useEffect(() => {
         globalCtx.hideFooter();
@@ -58,8 +54,9 @@ const WorkerFormView: React.FC = () => {
 
     const worker: WorkerWithCertificates | null = userCtx?.meCtx?.workerProfile || null;
 
-    const formRef = useForm<WorkerForm>({
+    const formCtx = useForm<WorkerForm>({
         defaultValues: {
+            currentStep: WORKER_FORM_STEPS_ORDER[0],
             personalData: {
                 fullName: "",
                 phoneNumber: { prefix: "+00", number: "" },
@@ -89,6 +86,8 @@ const WorkerFormView: React.FC = () => {
         },
     });
 
+    const form = formCtx.watch();
+
     const getGeoPosition = async (): Promise<GeocodedPosition | null> => {
         if (userCtx.position) {
             // Use backend geocoding to avoid API key restrictions
@@ -108,21 +107,21 @@ const WorkerFormView: React.FC = () => {
         setLoading(true);
         const position = await getGeoPosition();
 
-        formRef.setValue("personalData.fullName", me.displayName)
+        formCtx.setValue("personalData.fullName", me.displayName)
 
         if (isOneOf([UserProviders.EMAIL, UserProviders.GOOGLE], me.provider)) {
-            formRef.setValue("personalData.email", me.email)
+            formCtx.setValue("personalData.email", me.email)
         }
 
         if (me.avatarRef) {
-            formRef.setValue("personalData.avatarRef", me.avatarRef);
+            formCtx.setValue("personalData.avatarRef", me.avatarRef);
         }
         if (position) {
             const element = DictionaryUtil.getElementByCountryCode(globalCtx.dics.languages!, position.country?.toLocaleLowerCase() || "");
 
             if (element) {
-                formRef.setValue("personalData.phoneNumber.prefix", element.values.PHONE_PREFIX);
-                formRef.setValue("personalData.communicationLanguages", [element.code]);
+                formCtx.setValue("personalData.phoneNumber.prefix", element.values.PHONE_PREFIX);
+                formCtx.setValue("personalData.communicationLanguages", [element.code]);
                 setPositionFormDataByLocation(position);
             }
         }
@@ -143,8 +142,8 @@ const WorkerFormView: React.FC = () => {
     const setPositionFormDataByLocation = (position: GeocodedPosition) => {
         const element = getDictionaryElementByPosition(position);
         if (element) {
-            formRef.setValue("location.countryCode", element.code);
-            formRef.setValue("location.geocodedPosition", position);
+            formCtx.setValue("location.countryCode", element.code);
+            formCtx.setValue("location.geocodedPosition", position);
         }
     }
 
@@ -157,7 +156,10 @@ const WorkerFormView: React.FC = () => {
             if (savedData) {
                 try {
                     const parsedData: WorkerForm = JSON.parse(savedData);
-                    formRef.reset(parsedData);
+                    if (!parsedData?.currentStep) {
+                        parsedData.currentStep = WORKER_FORM_STEPS_ORDER[0];
+                    }
+                    formCtx.reset(parsedData);
                 } catch (error) {
                     console.error("Error loading form from localStorage:", error);
                 }
@@ -167,7 +169,7 @@ const WorkerFormView: React.FC = () => {
             return;
         }
         initFormFromProfile();
-    }, [worker, formRef]);
+    }, [worker, formCtx]);
 
     const initFormFromProfile = async () => {
         if (!worker) return;
@@ -186,7 +188,7 @@ const WorkerFormView: React.FC = () => {
             .map(r => DateRangeUtil.toDateRange(r))
             .filter((r): r is DateRange => r != null);
 
-        formRef.reset({
+        formCtx.reset({
             personalData: {
                 fullName: worker.fullName || "",
                 phoneNumber: worker.phoneNumber || { prefix: "+48", number: "" },
@@ -238,7 +240,7 @@ const WorkerFormView: React.FC = () => {
         if (!confirmed) return;
 
 
-        const form = formRef.watch();
+        const form = formCtx.watch();
         if (worker) {
             await updateWorker(form);
             return;
@@ -274,45 +276,81 @@ const WorkerFormView: React.FC = () => {
     }
 
     const handleDevFill = () => {
-        formRef.setValue("personalData.fullName", "Pawel Malek");
-        formRef.setValue("certificates.certificates", ["ONE"]);
-        formRef.setValue("personalData.communicationLanguages", ["en", "pl"]);
+        formCtx.setValue("personalData.fullName", "Pawel Malek");
+        formCtx.setValue("certificates.certificates", ["ONE"]);
+        formCtx.setValue("personalData.communicationLanguages", ["en", "pl"]);
     };
 
     if (loading) {
         return <Loading />;
     }
 
-    const renderStepByKey = (stepKey: StepKey) => {
+    const renderStepByKey = (stepKey: WorkerFormStep) => {
         switch (stepKey) {
-            case 'personalData':
-                return <WorkerFormpersonalData formRef={formRef} />;
-            case 'career':
-                return <WorkerFormStepCareer formRef={formRef} />;
-            case 'location':
-                return <WorkerFormStepLocation formRef={formRef} initPosition={resetPositionFormData} />;
-            case 'availability':
-                return <WorkerFormStepAvailability formRef={formRef} />;
-            case 'certificates':
-                return <WorkerFormStepCertificates formRef={formRef} />;
+            case WorkerFormSteps.PERSONAL_DATA:
+                return <WorkerFormpersonalData formRef={formCtx} />;
+            case WorkerFormSteps.CAREER:
+                return <WorkerFormStepCareer formRef={formCtx} />;
+            case WorkerFormSteps.LOCATION:
+                return <WorkerFormStepLocation formRef={formCtx} initPosition={resetPositionFormData} />;
+            case WorkerFormSteps.AVAILABILITY:
+                return <WorkerFormStepAvailability formRef={formCtx} />;
+            case WorkerFormSteps.CERTIFICATES:
+                return <WorkerFormStepCertificates formRef={formCtx} />;
             default:
                 return null;
         }
+    }
+
+    const validateStep = async (step: WorkerFormStep): Promise<boolean> => {
+        const result = await formCtx.trigger(step);
+        if (!result) {
+            toast.error(t("employeeProfile.form.validationError"));
+        }
+        return result;
+    }
+
+    const validateCurrentStep = async (): Promise<boolean> => {
+        return validateStep(form.currentStep);
+    }
+
+    const selectStep = async (targetStep: WorkerFormStep) => {
+        const targetIndex = WORKER_FORM_STEPS_ORDER.indexOf(targetStep);
+        const currentIndex = WORKER_FORM_STEPS_ORDER.indexOf(form.currentStep);
+        if (targetIndex < currentIndex) {
+            // Going back - no validation needed
+            setCurrentStep(targetStep);
+        } else if (targetIndex > currentIndex) {
+            // Going forward - validate current step
+            const isValid = await validateCurrentStep();
+            if (isValid) {
+                setCurrentStep(targetStep);
+                saveFormToLocalStorage(formCtx.watch());
+            }
+        }
+    }
+
+    const saveFormToLocalStorage = (form: WorkerForm) => {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(form));
+    }
+
+    const setCurrentStep = (step: WorkerFormStep) => {
+        formCtx.setValue("currentStep", step);
     }
 
     return (<>
         <Header title={t("employeeProfile.form.title")}></Header>
         <FormWizard
             localStorageKey={LOCAL_STORAGE_KEY}
-            formRef={formRef}
-            stepsOrder={STEPS_ORDER}
-            currentStep={step}
+            formRef={formCtx}
+            stepsOrder={WORKER_FORM_STEPS_ORDER}
+            currentStep={form.currentStep}
             onFinalSubmit={onSubmit}
-            onSelectStep={setStep}
+            onSelectStep={selectStep}
         >
             {
                 <>
-                    {renderStepByKey(step)}
+                    {renderStepByKey(form.currentStep)}
 
                     {isDevMode && (
                         <div className="flex items-center justify-end">

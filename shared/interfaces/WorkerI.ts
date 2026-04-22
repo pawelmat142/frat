@@ -137,12 +137,31 @@ export interface WorkerFormStepCertificates {
 }
 
 export interface WorkerForm {
+  currentStep: WorkerFormStep;
   personalData: WorkerFormStepPersonalData;
   career: WorkerFormStepCareer;
   location: WorkerFormStepLocation;
   availability: WorkerFormStepAvailability;
   certificates: WorkerFormStepCertificates;
 }
+
+export const WorkerFormSteps = {
+  PERSONAL_DATA: 'personalData',
+  CAREER: 'career',
+  LOCATION: 'location',
+  AVAILABILITY: 'availability',
+  CERTIFICATES: 'certificates',
+} as const;
+
+export type WorkerFormStep = typeof WorkerFormSteps[keyof typeof WorkerFormSteps];
+
+export const WORKER_FORM_STEPS_ORDER = [
+  WorkerFormSteps.PERSONAL_DATA,
+  WorkerFormSteps.CAREER,
+  WorkerFormSteps.LOCATION,
+  WorkerFormSteps.AVAILABILITY,
+  WorkerFormSteps.CERTIFICATES,
+]
 
 // Flat API structure for backend communication
 export interface WorkerFormDto {
