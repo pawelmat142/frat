@@ -206,6 +206,7 @@
       "lessThan": "<{{value}} {{unit}}",
       "availableAnytime": "Dostępny od zaraz",
       "availableFrom": "Dostępny od",
+      "available": "Dostępny",
       "fetchLocationError": "Nie można znaleźć lokalizacji.",
       "availableAnytimeShort": "Od zaraz",
       "call": "Zadzwoń",

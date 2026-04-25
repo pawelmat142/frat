@@ -3,7 +3,7 @@ import React, { useEffect, useId, useState } from "react";
 import { WorkerService } from "employee/services/WorkerService";
 import Loading from "global/components/Loading";
 import { useNavigate, useParams } from "react-router-dom";
-import { WorkerAvailabilityOptions, WorkerI, WorkerStatuses } from "@shared/interfaces/WorkerI";
+import { WorkerI, WorkerStatuses } from "@shared/interfaces/WorkerI";
 import { useWorkersSearch } from "../search/WorkersSearchProvider";
 import { useTranslation } from "react-i18next";
 import { Path } from "../../../path";
@@ -14,26 +14,21 @@ import { useUserContext } from "user/UserProvider";
 import { ChatService } from "chat/services/ChatService";
 import PositionWidget from "employee/components/PositionWidget";
 import { Ico } from "global/icon.def";
-import DateDisplay from "global/components/ui/DateDisplay";
-import { useIsDesktop } from "global/hooks/isMobile";
 import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { AppConfig } from "@shared/AppConfig";
-import { PositionUtil } from "@shared/utils/PositionUtil";
 import WorkerSkillsSection from "employee/components/WorkerSkillsSection";
 import WorkerImagesSection from "employee/components/WorkerImagesSection";
-import ListUi from "global/components/ui/ListUi";
 import ChecklistUi from "global/components/ui/ChecklistUi";
-import { BtnModes, BtnSizes, MenuItem } from "global/interface/controls.interface";
-import Button from "global/components/controls/Button";
 import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/interfaces/UserListedItem";
 import { UserListedItemService } from "user/services/UserListedItemService";
 import Header from "global/components/Header";
 import WorkerStatItems from "employee/components/WorkerStatItems";
 import CategoriesChips from "global/components/chips/CategoriesChips";
 import WorkerBioSection from "employee/components/WorkerBioSection";
+import WorkerDataSection from "employee/components/WorkerDataSection";
 
 const WorkerView: React.FC = () => {
 
@@ -53,7 +48,6 @@ const WorkerView: React.FC = () => {
     const fabId = useId();
 
     const profileCtx = useWorkersSearch();
-    const isDesktop = useIsDesktop();
 
     const isMe = me?.uid === worker?.uid;
     const isSavedOnList = (userCtx.meCtx?.listedItems ?? [])
@@ -237,18 +231,6 @@ const WorkerView: React.FC = () => {
         }
     }
 
-    const getDistanceInfo = (): string => {
-        if (!worker?.point) {
-            return '';
-        }
-
-        const distanceInfo = userCtx.getDistanceInfo(PositionUtil.fromGeoPoint(worker.point));
-        if (!distanceInfo) {
-            return '';
-        }
-
-        return `(${distanceInfo} ${t('others.away')})`;
-    }
 
     if (loading) {
         return <Loading />
@@ -261,43 +243,6 @@ const WorkerView: React.FC = () => {
         navigate(Path.WORKER_FORM);
     }
 
-    const isAnytime = worker.availabilityOption === WorkerAvailabilityOptions.ANYTIME;
-
-    const onAvailabilityClick = () => {
-        if (!isAnytime) {
-            // TODO show callendar view
-        }
-    }
-
-    const openPhoneCall = () => {
-        if (!worker.phoneNumber || isMe) return;
-
-        const number = `${worker.phoneNumber.prefix}${worker.phoneNumber.number}`
-        if (isDesktop) {
-            // copy to clipboard
-            navigator.clipboard.writeText(number);
-            toast.info(t('employeeProfile.phoneNumberCopied', { number }));
-            return;
-        }
-        window.location.href = `tel:${worker.phoneNumber.prefix}${worker.phoneNumber.number}`;
-    }
-
-    const getWorksInIndustry = () => {
-        if (!worker.careerStartDate) {
-            return null;
-        }
-        const start = new Date(worker.careerStartDate);
-        const now = new Date();
-        const years = now.getFullYear() - start.getFullYear();
-
-        if (years > 2) {
-            return t('employeeProfile.worksInIndurstryYears', { years });
-        }
-        const months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
-        return t('employeeProfile.worksInIndurstryMonths', { months });
-    }
-
-    const worksInIndurstry = getWorksInIndustry();
 
     // TODO translacje
     const addListItem = async () => {
@@ -345,49 +290,6 @@ const WorkerView: React.FC = () => {
         }
     }
 
-    const getListItems = (): MenuItem[] => {
-        return [{
-            if: isAnytime,
-            label: t('others.availableAnytime'),
-            icon: Ico.CALENDAR
-        }, {
-            if: !isAnytime && worker.startDate,
-            label: `${t('others.availableFrom')} ${DateDisplay({
-                date: new Date(worker.startDate!),
-                showYear: false, t
-            })}`,
-            icon: Ico.CALENDAR,
-            onClick: onAvailabilityClick
-        }, {
-            if: worker.geocodedPosition?.fullAddress,
-            label: `${worker.geocodedPosition?.fullAddress} ${getDistanceInfo()}`,
-            icon: Ico.MARKER
-        }, {
-            if: worker.phoneNumber,
-            label: `${t('employeeProfile.form.phoneNumber')}: ${worker.phoneNumber.prefix} ${worker.phoneNumber.number}`,
-            icon: Ico.PHONE,
-            onClick: openPhoneCall
-        }, {
-            label: `${t("employeeProfile.form.email")}: ${worker.email}`,
-            icon: Ico.EMAIL
-        }, {
-            if: worksInIndurstry,
-            label: worksInIndurstry,
-            icon: Ico.CLOCK
-        }, {
-            if: worker.maxAltitude,
-            label: `${t('employeeProfile.form.career.maxAltitudeShort')}: ${worker.maxAltitude}[m]`,
-            icon: Ico.RULER
-        }, {
-            if: typeof worker.readyToTravel === 'boolean',
-            label: `${t('employeeProfile.form.career.readyToTravel')}: ${worker.readyToTravel ? t('common.yes') : t('common.no')}`,
-            icon: Ico.COMPASS
-        }, {
-            if: !!worker.communicationLanguages.length,
-            label: `${t('others.languages')}: ${worker.communicationLanguages.map(lang => DictionaryDisplay({ dictionary: "LANGUAGES", value: lang, t }))}`,
-            icon: Ico.LANGUAGE
-        }];
-    }
 
     return (<>
         <Header title={t('employeeProfile.title')} menu={getProfileMenuItems(worker)}></Header>
@@ -416,9 +318,7 @@ const WorkerView: React.FC = () => {
 
             </div>
 
-            <div className="mb-5 mt-5">
-                <ListUi items={getListItems()}></ListUi>
-            </div>
+            <WorkerDataSection worker={worker} />`
 
             <ChecklistUi icon={Ico.CHECK} title={t('employeeProfile.form.certificates.title')}
                 items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []}

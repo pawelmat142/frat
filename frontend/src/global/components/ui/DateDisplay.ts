@@ -2,7 +2,7 @@ import { FrontDateUtil } from "global/utils/FrontDateUtil";
 
 interface Props {
     date?: Date;
-    localDateString?: string;
+    localDateString?: string | null;
     showYear?: boolean;
     showYearIfNotCurrent?: boolean;
     showTimeIfToday?: boolean;

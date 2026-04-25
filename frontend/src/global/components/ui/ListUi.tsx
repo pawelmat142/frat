@@ -32,23 +32,34 @@ const ListUi: React.FC<Props> = ({ items, className, itemClassName }) => {
         item.onClick?.(e);
     }
 
-    const defaultClassName = "flex gap-4 view-margin py-2 items-center s-font"
+    const defaultClassName = "flex gap-4 view-margin  items-center s-font"
 
     return (
         <div className={className ? className : ""}>
             {items.filter(item => item.if === undefined || !!item.if).map((item, index) => {
 
-                const _itemClassName = `${defaultClassName}${item.onClick ? " ripple" : ""}${item.className ? ` ${item.className}` : ""}${itemClassName ? ` ${itemClassName}` : ""}`;
+                const _itemClassName = `${defaultClassName}${item.className ? ` ${item.className}` : ""}${itemClassName ? ` ${itemClassName}` : ""}`;
 
-                return <div key={index} className={_itemClassName} onClick={(e) => onItemClick(e, item)}>
+                return <div key={index} className={`py-2${item.onClick ? " ripple" : ""}`} onClick={(e) => onItemClick(e, item)}>
+                    <div className={_itemClassName}>
 
-                    {item.icon && <item.icon size={iconSize} />}
+                        {item.icon && <item.icon size={iconSize} />}
 
-                    <span>{item.label}</span>
+                        <span>{item.label}</span>
 
-                    {getRightIcon(item)}
+                        {getRightIcon(item)}
+
+                    </div>
+
+                    {!!item.list && (<ul className="xs-font view-margin ml-10 mt-1 list-disc">
+                        {item.list.map((subItem, subIndex) => (
+                            <li key={subIndex} className="list-disc"> {subItem.label}</li>
+                        ))}
+                    </ul>)}
+
 
                 </div>
+                
             })}
         </div>
     )
