@@ -13,7 +13,7 @@ import Header from "../Header";
 
 
 interface CallendarsViewProps {
-    range?: DateRange | null;
+    ranges?: DateRange[] | null;
     onSubmit?: (result?: DateRange | null) => void;
     onCancel?: () => void;
     onClose?: () => void;
@@ -24,16 +24,17 @@ interface CallendarsViewProps {
     title: string
 }
 
-const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCancel, onClose, selectorMode, singleDateMode, bottomSheetCtx, title }) => {
+const CallendarsView: React.FC<CallendarsViewProps> = ({ ranges, onSubmit, onCancel, onClose, selectorMode, singleDateMode, bottomSheetCtx, title }) => {
     
     const { t } = useTranslation();
 
-    const date = range?.start ? DateUtil.parseLocalDateString(range.start) : null;
+    const firstRange = ranges && ranges.length > 0 ? ranges[0] : null;
+    const date = firstRange?.start ? DateUtil.parseLocalDateString(firstRange.start) : null;
 
     // activeControl determines which control is currently selected/focused
     const [activeControl, setActiveControl] = useState<'start' | 'end'>('start');
 
-    const [currentRange, setCurrentRange] = useState<DateRange | null>(range || {start: null, end: null});
+    const [currentRange, setCurrentRange] = useState<DateRange>(firstRange || {start: null, end: null});
     
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const initialScrollDone = useRef(false);
@@ -42,7 +43,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
     useEffect(() => {
         if (initialScrollDone.current) return;
         
-        const targetDate = range?.start ? DateUtil.parseLocalDateString(range.start) : null;
+        const targetDate = firstRange?.start ? DateUtil.parseLocalDateString(firstRange.start) : null;
         if (targetDate && scrollContainerRef.current) {
             const monthId = `month-${targetDate.getFullYear()}-${targetDate.getMonth()}`;
             const targetElement = document.getElementById(monthId);
@@ -54,9 +55,9 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
                 }, 100);
             }
         }
-    }, [range?.start]);
+    }, [firstRange?.start]);
 
-    const prepareMonthsArray = (range: DateRange): Date[] => {
+    const prepareMonthsArray = (rangesList: DateRange[]): Date[] => {
         const months: Date[] = [];
         const now = new Date();
         // Always start from current month
@@ -64,16 +65,23 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
         
         // Find the furthest selected date
         let furthestDate: Date | null = null;
-        const rangeStart = range.start ? DateUtil.parseLocalDateString(range.start) : null;
-        const rangeEnd = range.end ? DateUtil.parseLocalDateString(range.end) : null;
-        
-        if (rangeStart && rangeEnd) {
-            furthestDate = rangeStart > rangeEnd ? rangeStart : rangeEnd;
-        } else if (rangeStart) {
-            furthestDate = rangeStart;
-        } else if (rangeEnd) {
-            furthestDate = rangeEnd;
-        }
+        rangesList.forEach((range) => {
+            const rangeStart = range.start ? DateUtil.parseLocalDateString(range.start) : null;
+            const rangeEnd = range.end ? DateUtil.parseLocalDateString(range.end) : null;
+
+            let candidate: Date | null = null;
+            if (rangeStart && rangeEnd) {
+                candidate = rangeStart > rangeEnd ? rangeStart : rangeEnd;
+            } else if (rangeStart) {
+                candidate = rangeStart;
+            } else if (rangeEnd) {
+                candidate = rangeEnd;
+            }
+
+            if (candidate && (!furthestDate || candidate > furthestDate)) {
+                furthestDate = candidate;
+            }
+        });
         
         // End at furthest date + 12 months, or current month + 12 if no date selected
         const endBase = furthestDate || now;
@@ -127,11 +135,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
         )
     }
 
-    if (!currentRange) {
-        return <div>??</div>
-    }
-
-    const months = prepareMonthsArray(currentRange);
+    const months = prepareMonthsArray(selectorMode ? [currentRange] : (ranges || []));
 
     return (
 
@@ -218,7 +222,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ range, onSubmit, onCanc
                         <MonthCallendar
                             showDaysHeader={false}
                             date={monthDate}
-                            selectedRange={currentRange}
+                            selectedRanges={selectorMode ? [currentRange] : (ranges || [])}
                             fullScreenMode={true}
                             showOnlyDateMonth={true}
                             showMonthHeader={true}

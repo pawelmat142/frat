@@ -139,7 +139,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
             <PseudoView show={openPseudoView}>
                 <CallendarsView
                     title={label || ''}
-                    range={_value}
+                    ranges={[_value]}
                     selectorMode={true}
                     singleDateMode={singleDateMode}
                     bottomSheetCtx={bottomSheetCtx}

@@ -13,6 +13,7 @@ interface Props {
  * Use anywhere: gallery, datepicker, filters, etc.
  */
 const PseudoView: React.FC<Props> = ({ show, children, className = "bg-black" }) => {
+
     const zIndex = Z_INDEX.PSEUDO_VIEW;
     return (
         <AnimatePresence>

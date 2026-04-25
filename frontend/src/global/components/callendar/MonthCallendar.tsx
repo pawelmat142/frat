@@ -6,7 +6,7 @@ import { DateUtil } from "@shared/utils/DateUtil";
 
 interface MonthCallendarProps {
     date: Date;
-    selectedRange?: DateRange | null;
+    selectedRanges?: DateRange[] | null;
     selectedDay?: Date | null;
     showDaysHeader?: boolean;
     fullScreenMode?: boolean;
@@ -23,7 +23,7 @@ const MS_DAY = 24 * 60 * 60 * 1000;
 
 const MonthCallendar: React.FC<MonthCallendarProps> = ({
     date,
-    selectedRange,
+    selectedRanges,
     showDaysHeader = true,
     fullScreenMode = false,
     showOnlyDateMonth = false,
@@ -97,34 +97,46 @@ const MonthCallendar: React.FC<MonthCallendarProps> = ({
         return arr;
     }, [year, month, offset, daysInMonth, showOnlyDateMonth]);
 
+    const allRanges = useMemo(() => {
+        return selectedRanges && selectedRanges.length > 0
+            ? selectedRanges.filter(Boolean)
+            : [];
+    }, [selectedRanges]);
+
     // Normalize selected range boundaries (inclusive)
     const rangeBoundaries = useMemo(() => {
-        if (!selectedRange?.start || !selectedRange?.end) return null;
-        const startDate = DateUtil.parseLocalDateString(selectedRange.start);
-        const endDate = DateUtil.parseLocalDateString(selectedRange.end);
-        // Normalize to midnight to avoid issues with timezones
-        const startMid = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).getTime();
-        const endMid = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()).getTime();
-        return { start: startMid, end: endMid };
-    }, [selectedRange]);
+        return allRanges
+            .filter((range) => !!range?.start && !!range?.end)
+            .map((range) => {
+                const startDate = DateUtil.parseLocalDateString(range.start!);
+                const endDate = DateUtil.parseLocalDateString(range.end!);
+                const startMid = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).getTime();
+                const endMid = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()).getTime();
+                return startMid <= endMid
+                    ? { start: startMid, end: endMid }
+                    : { start: endMid, end: startMid };
+            });
+    }, [allRanges]);
 
     // Single start day (no end) highlight
-    const singleStartMid = useMemo(() => {
-        if (selectedRange?.start && !selectedRange?.end) {
-            const s = DateUtil.parseLocalDateString(selectedRange.start);
-            return new Date(s.getFullYear(), s.getMonth(), s.getDate()).getTime();
-        }
-        return null;
-    }, [selectedRange]);
+    const singleStartMids = useMemo(() => {
+        return allRanges
+            .filter((range) => !!range?.start && !range?.end)
+            .map((range) => {
+                const startDate = DateUtil.parseLocalDateString(range.start!);
+                return new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).getTime();
+            });
+    }, [allRanges]);
 
     // Single end day (no start) highlight
-    const singleEndMid = useMemo(() => {
-        if (selectedRange?.end && !selectedRange?.start) {
-            const e = DateUtil.parseLocalDateString(selectedRange.end);
-            return new Date(e.getFullYear(), e.getMonth(), e.getDate()).getTime();
-        }
-        return null;
-    }, [selectedRange]);
+    const singleEndMids = useMemo(() => {
+        return allRanges
+            .filter((range) => !!range?.end && !range?.start)
+            .map((range) => {
+                const endDate = DateUtil.parseLocalDateString(range.end!);
+                return new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()).getTime();
+            });
+    }, [allRanges]);
 
     // Base times for month boundaries to reduce Date allocations for current month cells
     const currentMonthBase = useMemo(() => new Date(year, month, 1).getTime(), [year, month]);
@@ -168,18 +180,18 @@ const MonthCallendar: React.FC<MonthCallendarProps> = ({
                     let isLast = false;
                     let isStartingOnly = false;
                     let isEndingOnly = false;
-                    if (rangeBoundaries && cell.day !== null && cell.monthOffset === 0) { // selection only within current month when showOnlyDateMonth
-                        isSelected = cellTime >= rangeBoundaries.start && cellTime <= rangeBoundaries.end;
+                    if (rangeBoundaries.length > 0 && cell.day !== null && cell.monthOffset === 0) { // selection only within current month when showOnlyDateMonth
+                        isSelected = rangeBoundaries.some((boundary) => cellTime >= boundary.start && cellTime <= boundary.end);
                         if (isSelected) {
-                            isFirst = cellTime === rangeBoundaries.start;
-                            isLast = cellTime === rangeBoundaries.end;
+                            isFirst = rangeBoundaries.some((boundary) => cellTime === boundary.start);
+                            isLast = rangeBoundaries.some((boundary) => cellTime === boundary.end);
                         }
                     }
-                    if (!rangeBoundaries && singleStartMid && cell.day !== null && cell.monthOffset === 0) {
-                        isStartingOnly = cellTime === singleStartMid;
+                    if (rangeBoundaries.length === 0 && singleStartMids.length > 0 && cell.day !== null && cell.monthOffset === 0) {
+                        isStartingOnly = singleStartMids.includes(cellTime);
                     }
-                    if (!rangeBoundaries && singleEndMid && cell.day !== null && cell.monthOffset === 0) {
-                        isEndingOnly = cellTime === singleEndMid;
+                    if (rangeBoundaries.length === 0 && singleEndMids.length > 0 && cell.day !== null && cell.monthOffset === 0) {
+                        isEndingOnly = singleEndMids.includes(cellTime);
                     }
 
                     const isToday = cellTime === todayMid;

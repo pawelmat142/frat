@@ -1,12 +1,17 @@
 import { WorkerAvailabilityOptions, WorkerI } from "@shared/interfaces/WorkerI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { PositionUtil } from "@shared/utils/PositionUtil";
+import CallendarsView from "global/components/callendar/CallendarsView";
+import PseudoView from "global/components/PseudoView";
 import DateDisplay from "global/components/ui/DateDisplay";
 import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
 import ListUi from "global/components/ui/ListUi";
 import { useIsDesktop } from "global/hooks/isMobile";
 import { Ico } from "global/icon.def";
 import { MenuItem } from "global/interface/controls.interface";
+import { useBottomSheet } from "global/providers/BottomSheetProvider";
+import { useGlobalContext } from "global/providers/GlobalProvider";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useUserContext } from "user/UserProvider";
@@ -17,13 +22,21 @@ interface Props {
 
 const WorkerDataSection: React.FC<Props> = ({ worker }) => {
 
+    const bottomSheetCtx = useBottomSheet();
+    const globalCtx = useGlobalContext();
     const { t } = useTranslation();
     const isDesktop = useIsDesktop();
     const userCtx = useUserContext();
     const me = userCtx?.me;
 
+    const [openPseudoView, setOpenPseudoView] = useState(false);
+
     const onAvailabilityClick = () => {
+        setOpenPseudoView(true);
+        globalCtx.hideFooter();
+        globalCtx.setHideFloatingButton(true);
     }
+
 
     const isMe = me?.uid === worker?.uid;
 
@@ -105,6 +118,8 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
         }
     }
 
+    const ranges = worker.availabilityOption === WorkerAvailabilityOptions.DATE_RANGES ? worker.availabilityDateRanges?.map(range => DateRangeUtil.toDateRange(range)).filter(r => !!r) : [];
+
     const getListItems = (): MenuItem[] => {
         return [
             getAvailabilityMenuItem(),
@@ -140,9 +155,25 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
     }
 
     return (
-        <div className="mb-5 mt-5">
-            <ListUi items={getListItems()}></ListUi>
-        </div>
+        <>
+            <div className="mb-5 mt-5">
+                <ListUi items={getListItems()}></ListUi>
+            </div>
+
+            
+            <PseudoView show={openPseudoView}>
+                <CallendarsView
+                    title={t("employeeProfile.availability")}
+                    ranges={ranges}
+                    bottomSheetCtx={bottomSheetCtx}
+                    onClose={() => {
+                        setOpenPseudoView(false)
+                        globalCtx.showFooter();
+                        globalCtx.setHideFloatingButton(false);
+                    }}
+                />
+            </PseudoView>
+        </>
     );
 }
 

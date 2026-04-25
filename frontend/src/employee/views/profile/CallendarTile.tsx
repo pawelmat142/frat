@@ -44,14 +44,14 @@ const CallendarTile: React.FC<CallendarTileProps> = ({ range }) => {
                 <div className="mb-2 s-font">{t(`callendar.monthShort.${month}`)} {year}</div>
 
                 <div className="month-tile-wrapper">
-                    <MonthCallendar date={date} selectedRange={range} />
+                    <MonthCallendar date={date} selectedRanges={range ? [range] : []} />
                 </div>
             </div>
 
             <PseudoView show={openPseudoView}>
                 <CallendarsView
                     title={t("employeeProfile.availability")}
-                    range={range!}
+                    ranges={range ? [range] : []}
                     bottomSheetCtx={bottomSheetCtx}
                     onClose={() => {
                         setOpenPseudoView(false)
