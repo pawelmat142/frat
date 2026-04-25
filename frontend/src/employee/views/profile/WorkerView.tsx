@@ -292,7 +292,7 @@ const WorkerView: React.FC = () => {
 
             </div>
 
-            <WorkerDataSection worker={worker} />`
+            <WorkerDataSection worker={worker} />
 
             <ChecklistUi icon={Ico.CHECK} title={t('employeeProfile.form.certificates.title')}
                 items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []}

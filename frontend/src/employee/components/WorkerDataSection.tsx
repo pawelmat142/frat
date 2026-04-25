@@ -37,7 +37,6 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
         globalCtx.setHideFloatingButton(true);
     }
 
-
     const isMe = me?.uid === worker?.uid;
 
     const openPhoneCall = () => {
@@ -120,6 +119,13 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
 
     const ranges = worker.availabilityOption === WorkerAvailabilityOptions.DATE_RANGES ? worker.availabilityDateRanges?.map(range => DateRangeUtil.toDateRange(range)).filter(r => !!r) : [];
 
+    const displayAddress = worker.geocodedPosition == null ? null : `${worker.geocodedPosition?.city || ''}, ${DictionaryDisplay({
+        dictionary: "LANGUAGES",
+        value: worker.geocodedPosition.country?.toLocaleLowerCase() || '',
+        column: "COUNTRY_NAME",
+        t,
+    })}`;
+
     const getListItems = (): MenuItem[] => {
         return [
             getAvailabilityMenuItem(),
@@ -129,8 +135,8 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
                 icon: Ico.PHONE,
                 onClick: openPhoneCall
             }, {
-                if: worker.geocodedPosition?.fullAddress,
-                label: `${worker.geocodedPosition?.fullAddress} ${getDistanceInfo()}`,
+                if: displayAddress,
+                label: displayAddress + ' ' + getDistanceInfo(),
                 icon: Ico.MARKER
             }, {
                 label: `${t("employeeProfile.form.email")}: ${worker.email}`,

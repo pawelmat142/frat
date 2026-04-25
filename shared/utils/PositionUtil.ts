@@ -1,4 +1,4 @@
-import { Position } from "../interfaces/MapsInterfaces";
+import { GeocodedPosition, Position } from "../interfaces/MapsInterfaces";
 import { Point } from "../interfaces/WorkerI";
 
 export abstract class PositionUtil {
@@ -45,5 +45,4 @@ export abstract class PositionUtil {
             return `${Math.round(distanceInMeters / 1000)} km`;
         }
     }
-
 }
