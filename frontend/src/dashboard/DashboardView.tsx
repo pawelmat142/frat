@@ -63,6 +63,10 @@ const DashboardView: React.FC = () => {
         icon: Ico.NOTIFICATION,
         onClick: () => navigate(Path.NOTIFICATIONS)
     }, {
+        label: t("user.myList"),
+        icon: Ico.STAR,
+        onClick: () => navigate(Path.MY_LIST)
+    }, {
         icon: Ico.CHAT,
         label: t("chat.chats"),
         onClick: () => navigate(Path.CHATS)

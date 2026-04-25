@@ -243,8 +243,6 @@ const WorkerView: React.FC = () => {
         navigate(Path.WORKER_FORM);
     }
 
-
-    // TODO translacje
     const addListItem = async () => {
         if (isMe || !userCtx.meCtx) return;
         const meCtx = userCtx.meCtx;
@@ -256,14 +254,14 @@ const WorkerView: React.FC = () => {
                 listedType: UserListedItemTypes.DEFAULT
             });
             if (!item) {
-                toast.error("Nie można dodać tego wpisu do listy");
+                toast.error(t('user.addToListError'));
                 return;
             }
             userCtx.updateMeCtx({
                 ...meCtx,
                 listedItems: [...(meCtx.listedItems ?? []), item]
             });
-            toast.success("Dodano wpis do Twojej listy");
+            toast.success(t('user.addToListSuccess'));
         }
         finally {
             setLoading(false);
@@ -283,7 +281,7 @@ const WorkerView: React.FC = () => {
                 ...meCtx,
                 listedItems: (meCtx.listedItems ?? []).filter(item => item.id !== listItem.id)
             } as Parameters<typeof userCtx.updateMeCtx>[0]);
-            toast.success("Usunięto wpis z Twojej listy");
+            toast.success(t('user.removeFromListSuccess'));
         }
         finally {
             setLoading(false);

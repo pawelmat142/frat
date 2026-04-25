@@ -66,14 +66,14 @@ const WorkersSearchView: React.FC = () => {
                 listedType: UserListedItemTypes.DEFAULT
             });
             if (!item) {
-                toast.error("Nie można dodać tego wpisu do listy");
+                toast.error(t('user.addToListError'));
                 return;
             }
             userCtx.updateMeCtx({
                 ...meCtx,
                 listedItems: [...(meCtx.listedItems ?? []), item]
             });
-            toast.success("Dodano wpis do Twojej listy");
+            toast.success(t('user.addToListSuccess'));
         } finally {
             setLoading(false);
         }
@@ -92,7 +92,7 @@ const WorkersSearchView: React.FC = () => {
                 ...meCtx,
                 listedItems: (meCtx.listedItems ?? []).filter(item => item.id !== listItem.id)
             } as Parameters<typeof userCtx.updateMeCtx>[0]);
-            toast.success("Usunięto wpis z Twojej listy");
+            toast.success(t('user.removeFromListSuccess'));
         }
         finally {
             setLoading(false);
@@ -126,9 +126,9 @@ const WorkersSearchView: React.FC = () => {
 
                         const rowActions = <>
                             {isSavedOnList ? (
-                                <IconButton className="p-3" mode={BtnModes.ERROR_TXT} icon={<FaRegBookmark />} onClick={() => { removeListItem(worker) }}></IconButton>
+                                <IconButton className="p-3" mode={BtnModes.ERROR_TXT} icon={<Ico.STAR_OUTLINE />} onClick={() => { removeListItem(worker) }}></IconButton>
                             ) : (
-                                <IconButton className="p-3"  icon={<Ico.BOOKMARK />} onClick={() => { addItemToMyList(worker) }}></IconButton>
+                                <IconButton className="p-3"  icon={<Ico.STAR />} onClick={() => { addItemToMyList(worker) }}></IconButton>
                             )}
                         </>
 
