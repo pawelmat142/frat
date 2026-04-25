@@ -97,8 +97,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Rope Access Lead - Gdansk",
             description: "Inspect shipyard cranes and supervise rope access crew.",
             uniqueViewsCount: 3,
-            likes: ["profile-103", "profile-219"],
-            shares: ["profile-305"],
             createdAt: getCreatedAt(0),
             updatedAt: getDate(2025, 12, 1),
         },
@@ -119,8 +117,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Offshore Wind Turbine Technician",
             description: "Routine maintenance on offshore turbines with 14 days on/14 off rotation.",
             uniqueViewsCount: 4,
-            likes: ["profile-204", "profile-399"],
-            shares: ["profile-312", "profile-450"],
             createdAt: getCreatedAt(1),
             updatedAt: getDate(2025, 12, 4),
         },
@@ -141,8 +137,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "High-Rise Window Cleaning Crew",
             description: "Spring facade cleaning for Berlin skyline properties.",
             uniqueViewsCount: 3,
-            likes: ["profile-256"],
-            shares: ["profile-118"],
             createdAt: getCreatedAt(2),
             updatedAt: getDate(2025, 11, 28),
         },
@@ -163,8 +157,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Rope Rescue Support for Ski Patrol",
             description: "Provide rope rescue cover during peak ski season.",
             uniqueViewsCount: 2,
-            likes: ["profile-130"],
-            shares: ["profile-198"],
             createdAt: getCreatedAt(3),
         },
         {
@@ -184,8 +176,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Offshore Rope Access Welder",
             description: "Execute hot work scopes on semi-submersible rigs.",
             uniqueViewsCount: 3,
-            likes: ["profile-207", "profile-333"],
-            shares: ["profile-501", "profile-612"],
             createdAt: getCreatedAt(4),
         },
         {
@@ -205,8 +195,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Telecom Tower Service Team",
             description: "Upgrade RF equipment on 150m telecom structure.",
             uniqueViewsCount: 2,
-            likes: ["profile-311"],
-            shares: ["profile-210"],
             createdAt: getCreatedAt(5),
         },
         {
@@ -226,8 +214,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Bridge Structural Inspectors",
             description: "Carry out ultrasonic weld inspections on suspension bridge.",
             uniqueViewsCount: 3,
-            likes: ["profile-305", "profile-420"],
-            shares: ["profile-275"],
             createdAt: getCreatedAt(6),
         },
         {
@@ -247,8 +233,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Theme Park Ride Maintenance",
             description: "Pre-season maintenance for rides requiring work at height.",
             uniqueViewsCount: 3,
-            likes: ["profile-140", "profile-233"],
-            shares: ["profile-275"],
             createdAt: getCreatedAt(7),
         },
         {
@@ -268,8 +252,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Concert Rigging Crew",
             description: "Install stage banners and lighting for summer concerts.",
             uniqueViewsCount: 4,
-            likes: ["profile-512", "profile-320"],
-            shares: ["profile-602", "profile-760"],
             createdAt: getCreatedAt(8),
         },
         {
@@ -289,8 +271,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Hydroelectric Dam Rope Team",
             description: "Perform concrete refurbishment on spillway walls.",
             uniqueViewsCount: 3,
-            likes: ["profile-467"],
-            shares: ["profile-512"],
             createdAt: getCreatedAt(9),
         },
         {
@@ -310,8 +290,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Offshore Rope Access Painters",
             description: "Splash zone blasting and coating scope on fixed platform.",
             uniqueViewsCount: 4,
-            likes: ["profile-450", "profile-575"],
-            shares: ["profile-450", "profile-330"],
             createdAt: getCreatedAt(10),
         },
         {
@@ -331,8 +309,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Cathedral Facade Specialists",
             description: "Holiday campaign to restore gothic facade details.",
             uniqueViewsCount: 2,
-            likes: ["profile-270"],
-            shares: ["profile-315"],
             createdAt: getCreatedAt(11),
         },
         {
@@ -352,8 +328,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Wind Blade Rope Repair Crew",
             description: "Blade inspection and composite repair campaign.",
             uniqueViewsCount: 3,
-            likes: ["profile-715"],
-            shares: ["profile-580"],
             createdAt: getCreatedAt(12),
         },
         {
@@ -373,8 +347,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Advanced Rope Rescue Trainer",
             description: "Deliver 10 day IRATA L2/L3 refresher courses.",
             uniqueViewsCount: 3,
-            likes: ["profile-611", "profile-703"],
-            shares: ["profile-620", "profile-702"],
             createdAt: getCreatedAt(13),
         },
         {
@@ -394,8 +366,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Solar Canopy Installers",
             description: "Install elevated solar arrays requiring rope positioning.",
             uniqueViewsCount: 3,
-            likes: ["profile-450", "profile-612"],
-            shares: ["profile-233"],
             createdAt: getCreatedAt(14),
         },
         {
@@ -416,8 +386,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Suspension Cable Inspectors",
             description: "Inspect and photograph suspension cables and nodes.",
             uniqueViewsCount: 2,
-            likes: ["profile-620"],
-            shares: ["profile-520"],
             createdAt: getCreatedAt(15),
         },
         {
@@ -437,8 +405,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Met Mast Instrument Technicians",
             description: "Calibrate instruments on 200m meteorological mast.",
             uniqueViewsCount: 3,
-            likes: ["profile-160", "profile-205"],
-            shares: ["profile-188"],
             createdAt: getCreatedAt(16),
         },
         {
@@ -458,8 +424,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Industrial Chimney Inspectors",
             description: "Internal and external survey of twin chimneys.",
             uniqueViewsCount: 4,
-            likes: ["profile-201", "profile-249"],
-            shares: ["profile-260"],
             createdAt: getCreatedAt(17),
         },
         {
@@ -479,8 +443,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Urban Art Installation Crew",
             description: "Install large format banners on heritage buildings.",
             uniqueViewsCount: 3,
-            likes: ["profile-284"],
-            shares: ["profile-312"],
             createdAt: getCreatedAt(18),
         },
         {
@@ -500,8 +462,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName: "Mountain Gondola Rope Access Technician",
             description: "Pre-winter overhaul of gondola line and towers.",
             uniqueViewsCount: 4,
-            likes: ["profile-261", "profile-300"],
-            shares: ["profile-262", "profile-361"],
             createdAt: getCreatedAt(19),
         },
     ]
@@ -548,14 +508,6 @@ export const OffersInitialData = (): DeepPartial<OfferEntity>[] => {
             displayName,
             description,
             uniqueViewsCount: 3,
-            likes: [
-                `profile-${viewBase + 10}`,
-                `profile-${viewBase + 12}`,
-            ],
-            shares: [
-                `profile-${viewBase + 20}`,
-                `profile-${viewBase + 21}`,
-            ],
         };
 
         return offer;

@@ -1,10 +1,10 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger } from '@nestjs/common';
 import {
-  EntityInteractionEntityType,
   EntityInteractionEntityTypes,
   EntityInteractionEventTypes,
   EntityInteractionI,
+  RecordInteractionRequest,
   VIEW_DEDUP_WINDOW_DAYS,
 } from '@shared/interfaces/EntityInteractionI';
 import { EntityInteractionRepo } from './EntityInteractionRepo';
@@ -21,11 +21,8 @@ export class EntityInteractionService {
    * Returns true only if there was no previous view from this user within the sliding window —
    * the caller should increment the unique counter only when true.
    */
-  public async recordView(
-    entityType: EntityInteractionEntityType,
-    entityId: number,
-    userUid: string,
-  ): Promise<boolean> {
+  public async recordView(request: RecordInteractionRequest): Promise<boolean> {
+    const { entityType, entityId, userUid } = request;
     const recent = await this.repo.findRecentInteraction(
       entityType,
       entityId,

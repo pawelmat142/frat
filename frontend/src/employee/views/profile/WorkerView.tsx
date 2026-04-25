@@ -97,8 +97,6 @@ const WorkerView: React.FC = () => {
     const getProfileMenuItems = (profile: WorkerI): MenuConfig => {
         const isMyProfile = me?.uid === profile.uid;
 
-        const hasMyLike = profile.likes?.includes(me?.uid || '') || false;
-
         const menu: MenuConfig = {
             title: t('employeeProfile.profileMenu'),
             items: []
@@ -118,10 +116,6 @@ const WorkerView: React.FC = () => {
                 onClick: () => { deleteProfile() }
             })
         } else {
-            menu.items.push({
-                label: hasMyLike ? t('employeeProfile.unlikeButton') : t('employeeProfile.likeButton'),
-                onClick: () => { likeProfile(profile) }
-            })
             menu.items.push({
                 label: t('chat.openChat'),
                 onClick: openChat
@@ -153,24 +147,6 @@ const WorkerView: React.FC = () => {
         } catch (error) {
             console.error('Failed to open chat:', error)
             toast.error(t('chat.error.cannotOpen'))
-        }
-    }
-
-    const likeProfile = async (profile: WorkerI) => {
-        try {
-            setLoading(true);
-            const likesBefore = profile.likes?.length || 0;
-            const likes = await WorkerService.notifyWorkerLike(profile.workerId);
-            profile.likes = likes;
-            setProfile({ ...profile });
-            if (profile.likes?.length > likesBefore) {
-                toast.success(t('employeeProfile.likeSuccessToast'));
-            } else {
-                toast.info(t('employeeProfile.likeRemoveToast'));
-            }
-        }
-        finally {
-            setLoading(false);
         }
     }
 

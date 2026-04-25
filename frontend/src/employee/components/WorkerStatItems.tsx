@@ -41,9 +41,9 @@ const WorkerStatItems: React.FC<Props> = ({ worker }) => {
         if: true,
         display: worker.uniqueViewsCount || 0,
     }, {
-        icon: Ico.LIKES,
-        if: worker.likes?.length,
-        display: worker.likes?.length || 0,
+        icon: Ico.STAR,
+        if: worker.favoritesCount,
+        display: worker.favoritesCount || 0,
     }, {
         icon: Ico.FRIENDS,
         if: mutualFriendsUids.length,

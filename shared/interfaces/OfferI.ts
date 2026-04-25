@@ -32,9 +32,8 @@ export interface OfferI {
 
     // STATS
     uniqueViewsCount: number;    
-    likes: string[]     //uids of profiles who liked the offer
-    // TODO power fields
-    shares: string[]    //uids of profiles who shared the offer
+    favoritesCount: number
+
     createdAt: Date
     updatedAt?: Date
 }

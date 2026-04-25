@@ -56,10 +56,6 @@ const OfferView: React.FC = () => {
                 onClick: () => { deleteOffer(offer) }
             })
         } else {
-            menu.items.push({
-                label: t('offer.likeButton'),
-                onClick: () => { likeOffer(offer) }
-            })
         }
         return menu;
     }
@@ -134,24 +130,6 @@ const OfferView: React.FC = () => {
                 toast.success(t('offer.activationSuccessToast'));
             } else {
                 toast.success(t('offer.deactivationSuccessToast'));
-            }
-        }
-        finally {
-            setLoading(false);
-        }
-    }
-
-    const likeOffer = async (offer: OfferI) => {
-        try {
-            setLoading(true);
-            const likesBefore = offer.likes?.length || 0;
-            const likes = await OffersService.notifyOfferLike(offer.offerId);
-            offer.likes = likes;
-            setOffer({ ...offer });
-            if (offer.likes?.length > likesBefore) {
-                toast.success(t('offer.likeSuccessToast'));
-            } else {
-                toast.info(t('offer.likeRemoveToast'));
             }
         }
         finally {

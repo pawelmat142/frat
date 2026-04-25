@@ -28,7 +28,6 @@ const mapFormToApi = (form: WorkerForm): WorkerFormDto => {
 		maxAltitude: form.career.maxAltitude,
 		readyToTravel: form.career.readyToTravel,
 		categories: form.career.categories,
-		bio: form.career.bio,
 	};
 };
 
@@ -58,10 +57,6 @@ export const WorkerService = {
 
 	notifyWorkerView(workerId: number): Promise<void> {
 		return httpClient.get<void>(`/worker/notify-profile-view/${workerId}`);
-	},
-
-	notifyWorkerLike(workerId: number): Promise<string[]> {
-		return httpClient.get<string[]>(`/worker/notify-profile-like/${workerId}`);
 	},
 
 	deleteProfile(): Promise<void> {

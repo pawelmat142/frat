@@ -133,34 +133,22 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
             throw new ToastException('employeeProfile.exists', this);
         }
 
-        const isNew = await this.entityInteractionService.recordView(
-            EntityInteractionEntityTypes.OFFER,
-            offerId,
-            user.uid
-        )
+        const isNew = await this.entityInteractionService.recordView({
+            entityType: EntityInteractionEntityTypes.OFFER,
+            entityId: offerId,
+            userUid: user.uid
+        })
 
         if (isNew) {
             this.offersRepo.incrementUniqueViewsCount(offerId);
         }
     }
 
-    async notifyOfferLike(offerId: number, likerUid: string): Promise<string[]> {
-        const offer = await this.offersRepo.getById(offerId);
-        if (!offer) {
-            throw new ToastException('employeeProfile.exists', this);
-        }
-        if (offer.uid === likerUid) {
-            throw new ToastException('offer.cannotLikeOwnOffer', this);
-        }
-        if (offer.likes.includes(likerUid)) {
-            offer.likes = offer.likes.filter(uid => uid !== likerUid);
-            await this.offersRepo.update(offer);
-            this.logger.log(`Liker ${likerUid} unliked offer ${offerId}`);
-        } else {
-            this.logger.log(`Liker ${likerUid} liked offer ${offerId}`);
-            offer?.likes.push(likerUid);
-            await this.offersRepo.update(offer);
-        }
-        return offer.likes;
+    incrementFavoritesCount(offerId: number): Promise<void> {
+        return this.offersRepo.incrementFavoritesCount(offerId);
+    }
+
+    decrementFavoritesCount(offerId: number): Promise<void> {
+        return this.offersRepo.decrementFavoritesCount(offerId);
     }
 }

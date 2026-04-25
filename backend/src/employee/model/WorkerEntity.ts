@@ -124,15 +124,13 @@ export class WorkerEntity implements WorkerI {
   uniqueViewsCount: number;
 
   @Expose()
+  @Column({ name: 'favorites_count', type: 'int', default: 0 })
+  favoritesCount: number;
+
+  @Expose()
   @Column({ name: 'jobs', type: 'text', array: true, default: [] })
   jobs: string[];
   
-  @Expose()
-  @Column({ name: 'likes', type: 'text', array: true, default: [] })
-  likes: string[];
-
-
-
 
   // AUDIT FIELDS
   @Expose()

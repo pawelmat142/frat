@@ -95,19 +95,14 @@ export class OfferEntity implements OfferI {
     acceptedSlots: number;
 
 
-
     // STATS
     @Column({ name: 'unique_views_count', type: 'int', default: 0 })
     @Expose()
     uniqueViewsCount: number;
-
-    @Column({ name: 'likes', type: 'text', array: true, default: [] })
-    @Expose()
-    likes: string[];
-
-    @Column({ name: 'shares', type: 'text', array: true, default: [] })
-    @Expose()
-    shares: string[];
+    
+    @Column({ name: 'favorites_count', type: 'int', default: 0 })
+    @Expose()    
+    favoritesCount: number;
 
     @Column({ name: 'created_at', type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
     @Expose()

@@ -233,35 +233,23 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
             return;
         }
 
-        const isNew = await this.entityInteractionService.recordView(
-            EntityInteractionEntityTypes.WORKER,
-            workerId,
-            user.uid,
-        );
+        const isNew = await this.entityInteractionService.recordView({
+            entityType: EntityInteractionEntityTypes.WORKER,
+            entityId: workerId,
+            userUid: user.uid,
+        });
 
         if (isNew) {
             await this.workerRepo.incrementUniqueViewsCount(workerId);
         }
     }
-    
-    public async notifyWorkerLike(workerId: number, likerUid: string): Promise<string[]> {
-        const profile = await this.workerRepo.getById(workerId);
-        if (!profile) {
-            throw new ToastException('employeeProfile.exists', this);
-        }
-        if (profile.uid === likerUid) {
-            throw new ToastException('employeeProfile.cannotLikeOwnProfile', this);
-        }
-        if (profile.likes.includes(likerUid)) {
-            profile.likes = profile.likes.filter(uid => uid !== likerUid);
-            await this.workerRepo.update(profile);
-            this.logger.log(`Liker ${likerUid} unliked profile ${workerId}`);
-        } else {
-            profile?.likes.push(likerUid);
-            await this.workerRepo.update(profile);
-            this.logger.log(`Liker ${likerUid} liked profile ${workerId}`);
-        }
-        return profile.likes;
+
+    public incrementFavoritesCount(workerId: number): Promise<void> {
+        return this.workerRepo.incrementFavoritesCount(workerId);
+    }
+
+    public decrementFavoritesCount(workerId: number): Promise<void> {
+        return this.workerRepo.decrementFavoritesCount(workerId);
     }
 
     async deleteProfileByUid(user: UserI): Promise<void> {

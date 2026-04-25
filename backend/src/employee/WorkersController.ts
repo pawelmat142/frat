@@ -91,15 +91,6 @@ export class WorkersController {
   ): Promise<void> {
     return this.workersService.notifyWorkerView(Number(workerId), user);
   }
-  
-  @Get("/notify-profile-like/:workerId")
-  @UseGuards(JwtAuthGuard)
-  notifyWorkerLike(
-    @Param('workerId') workerId: string,
-    @CurrentUser() user: UserI,
-  ): Promise<string[]> {
-    return this.workersService.notifyWorkerLike(Number(workerId), user.uid);
-  }
 
   @Delete()
   @UseGuards(JwtAuthGuard)

@@ -225,12 +225,6 @@ export class WorkerRepo {
             updatedFlag = true;
         }
 
-        if (ObjUtil.arrayChanged(worker.likes, newWorker.likes || [])) {
-            this.logger.log(`Updating EmployeeProfile likes from ${worker.likes} to ${newWorker.likes}`);
-            worker.likes = newWorker.likes || [];
-            updatedFlag = true;
-        }
-
         if (this.dateRangesChanged(newWorker, worker)) {
             this.logger.log(`Updating EmployeeProfile availabilityDateRanges`);
             // Normalize DeepPartial<DateRangeEntity>[] into DateRangeEntity[] to satisfy typing.
@@ -310,6 +304,20 @@ export class WorkerRepo {
                 this.logger.log(`Incremented uniqueViewsCount for worker ${workerId}`);
             });
     }
+
+    public incrementFavoritesCount(workerId: number): Promise<void> {
+        return this.woerkersRepository.increment({ workerId }, 'favoritesCount', 1)
+            .then(() => {
+                this.logger.log(`Incremented favoritesCount for worker ${workerId}`);
+            });
+    }
+
+    public decrementFavoritesCount(workerId: number): Promise<void> {
+        return this.woerkersRepository.decrement({ workerId }, 'favoritesCount', 1)
+            .then(() => {
+                this.logger.log(`Decremented favoritesCount for worker ${workerId}`);
+            });
+        }
 
     public getQueryBuilder(): SelectQueryBuilder<WorkerEntity> {
         return this.woerkersRepository.createQueryBuilder('profile');

@@ -64,13 +64,13 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
     const bottomLeft = <div className="flex flex-col gap-2 mt-2">
         <div className="flex items-center gap-3">
             {categoryChip}
-            <div>
-                <Visibility fontSize="inherit" className="secondary-text mr-1" />
+            <div className="flex items-center">
+                <Ico.VIEWS size={14} className="secondary-text mr-1" />
                 <span className="xs-font">{offer.uniqueViewsCount || 0}</span>
             </div>
-            <div>
-                <ThumbUp fontSize="inherit" className="secondary-text mr-1" />
-                <span className="xs-font">{offer.likes?.length || 0}</span>
+            <div className="flex items-center">
+                <Ico.STAR size={14} className="secondary-text mr-1" />
+                <span className="xs-font">{offer.favoritesCount || 0}</span>
             </div>
 
             {!!distance && (

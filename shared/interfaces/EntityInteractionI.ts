@@ -20,5 +20,11 @@ export interface EntityInteractionI {
   date: Date;
 }
 
+export interface RecordInteractionRequest {
+  entityType: EntityInteractionEntityType,
+  entityId: number,
+  userUid: string,
+}
+
 /** Sliding window in days for view deduplication per user */
 export const VIEW_DEDUP_WINDOW_DAYS = 7;

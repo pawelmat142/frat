@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger } from '@nestjs/common';
-import { AddNoteDto, AddUserListedItemDto, ListedItemNote, UserListedItem, UserListedItemReferenceTypes, UserListedItemType, UserListedItemTypes } from '@shared/interfaces/UserListedItem';
+import { AddNoteDto, AddUserListedItemDto, ListedItemNote, UserListedItem, UserListedItemReferenceTypes, UserListedItemType } from '@shared/interfaces/UserListedItem';
 import { WorkersService } from 'employee/services/WorkerService';
 import { ToastException } from 'global/exceptions/ToastException';
 import { UserListedItemEntity } from '../model/UserListedItemEntity';
@@ -71,7 +71,6 @@ export class UserListedItemService {
         }
     }
 
-
     public async addItem(uid: string, item: AddUserListedItemDto): Promise<UserListedItem> {
         let data: any;
         await this.validateExistingItem(uid, item);
@@ -105,6 +104,12 @@ export class UserListedItemService {
 
         result.data = data;
         this.logger.log('result: ', result);
+
+        if (item.referenceType === UserListedItemReferenceTypes.WORKER) {
+            await this.workersService.incrementFavoritesCount(Number(item.reference));
+        } else if (item.referenceType === UserListedItemReferenceTypes.OFFER) {
+            await this.offersService.incrementFavoritesCount(Number(item.reference));
+        }
         return result;
     }
 
@@ -141,7 +146,25 @@ export class UserListedItemService {
         notes.splice(noteIndex, 1);
         item.notes = notes;
         await this.repository.save(item);
+
+
         this.logger.log(`User ${user.uid} removed note ${noteId} from listed item ${itemId}`);
+    }
+
+    public async removeItem(uid: string, id: number): Promise<void> {
+        const item = await this.repository.findOne({ where: { uid, id } });
+        if (!item) {
+            throw new ToastException(`Listed item with ID ${id} not found for user ${uid}`, this);
+        }
+
+        await this.repository.delete({ uid, id });
+        this.logger.log(`User ${uid} removed listed item: ${id}`);
+
+        if (item.referenceType === UserListedItemReferenceTypes.WORKER) {
+            await this.workersService.decrementFavoritesCount(Number(item.reference));
+        } else if (item.referenceType === UserListedItemReferenceTypes.OFFER) {
+            await this.offersService.decrementFavoritesCount(Number(item.reference));
+        }
     }
 
     public async updateNote(user: UserI, dto: AddNoteDto): Promise<ListedItemNote> {
@@ -185,8 +208,4 @@ export class UserListedItemService {
         }
     }
 
-    public async removeItem(uid: string, id: number): Promise<void> {
-        await this.repository.delete({ uid, id });
-        this.logger.log(`User ${uid} removed listed item: ${id}`);
-    }
 }

@@ -50,9 +50,9 @@ export interface WorkerI {
   images?: AvatarRef[]
 
   uniqueViewsCount: number;
-  jobs: string[];
-  likes: string[];
+  favoritesCount: number;
 
+  jobs: string[];
   createdAt: Date;
 }
 

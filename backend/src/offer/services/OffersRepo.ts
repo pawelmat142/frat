@@ -63,4 +63,18 @@ export class OffersRepo {
                 this.logger.log(`Incremented uniqueViewsCount for offer ${offerId}`);
             });
     }
+
+    public incrementFavoritesCount(offerId: number): Promise<void> {
+        return this.offerRepository.increment({ offerId }, 'favoritesCount', 1)
+            .then(() => {
+                this.logger.log(`Incremented favoritesCount for offer ${offerId}`);
+            });
+    }
+
+    public decrementFavoritesCount(offerId: number): Promise<void> {
+        return this.offerRepository.decrement({ offerId }, 'favoritesCount', 1)
+            .then(() => {
+                this.logger.log(`Decremented favoritesCount for offer ${offerId}`);
+            });
+    }
 }
