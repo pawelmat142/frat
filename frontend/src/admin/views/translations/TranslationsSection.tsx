@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Loading from "global/components/Loading";
 import { useState } from "react";
 import { userAdminPanelContext } from "../AdminPanelProvider";
@@ -18,9 +18,10 @@ import { TranslationAdminService } from "admin/services/TranslationAdmin.service
 import { useConfirm } from 'global/providers/PopupProvider';
 import { useNavigate } from 'react-router-dom';
 import { Path } from '../../../path';
-import FloatingInput from 'global/components/controls/FloatingInput';
 import RoleGuard from 'global/components/RoleGuard';
 import { UserRoles } from '@shared/interfaces/UserI';
+import { useFilteredPagination } from 'admin/hooks/useFilteredPagination';
+import SearchAndPagination from 'admin/components/SearchAndPagination';
 
 const TranslationsSection: React.FC = () => {
     const [loading, setLoading] = useState(false);
@@ -28,8 +29,6 @@ const TranslationsSection: React.FC = () => {
     const [newPath, setNewPath] = useState('');
     const [newValue, setNewValue] = useState('');
     const [editMode, setEditMode] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchText, setSearchText] = useState('');
     const confirm = useConfirm();
     const ctx = userAdminPanelContext();
     const translation = ctx?.translation;
@@ -37,12 +36,33 @@ const TranslationsSection: React.FC = () => {
 
     const itemsPerPage = 15;
 
-    if (!translation?.translations) {
-        return null
-    }
+    // Computed before hooks so they can be used in hook deps
+    const selectedTranslation: TranslationI | undefined = translation?.translations?.find(t => t.langCode === translation.selectedLanguage);
+    const defaultTranslation: TranslationI | undefined = translation?.translations?.find(t => t.langCode === 'en');
+    const keys = selectedTranslation ? ObjUtil.getPathsFromNestedJsonKeys(selectedTranslation.data) : [];
 
-    const selectedTranslation: TranslationI | undefined = translation.translations.find(t => t.langCode === translation.selectedLanguage);
-    const defaultTranslation: TranslationI | undefined = translation.translations.find(t => t.langCode === 'en');
+    const keyFilterFn = useCallback((key: string, search: string): boolean => {
+        const lower = search.toLowerCase();
+        if (key.toLowerCase().includes(lower)) return true;
+        const value = ObjUtil.getValueFromNestedJsonByPath(selectedTranslation?.data, key);
+        return typeof value === 'string' && value.toLowerCase().includes(lower);
+    }, [selectedTranslation]);
+
+    const {
+        searchText,
+        setSearchText,
+        currentPage,
+        totalPages,
+        filteredCount,
+        totalItems,
+        paginatedItems: paginatedKeys,
+        handlePageChange,
+    } = useFilteredPagination(keys, itemsPerPage, keyFilterFn);
+
+    // All early returns after ALL hooks
+    if (!translation?.translations) {
+        return null;
+    }
 
     const handleImportTranslation = async (file: File) => {
         try {
@@ -148,34 +168,6 @@ const TranslationsSection: React.FC = () => {
         }
     }
 
-    const keys = selectedTranslation ? ObjUtil.getPathsFromNestedJsonKeys(selectedTranslation.data) : [];
-
-    // Filter keys based on search text (search in both key and translation value)
-    const filteredKeys = keys.filter(key => {
-        if (!searchText) return true;
-        const value = ObjUtil.getValueFromNestedJsonByPath(selectedTranslation?.data, key);
-        const lowerSearch = searchText.toLowerCase();
-        return key.toLowerCase().includes(lowerSearch) ||
-            (typeof value === 'string' && value.toLowerCase().includes(lowerSearch));
-    });
-
-    // Pagination
-    const totalPages = Math.ceil(filteredKeys.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const paginatedKeys = filteredKeys.slice(startIndex, endIndex);
-
-    const handlePageChange = (newPage: number) => {
-        if (newPage >= 1 && newPage <= totalPages) {
-            setCurrentPage(newPage);
-        }
-    };
-
-    React.useEffect(() => {
-        setCurrentPage(1);
-    }, [searchText]);
-
-    // All early returns after ALL hooks (including useEffect)
     if (loading) {
         return <Loading />;
     }
@@ -206,39 +198,16 @@ const TranslationsSection: React.FC = () => {
 
             <h2 className="font-mono font-bold mb-2 mt-10">Selected language: {translation?.selectedLanguage}</h2>
 
-            {/* Search input and Pagination in one row */}
-            <div className="flex gap-4 mb-4 items-center">
-                <div className="flex-[1]">
-                    <FloatingInput
-                        name="search"
-                        label="Search translations"
-                        fullWidth
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value)}
-                    />
-                </div>
-                {totalPages > 1 && (
-                    <div className="flex-[2] flex justify-end items-center gap-4">
-                        <Button
-                            mode={BtnModes.PRIMARY_TXT}
-                            onClick={() => handlePageChange(currentPage - 1)}
-                            disabled={currentPage === 1}
-                        >
-                            Previous
-                        </Button>
-                        <span className="secondary-text whitespace-nowrap">
-                            Page {currentPage} of {totalPages} ({filteredKeys.length} {searchText ? 'filtered' : 'total'} items)
-                        </span>
-                        <Button
-                            mode={BtnModes.PRIMARY_TXT}
-                            onClick={() => handlePageChange(currentPage + 1)}
-                            disabled={currentPage === totalPages}
-                        >
-                            Next
-                        </Button>
-                    </div>
-                )}
-            </div>
+            <SearchAndPagination
+                searchText={searchText}
+                onSearchChange={setSearchText}
+                searchLabel="Search translations"
+                currentPage={currentPage}
+                totalPages={totalPages}
+                filteredCount={filteredCount}
+                totalItems={totalItems}
+                onPageChange={handlePageChange}
+            />
 
             {/* Formularz dodawania nowego tłumaczenia nad tabelą */}
             {showForm && !editMode && (
@@ -265,7 +234,7 @@ const TranslationsSection: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredKeys.length === 0 ? (
+                        {filteredCount === 0 ? (
                             <tr>
                                 <td colSpan={3} className="px-6 py-6 secondary-text text-center">
                                     {searchText ? 'No translations found matching your search.' : 'No translations found.'}

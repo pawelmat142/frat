@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "global/components/controls/Button";
 import Loading from "global/components/Loading";
@@ -12,7 +12,8 @@ import DictionaryGroups from "./DictionaryGroups";
 import { DictionaryI, DictionaryElement, DictionaryGroup, DictionaryStatuses } from "@shared/interfaces/DictionaryI";
 import DictionaryElementsTable from "./DictionaryElementsTable";
 import DictionaryActionsBar from "./DictionaryActionsBar";
-import DictionaryPagination from "./DictionaryPagination";
+import SearchAndPagination from "admin/components/SearchAndPagination";
+import { useFilteredPagination } from "admin/hooks/useFilteredPagination";
 
 const DictionaryView: React.FC = () => {
     const navigate = useNavigate();
@@ -22,8 +23,15 @@ const DictionaryView: React.FC = () => {
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
     const [loading, setLoading] = useState(false);
     const [elements, setElements] = useState<DictionaryElement[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 15;
+
+    const filterElement = useCallback((element: DictionaryElement, search: string): boolean => {
+        const lower = search.toLowerCase();
+        if (element.code.toLowerCase().includes(lower)) return true;
+        return Object.values(element.values ?? {}).some(
+            v => typeof v === 'string' && v.toLowerCase().includes(lower)
+        );
+    }, []);
 
     const _setDictionary = (dict: DictionaryI) => {
         setDictionary(dict);
@@ -45,9 +53,16 @@ const DictionaryView: React.FC = () => {
         initDictionary();
     }, [code]);
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [elements.length]);
+    const {
+        searchText,
+        setSearchText,
+        currentPage,
+        totalPages,
+        filteredCount,
+        totalItems,
+        paginatedItems: paginatedElements,
+        handlePageChange,
+    } = useFilteredPagination(elements, itemsPerPage, filterElement);
 
     if (loading) {
         return <Loading />;
@@ -106,17 +121,6 @@ const DictionaryView: React.FC = () => {
         });
     }
 
-    const totalPages = Math.ceil(elements.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const paginatedElements = elements.slice(startIndex, endIndex);
-
-    const handlePageChange = (newPage: number) => {
-        if (newPage >= 1 && newPage <= totalPages) {
-            setCurrentPage(newPage);
-        }
-    };
-
     return (
         <div className="flex flex-col gap-6 w-full px-5 pb-20 pt-10">
             <div className="w-full">
@@ -132,10 +136,14 @@ const DictionaryView: React.FC = () => {
                     <div className="mb-4 secondary-text">Description: {dictionary.description}</div>
                 )}
 
-                <DictionaryPagination
+                <SearchAndPagination
+                    searchText={searchText}
+                    onSearchChange={setSearchText}
+                    searchLabel="Search elements"
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    totalItems={elements.length}
+                    filteredCount={filteredCount}
+                    totalItems={totalItems}
                     onPageChange={handlePageChange}
                 />
 
