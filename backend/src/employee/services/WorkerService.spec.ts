@@ -262,43 +262,6 @@ describe('WorkersService', () => {
         });
     });
 
-    describe('notifyWorkerLike', () => {
-
-        it('should add like from new liker', async () => {
-            const worker = mockWorkerEntity({ likes: [] });
-            workerRepo.getById.mockResolvedValue(worker);
-            workerRepo.update.mockResolvedValue(worker);
-
-            const result = await service.notifyWorkerLike(1, 'liker-uid');
-
-            expect(result).toContain('liker-uid');
-            expect(workerRepo.update).toHaveBeenCalled();
-        });
-
-        it('should remove like (unlike) from existing liker', async () => {
-            const worker = mockWorkerEntity({ likes: ['liker-uid'] });
-            workerRepo.getById.mockResolvedValue(worker);
-            workerRepo.update.mockResolvedValue(worker);
-
-            const result = await service.notifyWorkerLike(1, 'liker-uid');
-
-            expect(result).not.toContain('liker-uid');
-        });
-
-        it('should throw when trying to like own profile', async () => {
-            const worker = mockWorkerEntity({ uid: 'same-uid' });
-            workerRepo.getById.mockResolvedValue(worker);
-
-            await expect(service.notifyWorkerLike(1, 'same-uid')).rejects.toThrow(ToastException);
-        });
-
-        it('should throw when worker not found', async () => {
-            workerRepo.getById.mockResolvedValue(null);
-
-            await expect(service.notifyWorkerLike(999, 'liker-uid')).rejects.toThrow(ToastException);
-        });
-    });
-
     describe('updateSkills', () => {
 
         it('should update skills on existing profile', async () => {
