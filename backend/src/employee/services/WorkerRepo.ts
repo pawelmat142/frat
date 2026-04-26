@@ -337,10 +337,6 @@ export class WorkerRepo {
     }
 
     public async incrementSearchAppearancesCountDedup(workerIds: number[], searchSessionId: string): Promise<void> {
-        if (!workerIds.length || !searchSessionId) {
-            return;
-        }
-
         await this.woerkersRepository.manager.query(
             `
                 WITH input_ids AS (
@@ -361,7 +357,6 @@ export class WorkerRepo {
             [searchSessionId, workerIds],
         );
 
-        this.logger.log(`Processed deduplicated searchAppearancesCount for ${workerIds.length} workers (session ${searchSessionId})`);
     }
 
     public getQueryBuilder(): SelectQueryBuilder<WorkerEntity> {

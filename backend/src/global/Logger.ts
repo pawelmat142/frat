@@ -14,16 +14,21 @@ const customTimestamp = winston.format((info) => {
 });
 
 export const createMyLogger = () =>
-  WinstonModule.createLogger({
+{
+  const isColorEnabled = process.stdout.isTTY === true;
+
+  return WinstonModule.createLogger({
     instance: winston.createLogger({
+      level: 'debug',
       transports: [
         new winston.transports.Console({
+          level: 'debug',
           format: winston.format.combine(
             customTimestamp(),
             // winston.format.timestamp(),
             winston.format.ms(),
             nestWinstonModuleUtilities.format.nestLike('MyApp', {
-              colors: true,
+              colors: isColorEnabled,
               prettyPrint: true,
             }),
           ),
@@ -50,3 +55,4 @@ export const createMyLogger = () =>
       ],
     }),
   });
+  };

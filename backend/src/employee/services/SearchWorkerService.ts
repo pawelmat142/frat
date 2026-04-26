@@ -54,9 +54,7 @@ export class SearchWorkersService {
         const mutualFriendsMap = user ? this.buildMutualFriendsMap(idsResult) : {};
         const normalizedSearchSessionId = this.normalizeSearchSessionId(searchSessionId);
 
-        if (profileIds.length) {
-            await this.trackSearchAppearances(profileIds, normalizedSearchSessionId);
-        }
+        await this.trackSearchAppearances(profileIds, normalizedSearchSessionId);
 
         // Step 4: Load full profiles with relations using the IDs
         const resultsQueryBuilder = this.workerRepo.getQueryBuilder()
@@ -375,14 +373,17 @@ export class SearchWorkersService {
 
     private async trackSearchAppearances(profileIds: number[], searchSessionId: string | null): Promise<void> {
         if (!profileIds.length) {
+            this.logger.warn('No profile IDs to track search appearances for.');
             return;
         }
         if (!searchSessionId) {
+            this.logger.warn('Invalid or missing searchSessionId. Skipping search appearances tracking.');
             return;
         }
 
         try {
             await this.workerRepo.incrementSearchAppearancesCountDedup(profileIds, searchSessionId);
+            this.logger.log(`Processed deduplicated searchAppearancesCount for ${profileIds.length} workers (session ${searchSessionId})`);
         } catch (error) {
             const reason = error instanceof Error ? error.message : String(error);
 
