@@ -5,7 +5,10 @@ const request = require('supertest');
 import { GlobalController } from 'global/GlobalController';
 import { TranslationPublicService } from 'admin/translation/TranslationPublicService';
 import { DictionariesPublicService } from 'admin/dictionaries/services/DictionariesPublicService';
-import { Reflector } from '@nestjs/core';
+import { GeocodingService } from 'global/services/GeocodingService';
+
+// cd backend
+// npm run test:e2e
 
 const mockTranslation = {
   langCode: 'en',
@@ -42,6 +45,7 @@ describe('GlobalController (e2e)', () => {
   let app: INestApplication;
   let translationService: { getTranslation: jest.Mock };
   let dictionariesService: { getDictionary: jest.Mock };
+  let geocodingService: { reverseGeocode: jest.Mock };
 
   beforeAll(async () => {
     translationService = {
@@ -50,12 +54,16 @@ describe('GlobalController (e2e)', () => {
     dictionariesService = {
       getDictionary: jest.fn(),
     };
+    geocodingService = {
+      reverseGeocode: jest.fn(),
+    };
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       controllers: [GlobalController],
       providers: [
         { provide: TranslationPublicService, useValue: translationService },
         { provide: DictionariesPublicService, useValue: dictionariesService },
+        { provide: GeocodingService, useValue: geocodingService },
       ],
     }).compile();
 
