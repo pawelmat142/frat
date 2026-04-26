@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { WorkerService } from "employee/services/WorkerService";
-import { WorkerI, WorkerSearchFilters, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT, WorkerSearchRequest, WorkerSearchResponse, WorkerWithMutualFriends } from "@shared/interfaces/WorkerI";
+import { WorkerI, WorkerSearchFilters, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT, WorkerSearchRequest, WorkerSearchResponse, WorkerWithMutualFriends, WorkerSearchSortOptions } from "@shared/interfaces/WorkerI";
 import { WorkerUtil } from "@shared/utils/WorkerUtil";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
@@ -44,15 +44,15 @@ export const WorkerDefaultFilters: WorkerSearchFilters = {
 
     skip: 0,
     limit: PROFILES_INITIAL_SEARCH_LIMIT,
+    sortBy: WorkerSearchSortOptions.MUTUAL_FRIENDS
 };
 
 const WorkersSearchContext = createContext<WorkersSearchContextProps | undefined>(undefined)
 
-
 export const useWorkersSearch = () => {
-    const ctx = useContext(WorkersSearchContext);
-    if (!ctx) throw new Error("useEmployeeSearch must be used within EmployeeSearchProvider");
-    return ctx;
+    const ctx = useContext(WorkersSearchContext)
+    if (!ctx) throw new Error("useWorkersSearch must be used within WorkersSearchProvider")
+    return ctx
 };
 
 const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -61,7 +61,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
 
-    const [filters, setFiltersState] = useState<WorkerSearchFilters>(WorkerUtil.parseFiltersFromSearch(location.search, WorkerDefaultFilters))
+    const [filters, setFilters] = useState<WorkerSearchFilters>(WorkerUtil.parseFiltersFromSearch(location.search, WorkerDefaultFilters))
 
     const [results, setResults] = useState<WorkerWithMutualFriends[]>([]);
     const [loading, setLoading] = useState(false);
@@ -110,7 +110,10 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 return;
             }
             let request: WorkerSearchRequest = WorkerUtil.filtersToRequest(searchFilters);
-            const result = await WorkerService.searchWorkers(request, !userCtx.me);
+            const viewerLocation = request.sortBy === WorkerSearchSortOptions.DISTANCE_ASC && userCtx.position
+                ? userCtx.position
+                : undefined;
+            const result = await WorkerService.searchWorkers(request, !userCtx.me, viewerLocation);
 
             if (loadMore) {
                 setResults(prev => {
@@ -126,10 +129,6 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const loaded = searchFilters.skip + result.profiles.length;
             const hasMoreValue = loaded < result.count;
             hasMoreRef.current = hasMoreValue;
-        } catch (error: any) {
-            if (error?.name !== 'AbortError') {
-                console.error("Error searching employee profiles:", error);
-            }
         } finally {
             if (requestId === requestIdRef.current) {
                 if (loadMore) {
@@ -185,6 +184,10 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (!isOnSearchPage) {
             navigate({ pathname: Path.WORKERS_SEARCH, search: newUrl })
         }
+    }
+
+    const setFiltersState = (newFilters: WorkerSearchFilters) => {
+        setFilters(newFilters);
     }
 
     const loadMore = () => {

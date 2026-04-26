@@ -6,6 +6,7 @@ import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchRespons
 import { SelectQueryBuilder } from 'typeorm';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { SearchUtil } from 'global/utils/SearchUtil';
+import { Position } from '@shared/interfaces/MapsInterfaces';
 
 @Injectable()
 export class SearchWorkersService {
@@ -16,7 +17,9 @@ export class SearchWorkersService {
         private readonly workerRepo: WorkerRepo,
     ) { }
 
-    async searchWorkers(filters: WorkerSearchRequest, user?: UserI): Promise<WorkerSearchResponse> {
+    async searchWorkers(filters: WorkerSearchRequest, user?: UserI, viewerLocation?: Position): Promise<WorkerSearchResponse> {
+        const normalizedFilters = this.normalizeFilters(filters);
+        const normalizedViewerLocation = this.normalizeViewerLocation(viewerLocation);
 
         // Step 1: Build base query for filtering (without eagerly loading relations to avoid row multiplication)
         const baseQueryBuilder = this.workerRepo.getQueryBuilder()
@@ -24,9 +27,9 @@ export class SearchWorkersService {
 
         let hasFilter = false;
 
-        this.addBasicFilters(baseQueryBuilder, filters, hasFilter);
-        this.addDateRangeFilter(baseQueryBuilder, filters, hasFilter);
-        this.addPositionFilter(baseQueryBuilder, filters, hasFilter);
+        this.addBasicFilters(baseQueryBuilder, normalizedFilters, hasFilter);
+        this.addDateRangeFilter(baseQueryBuilder, normalizedFilters, hasFilter);
+        this.addPositionFilter(baseQueryBuilder, normalizedFilters, hasFilter);
 
         const count: number = await this.getCount(baseQueryBuilder);
 
@@ -43,8 +46,8 @@ export class SearchWorkersService {
         if (user) {
             this.addMutualFriendsSelect(idsQueryBuilder, user.uid);
         }
-        this.addSortingForIds(idsQueryBuilder, filters, user);
-        this.addPagination(idsQueryBuilder, filters);
+        this.addSortingForIds(idsQueryBuilder, normalizedFilters, normalizedViewerLocation, user);
+        this.addPagination(idsQueryBuilder, normalizedFilters);
 
         const idsResult = await idsQueryBuilder.getRawMany();
         const profileIds = idsResult.map(row => row.id);
@@ -69,7 +72,6 @@ export class SearchWorkersService {
             count,
         };
     }
-
 
     private addBasicFilters(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, hasFilter: boolean) {
         const certificates = SearchUtil.parseArray(filters.certificates);
@@ -173,7 +175,12 @@ export class SearchWorkersService {
         return value.replace(/^\{|\}$/g, '').split(',');
     }
 
-    private addSortingForIds(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, user?: UserI) {
+    private addSortingForIds(
+        idsQueryBuilder: SelectQueryBuilder<WorkerEntity>,
+        filters: WorkerSearchRequest,
+        viewerLocation?: Position,
+        user?: UserI,
+    ) {
         const sortBy = filters.sortBy || DefaultWorkerSearchSortOption;
         switch (sortBy) {
             case WorkerSearchSortOptions.MUTUAL_FRIENDS:
@@ -184,14 +191,14 @@ export class SearchWorkersService {
 
             case WorkerSearchSortOptions.START_FROM_ASC:
                 idsQueryBuilder
-                    .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
-                    .addOrderBy('earliest_date', SearchUtil.ASC, 'NULLS LAST');
+                    .addSelect('MIN(profile.start_date)', 'sort_start_date')
+                    .addOrderBy('sort_start_date', SearchUtil.ASC, 'NULLS LAST');
                 break;
 
             case WorkerSearchSortOptions.START_FROM_DESC:
                 idsQueryBuilder
-                    .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
-                    .addOrderBy('earliest_date', SearchUtil.DESC, 'NULLS FIRST');
+                    .addSelect('MIN(profile.start_date)', 'sort_start_date')
+                    .addOrderBy('sort_start_date', SearchUtil.DESC, 'NULLS FIRST');
                 break;
 
             case WorkerSearchSortOptions.CREATED_AT_DESC:
@@ -204,11 +211,37 @@ export class SearchWorkersService {
                     .addSelect('MIN(profile.created_at)', 'sort_created_at')
                     .addOrderBy('sort_created_at', SearchUtil.ASC);
                 break;
+
+            case WorkerSearchSortOptions.DISTANCE_ASC:
+                if (viewerLocation?.lat != null && viewerLocation?.lng != null) {
+                    idsQueryBuilder
+                        .addSelect(`MIN(CASE
+                            WHEN profile.location_option = :distanceLocationOption AND profile.point IS NOT NULL THEN ST_Distance(
+                                profile.point,
+                                ST_SetSRID(ST_MakePoint(:sortLng, :sortLat), 4326)::geography
+                            )
+                            ELSE NULL
+                        END)`, 'sort_distance_m')
+                        .setParameters({
+                            distanceLocationOption: WorkerLocationOptions.POSITION,
+                            sortLat: viewerLocation.lat,
+                            sortLng: viewerLocation.lng,
+                        })
+                        .addOrderBy('sort_distance_m', SearchUtil.ASC, 'NULLS LAST');
+                }
+                break;
+
         }
 
         // add views count sorting
         idsQueryBuilder
             .addOrderBy('profile.unique_views_count', SearchUtil.DESC, 'NULLS LAST');
+    }
+
+    private addStartFromSorting(idsQueryBuilder: SelectQueryBuilder<WorkerEntity>) {
+        idsQueryBuilder
+            .addSelect('MIN(lower(ranges.date_range))', 'earliest_date')
+            .addOrderBy('earliest_date', SearchUtil.ASC, 'NULLS LAST');
     }
 
     /** Preserve order from paginated IDs query using CASE expression */
@@ -284,6 +317,40 @@ export class SearchWorkersService {
 
         baseQueryBuilder.andWhere(`(${conditions.join('\n            OR ')})`, params);
         hasFilter = true;
+    }
+
+    private normalizeFilters(filters: WorkerSearchRequest): WorkerSearchRequest {
+        return {
+            ...filters,
+            lat: this.parseNumber(filters.lat),
+            lng: this.parseNumber(filters.lng),
+            positionRadiusKm: this.parseNumber(filters.positionRadiusKm),
+            skip: this.parseNumber(filters.skip) ?? 0,
+            limit: this.parseNumber(filters.limit) ?? PROFILES_INITIAL_SEARCH_LIMIT,
+        };
+    }
+
+    private normalizeViewerLocation(viewerLocation?: Position): Position | null {
+        if (!viewerLocation) {
+            return null;
+        }
+        return {
+            lat: this.parseNumber(viewerLocation?.lat),
+            lng: this.parseNumber(viewerLocation?.lng),
+        };
+    }
+
+    private parseNumber(value: unknown): number | undefined {
+        if (typeof value === 'number') {
+            return Number.isFinite(value) ? value : undefined;
+        }
+
+        if (typeof value === 'string' && value.trim().length > 0) {
+            const parsed = Number(value);
+            return Number.isFinite(parsed) ? parsed : undefined;
+        }
+
+        return undefined;
     }
 
 }

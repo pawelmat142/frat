@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   Patch,
   Post,
@@ -25,6 +26,8 @@ import { Roles } from 'auth/decorators/RolesDecorator';
 import { Public } from 'auth/decorators/PublicDecorator';
 import { OptionalJwtUser } from 'auth/guards/OptionalJwtUser';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
+import { Position } from '@shared/interfaces/MapsInterfaces';
+import { PositionUtil } from '@shared/utils/PositionUtil';
 
 @Controller('api/worker')
 @UseInterceptors(LogInterceptor)
@@ -78,9 +81,16 @@ export class WorkersController {
   @UseGuards(OptionalJwtUser)
   searchWorkers(
     @Query() filters: WorkerSearchRequest,
+    @Headers(PositionUtil.LAT_HEADER) lat?: string,
+    @Headers(PositionUtil.LNG_HEADER) lng?: string,
     @CurrentUser() user?: UserI,
   ): Promise<WorkerSearchResponse> {
-    return this.searchWorkerService.searchWorkers(filters, user);
+    const viewerLocation: Position | undefined = lat && lng ? {
+      lat: lat ? Number(lat) : undefined,
+      lng: lng ? Number(lng ) : undefined,
+    } : undefined;
+
+    return this.searchWorkerService.searchWorkers(filters, user, viewerLocation);
   }
   
   @Get("/notify-profile-view/:workerId")

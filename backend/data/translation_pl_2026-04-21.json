@@ -716,7 +716,7 @@
         "phoneNumber": "Numer telefonu",
         "sortOptions": {
           "title": "Sortuj według",
-          "POPULARITY": "Popularność",
+          "MUTUAL_FRIENDS": "Wg wspólnych znajomych",
           "DISTANCE_ASC": "Odległość: Najbliżej",
           "CREATED_AT_ASC": "Dołączył: Najstarszy",
           "START_FROM_ASC": "Dostępność: Najdalsza",

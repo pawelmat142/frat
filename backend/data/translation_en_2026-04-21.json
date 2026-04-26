@@ -721,7 +721,7 @@
         "phoneNumber": "Phone number",
         "sortOptions": {
           "title": "Sort by",
-          "POPULARITY": "Popularity",
+          "MUTUAL_FRIENDS": "By mutual friends",
           "DISTANCE_ASC": "Distance: Nearest first",
           "CREATED_AT_ASC": "Joined: Oldest first",
           "START_FROM_ASC": "Availability: Latest first",

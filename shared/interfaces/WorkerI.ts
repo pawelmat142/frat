@@ -259,8 +259,7 @@ export const WorkerSearchSortOptions = {
   START_FROM_ASC: 'START_FROM_ASC',
   CREATED_AT_DESC: 'CREATED_AT_DESC',
   CREATED_AT_ASC: 'CREATED_AT_ASC',
-  DISTANCE_ASC: 'DISTANCE_ASC',
-  POPULARITY: 'POPULARITY',
+  DISTANCE_ASC: 'DISTANCE_ASC'
 } as const;
 export type WorkerSearchSortOption = typeof WorkerSearchSortOptions[keyof typeof WorkerSearchSortOptions];
 

@@ -17,6 +17,7 @@ import CountryAndLocationSelector, { LocationFilterValue } from "global/componen
 import { AppConfig } from "@shared/AppConfig";
 import Header from "global/components/Header";
 import { DateUtil } from "@shared/utils/DateUtil";
+import FloatingSelector from "global/components/selector/FloatingSelector";
 
 interface Props {
     onClose?: () => void;
@@ -38,6 +39,8 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
     })
 
     const formState = f.watch()
+
+    const sortBy = formState.sortBy;
 
     useEffect(() => {
         const autofillLocationCountry = async () => {
@@ -70,6 +73,9 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
         if (!ctx.filters.startDate) {
             f.setValue('startDate', DateUtil.toLocalDateString(new Date()));
         }
+        if (sortBy === WorkerSearchSortOptions.MUTUAL_FRIENDS && !userCtx.me) {
+            f.setValue('sortBy', WorkerSearchSortOptions.START_FROM_ASC);
+        }
     }, [])
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
@@ -84,7 +90,14 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
         ctx.setFiltersWithSearchAndNavigate(formState);
     }
 
-    const sortOptionItems: SelectorItem<string>[] = Object.keys(WorkerSearchSortOptions).map((option: string) => ({
+    const sortOptionItems: SelectorItem<string>[] = Object.keys(WorkerSearchSortOptions)
+    .filter(option => {
+        if (option === WorkerSearchSortOptions.MUTUAL_FRIENDS && !userCtx.me) {
+            return false;
+        }
+        return true;
+    })
+    .map((option: string) => ({
         value: option,
         label: t('employeeProfile.form.sortOptions.' + option)
     }))
@@ -213,15 +226,14 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                     )}
                 />
 
-                {/* TODO sort option select functionality... */}
-                {/* <Controller
+                <Controller
                     name="sortBy"
                     control={f.control}
                     render={({ field }) => (
                         <FloatingSelector
                             className="w-full mt-3"
                             items={sortOptionItems}
-                            value={sortOptionItems.find(i => i.value === ctx.filters.sortBy) || null}
+                            value={sortOptionItems.find(i => i.value === sortBy) || null}
                             onSelect={item => {
                                 field.onChange(item);
                             }}
@@ -229,8 +241,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                             fullWidth
                         ></FloatingSelector>
                     )}
-                /> */}
-
+                />
 
                 <div className="mt-10">
                     <Button
