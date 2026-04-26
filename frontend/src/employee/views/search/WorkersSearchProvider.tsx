@@ -13,6 +13,53 @@ import { NavBus } from "global/utils/PseudoViewBus";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { MenuItemIdentifiers } from "global/interface/controls.interface";
 
+const WORKER_SEARCH_SESSION_STORAGE_KEY = 'workerSearchSession';
+const WORKER_SEARCH_SESSION_TTL_MS = 30 * 60 * 1000;
+
+interface WorkerSearchSessionStorage {
+    id: string;
+    lastActivityAt: number;
+}
+
+const createWorkerSearchSessionId = (): string => {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+    return `${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+};
+
+const getOrCreateWorkerSearchSessionId = (): string => {
+    const now = Date.now();
+
+    try {
+        const raw = sessionStorage.getItem(WORKER_SEARCH_SESSION_STORAGE_KEY);
+        if (raw) {
+            const parsed = JSON.parse(raw) as WorkerSearchSessionStorage;
+            const hasValidId = typeof parsed?.id === 'string' && parsed.id.length > 0;
+            const isFresh = typeof parsed?.lastActivityAt === 'number' && (now - parsed.lastActivityAt) <= WORKER_SEARCH_SESSION_TTL_MS;
+
+            if (hasValidId && isFresh) {
+                const refreshed: WorkerSearchSessionStorage = {
+                    id: parsed.id,
+                    lastActivityAt: now,
+                };
+                sessionStorage.setItem(WORKER_SEARCH_SESSION_STORAGE_KEY, JSON.stringify(refreshed));
+                return parsed.id;
+            }
+        }
+    } catch {
+        // Ignore malformed storage and create a new session id.
+    }
+
+    const newId = createWorkerSearchSessionId();
+    const created: WorkerSearchSessionStorage = {
+        id: newId,
+        lastActivityAt: now,
+    };
+    sessionStorage.setItem(WORKER_SEARCH_SESSION_STORAGE_KEY, JSON.stringify(created));
+    return newId;
+};
+
 export interface WorkersSearchContextProps {
     filters: WorkerSearchFilters;
     defaultFilters: WorkerSearchFilters;
@@ -113,7 +160,8 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const viewerLocation = request.sortBy === WorkerSearchSortOptions.DISTANCE_ASC && userCtx.position
                 ? userCtx.position
                 : undefined;
-            const result = await WorkerService.searchWorkers(request, !userCtx.me, viewerLocation);
+            const searchSessionId = getOrCreateWorkerSearchSessionId();
+            const result = await WorkerService.searchWorkers(request, !userCtx.me, viewerLocation, searchSessionId);
 
             if (loadMore) {
                 setResults(prev => {

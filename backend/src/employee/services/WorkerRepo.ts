@@ -319,6 +319,51 @@ export class WorkerRepo {
             });
         }
 
+    public async incrementSearchAppearancesCount(workerIds: number[]): Promise<void> {
+        if (!workerIds.length) {
+            return;
+        }
+
+        await this.woerkersRepository
+            .createQueryBuilder()
+            .update(WorkerEntity)
+            .set({
+                searchAppearancesCount: () => 'search_appearances_count + 1',
+            })
+            .where('worker_id IN (:...workerIds)', { workerIds })
+            .execute();
+
+        this.logger.log(`Incremented searchAppearancesCount for ${workerIds.length} workers`);
+    }
+
+    public async incrementSearchAppearancesCountDedup(workerIds: number[], searchSessionId: string): Promise<void> {
+        if (!workerIds.length || !searchSessionId) {
+            return;
+        }
+
+        await this.woerkersRepository.manager.query(
+            `
+                WITH input_ids AS (
+                    SELECT DISTINCT UNNEST($2::bigint[]) AS worker_id
+                ),
+                inserted AS (
+                    INSERT INTO jh_worker_search_appearances (search_session_id, worker_id)
+                    SELECT $1, worker_id
+                    FROM input_ids
+                    ON CONFLICT (search_session_id, worker_id) DO NOTHING
+                    RETURNING worker_id
+                )
+                UPDATE jh_workers w
+                SET search_appearances_count = w.search_appearances_count + 1
+                FROM inserted i
+                WHERE w.worker_id = i.worker_id
+            `,
+            [searchSessionId, workerIds],
+        );
+
+        this.logger.log(`Processed deduplicated searchAppearancesCount for ${workerIds.length} workers (session ${searchSessionId})`);
+    }
+
     public getQueryBuilder(): SelectQueryBuilder<WorkerEntity> {
         return this.woerkersRepository.createQueryBuilder('profile');
     }

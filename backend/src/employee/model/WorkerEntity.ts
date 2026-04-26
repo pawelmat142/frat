@@ -127,6 +127,9 @@ export class WorkerEntity implements WorkerI {
   @Column({ name: 'favorites_count', type: 'int', default: 0 })
   favoritesCount: number;
 
+  @Column({ name: 'search_appearances_count', type: 'int', default: 0 })
+  searchAppearancesCount: number;
+
   @Expose()
   @Column({ name: 'jobs', type: 'text', array: true, default: [] })
   jobs: string[];

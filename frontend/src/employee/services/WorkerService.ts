@@ -1,8 +1,8 @@
 import { httpClient } from "global/services/http";
 import { WorkerForm, WorkerFormDto, WorkerI, WorkerSearchFilters, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerWithCertificates } from "@shared/interfaces/WorkerI";
 import { AvatarRef } from "@shared/interfaces/UserI";
-import { PositionUtil } from "@shared/utils/PositionUtil";
 import { Position } from "@shared/interfaces/MapsInterfaces";
+import { Header } from "@shared/def/def";
 
 // Mapper to convert nested form structure to flat API structure
 const mapFormToApi = (form: WorkerForm): WorkerFormDto => {
@@ -53,11 +53,20 @@ export const WorkerService = {
 		return httpClient.put<WorkerI>(`/worker`, apiPayload);
 	},
 
-	searchWorkers(params: WorkerSearchRequest, skipAuth: boolean = false, viewerLocation?: Position): Promise<WorkerSearchResponse> {
-		const headers = viewerLocation ? { 
-				[PositionUtil.LAT_HEADER]: String(viewerLocation.lat), 
-				[PositionUtil.LNG_HEADER]: String(viewerLocation.lng)
-			} : undefined;
+	searchWorkers(
+		params: WorkerSearchRequest,
+		skipAuth: boolean = false,
+		viewerLocation?: Position,
+		searchSessionId?: string,
+	): Promise<WorkerSearchResponse> {
+		const headers: Record<string, string> = {};
+		if (viewerLocation) {
+			headers[Header.LAT_HEADER] = String(viewerLocation.lat);
+			headers[Header.LNG_HEADER] = String(viewerLocation.lng);
+		}
+		if (searchSessionId) {
+			headers[Header.SEARCH_SESSION] = searchSessionId;
+		}
 		return httpClient.get<WorkerSearchResponse>(`/worker/search/list`, { params, skipAuth, headers });
 	},
 

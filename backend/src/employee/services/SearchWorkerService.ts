@@ -12,12 +12,12 @@ import { Position } from '@shared/interfaces/MapsInterfaces';
 export class SearchWorkersService {
 
     private readonly logger = new Logger(this.constructor.name);
-
+    private static readonly SEARCH_SESSION_ID_REGEX = /^[a-zA-Z0-9_-]{16,128}$/;
     constructor(
         private readonly workerRepo: WorkerRepo,
     ) { }
 
-    async searchWorkers(filters: WorkerSearchRequest, user?: UserI, viewerLocation?: Position): Promise<WorkerSearchResponse> {
+    async searchWorkers(filters: WorkerSearchRequest, user?: UserI, viewerLocation?: Position, searchSessionId?: string): Promise<WorkerSearchResponse> {
         const normalizedFilters = this.normalizeFilters(filters);
         const normalizedViewerLocation = this.normalizeViewerLocation(viewerLocation);
 
@@ -52,6 +52,11 @@ export class SearchWorkersService {
         const idsResult = await idsQueryBuilder.getRawMany();
         const profileIds = idsResult.map(row => row.id);
         const mutualFriendsMap = user ? this.buildMutualFriendsMap(idsResult) : {};
+        const normalizedSearchSessionId = this.normalizeSearchSessionId(searchSessionId);
+
+        if (profileIds.length) {
+            await this.trackSearchAppearances(profileIds, normalizedSearchSessionId);
+        }
 
         // Step 4: Load full profiles with relations using the IDs
         const resultsQueryBuilder = this.workerRepo.getQueryBuilder()
@@ -351,6 +356,42 @@ export class SearchWorkersService {
         }
 
         return undefined;
+    }
+
+    private normalizeSearchSessionId(searchSessionId?: string): string | null {
+        if (!searchSessionId) {
+            return null;
+        }
+
+        const normalized = searchSessionId.trim();
+        if (!normalized) {
+            return null;
+        }
+
+        return SearchWorkersService.SEARCH_SESSION_ID_REGEX.test(normalized)
+            ? normalized
+            : null;
+    }
+
+    private async trackSearchAppearances(profileIds: number[], searchSessionId: string | null): Promise<void> {
+        if (!profileIds.length) {
+            return;
+        }
+        if (!searchSessionId) {
+            return;
+        }
+
+        try {
+            await this.workerRepo.incrementSearchAppearancesCountDedup(profileIds, searchSessionId);
+        } catch (error) {
+            const reason = error instanceof Error ? error.message : String(error);
+
+            if (reason.includes('jh_worker_search_appearances') && reason.includes('does not exist')) {
+                this.logger.warn('Search appearances dedup table is missing. Search appearances tracking disabled until service restart.');
+            } else {
+                this.logger.warn(`Failed deduplicated searchAppearancesCount for ${profileIds.length} workers: ${reason}`);
+            }
+        }
     }
 
 }

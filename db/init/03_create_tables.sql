@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS jh_workers (
     ready_to_travel BOOLEAN,
     skills JSONB,
     images JSONB,
+    search_appearances_count INTEGER NOT NULL DEFAULT 0,
     views TEXT[] DEFAULT '{}',
     jobs TEXT[] DEFAULT '{}',
     likes TEXT[] DEFAULT '{}',
@@ -104,6 +105,18 @@ CREATE TABLE IF NOT EXISTS jh_workers_date_ranges (
 
 CREATE INDEX IF NOT EXISTS idx_workers_date_ranges_worker_id ON jh_workers_date_ranges (worker_id);
 CREATE INDEX IF NOT EXISTS idx_workers_date_ranges_range_gist ON jh_workers_date_ranges USING GIST (date_range);
+
+
+-- jh_worker_search_appearances
+CREATE TABLE IF NOT EXISTS jh_worker_search_appearances (
+    search_session_id VARCHAR(128) NOT NULL,
+    worker_id BIGINT NOT NULL REFERENCES jh_workers(worker_id) ON DELETE CASCADE,
+    first_seen_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (search_session_id, worker_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_worker_search_appearances_first_seen_at
+    ON jh_worker_search_appearances (first_seen_at);
 
 
 -- jh_certificates

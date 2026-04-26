@@ -1,10 +1,7 @@
-import { GeocodedPosition, Position } from "../interfaces/MapsInterfaces";
+import { Position } from "../interfaces/MapsInterfaces";
 import { Point } from "../interfaces/WorkerI";
 
 export abstract class PositionUtil {
-
-    public static readonly LAT_HEADER = 'x-viewer-lat';
-    public static readonly LNG_HEADER = 'x-viewer-lng';
 
     public static toGeoPoint(position?: Position): Point | null {
         if (!position) {
