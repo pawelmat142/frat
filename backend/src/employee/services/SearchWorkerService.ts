@@ -287,7 +287,7 @@ export class SearchWorkersService {
         // SELECTED_COUNTRIES - narrow to matching country when country filter is provided, otherwise match all
         conditions.push(`(
                 profile.location_option = '${WorkerLocationOptions.SELECTED_COUNTRIES}'
-                AND LOWER(:locationCountry) = ANY(profile.location_countries)
+                AND profile.location_countries @> ARRAY[:locationCountry]::text[]
             )`);
         params.locationCountry = filters.locationCountry!.toLowerCase();
 
@@ -311,7 +311,7 @@ export class SearchWorkersService {
             // No coordinates - match POSITION profiles by country stored in location_countries
             conditions.push(`(
                 profile.location_option = '${WorkerLocationOptions.POSITION}'
-                AND LOWER(:locationCountry) = ANY(profile.location_countries)
+                AND profile.location_countries @> ARRAY[:locationCountry]::text[]
             )`);
         }
 
