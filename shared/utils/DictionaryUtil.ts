@@ -1,4 +1,6 @@
-import { DictionaryElement, DictionaryI } from "../interfaces/DictionaryI";
+import { AppConfig } from "@shared/AppConfig";
+import { DictionaryColumnTypes, DictionaryElement, DictionaryI } from "../interfaces/DictionaryI";
+import { DateUtil } from "./DateUtil";
 
 export abstract class DictionaryUtil {
 
@@ -14,6 +16,22 @@ export abstract class DictionaryUtil {
     public static getElementByCountryCode(dictionary: DictionaryI, countryCode: string): DictionaryElement | undefined {
         return dictionary.elements.find(el => el.values.COUNTRY_CODE === countryCode);
     }
+
+    public static displayElementValue = (value: any, columnType: string, t: any, isTranslatable: boolean = false) => {
+        if (isTranslatable && value) {
+            return t(value, { lang: AppConfig.DEFAULT_LANG_CODE });
+        }
+
+        if (columnType === DictionaryColumnTypes.DATE) {
+            return DateUtil.displayDate(value);
+        }
+
+        if (columnType === DictionaryColumnTypes.BOOLEAN) {
+            return value ? 'true' : 'false';
+        }
+
+        return value !== undefined && value !== '' ? String(value) : '-';
+    };
 
 }
 

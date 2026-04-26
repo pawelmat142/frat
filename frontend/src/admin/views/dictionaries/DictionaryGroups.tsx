@@ -4,22 +4,23 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useConfirm } from "global/providers/PopupProvider";
-import { DictionaryColumnTypes, DictionaryGroup, DictionaryI } from "@shared/interfaces/DictionaryI";
-import { DateUtil } from "@shared/utils/DateUtil";
+import { DictionaryGroup, DictionaryI } from "@shared/interfaces/DictionaryI";
 import { UserRoles } from "@shared/interfaces/UserI";
 import RoleGuard from "global/components/RoleGuard";
 import { useTranslation } from "react-i18next";
-import { AppConfig } from "@shared/AppConfig";
+import { Path } from '../../../path';
+import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
+import { useNavigate } from "react-router-dom";
 
 interface DictionaryGroupsProps {
     dictionary: DictionaryI;
     onRemoveGroup?: (group: DictionaryGroup) => void;
-    onEditGroup?: (group: DictionaryGroup) => void;
 }
 
-const DictionaryGroups: React.FC<DictionaryGroupsProps> = ({ dictionary, onRemoveGroup, onEditGroup }) => {
+const DictionaryGroups: React.FC<DictionaryGroupsProps> = ({ dictionary, onRemoveGroup }) => {
     const groups = dictionary.groups || [];
     const elements = dictionary.elements || [];
+    const navigate = useNavigate();
 
     if (!groups || groups.length === 0) {
         return <div className="secondary-text">No groups available.</div>;
@@ -29,8 +30,12 @@ const DictionaryGroups: React.FC<DictionaryGroupsProps> = ({ dictionary, onRemov
 
     const { t } = useTranslation()
 
+    const displayElementValue = (value: any, columnType: string, isTranslatable: boolean = false) => {
+        return DictionaryUtil.displayElementValue(value, columnType, t, isTranslatable);
+    };
+
     const handleEditDictionaryGroup = async (group: DictionaryGroup) => {
-        onEditGroup?.(group);
+        navigate(Path.getDictionaryGroupFormPath(dictionary.code, group.code));
     }
 
     const handleRemoveDictionaryGroup = async (group: DictionaryGroup) => {
@@ -83,10 +88,7 @@ const DictionaryGroups: React.FC<DictionaryGroupsProps> = ({ dictionary, onRemov
                                                 <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text"}>{el.code}</td>
                                                 {dictionary.columns.map(col => (
                                                     <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
-                                                        {col.translatable ? t(el.values[col.code], { lang: AppConfig.DEFAULT_LANG_CODE}) :
-                                                        col.type === DictionaryColumnTypes.DATE
-                                                            ? DateUtil.displayDate(el.values[col.code])
-                                                            : (el.values[col.code] !== undefined && el.values[col.code] !== "" ? el.values[col.code] : "-")}
+                                                        {displayElementValue(el.values[col.code], col.type, col.translatable)}
                                                     </td>
                                                 ))}
                                                 <td className={"px-6 py-3 border-b border-color"}>{el.active ? <span className="primary-color font-semibold">ACTIVE</span> : <span className="secondary-text">INACTIVE</span>}</td>
