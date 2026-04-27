@@ -5,7 +5,7 @@ import { SocketGateway } from 'global/web-socket/SocketGateway';
 import { SocketHandler } from 'global/web-socket/SocketHandler';
 import { AuthenticatedSocket } from 'global/web-socket/AuthenticatedSocket';
 import { ChatUtil } from '@shared/utils/ChatUtil';
-import { ChatEvents, ChatI, JoinChatResponse, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
+import { ChatEvents, ChatI, DeleteMessageDto, DeleteMessageResponse, JoinChatResponse, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
 
 @Injectable()
 export class ChatSocketHandler implements SocketHandler, OnModuleInit {
@@ -40,6 +40,10 @@ export class ChatSocketHandler implements SocketHandler, OnModuleInit {
 
     socket.on(ChatEvents.LEAVE_CHAT, (data: { chatId: number }, callback: (res: JoinChatResponse) => void) => {
       this.handleLeaveChat(socket, data).then(callback);
+    });
+
+    socket.on(ChatEvents.DELETE_MESSAGE, (data: DeleteMessageDto, callback: (res: DeleteMessageResponse) => void) => {
+      this.handleDeleteMessage(socket, data).then(callback);
     });
   }
 
@@ -102,6 +106,19 @@ export class ChatSocketHandler implements SocketHandler, OnModuleInit {
     const chat = await this.chatService.leaveChat(uid, chatId);
     this.notifyAboutRefreshChat(chat);
     return { success: true };
+  }
+
+  private async handleDeleteMessage(socket: AuthenticatedSocket, data: DeleteMessageDto): Promise<DeleteMessageResponse> {
+    const { messageId, chatId } = data;
+    const uid = socket.user.uid;
+    try {
+      await this.chatService.deleteMessage(messageId, uid);
+      this.socketGateway.emitToRoom(ChatUtil.chatRoom(chatId), ChatEvents.MESSAGE_DELETED, { messageId, chatId });
+      return { success: true, messageId };
+    } catch (error) {
+      this.logger.error(`Delete message error: ${error instanceof Error ? error.message : String(error)}`);
+      return { error: 'Failed to delete message' };
+    }
   }
 
   /**

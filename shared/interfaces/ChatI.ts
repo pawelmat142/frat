@@ -54,7 +54,9 @@ export const ChatEvents = {
     LOAD_CHAT: 'loadChat',
     OPEN_CHAT: 'openChat',
     LEAVE_CHAT: 'leaveChat',
-    
+    DELETE_MESSAGE: 'deleteMessage',
+    MESSAGE_DELETED: 'messageDeleted',
+
     CONNECT: 'connect',
     DISCONNECT: 'disconnect',
     CONNECT_ERROR: 'connect_error',
@@ -76,6 +78,17 @@ export interface SendMessageResponse {
 
 export interface JoinChatResponse {
     success?: boolean;
+    error?: string;
+}
+
+export interface DeleteMessageDto {
+    messageId: number;
+    chatId: number;
+}
+
+export interface DeleteMessageResponse {
+    success?: boolean;
+    messageId?: number;
     error?: string;
 }
 

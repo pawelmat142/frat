@@ -22,6 +22,7 @@ import { FileUtil } from "global/utils/FileUtil";
 import { AppConfig } from "@shared/AppConfig";
 import { FaImage } from "react-icons/fa";
 import { AvatarRef } from "@shared/interfaces/UserI";
+import LongTapHandler from "global/components/LongTapHandler";
 
 interface PendingImage {
     previewUrl: string;
@@ -274,9 +275,15 @@ const ChatConversationView: React.FC = () => {
         chatSocket.registerMessageListener(numericChatId, messageListener);
         chatSocket.registerChatListener(loadChatListener);
 
+        const messageDeletedListener = ({ messageId }: { messageId: number; chatId: number }) => {
+            setMessages(prev => prev.filter(m => m.messageId !== messageId));
+        };
+        chatSocket.registerMessageDeletedListener(messageDeletedListener);
+
         return () => {
             chatSocket.unregisterMessageListener(numericChatId);
             chatSocket.unregisterChatListener(loadChatListener);
+            chatSocket.unregisterMessageDeletedListener(messageDeletedListener);
             chatSocket.leaveChat(numericChatId);
             isInitialized.current = false;
         };
@@ -298,6 +305,18 @@ const ChatConversationView: React.FC = () => {
             setMessages(messagesData);
         }
     }
+
+    // TODO translacja
+    const handleDeleteMessage = async (msg: ChatMessageI) => {
+        const confirmed = await confirm({
+            message: t('chat.deleteMessageConfirm'),
+        });
+        if (!confirmed) return;
+        const response = await chatSocket.deleteMessage({ messageId: msg.messageId, chatId: msg.chatId });
+        if (response.error) {
+            toast.error(t('chat.error.deleteFailed'));
+        }
+    };
 
     // TODO translacje
     const handleSendMessage = async (e: React.FormEvent) => {
@@ -369,33 +388,41 @@ const ChatConversationView: React.FC = () => {
                 ) : (
                     messages.map((msg) => {
                         const leftSide = msg.senderUid !== me?.uid;
+                        const isOwn = !leftSide;
+                        const bubble = (
+                            <div className={`chat-view-message ${leftSide ? 'left' : 'right'} ${msg.type === MessageTypes.IMAGE ? 'image' : ''}`}>
+                                {msg.type === MessageTypes.IMAGE && msg.imageRefs?.length && (
+                                    <div className={`chat-view-message-images count-${Math.min(msg.imageRefs.length, 4)}`}>
+                                        {msg.imageRefs.map((ref, i) => (
+                                            <img
+                                                key={i}
+                                                src={ref.url}
+                                                alt=""
+                                                className="chat-view-message-image"
+                                                onClick={() => window.open(ref.url, '_blank')}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                                {msg.content && <p>{msg.content}</p>}
+                                <div className={`chat-view-message-info`}>
+                                    {!!msg.readAt && !leftSide && (
+                                        <span className="primary-color"><Ico.CHECK size={12} /></span>
+                                    )}
+                                    <span className="xs-font">{DateUtil.displayTime(msg.createdAt)}</span>
+                                </div>
+                            </div>
+                        );
                         return (
                             <div
                                 key={msg.messageId}
                                 className={`flex ${leftSide ? 'justify-start' : 'justify-end'}`}
                             >
-                                <div className={`chat-view-message ${leftSide ? 'left' : 'right'} ${msg.type === MessageTypes.IMAGE ? 'image' : ''}`}>
-                                    {msg.type === MessageTypes.IMAGE && msg.imageRefs?.length && (
-                                        <div className={`chat-view-message-images count-${Math.min(msg.imageRefs.length, 4)}`}>
-                                            {msg.imageRefs.map((ref, i) => (
-                                                <img
-                                                    key={i}
-                                                    src={ref.url}
-                                                    alt=""
-                                                    className="chat-view-message-image"
-                                                    onClick={() => window.open(ref.url, '_blank')}
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
-                                    {msg.content && <p>{msg.content}</p>}
-                                    <div className={`chat-view-message-info`}>
-                                        {!!msg.readAt && !leftSide && (
-                                            <span className="primary-color"><Ico.CHECK size={12} /></span>
-                                        )}
-                                        <span className="xs-font">{DateUtil.displayTime(msg.createdAt)}</span>
-                                    </div>
-                                </div>
+                                {isOwn ? (
+                                    <LongTapHandler onLongTap={() => handleDeleteMessage(msg)} className="relative">
+                                        {bubble}
+                                    </LongTapHandler>
+                                ) : bubble}
                             </div>
                         );
                     })

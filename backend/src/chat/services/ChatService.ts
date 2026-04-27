@@ -188,4 +188,23 @@ try {
   findChat(chatId: number): Promise<ChatI> {
     return this.chatRepo.findChat(chatId);
   }
+
+  async deleteMessage(messageId: number, uid: string): Promise<number> {
+    const message = await this.chatRepo.getMessageById(messageId);
+    if (!message) {
+      throw new ToastException('chat.error.messageNotFound', this);
+    }
+    // Only the sender can delete their own message
+    if (message.senderUid !== uid) {
+      throw new ToastException('chat.error.notMessageOwner', this);
+    }
+    await this.chatRepo.deleteMessage(messageId);
+    if (message.imageRefs?.length) {
+      const publicIds = message.imageRefs.map(ref => ref.publicId).filter(Boolean);
+      this.cloudinaryService.deleteImagesByPublicIds(publicIds).catch(err =>
+        this.logger.error(`Failed to delete Cloudinary images for message ${messageId}`, err)
+      );
+    }
+    return messageId;
+  }
 }

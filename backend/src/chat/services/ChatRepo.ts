@@ -173,6 +173,10 @@ export class ChatRepo {
       .execute()
   }
 
+  async deleteMessage(messageId: number): Promise<void> {
+    await this.messageRepository.delete({ messageId });
+  }
+
   /**
    * Ustawia status członka czatu na 'LEFT' gdy opuszcza czat.
    */

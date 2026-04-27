@@ -1,10 +1,11 @@
-import { ChatEvents, ChatI, ChatMessageI, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
+import { ChatEvents, ChatI, ChatMessageI, DeleteMessageDto, DeleteMessageResponse, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
 import WebSocketService from 'global/web-socket/WebSocketService';
 
 class ChatSocketService {
     private webSocket: WebSocketService;
     private messageListeners: Map<number, (message: ChatMessageI) => void> = new Map();
     private loadChatListeners: Set<(chat: ChatI) => void> = new Set();
+    private messageDeletedListeners: Set<(data: { messageId: number; chatId: number }) => void> = new Set();
     private notificationMessageListener: ((message: ChatMessageI) => void) | null = null;
 
     constructor() {
@@ -28,6 +29,10 @@ class ChatSocketService {
         this.webSocket.on(ChatEvents.LOAD_CHAT, (chat: ChatI) => {
             console.log('on(ChatEvents.LOAD_CHAT', chat);
             this.loadChatListeners.forEach(listener => listener(chat));
+        });
+
+        this.webSocket.on(ChatEvents.MESSAGE_DELETED, (data: { messageId: number; chatId: number }) => {
+            this.messageDeletedListeners.forEach(listener => listener(data));
         });
     }
 
@@ -57,6 +62,16 @@ class ChatSocketService {
         }
     }
 
+    async deleteMessage(dto: DeleteMessageDto): Promise<DeleteMessageResponse> {
+        try {
+            const response = await this.webSocket.emit<DeleteMessageResponse>(ChatEvents.DELETE_MESSAGE, dto);
+            return response;
+        } catch (error) {
+            console.error('ChatSocket: deleteMessage error', error);
+            return { error: 'Not connected' };
+        }
+    }
+
     registerMessageListener(chatId: number, messageListener: (message: ChatMessageI) => void): void {
         this.messageListeners.set(chatId, messageListener);
     }
@@ -71,6 +86,14 @@ class ChatSocketService {
 
     unregisterChatListener(loadChatListener: (chat: ChatI) => void): void {
         this.loadChatListeners.delete(loadChatListener);
+    }
+
+    registerMessageDeletedListener(listener: (data: { messageId: number; chatId: number }) => void): void {
+        this.messageDeletedListeners.add(listener);
+    }
+
+    unregisterMessageDeletedListener(listener: (data: { messageId: number; chatId: number }) => void): void {
+        this.messageDeletedListeners.delete(listener);
     }
 
     registerNotificationMessageListener(listener: (message: ChatMessageI) => void): void {

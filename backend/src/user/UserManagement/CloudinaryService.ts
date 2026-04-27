@@ -108,6 +108,31 @@ export class CloudinaryService {
     }
 
     /**
+     * Deletes multiple Cloudinary assets by their public IDs in a single request.
+     */
+    public async deleteImagesByPublicIds(publicIds: string[]): Promise<void> {
+        if (!publicIds.length) return;
+        this.validateConfig();
+        const auth = Buffer.from(`${this.apiKey}:${this.apiSecret}`).toString('base64');
+        try {
+            const response = await axios.delete(
+                `${BASE_URL}/${this.cloudName}/resources/image/upload`,
+                {
+                    headers: { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' },
+                    data: { public_ids: publicIds },
+                }
+            );
+            this.logger.log(`Deleted ${publicIds.length} images by publicId, result: ${JSON.stringify(response.data)}`);
+        } catch (error: any) {
+            if (error.response?.status === 404) {
+                this.logger.log(`No images found for publicIds: ${publicIds.join(', ')}`);
+                return;
+            }
+            this.logger.error(`Error deleting images by publicIds`, error);
+        }
+    }
+
+    /**
      * Deletes all chat images associated with a given chatId tag.
      */
     public async deleteChatImages(chatId: number): Promise<void> {
