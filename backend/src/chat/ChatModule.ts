@@ -10,6 +10,7 @@ import { ChatRepo } from './services/ChatRepo';
 import { AuthModule } from 'auth/AuthModule';
 import { UserModule } from 'user/UserModule';
 import { ChatController } from './ChatController';
+import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ChatController } from './ChatController';
     ]),
     AuthModule,
     UserModule,
+    UserManagementModule,
   ],
   controllers: [
     ChatController,

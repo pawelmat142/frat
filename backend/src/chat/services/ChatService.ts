@@ -1,22 +1,51 @@
 /** Created by Pawel Malek **/
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ChatRepo } from './ChatRepo';
 import { ChatEntity } from '../model/ChatEntity';
 import { ChatI, ChatTypes, ChatMessageI } from '@shared/interfaces/ChatI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { UserService } from 'user/services/UserService';
+import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
 import { ApiResponse } from '@shared/dto/dtos';
 import { AvatarRef } from '@shared/interfaces/UserI';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Injectable()
-export class ChatService {
+export class ChatService implements OnModuleInit, OnModuleDestroy {
 
   private readonly logger = new Logger(this.constructor.name);
+
+  private readonly subscription = new Subscription();
 
   constructor(
     private readonly chatRepo: ChatRepo,
     private readonly userService: UserService,
+    private readonly cloudinaryService: CloudinaryService,
   ) { }
+
+  onModuleInit() {
+    this.startSubscription();
+  }
+
+  onModuleDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  private startSubscription() {
+    this.subscription.add(
+      this.userService.userDeletedEvent.subscribe(async (user) => {
+        if (user) {
+try {
+            const chats = await this.chatRepo.getUserChatsWithoutJoins(user.uid);
+            await Promise.all(chats.map(chat => this.chatRepo.deleteChat(chat.chatId)));
+            this.logger.log(`Deleted ${chats.length} chats for deleted user ${user.uid}`);
+          } catch (error) {
+            this.logger.error(`Error deleting chats for user ${user.uid}`, error);
+          }
+        }
+      })
+    );
+  }
 
   async getOrCreateDirectChat(initiatorUid: string, recipientUid: string): Promise<ChatI> {
     // Validate recipient exists
@@ -122,6 +151,9 @@ export class ChatService {
     // Usuń wszystkie wiadomości z chatu
     await this.chatRepo.deleteAllMessagesFromChat(chatId);
     await this.chatRepo.updateLatestMessageContent(chatId, null);
+    this.cloudinaryService.deleteChatImages(chatId).catch(err =>
+      this.logger.error(`Failed to delete Cloudinary images for chat ${chatId}`, err)
+    );
     this.logger.log(`User ${uid} cleaned chat history for chat ${chatId}`);
     return this.findChat(chatId);
   }
@@ -144,8 +176,11 @@ export class ChatService {
 
   async deleteChat(uid: string, chatId: number): Promise<ApiResponse> {
     await this.validateMembership(uid, chatId);
-    // Delete chat itself
+    // Delete chat itself (cascades to members and messages in DB)
     await this.chatRepo.deleteChat(chatId);
+    this.cloudinaryService.deleteChatImages(chatId).catch(err =>
+      this.logger.error(`Failed to delete Cloudinary images for chat ${chatId}`, err)
+    );
     this.logger.log(`User ${uid} deleted chat ${chatId}`);
     return { success: true }
   }

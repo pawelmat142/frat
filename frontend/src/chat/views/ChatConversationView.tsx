@@ -344,13 +344,15 @@ const ChatConversationView: React.FC = () => {
     
     return (<>
         {!!chat && !!otherUser && (
-            <Header leftBtn={<div className="flex gap-2 items-center">
-                <HeaderBackBtn></HeaderBackBtn>
-                <UserItem user={otherUser} size={2.5}></UserItem>
-            </div>} menu={{
-                title: t('chat.chatMenu'),
-                items: prepareChatMenu(chat)
-            }}></Header>
+            <div className="sticky-header">
+                <Header leftBtn={<div className="flex gap-2 items-center">
+                    <HeaderBackBtn></HeaderBackBtn>
+                    <UserItem user={otherUser} size={2.5}></UserItem>
+                </div>} menu={{
+                    title: t('chat.chatMenu'),
+                    items: prepareChatMenu(chat)
+                }}></Header>
+            </div>
         )}
         <div className="chat-view">
 
