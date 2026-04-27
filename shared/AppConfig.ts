@@ -22,7 +22,9 @@ export const AppConfig = {
 
     UPLOAD_IMG_MAX_PX: 1080, // for mobile gallery
     UPLOAD_IMG_QUALITY: 0.82, // for mobile gallery, starting quality; reduced iteratively to hit target size
-    UPLOAD_IMG_TARGET_OUTPUT_SIZE_BYTES: 1 * 1024 * 1024, // 1 MB - max output file size after compression
+    UPLOAD_IMG_TARGET_OUTPUT_SIZE_BYTES: 1 * 1024 * 1024, //    1 MB - max output file size after compression
+
+    CHAT_MAX_IMAGE_STORAGE_MB: 500, // max total image storage per conversation
 
     AVATAR_PLACEHOLDER: "/assets/img/default-avatar.png",
 

@@ -19,6 +19,7 @@ import Header from "global/components/Header";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { CloudinaryService } from "user/services/CloudinaryService";
 import { FileUtil } from "global/utils/FileUtil";
+import { AppConfig } from "@shared/AppConfig";
 import { FaImage } from "react-icons/fa";
 import { AvatarRef } from "@shared/interfaces/UserI";
 
@@ -72,6 +73,23 @@ const ChatConversationView: React.FC = () => {
                     return { previewUrl: URL.createObjectURL(optimizedFile), optimizedFile };
                 })
             );
+
+            // TODO translacje 
+
+            const incomingBytes = newImages.reduce((sum, img) => sum + img.optimizedFile.size, 0);
+            const totalAfter = getExistingStorageBytes() + getPendingBytes() + incomingBytes;
+
+            if (totalAfter > MAX_STORAGE_BYTES) {
+                newImages.forEach(img => URL.revokeObjectURL(img.previewUrl));
+                confirm({
+                    title: t('chat.storageLimitTitle'),
+                    message: t('chat.storageLimitMessage', { limit: AppConfig.CHAT_MAX_IMAGE_STORAGE_MB }),
+                    confirmText: 'common.ok',
+                    cancelText: 'common.cancel',
+                });
+                return;
+            }
+
             setPendingImages(prev => [...prev, ...newImages]);
         } catch (error) {
             toast.error(t('chat.error.imageOptimizationFailed'));
@@ -112,6 +130,16 @@ const ChatConversationView: React.FC = () => {
 
     const otherUser = getOtherMember();
     const confirm = useConfirm();
+
+    const MAX_STORAGE_BYTES = AppConfig.CHAT_MAX_IMAGE_STORAGE_MB * 1024 * 1024;
+
+    // Estimate total image bytes already stored in this chat.
+    // Each uploaded image was resized to at most UPLOAD_IMG_TARGET_OUTPUT_SIZE_BYTES.
+    const getExistingStorageBytes = () =>
+        messages.reduce((sum, msg) => sum + (msg.imageRefs?.length ?? 0) * AppConfig.UPLOAD_IMG_TARGET_OUTPUT_SIZE_BYTES, 0);
+
+    const getPendingBytes = () =>
+        pendingImages.reduce((sum, p) => sum + p.optimizedFile.size, 0);
 
     const blockedByMe = chat?.blockedByUid === me?.uid;
 
