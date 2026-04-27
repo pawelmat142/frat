@@ -11,3 +11,4 @@ sudo docker compose build --no-cache frontend
 
 # 5. Uruchom aplikację ponownie w tle
 sudo docker compose up -d
+sudo docker compose up -d

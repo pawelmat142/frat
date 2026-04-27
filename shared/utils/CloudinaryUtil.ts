@@ -4,6 +4,8 @@ export const CloudinaryTags = {
     AVATAR: 'avatar',
     TEMP: 'temp',
     WORKER_PROFILE: 'worker-profile',
+    CHAT: 'chat',
+    chatId: (chatId: string) => `chat-id:${chatId}`,
 } as const 
 
 export type CloudinaryTag = (typeof CloudinaryTags)[keyof typeof CloudinaryTags];

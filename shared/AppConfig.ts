@@ -18,7 +18,12 @@ export const AppConfig = {
     FAB_BTN_ICON_SIZE: 28,
 
     UPLOAD_IMG_ALLOWED_EXTENSIONS: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
-    UPLOAD_IMG_MAX_SIZE_MB: 5,
+    UPLOAD_IMG_MAX_SIZE_MB: 50, // input limit - accept large files, they will be compressed on output
+
+    UPLOAD_IMG_MAX_PX: 1080, // for mobile gallery
+    UPLOAD_IMG_QUALITY: 0.82, // for mobile gallery, starting quality; reduced iteratively to hit target size
+    UPLOAD_IMG_TARGET_OUTPUT_SIZE_BYTES: 1 * 1024 * 1024, // 1 MB - max output file size after compression
+
     AVATAR_PLACEHOLDER: "/assets/img/default-avatar.png",
 
     ROUTER_ANIMATION_DURATION: 150, // ms
