@@ -82,4 +82,21 @@ export const CloudinaryService = {
         return UserManagementService.updateAvatar(avatarRef);
     },
 
+    /**
+     * Uploads a chat image with optional compression
+     * @param file - The image file to upload
+     * @param chatId - Chat ID for organizing files and tagging
+     * @returns Promise with the AvatarRef (url + publicId)
+     */
+    uploadChatImage: async (file: File, chatId: number): Promise<AvatarRef> => {
+        const resizedFile = await FileUtil.resizeForMobile(file);
+        const tags = [
+            CloudinaryTags.CHAT,
+            CloudinaryTags.CHAT_IMAGE,
+            CloudinaryTags.chatId(String(chatId)),
+        ];
+        const folder = `${CloudinaryFolderNames.CHAT_IMAGES}/${chatId}`;
+        return CloudinaryService.uploadImage(resizedFile, folder, tags);
+    },
+
 }

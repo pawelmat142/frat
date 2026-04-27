@@ -1,4 +1,4 @@
-import { UserI } from "./UserI";
+import { AvatarRef, UserI } from "./UserI";
 
 export interface ChatI {
     chatId: number;
@@ -31,12 +31,14 @@ export interface ChatMessageI {
     chatId: number;
     senderUid: string;
     content: string;
+    imageRefs?: AvatarRef[] | null;
     createdAt: Date;
     readAt: Date | null;
 }
 
 export const MessageTypes = {
     TEXT: 'TEXT',
+    IMAGE: 'IMAGE',
 } as const
 export type MessageType = typeof MessageTypes[keyof typeof MessageTypes];
 
@@ -63,6 +65,7 @@ export type ChatEvent = typeof ChatEvents[keyof typeof ChatEvents];
 export interface SendMessageDto {
     chatId: number;
     content: string;
+    imageRefs?: AvatarRef[];
 }
 
 export interface SendMessageResponse {

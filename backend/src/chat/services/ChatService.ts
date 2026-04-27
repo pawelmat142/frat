@@ -6,6 +6,7 @@ import { ChatI, ChatTypes, ChatMessageI } from '@shared/interfaces/ChatI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { UserService } from 'user/services/UserService';
 import { ApiResponse } from '@shared/dto/dtos';
+import { AvatarRef } from '@shared/interfaces/UserI';
 
 @Injectable()
 export class ChatService {
@@ -70,13 +71,14 @@ export class ChatService {
     return this.chatRepo.isMember(chatId, uid);
   }
 
-  async createMessage(chatId: number, senderUid: string, content: string): Promise<ChatMessageI> {
-    if (!content?.trim()) {
+  async createMessage(chatId: number, senderUid: string, content: string, imageRefs?: AvatarRef[]): Promise<ChatMessageI> {
+    if (!content?.trim() && !imageRefs?.length) {
       throw new ToastException('chat.error.emptyMessage', this);
     }
 
-    const message = await this.chatRepo.createMessage(chatId, senderUid, content.trim());
-    await this.chatRepo.updateLatestMessageContent(chatId, message.content);
+    const message = await this.chatRepo.createMessage(chatId, senderUid, content.trim(), imageRefs);
+    const latestContent = message.imageRefs?.length ? (message.content || '📷 Image') : message.content;
+    await this.chatRepo.updateLatestMessageContent(chatId, latestContent);
     // Inkrementuj unreadCount dla wszystkich poza nadawcą i onlineUids
     await this.chatRepo.incrementUnreadForMembersExceptSender(chatId, senderUid);
     return message;

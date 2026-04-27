@@ -6,7 +6,8 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ChatEntity } from '../model/ChatEntity';
 import { ChatMemberEntity } from '../model/ChatMemberEntity';
 import { ChatMessageEntity } from '../model/ChatMessageEntity';
-import { ChatI, ChatMemberStatuses } from '@shared/interfaces/ChatI';
+import { ChatI, ChatMemberStatuses, MessageTypes } from '@shared/interfaces/ChatI';
+import { AvatarRef } from '@shared/interfaces/UserI';
 
 @Injectable()
 export class ChatRepo {
@@ -98,11 +99,18 @@ export class ChatRepo {
   }
 
   // Message operations
-  async createMessage(chatId: number, senderUid: string, content: string): Promise<ChatMessageEntity> {
+  async createMessage(
+    chatId: number,
+    senderUid: string,
+    content: string,
+    imageRefs?: AvatarRef[],
+  ): Promise<ChatMessageEntity> {
     const message = this.messageRepository.create({
       chatId,
       senderUid,
       content,
+      type: imageRefs?.length ? MessageTypes.IMAGE : MessageTypes.TEXT,
+      imageRefs: imageRefs?.length ? imageRefs : null,
     });
     return this.messageRepository.save(message);
   }

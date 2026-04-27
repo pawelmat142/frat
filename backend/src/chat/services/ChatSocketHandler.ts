@@ -48,7 +48,7 @@ export class ChatSocketHandler implements SocketHandler, OnModuleInit {
   }
 
   private async handleSendMessage(socket: AuthenticatedSocket, data: SendMessageDto): Promise<SendMessageResponse> {
-    const { chatId, content } = data;
+    const { chatId, content, imageRefs } = data;
     const senderUid = socket.user.uid;
 
     this.logger.warn(`Received message from user ${senderUid} to chat ${chatId}`);
@@ -58,7 +58,7 @@ export class ChatSocketHandler implements SocketHandler, OnModuleInit {
         return { error: 'Not a member of this chat' };
       }
 
-      const message = await this.chatService.createMessage(chatId, senderUid, content);
+      const message = await this.chatService.createMessage(chatId, senderUid, content, imageRefs);
 
       const chat = await this.chatService.findChat(chatId);
       this.notifyAboutRefreshChat(chat);

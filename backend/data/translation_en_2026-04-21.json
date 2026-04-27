@@ -38,7 +38,8 @@
       "deleteChatConfirm": "Are you sure you want to delete this chat? This action cannot be undone.",
       "deleteChatSuccess": "Chat deleted successfully",
       "unblockUserConfirm": "Are you sure you want to unblock this user? You will be able to send and receive messages from them again.",
-      "unblockUserSuccess": "User unblocked successfully"
+      "unblockUserSuccess": "User unblocked successfully",
+      "imageOptimizationFailed": "Failed to optimize images, please try again later."
     },
     "lang": {
       "select": "Select Language",

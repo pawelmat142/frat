@@ -38,7 +38,8 @@
       "deleteChatConfirm": "Czy na pewno chcesz usunąć ten czat? Tej akcji nie można cofnąć.",
       "deleteChatSuccess": "Czat został pomyślnie usunięty",
       "unblockUserConfirm": "Czy na pewno chcesz odblokować tego użytkownika? Będziesz mógł ponownie wysyłać i odbierać od niego wiadomości.",
-      "unblockUserSuccess": "Użytkownik został pomyślnie odblokowany"
+      "unblockUserSuccess": "Użytkownik został pomyślnie odblokowany",
+      "imageOptimizationFailed": "Nie udało się zoptymalizować obrazów, spróbuj ponownie później."
     },
     "lang": {
       "select": "Wybierz język",
