@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { TrainingProviderProfileI } from "@shared/interfaces/TrainingI";
+import { ProviderFormData, TrainingProviderProfileI } from "@shared/interfaces/TrainingI";
 import { TrainingService } from "training/services/TrainingService";
 import { Path } from "../../../path";
 import { useGlobalContext } from "global/providers/GlobalProvider";
@@ -18,16 +18,9 @@ import CountryAndLocationSelector, { LocationFilterValue } from "global/componen
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import { useUserContext } from "user/UserProvider";
+import PhoneNumberFloatingInput from "global/components/controls/PhoneNumberFloatingInput";
 
-interface ProviderFormData {
-    companyName: string;
-    description?: string;
-    website?: string;
-    contactEmail?: string;
-    locationCountry: string;
-    geocodedPosition?: GeocodedPosition | null;
-}
-
+// TODO required validation for geo position not working
 const TrainingProviderFormView: React.FC = () => {
 
     const { t } = useTranslation();
@@ -47,18 +40,20 @@ const TrainingProviderFormView: React.FC = () => {
             description: '',
             website: '',
             contactEmail: '',
+            phoneNumber: { prefix: "+00", number: "" },
             locationCountry: '',
             geocodedPosition: null,
         }
     });
+
     const required = FormValidator.required(t);
+    f.register("geocodedPosition", required);
+    f.register("locationCountry", required);
 
     useEffect(() => {
         const init = async () => {
             try {
                 setLoading(true);
-                // TODO
-                // const profile = await TrainingService.getMyProviderProfile();
                 if (!trainingProvider) {
                     setIsEditMode(false);
                     return;
@@ -70,6 +65,11 @@ const TrainingProviderFormView: React.FC = () => {
                     website: trainingProvider.website ?? '',
                     contactEmail: trainingProvider.contactEmail ?? '',
                     locationCountry: trainingProvider.locationCountry,
+                    geocodedPosition: trainingProvider.point ? PositionUtil.fromGeoPoint(trainingProvider.point) : null,
+                    phoneNumber: trainingProvider.phoneNumber ? {
+                        prefix: trainingProvider.phoneNumber.prefix,
+                        number: trainingProvider.phoneNumber.number
+                    } : { prefix: "+00", number: "" }
                 });
             } finally {
                 setLoading(false);
@@ -79,27 +79,15 @@ const TrainingProviderFormView: React.FC = () => {
     }, []);
 
     const onSubmit = async (data: ProviderFormData) => {
-        const point = data.geocodedPosition
-            ? PositionUtil.toGeoPoint({ lat: data.geocodedPosition.lat, lng: data.geocodedPosition.lng })
-            : undefined;
-
-        const payload: Partial<TrainingProviderProfileI> = {
-            companyName: data.companyName,
-            description: data.description,
-            website: data.website,
-            contactEmail: data.contactEmail,
-            locationCountry: data.locationCountry,
-            displayAddress: data.geocodedPosition?.fullAddress,
-            point: point as any,
-        };
-
         try {
             setSaving(true);
             if (isEditMode) {
-                await TrainingService.updateProviderProfile(payload);
+                const result = await TrainingService.updateProviderProfile(data);
+                userCtx.updateMeCtx({ ...userCtx.meCtx!, trainingProvider: result });
                 toast.success(t("training.provider.updateSuccess"));
             } else {
-                await TrainingService.createProviderProfile(payload);
+                const result = await TrainingService.createProviderProfile(data);
+                userCtx.updateMeCtx({ ...userCtx.meCtx!, trainingProvider: result });
                 toast.success(t("training.provider.createSuccess"));
             }
             navigate(Path.MY_TRAININGS);
@@ -112,10 +100,11 @@ const TrainingProviderFormView: React.FC = () => {
 
     if (loading) return <Loading />;
 
+    console.log(f.formState.errors.geocodedPosition);
+
     return (
         <>
             <Header
-                onBack={() => navigate(Path.MY_TRAININGS)}
                 title={isEditMode ? t("training.provider.editTitle") : t("training.provider.createTitle")}
             />
             <div className="form-view flex flex-col primary-bg">
@@ -141,12 +130,49 @@ const TrainingProviderFormView: React.FC = () => {
                     <Controller
                         name="description"
                         control={f.control}
-                        render={({ field }) => (
+                        rules={required}
+                        render={({ field, fieldState }) => (
                             <FloatingTextarea
                                 id="description"
                                 label={t("training.provider.description")}
                                 value={field.value ?? null}
                                 onChange={field.onChange}
+                                error={fieldState.error}
+                                required
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="contactEmail"
+                        control={f.control}
+                        rules={required}
+                        render={({ field, fieldState }) => (
+                            <FloatingInput
+                                id="contactEmail"
+                                label={t("training.provider.contactEmail")}
+                                value={field.value ?? null}
+                                onChange={field.onChange}
+                                error={fieldState.error}
+                                required
+                            />
+                        )}
+                    ></Controller>
+
+                    <Controller
+                        name="phoneNumber"
+                        control={f.control}
+                        rules={{
+                            ...required,
+                            ...FormValidator.phoneNumber(t)
+                        }}
+                        render={({ field, fieldState }) => (
+                            <PhoneNumberFloatingInput
+                                {...field}
+                                label={t("employeeProfile.form.phoneNumber")}
+                                fullWidth
+                                required
+                                error={fieldState.error}
                             />
                         )}
                     />
@@ -158,20 +184,6 @@ const TrainingProviderFormView: React.FC = () => {
                             <FloatingInput
                                 id="website"
                                 label={t("training.provider.website")}
-                                value={field.value ?? null}
-                                onChange={field.onChange}
-                            />
-                        )}
-                    />
-
-                    <Controller
-                        name="contactEmail"
-                        control={f.control}
-                        render={({ field }) => (
-                            <FloatingInput
-                                id="contactEmail"
-                                label={t("training.provider.contactEmail")}
-                                type="email"
                                 value={field.value ?? null}
                                 onChange={field.onChange}
                             />
@@ -197,8 +209,12 @@ const TrainingProviderFormView: React.FC = () => {
                                             countryField.onChange(val.locationCountry);
                                             posField.onChange(val.geocodedPosition);
                                         }}
-                                        errors={{ locationCountry: fieldState.error }}
-                                        countryRequired
+                                        config={{ locationOption: 'searchbar', showRadiusSlider: false }}
+                                        errors={{ 
+                                            locationCountry: fieldState.error, 
+                                            geocodedPosition: f.formState.errors.geocodedPosition 
+                                        }}
+                                        positionRequired
                                     />
                                 )}
                             />

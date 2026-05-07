@@ -85,7 +85,6 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                             value={displayValue}
                             className={inputClass}
                             disabled={disabled}
-                            required={required}
                             readOnly
                             placeholder=" "
                         />

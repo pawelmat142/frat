@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { TrainingProviderProfileI, TrainingProviderStatuses } from '@shared/interfaces/TrainingI';
+import { ProviderFormData, TrainingProviderProfileI, TrainingProviderStatuses } from '@shared/interfaces/TrainingI';
 import { UserI } from '@shared/interfaces/UserI';
 import { TrainingProviderEntity } from '../model/TrainingProviderEntity';
 import { TrainingProviderRepo } from './TrainingProviderRepo';
@@ -19,14 +19,14 @@ export class TrainingProviderService {
         return profile;
     }
 
-    async createProfile(user: UserI, data: Partial<TrainingProviderEntity>): Promise<TrainingProviderProfileI> {
+    async createProfile(user: UserI, data: ProviderFormData): Promise<TrainingProviderProfileI> {
         const existing = await this.providerRepo.getByUid(user.uid);
         if (existing) throw new ConflictException('Training provider profile already exists for this user');
 
         return this.providerRepo.create({ ...data, uid: user.uid, status: TrainingProviderStatuses.ACTIVE });
     }
 
-    async updateProfile(user: UserI, data: Partial<TrainingProviderEntity>): Promise<TrainingProviderProfileI> {
+    async updateProfile(user: UserI, data: ProviderFormData): Promise<TrainingProviderProfileI> {
         const profile = await this.providerRepo.getByUid(user.uid);
         if (!profile) throw new NotFoundException('Training provider profile not found');
 

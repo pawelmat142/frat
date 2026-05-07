@@ -40,6 +40,7 @@ interface Props {
     className?: string;
     radiusSteps?: number[];
     countryRequired?: boolean;
+    positionRequired?: boolean;
     config?: Config;
     loadingInput?: boolean;
 }
@@ -51,6 +52,7 @@ const CountryAndLocationSelector: React.FC<Props> = ({
     className = '',
     radiusSteps = [...AppConfig.RADIUS_STEPS_KM],
     countryRequired = true,
+    positionRequired = false,
     config = defaultConfig,
     loadingInput = false
 }) => {
@@ -153,6 +155,7 @@ const CountryAndLocationSelector: React.FC<Props> = ({
                         displayValue={value.geocodedPosition?.fullAddress || ''}
                         label={t('employeeProfile.form.city')}
                         error={errors?.geocodedPosition}
+                        required={positionRequired}
                         countryRestriction={value.locationCountry || 'pl'}
                         disabled={!value.locationCountry}
                         onSelect={handleCitySelect}
@@ -166,7 +169,7 @@ const CountryAndLocationSelector: React.FC<Props> = ({
                         value={value.geocodedPosition}
                         initialPosition={preparePosition()}
                         disabled={!value.locationCountry}
-                        required
+                        required={positionRequired}
                         onChange={(p) => {
                             autofillCountryByPosition(p);
                         }}

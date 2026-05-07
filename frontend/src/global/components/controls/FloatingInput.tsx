@@ -93,7 +93,6 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
                             }}
                             className={`${myClass}${icon ? ' pr-10' : ''}`}
                             disabled={disabled}
-                            required={required}
                             autoComplete={autoComplete}
                             placeholder=" "
                         />

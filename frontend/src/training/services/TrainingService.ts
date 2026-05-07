@@ -1,4 +1,4 @@
-import { TrainingProviderProfileI, TrainingSearchFilters, TrainingSearchResponse, TrainingI, TrainingSessionI, TrainingWithNextSession } from "@shared/interfaces/TrainingI";
+import { TrainingProviderProfileI, TrainingSearchFilters, TrainingSearchResponse, TrainingI, TrainingSessionI, TrainingWithNextSession, ProviderFormData } from "@shared/interfaces/TrainingI";
 import { httpClient } from "global/services/http";
 
 export const TrainingService = {
@@ -57,11 +57,11 @@ export const TrainingService = {
         return httpClient.get<TrainingProviderProfileI>(`/training-providers/${providerId}`);
     },
 
-    createProviderProfile(data: Partial<TrainingProviderProfileI>): Promise<TrainingProviderProfileI> {
+    createProviderProfile(data: ProviderFormData): Promise<TrainingProviderProfileI> {
         return httpClient.post<TrainingProviderProfileI>(`/training-providers`, data);
     },
 
-    updateProviderProfile(data: Partial<TrainingProviderProfileI>): Promise<TrainingProviderProfileI> {
+    updateProviderProfile(data: ProviderFormData): Promise<TrainingProviderProfileI> {
         return httpClient.patch<TrainingProviderProfileI>(`/training-providers/me`, data);
     },
 

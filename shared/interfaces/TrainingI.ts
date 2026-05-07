@@ -1,3 +1,4 @@
+import { GeocodedPosition } from './MapsInterfaces';
 import { AvatarRef } from './UserI';
 import { ParsedPhoneNumber, Point } from './WorkerI';
 
@@ -113,4 +114,14 @@ export interface TrainingSearchResponse {
 
 export interface TrainingWithNextSession extends TrainingI {
     nextSession?: TrainingSessionI;
+}
+
+export interface ProviderFormData {
+    companyName: string;
+    description: string;
+    website?: string;
+    contactEmail: string;
+    phoneNumber: ParsedPhoneNumber;
+    locationCountry: string;
+    geocodedPosition?: GeocodedPosition | null;
 }

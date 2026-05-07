@@ -9,6 +9,7 @@ import { UserI, UserRoles } from '@shared/interfaces/UserI';
 import { Param } from '@nestjs/common';
 import { TrainingProviderEntity } from './model/TrainingProviderEntity';
 import { TrainingProviderService } from './services/TrainingProviderService';
+import { ProviderFormData } from '@shared/interfaces/TrainingI';
 
 @Controller('api/training-providers')
 @UseInterceptors(LogInterceptor)
@@ -28,7 +29,7 @@ export class TrainingProviderController {
     @Serialize(TrainingProviderEntity)
     createProfile(
         @CurrentUser() user: UserI,
-        @Body() body: Partial<TrainingProviderEntity>,
+        @Body() body: ProviderFormData,
     ) {
         return this.providerService.createProfile(user, body);
     }
@@ -39,7 +40,7 @@ export class TrainingProviderController {
     @Serialize(TrainingProviderEntity)
     updateProfile(
         @CurrentUser() user: UserI,
-        @Body() body: Partial<TrainingProviderEntity>,
+        @Body() body: ProviderFormData,
     ) {
         return this.providerService.updateProfile(user, body);
     }

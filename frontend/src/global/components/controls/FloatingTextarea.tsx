@@ -97,7 +97,6 @@ const FloatingTextarea = forwardRef<HTMLTextAreaElement, FloatingTextareaProps>(
                             onBlur={() => setIsFocused(false)}
                             className={`${myClass}${icon ? ' pr-10' : ''} w-full px-3 outline-none resize-none`}
                             disabled={disabled}
-                            required={required}
                             autoComplete={autoComplete}
                             rows={initialRows}
                             placeholder=" "

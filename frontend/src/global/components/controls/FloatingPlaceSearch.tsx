@@ -281,7 +281,6 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
                             onBlur={handleBlur}
                             className={`${inputClass}${' pr-10'}`}
                             disabled={disabled}
-                            required={required}
                             placeholder=" "
                             autoComplete="off"
                         />

@@ -154,7 +154,6 @@ const PhoneNumberFloatingInput = forwardRef<HTMLInputElement, PhoneNumberFloatin
                             onBlur={() => setIsFocused(false)}
                             className="pp-phone-number-input"
                             disabled={disabled}
-                            required={required}
                             maxLength={MAX_PHONE_DIGITS}
                             autoComplete={autoComplete}
                             placeholder=" "
