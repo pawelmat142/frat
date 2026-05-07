@@ -69,8 +69,10 @@ export type TrainingStatus = typeof TrainingStatuses[keyof typeof TrainingStatus
 export interface TrainingSessionI {
     sessionId: number;
     trainingId: number;
-    startDate: Date;
-    endDate?: Date;
+    /** Local date string in YYYY-MM-DD format */
+    startDate: string;
+    /** Local date string in YYYY-MM-DD format */
+    endDate?: string;
     /** Override training location for a specific session */
     locationCountry?: string;
     displayAddress?: string;

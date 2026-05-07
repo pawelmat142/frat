@@ -1,15 +1,7 @@
 import { TrainingSessionI, TrainingSessionStatus, TrainingSessionStatuses } from '@shared/interfaces/TrainingI';
 import { Point } from '@shared/interfaces/WorkerI';
 import { Expose } from 'class-transformer';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, ValueTransformer } from 'typeorm';
-
-const dateTransformer: ValueTransformer = {
-    to: (value?: Date | null) => value ?? null,
-    from: (value: any) => {
-        if (!value) return value;
-        return value instanceof Date ? value : new Date(value);
-    },
-};
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('jh_training_sessions')
 export class TrainingSessionEntity implements TrainingSessionI {
@@ -22,13 +14,15 @@ export class TrainingSessionEntity implements TrainingSessionI {
     @Expose()
     trainingId: number;
 
-    @Column({ name: 'start_date', type: 'timestamptz', transformer: dateTransformer })
+    /** Local date string in YYYY-MM-DD format */
+    @Column({ name: 'start_date', type: 'date' })
     @Expose()
-    startDate: Date;
+    startDate: string;
 
-    @Column({ name: 'end_date', type: 'timestamptz', nullable: true, transformer: dateTransformer })
+    /** Local date string in YYYY-MM-DD format */
+    @Column({ name: 'end_date', type: 'date', nullable: true })
     @Expose()
-    endDate?: Date;
+    endDate?: string;
 
     @Column({ name: 'location_country', nullable: true })
     @Expose()

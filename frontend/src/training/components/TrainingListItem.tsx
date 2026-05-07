@@ -7,6 +7,7 @@ import ListItem from "global/components/ListItem";
 import { Ico } from "global/icon.def";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
+import { Dictionaries } from "@shared/def/dictionary.def";
 
 interface Props {
     training: TrainingWithNextSession;
@@ -22,7 +23,7 @@ const TrainingListItem: React.FC<Props> = ({ training, first, last, rightSection
     const { t } = useTranslation();
 
     // Always use translation key – CERTIFICATES dictionary is loaded lazily per feature
-    const certLabel = t(DictionaryUtil.getTranslationKey('CERTIFICATES', training.certificateCode));
+    const certLabel = t(DictionaryUtil.getTranslationKey(Dictionaries.CERTIFICATES, training.certificateCode));
 
     const topLeft = (
         <div className="font-medium truncate">

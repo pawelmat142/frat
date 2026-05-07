@@ -49,6 +49,8 @@ import TrainingFormView from 'training/views/form/TrainingFormView';
 import MyTrainingsList from 'training/views/MyTrainingsList';
 import TrainingProviderFormView from 'training/views/provider/TrainingProviderFormView';
 
+const trainingAccess = [UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.SUPERADMIN]
+
 const App: React.FC = () => {
     const location = useLocation();
     useRippleEffect();
@@ -101,10 +103,10 @@ const App: React.FC = () => {
                         </TrainingSearchProvider>
                     </PageWrapper>
                 } />
-                <Route path={Path.TRAINING_FORM} element={<PageWrapper isProtected><TrainingFormView /></PageWrapper>} />
-                <Route path={Path.TRAINING_FORM_EDIT} element={<PageWrapper isProtected><TrainingFormView /></PageWrapper>} />
-                <Route path={Path.MY_TRAININGS} element={<PageWrapper isProtected><MyTrainingsList /></PageWrapper>} />
-                <Route path={Path.TRAINING_PROVIDER_FORM} element={<PageWrapper isProtected><TrainingProviderFormView /></PageWrapper>} />
+                <Route path={Path.TRAINING_FORM} element={<PageWrapper roles={trainingAccess}><TrainingFormView /></PageWrapper>} />
+                <Route path={Path.TRAINING_FORM_EDIT} element={<PageWrapper roles={trainingAccess}><TrainingFormView /></PageWrapper>} />
+                <Route path={Path.MY_TRAININGS} element={<PageWrapper roles={trainingAccess}><MyTrainingsList /></PageWrapper>} />
+                <Route path={Path.TRAINING_PROVIDER_FORM} element={<PageWrapper roles={trainingAccess}><TrainingProviderFormView /></PageWrapper>} />
 
                 <Route path={Path.SIGN_IN} element={<PageWrapper><SignInPage /></PageWrapper>} />
                 <Route path={Path.SIGN_UP} element={<PageWrapper><SignUpPage /></PageWrapper>} />

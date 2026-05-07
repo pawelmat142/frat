@@ -10,8 +10,9 @@ import Flags from "global/components/Flags";
 import { useNavigate } from "react-router-dom";
 import { useWorkersSearch } from "./WorkersSearchProvider";
 import { DateUtil } from "@shared/utils/DateUtil";
-import { Dictionaries, DictionaryUtil } from "@shared/utils/DictionaryUtil";
+import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import CategoriesChips from "global/components/chips/CategoriesChips";
+import { Dictionaries } from "@shared/def/dictionary.def";
 
 const WorkersSearchFilters: React.FC = () => {
 

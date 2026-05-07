@@ -34,9 +34,3 @@ export abstract class DictionaryUtil {
     };
 
 }
-
-export const Dictionaries = {
-    LANGUAGES: 'LANGUAGES',
-    WORK_CATEGORY: 'WORK_CATEGORY',
-    CERTIFICATES: 'CERTIFICATES',
-} as const

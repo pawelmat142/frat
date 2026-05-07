@@ -3,7 +3,7 @@ import { DictionaryService } from "global/services/DictionaryService"
 import React from "react"
 import { createContext, useRef, useState } from "react"
 import { useIsDesktop } from "global/hooks/isMobile";
-import { Dictionaries } from "@shared/utils/DictionaryUtil";
+import { Dictionaries } from "@shared/def/dictionary.def";
 
 interface GlobalContextType {
     isDesktop: boolean;

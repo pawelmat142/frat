@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import EmailVerificationWarning from "./EmailVerificationWarning";
 import { usePwaInstall } from "global/hooks/usePwaInstall";
 import { Util } from "@shared/utils/util";
-import { UserRoles } from "@shared/interfaces/UserI";
+import { UserRole, UserRoles } from "@shared/interfaces/UserI";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import RecentViewedWorkers from "./RecentViewedWorkers";
 import RecentViewedOffers from "./RecentViewedOffers";
@@ -52,6 +52,8 @@ const DashboardView: React.FC = () => {
             AuthService.logout();
         }
     }
+
+    const trainingAccess = Util.hasPermission([UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.SUPERADMIN], me)
 
     const menuActions: MenuItem[] = [{
         label: "Admin panel",
@@ -102,6 +104,7 @@ const DashboardView: React.FC = () => {
         label: t("user.addWorkerProfile"),
         onClick: () => navigate(Path.WORKER_FORM)
     }, {
+        if: trainingAccess,
         icon: Ico.TRAINING,
         label: t("user.myTrainings"),
         onClick: () => navigate(Path.MY_TRAININGS)

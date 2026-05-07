@@ -1,4 +1,5 @@
-import { Dictionaries, DictionaryUtil } from "@shared/utils/DictionaryUtil";
+import { Dictionaries } from "@shared/def/dictionary.def";
+import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import { Util } from "@shared/utils/util";
 import { useTranslation } from "react-i18next";
 
