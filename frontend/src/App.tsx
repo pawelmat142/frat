@@ -43,6 +43,11 @@ import TranslationItemForm from 'admin/views/translations/TranslationItemForm';
 import SettingsView from 'user/views/SettingsView';
 import DictionaryElementForm from 'admin/views/dictionaries/DictionaryElementForm';
 import MyListedItemsView from 'user/views/MyListedItemsView';
+import TrainingSearchView from 'training/views/search/TrainingSearchView';
+import TrainingSearchProvider from 'training/views/search/TrainingSearchProvider';
+import TrainingFormView from 'training/views/form/TrainingFormView';
+import MyTrainingsList from 'training/views/MyTrainingsList';
+import TrainingProviderFormView from 'training/views/provider/TrainingProviderFormView';
 
 const App: React.FC = () => {
     const location = useLocation();
@@ -87,6 +92,19 @@ const App: React.FC = () => {
                 {/* unprotected */}
                 <Route path={Path.OFFER} element={<PageWrapper><OfferView/></PageWrapper>} />
                 <Route path={Path.OFFERS_SEARCH} element={<PageWrapper><OfferSearchView/></PageWrapper>} />
+
+                {/* TRAININGS */}
+                <Route path={Path.TRAININGS_SEARCH} element={
+                    <PageWrapper>
+                        <TrainingSearchProvider>
+                            <TrainingSearchView />
+                        </TrainingSearchProvider>
+                    </PageWrapper>
+                } />
+                <Route path={Path.TRAINING_FORM} element={<PageWrapper isProtected><TrainingFormView /></PageWrapper>} />
+                <Route path={Path.TRAINING_FORM_EDIT} element={<PageWrapper isProtected><TrainingFormView /></PageWrapper>} />
+                <Route path={Path.MY_TRAININGS} element={<PageWrapper isProtected><MyTrainingsList /></PageWrapper>} />
+                <Route path={Path.TRAINING_PROVIDER_FORM} element={<PageWrapper isProtected><TrainingProviderFormView /></PageWrapper>} />
 
                 <Route path={Path.SIGN_IN} element={<PageWrapper><SignInPage /></PageWrapper>} />
                 <Route path={Path.SIGN_UP} element={<PageWrapper><SignUpPage /></PageWrapper>} />

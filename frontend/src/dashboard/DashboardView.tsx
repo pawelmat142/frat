@@ -35,7 +35,7 @@ const DashboardView: React.FC = () => {
     const confirm = useConfirm()
     const { isInstallable, install } = usePwaInstall();
     const { isDesktop } = useGlobalContext();
-    
+
     const me = userCtx.me;
 
     if (userCtx.loading || !me) {
@@ -101,6 +101,10 @@ const DashboardView: React.FC = () => {
         icon: Ico.ADD_USER,
         label: t("user.addWorkerProfile"),
         onClick: () => navigate(Path.WORKER_FORM)
+    }, {
+        icon: Ico.TRAINING,
+        label: t("user.myTrainings"),
+        onClick: () => navigate(Path.MY_TRAININGS)
     }, {
         label: t("common.settings"),
         icon: Ico.SETTINGS,
@@ -168,7 +172,7 @@ const DashboardView: React.FC = () => {
                 </div>);
             })}
         </div>
- 
+
         <MyListDashboard></MyListDashboard>
 
         <RecentViewedWorkers></RecentViewedWorkers>

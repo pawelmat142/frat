@@ -50,6 +50,14 @@ export abstract class Path {
     public static readonly ADMIN_EMPLOYEE_PROFILES = `${Path.ADMIN_PANEL}/workers`;
     public static readonly ADMIN_OFFERS = `${Path.ADMIN_PANEL}/offers`;
 
+    // TRAININGS
+    public static readonly TRAININGS_SEARCH = '/trainings-search';
+    public static readonly TRAINING = '/training/:trainingId';
+    public static readonly TRAINING_FORM = '/training-form';
+    public static readonly TRAINING_FORM_EDIT = '/training-form/:trainingId';
+    public static readonly MY_TRAININGS = '/my-trainings';
+    public static readonly TRAINING_PROVIDER_FORM = '/training-provider-form';
+
     public static getDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES}/${code}`;
     public static getEditDictionaryPath = (code: string) => `${Path.ADMIN_DICTIONARIES_EDIT.replace(':code', code)}`;
     public static getEditDictionaryElementPath = (code: string, elementCode: string) => `${Path.ADMIN_DICTIONARIES_EDIT_ELEMENT.replace(':code', code).replace(':elementCode', elementCode)}`;
@@ -64,4 +72,6 @@ export abstract class Path {
     public static getFriendsPath = (uid: string) => `${Path.FRIENDS.replace(':uid', uid)}`;
     public static getNotificationPath = (notificationId: string) => `${Path.NOTIFICATION.replace(':notificationId', `${notificationId}`)}`;
     public static getTranslationItemPath = (path: string) => `${Path.ADMIN_TRANSLATION_ITEM.replace(':path', path)}`;
+    public static getTrainingPath = (trainingId: number) => `${Path.TRAINING.replace(':trainingId', `${trainingId}`)}`;
+    public static getTrainingFormEditPath = (trainingId: number) => `${Path.TRAINING_FORM_EDIT.replace(':trainingId', `${trainingId}`)}`;
 }
