@@ -8,6 +8,7 @@ import { EntityInteractionService } from "entity-interaction/services/EntityInte
 import { FriendshipService } from "friends/services/FriendshipService";
 import { NotificationService } from "notification/services/NotificationService";
 import { OffersService } from "offer/services/OffersService";
+import { TrainingProviderService } from "training/services/TrainingProviderService";
 import { UserService } from "user/services/UserService";
 import { SettingsService } from "user/settings-module/services/SettingsService";
 import { UserListedItemService } from "user/user-listed-module/services/UserListedItemService";
@@ -24,6 +25,7 @@ export class UserContextService {
         private readonly chatService: ChatService,
         private readonly userListedItemService: UserListedItemService,
         private readonly entityInteractionService: EntityInteractionService,
+        private readonly trainingProviderService: TrainingProviderService
     ) { }
 
     public async getUserContext(user: UserI, uid: string): Promise<UserContext> {
@@ -51,6 +53,7 @@ export class UserContextService {
         const listedItems = await this.userListedItemService.listUserItems(user.uid, UserListedItemTypes.DEFAULT);
         const recentViewedWorkers = await this.getRecentViewedWorkersListedItems(user.uid);
         const recentViewedOffers = await this.getRecentViewedOffersListedItems(user.uid);
+        const trainingProvider = await this.trainingProviderService.getMyProfile(user);
 
         const meCtx: MeUserContext = {
             ...ctx,
@@ -59,7 +62,8 @@ export class UserContextService {
             chats,
             listedItems,
             recentViewedWorkers,
-            recentViewedOffers
+            recentViewedOffers,
+            trainingProvider
         }
         await this.userService.updateLastSeenAt(user.uid);
         return meCtx;

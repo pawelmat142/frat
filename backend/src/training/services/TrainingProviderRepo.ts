@@ -32,4 +32,12 @@ export class TrainingProviderRepo {
     save(entity: TrainingProviderProfileI): Promise<TrainingProviderEntity> {
         return this.repo.save(entity as TrainingProviderEntity);
     }
+
+    async delete(uid: string, providerId: number): Promise<void> {
+        const result = await this.repo.delete({ providerId, uid });
+        if (result.affected === 0) {
+            throw new Error('Training provider not found or does not belong to this user');
+        }
+        this.logger.log(`Deleted training provider: ${providerId} for uid: ${uid}`);
+    }
 }

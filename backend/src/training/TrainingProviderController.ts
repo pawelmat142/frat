@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
 import { Roles } from 'auth/decorators/RolesDecorator';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
@@ -15,14 +15,6 @@ import { TrainingProviderService } from './services/TrainingProviderService';
 export class TrainingProviderController {
 
     constructor(private readonly providerService: TrainingProviderService) {}
-
-    @Get('me')
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.SUPERADMIN)
-    @Serialize(TrainingProviderEntity)
-    getMyProfile(@CurrentUser() user: UserI) {
-        return this.providerService.getMyProfile(user);
-    }
 
     @Get(':providerId')
     @Serialize(TrainingProviderEntity)
@@ -50,5 +42,12 @@ export class TrainingProviderController {
         @Body() body: Partial<TrainingProviderEntity>,
     ) {
         return this.providerService.updateProfile(user, body);
+    }
+
+    @Delete()
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.SUPERADMIN)
+    deleteProfile(@CurrentUser() user: UserI) {
+        return this.providerService.deleteProfile(user);
     }
 }

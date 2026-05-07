@@ -43,4 +43,11 @@ export class TrainingProviderService {
         }
         return profile;
     }
+
+    async deleteProfile(user: UserI): Promise<void> {
+        const profile = await this.providerRepo.getByUid(user.uid);
+        if (!profile) throw new NotFoundException('Training provider profile not found');
+        
+        await this.providerRepo.delete(user.uid, profile.providerId);
+    }
 }

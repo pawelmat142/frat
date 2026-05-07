@@ -12,6 +12,7 @@ import { UserContextController } from './UserContextController';
 import { AuthModule } from 'auth/AuthModule';
 import { UserListedModule } from 'user/user-listed-module/UserListedModule';
 import { EntityInteractionModule } from 'entity-interaction/EntityInteractionModule';
+import { TrainingModule } from 'training/TrainingModule';
 
 @Module({
     imports: [
@@ -25,6 +26,7 @@ import { EntityInteractionModule } from 'entity-interaction/EntityInteractionMod
         ChatModule,
         UserListedModule,
         EntityInteractionModule,
+        TrainingModule,
     ],
     controllers: [
         UserContextController,

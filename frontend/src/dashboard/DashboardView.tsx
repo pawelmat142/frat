@@ -53,6 +53,7 @@ const DashboardView: React.FC = () => {
         }
     }
 
+    const trainingProvider = userCtx.meCtx?.trainingProvider;
     const trainingAccess = Util.hasPermission([UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.SUPERADMIN], me)
 
     const menuActions: MenuItem[] = [{
@@ -104,10 +105,16 @@ const DashboardView: React.FC = () => {
         label: t("user.addWorkerProfile"),
         onClick: () => navigate(Path.WORKER_FORM)
     }, {
-        if: trainingAccess,
+        // TODO translations
+        if: trainingAccess && !!trainingProvider,
         icon: Ico.TRAINING,
-        label: t("user.myTrainings"),
+        label: t("training.myTrainings"),
         onClick: () => navigate(Path.MY_TRAININGS)
+    }, {
+        if: trainingAccess && !trainingProvider,
+        icon: Ico.TRAINING,
+        label: t("training.provider.create"),
+        onClick: () => navigate(Path.TRAINING_PROVIDER_FORM)
     }, {
         label: t("common.settings"),
         icon: Ico.SETTINGS,

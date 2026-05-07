@@ -53,10 +53,6 @@ export const TrainingService = {
 
     // ─── Training Provider profile ────────────────────────────────────────────
 
-    getMyProviderProfile(): Promise<TrainingProviderProfileI> {
-        return httpClient.get<TrainingProviderProfileI>(`/training-providers/me`);
-    },
-
     getProviderProfile(providerId: number): Promise<TrainingProviderProfileI> {
         return httpClient.get<TrainingProviderProfileI>(`/training-providers/${providerId}`);
     },
@@ -68,4 +64,9 @@ export const TrainingService = {
     updateProviderProfile(data: Partial<TrainingProviderProfileI>): Promise<TrainingProviderProfileI> {
         return httpClient.patch<TrainingProviderProfileI>(`/training-providers/me`, data);
     },
-};
+
+    deleteProviderProfile(): Promise<void> {
+        return httpClient.delete<void>(`/training-providers`);
+    }
+}
+    

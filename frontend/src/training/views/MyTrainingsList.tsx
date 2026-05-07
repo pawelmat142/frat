@@ -13,21 +13,30 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { Ico } from "global/icon.def";
 import IconButton from "global/components/controls/IconButon";
 import ListItem from "global/components/ListItem";
+import { useUserContext } from "user/UserProvider";
+import { useConfirm } from "global/providers/PopupProvider";
 
+// TODO translations
 const MyTrainingsList: React.FC = () => {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
     const globalCtx = useGlobalContext();
+    const userCtx = useUserContext();
+    const confirm = useConfirm();
 
     const [trainings, setTrainings] = useState<TrainingI[]>([]);
     const [loading, setLoading] = useState(true);
-    const [providerExists, setProviderExists] = useState(true);
+    const [providerExists, setProviderExists] = useState(!!userCtx.meCtx?.trainingProvider);
+
+    const trainingProvider = userCtx.meCtx?.trainingProvider;
+    if (!trainingProvider) {
+        throw new Error("Training provider profile is required to access My Trainings List");
+    }
 
     useEffect(() => {
         const init = async () => {
             try {
-                await TrainingService.getMyProviderProfile();
                 const list = await TrainingService.listMyTrainings();
                 setTrainings(list);
             } catch {
@@ -50,13 +59,24 @@ const MyTrainingsList: React.FC = () => {
     };
 
     const deleteTraining = async (trainingId: number) => {
-        if (!window.confirm(t("training.deleteConfirm"))) return;
+        if (!(await confirm({ title: t("training.deleteConfirmTitle"), message: t("training.deleteConfirm") }))) return;
         try {
             await TrainingService.deleteTraining(trainingId);
             setTrainings(prev => prev.filter(t => t.trainingId !== trainingId));
             toast.success(t("training.deleteSuccess"));
         } catch {
             toast.error(t("training.deleteError"));
+        }
+    };
+
+    const deleteProviderProfile = async () => {
+        if (!(await confirm({ title: t("training.deleteProviderConfirmTitle"), message: t("training.deleteProviderConfirmMessage") }))) return;
+        try {
+            await TrainingService.deleteProviderProfile();
+            toast.success(t("training.providerDeleteSuccess"));
+            navigate(Path.HOME, { replace: true });
+        } catch {
+            toast.error(t("training.providerDeleteError"));
         }
     };
 
@@ -90,6 +110,13 @@ const MyTrainingsList: React.FC = () => {
                     onClick={() => navigate(Path.TRAINING_PROVIDER_FORM)}
                 >
                     {t("training.editProviderProfile")}
+                </Button>
+                <Button
+                    size={BtnSizes.SMALL}
+                    mode={BtnModes.SECONDARY}
+                    onClick={deleteProviderProfile}
+                >
+                    {t("training.deleteProvider")}
                 </Button>
                 <Button
                     size={BtnSizes.SMALL}

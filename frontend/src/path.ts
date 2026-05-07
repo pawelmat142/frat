@@ -1,7 +1,6 @@
 export abstract class Path {
 
     public static readonly HOME = '/';
-    public static readonly DASHBOARD = '/dashboard';
 
     public static readonly SIGN_IN = '/sign-in';
     public static readonly SIGN_UP = '/sign-up';
