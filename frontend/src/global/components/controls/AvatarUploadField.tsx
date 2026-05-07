@@ -43,9 +43,10 @@ const AvatarUploadField: React.FC<AvatarUploadFieldProps> = ({
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const validationError = FileUtil.validateImage(file);
-        if (validationError) {
-            toast.error(t(validationError));
+
+        const error = FileUtil.validateImage(file);
+        if (error) {
+            toast.error(t(error, { allowed: FileUtil.ALLOWED_IMAGE_EXTENSIONS.join(', '), max: FileUtil.MAX_FILE_SIZE_MB }));
             e.target.value = '';
             return;
         }
