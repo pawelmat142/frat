@@ -91,16 +91,16 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
     }
 
     const sortOptionItems: SelectorItem<string>[] = Object.keys(WorkerSearchSortOptions)
-    .filter(option => {
-        if (option === WorkerSearchSortOptions.MUTUAL_FRIENDS && !userCtx.me) {
-            return false;
-        }
-        return true;
-    })
-    .map((option: string) => ({
-        value: option,
-        label: t('employeeProfile.form.sortOptions.' + option)
-    }))
+        .filter(option => {
+            if (option === WorkerSearchSortOptions.MUTUAL_FRIENDS && !userCtx.me) {
+                return false;
+            }
+            return true;
+        })
+        .map((option: string) => ({
+            value: option,
+            label: t('employeeProfile.form.sortOptions.' + option)
+        }))
 
     const resetFilters = () => {
         f.reset(WorkerDefaultFilters);
@@ -126,137 +126,206 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
 
 
     return (
-        <div className="relative flex flex-col primary-bg h-full">
-            <Header onBack={() => onClose?.()} title={t("employeeProfile.filtersTitle")} />
+        <div className="mb-20">
+            <div className="relative flex flex-col primary-bg h-full w-full ">
+                <Header onBack={() => onClose?.()} title={t("employeeProfile.filtersTitle")} />
 
-            <form className='flex flex-col flex-1 form-view'
-                noValidate
-                onSubmit={f.handleSubmit(submit)}
-            >
-                <Controller
-                    name="startDate"
-                    control={f.control}
-                    rules={startDateRequired}
-                    render={({ field }) => (
-                        <DateRangeInputViewSelector
-                            label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label") + '*'}
-                            className="w-full mt-3"
-                            value={prepareDateRange()}
-                            error={f.formState.errors.startDate?.message}
-                            onChange={(dateRange) => {
-                                const filters: WorkerSearchFilters = {
-                                    ...formState,
-                                    startDate: dateRange?.start || null,
-                                    endDate: dateRange?.end || null
-                                };
-                                f.reset(filters)
-                            }}
-                        />
-                    )}
-                />
+                <form className='flex flex-col flex-1 form-view w-full'
+                    noValidate
+                    onSubmit={f.handleSubmit(submit)}
+                >
+                    <Controller
+                        name="startDate"
+                        control={f.control}
+                        rules={startDateRequired}
+                        render={({ field }) => (
+                            <DateRangeInputViewSelector
+                                label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label") + '*'}
+                                className="w-full mt-3"
+                                value={prepareDateRange()}
+                                error={f.formState.errors.startDate?.message}
+                                onChange={(dateRange) => {
+                                    const filters: WorkerSearchFilters = {
+                                        ...formState,
+                                        startDate: dateRange?.start || null,
+                                        endDate: dateRange?.end || null
+                                    };
+                                    f.reset(filters)
+                                }}
+                            />
+                        )}
+                    />
 
-                <CountryAndLocationSelector
-                    className="w-full mt-5"
-                    value={{
-                        locationCountry: formState.locationCountry ?? null,
-                        geocodedPosition: formState.geocodedPosition ?? null,
-                        positionRadiusKm: formState.positionRadiusKm,
-                    }}
-                    loadingInput={loadingCountry}
-                    onChange={updateLocationFilter}
-                    errors={{
-                        locationCountry: f.formState.errors.locationCountry,
-                        geocodedPosition: f.formState.errors.geocodedPosition as { message?: string } | undefined,
-                    }}
-                    radiusSteps={[...AppConfig.RADIUS_STEPS_KM]}
-                />
+                    <CountryAndLocationSelector
+                        className="w-full mt-5"
+                        value={{
+                            locationCountry: formState.locationCountry ?? null,
+                            geocodedPosition: formState.geocodedPosition ?? null,
+                            positionRadiusKm: formState.positionRadiusKm,
+                        }}
+                        loadingInput={loadingCountry}
+                        onChange={updateLocationFilter}
+                        errors={{
+                            locationCountry: f.formState.errors.locationCountry,
+                            geocodedPosition: f.formState.errors.geocodedPosition as { message?: string } | undefined,
+                        }}
+                        radiusSteps={[...AppConfig.RADIUS_STEPS_KM]}
+                    />
 
-                <Controller
-                    name="categories"
-                    control={f.control}
-                    render={({ field }) => (
-                        <DictionarySelector
-                            type='multi'
-                            className="w-full mt-5"
-                            valueInput={field.value}
-                            onSelectMulti={items => {
-                                field.onChange(items);
-                            }}
-                            label={t("offer.filters.categories")}
-                            code="WORK_CATEGORY"
-                            fullWidth
-                        />
-                    )}
-                />
+                    <Controller
+                        name="categories"
+                        control={f.control}
+                        render={({ field }) => (
+                            <DictionarySelector
+                                type='multi'
+                                className="w-full mt-5"
+                                valueInput={field.value}
+                                onSelectMulti={items => {
+                                    field.onChange(items);
+                                }}
+                                label={t("offer.filters.categories")}
+                                code="WORK_CATEGORY"
+                                fullWidth
+                            />
+                        )}
+                    />
 
-                <Controller
-                    name="certificates"
-                    control={f.control}
-                    render={({ field }) => (
-                        <DictionarySelector
-                            type='multi'
-                            className="w-full mt-3"
-                            valueInput={field.value}
-                            onSelectMulti={items => {
-                                field.onChange(items);
-                            }}
-                            label={t("employeeProfile.certificates")}
-                            code="CERTIFICATES"
-                            fullWidth
-                        />
-                    )}
-                />
+                    <Controller
+                        name="certificates"
+                        control={f.control}
+                        render={({ field }) => (
+                            <DictionarySelector
+                                type='multi'
+                                className="w-full mt-3"
+                                valueInput={field.value}
+                                onSelectMulti={items => {
+                                    field.onChange(items);
+                                }}
+                                label={t("employeeProfile.certificates")}
+                                code="CERTIFICATES"
+                                fullWidth
+                            />
+                        )}
+                    />
 
-                <Controller
-                    name="communicationLanguages"
-                    control={f.control}
-                    render={({ field }) => (
-                        <DictionarySelector
-                            type='multi'
-                            className="w-full mt-3"
-                            valueInput={field.value}
-                            onSelectMulti={items => {
-                                field.onChange(items);
-                            }}
-                            label={t("employeeProfile.form.communicationLanguages")}
-                            code="LANGUAGES"
-                            groupCode="COMMUNICATION"
-                            fullWidth
-                        />
-                    )}
-                />
+                    <Controller
+                        name="communicationLanguages"
+                        control={f.control}
+                        render={({ field }) => (
+                            <DictionarySelector
+                                type='multi'
+                                className="w-full mt-3"
+                                valueInput={field.value}
+                                onSelectMulti={items => {
+                                    field.onChange(items);
+                                }}
+                                label={t("employeeProfile.form.communicationLanguages")}
+                                code="LANGUAGES"
+                                groupCode="COMMUNICATION"
+                                fullWidth
+                            />
+                        )}
+                    />
 
-                <Controller
-                    name="sortBy"
-                    control={f.control}
-                    render={({ field }) => (
-                        <FloatingSelector
-                            className="w-full mt-3"
-                            items={sortOptionItems}
-                            value={sortOptionItems.find(i => i.value === sortBy) || null}
-                            onSelect={item => {
-                                field.onChange(item);
-                            }}
-                            label={t("employeeProfile.form.sortOptions.title")}
-                            fullWidth
-                        ></FloatingSelector>
-                    )}
-                />
+                    <Controller
+                        name="sortBy"
+                        control={f.control}
+                        render={({ field }) => (
+                            <FloatingSelector
+                                className="w-full mt-3"
+                                items={sortOptionItems}
+                                value={sortOptionItems.find(i => i.value === sortBy) || null}
+                                onSelect={item => {
+                                    field.onChange(item);
+                                }}
+                                label={t("employeeProfile.form.sortOptions.title")}
+                                fullWidth
+                            ></FloatingSelector>
+                        )}
+                    />
 
-                <div className="mt-10">
-                    <Button
-                        size={BtnSizes.LARGE}
-                        mode={BtnModes.PRIMARY} fullWidth type="submit">
-                        <Ico.SEARCH size={22}></Ico.SEARCH>
-                        {t("common.search")}
-                    </Button>
-                    <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-3" fullWidth>
-                        {t("common.reset")}
-                    </Button>
-                </div>
+                    <Controller
+                        name="sortBy"
+                        control={f.control}
+                        render={({ field }) => (
+                            <FloatingSelector
+                                className="w-full mt-3"
+                                items={sortOptionItems}
+                                value={sortOptionItems.find(i => i.value === sortBy) || null}
+                                onSelect={item => {
+                                    field.onChange(item);
+                                }}
+                                label={t("employeeProfile.form.sortOptions.title")}
+                                fullWidth
+                            ></FloatingSelector>
+                        )}
+                    />
 
+                    <Controller
+                        name="sortBy"
+                        control={f.control}
+                        render={({ field }) => (
+                            <FloatingSelector
+                                className="w-full mt-3"
+                                items={sortOptionItems}
+                                value={sortOptionItems.find(i => i.value === sortBy) || null}
+                                onSelect={item => {
+                                    field.onChange(item);
+                                }}
+                                label={t("employeeProfile.form.sortOptions.title")}
+                                fullWidth
+                            ></FloatingSelector>
+                        )}
+                    />
 
-            </form>
+                    <Controller
+                        name="sortBy"
+                        control={f.control}
+                        render={({ field }) => (
+                            <FloatingSelector
+                                className="w-full mt-3"
+                                items={sortOptionItems}
+                                value={sortOptionItems.find(i => i.value === sortBy) || null}
+                                onSelect={item => {
+                                    field.onChange(item);
+                                }}
+                                label={t("employeeProfile.form.sortOptions.title")}
+                                fullWidth
+                            ></FloatingSelector>
+                        )}
+                    />
+
+                    <Controller
+                        name="sortBy"
+                        control={f.control}
+                        render={({ field }) => (
+                            <FloatingSelector
+                                className="w-full mt-3"
+                                items={sortOptionItems}
+                                value={sortOptionItems.find(i => i.value === sortBy) || null}
+                                onSelect={item => {
+                                    field.onChange(item);
+                                }}
+                                label={t("employeeProfile.form.sortOptions.title")}
+                                fullWidth
+                            ></FloatingSelector>
+                        )}
+                    />
+
+                    <div className="mt-10 mb-8">
+                        <Button
+                            size={BtnSizes.LARGE}
+                            mode={BtnModes.PRIMARY} fullWidth type="submit">
+                            <Ico.SEARCH size={22}></Ico.SEARCH>
+                            {t("common.search")}
+                        </Button>
+                        <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-3" fullWidth>
+                            {t("common.reset")}
+                        </Button>
+                    </div>
+
+                </form>
+            </div>
         </div>
     )
 }

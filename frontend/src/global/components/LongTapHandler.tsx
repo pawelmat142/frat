@@ -64,7 +64,7 @@ const LongTapHandler: React.FC<LongTapHandlerProps> = ({
             >
                 {children}
                 {holding && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <svg width="60" height="60" viewBox="0 0 60 60" className="-rotate-90">
                             <circle cx="30" cy="30" r="26" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="3" />
                             <circle

@@ -194,7 +194,7 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config, classN
     }
   }
 
-  const overlayClass = `popup fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-200 ${show && !closing ? 'opacity-100' : 'opacity-0'}`;
+  const overlayClass = `popup fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-200 ${show && !closing ? 'opacity-100' : 'opacity-0'}`;
   return (
     <div className={overlayClass}>
       <div

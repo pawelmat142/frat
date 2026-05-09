@@ -230,7 +230,7 @@ const WorkerView: React.FC = () => {
         label: worker.status === WorkerStatuses.ACTIVE ? t('employeeProfile.deactivateButton') : t('employeeProfile.activateButton'),
         if: isMyAccount,
         onClick: () => { profileActivation(worker) },
-        icon: Ico.MENU
+        icon: worker.status === WorkerStatuses.ACTIVE ? Ico.CANCEL :  Ico.CHECK
     }, {
         label: t('employeeProfile.deleteButton'),
         if: isMyAccount,

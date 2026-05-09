@@ -5,14 +5,13 @@ import { Z_INDEX } from "global/def";
 interface Props {
     show: boolean;
     children: React.ReactNode;
-    className?: string;
 }
 
 /**
  * Fullscreen animated overlay — wraps AnimatePresence internally.
  * Use anywhere: gallery, datepicker, filters, etc.
  */
-const PseudoView: React.FC<Props> = ({ show, children, className = "bg-black" }) => {
+const PseudoView: React.FC<Props> = ({ show, children }) => {
 
     const zIndex = Z_INDEX.PSEUDO_VIEW;
     return (
@@ -24,7 +23,7 @@ const PseudoView: React.FC<Props> = ({ show, children, className = "bg-black" })
                     exit={{ x: "100%", opacity: 0 }}
                     transition={{ duration: AppConfig.ROUTER_ANIMATION_DURATION / 1000, ease: "easeInOut" }}
                     style={{ zIndex }}
-                    className={`fixed inset-0 flex flex-col ${className}`}
+                    className={`fixed inset-0 flex flex-col primary-bg overflow-y-auto`}
                 >
                     {children}
                 </motion.div>
