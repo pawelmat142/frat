@@ -11,8 +11,10 @@ import { Ico } from "global/icon.def";
 import { MenuItem } from "global/interface/controls.interface";
 import { useBottomSheet } from "global/providers/BottomSheetProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import { Path } from "../../path";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useUserContext } from "user/UserProvider";
 
@@ -27,17 +29,24 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
     const { t } = useTranslation();
     const isDesktop = useIsDesktop();
     const userCtx = useUserContext();
+    const navigate = useNavigate();
+
     const me = userCtx?.me;
 
     const [openPseudoView, setOpenPseudoView] = useState(false);
 
+    const isMe = me?.uid === worker?.uid;
+
     const onAvailabilityClick = () => {
+        if (isMe) {
+            navigate(Path.WORKER_AVAILABILITY_EDIT);
+            return;
+        }
         setOpenPseudoView(true);
         globalCtx.hideFooter();
         globalCtx.setHideFloatingButton(true);
     }
 
-    const isMe = me?.uid === worker?.uid;
 
     const openPhoneCall = () => {
         if (!worker.phoneNumber || isMe) return;
@@ -117,7 +126,10 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
         }
     }
 
-    const ranges = worker.availabilityOption === WorkerAvailabilityOptions.DATE_RANGES ? worker.availabilityDateRanges?.map(range => DateRangeUtil.toDateRange(range)).filter(r => !!r) : [];
+    const ranges = worker.availabilityOption === WorkerAvailabilityOptions.DATE_RANGES 
+    ? worker.availabilityDateRanges?.map(range => DateRangeUtil.toDateRange(range)).filter(r => !!r) 
+    : worker.availabilityOption === WorkerAvailabilityOptions.FROM_DATE 
+    ? [{ start: worker.startDate }] : [];
 
     const displayAddress = worker.geocodedPosition == null ? null : `${worker.geocodedPosition?.city || ''}, ${DictionaryDisplay({
         dictionary: "LANGUAGES",

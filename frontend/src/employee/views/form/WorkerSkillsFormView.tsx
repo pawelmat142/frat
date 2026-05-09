@@ -15,6 +15,7 @@ import { WorkerService } from "employee/services/WorkerService";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import Header from "global/components/Header";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 interface SkillsForm {
     items: { name: string }[];
@@ -25,6 +26,7 @@ const WorkerSkillsFormView: React.FC = () => {
     const navigate = useNavigate();
     const userCtx = useUserContext();
     const worker = userCtx.meCtx?.workerProfile || null;
+    const globalCtx = useGlobalContext();
 
     const [loading, setLoading] = React.useState(false);
 
@@ -38,7 +40,15 @@ const WorkerSkillsFormView: React.FC = () => {
     const { fields, append, remove } = useFieldArray({ control, name: "items" });
 
     React.useEffect(() => {
-        if (fields.length === 0) append({ name: "" });
+        globalCtx.hideFooter();
+        globalCtx.setHideFloatingButton(true);
+        if (fields.length === 0) {
+            append({ name: "" })
+        };
+        return () => {
+            globalCtx.showFooter();
+            globalCtx.setHideFloatingButton(false);
+        }
     }, []);
 
     const required = FormValidator.required(t);
@@ -115,7 +125,7 @@ const WorkerSkillsFormView: React.FC = () => {
 
                 <div className="flex gap-3 mt-8">
                     <Button fullWidth mode={BtnModes.SECONDARY} onClick={() => navigate(-1)}>
-                        {t("common.cancel")}
+                        {t("common.back")}
                     </Button>
                     <Button fullWidth type="submit">
                         {t("common.save")}

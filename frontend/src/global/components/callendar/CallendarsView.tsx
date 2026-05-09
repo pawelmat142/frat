@@ -57,6 +57,22 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ ranges, onSubmit, onCan
         }
     }, [firstRange?.start]);
 
+    const normalizeRanges = (rangesList: DateRange[]): DateRange[] => {
+        return rangesList.map(range => {
+            // If only start date is set without end date, highlight to one year ahead
+            if (range.start && !range.end) {
+                const startDate = DateUtil.parseLocalDateString(range.start);
+                const endDate = new Date(startDate);
+                endDate.setFullYear(endDate.getFullYear() + 1);
+                return {
+                    ...range,
+                    end: DateUtil.toLocalDateString(endDate)
+                };
+            }
+            return range;
+        });
+    };
+
     const prepareMonthsArray = (rangesList: DateRange[]): Date[] => {
         const months: Date[] = [];
         const now = new Date();
@@ -222,7 +238,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ ranges, onSubmit, onCan
                         <MonthCallendar
                             showDaysHeader={false}
                             date={monthDate}
-                            selectedRanges={selectorMode ? [currentRange] : (ranges || [])}
+                            selectedRanges={selectorMode ? normalizeRanges([currentRange]) : ranges || []}
                             fullScreenMode={true}
                             showOnlyDateMonth={true}
                             showMonthHeader={true}

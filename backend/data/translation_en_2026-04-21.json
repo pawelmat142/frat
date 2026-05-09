@@ -209,6 +209,7 @@
       "lessThan": "<{{value}} {{unit}}",
       "availableAnytime": "Available anytime",
       "availableFrom": "Available from",
+      "available": "Available",
       "fetchLocationError": "Could not find location.",
       "availableAnytimeShort": "Anytime",
       "call": "Call",
