@@ -3,20 +3,14 @@ import Loading from "global/components/Loading";
 import { UserI } from "@shared/interfaces/UserI";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "auth/AuthProvider";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "user/UserProvider";
 import { Path } from "../../path";
-import { useConfirm } from "global/providers/PopupProvider";
-import { ChatService } from "chat/services/ChatService";
 import { WorkerI } from "@shared/interfaces/WorkerI";
 import { OfferI } from "@shared/interfaces/OfferI";
 import { WorkerService } from "employee/services/WorkerService";
 import { OffersService } from "offer/services/OffersService";
-import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
-import { FriendsService } from "friends/services/FriendsService";
 import { Ico } from "global/icon.def";
-import { useFriendsContext } from "friends/FriendsProvider";
 import UserProfileItem from "user/components/UserProfileItem";
 import ListUi from "global/components/ui/ListUi";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
@@ -25,18 +19,19 @@ import { AppConfig } from "@shared/AppConfig";
 import { MenuItem } from "global/interface/controls.interface";
 import { useUsersStorage } from "global/providers/UsersStorageProvider";
 import Header from "global/components/Header";
+import { useFriendshipActions } from "friends/useFriendshipActions";
+import { buildFriendshipMenuItems } from "friends/friendshipMenuBuilder";
+import { FriendshipStatuses } from "@shared/interfaces/FriendshipI";
 
 const ProfileView: React.FC = () => {
 
     const { loading: authLoading } = useAuthContext()
     const userCtx = useUserContext()
-    const friendsCtx = useFriendsContext();
     const me = userCtx.me;
     const [user, setUser] = useState<UserI | null>(null)
     const { uid } = useParams<{ uid?: string }>()
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const confirm = useConfirm()
     const userStorage = useUsersStorage();
     const globalCtx = useGlobalContext();
     const fabId = useId();
@@ -46,6 +41,18 @@ const ProfileView: React.FC = () => {
     const [offers, setOffers] = useState<OfferI[]>([])
 
     const isMyAccount = uid === me?.uid
+
+    const {
+        getFriendship,
+        sendInvite,
+        removeFriend,
+        acceptInvitation,
+        rejectInvitation,
+        openChat,
+        loading: friendshipActionLoading,
+    } = useFriendshipActions({
+        targetUid: user?.uid || '',
+    });
 
     useEffect(() => {
         setLoading(true);
@@ -92,17 +99,6 @@ const ProfileView: React.FC = () => {
         setLoading(authLoading);
     }, [authLoading]);
 
-    const openChat = async () => {
-        if (!user) return;
-        try {
-            const chat = await ChatService.getOrCreateDirectChat(user.uid);
-            navigate(Path.getConversationPath(chat.chatId));
-        } catch (error) {
-            console.error('Failed to open chat:', error);
-            toast.error(t('chat.error.cannotOpen'));
-        }
-    }
-
     useEffect(() => {
         if (!isMyAccount) {
             globalCtx.setFloatingButton(
@@ -115,28 +111,12 @@ const ProfileView: React.FC = () => {
         }
     }, [user, isMyAccount]);
 
-    if (loading) {
+    if (loading || friendshipActionLoading) {
         return <Loading />;
-    }
-
-    const sendInvite = async () => {
-        try {
-            setLoading(true)
-            const result = await FriendsService.sendInvite(user!.uid)
-            toast.success(t('friends.invitationSent'))
-            friendsCtx.putFriendship(result);
-        }
-        finally {
-            setLoading(false);
-        }
     }
 
     if (!user) {
         return <div className="p-5 text-center secondary-text">{t('user.error.notFound')}</div>;
-    }
-
-    const getFriendship = (): FriendshipI | undefined => {
-        return friendsCtx.friendships.find(f => [f.addresseeUid, f.requesterUid].includes(user?.uid));
     }
 
     const isFriend = getFriendship()?.status === FriendshipStatuses.ACCEPTED;
@@ -153,55 +133,9 @@ const ProfileView: React.FC = () => {
         navigate(Path.getOffersPath(user.uid));
     };
 
-    const removeFriend = async (friendship: FriendshipI) => {
-        const confirmed = await confirm({
-            title: t('friends.remove'),
-            message: t('friends.removeConfirm'),
-        });
-        if (!confirmed) return;
-
-        try {
-            setLoading(true);
-            await FriendsService.removeFriend(friendship.friendshipId);
-            toast.success(t('friends.removeSuccess'));
-        } catch (error) {
-            console.error(error);
-            toast.error(t('friends.removeFailed'));
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    const acceptInvitation = async (friendship: FriendshipI) => {
-        try {
-            setLoading(true);
-            const result = await FriendsService.acceptInvite(friendship.friendshipId)
-            toast.success(t('friends.acceptedToast'));
-        }
-        finally {
-            setLoading(false);
-        }
-    }
-
-    const rejectInvitation = async (friendship: FriendshipI) => {
-        try {
-            setLoading(true);
-            const result = await FriendsService.rejectInvite(friendship.friendshipId)
-            toast.success(t('friends.rejectedToast'));
-        }
-        finally {
-            setLoading(false);
-        }
-    }
-
     const friendship = isMyAccount ? null : getFriendship();
 
-    const menuItems: MenuItem[] = [{
-        label: t('chat.openChat'),
-        if: !isMyAccount,
-        icon: Ico.CHAT,
-        onClick: openChat
-    }, {
+    const baseMenuItems: MenuItem[] = [{
         label: t('account.friends'),
         if: isFriend || isMyAccount,
         icon: Ico.FRIENDS,
@@ -216,28 +150,24 @@ const ProfileView: React.FC = () => {
         if: offers.length,
         icon: Ico.OFFER,
         onClick: goToUserOffers
-    }, {
-        label: t('friends.invite'),
-        if: !isMyAccount && (!friendship || friendship.status === FriendshipStatuses.REJECTED),
-        icon: Ico.FRIENDS,
-        onClick: sendInvite
-    }, {
-        label: t('friends.reject'),
-        if: friendship?.status === FriendshipStatuses.PENDING,
-        onClick: async () => { rejectInvitation(friendship!); },
-        icon: Ico.CANCEL
-    }, {
-        label: t('friends.accept'),
-        if: friendship?.status === FriendshipStatuses.PENDING && friendship.addresseeUid === me?.uid,
-        onClick: async () => { acceptInvitation(friendship!); },
-        icon: Ico.FRIENDS
-    }, {
-        label: t('friends.remove'),
-        if: friendship?.status === FriendshipStatuses.ACCEPTED,
-        onClick: () => removeFriend(friendship!),
-        icon: Ico.DELETE
-    }]
+    }];
 
+    const friendshipItems = buildFriendshipMenuItems({
+        t,
+        isMyAccount,
+        friendship,
+        me,
+        onSendInvite: sendInvite,
+        onRemoveFriend: removeFriend,
+        onAcceptInvitation: acceptInvitation,
+        onRejectInvitation: rejectInvitation,
+        onOpenChat: openChat,
+    });
+    
+    const menuItems = [
+        ...friendshipItems,
+        ...baseMenuItems
+    ];
 
     return (
         <>

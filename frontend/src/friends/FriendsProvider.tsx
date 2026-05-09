@@ -6,7 +6,7 @@ import { useUserContext } from "user/UserProvider";
 
 interface FriendsContextType {
     friendships: FriendshipI[];
-    initFriendships: () => void;
+    initFriendships: () => Promise<void>;
     cleanFriendships: () => void;
     putFriendship: (friendship: FriendshipI) => void;
 }

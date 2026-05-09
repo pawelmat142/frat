@@ -11,7 +11,6 @@ import { MenuConfig } from "global/components/selector/MenuItems";
 import { toast } from "react-toastify";
 import { useConfirm } from "global/providers/PopupProvider";
 import { useUserContext } from "user/UserProvider";
-import { ChatService } from "chat/services/ChatService";
 import PositionWidget from "employee/components/PositionWidget";
 import { Ico } from "global/icon.def";
 import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
@@ -29,10 +28,8 @@ import WorkerStatItems from "employee/components/WorkerStatItems";
 import CategoriesChips from "global/components/chips/CategoriesChips";
 import WorkerBioSection from "employee/components/WorkerBioSection";
 import WorkerDataSection from "employee/components/WorkerDataSection";
-import { useFriendsContext } from "friends/FriendsProvider";
-import { FriendUtil } from "@shared/utils/FriendUtil";
-import { FriendsService } from "friends/services/FriendsService";
-import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
+import { useFriendshipActions } from "friends/useFriendshipActions";
+import { buildFriendshipMenuItems } from "friends/friendshipMenuBuilder";
 
 const WorkerView: React.FC = () => {
 
@@ -48,21 +45,28 @@ const WorkerView: React.FC = () => {
     const confirm = useConfirm();
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
-    const friendsCtx = useFriendsContext();
     const me = userCtx?.me;
     const fabId = useId();
 
     const profileCtx = useWorkersSearch();
-
-    const getFriendship = (): FriendshipI | undefined => {
-        return worker ? friendsCtx.friendships.find(f => [f.addresseeUid, f.requesterUid].includes(worker.uid)) : undefined;
-    }
 
     const isMe = me?.uid === worker?.uid;
     const isSavedOnList = (userCtx.meCtx?.listedItems ?? [])
         .some(item => item.reference === worker?.workerId?.toString() && item.referenceType === UserListedItemReferenceTypes.WORKER);
 
     const isMyAccount = !!worker && me?.uid === worker?.uid;
+
+    const {
+        getFriendship,
+        sendInvite,
+        removeFriend,
+        acceptInvitation,
+        rejectInvitation,
+        loading: friendshipActionLoading,
+        openChat,
+    } = useFriendshipActions({
+        targetUid: worker?.uid || '',
+    });
 
     const friendship = isMyAccount ? null : getFriendship();
 
@@ -106,72 +110,6 @@ const WorkerView: React.FC = () => {
     const goToUserProfile = () => {
         if (!worker) return;
         navigate(Path.getProfilePath(worker?.uid));
-    }
-
-
-
-    const sendInvite = async () => {
-        try {
-            setLoading(true)
-            const result = await FriendsService.sendInvite(worker!.uid)
-            toast.success(t('friends.invitationSent'))
-            friendsCtx.putFriendship(result);
-        }
-        finally {
-            setLoading(false);
-        }
-    }
-
-    const removeFriend = async (friendship: FriendshipI) => {
-        const confirmed = await confirm({
-            title: t('friends.remove'),
-            message: t('friends.removeConfirm'),
-        });
-        if (!confirmed) return;
-
-        try {
-            setLoading(true);
-            await FriendsService.removeFriend(friendship.friendshipId);
-            toast.success(t('friends.removeSuccess'));
-        } catch (error) {
-            console.error(error);
-            toast.error(t('friends.removeFailed'));
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    const rejectInvitation = async (friendship: FriendshipI) => {
-        try {
-            setLoading(true);
-            const result = await FriendsService.rejectInvite(friendship.friendshipId)
-            toast.success(t('friends.rejectedToast'));
-        }
-        finally {
-            setLoading(false);
-        }
-    }
-
-    const acceptInvitation = async (friendship: FriendshipI) => {
-        try {
-            setLoading(true);
-            const result = await FriendsService.acceptInvite(friendship.friendshipId)
-            toast.success(t('friends.acceptedToast'));
-        }
-        finally {
-            setLoading(false);
-        }
-    }
-
-    const openChat = async () => {
-        if (!worker) return;
-        try {
-            const chat = await ChatService.getOrCreateDirectChat(worker.uid)
-            navigate(Path.getConversationPath(chat.chatId))
-        } catch (error) {
-            console.error('Failed to open chat:', error)
-            toast.error(t('chat.error.cannotOpen'))
-        }
     }
 
     const deleteProfile = async () => {
@@ -231,7 +169,7 @@ const WorkerView: React.FC = () => {
         }
     }
 
-    if (loading) {
+    if (loading || friendshipActionLoading) {
         return <Loading />
     }
     if (!worker) {
@@ -283,7 +221,7 @@ const WorkerView: React.FC = () => {
         }
     }
 
-    const menuItems = [{
+    const baseMenuItems = [{
         label: t('employeeProfile.editButton'),
         if: isMyAccount,
         onClick: () => { goToEditForm() },
@@ -299,11 +237,6 @@ const WorkerView: React.FC = () => {
         onClick: () => { deleteProfile() },
         icon: Ico.DELETE
     }, {
-        label: t('chat.openChat'),
-        if: !isMyAccount,
-        onClick: openChat,
-        icon: Ico.CHAT
-    }, {
         label: t('user.removeFromList'),
         if: !isMyAccount && isSavedOnList,
         onClick: removeListItem,
@@ -317,33 +250,29 @@ const WorkerView: React.FC = () => {
         label: t('user.openProfile'),
         onClick: goToUserProfile,
         icon: Ico.ACCOUNT
-    }, {
-        label: t('friends.invite'),
-        if: !isMyAccount && (!friendship || friendship.status === FriendshipStatuses.REJECTED),
-        icon: Ico.FRIENDS,
-        onClick: sendInvite
-    }, {
-        label: t('friends.reject'),
-        if: friendship?.status === FriendshipStatuses.PENDING,
-        onClick: async () => { rejectInvitation(friendship!); },
-        icon: Ico.CANCEL
-    }, {
-        label: t('friends.accept'),
-        if: friendship?.status === FriendshipStatuses.PENDING && friendship.addresseeUid === me?.uid,
-        onClick: async () => { acceptInvitation(friendship!); },
-        icon: Ico.FRIENDS
-    }, {
-        label: t('friends.remove'),
-        if: friendship?.status === FriendshipStatuses.ACCEPTED,
-        onClick: () => removeFriend(friendship!),
-        icon: Ico.DELETE
     }];
+
+    const friendshipItems = buildFriendshipMenuItems({
+        t,
+        isMyAccount,
+        friendship,
+        me,
+        onSendInvite: sendInvite,
+        onRemoveFriend: removeFriend,
+        onAcceptInvitation: acceptInvitation,
+        onRejectInvitation: rejectInvitation,
+        onOpenChat: openChat,
+    });
+
+    const menuItems = [
+        ...friendshipItems,
+        ...baseMenuItems
+    ];
 
     const menuConfig: MenuConfig = {
         title: t('employeeProfile.profileMenu'),
         items: menuItems
     }
-
 
     const goToEditForm = () => {
         navigate(Path.WORKER_FORM);
