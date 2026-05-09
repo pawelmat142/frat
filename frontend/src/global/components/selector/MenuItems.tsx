@@ -26,7 +26,7 @@ const MenuItems = ({
     return (
         <>
             <div className="bottom-sheet-content">
-                {items.map((item, index) => {
+                {items.filter(item => item.if === undefined || !!item.if).map((item, index) => {
                     return (
                         <div
                             key={index}

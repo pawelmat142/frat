@@ -28,7 +28,7 @@ import Header from "global/components/Header";
 
 const ProfileView: React.FC = () => {
 
-    const { loading } = useAuthContext()
+    const { loading: authLoading } = useAuthContext()
     const userCtx = useUserContext()
     const friendsCtx = useFriendsContext();
     const me = userCtx.me;
@@ -41,14 +41,14 @@ const ProfileView: React.FC = () => {
     const globalCtx = useGlobalContext();
     const fabId = useId();
 
-    const [localLoading, setLocalLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [worker, setWorker] = useState<WorkerI | null>(null)
     const [offers, setOffers] = useState<OfferI[]>([])
 
     const isMyAccount = uid === me?.uid
 
     useEffect(() => {
-        setLocalLoading(true);
+        setLoading(true);
         const initUser = async () => {
             if (uid) {
                 if (uid === me?.uid) {
@@ -71,7 +71,7 @@ const ProfileView: React.FC = () => {
         if (user.uid === me?.uid) {
             setOffers(userCtx.meCtx?.offers || []);
             setWorker(userCtx.meCtx?.workerProfile || null)
-            setLocalLoading(false);
+            setLoading(false);
         } else {
             initUserData(user);
         }
@@ -85,12 +85,12 @@ const ProfileView: React.FC = () => {
         ])
         setWorker(worker)
         setOffers(userOffers)
-        setLocalLoading(false);
+        setLoading(false);
     }
 
     useEffect(() => {
-        setLocalLoading(loading);
-    }, [loading]);
+        setLoading(authLoading);
+    }, [authLoading]);
 
     const openChat = async () => {
         if (!user) return;
@@ -115,19 +115,19 @@ const ProfileView: React.FC = () => {
         }
     }, [user, isMyAccount]);
 
-    if (localLoading) {
+    if (loading) {
         return <Loading />;
     }
 
     const sendInvite = async () => {
         try {
-            setLocalLoading(true)
+            setLoading(true)
             const result = await FriendsService.sendInvite(user!.uid)
             toast.success(t('friends.invitationSent'))
             friendsCtx.putFriendship(result);
         }
         finally {
-            setLocalLoading(false);
+            setLoading(false);
         }
     }
 
@@ -161,36 +161,36 @@ const ProfileView: React.FC = () => {
         if (!confirmed) return;
 
         try {
-            setLocalLoading(true);
+            setLoading(true);
             await FriendsService.removeFriend(friendship.friendshipId);
             toast.success(t('friends.removeSuccess'));
         } catch (error) {
             console.error(error);
             toast.error(t('friends.removeFailed'));
         } finally {
-            setLocalLoading(false);
+            setLoading(false);
         }
     }
 
     const acceptInvitation = async (friendship: FriendshipI) => {
         try {
-            setLocalLoading(true);
+            setLoading(true);
             const result = await FriendsService.acceptInvite(friendship.friendshipId)
             toast.success(t('friends.acceptedToast'));
         }
         finally {
-            setLocalLoading(false);
+            setLoading(false);
         }
     }
 
     const rejectInvitation = async (friendship: FriendshipI) => {
         try {
-            setLocalLoading(true);
+            setLoading(true);
             const result = await FriendsService.rejectInvite(friendship.friendshipId)
             toast.success(t('friends.rejectedToast'));
         }
         finally {
-            setLocalLoading(false);
+            setLoading(false);
         }
     }
 
@@ -241,7 +241,7 @@ const ProfileView: React.FC = () => {
 
     return (
         <>
-            <Header title={t('account.profile')}></Header>
+            <Header title={t('account.account')}></Header>
             
             <div className="w-full">
 
