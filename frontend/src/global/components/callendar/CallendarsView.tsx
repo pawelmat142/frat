@@ -238,7 +238,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ ranges, onSubmit, onCan
                         <MonthCallendar
                             showDaysHeader={false}
                             date={monthDate}
-                            selectedRanges={selectorMode ? normalizeRanges([currentRange]) : ranges || []}
+                            selectedRanges={selectorMode ? [currentRange] : normalizeRanges(ranges || [])}
                             fullScreenMode={true}
                             showOnlyDateMonth={true}
                             showMonthHeader={true}

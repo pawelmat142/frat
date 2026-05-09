@@ -3,7 +3,7 @@ import { ForbiddenException, Injectable, Logger, NotFoundException, OnModuleDest
 import { WorkerRepo } from './WorkerRepo';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { AvatarRef, UserI } from '@shared/interfaces/UserI';
-import { WorkerAvailabilityOptions, WorkerFormDto, WorkerI, WorkerSkills, WorkerStatus, WorkerStatuses, WorkerWithCertificates, WorkerWithMutualFriends } from '@shared/interfaces/WorkerI';
+import { WorkerAvailabilityOptions, WorkerFormDto, WorkerFormStepAvailability, WorkerI, WorkerSkills, WorkerStatus, WorkerStatuses, WorkerWithCertificates, WorkerWithMutualFriends } from '@shared/interfaces/WorkerI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { WorkerUtil } from './WorkerUtil';
 import { DeepPartial, In } from 'typeorm';
@@ -168,6 +168,18 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         return result;
     }
 
+    public async updateAvailability(user: UserI, availability: WorkerFormStepAvailability): Promise<WorkerI> {
+
+        const worker = await this.workerRepo.findByUid(user.uid);
+        if (!worker) {
+            throw new ToastException('employeeProfile.notFound', this);
+        }
+
+        this.fillAvailabilityData(worker, availability);
+        const updatedWorker = await this.workerRepo.update(worker);
+        return updatedWorker;
+    }
+
     public async updateSkills(user: UserI, skills: WorkerSkills): Promise<void> {
         const profile = await this.workerRepo.findByUid(user.uid);
         if (!profile) {
@@ -291,7 +303,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         return result;
     }
 
-    private fillAvailabilityData(result: DeepPartial<WorkerEntity>, form: WorkerFormDto): void {
+    private fillAvailabilityData(result: DeepPartial<WorkerEntity>, form: WorkerFormStepAvailability): void {
         result.availabilityOption = form.availabilityOption;
         if (result.availabilityOption === WorkerAvailabilityOptions.DATE_RANGES) {
             const ranges = form.availabilityDateRanges.map(dateRange => DateRangeUtil.fromDateRange([], dateRange))

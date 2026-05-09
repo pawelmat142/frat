@@ -1,5 +1,5 @@
 import { httpClient } from "global/services/http";
-import { WorkerForm, WorkerFormDto, WorkerI, WorkerSearchFilters, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerWithCertificates } from "@shared/interfaces/WorkerI";
+import { WorkerForm, WorkerFormDto, WorkerFormStepAvailability, WorkerI, WorkerSearchFilters, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerWithCertificates } from "@shared/interfaces/WorkerI";
 import { AvatarRef } from "@shared/interfaces/UserI";
 import { Position } from "@shared/interfaces/MapsInterfaces";
 import { Header } from "@shared/def/def";
@@ -80,6 +80,10 @@ export const WorkerService = {
 
 	activation(): Promise<WorkerI> {
 		return httpClient.patch<WorkerI>(`/worker/activation`);
+	},
+
+	updateAvailability(availability: WorkerFormStepAvailability): Promise<WorkerI> {
+		return httpClient.put<WorkerI>(`/worker/availability`, availability);
 	},
 
 	updateSkills(skills: WorkerSkills): Promise<WorkerI> {

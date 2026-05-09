@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -6,10 +6,13 @@ import { DateRange, WorkerAvailabilityOptions, WorkerForm, WorkerWithCertificate
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import Header from "global/components/Header";
-import WorkerFormStepAvailability from "../form/WorkerFormStepAvailability";
+import WorkerFormStepAvailability from "./WorkerFormStepAvailability";
 import { useUserContext } from "user/UserProvider";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import { WorkerService } from "employee/services/WorkerService";
+import { toast } from "react-toastify";
+import Loading from "global/components/Loading";
 
 const WorkerAvailabilityEditView: React.FC = () => {
 
@@ -17,6 +20,8 @@ const WorkerAvailabilityEditView: React.FC = () => {
     const navigate = useNavigate();
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
+
+    const [loading, setLoading] = useState(false);
 
     const worker: WorkerWithCertificates | null = userCtx?.meCtx?.workerProfile || null;
 
@@ -46,14 +51,25 @@ const WorkerAvailabilityEditView: React.FC = () => {
     });
 
     const handleSave = async () => {
-        // TODO: Obsługa zapisu - dodać usługę do zapisu danych
-        const availabilityData = formRef.getValues("availability");
-        console.log("Saving availability:", availabilityData);
+        try {
+            const availabilityData = formRef.getValues("availability");
+            setLoading(true);
+            const result = await WorkerService.updateAvailability(availabilityData);
+            userCtx.initWorker();
+            toast.success(t("employeeProfile.form.submitSuccess"));
+            handleBack();
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleBack = () => {
         navigate(-1);
     };
+
+    if (loading) {
+        return <Loading></Loading>
+    }
 
     return (
         <div className="relative flex flex-col w-full flex-1">

@@ -23,7 +23,7 @@ import { ProtectedRoute } from 'auth/ProtectedRoute';
 import { UserRoles } from '@shared/interfaces/UserI';
 import WorkerFormView from 'employee/views/form/WorkerFormView';
 import WorkerSkillsFormView from 'employee/views/form/WorkerSkillsFormView';
-import WorkerAvailabilityEditView from 'employee/views/availability/WorkerAvailabilityEditView';
+import WorkerAvailabilityEditView from 'employee/views/form/WorkerAvailabilityEditView';
 import AdminFeedbacks from 'admin/views/feedback/AdminFeedbacks';
 import WorkersSearchView from 'employee/views/search/WorkersSearchView';
 import AdminEmployeeProfiles from 'admin/views/employee_profiles/AdminEmployeeProfiles';

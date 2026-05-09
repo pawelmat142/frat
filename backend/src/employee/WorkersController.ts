@@ -17,7 +17,7 @@ import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { AvatarRef, UserI, UserRoles } from '@shared/interfaces/UserI';
 import { WorkersService } from './services/WorkerService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
-import { WorkerFormDto, WorkerI, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerStatus, WorkerWithCertificates } from '@shared/interfaces/WorkerI';
+import { WorkerFormDto, WorkerFormStepAvailability, WorkerI, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerStatus, WorkerWithCertificates } from '@shared/interfaces/WorkerI';
 import { Serialize } from 'global/decorators/Serialize';
 import { WorkerEntity } from './model/WorkerEntity';
 import { SearchWorkersService } from './services/SearchWorkerService';
@@ -130,6 +130,16 @@ export class WorkersController {
     return this.workersService.updateSkills(user, skills);
   }
 
+  @Put("/availability")
+  @UseGuards(JwtAuthGuard)
+  @Serialize(WorkerEntity)
+  updateAvailability(
+    @CurrentUser() user: UserI,
+    @Body() availability: WorkerFormStepAvailability
+  ): Promise<WorkerI> {
+    return this.workersService.updateAvailability(user, availability);
+  }
+  
   @Put("/bio")
   @UseGuards(JwtAuthGuard)
   @Serialize(WorkerEntity)
