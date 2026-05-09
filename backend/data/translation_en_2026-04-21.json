@@ -710,7 +710,6 @@
           "categories": "Work categories",
           "careerStartDate": "Career start date",
           "maxAltitude": "Maximum working altitude (m)",
-          "maxAltitudeShort": "Max altitude",
           "readyToTravel": "Ready to travel"
         },
         "title": "Technician profile form",

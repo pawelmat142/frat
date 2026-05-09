@@ -158,10 +158,6 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
                 label: worksInIndurstry,
                 icon: Ico.CLOCK
             }, {
-                if: worker.maxAltitude,
-                label: `${t('employeeProfile.form.career.maxAltitudeShort')}: ${worker.maxAltitude}[m]`,
-                icon: Ico.RULER
-            }, {
                 if: typeof worker.readyToTravel === 'boolean',
                 label: `${t('employeeProfile.form.career.readyToTravel')}: ${worker.readyToTravel ? t('common.yes') : t('common.no')}`,
                 icon: Ico.COMPASS

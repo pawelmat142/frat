@@ -64,7 +64,6 @@ const WorkerFormView: React.FC = () => {
             career: {
                 categories: [],
                 careerStartDate: undefined,
-                maxAltitude: undefined,
                 readyToTravel: undefined,
             },
             location: {
@@ -210,7 +209,6 @@ const WorkerFormView: React.FC = () => {
             career: {
                 categories: worker.categories || [],
                 careerStartDate: worker.careerStartDate,
-                maxAltitude: worker.maxAltitude,
                 readyToTravel: worker.readyToTravel,
             },
             certificates: {

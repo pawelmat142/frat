@@ -58,25 +58,6 @@ const WorkerFormStepCareer: React.FC<Props> = ({ formRef }) => {
                 />
 
                 <Controller
-                    name="career.maxAltitude"
-                    control={control}
-                    rules={FormValidator.positiveInterger(t)}
-                    render={({ field }) => (
-                        <FloatingInput
-                            type="number"
-                            label={t("employeeProfile.form.career.maxAltitude")}
-                            fullWidth
-                            value={field.value ?? ''}
-                            onChange={e => {
-                                const v = e.target.value;
-                                field.onChange(v === '' ? undefined : Number(v));
-                            }}
-                            error={formState.errors.career?.maxAltitude}
-                        />
-                    )}
-                />
-
-                <Controller
                     name="career.readyToTravel"
                     control={control}
                     render={({ field }) => (

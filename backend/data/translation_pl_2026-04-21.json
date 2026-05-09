@@ -704,7 +704,6 @@
           "categories": "Kategorie pracy",
           "careerStartDate": "Data rozpoczęcia kariery",
           "maxAltitude": "Maksymalna wysokość pracy (m)",
-          "maxAltitudeShort": "Maksymalna wysokość",
           "readyToTravel": "Gotowość do wyjazdów"
         },
         "title": "Formularz profilu pracownika",

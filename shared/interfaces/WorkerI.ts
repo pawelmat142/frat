@@ -44,7 +44,7 @@ export interface WorkerI {
   categories?: string[];
   /** Local date string in YYYY-MM-DD format */
   careerStartDate?: string
-  maxAltitude?: number; //[m]
+  maxAltitude?: number; //[m] DEPRACATED
   readyToTravel?: boolean;
   skills?: WorkerSkills
   images?: AvatarRef[]
@@ -111,7 +111,6 @@ export interface WorkerFormStepPersonalData {
 export interface WorkerFormStepCareer {
   categories?: string[];
   careerStartDate?: string;
-  maxAltitude?: number; //[m]
   readyToTravel?: boolean;
 }
 
