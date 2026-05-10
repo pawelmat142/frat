@@ -225,6 +225,12 @@ export class WorkerRepo {
             updatedFlag = true;
         }
 
+        if (worker.rangesOption !== newWorker.rangesOption) {
+            this.logger.log(`Updating EmployeeProfile rangesOption from ${worker.rangesOption} to ${newWorker.rangesOption}`);
+            worker.rangesOption = newWorker.rangesOption;
+            updatedFlag = true;
+        }
+
         if (this.dateRangesChanged(newWorker, worker)) {
             this.logger.log(`Updating EmployeeProfile availabilityDateRanges`);
             // Normalize DeepPartial<DateRangeEntity>[] into DateRangeEntity[] to satisfy typing.
