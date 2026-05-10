@@ -7,7 +7,6 @@ import { Utils } from "global/utils/utils";
 import { DateRange } from "@shared/interfaces/WorkerI";
 import { LocationCity, Place } from "@mui/icons-material";
 import Flags from "global/components/Flags";
-import { useNavigate } from "react-router-dom";
 import { useWorkersSearch } from "./WorkersSearchProvider";
 import { DateUtil } from "@shared/utils/DateUtil";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
@@ -20,7 +19,6 @@ const WorkersSearchFilters: React.FC = () => {
     const languagesDictionary = globalCtx.dics.languages;
     const { t } = useTranslation();
     const ctx = useWorkersSearch();
-    const navigate = useNavigate();
 
     const flags = languagesDictionary
         ? Array.from(Utils.prepareFlagSrcs(ctx.filters.communicationLanguages || [], languagesDictionary))
@@ -42,6 +40,23 @@ const WorkersSearchFilters: React.FC = () => {
         return result;
     }
 
+    const displayCountry = () => {
+        if (!ctx.filters.locationCountry) {
+            return null;
+        }
+
+        if (ctx.filters.locationCountry === 'worldwide') {
+            return (
+                <span className="xs-font">{t('employeeProfile.form.locationCountry.worldwide')}</span>
+            )
+        }
+
+        return (
+            <Flags languages={[locationCountryDictionaryCode!]} size={12} />
+        )
+
+    }
+
     return (
         <div className="filters-container primary-bg">
             <div className="flex gap-3 w-full px-2 pb-1 flex-wrap">
@@ -60,7 +75,7 @@ const WorkersSearchFilters: React.FC = () => {
                 {(!!ctx.filters.locationCountry) && (
                     <div className="flex items-center gap-1">
                         <Place fontSize="inherit" className="secondary-text" />
-                        {!!ctx.filters.locationCountry && (<Flags languages={[locationCountryDictionaryCode!]} size={12} />)}
+                        {displayCountry()}
                     </div>
                 )}
 

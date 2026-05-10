@@ -2,7 +2,7 @@ import React, { useEffect, useId, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Loading from "global/components/Loading";
 import { useWorkersSearch } from "./WorkersSearchProvider";
-import WorkersSearchFilters from "./WorkersSearchFilters";
+import WorkersSearchFiltersBar from "./WorkersSearchFiltersBar";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
 import { FaRegBookmark, FaUserSlash } from "react-icons/fa";
@@ -105,7 +105,7 @@ const WorkersSearchView: React.FC = () => {
         <div className="list-view pt-0">
 
             <div className="infinite-scroll-filters">
-                <WorkersSearchFilters />
+                <WorkersSearchFiltersBar />
             </div>
 
             {initialLoading || loading ? (
