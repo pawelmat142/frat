@@ -210,6 +210,7 @@
       "availableAnytime": "Available anytime",
       "availableFrom": "Available from",
       "available": "Available",
+      "notAvailable": "Not available",
       "fetchLocationError": "Could not find location.",
       "availableAnytimeShort": "Anytime",
       "call": "Call",

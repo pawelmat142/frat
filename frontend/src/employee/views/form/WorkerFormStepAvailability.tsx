@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { DateRange, WorkerAvailabilityOption, WorkerAvailabilityOptions, WorkerForm, WorkerFormRangesOption, WorkerFormRangesOptions } from "@shared/interfaces/WorkerI";
@@ -27,11 +27,70 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
     const required = FormValidator.dateRangeRequired(t);
     const startDateRequired = FormValidator.required(t);
 
+    const rangesStateRef = useRef<{
+        [WorkerFormRangesOptions.AVAILABLE_ON]: DateRange[];
+        [WorkerFormRangesOptions.NOT_AVAILABLE_ON]: DateRange[];
+    }>({
+        [WorkerFormRangesOptions.AVAILABLE_ON]: [],
+        [WorkerFormRangesOptions.NOT_AVAILABLE_ON]: [],
+    });
+    const prevRangesOptionRef = useRef(rangesOption);
+
+    // Initialize ranges on first mount
+    useEffect(() => {
+        if (!rangesOption) return;
+        rangesStateRef.current[rangesOption] = availabilityDateRanges || [];
+        prevRangesOptionRef.current = rangesOption;
+    }, []);
+
+    // Handle rangesOption change - swap between availability and unavailability ranges
+    useEffect(() => {
+        if (!rangesOption) return;
+
+        const prevOption = prevRangesOptionRef.current;
+
+        // Save current ranges to the previous option
+        if (prevOption) {
+            rangesStateRef.current[prevOption] = availabilityDateRanges;
+        }
+
+        // Load ranges for the new option only when rangesOption actually changes
+        if (prevOption !== rangesOption) {
+            let newRanges = rangesStateRef.current[rangesOption] || [];
+            // Ensure at least one range is available when switching options
+            if (!newRanges.length) {
+                newRanges = [getDefaultDateRange()];
+            }
+            setValue("availability.availabilityDateRanges", newRanges);
+            prevRangesOptionRef.current = rangesOption;
+        } else {
+            // Just update the ref when ranges change within same option
+            rangesStateRef.current[rangesOption] = availabilityDateRanges;
+        }
+    }, [rangesOption, setValue, availabilityDateRanges]);
+
+    const getRanges = (): DateRange[] => {
+        return availabilityDateRanges || [];
+    }
+
     const getDefaultDateRange = (): DateRange => {
         return {
             start: DateUtil.toLocalDateString(new Date()),
             id: DateRangeUtil.newId(availabilityDateRanges)
         }
+    }
+
+    const onRangeChange = (dateRange: DateRange | null, idx: number) => {
+        const newRanges = [...availabilityDateRanges];
+
+        if (dateRange) {
+            newRanges[idx] = dateRange;
+        } else {
+            newRanges.splice(idx, 1);
+        }
+
+        // Update form
+        setValue("availability.availabilityDateRanges", newRanges);
     }
 
     useEffect(() => {
@@ -78,7 +137,7 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
     }
 
     const removeDateRange = (id?: number) => {
-        const ranges = availabilityDateRanges?.filter((r, i) => r && r.id !== id);
+        const ranges = availabilityDateRanges?.filter((r) => r && r.id !== id);
         setValue("availability.availabilityDateRanges", (ranges || []).filter(Boolean));
     }
 
@@ -114,6 +173,8 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
             setValue("availability.rangesOption", WorkerFormRangesOptions.AVAILABLE_ON);
         }
     }
+
+    const ranges = getRanges();
 
     return (
         <>
@@ -179,9 +240,9 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                 </div>
                                 <div className="mb-5"></div>
 
-                                {availabilityDateRanges.map((dateRange, idx) => {
+                                {ranges.map((dateRange, idx) => {
                                     return (
-                                        <div key={dateRange?.id ?? idx} className="flex gap-2 items-end mt-4">
+                                        <div key={`${rangesOption}-range-${idx}`} className="flex gap-2 items-end mt-4">
                                             <Controller
                                                 name={`availability.availabilityDateRanges.${idx}` as const}
                                                 control={control}
@@ -190,14 +251,16 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                                     // Extract string message for this specific range error (RHF stores errors by index/key)
                                                     const fieldError = (formState?.errors?.availability?.availabilityDateRanges as any)?.[idx];
                                                     const errorMessage = fieldError?.message as string | undefined;
+                                                    // Use availabilityDateRanges[idx] from watch() to ensure synchronization
+                                                    const currentValue = availabilityDateRanges[idx] || field.value || getDefaultDateRange();
                                                     return (
                                                         <DateRangeInputViewSelector
                                                             required
                                                             label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label") + (availabilityDateRanges.length ? ` #${idx + 1}` : "") + ` (${t(`employeeProfile.form.rangesOption.${rangesOption}.tab`)})`}
                                                             className="w-full"
-                                                            value={field.value || getDefaultDateRange()}
+                                                            value={currentValue}
                                                             onChange={(dateRange) => {
-                                                                field.onChange(dateRange)
+                                                                onRangeChange(dateRange || null, idx);
                                                             }}
                                                             error={errorMessage}
                                                             rightIcon={

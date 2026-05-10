@@ -1,4 +1,4 @@
-import { WorkerAvailabilityOptions, WorkerI } from "@shared/interfaces/WorkerI";
+import { WorkerAvailabilityOptions, WorkerFormRangesOptions, WorkerI } from "@shared/interfaces/WorkerI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import CallendarsView from "global/components/callendar/CallendarsView";
@@ -109,7 +109,7 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
                 }
             case WorkerAvailabilityOptions.DATE_RANGES:
                 return {
-                    label: t('others.available'),
+                    label: worker.rangesOption === WorkerFormRangesOptions.AVAILABLE_ON ? t('others.available') : t('others.notAvailable'),
                     icon: Ico.CALENDAR,
                     onClick: onAvailabilityClick,
                     list: worker.availabilityDateRanges?.map(range => DateRangeUtil.toDateRange(range)).filter(r => !!r).map(r => {

@@ -211,6 +211,7 @@
       "availableAnytime": "Dostępny od zaraz",
       "availableFrom": "Dostępny od",
       "available": "Dostępny",
+      "notAvailable": "Niedostępny",
       "fetchLocationError": "Nie można znaleźć lokalizacji.",
       "availableAnytimeShort": "Od zaraz",
       "call": "Zadzwoń",
