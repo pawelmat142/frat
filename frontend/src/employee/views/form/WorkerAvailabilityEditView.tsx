@@ -58,6 +58,7 @@ const WorkerAvailabilityEditView: React.FC = () => {
             userCtx.initWorker();
             toast.success(t("employeeProfile.form.submitSuccess"));
             handleBack();
+        } catch (error) {
         } finally {
             setLoading(false);
         }

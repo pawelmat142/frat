@@ -178,7 +178,7 @@ const ProfileView: React.FC = () => {
                 <UserProfileItem user={user} className="px-2"></UserProfileItem>
 
                 <div className="py-3">
-                    <ListUi items={menuItems} itemClassName="m-font py-3"></ListUi>
+                    <ListUi items={menuItems} itemClassName="m-font py-1"></ListUi>
                 </div>
 
 

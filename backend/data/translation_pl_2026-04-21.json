@@ -277,8 +277,8 @@
       "friends": "Znajomi",
       "showProfile": "Pokaż profil",
       "deleteAccountFailed": "Nie udało się usunąć konta",
-      "showEmployeeProfile": "Pokaż profil pracownika",
-      "createEmployeeProfile": "Utwórz profil pracownika",
+      "showEmployeeProfile": "Pokaż Profil Technika",
+      "createEmployeeProfile": "Utwórz Profil Technika",
       "deleteAccountConfirmTitle": "Usuń konto",
       "deleteAccountSuccessToast": "Konto zostało pomyślnie usunięte",
       "deleteAccountConfirmMessage": "Czy na pewno chcesz usunąć swoje konto? Tej akcji nie można cofnąć."

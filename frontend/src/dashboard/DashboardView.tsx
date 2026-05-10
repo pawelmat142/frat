@@ -162,7 +162,7 @@ const DashboardView: React.FC = () => {
         drawer.open({
             showClose: true,
             title: t("common.menu"),
-            children: <ListUi items={menuActions} itemClassName="m-font py-3"></ListUi>
+            children: <ListUi items={menuActions} itemClassName="m-font py-1"></ListUi>
         })
     }}></IconButton>;
 

@@ -69,9 +69,8 @@ export class HttpClient {
           this.handleFileError(error);
           return Promise.reject(error);
         } else {
-          const handled = this.handleError(error);
-          // propaguj błąd tylko jeśli nie został obsłużony (np. toast, redirect)
-          if (!handled) return Promise.reject(error);
+          this.handleError(error);
+          return Promise.reject(error);
         }
       }
     );
@@ -120,11 +119,13 @@ export class HttpClient {
     console.error(error);
     const msg = this.getErrorMsg(error);
     this.storeErrorMsg(msg);
-    if (this.navigate) {
-      this.navigate(Path.ERROR_PAGE, { replace: true });
-    } else {
-      window.location.replace(Path.ERROR_PAGE);
-    }
+    setTimeout(() => {
+      if (this.navigate) {
+        this.navigate(Path.ERROR_PAGE, { replace: true });
+      } else {
+        window.location.replace(Path.ERROR_PAGE);
+      }
+    }, 100); // ensure this runs after any pending operations
   }
 
   private async handlePopupException(error: AxiosError) {
