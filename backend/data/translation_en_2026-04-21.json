@@ -762,7 +762,10 @@
             "tab": "Countries"
           }
         },
-        "locationCountry": "Location country",
+        "locationCountry": {
+          "label": "Location country",
+          "worldwide": "Worldwide"
+        },
         "validationError": "Please fill in all required fields in this step",
         "locationCountries": "Location countries",
         "availabilityOption": {

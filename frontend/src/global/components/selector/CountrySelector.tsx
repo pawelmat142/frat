@@ -24,6 +24,8 @@ interface CountrySelectorProps {
     showLabel?: boolean;
     /** Optional group code to filter dictionary elements */
     groupCode?: string;
+    /** Include "Worldwide" option (not from dictionary) */
+    includeWorldwide?: boolean;
 }
 
 /**
@@ -45,6 +47,7 @@ const CountrySelector = forwardRef((
         enableSearchText = true,
         showLabel,
         groupCode,
+        includeWorldwide = false,
     }: CountrySelectorProps,
     ref: React.Ref<any>
 ) => {
@@ -91,6 +94,14 @@ const CountrySelector = forwardRef((
             src: element.values.SRC,
         };
     });
+
+    // Add worldwide option at the beginning if enabled
+    if (includeWorldwide) {
+        items.unshift({
+            label: t('employeeProfile.form.locationCountry.worldwide'),
+            value: 'worldwide',
+        });
+    }
 
     const selectedItem: SelectorItem<string> | null = items.find(item => item.value === value) || null;
 

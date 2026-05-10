@@ -43,6 +43,8 @@ interface Props {
     positionRequired?: boolean;
     config?: Config;
     loadingInput?: boolean;
+    /** Include "Worldwide" option in country selector */
+    includeWorldwide?: boolean;
 }
 
 const CountryAndLocationSelector: React.FC<Props> = ({
@@ -54,7 +56,8 @@ const CountryAndLocationSelector: React.FC<Props> = ({
     countryRequired = true,
     positionRequired = false,
     config = defaultConfig,
-    loadingInput = false
+    loadingInput = false,
+    includeWorldwide = false,
 }) => {
     const { t } = useTranslation();
     const userCtx = useUserContext();
@@ -64,7 +67,7 @@ const CountryAndLocationSelector: React.FC<Props> = ({
     const [countryCenter, setCountryCenter] = useState<Position | null>(null);
 
     React.useEffect(() => {
-        if (!value.locationCountry || value.geocodedPosition) {
+        if (!value.locationCountry || value.geocodedPosition || value.locationCountry === 'worldwide') {
             setCountryCenter(null);
             return;
         }
@@ -140,13 +143,14 @@ const CountryAndLocationSelector: React.FC<Props> = ({
             <CountrySelector
                 fullWidth
                 value={value.locationCountry ?? undefined}
-                label={t('employeeProfile.form.locationCountry') + (countryRequired ? '*' : '')}
+                label={t('employeeProfile.form.locationCountry.label') + (countryRequired ? '*' : '')}
                 className="w-full mb-3"
                 error={errors?.locationCountry}
                 onSelect={(countryCode) => handleCountryChange(countryCode)}
+                includeWorldwide={includeWorldwide}
             />
 
-            {(
+            {value.locationCountry !== 'worldwide' && (
                 (loadingCity || geoLoading || loadingInput) ? (
                     <SkeletonControl label={t('employeeProfile.form.city')} />
                 ) : config.locationOption === 'searchbar' ? (

@@ -275,6 +275,11 @@ export class SearchWorkersService {
     }
 
     private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, hasFilter: boolean) {
+        // Skip location filter if "worldwide" is selected
+        if (filters.locationCountry === 'worldwide') {
+            return;
+        }
+
         const hasCoordinates = filters.lat != null && filters.lng != null;
 
         if (!filters.locationCountry) {

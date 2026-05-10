@@ -756,7 +756,10 @@
             "tab": "Kraje"
           }
         },
-        "locationCountry": "Kraj lokalizacji",
+        "locationCountry": {
+          "label": "Kraj lokalizacji",
+          "worldwide": "Całym światem"
+        },
         "validationError": "Proszę wypełnić wszystkie wymagane pola w tym kroku",
         "locationCountries": "Kraje",
         "availabilityOption": {

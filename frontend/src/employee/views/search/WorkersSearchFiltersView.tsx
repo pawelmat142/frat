@@ -170,6 +170,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                             geocodedPosition: f.formState.errors.geocodedPosition as { message?: string } | undefined,
                         }}
                         radiusSteps={[...AppConfig.RADIUS_STEPS_KM]}
+                        includeWorldwide={true}
                     />
 
                     <Controller
