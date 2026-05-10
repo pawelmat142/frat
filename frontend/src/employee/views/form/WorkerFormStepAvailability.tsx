@@ -200,21 +200,20 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                                                 field.onChange(dateRange)
                                                             }}
                                                             error={errorMessage}
+                                                            rightIcon={
+                                                                (idx > 0 && <IconButton
+                                                                    className="mb-1"
+                                                                    icon={<DeleteIcon />}
+                                                                    mode={BtnModes.ERROR_TXT}
+                                                                    onClick={() => {
+                                                                        removeDateRange(dateRange.id);
+                                                                    }}
+                                                                />)
+                                                            }
                                                         />
                                                     )
                                                 }}
                                             />
-                                            {idx > 0 && (
-                                                <IconButton
-                                                    className="mb-1"
-                                                    icon={<DeleteIcon />}
-                                                    size={BtnSizes.SMALL}
-                                                    mode={BtnModes.ERROR_TXT}
-                                                    onClick={() => {
-                                                        removeDateRange(dateRange.id);
-                                                    }}
-                                                />
-                                            )}
                                         </div>
                                     )
                                 })}

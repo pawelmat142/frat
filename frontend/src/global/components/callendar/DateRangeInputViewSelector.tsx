@@ -24,6 +24,7 @@ interface DateRangeProps {
     className?: string;
     /** When true, only single date selection is allowed (end date is ignored) */
     singleDateMode?: boolean;
+    rightIcon?: React.ReactNode;
 }
 
 const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
@@ -36,6 +37,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
     name,
     className = '',
     singleDateMode = false,
+    rightIcon,
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomSheetCtx = useBottomSheet();
@@ -110,7 +112,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
         <div className={`floating-input-wrapper ${myClass}`}>
             <div className="floating-input-container">
                 <div className="pp-control min-height pp-input-row">
-                    <div className="flex items-center gap-2 w-full">
+                    <div className="flex items-center gap-2 w-full pp-input-row justify-between">
                         <input
                             ref={inputRef}
                             id={name}
@@ -125,6 +127,11 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
                             placeholder=" "
                         />
                     </div>
+                    {rightIcon && (
+                        <div className="">
+                            {rightIcon}
+                        </div>
+                    )}
                     <FloatingLabel
                         htmlFor={name}
                         label={label}
