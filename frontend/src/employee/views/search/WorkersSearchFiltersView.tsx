@@ -124,7 +124,6 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
         f.setValue('positionRadiusKm', loc.positionRadiusKm);
     };
 
-
     return (
         <div className="mb-20">
             <div className="relative flex flex-col primary-bg h-full w-full ">

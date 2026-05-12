@@ -18,6 +18,7 @@ import { UserListedItemService } from "user/services/UserListedItemService";
 import { toast } from "react-toastify";
 import IconButton from "global/components/controls/IconButon";
 import { BtnModes } from "global/interface/controls.interface";
+import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
 
 const OfferSearchView: React.FC = () => {
 
@@ -26,14 +27,14 @@ const OfferSearchView: React.FC = () => {
     const ctx = useOfferSearch();
     const userCtx = useUserContext();
     const fabId = useId();
+    const floatingBtnCtx = useFloatingBtnContext();
 
     const swipeRefs = useRef<Map<number, SwipeableRowRef>>(new Map());
     const [loading, setLoading] = React.useState(false);
 
     useEffect(() => {
-        globalCtx.setFloatingButton(
+        floatingBtnCtx.setup(
             <FloatingActionButton
-                forceVisible={!ctx.openPseudoView}
                 onClick={() => ctx.setOpenPseudoView(true)}
                 icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE} />}
             />,
@@ -43,7 +44,7 @@ const OfferSearchView: React.FC = () => {
 
     // Cleanup only on unmount — avoids null flash when openPseudoView changes
     useEffect(() => {
-        return () => globalCtx.setFloatingButton(null);
+        return () => { floatingBtnCtx.hide({ remove: true }) };
     }, []);
 
     if (globalCtx.loading || !globalCtx.dics.languages) {

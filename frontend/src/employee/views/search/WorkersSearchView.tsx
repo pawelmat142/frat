@@ -5,7 +5,7 @@ import { useWorkersSearch } from "./WorkersSearchProvider";
 import WorkersSearchFiltersBar from "./WorkersSearchFiltersBar";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
-import { FaRegBookmark, FaUserSlash } from "react-icons/fa";
+import { FaUserSlash } from "react-icons/fa";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
 import { Ico } from "global/icon.def";
 import { AppConfig } from "@shared/AppConfig";
@@ -19,6 +19,7 @@ import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/inter
 import { useUserContext } from "user/UserProvider";
 import { toast } from "react-toastify";
 import { BtnModes } from "global/interface/controls.interface";
+import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
 
 const WorkersSearchView: React.FC = () => {
 
@@ -26,25 +27,25 @@ const WorkersSearchView: React.FC = () => {
     const userCtx = useUserContext();
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
+    const floatingBtnCtx = useFloatingBtnContext();
     const fabId = useId()
 
     const swipeRefs = useRef<Map<number, SwipeableRowRef>>(new Map());
     const [loading, setLoading] = React.useState(false);
 
     useEffect(() => {
-        globalCtx.setFloatingButton(
+        floatingBtnCtx.setup(
             <FloatingActionButton
-                forceVisible={!ctx.openPseudoView}
                 onClick={() => ctx.setOpenPseudoView(true)}
                 icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE} />}
             />,
             fabId
         );
-    }, [ctx.openPseudoView]);
+        floatingBtnCtx.show();
+    }, []);
 
-    // Cleanup only on unmount — avoids null flash when openPseudoView changes
     useEffect(() => {
-        return () => globalCtx.setFloatingButton(null);
+        return () => { floatingBtnCtx.hide({ remove: true }) };
     }, []);
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
@@ -122,20 +123,20 @@ const WorkersSearchView: React.FC = () => {
                     {(ctx.results).map((worker, index) => {
 
                         const isSavedOnList = (userCtx.meCtx?.listedItems ?? [])
-                                .some(item => item.reference === worker?.workerId?.toString() && item.referenceType === UserListedItemReferenceTypes.WORKER);
+                            .some(item => item.reference === worker?.workerId?.toString() && item.referenceType === UserListedItemReferenceTypes.WORKER);
 
                         const rowActions = <>
                             {isSavedOnList ? (
                                 <IconButton className="p-3" mode={BtnModes.ERROR_TXT} icon={<Ico.STAR_OUTLINE />} onClick={() => { removeListItem(worker) }}></IconButton>
                             ) : (
-                                <IconButton className="p-3"  icon={<Ico.STAR />} onClick={() => { addItemToMyList(worker) }}></IconButton>
+                                <IconButton className="p-3" icon={<Ico.STAR />} onClick={() => { addItemToMyList(worker) }}></IconButton>
                             )}
                         </>
 
                         return (
                             <SwipeableRow disable={worker.uid === userCtx.me?.uid}
-                            key={worker.workerId} 
-                            ref={el => el ? swipeRefs.current.set(worker.workerId, el) : swipeRefs.current.delete(worker.workerId)} actions={rowActions}>
+                                key={worker.workerId}
+                                ref={el => el ? swipeRefs.current.set(worker.workerId, el) : swipeRefs.current.delete(worker.workerId)} actions={rowActions}>
                                 <WorkerSearchListItem className="primary-bg"
                                     worker={worker}
                                     first={index === 0}

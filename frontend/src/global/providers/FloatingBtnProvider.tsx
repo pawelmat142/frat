@@ -4,7 +4,7 @@ interface FloatingBtnContextType {
     floatingButton: React.ReactNode;
     isVisible: boolean;
     setup: (button: React.ReactNode, id: string) => void;
-    hide: (param?: { remove: boolean, id: string }) => Promise<void>;
+    hide: (param?: { remove: boolean }) => Promise<void>;
     show(): Promise<void>;
 }
 
@@ -18,10 +18,8 @@ const FloatingBtnProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [currenctFabId, setCurrentFabId] = useState<string | null>(null);
 
 
-    const hide: (param?: { remove: boolean, id: string }) => Promise<void> = async (params) => {
-        const { remove, id } = params || {} as { remove?: boolean; id?: string };
-
-        if (id && id !== currenctFabId) return;
+    const hide: (param?: { remove: boolean }) => Promise<void> = async (params) => {
+        const { remove } = params || {} as { remove?: boolean };
 
         setIsVisible(false);
         

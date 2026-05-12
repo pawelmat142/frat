@@ -99,7 +99,7 @@ const WorkerView: React.FC = () => {
             floatingBtnCtx.show();
 
             return () => {
-                floatingBtnCtx.hide({ remove: true, id: worker.uid });
+                floatingBtnCtx.hide({ remove: true });
             }
     }, [worker]);
 
@@ -312,7 +312,7 @@ const WorkerView: React.FC = () => {
 
             <WorkerImagesSection worker={worker} onWorkerUpdate={_setProfile} onOpenCloseLightbox={(open) => {
                 if (open) {
-                    floatingBtnCtx.hide({ remove: false, id: worker.uid });
+                    floatingBtnCtx.hide({ remove: false });
                 } else {
                     floatingBtnCtx.show();
                 }
