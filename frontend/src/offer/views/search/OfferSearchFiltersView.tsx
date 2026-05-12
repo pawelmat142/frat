@@ -95,11 +95,12 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                                 {...field}
                                 fullWidth
                                 value={field.value?.[0] ?? undefined}
-                                label={t("employeeProfile.form.locationCountry") + '*'}
+                                label={t("employeeProfile.form.locationCountry.label") + '*'}
                                 className="w-full mt-5"
                                 onSelect={item => {
                                     f.setValue('locationCountries', item ? [item] : []);
                                 }}
+                                includeWorldwide
                             />
                         )}
                     />

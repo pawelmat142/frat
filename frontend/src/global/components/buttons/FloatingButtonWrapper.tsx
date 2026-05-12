@@ -1,15 +1,16 @@
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useGlobalContext } from "global/providers/GlobalProvider";
+import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
 
 interface Props {}
 
 const FloatingButtonWrapper: React.FC<Props> = () => {
-    const { floatingButton, floatingButtonKey } = useGlobalContext();
+
+    const { floatingButton, isVisible, floatingButtonKey } = useFloatingBtnContext();
 
     return (
         <AnimatePresence mode="wait">
-            {floatingButton && (
+            {floatingButton && isVisible && (
                 <motion.div
                     key={floatingButtonKey}
                     className="floating-button-wrapper"

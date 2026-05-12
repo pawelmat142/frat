@@ -99,7 +99,7 @@ const OfferFormStepTwo: React.FC = () => {
                             onSelect={(countryCode) => {
                                 handleCountryChange(countryCode);
                             }}
-                            label={t("employeeProfile.form.locationCountry")}
+                            label={t("employeeProfile.form.locationCountry.label")}
                             fullWidth
                             required
                             error={ctx.formCtx.formState.errors.STEP_TWO?.locationCountry}

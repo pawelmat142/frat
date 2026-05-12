@@ -167,7 +167,7 @@ const FriendsListView: React.FC = () => {
     }
     return (
         <>
-            <Header title={t('friends.header')}></Header>
+            <Header title={t('account.friends')}></Header>
             
             <div className="list-view">
 

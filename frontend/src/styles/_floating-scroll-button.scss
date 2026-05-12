@@ -151,3 +151,13 @@
         visibility: hidden;
     }
 }
+
+// FLOATING BUTTON WRAPPER (for context-based floating buttons with Framer Motion)
+.floating-button-wrapper {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 40;
+    width: 3.5rem;
+    height: 3.5rem;
+}

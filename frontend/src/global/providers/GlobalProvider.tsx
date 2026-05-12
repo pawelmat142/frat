@@ -13,11 +13,6 @@ interface GlobalContextType {
     getLanguagesList: () => string[];
     hideFooter: () => void;
     showFooter: () => void;
-    setFloatingButton: (button: React.ReactNode, registrationId?: string) => void;
-    floatingButton: React.ReactNode;
-    floatingButtonKey: number;
-    hideFloatingButton: boolean;
-    setHideFloatingButton: (hide: boolean) => void;
 }
 
 interface Dictionaries {
@@ -42,7 +37,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const setFloatingButton = (button: React.ReactNode, registrationId?: string) => {
         setHideFloatingButton(false)
-        if (button === null) {
+        if (!button) {
             floatingButtonIdRef.current = undefined
             setFloatingButtonState(null)
         } else {
@@ -88,11 +83,6 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             getLanguagesList,
             hideFooter,
             showFooter,
-            setFloatingButton,
-            floatingButton,
-            floatingButtonKey,
-            hideFloatingButton,
-            setHideFloatingButton
         }}>
             {children}
         </GlobalContext.Provider>

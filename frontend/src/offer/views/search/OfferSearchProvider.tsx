@@ -7,11 +7,9 @@ import { OffersService } from "offer/services/OffersService";
 import { Path } from "../../../path";
 import PseudoView from "global/components/PseudoView";
 import OfferSearchFiltersView from "./OfferSearchFiltersView";
-import { AppConfig } from "@shared/AppConfig";
-import { wait } from "global/utils/utils";
 import { NavBus } from "global/utils/PseudoViewBus";
-import { useGlobalContext } from "global/providers/GlobalProvider";
 import { MenuItemIdentifiers } from "global/interface/controls.interface";
+import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
 
 export interface OfferSearchContextProps {
     filters: OfferSearchFilters;
@@ -65,7 +63,7 @@ export const useOfferSearch = () => {
 const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const globalCtx = useGlobalContext();
+    const floatingBtnCtx = useFloatingBtnContext();
 
     const [filters, setFiltersState] = useState<OfferSearchFilters>(() => {
         const parsed = OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters);
@@ -83,9 +81,9 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const openOfferPseudoView = (open: boolean) => {
         if (open) {
-            globalCtx.setHideFloatingButton(true);
+            floatingBtnCtx.hide();
         } else {
-            globalCtx.setHideFloatingButton(false);
+            floatingBtnCtx.show();
         }
         setOpenPseudoView(open);
     };

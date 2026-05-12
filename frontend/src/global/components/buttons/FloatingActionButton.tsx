@@ -1,5 +1,4 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { useIsPresent } from "framer-motion";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 
 interface FloatingActionButtonProps {
@@ -8,8 +7,6 @@ interface FloatingActionButtonProps {
     ariaLabel?: string;
     bottomOffset?: number;
     rightOffset?: number;
-    forceVisible?: boolean;
-    hidden?: boolean;
 }
 
 const getScrollTop = (container: Window | HTMLElement): number => {
@@ -24,23 +21,12 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
     icon,
     ariaLabel = "Action",
     bottomOffset = 84,
-    rightOffset = 24,
-    forceVisible,
-    hidden = false,
+    rightOffset = 24
 }) => {
-    // null = not yet interacted (no animation class applied)
     const [visible, setVisible] = useState<boolean | null>(null);
-    const [mounted, setMounted] = useState(false);
     const lastScrollTop = useRef(0);
-    const isPresent = useIsPresent();
 
     const globalCtx = useGlobalContext();
-    
-    // Delay initial render to avoid flash during router navigation
-    useEffect(() => {
-        const timer = setTimeout(() => setMounted(true), 500);
-        return () => clearTimeout(timer);
-    }, []);
 
     useEffect(() => {
         // Scroll happens on .app-main, not window
@@ -64,14 +50,9 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
         setVisible(!globalCtx.hideFloatingButton);
     }, [globalCtx.hideFloatingButton])
 
-    // When AnimatePresence starts exit transition, immediately hide the FAB
-    const visibilityClass = !isPresent || !visible
+    const visibilityClass = !visible
         ? "fab-hidden"
-        : (forceVisible)
-            ? "fab-visible"
-            : "";
-
-    if (hidden || !mounted) return null;
+        : "fab-visible";
 
     const className = ["floating-action-btn", visibilityClass]
         .filter(Boolean)

@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { FaGlobe } from "react-icons/fa";
-import { Utils } from "global/utils/utils";
 import { DateRange } from "@shared/interfaces/WorkerI";
 import { LocationCity, Place } from "@mui/icons-material";
 import Flags from "global/components/Flags";
@@ -19,10 +18,6 @@ const WorkersSearchFilters: React.FC = () => {
     const languagesDictionary = globalCtx.dics.languages;
     const { t } = useTranslation();
     const ctx = useWorkersSearch();
-
-    const flags = languagesDictionary
-        ? Array.from(Utils.prepareFlagSrcs(ctx.filters.communicationLanguages || [], languagesDictionary))
-        : [];
 
     const locationCountryDictionaryCode = DictionaryUtil.getElementByCountryCode(languagesDictionary!, ctx.filters.locationCountry || "")?.code;
 

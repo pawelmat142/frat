@@ -22,6 +22,7 @@ import Header from "global/components/Header";
 import { useFriendshipActions } from "friends/useFriendshipActions";
 import { buildFriendshipMenuItems } from "friends/friendshipMenuBuilder";
 import { FriendshipStatuses } from "@shared/interfaces/FriendshipI";
+import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
 
 const ProfileView: React.FC = () => {
 
@@ -33,8 +34,8 @@ const ProfileView: React.FC = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const userStorage = useUsersStorage();
+    const floatingBtnCtx = useFloatingBtnContext();
     const globalCtx = useGlobalContext();
-    const fabId = useId();
 
     const [loading, setLoading] = useState(true);
     const [worker, setWorker] = useState<WorkerI | null>(null)
@@ -84,6 +85,21 @@ const ProfileView: React.FC = () => {
         }
     }, [user]);
 
+    useEffect(() => {
+        if (!user || isMyAccount) return
+        floatingBtnCtx.setup(<FloatingActionButton
+            onClick={openChat}
+            icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
+        />, user.uid)
+
+        floatingBtnCtx.show();
+
+        return () => {
+            floatingBtnCtx.hide({ remove: true, id: user.uid });
+        }
+
+    }, [user])
+
 
     const initUserData = async (user: UserI) => {
         const [worker, userOffers] = await Promise.all([
@@ -98,18 +114,6 @@ const ProfileView: React.FC = () => {
     useEffect(() => {
         setLoading(authLoading);
     }, [authLoading]);
-
-    useEffect(() => {
-        if (!isMyAccount) {
-            globalCtx.setFloatingButton(
-                <FloatingActionButton
-                    onClick={openChat}
-                    icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
-                />,
-                fabId
-            );
-        }
-    }, [user, isMyAccount]);
 
     if (loading || friendshipActionLoading) {
         return <Loading />;
@@ -163,7 +167,7 @@ const ProfileView: React.FC = () => {
         onRejectInvitation: rejectInvitation,
         onOpenChat: openChat,
     });
-    
+
     const menuItems = [
         ...friendshipItems,
         ...baseMenuItems
@@ -172,7 +176,7 @@ const ProfileView: React.FC = () => {
     return (
         <>
             <Header title={t('account.account')}></Header>
-            
+
             <div className="w-full">
 
                 <UserProfileItem user={user} className="px-2"></UserProfileItem>

@@ -15,7 +15,6 @@ import PositionWidget from "employee/components/PositionWidget";
 import { Ico } from "global/icon.def";
 import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
 import FloatingActionButton from "global/components/buttons/FloatingActionButton";
-import { useGlobalContext } from "global/providers/GlobalProvider";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { AppConfig } from "@shared/AppConfig";
 import WorkerSkillsSection from "employee/components/WorkerSkillsSection";
@@ -30,6 +29,7 @@ import WorkerBioSection from "employee/components/WorkerBioSection";
 import WorkerDataSection from "employee/components/WorkerDataSection";
 import { useFriendshipActions } from "friends/useFriendshipActions";
 import { buildFriendshipMenuItems } from "friends/friendshipMenuBuilder";
+import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
 
 const WorkerView: React.FC = () => {
 
@@ -37,16 +37,14 @@ const WorkerView: React.FC = () => {
     const displayName = params.displayName
 
     const [loading, setLoading] = useState(false)
-    const [worker, setProfile] = useState<WorkerI | null>(null)
-    const [hideFloatingBtn, setHideFloatingBtn] = useState(false);
+    const [worker, setWorker] = useState<WorkerI | null>(null)
 
     const { t } = useTranslation();
     const navigate = useNavigate();
     const confirm = useConfirm();
     const userCtx = useUserContext();
-    const globalCtx = useGlobalContext();
+    const floatingBtnCtx = useFloatingBtnContext();
     const me = userCtx?.me;
-    const fabId = useId();
 
     const profileCtx = useWorkersSearch();
 
@@ -90,21 +88,20 @@ const WorkerView: React.FC = () => {
         initWorker()
     }, []);
 
-    useEffect(() => {
-        if (!worker || isMe) return;
-        globalCtx.setFloatingButton(
-            <FloatingActionButton
-                forceVisible={!hideFloatingBtn}
-                onClick={openChat}
-                icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
-            />,
-            fabId
-        );
-    }, [worker, isMe, hideFloatingBtn]);
 
     useEffect(() => {
-        return () => globalCtx.setHideFloatingButton(true);
-    }, []);
+        if (!worker || isMyAccount) return;
+        floatingBtnCtx.setup(
+            <FloatingActionButton
+                onClick={openChat}
+                icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
+            />, worker.uid);
+            floatingBtnCtx.show();
+
+            return () => {
+                floatingBtnCtx.hide({ remove: true, id: worker.uid });
+            }
+    }, [worker]);
 
 
     const goToUserProfile = () => {
@@ -140,7 +137,7 @@ const WorkerView: React.FC = () => {
         try {
             setLoading(true);
             const result = await WorkerService.activation()
-            setProfile(result);
+            setWorker(result);
             if (WorkerStatuses.ACTIVE === result.status) {
                 toast.success(t('employeeProfile.activationSuccessToast'));
             } else {
@@ -163,7 +160,7 @@ const WorkerView: React.FC = () => {
     }
 
     const _setProfile = (profile: WorkerI | null) => {
-        setProfile(profile)
+        setWorker(profile)
         if (profile) {
             notifyProfileView(profile)
         }
@@ -230,7 +227,7 @@ const WorkerView: React.FC = () => {
         label: worker.status === WorkerStatuses.ACTIVE ? t('employeeProfile.deactivateButton') : t('employeeProfile.activateButton'),
         if: isMyAccount,
         onClick: () => { profileActivation(worker) },
-        icon: worker.status === WorkerStatuses.ACTIVE ? Ico.CANCEL :  Ico.CHECK
+        icon: worker.status === WorkerStatuses.ACTIVE ? Ico.CANCEL : Ico.CHECK
     }, {
         label: t('employeeProfile.deleteButton'),
         if: isMyAccount,
@@ -314,7 +311,11 @@ const WorkerView: React.FC = () => {
             <WorkerSkillsSection worker={worker} />
 
             <WorkerImagesSection worker={worker} onWorkerUpdate={_setProfile} onOpenCloseLightbox={(open) => {
-                setHideFloatingBtn(open);
+                if (open) {
+                    floatingBtnCtx.hide({ remove: false, id: worker.uid });
+                } else {
+                    floatingBtnCtx.show();
+                }
             }} />
 
             <WorkerBioSection worker={worker} />

@@ -41,13 +41,11 @@ const WorkerSkillsFormView: React.FC = () => {
 
     React.useEffect(() => {
         globalCtx.hideFooter();
-        globalCtx.setHideFloatingButton(true);
         if (fields.length === 0) {
             append({ name: "" })
         };
         return () => {
             globalCtx.showFooter();
-            globalCtx.setHideFloatingButton(false);
         }
     }, []);
 

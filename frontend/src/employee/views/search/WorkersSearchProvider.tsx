@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { WorkerService } from "employee/services/WorkerService";
-import { WorkerI, WorkerSearchFilters, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT, WorkerSearchRequest, WorkerSearchResponse, WorkerWithMutualFriends, WorkerSearchSortOptions } from "@shared/interfaces/WorkerI";
+import { WorkerI, WorkerSearchFilters, PROFILES_INITIAL_SEARCH_LIMIT, PROFILES_LOAD_MORE_SEARCH_LIMIT, WorkerSearchRequest, WorkerWithMutualFriends, WorkerSearchSortOptions } from "@shared/interfaces/WorkerI";
 import { WorkerUtil } from "@shared/utils/WorkerUtil";
 import { Path } from "../../../path";
 import { useUserContext } from "user/UserProvider";
@@ -10,8 +10,8 @@ import { AppConfig } from "@shared/AppConfig";
 import PseudoView from "global/components/PseudoView";
 import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
 import { NavBus } from "global/utils/PseudoViewBus";
-import { useGlobalContext } from "global/providers/GlobalProvider";
 import { MenuItemIdentifiers } from "global/interface/controls.interface";
+import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
 
 const WORKER_SEARCH_SESSION_STORAGE_KEY = 'workerSearchSession';
 const WORKER_SEARCH_SESSION_TTL_MS = 30 * 60 * 1000;
@@ -106,7 +106,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const location = useLocation();
     const navigate = useNavigate();
     const userCtx = useUserContext();
-    const globalCtx = useGlobalContext();
+    const floatingBtnCtx = useFloatingBtnContext();
 
     const [filters, setFilters] = useState<WorkerSearchFilters>(WorkerUtil.parseFiltersFromSearch(location.search, WorkerDefaultFilters))
 
@@ -122,10 +122,11 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const openWorkersPseudoView = (open: boolean) => {
         NavBus.emit(MenuItemIdentifiers.WORKERS);
         if (open) {
-            globalCtx.setHideFloatingButton(true);
+            floatingBtnCtx.hide();
         } else {
-            globalCtx.setHideFloatingButton(false);
+            floatingBtnCtx.show();
         }
+
         setOpenPseudoView(open);
     };
 

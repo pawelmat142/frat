@@ -25,6 +25,7 @@ import { UsersStorageProvider } from 'global/providers/UsersStorageProvider';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
 import FloatingButtonWrapper from 'global/components/buttons/FloatingButtonWrapper';
 import { motion } from 'framer-motion';
+import FloatingBtnProvider from 'global/providers/FloatingBtnProvider';
 
 const AppShell: React.FC = () => {
   const { isFooterHidden } = useGlobalContext();
@@ -46,49 +47,51 @@ root.render(
   <React.StrictMode>
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <GlobalProvider>
-        <PopupProvider>
-          <BottomSheetProvider>
-            <DrawerProvider>
-              <ThemeProvider>
-                <UsersStorageProvider>
-                  <CookieProvider>
-                    <AuthProvider>
-                      <UserProvider>
-                        <FriendsProvider>
-                          <ChatsProvider>
-                            <NotificationsProvider>
-                              <OfferSearchProvider>
-                                <WorkersSearchProvider>
-                                  <MenuProvider>
+        <FloatingBtnProvider>
+          <PopupProvider>
+            <BottomSheetProvider>
+              <DrawerProvider>
+                <ThemeProvider>
+                  <UsersStorageProvider>
+                    <CookieProvider>
+                      <AuthProvider>
+                        <UserProvider>
+                          <FriendsProvider>
+                            <ChatsProvider>
+                              <NotificationsProvider>
+                                <OfferSearchProvider>
+                                  <WorkersSearchProvider>
+                                    <MenuProvider>
 
-                                    <AppShell />
+                                      <AppShell />
 
-                                    <CookieBanner />
-                                    <ToastContainer
-                                      position="top-right"
-                                      autoClose={3000}
-                                      hideProgressBar={false}
-                                      newestOnTop={false}
-                                      closeOnClick
-                                      rtl={false}
-                                      pauseOnFocusLoss
-                                      draggable
-                                      pauseOnHover
-                                    />
-                                  </MenuProvider>
-                                </WorkersSearchProvider>
-                              </OfferSearchProvider>
-                            </NotificationsProvider>
-                          </ChatsProvider>
-                        </FriendsProvider>
-                      </UserProvider>
-                    </AuthProvider>
-                  </CookieProvider>
-                </UsersStorageProvider>
-              </ThemeProvider>
-            </DrawerProvider>
-          </BottomSheetProvider>
-        </PopupProvider>
+                                      <CookieBanner />
+                                      <ToastContainer
+                                        position="top-right"
+                                        autoClose={3000}
+                                        hideProgressBar={false}
+                                        newestOnTop={false}
+                                        closeOnClick
+                                        rtl={false}
+                                        pauseOnFocusLoss
+                                        draggable
+                                        pauseOnHover
+                                      />
+                                    </MenuProvider>
+                                  </WorkersSearchProvider>
+                                </OfferSearchProvider>
+                              </NotificationsProvider>
+                            </ChatsProvider>
+                          </FriendsProvider>
+                        </UserProvider>
+                      </AuthProvider>
+                    </CookieProvider>
+                  </UsersStorageProvider>
+                </ThemeProvider>
+              </DrawerProvider>
+            </BottomSheetProvider>
+          </PopupProvider>
+        </FloatingBtnProvider>
       </GlobalProvider>
     </BrowserRouter>
   </React.StrictMode>

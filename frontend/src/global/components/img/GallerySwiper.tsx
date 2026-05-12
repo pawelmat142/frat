@@ -21,7 +21,7 @@ const GallerySwiper: React.FC<Props> = ({ images, startIndex, onClose }) => {
     };
 
     return (
-        <>
+        <div className="bg-black h-full flex flex-col">
             {/* Close */}
             <button
                 className="absolute top-4 right-4 z-10 text-white text-2xl p-2"
@@ -66,7 +66,7 @@ const GallerySwiper: React.FC<Props> = ({ images, startIndex, onClose }) => {
                     ))}
                 </div>
             )}
-        </>
+        </div>
     );
 };
 
