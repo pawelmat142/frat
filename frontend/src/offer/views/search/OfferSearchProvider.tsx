@@ -9,7 +9,7 @@ import PseudoView from "global/components/PseudoView";
 import OfferSearchFiltersView from "./OfferSearchFiltersView";
 import { NavBus } from "global/utils/PseudoViewBus";
 import { MenuItemIdentifiers } from "global/interface/controls.interface";
-import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
+import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 
 export interface OfferSearchContextProps {
     filters: OfferSearchFilters;

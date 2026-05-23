@@ -11,7 +11,7 @@ import PseudoView from "global/components/PseudoView";
 import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
 import { NavBus } from "global/utils/PseudoViewBus";
 import { MenuItemIdentifiers } from "global/interface/controls.interface";
-import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
+import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 
 const WORKER_SEARCH_SESSION_STORAGE_KEY = 'workerSearchSession';
 const WORKER_SEARCH_SESSION_TTL_MS = 30 * 60 * 1000;

@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Loading from "global/components/Loading";
 import { UserI } from "@shared/interfaces/UserI";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,8 +13,7 @@ import { OffersService } from "offer/services/OffersService";
 import { Ico } from "global/icon.def";
 import UserProfileItem from "user/components/UserProfileItem";
 import ListUi from "global/components/ui/ListUi";
-import FloatingActionButton from "global/components/buttons/FloatingActionButton";
-import { useGlobalContext } from "global/providers/GlobalProvider";
+import FloatingActionButton from "global/fab/FloatingActionButton";
 import { AppConfig } from "@shared/AppConfig";
 import { MenuItem } from "global/interface/controls.interface";
 import { useUsersStorage } from "global/providers/UsersStorageProvider";
@@ -22,7 +21,7 @@ import Header from "global/components/Header";
 import { useFriendshipActions } from "friends/useFriendshipActions";
 import { buildFriendshipMenuItems } from "friends/friendshipMenuBuilder";
 import { FriendshipStatuses } from "@shared/interfaces/FriendshipI";
-import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
+import { FABkey, FABtype, useFAB } from "global/fab/useFAB";
 
 const ProfileView: React.FC = () => {
 
@@ -34,8 +33,6 @@ const ProfileView: React.FC = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const userStorage = useUsersStorage();
-    const floatingBtnCtx = useFloatingBtnContext();
-    const globalCtx = useGlobalContext();
 
     const [loading, setLoading] = useState(true);
     const [worker, setWorker] = useState<WorkerI | null>(null)
@@ -85,21 +82,15 @@ const ProfileView: React.FC = () => {
         }
     }, [user]);
 
-    useEffect(() => {
-        if (!user || isMyAccount) return
-        floatingBtnCtx.setup(<FloatingActionButton
+    useFAB({
+        type: FABtype.chat,
+        key: FABkey.chat(worker?.uid || ''),
+        props: { uid: worker?.uid },
+        component: <FloatingActionButton
             onClick={openChat}
             icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
-        />, user.uid)
-
-        floatingBtnCtx.show();
-
-        return () => {
-            floatingBtnCtx.hide({ remove: true, id: user.uid });
-        }
-
-    }, [user])
-
+        />,
+    });
 
     const initUserData = async (user: UserI) => {
         const [worker, userOffers] = await Promise.all([

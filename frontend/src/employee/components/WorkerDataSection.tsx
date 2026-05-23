@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useUserContext } from "user/UserProvider";
-import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
+import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 
 interface Props {
     worker: WorkerI;
@@ -27,11 +27,11 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
 
     const bottomSheetCtx = useBottomSheet();
     const globalCtx = useGlobalContext();
-    const floatingBtnCtx = useFloatingBtnContext();
     const { t } = useTranslation();
     const isDesktop = useIsDesktop();
     const userCtx = useUserContext();
     const navigate = useNavigate();
+    const floatingBtnCtx = useFloatingBtnContext();
 
     const me = userCtx?.me;
 
@@ -46,7 +46,7 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
         }
         setOpenPseudoView(true);
         globalCtx.hideFooter();
-        floatingBtnCtx.hide({ remove: false, id: worker.uid });
+        floatingBtnCtx.hide();
     }
 
 

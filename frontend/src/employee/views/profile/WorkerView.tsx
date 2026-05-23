@@ -14,7 +14,7 @@ import { useUserContext } from "user/UserProvider";
 import PositionWidget from "employee/components/PositionWidget";
 import { Ico } from "global/icon.def";
 import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
-import FloatingActionButton from "global/components/buttons/FloatingActionButton";
+import FloatingActionButton from "global/fab/FloatingActionButton";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { AppConfig } from "@shared/AppConfig";
 import WorkerSkillsSection from "employee/components/WorkerSkillsSection";
@@ -29,7 +29,9 @@ import WorkerBioSection from "employee/components/WorkerBioSection";
 import WorkerDataSection from "employee/components/WorkerDataSection";
 import { useFriendshipActions } from "friends/useFriendshipActions";
 import { buildFriendshipMenuItems } from "friends/friendshipMenuBuilder";
-import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
+import { useFAB } from "global/fab";
+import { FABkey, FABtype } from "global/fab/useFAB";
+import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 
 const WorkerView: React.FC = () => {
 
@@ -43,10 +45,10 @@ const WorkerView: React.FC = () => {
     const navigate = useNavigate();
     const confirm = useConfirm();
     const userCtx = useUserContext();
-    const floatingBtnCtx = useFloatingBtnContext();
     const me = userCtx?.me;
-
+    
     const profileCtx = useWorkersSearch();
+    const floatingBtnCtx = useFloatingBtnContext();
 
     const isMe = me?.uid === worker?.uid;
     const isSavedOnList = (userCtx.meCtx?.listedItems ?? [])
@@ -65,6 +67,7 @@ const WorkerView: React.FC = () => {
     } = useFriendshipActions({
         targetUid: worker?.uid || '',
     });
+
 
     const friendship = isMyAccount ? null : getFriendship();
 
@@ -88,19 +91,18 @@ const WorkerView: React.FC = () => {
         initWorker()
     }, []);
 
+    useFAB({
+        type: FABtype.chat,
+        key: FABkey.chat(worker?.uid || ''),
+        props: { uid: worker?.uid },
+        component: <FloatingActionButton
+            onClick={openChat}
+            icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
+        />,
+    });
 
     useEffect(() => {
         if (!worker || isMyAccount) return;
-        floatingBtnCtx.setup(
-            <FloatingActionButton
-                onClick={openChat}
-                icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
-            />, worker.uid);
-            floatingBtnCtx.show();
-
-            return () => {
-                floatingBtnCtx.hide({ remove: true });
-            }
     }, [worker]);
 
 
@@ -312,9 +314,9 @@ const WorkerView: React.FC = () => {
 
             <WorkerImagesSection worker={worker} onWorkerUpdate={_setProfile} onOpenCloseLightbox={(open) => {
                 if (open) {
-                    floatingBtnCtx.hide({ remove: false });
+                    floatingBtnCtx.hide()
                 } else {
-                    floatingBtnCtx.show();
+                    floatingBtnCtx.show()
                 }
             }} />
 

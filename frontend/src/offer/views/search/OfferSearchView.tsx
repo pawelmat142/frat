@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef } from "react";
+import React, { useRef } from "react";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useTranslation } from "react-i18next";
 import { useOfferSearch } from "./OfferSearchProvider";
@@ -6,7 +6,7 @@ import Loading from "global/components/Loading";
 import OfferSearchFilters from "./OfferSearchFilters";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
 import OfferSearchListItem from "offer/components/ListItems/OfferSearchListItem";
-import FloatingActionButton from "global/components/buttons/FloatingActionButton";
+import FloatingActionButton from "global/fab/FloatingActionButton";
 import { Ico } from "global/icon.def";
 import { AppConfig } from "@shared/AppConfig";
 import Header from "global/components/Header";
@@ -18,7 +18,7 @@ import { UserListedItemService } from "user/services/UserListedItemService";
 import { toast } from "react-toastify";
 import IconButton from "global/components/controls/IconButon";
 import { BtnModes } from "global/interface/controls.interface";
-import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
+import { FABkey, FABtype, useFAB } from "global/fab/useFAB";
 
 const OfferSearchView: React.FC = () => {
 
@@ -26,26 +26,18 @@ const OfferSearchView: React.FC = () => {
     const globalCtx = useGlobalContext();
     const ctx = useOfferSearch();
     const userCtx = useUserContext();
-    const fabId = useId();
-    const floatingBtnCtx = useFloatingBtnContext();
 
     const swipeRefs = useRef<Map<number, SwipeableRowRef>>(new Map());
     const [loading, setLoading] = React.useState(false);
 
-    useEffect(() => {
-        floatingBtnCtx.setup(
-            <FloatingActionButton
-                onClick={() => ctx.setOpenPseudoView(true)}
-                icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE} />}
-            />,
-            fabId
-        );
-    }, [ctx.openPseudoView]);
-
-    // Cleanup only on unmount — avoids null flash when openPseudoView changes
-    useEffect(() => {
-        return () => { floatingBtnCtx.hide({ remove: true }) };
-    }, []);
+    useFAB({
+        type: FABtype.filters,
+        key: FABkey.offerSearch,
+        component: <FloatingActionButton
+            onClick={() => ctx.setOpenPseudoView(true)}
+            icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE} />}
+        />,
+    });
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading></Loading>

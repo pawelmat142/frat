@@ -1,4 +1,4 @@
-import React, { useEffect, useId } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useTrainingSearch } from "./TrainingSearchProvider";
@@ -6,34 +6,28 @@ import TrainingListItem from "training/components/TrainingListItem";
 import TrainingSearchFilters from "./TrainingSearchFilters";
 import Loading from "global/components/Loading";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
-import FloatingActionButton from "global/components/buttons/FloatingActionButton";
+import FloatingActionButton from "global/fab/FloatingActionButton";
 import PseudoView from "global/components/PseudoView";
 import TrainingSearchFiltersView from "./TrainingSearchFiltersView";
 import { Ico } from "global/icon.def";
 import { AppConfig } from "@shared/AppConfig";
 import Header from "global/components/Header";
+import { FABkey, FABtype, useFAB } from "global/fab/useFAB";
 
 const TrainingSearchView: React.FC = () => {
 
     const { t } = useTranslation();
     const globalCtx = useGlobalContext();
     const ctx = useTrainingSearch();
-    const fabId = useId();
 
-    useEffect(() => {
-        globalCtx.setFloatingButton(
-            <FloatingActionButton
-                forceVisible={!ctx.openPseudoView}
-                onClick={() => ctx.setOpenPseudoView(true)}
-                icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE} />}
-            />,
-            fabId,
-        );
-    }, [ctx.openPseudoView]);
-
-    useEffect(() => {
-        return () => globalCtx.setFloatingButton(null);
-    }, []);
+    useFAB({
+        type: FABtype.filters,
+        key: FABkey.trainingSearch,
+        component: <FloatingActionButton
+            onClick={() => ctx.setOpenPseudoView(true)}
+            icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE} />}
+        />,
+    });
 
     if (globalCtx.loading) {
         return <Loading />;

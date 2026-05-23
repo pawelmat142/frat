@@ -23,9 +23,9 @@ import { NotificationsProvider } from 'notification/NotificationsProvider';
 import { FriendsProvider } from 'friends/FriendsProvider';
 import { UsersStorageProvider } from 'global/providers/UsersStorageProvider';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
-import FloatingButtonWrapper from 'global/components/buttons/FloatingButtonWrapper';
+import FloatingButtonWrapper from 'global/fab/FloatingButtonWrapper';
 import { motion } from 'framer-motion';
-import FloatingBtnProvider from 'global/providers/FloatingBtnProvider';
+import FloatingBtnProvider from 'global/fab/FloatingBtnProvider';
 
 const AppShell: React.FC = () => {
   const { isFooterHidden } = useGlobalContext();

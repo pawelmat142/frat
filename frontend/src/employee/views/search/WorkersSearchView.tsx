@@ -6,7 +6,7 @@ import WorkersSearchFiltersBar from "./WorkersSearchFiltersBar";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
 import { FaUserSlash } from "react-icons/fa";
-import FloatingActionButton from "global/components/buttons/FloatingActionButton";
+import FloatingActionButton from "global/fab/FloatingActionButton";
 import { Ico } from "global/icon.def";
 import { AppConfig } from "@shared/AppConfig";
 import WorkerSearchListItem from "employee/components/ListItems/WorkerSearchListItem";
@@ -19,7 +19,8 @@ import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/inter
 import { useUserContext } from "user/UserProvider";
 import { toast } from "react-toastify";
 import { BtnModes } from "global/interface/controls.interface";
-import { useFloatingBtnContext } from "global/providers/FloatingBtnProvider";
+import { useFAB } from "global/fab";
+import { FABkey, FABtype } from "global/fab/useFAB";
 
 const WorkersSearchView: React.FC = () => {
 
@@ -27,26 +28,18 @@ const WorkersSearchView: React.FC = () => {
     const userCtx = useUserContext();
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
-    const floatingBtnCtx = useFloatingBtnContext();
-    const fabId = useId()
 
     const swipeRefs = useRef<Map<number, SwipeableRowRef>>(new Map());
     const [loading, setLoading] = React.useState(false);
 
-    useEffect(() => {
-        floatingBtnCtx.setup(
-            <FloatingActionButton
-                onClick={() => ctx.setOpenPseudoView(true)}
-                icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE} />}
-            />,
-            fabId
-        );
-        floatingBtnCtx.show();
-    }, []);
-
-    useEffect(() => {
-        return () => { floatingBtnCtx.hide({ remove: true }) };
-    }, []);
+    useFAB({
+        type: FABtype.filters,
+        key: FABkey.workerSearch,
+        component: <FloatingActionButton
+            onClick={() => ctx.setOpenPseudoView(true)}
+            icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE} />}
+        />,
+    });
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading></Loading>
