@@ -606,7 +606,11 @@
         }
       },
       "WORK_CATEGORY": {
-        "NAME": {}
+        "NAME": {
+          "WIND": "Wind Energy",
+          "ONSHORE": "Rope Access ONSHORE",
+          "OFFSHORE": "OFFSHORE Oil and Gas"
+        }
       }
     },
     "validation": {

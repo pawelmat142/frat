@@ -91,10 +91,11 @@ export class SearchWorkersService {
             baseQueryBuilder.andWhere('profile.certificates @> :certificates', { certificates });
             hasFilter = true;
         }
-        if (categories?.length) {
-            baseQueryBuilder.andWhere('profile.categories @> :categories', { categories });
-            hasFilter = true;
-        }
+        // Catgegory filter is used only to narrow down certificates options in the frontend, so it is not used in search engine
+        // if (categories?.length) {
+        //     baseQueryBuilder.andWhere('profile.categories @> :categories', { categories });
+        //     hasFilter = true;
+        // }
     }
 
     private addDateRangeFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, hasFilter: boolean) {

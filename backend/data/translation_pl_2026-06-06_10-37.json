@@ -606,6 +606,13 @@
           "HIGH_ANGLE_RESCUE_TECHNICIAN": "Technik Ratownictwa Wysokościowego",
           "CONFINED_SPACE_RESCUE_TECHNICIAN": "Technik Ratownictwa w Przestrzeniach Zamkniętych"
         }
+      },
+      "WORK_CATEGORY": {
+        "NAME": {
+          "WIND": "Turbiny wiatrowe",
+          "ONSHORE": "Dostęp linowy (prace lądowe)",
+          "OFFSHORE": "Platformy wiertnicze"
+        }
       }
     },
     "validation": {
