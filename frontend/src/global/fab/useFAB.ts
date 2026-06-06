@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useFloatingBtnContext, FABConfig } from 'global/fab/FloatingBtnProvider';
+import { useUserContext } from 'user/UserProvider';
 
 /**
  * Hook do deklaracji FAB w widokach.
@@ -18,8 +19,15 @@ import { useFloatingBtnContext, FABConfig } from 'global/fab/FloatingBtnProvider
 export const useFAB = (config: FABConfig | null) => {
     const { setFAB, show: show } = useFloatingBtnContext();
 
+    const { me } = useUserContext();
     useEffect(() => {
         if (config) {
+            const uid = config.props?.uid;
+            if (!!uid && uid === me?.uid) {
+                setFAB(null);
+                return;
+            }
+
             setFAB(config);
             show();
         } else {
