@@ -9,7 +9,6 @@ import Flags from "global/components/Flags";
 import { useWorkersSearch } from "./WorkersSearchProvider";
 import { DateUtil } from "@shared/utils/DateUtil";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
-import CategoriesChips from "global/components/chips/CategoriesChips";
 import { Dictionaries } from "@shared/def/dictionary.def";
 
 const WorkersSearchFiltersBar: React.FC = () => {

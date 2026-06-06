@@ -3,7 +3,6 @@ import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import ArrowIcon from '../controls/ArrowIcon';
 import FloatingLabel from '../controls/FloatingLabel';
 import FormError from '../controls/FormError';
-import { AppConfig } from '@shared/AppConfig';
 
 function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
     items,
@@ -18,6 +17,7 @@ function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
     className = '',
     error,
     displayElementsAsChips = false,
+    enableSearchText = false,
 }: SelectorMultiProps<T>) {
 
     const bottomSheet = useBottomSheet();
@@ -47,6 +47,7 @@ function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
             selectedValues: values ? values.map(v => v.value) : [],
             title: label || '',
             multiSelect: true,
+            enableSearchText: enableSearchText,
             onSelectMulti: (items) => {
                 onSelect(items);
             },

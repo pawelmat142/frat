@@ -47,6 +47,7 @@ const CertificatesSelector: React.FC<Props> = ({ form }) => {
                     groupCode={category ?? undefined}
                     fullWidth
                     onDictionaryChange={setDictionary}
+                    enableSearchText
                 />
             )}
         />

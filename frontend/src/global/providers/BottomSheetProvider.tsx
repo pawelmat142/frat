@@ -21,6 +21,7 @@ export interface BottomSheetDictionaryParams<T extends SelectorValue = SelectorV
     code: string;
     groupCode?: string;
     multiSelect?: boolean;
+    enableSearchText?: boolean;
     translateItems?: boolean
     selectedValues?: T[];
     onSelect?: (item: T) => void;
@@ -33,6 +34,7 @@ export interface OpenSelectorParams<T extends SelectorValue = SelectorValue> {
     items: SelectorItem<T>[];
     selectedValues?: T[];
     multiSelect?: boolean;
+    enableSearchText?: boolean;
     onSelect?: (item: T) => void;
     onSelectMulti?: (items: T[]) => void;
     onClean?: () => void;
@@ -43,6 +45,7 @@ export interface OpenDictionaryParams<T extends SelectorValue = SelectorValue> {
     code: string;
     translateItems?: boolean
     groupCode?: string;
+    enableSearchText?: boolean;
     selectedValues?: T[];
     multiSelect?: boolean;
     onSelect?: (item: T) => void;
@@ -108,6 +111,7 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
                 selectedValues={params.selectedValues}
                 multiSelect={params.multiSelect}
                 translateItems={params.translateItems}
+                enableSearchText={params.enableSearchText}
                 onSelect={(item) => {
                     close()
                     params.onSelect?.(item)
@@ -141,6 +145,7 @@ export const BottomSheetProvider: React.FC<{ children: React.ReactNode }> = ({ c
             selectedValues: params.selectedValues,
             multiSelect: params.multiSelect,
             translateItems: params.translateItems,
+            enableSearchText: params.enableSearchText,
             items: items,
             onSelect: params.onSelect,
             onSelectMulti: params.onSelectMulti,

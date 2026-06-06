@@ -14,6 +14,7 @@ interface DictionarySelectorProps extends DictionarySelectorInterface<string> {
     showLabel?: boolean
     emitValueCode?: string;
     onDictionaryChange?: (dictionary: DictionaryI | null) => void;
+    enableSearchText?: boolean;
 }
 const DictionarySelector = forwardRef((
     {
@@ -33,7 +34,7 @@ const DictionarySelector = forwardRef((
         disabledValues = [],
         elementLabelTranslationKey = 'NAME',
         error,
-        enableSearchText = true,
+        enableSearchText = false,
         showLabel,
         onDictionaryChange
     }: DictionarySelectorProps,
@@ -104,17 +105,19 @@ const DictionarySelector = forwardRef((
 
     const filteredElements = getFilteredElements(dictionary);
 
-    const items: SelectorItem<string>[] = filteredElements.map(element => {
-        const translationKey = `dictionary.${dictionary.code}.${elementLabelTranslationKey}.${element.code}`;
-        const translatedLabel = t(translationKey);
-        const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
-        return {
-            label: capitalizedLabel,
-            value: String(element.code),
-            src: element.values.SRC,
-            disabled: disabledValues.includes(String(element.code)),
-        };
-    });
+    const items: SelectorItem<string>[] = filteredElements
+        .sort((a, b) => a.code.localeCompare(b.code))
+        .map(element => {
+            const translationKey = `dictionary.${dictionary.code}.${elementLabelTranslationKey}.${element.code}`;
+            const translatedLabel = t(translationKey);
+            const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
+            return {
+                label: capitalizedLabel,
+                value: String(element.code),
+                src: element.values.SRC,
+                disabled: disabledValues.includes(String(element.code)),
+            };
+        });
 
     if (type === 'single') {
         const selectedItem: SelectorItem<string> | null = items.find(item => item.value === valueInput) || null;
@@ -155,6 +158,7 @@ const DictionarySelector = forwardRef((
             className={className}
             error={error}
             displayElementsAsChips={true}
+            enableSearchText={enableSearchText}
             showLabel={showLabel}
         />;
     }

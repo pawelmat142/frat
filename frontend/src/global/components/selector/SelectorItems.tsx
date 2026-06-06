@@ -1,8 +1,10 @@
-import { BtnModes, SelectorItem, SelectorValue } from "global/interface/controls.interface";
+import { BtnModes, FloatingInputModes, SelectorItem, SelectorValue } from "global/interface/controls.interface";
 import { ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCheck } from "react-icons/fa";
 import Button from "../controls/Button";
+import FloatingInput from "../controls/FloatingInput";
+import { Search } from "@mui/icons-material";
 
 interface Props<T extends SelectorValue = SelectorValue> {
     items: SelectorItem<T>[]
@@ -12,6 +14,7 @@ interface Props<T extends SelectorValue = SelectorValue> {
     onSelectMulti?: (items: T[]) => void;
     multiSelect?: boolean;
     translateItems?: boolean
+    enableSearchText?: boolean;
     onClean?: () => void;
     automatedMode?: boolean; // If true, will call onSelect/onSelectMulti immediately on click without confirm button
     renderAfterItem?: (item: SelectorItem<T>, isSelected: boolean) => ReactNode;
@@ -25,6 +28,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     onSelectMulti,
     selectedValues = [],
     translateItems = false,
+    enableSearchText = false,
     onClose,
     onClean,
     automatedMode = false,
@@ -34,6 +38,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     const { t } = useTranslation();
 
     const [localSelectedValues, setLocalSelectedValues] = useState<T[]>(selectedValues);
+    const [searchText, setSearchText] = useState<string>('');
 
     useEffect(() => {
         setLocalSelectedValues(selectedValues);
@@ -88,13 +93,37 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
     const isSelected = (value: T) => localSelectedValues.includes(value);
 
+    const filteredItems = items.filter(item => {
+        if (!searchText) return true;
+        const label = (translateItems ? t(item.label) : item.label).toLowerCase();
+        return label.includes(searchText.toLowerCase());
+    });
+
     return (
         <>
+            {enableSearchText && (
+                <div className="px-4 py-2">
+
+                    <FloatingInput
+                        mode={FloatingInputModes.THIN}
+                        name="freeText"
+                        value={searchText}
+                        onChange={e => setSearchText(e.target.value)}
+                        label={t("common.search")}
+                        fullWidth
+                        icon={ <Search />}
+                        onIconClick={(e) => {
+                            e.preventDefault();
+                            setSearchText('');
+                        }}
+                    />
+                </div>
+            )}
             <div className="bottom-sheet-content">
-                {items.map((item, index) => {
+                {filteredItems.map((item, index) => {
                     const translatedLabel = translateItems ? t(item.label) : item.label;
                     const displayLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
-                    const last = index === items.length - 1;
+                    const last = index === filteredItems.length - 1;
                     const selected = isSelected(item.value);
 
                     return (
