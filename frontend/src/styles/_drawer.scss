@@ -5,7 +5,7 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   background: rgba(0, 0, 0, 0.2);
   z-index: 1200;
   display: flex;
@@ -16,7 +16,7 @@
   background: $primary-bg;
   width: 340px;
   max-width: 85vw;
-  height: 100vh;
+  height: 100dvh;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.12);
   transform: translateX(0);
   transition: transform 0.3s;

@@ -4,7 +4,7 @@ const Footer: React.FC = () => {
       <div className="container">
 
         <div className="px-4">
-          <p>2025 FRAT - High-Altitude Work Professional Network Platform</p>
+          <p>2026 FRAT - Find Rope Access Technicians</p>
 
           <div className="flex items-end gap-2">
             <span className="text-xs opacity-40">by</span>
