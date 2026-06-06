@@ -17,7 +17,7 @@ import { useUserContext } from 'user/UserProvider';
  * useFAB(null);
  */
 export const useFAB = (config: FABConfig | null) => {
-    const { setFAB, show: show } = useFloatingBtnContext();
+    const { setFAB, show } = useFloatingBtnContext();
 
     const { me } = useUserContext();
     useEffect(() => {
