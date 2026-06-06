@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { FaCheck } from "react-icons/fa";
 import Button from "../controls/Button";
 import FloatingInput from "../controls/FloatingInput";
-import { Search } from "@mui/icons-material";
+import { Close, Search } from "@mui/icons-material";
 
 interface Props<T extends SelectorValue = SelectorValue> {
     items: SelectorItem<T>[]
@@ -111,7 +111,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                         onChange={e => setSearchText(e.target.value)}
                         label={t("common.search")}
                         fullWidth
-                        icon={ <Search />}
+                        icon={ !!searchText ? <Close /> : <Search /> }
                         onIconClick={(e) => {
                             e.preventDefault();
                             setSearchText('');
