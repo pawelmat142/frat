@@ -93,11 +93,18 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
     const isSelected = (value: T) => localSelectedValues.includes(value);
 
-    const filteredItems = items.filter(item => {
+    // Always show selected items regardless of search filter
+    const selectedItems = items.filter(item => isSelected(item.value));
+    
+    // Filter unselected items by search text
+    const unselectedFiltered = items.filter(item => {
+        if (isSelected(item.value)) return false; // Skip already selected items
         if (!searchText) return true;
         const label = (translateItems ? t(item.label) : item.label).toLowerCase();
         return label.includes(searchText.toLowerCase());
     });
+
+    const sortedItems = [...selectedItems, ...unselectedFiltered];
 
     return (
         <>
@@ -120,10 +127,10 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                 </div>
             )}
             <div className="bottom-sheet-content">
-                {filteredItems.map((item, index) => {
+                {sortedItems.map((item, index) => {
                     const translatedLabel = translateItems ? t(item.label) : item.label;
                     const displayLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
-                    const last = index === filteredItems.length - 1;
+                    const last = index === sortedItems.length - 1;
                     const selected = isSelected(item.value);
 
                     return (
