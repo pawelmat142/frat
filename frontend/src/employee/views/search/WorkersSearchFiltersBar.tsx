@@ -12,7 +12,7 @@ import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import CategoriesChips from "global/components/chips/CategoriesChips";
 import { Dictionaries } from "@shared/def/dictionary.def";
 
-const WorkersSearchFilters: React.FC = () => {
+const WorkersSearchFiltersBar: React.FC = () => {
 
     const globalCtx = useGlobalContext();
     const languagesDictionary = globalCtx.dics.languages;
@@ -86,7 +86,7 @@ const WorkersSearchFilters: React.FC = () => {
                     </div>
                 )}
 
-                <CategoriesChips categories={ctx.filters.categories} />
+                {/* <CategoriesChips categories={ctx.filters.categories} /> */}
 
                 {(!!ctx.filters.certificates?.length) && (
                     <div className="flex items-center">
@@ -112,4 +112,4 @@ const WorkersSearchFilters: React.FC = () => {
     );
 };
 
-export default WorkersSearchFilters;
+export default WorkersSearchFiltersBar;
