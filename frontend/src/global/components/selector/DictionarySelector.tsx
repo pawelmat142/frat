@@ -13,6 +13,7 @@ interface DictionarySelectorProps extends DictionarySelectorInterface<string> {
     elementLabelTranslationKey?: string
     showLabel?: boolean
     emitValueCode?: string;
+    onDictionaryChange?: (dictionary: DictionaryI | null) => void;
 }
 const DictionarySelector = forwardRef((
     {
@@ -33,7 +34,8 @@ const DictionarySelector = forwardRef((
         elementLabelTranslationKey = 'NAME',
         error,
         enableSearchText = true,
-        showLabel
+        showLabel,
+        onDictionaryChange
     }: DictionarySelectorProps,
     ref: React.Ref<any>
 ) => {
@@ -47,7 +49,6 @@ const DictionarySelector = forwardRef((
         }
     }
 
-
     const [loading, setLoading] = useState(false);
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
 
@@ -56,12 +57,35 @@ const DictionarySelector = forwardRef((
     useEffect(() => {
         const initDictionary = async () => {
             setLoading(true);
-            const res = await DictionaryService.getDictionary(code, groupCode);
+            const res = await DictionaryService.getDictionary(code);
             setDictionary(res);
+            onDictionaryChange?.(res);
             setLoading(false);
         }
         initDictionary();
-    }, []);
+    }, [code, onDictionaryChange]);
+
+    // Filter elements by groupCode if provided
+    const getFilteredElements = (dict: DictionaryI | null): DictionaryI['elements'] => {
+
+        if (!dict) return [];
+        
+        if (!groupCode) {
+            return dict.elements;
+        }
+
+        const group = dict.groups.find(g => g.code === groupCode);
+        if (!group) {
+            return dict.elements;
+        }
+
+        return dict.elements.filter(el => group.elementCodes.includes(el.code));
+    };
+
+    // Emit dictionary change when groupCode changes
+    useEffect(() => {
+        onDictionaryChange?.(dictionary);
+    }, [groupCode, onDictionaryChange, dictionary]);
 
     if (loading) {
         return <Loading />;
@@ -78,7 +102,9 @@ const DictionarySelector = forwardRef((
         }
     }
 
-    const items: SelectorItem<string>[] = dictionary.elements.map(element => {
+    const filteredElements = getFilteredElements(dictionary);
+
+    const items: SelectorItem<string>[] = filteredElements.map(element => {
         const translationKey = `dictionary.${dictionary.code}.${elementLabelTranslationKey}.${element.code}`;
         const translatedLabel = t(translationKey);
         const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);

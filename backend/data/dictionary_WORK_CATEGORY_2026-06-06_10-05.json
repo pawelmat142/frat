@@ -1,0 +1,48 @@
+{
+  "code": "WORK_CATEGORY",
+  "description": "work category",
+  "version": 9,
+  "status": "INACTIVE",
+  "elements": [
+    {
+      "code": "ONSHORE",
+      "active": true,
+      "groups": [],
+      "values": {
+        "NAME": "dictionary.WORK_CATEGORY.NAME.ONSHORE"
+      },
+      "description": "Rope Access ONSHORE"
+    },
+    {
+      "code": "OFFSHORE",
+      "active": true,
+      "groups": [],
+      "values": {
+        "NAME": "dictionary.WORK_CATEGORY.NAME.OFFSHORE"
+      },
+      "description": "OFFSHORE Oil and Gas"
+    },
+    {
+      "code": "WIND",
+      "active": true,
+      "groups": [],
+      "values": {
+        "NAME": "dictionary.WORK_CATEGORY.NAME.WIND"
+      },
+      "description": "Wind Energy"
+    }
+  ],
+  "columns": [
+    {
+      "code": "NAME",
+      "type": "string",
+      "required": true,
+      "description": "name",
+      "defaultValue": "TODO NAME",
+      "translatable": true
+    }
+  ],
+  "groups": [],
+  "createdAt": "2025-11-25T07:00:49.374Z",
+  "updatedAt": "2026-06-06T08:26:24.652Z"
+}

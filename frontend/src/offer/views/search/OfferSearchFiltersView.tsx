@@ -112,11 +112,11 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                     control={f.control}
                     render={({ field }) => (
                         <DictionarySelector
-                            type='multi'
+                            type='single'
                             className="w-full mt-5"
-                            valueInput={field.value || []}
-                            onSelectMulti={items => {
-                                f.setValue('categories', items.map(i => String(i)));
+                            valueInput={field.value?.[0] }
+                            onSelect={item => {
+                                f.setValue('categories', item ? [item] : []);
                             }}
                             label={t("offer.filters.categories")}
                             code="WORK_CATEGORY"

@@ -18,6 +18,7 @@ import { AppConfig } from "@shared/AppConfig";
 import Header from "global/components/Header";
 import { DateUtil } from "@shared/utils/DateUtil";
 import FloatingSelector from "global/components/selector/FloatingSelector";
+import CertificatesSelector from "global/components/selector/CertificatesSelector";
 
 interface Props {
     onClose?: () => void;
@@ -177,11 +178,11 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                         control={f.control}
                         render={({ field }) => (
                             <DictionarySelector
-                                type='multi'
+                                type='single'
                                 className="w-full mt-5"
-                                valueInput={field.value}
-                                onSelectMulti={items => {
-                                    field.onChange(items);
+                                valueInput={field.value?.[0] }
+                                onSelect={item => {
+                                    field.onChange([item]);
                                 }}
                                 label={t("offer.filters.categories")}
                                 code="WORK_CATEGORY"
@@ -189,24 +190,8 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                             />
                         )}
                     />
-
-                    <Controller
-                        name="certificates"
-                        control={f.control}
-                        render={({ field }) => (
-                            <DictionarySelector
-                                type='multi'
-                                className="w-full mt-3"
-                                valueInput={field.value}
-                                onSelectMulti={items => {
-                                    field.onChange(items);
-                                }}
-                                label={t("employeeProfile.certificates")}
-                                code="CERTIFICATES"
-                                fullWidth
-                            />
-                        )}
-                    />
+                    
+                    <CertificatesSelector form={f as any} />
 
                     <Controller
                         name="communicationLanguages"
