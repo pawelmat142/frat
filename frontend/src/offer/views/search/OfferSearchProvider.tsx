@@ -10,6 +10,8 @@ import OfferSearchFiltersView from "./OfferSearchFiltersView";
 import { NavBus } from "global/utils/PseudoViewBus";
 import { MenuItemIdentifiers } from "global/interface/controls.interface";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
+import { useUserContext } from "user/UserProvider";
+import { createSearchSessionId, SearchSessionStorage } from "employee/views/search/WorkersSearchProvider";
 
 export interface OfferSearchContextProps {
     filters: OfferSearchFilters;
@@ -62,10 +64,46 @@ export const useOfferSearch = () => {
     return ctx;
 };
 
+const OFFER_SEARCH_SESSION_STORAGE_KEY = 'offerSearchSession';
+const OFFER_SEARCH_SESSION_TTL_MS = 30 * 60 * 1000;
+
+const getOrCreateOfferSearchSessionId = (): string => {
+    const now = Date.now();
+
+    try {
+        const raw = sessionStorage.getItem(OFFER_SEARCH_SESSION_STORAGE_KEY);
+        if (raw) {
+            const parsed = JSON.parse(raw) as SearchSessionStorage;
+            const hasValidId = typeof parsed?.id === 'string' && parsed.id.length > 0;
+            const isFresh = typeof parsed?.lastActivityAt === 'number' && (now - parsed.lastActivityAt) <= OFFER_SEARCH_SESSION_TTL_MS;
+
+            if (hasValidId && isFresh) {
+                const refreshed: SearchSessionStorage = {
+                    id: parsed.id,
+                    lastActivityAt: now,
+                };
+                sessionStorage.setItem(OFFER_SEARCH_SESSION_STORAGE_KEY, JSON.stringify(refreshed));
+                return parsed.id;
+            }
+        }
+    } catch {
+        // Ignore malformed storage and create a new session id.
+    }
+
+    const newId = createSearchSessionId();
+    const created: SearchSessionStorage = {
+        id: newId,
+        lastActivityAt: now,
+    };
+    sessionStorage.setItem(OFFER_SEARCH_SESSION_STORAGE_KEY, JSON.stringify(created));
+    return newId;
+};
+
 const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const floatingBtnCtx = useFloatingBtnContext();
+    const userCtx = useUserContext();
 
     const [filters, setFiltersState] = useState<OfferSearchFilters>(() => {
         const parsed = OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters);
@@ -140,7 +178,14 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         try {
-            const result = await OffersService.searchOffers(searchFilters);
+
+            const viewerLocation = searchFilters.sortBy === OfferSearchSortOptions.DISTANCE_ASC && userCtx.position
+                ? userCtx.position
+                : undefined;
+
+            const searchSessionId = getOrCreateOfferSearchSessionId();
+            
+            const result = await OffersService.searchOffers(searchFilters, !userCtx.me, viewerLocation, searchSessionId);
             if (requestId !== requestIdRef.current) {
                 return;
             }
@@ -166,7 +211,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 }
             }
         }
-    }, []);
+    }, [userCtx.position]);
 
     useEffect(() => {
         if (!location.pathname.includes(Path.OFFERS_SEARCH)) {

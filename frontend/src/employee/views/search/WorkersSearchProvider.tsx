@@ -16,12 +16,12 @@ import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 const WORKER_SEARCH_SESSION_STORAGE_KEY = 'workerSearchSession';
 const WORKER_SEARCH_SESSION_TTL_MS = 30 * 60 * 1000;
 
-interface WorkerSearchSessionStorage {
+export interface SearchSessionStorage {
     id: string;
     lastActivityAt: number;
 }
 
-const createWorkerSearchSessionId = (): string => {
+export const createSearchSessionId = (): string => {
     if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
         return crypto.randomUUID();
     }
@@ -34,12 +34,12 @@ const getOrCreateWorkerSearchSessionId = (): string => {
     try {
         const raw = sessionStorage.getItem(WORKER_SEARCH_SESSION_STORAGE_KEY);
         if (raw) {
-            const parsed = JSON.parse(raw) as WorkerSearchSessionStorage;
+            const parsed = JSON.parse(raw) as SearchSessionStorage;
             const hasValidId = typeof parsed?.id === 'string' && parsed.id.length > 0;
             const isFresh = typeof parsed?.lastActivityAt === 'number' && (now - parsed.lastActivityAt) <= WORKER_SEARCH_SESSION_TTL_MS;
 
             if (hasValidId && isFresh) {
-                const refreshed: WorkerSearchSessionStorage = {
+                const refreshed: SearchSessionStorage = {
                     id: parsed.id,
                     lastActivityAt: now,
                 };
@@ -51,8 +51,8 @@ const getOrCreateWorkerSearchSessionId = (): string => {
         // Ignore malformed storage and create a new session id.
     }
 
-    const newId = createWorkerSearchSessionId();
-    const created: WorkerSearchSessionStorage = {
+    const newId = createSearchSessionId();
+    const created: SearchSessionStorage = {
         id: newId,
         lastActivityAt: now,
     };
@@ -157,37 +157,37 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             if (requestId !== requestIdRef.current) {
                 return;
             }
-            let request: WorkerSearchRequest = WorkerUtil.filtersToRequest(searchFilters);
+            let request: WorkerSearchRequest = WorkerUtil.filtersToRequest(searchFilters)
             const viewerLocation = request.sortBy === WorkerSearchSortOptions.DISTANCE_ASC && userCtx.position
                 ? userCtx.position
                 : undefined;
-            const searchSessionId = getOrCreateWorkerSearchSessionId();
-            const result = await WorkerService.searchWorkers(request, !userCtx.me, viewerLocation, searchSessionId);
+            const searchSessionId = getOrCreateWorkerSearchSessionId()
+            const result = await WorkerService.searchWorkers(request, !userCtx.me, viewerLocation, searchSessionId)
 
             if (loadMore) {
                 setResults(prev => {
-                    const newResults = [...prev, ...result.profiles];
-                    resultsLengthRef.current = newResults.length;
-                    return newResults;
+                    const newResults = [...prev, ...result.profiles]
+                    resultsLengthRef.current = newResults.length
+                    return newResults
                 });
             } else {
-                setResults(result.profiles);
-                resultsLengthRef.current = result.profiles.length;
+                setResults(result.profiles)
+                resultsLengthRef.current = result.profiles.length
             }
 
-            const loaded = searchFilters.skip + result.profiles.length;
-            const hasMoreValue = loaded < result.count;
-            hasMoreRef.current = hasMoreValue;
+            const loaded = searchFilters.skip + result.profiles.length
+            const hasMoreValue = loaded < result.count
+            hasMoreRef.current = hasMoreValue
         } finally {
             if (requestId === requestIdRef.current) {
                 if (loadMore) {
-                    setLoadingMore(false);
+                    setLoadingMore(false)
                 } else {
-                    setLoading(false);
+                    setLoading(false)
                 }
             }
         }
-    }, [userCtx.position]);
+    }, [userCtx.position])
 
     useEffect(() => {
         if (!location.pathname.includes(Path.WORKERS_SEARCH)) {
