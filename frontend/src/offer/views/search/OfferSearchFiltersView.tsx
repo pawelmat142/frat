@@ -2,18 +2,19 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { defaultOfferFilters, useOfferSearch } from "./OfferSearchProvider";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
-import { OfferSearchFilters } from "@shared/interfaces/OfferI";
+import { OfferSearchFilters, OfferSearchSortOptions } from "@shared/interfaces/OfferI";
 import { FormValidator } from "global/FormValidator";
 import CountrySelector from "global/components/selector/CountrySelector";
 import DictionarySelector from "global/components/selector/DictionarySelector";
 import Button from "global/components/controls/Button";
-import { BtnModes, BtnSizes } from "global/interface/controls.interface";
+import { BtnModes, BtnSizes, SelectorItem } from "global/interface/controls.interface";
 import { Ico } from "global/icon.def";
 import { useEffect, useState } from "react";
 import { GoogleMapService } from "global/services/GoogleMapService";
 import { useUserContext } from "user/UserProvider";
 import Header from "global/components/Header";
 import SkeletonControl from "global/components/controls/SkeletonControl";
+import FloatingSelector from "global/components/selector/FloatingSelector";
 
 interface Props {
     onClose?: () => void;
@@ -35,6 +36,8 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
     const startDateRequired = FormValidator.required(t);
     const required = FormValidator.required(t);
     const formState = f.watch()
+
+    const sortBy = formState.sortBy;
 
     useEffect(() => {
         const autofillLocationCountry = async () => {
@@ -73,6 +76,12 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
         ctx.resetFilters()
     }
 
+    const sortOptionItems: SelectorItem<string>[] = Object.keys(OfferSearchSortOptions)
+        .map((option: string) => ({
+            value: option,
+            label: t('offer.form.sortOptions.' + option)
+        }))
+
     return (
         <div className="form-view relative flex flex-col primary-bg h-full">
 
@@ -104,9 +113,9 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                             />
                         )}
                     />
-                    
+
                 )}
-                
+
                 <Controller
                     name="categories"
                     control={f.control}
@@ -114,7 +123,7 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                         <DictionarySelector
                             type='single'
                             className="w-full mt-5"
-                            valueInput={field.value?.[0] }
+                            valueInput={field.value?.[0]}
                             onSelect={item => {
                                 f.setValue('categories', item ? [item] : []);
                             }}
@@ -143,6 +152,25 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                         />
                     )}
                 />
+
+                <Controller
+                    name="sortBy"
+                    control={f.control}
+                    render={({ field }) => (
+                        <FloatingSelector
+                            className="w-full mt-3"
+                            items={sortOptionItems}
+                            value={sortOptionItems.find(i => i.value === sortBy) || null}
+                            onSelect={item => {
+                                field.onChange(item);
+                            }}
+                            label={t("offer.form.sortOptions.title")}
+                            fullWidth
+                        ></FloatingSelector>
+                    )}
+                />
+
+
                 <div className="mt-10">
                     <Button
                         size={BtnSizes.LARGE}

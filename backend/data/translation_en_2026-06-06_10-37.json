@@ -106,7 +106,15 @@
           "currencyRequired": "Currency is required.",
           "atLeastOneSalaryRequired": "At least one salary (monthly or hourly) is required."
         },
-        "successUpdate": "Offer updated successfully"
+        "successUpdate": "Offer updated successfully",
+        "sortOptions": {
+          "title": "Sort by",
+          "DISTANCE_ASC": "Distance: Nearest first",
+          "START_FROM_ASC": "Start date: Earliest first",
+          "START_FROM_DESC": "Start date: Latest first",
+          "CREATED_AT_ASC": "Created date: Earliest first",
+          "CREATED_AT_DESC": "Created date: Latest first"
+        }
       },
       "likes": "Likes",
       "views": "Views",

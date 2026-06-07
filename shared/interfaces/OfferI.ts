@@ -1,4 +1,4 @@
-import { ParsedPhoneNumber, Point } from "./WorkerI";
+import { ParsedPhoneNumber, Point, WorkerSearchSortOptions } from "./WorkerI";
 import { GeocodedPosition } from "./MapsInterfaces";
 
 export interface OfferI {
@@ -17,7 +17,7 @@ export interface OfferI {
     displayAddress?: string
     point?: Point
 
-   // DETAILS FIELDS    
+    // DETAILS FIELDS    
     displayName?: string
     currency?: Currency;
     salary?: number;
@@ -31,7 +31,7 @@ export interface OfferI {
 
 
     // STATS
-    uniqueViewsCount: number;    
+    uniqueViewsCount: number;
     favoritesCount: number
 
     createdAt: Date
@@ -114,12 +114,22 @@ export interface OfferSearchFilters {
     locationCountries?: string[]
     communicationLanguages?: string[];
     categories?: string[];
+    sortBy?: OfferSearchSortOption;
 
     skip: number;
     limit: number;
 }
 
 export interface OfferSearchResponse {
-  offers: OfferI[];
-  count: number;
+    offers: OfferI[];
+    count: number;
 }
+
+export const OfferSearchSortOptions = {
+    DISTANCE_ASC: 'DISTANCE_ASC',
+    START_FROM_ASC: 'START_FROM_ASC',
+    START_FROM_DESC: 'START_FROM_DESC',
+    CREATED_AT_ASC: 'CREATED_AT_ASC',
+    CREATED_AT_DESC: 'CREATED_AT_DESC',
+} as const;
+export type OfferSearchSortOption = typeof OfferSearchSortOptions[keyof typeof OfferSearchSortOptions];

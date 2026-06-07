@@ -106,7 +106,15 @@
           "currencyRequired": "Waluta jest wymagana.",
           "atLeastOneSalaryRequired": "Wymagane jest podanie wynagrodzenia (miesięczne lub godzinowe)."
         },
-        "successUpdate": "Oferta została pomyślnie zaktualizowana"
+        "successUpdate": "Oferta została pomyślnie zaktualizowana",
+        "sortOptions": {
+          "title": "Sortuj według",
+          "DISTANCE_ASC": "Odległość: Najbliżej",
+          "START_FROM_ASC": "Data rozpoczęcia: Najwcześniej",
+          "START_FROM_DESC": "Data rozpoczęcia: Najpóźniej",
+          "CREATED_AT_ASC": "Data utworzenia: Najwcześniej",
+          "CREATED_AT_DESC": "Data utworzenia: Najpóźniej"
+        }
       },
       "likes": "Polubienia",
       "views": "Wyświetlenia",
