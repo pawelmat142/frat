@@ -1,7 +1,7 @@
 import { PositionUtil } from "./PositionUtil";
 import { FilterUtil } from "./FilterUtil";
 import { DateUtil } from "./DateUtil";
-import { OfferSearchFilters, OfferI, OfferForm, OfferFormSteps } from "../interfaces/OfferI";
+import { OfferSearchFilters, OfferI, OfferForm, OfferFormSteps, OfferSearchSortOption } from "../interfaces/OfferI";
 
 export abstract class OfferUtil {
     private static readonly CATEGORIES = 'categories'
@@ -9,6 +9,7 @@ export abstract class OfferUtil {
     private static readonly LOCATION_COUNTRIES = 'locationCountries'
     private static readonly PAGE = 'page';
     private static readonly LIMIT = 'limit';
+    private static readonly SORT_BY = 'sortBy';
 
     public static prepareUrlParams = (f: OfferSearchFilters, defaultFilters: OfferSearchFilters) => {
         const params = new URLSearchParams();
@@ -19,6 +20,7 @@ export abstract class OfferUtil {
         const page = Math.floor(f.skip / f.limit) + 1;
         if (page > 1) params.set(OfferUtil.PAGE, String(page));
         if (f.limit !== defaultFilters.limit) params.set(OfferUtil.LIMIT, String(f.limit));
+        if (f.sortBy) params.set(OfferUtil.SORT_BY, f.sortBy);
         const searchStr = params.toString();
         return searchStr;
     }
@@ -31,8 +33,10 @@ export abstract class OfferUtil {
         const locationCountries = FilterUtil.getArray(OfferUtil.LOCATION_COUNTRIES, params);
 
         const page = parseInt(params.get(OfferUtil.PAGE) || '1', 10);
-        const limit = parseInt(params.get('limit') || String(defaultFilters.limit), 10);
+        const limit = parseInt(params.get(OfferUtil.LIMIT) || String(defaultFilters.limit), 10);
         const skip = (page - 1) * limit;
+
+        const sortBy = (params.get(OfferUtil.SORT_BY) || defaultFilters.sortBy) as OfferSearchSortOption;
 
         return {
             categories,
@@ -40,6 +44,7 @@ export abstract class OfferUtil {
             locationCountries,
             skip: skip < 0 ? 0 : skip,
             limit,
+            sortBy,
         };
     }
     

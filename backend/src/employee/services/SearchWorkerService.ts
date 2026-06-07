@@ -2,11 +2,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { WorkerRepo } from './WorkerRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT, WorkerLocationOptions, WorkerFormRangesOptions, WorkerSearchRequest, DEFAULT_SEARCH_DISTANCE_M, DefaultWorkerSearchSortOption } from '@shared/interfaces/WorkerI';
+import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT, WorkerLocationOptions, WorkerFormRangesOptions, WorkerSearchRequest, DEFAULT_SEARCH_DISTANCE_M } from '@shared/interfaces/WorkerI';
 import { SelectQueryBuilder } from 'typeorm';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { SearchUtil } from 'global/utils/SearchUtil';
 import { Position } from '@shared/interfaces/MapsInterfaces';
+import { AppConfig } from '@shared/AppConfig';
+import { Util } from '@shared/utils/util';
+import { PositionUtil } from '@shared/utils/PositionUtil';
 
 @Injectable()
 export class SearchWorkersService {
@@ -19,7 +22,7 @@ export class SearchWorkersService {
 
     async searchWorkers(filters: WorkerSearchRequest, user?: UserI, viewerLocation?: Position, searchSessionId?: string): Promise<WorkerSearchResponse> {
         const normalizedFilters = this.normalizeFilters(filters);
-        const normalizedViewerLocation = this.normalizeViewerLocation(viewerLocation);
+        const normalizedViewerLocation = PositionUtil.normalizeViewerLocation(viewerLocation);
 
         // Step 1: Build base query for filtering (without eagerly loading relations to avoid row multiplication)
         const baseQueryBuilder = this.workerRepo.getQueryBuilder()
@@ -185,7 +188,7 @@ export class SearchWorkersService {
         viewerLocation?: Position,
         user?: UserI,
     ) {
-        const sortBy = filters.sortBy || DefaultWorkerSearchSortOption;
+        const sortBy = filters.sortBy || AppConfig.DEFAULT_WORKER_SEARCH_SORT_OPTION;
         switch (sortBy) {
             case WorkerSearchSortOptions.MUTUAL_FRIENDS:
                 if (user) {
@@ -331,36 +334,15 @@ export class SearchWorkersService {
     private normalizeFilters(filters: WorkerSearchRequest): WorkerSearchRequest {
         return {
             ...filters,
-            lat: this.parseNumber(filters.lat),
-            lng: this.parseNumber(filters.lng),
-            positionRadiusKm: this.parseNumber(filters.positionRadiusKm),
-            skip: this.parseNumber(filters.skip) ?? 0,
-            limit: this.parseNumber(filters.limit) ?? PROFILES_INITIAL_SEARCH_LIMIT,
+            lat: Util.parseNumber(filters.lat),
+            lng: Util.parseNumber(filters.lng),
+            positionRadiusKm: Util.parseNumber(filters.positionRadiusKm),
+            skip: Util.parseNumber(filters.skip) ?? 0,
+            limit: Util.parseNumber(filters.limit) ?? PROFILES_INITIAL_SEARCH_LIMIT,
         };
     }
 
-    private normalizeViewerLocation(viewerLocation?: Position): Position | null {
-        if (!viewerLocation) {
-            return null;
-        }
-        return {
-            lat: this.parseNumber(viewerLocation?.lat),
-            lng: this.parseNumber(viewerLocation?.lng),
-        };
-    }
 
-    private parseNumber(value: unknown): number | undefined {
-        if (typeof value === 'number') {
-            return Number.isFinite(value) ? value : undefined;
-        }
-
-        if (typeof value === 'string' && value.trim().length > 0) {
-            const parsed = Number(value);
-            return Number.isFinite(parsed) ? parsed : undefined;
-        }
-
-        return undefined;
-    }
 
     private normalizeSearchSessionId(searchSessionId?: string): string | null {
         if (!searchSessionId) {

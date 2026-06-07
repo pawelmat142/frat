@@ -1,4 +1,6 @@
 import { Position } from "./interfaces/MapsInterfaces";
+import { OfferSearchSortOptions } from "./interfaces/OfferI";
+import { WorkerSearchSortOptions } from "./interfaces/WorkerI";
 
 export const AppConfig = {
 
@@ -29,4 +31,7 @@ export const AppConfig = {
     AVATAR_PLACEHOLDER: "/assets/img/default-avatar.png",
 
     ROUTER_ANIMATION_DURATION: 150, // ms
+
+    DEFAULT_WORKER_SEARCH_SORT_OPTION: WorkerSearchSortOptions.MUTUAL_FRIENDS,
+    DEFAULT_OFFER_SEARCH_SORT_OPTION: OfferSearchSortOptions.DISTANCE_ASC,
 } as const;

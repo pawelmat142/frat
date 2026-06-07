@@ -1,10 +1,13 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { OffersRepo } from "./OffersRepo";
-import { OfferSearchFilters, OfferSearchResponse, OfferStatuses } from "@shared/interfaces/OfferI";
+import { OfferSearchFilters, OfferSearchResponse, OfferSearchSortOptions, OfferStatuses } from "@shared/interfaces/OfferI";
 import { UserI } from "@shared/interfaces/UserI";
 import { SearchUtil } from "global/utils/SearchUtil";
 import { OfferEntity } from "offer/model/OfferEntity";
 import { SelectQueryBuilder } from "typeorm";
+import { AppConfig } from "@shared/AppConfig";
+import { Position } from "@shared/interfaces/MapsInterfaces";
+import { PositionUtil } from "@shared/utils/PositionUtil";
 
 @Injectable()
 export class OffersSearchService {
@@ -19,8 +22,9 @@ export class OffersSearchService {
         return this.offersRepo.findAll()
     }
 
-    async searchOffers(user: UserI, filters: OfferSearchFilters): Promise<OfferSearchResponse> {
+    async searchOffers(user: UserI, filters: OfferSearchFilters, viewerLocation?: Position, searchSessionId?: string): Promise<OfferSearchResponse> {
         const queryBuilder = this.offersRepo.getQueryBuilder()
+        const normalizedViewerLocation = PositionUtil.normalizeViewerLocation(viewerLocation);
 
         let hasFilter = false;
 
@@ -44,6 +48,7 @@ export class OffersSearchService {
             hasFilter = true;
         }
 
+        this.applySorting(queryBuilder, filters, normalizedViewerLocation);
         this.addPagination(queryBuilder, filters);
 
         const count = await queryBuilder.getCount();
@@ -61,6 +66,52 @@ export class OffersSearchService {
         }
         if (filters.limit) {
             queryBuilder.take(filters.limit);
+        }
+    }
+
+    private applySorting(queryBuilder: SelectQueryBuilder<OfferEntity>, filters: OfferSearchFilters, viewerLocation?: Position) {
+        const sortBy = filters.sortBy || AppConfig.DEFAULT_OFFER_SEARCH_SORT_OPTION;
+        switch (sortBy) {
+            case OfferSearchSortOptions.DISTANCE_ASC:
+                if (viewerLocation?.lat != null && viewerLocation?.lng != null) {
+                    // Use ST_Distance with geography cast for accurate distance calculation in meters
+                    // Order by distance ascending, then by favoritesCount descending for tie-breaking
+                    queryBuilder.orderBy(
+                        `ST_Distance(
+                            offer.point,
+                            ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography
+                        )`,
+                        SearchUtil.ASC
+                    );
+                    queryBuilder.addOrderBy('offer.favoritesCount', SearchUtil.DESC);
+                    queryBuilder.setParameter('lat', viewerLocation.lat);
+                    queryBuilder.setParameter('lng', viewerLocation.lng);
+                } else {
+                    // Fallback to creation date if location is unavailable
+                    queryBuilder.orderBy('offer.createdAt', SearchUtil.DESC);
+                }
+                break;
+            
+            case OfferSearchSortOptions.START_FROM_ASC:
+                queryBuilder.orderBy('offer.startDate', SearchUtil.ASC);
+                break;
+            
+            case OfferSearchSortOptions.START_FROM_DESC:
+                queryBuilder.orderBy('offer.startDate', SearchUtil.DESC);
+                break;
+            
+            case OfferSearchSortOptions.CREATED_AT_ASC:
+                queryBuilder.orderBy('offer.createdAt', SearchUtil.ASC);
+                break;
+            
+            case OfferSearchSortOptions.CREATED_AT_DESC:
+                queryBuilder.orderBy('offer.createdAt', SearchUtil.DESC);
+                break;
+            
+            default:
+                // Default fallback
+                queryBuilder.orderBy('offer.createdAt', SearchUtil.DESC);
+                break;
         }
     }
 

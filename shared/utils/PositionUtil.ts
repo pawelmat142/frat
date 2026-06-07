@@ -1,5 +1,6 @@
 import { Position } from "../interfaces/MapsInterfaces";
 import { Point } from "../interfaces/WorkerI";
+import { Util } from "./util";
 
 export abstract class PositionUtil {
 
@@ -44,5 +45,15 @@ export abstract class PositionUtil {
         } else {
             return `${Math.round(distanceInMeters / 1000)} km`;
         }
+    }
+
+    public static normalizeViewerLocation(viewerLocation?: Position): Position | null {
+        if (!viewerLocation) {
+            return null;
+        }
+        return {
+            lat: Util.parseNumber(viewerLocation?.lat) ?? 0,
+            lng: Util.parseNumber(viewerLocation?.lng) ?? 0,
+        };
     }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards, UseInterceptors, Headers } from "@nestjs/common";
 import { LogInterceptor } from "global/interceptors/LogInterceptor";
 import { OffersService } from "./services/OffersService";
 import { JwtAuthGuard } from "auth/guards/JwtAuthGuard";
@@ -8,6 +8,8 @@ import { CurrentUser } from "auth/decorators/CurrentUserDecorator";
 import { UserI } from "@shared/interfaces/UserI";
 import { OfferForm, OfferI, OfferSearchFilters, OfferSearchResponse } from "@shared/interfaces/OfferI";
 import { OffersSearchService } from "./services/OffersSearchService";
+import { Header } from '@shared/def/def';
+import { Position } from "@shared/interfaces/MapsInterfaces";
 
 @Controller('api/offers')
 @UseInterceptors(LogInterceptor)
@@ -87,9 +89,16 @@ export class OffersController {
     @Serialize(OfferEntity)
     searchOffers(
         @CurrentUser() user: UserI,
-        @Query() filters: OfferSearchFilters
+        @Query() filters: OfferSearchFilters,
+        @Headers(Header.LAT_HEADER) lat?: string,
+        @Headers(Header.LNG_HEADER) lng?: string,
+        @Headers(Header.SEARCH_SESSION) searchSessionId?: string,
     ): Promise<OfferSearchResponse> {
-        return this.offersSearchService.searchOffers(user, filters);
+            const viewerLocation: Position | undefined = lat && lng ? {
+              lat: lat ? Number(lat) : undefined,
+              lng: lng ? Number(lng ) : undefined,
+            } : undefined;
+        return this.offersSearchService.searchOffers(user, filters, viewerLocation, searchSessionId);
     }
 
     @Get('notify-offer-view/:offerId')
