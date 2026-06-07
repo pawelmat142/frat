@@ -93,18 +93,18 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
     const isSelected = (value: T) => localSelectedValues.includes(value);
 
-    // Always show selected items regardless of search filter
-    const selectedItems = items.filter(item => isSelected(item.value));
+    // Always show selected items regardless of search filter - sort by initial selectedValues, not current localSelectedValues
+    const initialSelectedItems = items.filter(item => selectedValues.includes(item.value));
     
     // Filter unselected items by search text
     const unselectedFiltered = items.filter(item => {
-        if (isSelected(item.value)) return false; // Skip already selected items
+        if (selectedValues.includes(item.value)) return false; // Skip already selected items (based on initial values)
         if (!searchText) return true;
         const label = (translateItems ? t(item.label) : item.label).toLowerCase();
         return label.includes(searchText.toLowerCase());
     });
 
-    const sortedItems = [...selectedItems, ...unselectedFiltered];
+    const sortedItems = [...initialSelectedItems, ...unselectedFiltered];
 
     return (
         <>

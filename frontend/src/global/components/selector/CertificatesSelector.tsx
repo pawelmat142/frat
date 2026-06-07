@@ -20,7 +20,7 @@ const CertificatesSelector: React.FC<Props> = ({ form }) => {
 
     useEffect(() => {
         const prev = prevCategoryRef.current;
-        if (category && prev && category !== prev) {
+        if ((category && prev && category !== prev) || (category && !prev)) {
             const defaultElementsGroupCode = `${category}_DEFAULT`;
             const defaultElementCodes = dictionary?.groups.find(group => group.code === defaultElementsGroupCode)?.elementCodes || [];
             form.setValue('certificates', defaultElementCodes);
