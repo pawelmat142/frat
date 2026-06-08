@@ -722,7 +722,11 @@
         "certificates": {
           "main": "Most common certificates",
           "label": "Step 4",
-          "title": "Certificates - optional"
+          "title": "Certificates"
+        },
+        "certificateDates": {
+          "label": "Step 5",
+          "title": "Certificate validity dates"
         },
         "confirmTitle": "Confirm submission",
         "optionalinfo": "Optional information - we will show it on your profile if you fill it out.",

@@ -131,6 +131,9 @@ export interface WorkerFormStepAvailability {
 
 export interface WorkerFormStepCertificates {
   certificates?: string[];
+}
+
+export interface WorkerFormStepCertificateDates {
   certificateDates?: { [key: string]: string }; // key is certificate name, value is local date string in YYYY-MM-DD format
 }
 
@@ -141,6 +144,7 @@ export interface WorkerForm {
   location: WorkerFormStepLocation;
   availability: WorkerFormStepAvailability;
   certificates: WorkerFormStepCertificates;
+  certificateDates: WorkerFormStepCertificateDates;
 }
 
 export const WorkerFormSteps = {
@@ -149,6 +153,7 @@ export const WorkerFormSteps = {
   LOCATION: 'location',
   AVAILABILITY: 'availability',
   CERTIFICATES: 'certificates',
+  CERTIFICATE_DATES: 'certificateDates',
 } as const;
 
 export type WorkerFormStep = typeof WorkerFormSteps[keyof typeof WorkerFormSteps];
@@ -159,6 +164,7 @@ export const WORKER_FORM_STEPS_ORDER = [
   WorkerFormSteps.LOCATION,
   WorkerFormSteps.AVAILABILITY,
   WorkerFormSteps.CERTIFICATES,
+  WorkerFormSteps.CERTIFICATE_DATES,
 ]
 
 // Flat API structure for backend communication

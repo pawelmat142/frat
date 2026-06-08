@@ -1,13 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Controller, UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { FormValidator } from "global/FormValidator";
 import { WorkerForm } from "@shared/interfaces/WorkerI";
 import { DictionaryI } from "@shared/interfaces/DictionaryI";
 import { DictionaryService } from "global/services/DictionaryService";
-import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
-import FloatingDateInput, { datepickerWithDaysConfig, datepickerWithDaysConfigFutureOnly } from "global/components/callendar/FloatingDateInput";
-import { DateUtil } from "@shared/utils/DateUtil";
 import { FloatingInputModes, SelectorItem } from "global/interface/controls.interface";
 import SkeletonControl from "global/components/controls/SkeletonControl";
 import SelectorItems from "global/components/selector/SelectorItems";
@@ -23,11 +19,7 @@ interface Props {
 
 const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
 
-    const { control, formState } = formRef;
     const { t } = useTranslation();
-    const required = FormValidator.required(t);
-
-    const tomorrow = useMemo(() => { const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(0, 0, 0, 0); return d; }, []);
 
     const [loading, setLoading] = useState(false);
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
@@ -70,12 +62,6 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
     }, [])
 
     // Get selected certificates and their dictionary definitions
-    const certDictElements = dictionary?.elements || [];
-    const certElementsByCode = useMemo(
-        () => new Map(certDictElements.map(el => [String(el.code), el])),
-        [certDictElements],
-    );
-
     const mainGroupElementCodes = useMemo(() => {
         const mainGroup = dictionary?.groups?.find(group => group.code === 'MAIN');
         return new Set((mainGroup?.elementCodes || []).map(code => String(code)));
@@ -134,42 +120,6 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                         emitAllSelectedValues
                         onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
                         onClean={() => formRef.setValue('certificates.certificates', [])}
-                        renderAfterItem={(item, isSelected) => {
-                            if (!isSelected) {
-                                return null;
-                            }
-
-                            const cert = certElementsByCode.get(item.value);
-                            if (!cert?.values?.VALIDITY_DATE_REQUIRED) {
-                                return null;
-                            }
-
-                            return (
-                                <div className="px-1">
-                                    <Controller
-                                        name={`certificates.certificateDates.${cert.code}`}
-                                        control={control}
-                                        rules={required}
-                                        render={({ field }) => {
-                                            return (
-                                                <FloatingDateInput
-                                                    label={`${t('employeeProfile.form.certificateValidityDate')} ${t(DictionaryUtil.getTranslationKey('CERTIFICATES', cert.code))}`}
-                                                    className="w-full"
-                                                    value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
-                                                    onChange={date => field.onChange(DateUtil.toLocalDateString(date) ?? null)}
-                                                    required
-                                                    minDate={tomorrow}
-                                                    error={formState.errors?.certificates?.certificateDates?.[cert.code]?.message
-                                                        ? { message: formState.errors.certificates.certificateDates[cert.code]!.message }
-                                                        : undefined}
-                                                    config={datepickerWithDaysConfigFutureOnly}
-                                                />
-                                            )
-                                        }}
-                                    />
-                                </div>
-                            );
-                        }}
                     ></SelectorItems>
 
                     <h3 className="form-subheader mt-5">

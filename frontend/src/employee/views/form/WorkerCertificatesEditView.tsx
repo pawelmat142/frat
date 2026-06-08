@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { DateRange, WorkerAvailabilityOptions, WorkerForm, WorkerWithCertificates } from "@shared/interfaces/WorkerI";
+import { WorkerForm, WorkerWithCertificates } from "@shared/interfaces/WorkerI";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import Header from "global/components/Header";
-import WorkerFormStepAvailability from "./WorkerFormStepAvailability";
 import { useUserContext } from "user/UserProvider";
-import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { WorkerService } from "employee/services/WorkerService";
 import { toast } from "react-toastify";
@@ -38,8 +36,11 @@ const WorkerCertificatesEditView: React.FC = () => {
 
     const formRef = useForm<WorkerForm>({
         defaultValues: {
+            currentStep: 'certificates',
             certificates: {
                 certificates: worker.certificates || [],
+            },
+            certificateDates: {
                 certificateDates: WorkerUtil.prepareCertificateDates(worker)
             }
         }
@@ -48,8 +49,12 @@ const WorkerCertificatesEditView: React.FC = () => {
     const handleSave = async () => {
         try {
             const certificatesData = formRef.getValues("certificates");
+            const certificateDatesData = formRef.getValues("certificateDates");
             setLoading(true);
-            const result = await WorkerService.updateCertificates(certificatesData);
+            const result = await WorkerService.updateCertificates({
+                ...certificatesData,
+                ...certificateDatesData
+            });
             userCtx.initWorker();
             toast.success(t("employeeProfile.form.submitSuccess"));
             handleBack();

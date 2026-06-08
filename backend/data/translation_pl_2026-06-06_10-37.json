@@ -724,7 +724,11 @@
         "certificates": {
           "main": "Najczęściej wybierane certyfikaty",
           "label": "Krok 4",
-          "title": "Certyfikaty - nieobowiązkowe"
+          "title": "Certyfikaty"
+        },
+        "certificateDates": {
+          "label": "Krok 5",
+          "title": "Daty ważności certyfikatów"
         },
         "confirmTitle": "Potwierdź zapisanie profilu",
         "optionalinfo": "Informacje opcjonalne - pokażemy je na Twoim profilu jeśli je wypełnisz.",

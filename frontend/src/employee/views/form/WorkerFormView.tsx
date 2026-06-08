@@ -21,6 +21,7 @@ import { GoogleMapService } from "global/services/GoogleMapService";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { GeocodedPosition } from "@shared/interfaces/MapsInterfaces";
 import WorkerFormStepCertificates from "./WorkerFormStepCertificates";
+import WorkerFormStepCertificateDates from "./WorkerFormStepCertificateDates";
 import WorkerFormStepCareer from "./WorkerFormStepCareer";
 import { UserProviders } from "@shared/interfaces/UserI";
 import { isOneOf } from "@shared/utils/util";
@@ -79,6 +80,8 @@ const WorkerFormView: React.FC = () => {
             },
             certificates: {
                 certificates: [],
+            },
+            certificateDates: {
                 certificateDates: {}
             }
         },
@@ -214,6 +217,8 @@ const WorkerFormView: React.FC = () => {
             },
             certificates: {
                 certificates: worker.certificates || [],
+            },
+            certificateDates: {
                 certificateDates: WorkerUtil.prepareCertificateDates(worker),
             }
         });
@@ -291,6 +296,8 @@ const WorkerFormView: React.FC = () => {
                 return <WorkerFormStepAvailability formRef={formCtx} />;
             case WorkerFormSteps.CERTIFICATES:
                 return <WorkerFormStepCertificates formRef={formCtx} />;
+            case WorkerFormSteps.CERTIFICATE_DATES:
+                return <WorkerFormStepCertificateDates formRef={formCtx} />;
             default:
                 return null;
         }
@@ -308,7 +315,35 @@ const WorkerFormView: React.FC = () => {
         return validateStep(form.currentStep);
     }
 
+    const shouldSkipCertificateDatesStep = (): boolean => {
+        // Skip certificate dates step if no certificates are selected
+        const selectedCertificates = form.certificates?.certificates || [];
+        return selectedCertificates.length === 0;
+    }
+
+    const getNextOrPreviousStep = (currentIndex: number, direction: 'forward' | 'back'): WorkerFormStep => {
+        let nextIndex = direction === 'forward' ? currentIndex + 1 : currentIndex - 1;
+        
+        while (nextIndex >= 0 && nextIndex < WORKER_FORM_STEPS_ORDER.length) {
+            const step = WORKER_FORM_STEPS_ORDER[nextIndex];
+            if (step === WorkerFormSteps.CERTIFICATE_DATES && shouldSkipCertificateDatesStep()) {
+                nextIndex = direction === 'forward' ? nextIndex + 1 : nextIndex - 1;
+            } else {
+                return step;
+            }
+        }
+        
+        return WORKER_FORM_STEPS_ORDER[currentIndex];
+    }
+
     const selectStep = async (targetStep: WorkerFormStep) => {
+        // Skip certificate dates step if not needed
+        if (targetStep === WorkerFormSteps.CERTIFICATE_DATES && shouldSkipCertificateDatesStep()) {
+            const currentIndex = WORKER_FORM_STEPS_ORDER.indexOf(form.currentStep);
+            const nextValidStep = getNextOrPreviousStep(currentIndex, 'forward');
+            targetStep = nextValidStep;
+        }
+
         const targetIndex = WORKER_FORM_STEPS_ORDER.indexOf(targetStep);
         const currentIndex = WORKER_FORM_STEPS_ORDER.indexOf(form.currentStep);
         if (targetIndex < currentIndex) {
