@@ -29,19 +29,6 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
 
     const isSearchMode = debouncedQuery.length >= MIN_QUERY_LENGTH;
 
-    const dictionaryItems: SelectorItem<string>[] = dictionary?.elements.map(element => {
-        const translationKey = `dictionary.${dictionary.code}.NAME.${element.code}`;
-        const translatedLabel = t(translationKey);
-        const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
-        return {
-            label: capitalizedLabel,
-            value: String(element.code),
-            src: element.values.SRC,
-        };
-    }) ?? [];
-
-    const selectedCertificates: string[] = formRef.watch('certificates.certificates') || [];
-
     useEffect(() => {
         const initDictionary = async () => {
             if (dictionary) {
@@ -61,24 +48,35 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
         initDictionary();
     }, [])
 
+    const dictionaryItems: SelectorItem<string>[] = dictionary?.elements.map(element => {
+        const translationKey = `dictionary.${dictionary.code}.NAME.${element.code}`;
+        const translatedLabel = t(translationKey);
+        const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
+        return {
+            label: capitalizedLabel,
+            value: String(element.code),
+            src: element.values.SRC,
+        };
+    }) ?? [];
+
+    const selectedCertificates: string[] = formRef.watch('certificates.certificates') || [];
+
     // Get MAIN group element codes
-    const mainGroupElementCodes = useMemo(() => {
-        const mainGroup = dictionary?.groups?.find(group => group.code === 'MAIN');
-        return new Set((mainGroup?.elementCodes || []).map(code => String(code)));
-    }, [dictionary]);
+    const mainGroup = dictionary?.groups?.find(group => group.code === 'MAIN');
+    const mainCodes = new Set((mainGroup?.elementCodes || []).map(code => String(code)))
 
-    // Get all items in STABLE order - no reorganization
-    const allItems = useMemo(() => {
-        const query = debouncedQuery.toLowerCase();
+    const query = debouncedQuery.toLowerCase();
 
-        if (isSearchMode && query.length >= MIN_QUERY_LENGTH) {
-            // Search mode: show matching items
-            return dictionaryItems.filter(item => item.label.toLowerCase().includes(query));
-        } else {
-            // Normal mode: show MAIN group items
-            return dictionaryItems.filter(item => mainGroupElementCodes.has(item.value));
+    const items = useMemo(() => dictionaryItems.filter(item => {
+        if (selectedCertificates.includes(item.value)) {
+            return true; // Always show selected items
         }
-    }, [debouncedQuery, dictionaryItems, mainGroupElementCodes, isSearchMode]);
+        if (isSearchMode && query.length >= MIN_QUERY_LENGTH) {
+            return item.label.toLowerCase().includes(query)
+        }
+    }), [debouncedQuery, dictionary]);
+
+    const mainItems = dictionaryItems.filter(item => mainCodes.has(item.value));
 
     return (
         <>
@@ -104,27 +102,33 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                         } : undefined}
                     />
 
-                    {/* Simple stable list - no reorganization */}
-                    {allItems.length > 0 && (
-                        <>
-                            {!isSearchMode && (
-                                <h3 className="form-subheader mt-5">
-                                    {t("employeeProfile.form.certificates.main")}
-                                </h3>
-                            )}
-
-                            <SelectorItems
-                                items={allItems}
-                                selectedValues={selectedCertificates}
-                                multiSelect
-                                automatedMode
-                                translateItems
-                                emitAllSelectedValues
-                                onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
-                                onClean={() => formRef.setValue('certificates.certificates', [])}
-                            ></SelectorItems>
-                        </>
+                    {!!items.length && (
+                        <SelectorItems
+                            items={items}
+                            selectedValues={selectedCertificates}
+                            multiSelect
+                            automatedMode
+                            translateItems
+                            emitAllSelectedValues
+                            onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
+                            onClean={() => formRef.setValue('certificates.certificates', [])}
+                        ></SelectorItems>
                     )}
+
+                    <h3 className="form-subheader mt-5">
+                        {t("employeeProfile.form.certificates.main")}
+                    </h3>
+
+                    <SelectorItems
+                        items={mainItems}
+                        selectedValues={selectedCertificates}
+                        multiSelect
+                        automatedMode
+                        translateItems
+                        emitAllSelectedValues
+                        onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
+                        onClean={() => formRef.setValue('certificates.certificates', [])}
+                    ></SelectorItems>
                 </>
             )}
         </>

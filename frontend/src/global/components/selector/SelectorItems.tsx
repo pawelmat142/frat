@@ -16,9 +16,10 @@ interface Props<T extends SelectorValue = SelectorValue> {
     translateItems?: boolean
     enableSearchText?: boolean;
     onClean?: () => void;
-    automatedMode?: boolean; // If true, will call onSelect/onSelectMulti immediately on click without confirm button
+    automatedMode?: boolean;
     renderAfterItem?: (item: SelectorItem<T>, isSelected: boolean) => ReactNode;
     emitAllSelectedValues?: boolean;
+    initialSelectedItems?: SelectorItem<T>[];
 }
 
 const SelectorItems = <T extends SelectorValue = SelectorValue>({
@@ -34,6 +35,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     automatedMode = false,
     renderAfterItem,
     emitAllSelectedValues = false,
+    initialSelectedItems = [],
 }: Props<T>) => {
     const { t } = useTranslation();
 
@@ -120,6 +122,43 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                 </div>
             )}
             <div className="bottom-sheet-content">
+                {/* Initially selected items - always shown at top, never reorganized */}
+                {initialSelectedItems.map((item) => {
+                    const translatedLabel = translateItems ? t(item.label) : item.label;
+                    const displayLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
+                    const selected = isSelected(item.value);
+
+                    return (
+                        <div key={String(item.value)}>
+                            <div
+                                className={`bottom-sheet-item ripple${selected ? ' selected' : ''}`}
+                                onClick={() => handleItemClick(item)}
+                            >
+                                {multiSelect && (
+                                    <div className={`bottom-sheet-checkbox mr-3 ${selected ? 'checked' : ''}`}>
+                                        {selected && <FaCheck size={14} />}
+                                    </div>
+                                )}
+                                <div className="bottom-sheet-item-content">
+                                    {item.icon && (
+                                        <span className="bottom-sheet-item-icon">{item.icon}</span>
+                                    )}
+                                    {item.src && (
+                                        <img
+                                            src={item.src}
+                                            alt={displayLabel}
+                                            className="bottom-sheet-item-image"
+                                        />
+                                    )}
+                                    <span className="bottom-sheet-item-label">{displayLabel}</span>
+                                </div>
+                            </div>
+                            {renderAfterItem?.(item, selected)}
+                        </div>
+                    );
+                })}
+
+                {/* Other items */}
                 {sortedItems.map((item) => {
                     const translatedLabel = translateItems ? t(item.label) : item.label;
                     const displayLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
