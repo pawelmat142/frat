@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { WorkerForm, WorkerWithCertificates, WorkerLocationOptions, WorkerAvailabilityOptions, WorkerFormSteps } from "@shared/interfaces/WorkerI";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import Header from "global/components/Header";
 import { useUserContext } from "user/UserProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
-import { WorkerUtil } from "@shared/utils/WorkerUtil";
 import WorkerFormStepCertificates from "./WorkerFormStepCertificates";
 import { Path } from "../../../path";
 
@@ -20,8 +18,6 @@ const WorkerCertificatesEditView: React.FC = () => {
     const navigate = useNavigate();
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
-
-    const [loading, setLoading] = useState(false);
 
     const worker: WorkerWithCertificates | null = userCtx?.meCtx?.workerProfile || null;
 
@@ -79,10 +75,6 @@ const WorkerCertificatesEditView: React.FC = () => {
     const handleBack = () => {
         navigate(-1);
     };
-
-    if (loading) {
-        return <Loading></Loading>
-    }
 
     return (
         <div className="relative flex flex-col w-full flex-1">
