@@ -31,7 +31,7 @@ const WorkerSkillsSection: React.FC<Props> = ({ worker }) => {
     })) || [];
 
     return <TileSection
-        link={isMyProfile ? { title: t('employeeProfile.editSkills'), onClick: () => navigate(Path.WORKER_SKILLS_FORM) } : undefined}
+        link={isMyProfile ? { title: t('common.edit'), onClick: () => navigate(Path.WORKER_SKILLS_FORM) } : undefined}
         title={t('employeeProfile.skills')}>
         <ChecklistUi
             items={items}

@@ -33,6 +33,7 @@ import { useFAB } from "global/fab";
 import { FABkey, FABtype } from "global/fab/useFAB";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 import TileSection from "employee/components/TileSection";
+import WorkerCertificatesSection from "employee/components/WorkerCertificatesSection";
 
 const WorkerView: React.FC = () => {
 
@@ -307,11 +308,7 @@ const WorkerView: React.FC = () => {
 
             <WorkerDataSection worker={worker} />
 
-            <TileSection title={t('employeeProfile.form.certificates.title')} link={{ title: t('common.edit'), onClick: () => navigate(Path.WORKER_CERTIFICATES_EDIT) }}>
-                <ChecklistUi icon={Ico.CHECK}
-                    items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []}
-                ></ChecklistUi>
-            </TileSection>
+            <WorkerCertificatesSection worker={worker} />
 
             <WorkerSkillsSection worker={worker} />
 
