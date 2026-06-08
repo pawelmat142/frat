@@ -1,8 +1,8 @@
-import { WorkerI, WorkerSearchFilters, WorkerSearchRequest, WorkerSearchSortOption } from "../interfaces/WorkerI";
+import { WorkerI, WorkerSearchFilters, WorkerSearchRequest, WorkerSearchSortOption, WorkerWithCertificates } from "../interfaces/WorkerI";
 import { ObjUtil } from "./ObjUtil";
 
 export abstract class WorkerUtil {
-    
+
     private static readonly START_DATE = 'startDate';
     private static readonly END_DATE = 'endDate';
 
@@ -74,7 +74,7 @@ export abstract class WorkerUtil {
         if (page > 1) params.set(WorkerUtil.PAGE, String(page));
         if (f.limit !== defaultFilters.limit) params.set(WorkerUtil.LIMIT, String(f.limit));
         if (f.sortBy) params.set(WorkerUtil.SORT_BY, f.sortBy);
-        
+
         const searchStr = params.toString();
         return searchStr;
     }
@@ -135,5 +135,12 @@ export abstract class WorkerUtil {
         if (f1.limit !== f2.limit) return false;
         if (f1.sortBy !== f2.sortBy) return false;
         return true;
+    }
+
+    public static prepareCertificateDates = (worker: WorkerWithCertificates) => {
+        return worker.certs?.reduce((acc, cert) => {
+            acc[cert.code] = cert.validityDate;
+            return acc;
+        }, {} as Record<string, string>) || {}
     }
 }

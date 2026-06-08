@@ -27,6 +27,7 @@ import { isOneOf } from "@shared/utils/util";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import WorkerFormStepAvailability from "./WorkerFormStepAvailability";
 import Header from "global/components/Header";
+import { WorkerUtil } from "@shared/utils/WorkerUtil";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -213,10 +214,7 @@ const WorkerFormView: React.FC = () => {
             },
             certificates: {
                 certificates: worker.certificates || [],
-                certificateDates: worker.certs?.reduce((acc, cert) => {
-                    acc[cert.code] = cert.validityDate;
-                    return acc;
-                }, {} as Record<string, string>) || {},
+                certificateDates: WorkerUtil.prepareCertificateDates(worker),
             }
         });
     }

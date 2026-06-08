@@ -307,7 +307,7 @@ const WorkerView: React.FC = () => {
 
             <WorkerDataSection worker={worker} />
 
-            <TileSection title={t('employeeProfile.form.certificates.title')}>
+            <TileSection title={t('employeeProfile.form.certificates.title')} link={{ title: t('common.edit'), onClick: () => navigate(Path.WORKER_CERTIFICATES_EDIT) }}>
                 <ChecklistUi icon={Ico.CHECK}
                     items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []}
                 ></ChecklistUi>
