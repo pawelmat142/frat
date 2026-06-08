@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CertificatesRepo } from './CertificatesRepo';
 import { CertificateEntity } from 'employee/model/CertificateEntity';
-import { WorkerFormDto } from '@shared/interfaces/WorkerI';
+import { CertificatesDto, WorkerFormDto } from '@shared/interfaces/WorkerI';
 
 @Injectable()
 export class CertificatesWorkerService {
@@ -20,7 +20,7 @@ export class CertificatesWorkerService {
      */
     public async syncCertificates(
         uid: string,
-        form: WorkerFormDto
+        form: CertificatesDto
     ): Promise<boolean> {
         const { certificates = [], certificateDates = {} } = form;
         this.logger.log(`Syncing certificates for uid: ${uid}, certificates: ${certificates.join(', ')}`);
@@ -82,7 +82,7 @@ export class CertificatesWorkerService {
      */
     public async createCertificates(
         uid: string,
-        form: WorkerFormDto
+        form: CertificatesDto
     ): Promise<CertificateEntity[]> {
         const { certificates = [], certificateDates = {} } = form;
         this.logger.log(`Creating certificates for uid: ${uid}, certificates: ${certificates.join(', ')}`);

@@ -5,7 +5,7 @@ import { WorkerEntity } from "employee/model/WorkerEntity";
 import { ToastException } from "global/exceptions/ToastException";
 import { DeepPartial } from "typeorm";
 
-export abstract class WorkerUtil {
+export abstract class WorkerUtils {
 
     public static fillLocationData(profile: DeepPartial<WorkerEntity>, form: WorkerFormDto): void {
         profile.locationOption = form.locationOption;
@@ -91,7 +91,7 @@ export abstract class WorkerUtil {
             }
         }
 
-        WorkerUtil.validateLocationData(profile);
+        WorkerUtils.validateLocationData(profile);
     }
 
 

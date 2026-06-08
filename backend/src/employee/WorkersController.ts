@@ -17,7 +17,7 @@ import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { AvatarRef, UserI, UserRoles } from '@shared/interfaces/UserI';
 import { WorkersService } from './services/WorkerService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
-import { WorkerFormDto, WorkerFormStepAvailability, WorkerI, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerStatus, WorkerWithCertificates } from '@shared/interfaces/WorkerI';
+import { CertificatesDto, WorkerFormDto, WorkerFormStepAvailability, WorkerFormStepCertificates, WorkerI, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerStatus, WorkerWithCertificates } from '@shared/interfaces/WorkerI';
 import { Serialize } from 'global/decorators/Serialize';
 import { WorkerEntity } from './model/WorkerEntity';
 import { SearchWorkersService } from './services/SearchWorkerService';
@@ -148,6 +148,16 @@ export class WorkersController {
     @Body() bio: { value: string }
   ): Promise<void> {
     return this.workersService.updateBio(user, bio.value);
+  }
+  
+  @Put("/certificates")
+  @UseGuards(JwtAuthGuard)
+  @Serialize(WorkerEntity)
+  updateCertificates(
+    @CurrentUser() user: UserI,
+    @Body() dto: CertificatesDto
+  ): Promise<void> {
+    return this.workersService.updateCertificates(user, dto);
   }
 
   @Post("/images")

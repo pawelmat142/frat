@@ -61,31 +61,24 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
         initDictionary();
     }, [])
 
-    // Get selected certificates and their dictionary definitions
+    // Get MAIN group element codes
     const mainGroupElementCodes = useMemo(() => {
         const mainGroup = dictionary?.groups?.find(group => group.code === 'MAIN');
         return new Set((mainGroup?.elementCodes || []).map(code => String(code)));
     }, [dictionary]);
 
-    const topSectionItems = useMemo(() => {
-        const selectedSet = new Set(selectedCertificates);
-
-        if (debouncedQuery.length < MIN_QUERY_LENGTH) {
-            return dictionaryItems.filter(item => selectedSet.has(item.value));
-        }
-
+    // Get all items in STABLE order - no reorganization
+    const allItems = useMemo(() => {
         const query = debouncedQuery.toLowerCase();
-        return dictionaryItems.filter(item => selectedSet.has(item.value) || item.label.toLowerCase().includes(query));
-    }, [debouncedQuery, dictionaryItems, selectedCertificates]);
 
-    const mainSectionItems = useMemo(() => {
-        const selectedSet = new Set(selectedCertificates);
-        const topSectionCodes = new Set(topSectionItems.map(item => item.value));
-
-        return dictionaryItems.filter(
-            item => mainGroupElementCodes.has(item.value) && !selectedSet.has(item.value) && !topSectionCodes.has(item.value),
-        );
-    }, [dictionaryItems, mainGroupElementCodes, selectedCertificates, topSectionItems]);
+        if (isSearchMode && query.length >= MIN_QUERY_LENGTH) {
+            // Search mode: show matching items
+            return dictionaryItems.filter(item => item.label.toLowerCase().includes(query));
+        } else {
+            // Normal mode: show MAIN group items
+            return dictionaryItems.filter(item => mainGroupElementCodes.has(item.value));
+        }
+    }, [debouncedQuery, dictionaryItems, mainGroupElementCodes, isSearchMode]);
 
     return (
         <>
@@ -111,30 +104,27 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                         } : undefined}
                     />
 
-                    <SelectorItems
-                        items={topSectionItems}
-                        selectedValues={selectedCertificates}
-                        multiSelect
-                        automatedMode
-                        translateItems
-                        emitAllSelectedValues
-                        onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
-                        onClean={() => formRef.setValue('certificates.certificates', [])}
-                    ></SelectorItems>
+                    {/* Simple stable list - no reorganization */}
+                    {allItems.length > 0 && (
+                        <>
+                            {!isSearchMode && (
+                                <h3 className="form-subheader mt-5">
+                                    {t("employeeProfile.form.certificates.main")}
+                                </h3>
+                            )}
 
-                    <h3 className="form-subheader mt-5">
-                        {t("employeeProfile.form.certificates.main")}
-                    </h3>
-
-                    <SelectorItems
-                        items={mainSectionItems}
-                        selectedValues={selectedCertificates}
-                        multiSelect
-                        automatedMode
-                        translateItems
-                        emitAllSelectedValues
-                        onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
-                    ></SelectorItems>
+                            <SelectorItems
+                                items={allItems}
+                                selectedValues={selectedCertificates}
+                                multiSelect
+                                automatedMode
+                                translateItems
+                                emitAllSelectedValues
+                                onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
+                                onClean={() => formRef.setValue('certificates.certificates', [])}
+                            ></SelectorItems>
+                        </>
+                    )}
                 </>
             )}
         </>

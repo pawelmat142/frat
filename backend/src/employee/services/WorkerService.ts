@@ -3,9 +3,9 @@ import { ForbiddenException, Injectable, Logger, NotFoundException, OnModuleDest
 import { WorkerRepo } from './WorkerRepo';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { AvatarRef, UserI } from '@shared/interfaces/UserI';
-import { WorkerAvailabilityOptions, WorkerFormDto, WorkerFormStepAvailability, WorkerI, WorkerSkills, WorkerStatus, WorkerStatuses, WorkerWithCertificates, WorkerWithMutualFriends } from '@shared/interfaces/WorkerI';
+import { CertificatesDto, WorkerAvailabilityOptions, WorkerFormDto, WorkerFormStepAvailability, WorkerFormStepCertificates, WorkerI, WorkerSkills, WorkerStatus, WorkerStatuses, WorkerWithCertificates, WorkerWithMutualFriends } from '@shared/interfaces/WorkerI';
 import { ToastException } from 'global/exceptions/ToastException';
-import { WorkerUtil } from './WorkerUtil';
+import { WorkerUtils } from './WorkerUtil';
 import { DeepPartial, In } from 'typeorm';
 import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 import { DateUtil } from '@shared/utils/DateUtil';
@@ -17,6 +17,7 @@ import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
 import { CloudinaryTags } from '@shared/utils/CloudinaryUtil';
 import { EntityInteractionService } from 'entity-interaction/services/EntityInteractionService';
 import { EntityInteractionEntityTypes } from '@shared/interfaces/EntityInteractionI';
+import { WorkerUtil } from '@shared/utils/WorkerUtil';
 
 @Injectable()
 export class WorkersService implements OnModuleInit, OnModuleDestroy {
@@ -142,13 +143,13 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
 
         const profile = await this.prepareProfile(user, form);
         const result = await this.workerRepo.create(profile);
-        
+
         // Create certificates with validity dates if provided
         if (Object.keys(form.certificateDates || {}).length) {
             await this.certificatesWorkerService.createCertificates(user.uid, form)
             this.logger.log(`Created certificates for new worker profile: ${result.workerId}`);
         }
-        
+
         await this.userService.updateAvatarIfChanges(user, form.avatarRef);
         return result;
     }
@@ -158,14 +159,33 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         if (!profileBefore) {
             throw new ToastException('employeeProfile.notFound', this);
         }
-        
+
         // Sync certificates before updating profile
         const certificatesChanged = await this.updateCertificatesValidityDates(user.uid, form);
-        
+
         const profile = await this.prepareProfile(user, form);
         const result = await this.workerRepo.update(profile, certificatesChanged); // Mark as changed since certificates might have changed
         await this.userService.updateAvatarIfChanges(user, form.avatarRef);
         return result;
+    }
+
+    public async updateCertificates(
+        user: UserI,
+        dto: CertificatesDto
+    ): Promise<void> {
+        const profileBefore = await this.workerRepo.findByUid(user.uid);
+        if (!profileBefore) {
+            throw new ToastException('employeeProfile.notFound', this);
+        }
+
+        // Sync certificates before updating profile
+        const certificatesChanged = await this.updateCertificatesValidityDates(user.uid, dto);
+
+        if (certificatesChanged) {
+            profileBefore.certificates = dto.certificates || [];
+            await this.workerRepo.update(profileBefore);
+            this.logger.log(`Updated certificates for profile ID: ${profileBefore.workerId}, total certificates now: ${profileBefore.certificates.length}`);
+        }
     }
 
     public async updateAvailability(user: UserI, availability: WorkerFormStepAvailability): Promise<WorkerI> {
@@ -229,7 +249,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         await this.cloudinaryService.deleteImagesWithTags([CloudinaryTags.uid(uid), CloudinaryTags.WORKER_PROFILE]);
     }
 
-    private async updateCertificatesValidityDates(uid: string, form: WorkerFormDto): Promise<boolean> {
+    private async updateCertificatesValidityDates(uid: string, form: CertificatesDto): Promise<boolean> {
         const result = await this.certificatesWorkerService.syncCertificates(uid, form);
         this.logger.log(`Synced certificates for uid: ${uid}`);
         return result;
@@ -269,7 +289,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         if (!profile) {
             throw new ToastException('employeeProfile.notFound', this);
         }
-        
+
         // Delete certificates before deleting profile
         await this.certificatesWorkerService.deleteAllCertificatesForWorker(user.uid);
         return this.deleteProfile(profile.workerId);
@@ -299,7 +319,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         this.fillLocationData(result, form);
         this.fillAvailabilityData(result, form);
 
-        WorkerUtil.validateProfile(result);
+        WorkerUtils.validateProfile(result);
         return result;
     }
 
@@ -310,7 +330,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
             result.availabilityDateRanges = ranges
             result.startDate = DateRangeUtil.findEarliestDate(ranges)
             result.rangesOption = form.rangesOption;
-        } 
+        }
         else {
             result.rangesOption = undefined;
             result.availabilityDateRanges = undefined;
@@ -324,7 +344,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
     }
 
     private fillLocationData(result: DeepPartial<WorkerEntity>, form: WorkerFormDto): void {
-        WorkerUtil.fillLocationData(result, form)
+        WorkerUtils.fillLocationData(result, form)
     }
 
     private getProfileStatus(user: UserI, form: WorkerFormDto): WorkerStatus {

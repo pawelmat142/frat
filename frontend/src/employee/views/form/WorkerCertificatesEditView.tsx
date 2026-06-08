@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,6 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import Header from "global/components/Header";
 import { useUserContext } from "user/UserProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import Loading from "global/components/Loading";
 import WorkerFormStepCertificates from "./WorkerFormStepCertificates";
 import { Path } from "../../../path";
 

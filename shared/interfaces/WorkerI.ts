@@ -137,6 +137,11 @@ export interface WorkerFormStepCertificateDates {
   certificateDates?: { [key: string]: string }; // key is certificate name, value is local date string in YYYY-MM-DD format
 }
 
+export interface CertificatesDto {
+  certificates?: string[];
+  certificateDates?: { [key: string]: string };
+}
+
 export interface WorkerForm {
   currentStep: WorkerFormStep;
   personalData: WorkerFormStepPersonalData;

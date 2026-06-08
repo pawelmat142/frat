@@ -1,5 +1,5 @@
 import { BtnModes, FloatingInputModes, SelectorItem, SelectorValue } from "global/interface/controls.interface";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCheck } from "react-icons/fa";
 import Button from "../controls/Button";
@@ -93,18 +93,11 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
     const isSelected = (value: T) => localSelectedValues.includes(value);
 
-    // Always show selected items regardless of search filter - sort by initial selectedValues, not current localSelectedValues
-    const initialSelectedItems = items.filter(item => selectedValues.includes(item.value));
-    
-    // Filter unselected items by search text
-    const unselectedFiltered = items.filter(item => {
-        if (selectedValues.includes(item.value)) return false; // Skip already selected items (based on initial values)
-        if (!searchText) return true;
-        const label = (translateItems ? t(item.label) : item.label).toLowerCase();
-        return label.includes(searchText.toLowerCase());
-    });
-
-    const sortedItems = [...initialSelectedItems, ...unselectedFiltered];
+    // If enableSearchText is false, use items in original order (already organized by parent)
+    // If enableSearchText is true, can reorganize based on search
+    const sortedItems = useMemo(() => {
+        return items;
+    }, [items]);
 
     return (
         <>
@@ -127,14 +120,14 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                 </div>
             )}
             <div className="bottom-sheet-content">
-                {sortedItems.map((item, index) => {
+                {sortedItems.map((item) => {
                     const translatedLabel = translateItems ? t(item.label) : item.label;
                     const displayLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
-                    const last = index === sortedItems.length - 1;
+                    const last = item === sortedItems[sortedItems.length - 1];
                     const selected = isSelected(item.value);
 
                     return (
-                        <div key={index}>
+                        <div key={String(item.value)}>
                             <div
                                 className={`bottom-sheet-item ripple${selected ? ' selected' : ''}${last ? ' last' : ''}`}
                                 onClick={() => handleItemClick(item)}

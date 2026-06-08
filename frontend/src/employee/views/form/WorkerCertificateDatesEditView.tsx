@@ -73,15 +73,15 @@ const WorkerCertificateDatesEditView: React.FC = () => {
     const handleSave = async () => {
         try {
             const certificatesData = formRef.getValues("certificates");
-            const certificateDatesData = formRef.getValues("certificateDates");
+            const certificateDates = formRef.getValues("certificateDates");
             setLoading(true);
             const result = await WorkerService.updateCertificates({
-                ...certificatesData,
-                ...certificateDatesData
+                certificates: certificatesData.certificates,
+                certificateDates: certificateDates.certificateDates,
             });
             userCtx.initWorker();
             toast.success(t("employeeProfile.form.submitSuccess"));
-            handleBack();
+            navigate(-2);
         } catch (error) {
             console.error("Error saving certificates:", error);
         } finally {
