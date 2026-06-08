@@ -1,4 +1,5 @@
 import { OfferI } from "@shared/interfaces/OfferI";
+import TileSection from "employee/components/TileSection";
 import OfferRecentViewListItem from "offer/components/ListItems/OfferRecentViewListItem";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "user/UserProvider";
@@ -12,9 +13,7 @@ const RecentViewedOffers: React.FC = () => {
         return null;
     }
 
-    return (<div className="pt-7">
-
-        <div className="px-5 pb-2 secondary-text">{t("offer.recentlySeen")}:</div>
+    return <TileSection title={t("offer.recentlySeen")}>
 
         {userCtx.meCtx.recentViewedOffers.map(item => {
             const offer = item.data as OfferI;
@@ -22,8 +21,7 @@ const RecentViewedOffers: React.FC = () => {
                 <OfferRecentViewListItem offer={offer} date={item.listedAt} disableDefaultBorder/>
             </div>
         })}
-
-    </div>)
+    </TileSection>
 }
 
 export default RecentViewedOffers;
