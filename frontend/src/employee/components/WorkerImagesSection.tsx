@@ -17,6 +17,7 @@ import { useConfirm } from "global/providers/PopupProvider";
 import LongTapHandler from "global/components/LongTapHandler";
 import PseudoView from "global/components/PseudoView";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import TileSection from "./TileSection";
 
 interface Props {
     worker: WorkerI;
@@ -148,10 +149,10 @@ const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) =
         return <Loading />;
     }
 
-    return (
-        <div className="mb-10 view-margin">
-            <div className="secondary-text mb-3">{t('gallery.title')}</div>
+    const link = (isMyProfile && canAddMore && !pending) ? { title: t('gallery.addImage'), onClick: openFilePicker } : undefined;
 
+    return <>
+        <TileSection title={t('gallery.title')} link={link} primaryBg>
             <div className="grid grid-cols-2 gap-2">
                 {/* Saved images */}
                 {savedImages.map((img, i) => (
@@ -209,40 +210,21 @@ const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) =
 
             </div>
 
-            {isMyProfile && canAddMore && !pending && (
-                <Button
-                    mode={BtnModes.PRIMARY_TXT}
-                    size={BtnSizes.SMALL}
-                    className="ml-auto mt-3"
-                    onClick={openFilePicker}
-                >
-                    <Ico.PLUS className="w-4 h-4" />
-                    {t('gallery.addImage')}
-                </Button>
-            )}
+        </TileSection>
 
-            <input
-                ref={fileInputRef}
-                type="file"
-                accept={FileUtil.ALLOWED_IMAGE_EXTENSIONS.map((ext) => `.${ext}`).join(',')}
-                onChange={handleFileChange}
-                hidden
+        {/* Lightbox */}
+        <PseudoView show={lightboxIndex !== null}>
+            <GallerySwiper
+                images={allDisplayUrls}
+                startIndex={lightboxIndex ?? 0}
+                onClose={() => {
+                    setLightboxIndex(null);
+                    globalCtx.showFooter();
+                    onOpenCloseLightbox?.(false);
+                }}
             />
-
-            {/* Lightbox */}
-            <PseudoView show={lightboxIndex !== null}>
-                <GallerySwiper
-                    images={allDisplayUrls}
-                    startIndex={lightboxIndex ?? 0}
-                    onClose={() => {
-                        setLightboxIndex(null);
-                        globalCtx.showFooter();
-                        onOpenCloseLightbox?.(false);
-                    }}
-                />
-            </PseudoView>
-        </div>
-    );
+        </PseudoView>
+    </>
 };
 
 export default WorkerImagesSection;

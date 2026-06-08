@@ -32,6 +32,7 @@ import { buildFriendshipMenuItems } from "friends/friendshipMenuBuilder";
 import { useFAB } from "global/fab";
 import { FABkey, FABtype } from "global/fab/useFAB";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
+import TileSection from "employee/components/TileSection";
 
 const WorkerView: React.FC = () => {
 
@@ -280,7 +281,7 @@ const WorkerView: React.FC = () => {
     return (<>
         <Header title={t('employeeProfile.title')} menu={menuConfig}></Header>
 
-        <div className="w-full flex flex-col flex-1">
+        <div className="w-full flex-1">
 
             <div className="flex gap-3 items-center view-margin">
 
@@ -306,9 +307,11 @@ const WorkerView: React.FC = () => {
 
             <WorkerDataSection worker={worker} />
 
-            <ChecklistUi icon={Ico.CHECK} title={t('employeeProfile.form.certificates.title')}
-                items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []}
-            ></ChecklistUi>
+            <TileSection title={t('employeeProfile.form.certificates.title')}>
+                <ChecklistUi icon={Ico.CHECK}
+                    items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []}
+                ></ChecklistUi>
+            </TileSection>
 
             <WorkerSkillsSection worker={worker} />
 

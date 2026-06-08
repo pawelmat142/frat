@@ -1,14 +1,13 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { WorkerI } from "@shared/interfaces/WorkerI";
-import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import Button from "global/components/controls/Button";
-import { useNavigate } from "react-router-dom";
 import FloatingTextarea from "global/components/controls/FloatingTextarea";
 import SkeletonControl from "global/components/controls/SkeletonControl";
 import { WorkerService } from "employee/services/WorkerService";
+import TileSection from "./TileSection";
 
 interface Props {
     worker: WorkerI;
@@ -40,13 +39,16 @@ const WorkerBioSection: React.FC<Props> = ({ worker }) => {
         }
     };
 
+    const link = isMyProfile && !editMode ? { title: t('employeeProfile.editBio'), onClick: () => setEditMode(true) } : undefined;
+    const title = editMode ? undefined : t('employeeProfile.form.bioLabel');
+
     if (loading) {
         return <SkeletonControl></SkeletonControl>
     }
 
-    return <div className="mb-10 view-margin">
+    return <TileSection title={title} link={link} primaryBg={editMode}>
 
-        {editMode ? (
+         {editMode ? (
             <div className="">
                 <FloatingTextarea
                     label={t("employeeProfile.form.bioLabel")}
@@ -70,20 +72,10 @@ const WorkerBioSection: React.FC<Props> = ({ worker }) => {
 
             </div>
         ) : (
-            <div>
-                <div className="secondary-text mb-3">{t('employeeProfile.form.bioLabel')}</div>
-
-                <div className="s-font font-light">{bio}</div>
-
-                {isMyProfile && (
-                    <Button mode={BtnModes.PRIMARY_TXT} className="ml-auto" size={BtnSizes.SMALL} onClick={() => setEditMode(true)}>
-                        <Ico.EDIT className="w-4 h-4" />
-                        {t('employeeProfile.editBio')}
-                    </Button>)}
-            </div>
+            <div className="view-margin pb-2 s-font font-light">{bio}</div>
         )}
 
-    </div>
+    </TileSection>
 };
 
 export default WorkerBioSection;

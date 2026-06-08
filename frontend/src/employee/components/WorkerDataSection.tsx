@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useUserContext } from "user/UserProvider";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
+import TileSection from "./TileSection";
 
 interface Props {
     worker: WorkerI;
@@ -128,10 +129,10 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
         }
     }
 
-    const ranges = worker.availabilityOption === WorkerAvailabilityOptions.DATE_RANGES 
-    ? worker.availabilityDateRanges?.map(range => DateRangeUtil.toDateRange(range)).filter(r => !!r) 
-    : worker.availabilityOption === WorkerAvailabilityOptions.FROM_DATE 
-    ? [{ start: worker.startDate }] : [];
+    const ranges = worker.availabilityOption === WorkerAvailabilityOptions.DATE_RANGES
+        ? worker.availabilityDateRanges?.map(range => DateRangeUtil.toDateRange(range)).filter(r => !!r)
+        : worker.availabilityOption === WorkerAvailabilityOptions.FROM_DATE
+            ? [{ start: worker.startDate }] : [];
 
     const displayAddress = worker.geocodedPosition == null ? null : `${worker.geocodedPosition?.city || ''}, ${DictionaryDisplay({
         dictionary: "LANGUAGES",
@@ -170,26 +171,24 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
             }];
     }
 
-    return (
-        <>
-            <div className="mb-5 mt-5">
-                <ListUi items={getListItems()}></ListUi>
-            </div>
+    return <>
+        <TileSection>
+            <ListUi items={getListItems()}></ListUi>
+        </TileSection>
 
-            <PseudoView show={openPseudoView}>
-                <CallendarsView
-                    title={t("employeeProfile.availability")}
-                    ranges={ranges}
-                    bottomSheetCtx={bottomSheetCtx}
-                    onClose={() => {
-                        setOpenPseudoView(false)
-                        globalCtx.showFooter();
-                        floatingBtnCtx.show();
-                    }}
-                />
-            </PseudoView>
-        </>
-    );
+        <PseudoView show={openPseudoView}>
+            <CallendarsView
+                title={t("employeeProfile.availability")}
+                ranges={ranges}
+                bottomSheetCtx={bottomSheetCtx}
+                onClose={() => {
+                    setOpenPseudoView(false)
+                    globalCtx.showFooter();
+                    floatingBtnCtx.show();
+                }}
+            />
+        </PseudoView>
+    </>
 }
 
 export default WorkerDataSection;

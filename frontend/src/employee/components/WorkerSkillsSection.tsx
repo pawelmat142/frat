@@ -8,6 +8,7 @@ import Button from "global/components/controls/Button";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../path";
 import ChecklistUi from "global/components/ui/ChecklistUi";
+import TileSection from "./TileSection";
 
 interface Props {
     worker: WorkerI;
@@ -29,19 +30,15 @@ const WorkerSkillsSection: React.FC<Props> = ({ worker }) => {
         label: skill.name
     })) || [];
 
-    return <div>
+    return <TileSection
+        link={isMyProfile ? { title: t('employeeProfile.editSkills'), onClick: () => navigate(Path.WORKER_SKILLS_FORM) } : undefined}
+        title={t('employeeProfile.skills')}>
         <ChecklistUi
-            title={t('employeeProfile.skills')}
             items={items}
             icon={Ico.CHECK}
             className="view-margin"
         ></ChecklistUi>
-
-        <Button mode={BtnModes.PRIMARY_TXT} className="ml-auto mt-5" size={BtnSizes.SMALL} onClick={() => navigate(Path.WORKER_SKILLS_FORM)}>
-            <Ico.EDIT className="w-4 h-4" />
-            {t('employeeProfile.editSkills')}
-        </Button>
-    </div>
+    </TileSection>
 };
 
 export default WorkerSkillsSection;
