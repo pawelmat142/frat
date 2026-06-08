@@ -8,22 +8,25 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import Header from "global/components/Header";
 import { useUserContext } from "user/UserProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import { WorkerService } from "employee/services/WorkerService";
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
 import { WorkerUtil } from "@shared/utils/WorkerUtil";
-import WorkerFormStepCertificates from "./WorkerFormStepCertificates";
-import { Path } from "../../../path";
+import WorkerFormStepCertificateDates from "./WorkerFormStepCertificateDates";
 
-const WorkerCertificatesEditView: React.FC = () => {
+const WorkerCertificateDatesEditView: React.FC = () => {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const location = useLocation();
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
 
     const [loading, setLoading] = useState(false);
 
     const worker: WorkerWithCertificates | null = userCtx?.meCtx?.workerProfile || null;
+    const locationState = location.state as { certificates?: string[] } | null;
+    const certificatesFromPreviousStep = locationState?.certificates || [];
 
     useEffect(() => {
         globalCtx.hideFooter();
@@ -36,7 +39,7 @@ const WorkerCertificatesEditView: React.FC = () => {
 
     const formRef = useForm<WorkerForm>({
         defaultValues: {
-            currentStep: WorkerFormSteps.CERTIFICATES,
+            currentStep: WorkerFormSteps.CERTIFICATE_DATES,
             personalData: {
                 fullName: "",
                 phoneNumber: { prefix: "+00", number: "" },
@@ -59,21 +62,31 @@ const WorkerCertificatesEditView: React.FC = () => {
                 startDate: null,
             },
             certificates: {
-                certificates: worker.certificates || [],
+                certificates: certificatesFromPreviousStep,
             },
             certificateDates: {
-                certificateDates: {}
+                certificateDates: WorkerUtil.prepareCertificateDates(worker)
             }
         }
     });
 
-    const handleNext = () => {
-        const certificatesData = formRef.getValues("certificates");
-        navigate(Path.WORKER_CERTIFICATE_DATES_EDIT, {
-            state: {
-                certificates: certificatesData.certificates || []
-            }
-        });
+    const handleSave = async () => {
+        try {
+            const certificatesData = formRef.getValues("certificates");
+            const certificateDatesData = formRef.getValues("certificateDates");
+            setLoading(true);
+            const result = await WorkerService.updateCertificates({
+                ...certificatesData,
+                ...certificateDatesData
+            });
+            userCtx.initWorker();
+            toast.success(t("employeeProfile.form.submitSuccess"));
+            handleBack();
+        } catch (error) {
+            console.error("Error saving certificates:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleBack = () => {
@@ -86,11 +99,11 @@ const WorkerCertificatesEditView: React.FC = () => {
 
     return (
         <div className="relative flex flex-col w-full flex-1">
-            <Header title={t("employeeProfile.form.certificates.title")} />
+            <Header title={t("employeeProfile.form.certificateDates.title")} />
 
             <form className="flex flex-col flex-1">
                 <div className="flex-1 p-4">
-                    <WorkerFormStepCertificates formRef={formRef} />
+                    <WorkerFormStepCertificateDates formRef={formRef} />
                 </div>
 
                 <div className="view-margin pb-3">
@@ -108,13 +121,13 @@ const WorkerCertificatesEditView: React.FC = () => {
 
                         <Button
                             type="button"
-                            onClick={handleNext}
+                            onClick={handleSave}
                             size={BtnSizes.LARGE}
                             mode={BtnModes.PRIMARY}
                             className="flex-1"
-                            aria-label={t("common.next")}
+                            aria-label={t("common.save")}
                         >
-                            {t("common.next")}
+                            {t("common.save")}
                         </Button>
                     </div>
                 </div>
@@ -123,4 +136,4 @@ const WorkerCertificatesEditView: React.FC = () => {
     );
 };
 
-export default WorkerCertificatesEditView;
+export default WorkerCertificateDatesEditView;

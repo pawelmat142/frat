@@ -50,6 +50,7 @@ import TrainingFormView from 'training/views/form/TrainingFormView';
 import MyTrainingsList from 'training/views/MyTrainingsList';
 import TrainingProviderFormView from 'training/views/provider/TrainingProviderFormView';
 import WorkerCertificatesEditView from 'employee/views/form/WorkerCertificatesEditView';
+import WorkerCertificateDatesEditView from 'employee/views/form/WorkerCertificateDatesEditView';
 
 const trainingAccess = [UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.SUPERADMIN]
 
@@ -90,6 +91,7 @@ const App: React.FC = () => {
                 <Route path={Path.WORKER_SKILLS_FORM} element={<PageWrapper isProtected><WorkerSkillsFormView /></PageWrapper>} />
                 <Route path={Path.WORKER_AVAILABILITY_EDIT} element={<PageWrapper isProtected><WorkerAvailabilityEditView /></PageWrapper>} />
                 <Route path={Path.WORKER_CERTIFICATES_EDIT} element={<PageWrapper isProtected><WorkerCertificatesEditView /></PageWrapper>} />
+                <Route path={Path.WORKER_CERTIFICATE_DATES_EDIT} element={<PageWrapper isProtected><WorkerCertificateDatesEditView /></PageWrapper>} />
 
                 {/* OFFERS */}
                 <Route path={Path.OFFER_FORM} element={<PageWrapper isProtected><OfferFormView/></PageWrapper>} />
