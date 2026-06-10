@@ -208,6 +208,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                                 code="LANGUAGES"
                                 groupCode="COMMUNICATION"
                                 fullWidth
+                                skipSort={true}
                             />
                         )}
                     />

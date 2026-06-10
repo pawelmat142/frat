@@ -15,6 +15,7 @@ interface DictionarySelectorProps extends DictionarySelectorInterface<string> {
     emitValueCode?: string;
     onDictionaryChange?: (dictionary: DictionaryI | null) => void;
     enableSearchText?: boolean;
+    skipSort?: boolean;
 }
 const DictionarySelector = forwardRef((
     {
@@ -36,7 +37,8 @@ const DictionarySelector = forwardRef((
         error,
         enableSearchText = false,
         showLabel,
-        onDictionaryChange
+        onDictionaryChange,
+        skipSort = false
     }: DictionarySelectorProps,
     ref: React.Ref<any>
 ) => {
@@ -105,8 +107,9 @@ const DictionarySelector = forwardRef((
 
     const filteredElements = getFilteredElements(dictionary);
 
-    const items: SelectorItem<string>[] = filteredElements
-        .sort((a, b) => a.code.localeCompare(b.code))
+    const sortedElements = skipSort ? filteredElements : filteredElements.sort((a, b) => a.code.localeCompare(b.code));
+
+    const items: SelectorItem<string>[] = sortedElements
         .map(element => {
             const translationKey = `dictionary.${dictionary.code}.${elementLabelTranslationKey}.${element.code}`;
             const translatedLabel = t(translationKey);

@@ -90,6 +90,7 @@ const OfferFormStepOne: React.FC = () => {
                         groupCode="COMMUNICATION"
                         fullWidth
                         error={ctx.formCtx.formState.errors.STEP_ONE?.communicationLanguages}
+                        skipSort={true}
                     />
                     }
                 />
