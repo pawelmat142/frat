@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import FloatingSelector from './FloatingSelector';
 import { DictionaryUtil } from '@shared/utils/DictionaryUtil';
 import SkeletonControl from '../controls/SkeletonControl';
+import { WORLDWIDE_LOCATION } from '@shared/interfaces/WorkerI';
 
 interface CountrySelectorProps {
     /** Currently selected country code (e.g., 'pl', 'de', 'gb') */
@@ -99,7 +100,7 @@ const CountrySelector = forwardRef((
     if (includeWorldwide) {
         items.unshift({
             label: t('employeeProfile.form.locationCountry.worldwide'),
-            value: 'worldwide',
+            value: WORLDWIDE_LOCATION,
         });
     }
 

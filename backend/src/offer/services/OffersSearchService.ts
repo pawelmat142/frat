@@ -8,6 +8,7 @@ import { SelectQueryBuilder } from "typeorm";
 import { AppConfig } from "@shared/AppConfig";
 import { Position } from "@shared/interfaces/MapsInterfaces";
 import { PositionUtil } from "@shared/utils/PositionUtil";
+import { WORLDWIDE_LOCATION } from "@shared/interfaces/WorkerI";
 
 @Injectable()
 export class OffersSearchService {
@@ -30,7 +31,6 @@ export class OffersSearchService {
 
         const categories = SearchUtil.parseArray(filters.categories);
         const communicationLanguages = SearchUtil.parseArray(filters.communicationLanguages);
-        const locationCountries = SearchUtil.parseArray(filters.locationCountries);
 
         // Base condition - only ACTIVE profiles
         queryBuilder.where('offer.status = :status', { status: OfferStatuses.ACTIVE });
@@ -43,10 +43,8 @@ export class OffersSearchService {
             queryBuilder.andWhere('offer.languages_required @> :languages', { languages: communicationLanguages });
             hasFilter = true;
         }
-        if (locationCountries?.length) {
-            queryBuilder.andWhere('offer.location_country IN (:...countries)', { countries: locationCountries });
-            hasFilter = true;
-        }
+
+        this.addPositionFilter(queryBuilder, filters, hasFilter);
 
         this.applySorting(queryBuilder, filters, normalizedViewerLocation);
         this.addPagination(queryBuilder, filters);
@@ -57,6 +55,21 @@ export class OffersSearchService {
             offers: results,
             count
         };
+    }
+
+    private addPositionFilter(queryBuilder: SelectQueryBuilder<OfferEntity>, filters: OfferSearchFilters, hasFilter: boolean) {
+
+        const locationCountries = SearchUtil.parseArray(filters.locationCountries);
+
+        // Skip location filter if "worldwide" is selected
+        if (locationCountries.includes(WORLDWIDE_LOCATION)) {
+            return;
+        }
+
+        if (locationCountries?.length) {
+            queryBuilder.andWhere('offer.location_country IN (:...countries)', { countries: locationCountries });
+            hasFilter = true;
+        }
 
     }
 
@@ -91,23 +104,23 @@ export class OffersSearchService {
                     queryBuilder.orderBy('offer.createdAt', SearchUtil.DESC);
                 }
                 break;
-            
+
             case OfferSearchSortOptions.START_FROM_ASC:
                 queryBuilder.orderBy('offer.startDate', SearchUtil.ASC);
                 break;
-            
+
             case OfferSearchSortOptions.START_FROM_DESC:
                 queryBuilder.orderBy('offer.startDate', SearchUtil.DESC);
                 break;
-            
+
             case OfferSearchSortOptions.CREATED_AT_ASC:
                 queryBuilder.orderBy('offer.createdAt', SearchUtil.ASC);
                 break;
-            
+
             case OfferSearchSortOptions.CREATED_AT_DESC:
                 queryBuilder.orderBy('offer.createdAt', SearchUtil.DESC);
                 break;
-            
+
             default:
                 // Default fallback
                 queryBuilder.orderBy('offer.createdAt', SearchUtil.DESC);

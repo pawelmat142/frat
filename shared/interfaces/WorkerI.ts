@@ -249,6 +249,8 @@ export interface Point {
   coordinates: [number, number]; // [lng, lat]
 }
 
+export const WORLDWIDE_LOCATION = 'worldwide';
+
 export interface DateRangeI {
   id: number;
   dateRange: string;

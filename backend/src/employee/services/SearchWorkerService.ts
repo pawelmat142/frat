@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { WorkerRepo } from './WorkerRepo';
 import { UserI } from '@shared/interfaces/UserI';
-import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT, WorkerLocationOptions, WorkerFormRangesOptions, WorkerSearchRequest, DEFAULT_SEARCH_DISTANCE_M } from '@shared/interfaces/WorkerI';
+import { WorkerSearchSortOptions, WorkerAvailabilityOptions, WorkerSearchResponse, WorkerStatuses, PROFILES_INITIAL_SEARCH_LIMIT, WorkerLocationOptions, WorkerFormRangesOptions, WorkerSearchRequest, DEFAULT_SEARCH_DISTANCE_M, WORLDWIDE_LOCATION } from '@shared/interfaces/WorkerI';
 import { SelectQueryBuilder } from 'typeorm';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
 import { SearchUtil } from 'global/utils/SearchUtil';
@@ -280,7 +280,7 @@ export class SearchWorkersService {
 
     private addPositionFilter(baseQueryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest, hasFilter: boolean) {
         // Skip location filter if "worldwide" is selected
-        if (filters.locationCountry === 'worldwide') {
+        if (filters.locationCountry === WORLDWIDE_LOCATION) {
             return;
         }
 

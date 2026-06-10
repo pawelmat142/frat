@@ -13,6 +13,7 @@ import { PositionService } from 'global/services/PositionService';
 import PositionSelector from '../selector/position/PositionSelector';
 import { DEFAUT_POSITION } from 'offer/views/form/OfferFormStepOne';
 import { useUserContext } from 'user/UserProvider';
+import { WORLDWIDE_LOCATION } from '@shared/interfaces/WorkerI';
 
 export interface LocationFilterValue {
     locationCountry: string | null;
@@ -67,7 +68,7 @@ const CountryAndLocationSelector: React.FC<Props> = ({
     const [countryCenter, setCountryCenter] = useState<Position | null>(null);
 
     React.useEffect(() => {
-        if (!value.locationCountry || value.geocodedPosition || value.locationCountry === 'worldwide') {
+        if (!value.locationCountry || value.geocodedPosition || value.locationCountry === WORLDWIDE_LOCATION) {
             setCountryCenter(null);
             return;
         }
@@ -150,7 +151,7 @@ const CountryAndLocationSelector: React.FC<Props> = ({
                 includeWorldwide={includeWorldwide}
             />
 
-            {value.locationCountry !== 'worldwide' && (
+            {value.locationCountry !== WORLDWIDE_LOCATION && (
                 (loadingCity || geoLoading || loadingInput) ? (
                     <SkeletonControl label={t('employeeProfile.form.city')} />
                 ) : config.locationOption === 'searchbar' ? (

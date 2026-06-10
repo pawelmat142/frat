@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { FaGlobe } from "react-icons/fa";
-import { DateRange } from "@shared/interfaces/WorkerI";
+import { DateRange, WORLDWIDE_LOCATION } from "@shared/interfaces/WorkerI";
 import { LocationCity, Place } from "@mui/icons-material";
 import Flags from "global/components/Flags";
 import { useWorkersSearch } from "./WorkersSearchProvider";
@@ -39,7 +39,7 @@ const WorkersSearchFiltersBar: React.FC = () => {
             return null;
         }
 
-        if (ctx.filters.locationCountry === 'worldwide') {
+        if (ctx.filters.locationCountry === WORLDWIDE_LOCATION) {
             return (
                 <span className="xs-font">{t('employeeProfile.form.locationCountry.worldwide')}</span>
             )
