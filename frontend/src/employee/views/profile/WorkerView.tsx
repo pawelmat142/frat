@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { WorkerService } from "employee/services/WorkerService";
 import Loading from "global/components/Loading";
@@ -13,13 +13,11 @@ import { useConfirm } from "global/providers/PopupProvider";
 import { useUserContext } from "user/UserProvider";
 import PositionWidget from "employee/components/PositionWidget";
 import { Ico } from "global/icon.def";
-import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
 import FloatingActionButton from "global/fab/FloatingActionButton";
 import { AVATAR_MOCK } from "user/components/AvatarTile";
 import { AppConfig } from "@shared/AppConfig";
 import WorkerSkillsSection from "employee/components/WorkerSkillsSection";
 import WorkerImagesSection from "employee/components/WorkerImagesSection";
-import ChecklistUi from "global/components/ui/ChecklistUi";
 import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/interfaces/UserListedItem";
 import { UserListedItemService } from "user/services/UserListedItemService";
 import Header from "global/components/Header";
@@ -32,7 +30,6 @@ import { buildFriendshipMenuItems } from "friends/friendshipMenuBuilder";
 import { useFAB } from "global/fab";
 import { FABkey, FABtype } from "global/fab/useFAB";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
-import TileSection from "employee/components/TileSection";
 import WorkerCertificatesSection from "employee/components/WorkerCertificatesSection";
 
 const WorkerView: React.FC = () => {

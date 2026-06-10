@@ -1,23 +1,10 @@
-import { WorkerAvailabilityOptions, WorkerFormRangesOptions, WorkerI } from "@shared/interfaces/WorkerI";
-import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
-import { PositionUtil } from "@shared/utils/PositionUtil";
-import CallendarsView from "global/components/callendar/CallendarsView";
-import PseudoView from "global/components/PseudoView";
-import DateDisplay from "global/components/ui/DateDisplay";
+import { WorkerI } from "@shared/interfaces/WorkerI";
 import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
-import ListUi from "global/components/ui/ListUi";
-import { useIsDesktop } from "global/hooks/isMobile";
 import { Ico } from "global/icon.def";
-import { MenuItem } from "global/interface/controls.interface";
-import { useBottomSheet } from "global/providers/BottomSheetProvider";
-import { useGlobalContext } from "global/providers/GlobalProvider";
 import { Path } from "../../path";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useUserContext } from "user/UserProvider";
-import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 import TileSection from "./TileSection";
 import ChecklistUi from "global/components/ui/ChecklistUi";
 
