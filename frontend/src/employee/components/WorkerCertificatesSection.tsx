@@ -40,7 +40,7 @@ const WorkerCertificatesSection: React.FC<Props> = ({ worker }) => {
 
     return <>
         <TileSection title={t('employeeProfile.form.certificates.title')} link={isMyProfile ? { title: t('common.edit'), onClick: () => navigate(Path.WORKER_CERTIFICATES_EDIT) } : undefined}>
-            <ChecklistUi icon={Ico.CHECK}
+            <ChecklistUi icon={Ico.CHECK} className="pb-1"
                 items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []}
             ></ChecklistUi>
         </TileSection>

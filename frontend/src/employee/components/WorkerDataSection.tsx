@@ -173,7 +173,7 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
 
     return <>
         <TileSection>
-            <ListUi items={getListItems()}></ListUi>
+            <ListUi items={getListItems()} className="pb-1"></ListUi>
         </TileSection>
 
         <PseudoView show={openPseudoView}>

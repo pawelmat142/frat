@@ -15,7 +15,7 @@ const TileSection: React.FC<Props> = ({ title, children, className, link, primar
 
     const { t } = useTranslation();
 
-    const classs = `mx-3 my-4 pt-2 pb-4 ${primaryBg ? "primary-bg" : "secondary-bg"} rounded-xl ${className || ""}`;
+    const classs = `mx-3 my-4 pt-2 pb-2 ${primaryBg ? "primary-bg" : "secondary-bg"} rounded-xl ${className || ""}`;
 
     return (
         <div className={classs}>
