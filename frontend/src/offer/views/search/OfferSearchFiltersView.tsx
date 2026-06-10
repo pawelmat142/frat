@@ -15,6 +15,8 @@ import { useUserContext } from "user/UserProvider";
 import Header from "global/components/Header";
 import SkeletonControl from "global/components/controls/SkeletonControl";
 import FloatingSelector from "global/components/selector/FloatingSelector";
+import FloatingDateInput, { datepickerWithDaysConfig } from "global/components/callendar/FloatingDateInput";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 interface Props {
     onClose?: () => void;
@@ -149,6 +151,22 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                             code="LANGUAGES"
                             groupCode="COMMUNICATION"
                             fullWidth
+                        />
+                    )}
+                />
+
+                <Controller
+                    name="startDate"
+                    control={f.control}
+                    render={({ field }) => (
+                        <FloatingDateInput
+                            label={t("offer.filters.startDate")}
+                            className="w-full mt-5"
+                            value={field.value ? DateUtil.parseDateFromStringLocalDate(field.value) : null}
+                            onChange={date => {
+                                field.onChange(DateUtil.toLocalDateString(date) ?? null)
+                            }}
+                            config={datepickerWithDaysConfig}
                         />
                     )}
                 />

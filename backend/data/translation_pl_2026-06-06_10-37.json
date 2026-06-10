@@ -124,7 +124,8 @@
       "filters": {
         "countries": "Kraje",
         "categories": "Kategorie",
-        "communicationLanguages": "Języki komunikacji"
+        "communicationLanguages": "Języki komunikacji",
+        "startDate": "Mogę zacząć od"
       },
       "currency": "Waluta",
       "noOffers": "Nie ma jeszcze żadnych ofert...",

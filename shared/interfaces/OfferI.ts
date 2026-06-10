@@ -1,4 +1,4 @@
-import { ParsedPhoneNumber, Point, WorkerSearchSortOptions } from "./WorkerI";
+import { ParsedPhoneNumber, Point } from "./WorkerI";
 import { GeocodedPosition } from "./MapsInterfaces";
 
 export interface OfferI {
@@ -114,8 +114,9 @@ export interface OfferSearchFilters {
     locationCountries?: string[]
     communicationLanguages?: string[];
     categories?: string[];
-    sortBy?: OfferSearchSortOption;
+    startDate?: string | null;
 
+    sortBy?: OfferSearchSortOption;
     skip: number;
     limit: number;
 }

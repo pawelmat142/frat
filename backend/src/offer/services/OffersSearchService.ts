@@ -45,6 +45,7 @@ export class OffersSearchService {
         }
 
         this.addPositionFilter(queryBuilder, filters, hasFilter);
+        this.addStartDateFilter(queryBuilder, filters, hasFilter);
 
         this.applySorting(queryBuilder, filters, normalizedViewerLocation);
         this.addPagination(queryBuilder, filters);
@@ -70,7 +71,14 @@ export class OffersSearchService {
             queryBuilder.andWhere('offer.location_country IN (:...countries)', { countries: locationCountries });
             hasFilter = true;
         }
+    }
 
+    private addStartDateFilter(queryBuilder: SelectQueryBuilder<OfferEntity>, filters: OfferSearchFilters, hasFilter: boolean) {
+        const startDate = filters.startDate;
+        if (startDate) {
+            queryBuilder.andWhere('offer.start_date >= :startDate', { startDate });
+            hasFilter = true;
+        }
     }
 
     private addPagination(queryBuilder: SelectQueryBuilder<OfferEntity>, filters: OfferSearchFilters) {

@@ -124,7 +124,8 @@
       "filters": {
         "countries": "Countries",
         "categories": "Categories",
-        "communicationLanguages": "Communication languages"
+        "communicationLanguages": "Communication languages",
+        "startDate": "Available from"
       },
       "currency": "Currency",
       "noOffers": "Has no offers yet...",

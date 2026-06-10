@@ -7,6 +7,7 @@ export abstract class OfferUtil {
     private static readonly CATEGORIES = 'categories'
     private static readonly COMMUNICATION_LANGUAGES = 'communicationLanguages'
     private static readonly LOCATION_COUNTRIES = 'locationCountries'
+    private static readonly START_DATE = 'startDate'
     private static readonly PAGE = 'page';
     private static readonly LIMIT = 'limit';
     private static readonly SORT_BY = 'sortBy';
@@ -16,6 +17,7 @@ export abstract class OfferUtil {
         if (f.categories?.length) params.set(OfferUtil.CATEGORIES, f.categories.join(','));
         if (f.communicationLanguages?.length) params.set(OfferUtil.COMMUNICATION_LANGUAGES, f.communicationLanguages.join(','));
         if (f.locationCountries?.length) params.set(OfferUtil.LOCATION_COUNTRIES, f.locationCountries.join(','));
+        if (f.startDate) params.set('startDate', f.startDate);
 
         const page = Math.floor(f.skip / f.limit) + 1;
         if (page > 1) params.set(OfferUtil.PAGE, String(page));
@@ -31,6 +33,7 @@ export abstract class OfferUtil {
         const categories = FilterUtil.getArray(OfferUtil.CATEGORIES, params);
         const communicationLanguages = FilterUtil.getArray(OfferUtil.COMMUNICATION_LANGUAGES, params);
         const locationCountries = FilterUtil.getArray(OfferUtil.LOCATION_COUNTRIES, params);
+        const startDate = params.get(OfferUtil.START_DATE);
 
         const page = parseInt(params.get(OfferUtil.PAGE) || '1', 10);
         const limit = parseInt(params.get(OfferUtil.LIMIT) || String(defaultFilters.limit), 10);
@@ -45,6 +48,7 @@ export abstract class OfferUtil {
             skip: skip < 0 ? 0 : skip,
             limit,
             sortBy,
+            startDate,
         };
     }
     

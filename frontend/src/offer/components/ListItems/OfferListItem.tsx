@@ -2,7 +2,6 @@ import { OfferI } from "@shared/interfaces/OfferI"
 import { Path } from "../../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ThumbUp, Visibility } from "@mui/icons-material";
 import ListItem from "global/components/ListItem";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
@@ -10,6 +9,8 @@ import { PositionUtil } from "@shared/utils/PositionUtil";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import { AppConfig } from "@shared/AppConfig";
+import { DateUtil } from "@shared/utils/DateUtil";
+import DateDisplay from "global/components/ui/DateDisplay";
 
 interface Props {
     offer: OfferI,
@@ -54,16 +55,22 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
     ) : null;
 
     const topLeft = (
-        <div>
+        <div className="flex items-center gap-2">
             <div className="font-medium truncate">
                 {offer.displayName || t('offer.untitled')}
             </div>
+            {categoryChip}
         </div>
     );
 
+    const startsFrom = offer.startDate ? <span className="xs-font">
+        <span className="secondary-text">{t('common.from')} </span>
+        <span>{DateDisplay({ date: offer.startDate, t, showYearIfNotCurrent: true })}</span>
+    </span> : null;
+    
     const bottomLeft = <div className="flex flex-col gap-2 mt-2">
         <div className="flex items-center gap-3">
-            {categoryChip}
+            {startsFrom}
             <div className="flex items-center">
                 <Ico.VIEWS size={14} className="secondary-text mr-1" />
                 <span className="xs-font">{offer.uniqueViewsCount || 0}</span>
