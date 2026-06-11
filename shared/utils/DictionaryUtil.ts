@@ -1,4 +1,4 @@
-import { AppConfig } from "@shared/AppConfig";
+import { AppConfig } from "../AppConfig";
 import { DictionaryColumnTypes, DictionaryElement, DictionaryI } from "../interfaces/DictionaryI";
 import { DateUtil } from "./DateUtil";
 
