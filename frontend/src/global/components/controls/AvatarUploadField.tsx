@@ -18,6 +18,8 @@ interface AvatarUploadFieldProps {
     required?: boolean;
     folder?: string; // Optional custom folder for Cloudinary upload
     tags?: string[]; // Optional custom tags for Cloudinary upload
+    btnTitle?: string; 
+    imgPlaceholder?: string; 
 }
 
 const AVATAR_PLACEHOLDER = AppConfig.AVATAR_PLACEHOLDER;
@@ -29,7 +31,9 @@ const AvatarUploadField: React.FC<AvatarUploadFieldProps> = ({
     error,
     required,
     folder,
-    tags
+    tags,
+    btnTitle,
+    imgPlaceholder = AVATAR_PLACEHOLDER,
 }) => {
     const { t } = useTranslation();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -96,7 +100,7 @@ const AvatarUploadField: React.FC<AvatarUploadFieldProps> = ({
         }
     };
 
-    const displaySrc = previewSrc || value?.url || AVATAR_PLACEHOLDER;
+    const displaySrc = previewSrc || value?.url || imgPlaceholder;
     const hasAvatar = !!(previewSrc || value?.url);
 
     return (
@@ -127,7 +131,7 @@ const AvatarUploadField: React.FC<AvatarUploadFieldProps> = ({
                             mode={BtnModes.PRIMARY}
                             onClick={handleClick}
                             disabled={isUploading}
-                        >{t('employeeProfile.form.uploadAvatar')}</Button>
+                        >{ btnTitle || t('employeeProfile.form.uploadAvatar')}</Button>
                     )}
                     <div className="mt-1">
                         <FormError error={error} />

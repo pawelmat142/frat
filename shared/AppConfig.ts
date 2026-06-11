@@ -29,6 +29,7 @@ export const AppConfig = {
     CHAT_MAX_IMAGE_STORAGE_MB: 500, // max total image storage per conversation
 
     AVATAR_PLACEHOLDER: "/assets/img/default-avatar.png",
+    IMG_PLACEHOLDER: "/assets/img/img-placeholder.png",
 
     ROUTER_ANIMATION_DURATION: 150, // ms
 

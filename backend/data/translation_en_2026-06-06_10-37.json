@@ -97,7 +97,8 @@
         },
         "STEP_THREE": {
           "label": "Step 3",
-          "title": "Description and salary"
+          "title": "Description and salary",
+          "info": "Add a photo, logo, or graphic to make your offer stand out. If you skip this step, we will automatically generate an avatar for you."
         },
         "validation": {
           "notFound": "Offer not found.",
@@ -206,7 +207,8 @@
       "showMore": "Show more",
       "noResults": "No results found... ;(",
       "endOfResults": "No more results to display.",
-      "networkError": "Network error"
+      "networkError": "Network error",
+      "upload": "Upload"
     },
     "header": {
       "home": "Home",

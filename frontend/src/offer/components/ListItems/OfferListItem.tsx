@@ -11,6 +11,7 @@ import Chips, { ChipModes } from "global/components/chips/Chips";
 import { AppConfig } from "@shared/AppConfig";
 import { DateUtil } from "@shared/utils/DateUtil";
 import DateDisplay from "global/components/ui/DateDisplay";
+import AvatarMock from "global/components/AvatarMock";
 
 interface Props {
     offer: OfferI,
@@ -89,9 +90,16 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
         </div>
     </div>
 
+    const avatarMock = offer.avatarRef ? undefined : <AvatarMock 
+        color={"#4f46e5"}
+        letter={offer.displayName ? offer.displayName.charAt(0) : '?'}
+    ></AvatarMock>
+    
     return (
         <div onClick={goToOfferView} className={className}>
             <ListItem
+                imgUrl={offer.avatarRef ? offer.avatarRef.url : undefined}
+                imgComponent={avatarMock}
                 topLeft={topLeft}
                 bottomLeft={bottomLeft}
                 first={first}

@@ -97,7 +97,8 @@
         },
         "STEP_THREE": {
           "label": "Krok 3",
-          "title": "Opis i wynagrodzenie"
+          "title": "Opis i wynagrodzenie",
+          "info": "Dodaj zdjęcie, logo lub grafikę, aby wyróżnić swoją ofertę. Jeśli pominiesz ten krok, automatycznie wygenerujemy avatar."
         },
         "validation": {
           "notFound": "Nie znaleziono oferty.",
@@ -207,7 +208,8 @@
       "showMore": "Pokaż więcej",
       "noResults": "Brak wyników ;( ",
       "endOfResults": "Brak więcej wyników do wyświetlenia.",
-      "networkError": "Błąd sieci"
+      "networkError": "Błąd sieci",
+      "upload": "Prześlij"
     },
     "header": {
       "home": "Strona główna",

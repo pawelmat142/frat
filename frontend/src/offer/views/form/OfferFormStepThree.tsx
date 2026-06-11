@@ -8,6 +8,7 @@ import FloatingTextarea from "global/components/controls/FloatingTextarea";
 import AvatarUploadField from "global/components/controls/AvatarUploadField";
 import { useUserContext } from "user/UserProvider";
 import { CloudinaryFolderNames, CloudinaryTags } from "@shared/utils/CloudinaryUtil";
+import { AppConfig } from "@shared/AppConfig";
 
 const OfferFormStepThree: React.FC = () => {
 
@@ -22,6 +23,8 @@ const OfferFormStepThree: React.FC = () => {
     if (!uid) {
         return <div>Missing uid!!</div>;
     }
+
+    const msgClass = "secondary-text mb-5 s-font mt-2 mb-0"
 
     return (
         <>
@@ -91,22 +94,23 @@ const OfferFormStepThree: React.FC = () => {
                     )}
                 />
 
-{/* TODO */}
-                {/* <Controller
+                <p className="secondary-text mt-5 s-font mb-2">{t("offer.form.STEP_THREE.info")}</p>
+
+                <Controller
                     name="STEP_THREE.avatarRef"
                     control={ctx.formCtx.control}
-                    rules={required}
                     render={({ field }) => (
                         <AvatarUploadField
                             value={field.value || null}
                             onChange={field.onChange}
                             error={ctx.formCtx.formState.errors.STEP_THREE?.avatarRef}
-                            required
+                            btnTitle={t("common.upload")}
+                            imgPlaceholder={AppConfig.IMG_PLACEHOLDER}
                             folder={CloudinaryFolderNames.OFFERS}
                             tags={[CloudinaryTags.AVATAR, CloudinaryTags.OFFER_AVATAR, CloudinaryTags.offerId(ctx.form.offerId) ]}
                         />
                     )}
-                /> */}
+                />
 
             </div>
         </>
