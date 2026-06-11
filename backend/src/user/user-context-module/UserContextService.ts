@@ -71,16 +71,16 @@ export class UserContextService {
 
     private async getRecentViewedWorkersListedItems(uid: string): Promise<UserListedItem[]> {
         const recentViews = await this.entityInteractionService.getRecentWorkersViews(uid);
-        const recentViewedWorkerIds = recentViews.map(v => v.entityId);
+        const recentViewedWorkerIds = recentViews.map(v => Number(v.entityId));
         const recentViewedWorkerProfiles = await this.workersService.getWorkersByIds(recentViewedWorkerIds);
         const recentViewedWorkers: UserListedItem[] = recentViewedWorkerProfiles.map(profile => ({
-            id: recentViews.find(v => v.entityId === profile.workerId)?.id || 0,
+            id: recentViews.find(v => Number(v.entityId) === profile.workerId)?.id || 0,
             uid: uid,
             reference: String(profile.workerId),
             referenceType: UserListedItemReferenceTypes.WORKER,
             listedType: UserListedItemTypes.VIEW,
             data: profile,
-            listedAt: recentViews.find(v => v.entityId === profile.workerId)?.date,
+            listedAt: recentViews.find(v => Number(v.entityId) === profile.workerId)?.date,
         }))
         return recentViewedWorkers;
     }

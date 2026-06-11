@@ -14,7 +14,7 @@ export class EntityInteractionEntity implements EntityInteractionI {
   entityType: EntityInteractionEntityType;
 
   @Column({ name: 'entity_id' })
-  entityId: number;
+  entityId: string;
 
   @Column({ name: 'event_type' })
   eventType: EntityInteractionEventType;

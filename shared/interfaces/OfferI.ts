@@ -1,9 +1,10 @@
 import { ParsedPhoneNumber, Point } from "./WorkerI";
 import { GeocodedPosition } from "./MapsInterfaces";
+import { AvatarRef } from "./UserI";
 
 export interface OfferI {
 
-    offerId: number
+    offerId: string
     uid: string
     status: OfferStatus
 
@@ -22,6 +23,7 @@ export interface OfferI {
     currency?: Currency;
     salary?: number;
     description?: string
+    avatarRef?: AvatarRef
 
     availableSlots: number
     // TODO power fields
@@ -72,6 +74,7 @@ export type Currency = typeof Currencies[keyof typeof Currencies];
 
 export interface OfferForm {
     currentStep: OfferFormStep;
+    offerId: string;
     STEP_ONE: OfferFormOne;
     STEP_TWO?: OfferFormTwo;
     STEP_THREE?: OfferFormThree;
@@ -107,6 +110,7 @@ export interface OfferFormThree {
     currency: Currency | null;
     salary: number | null;
     description?: string | null;
+    avatarRef?: AvatarRef | null;
 }
 
 export interface OfferSearchFilters {

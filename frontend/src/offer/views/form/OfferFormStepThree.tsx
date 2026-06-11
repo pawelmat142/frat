@@ -5,6 +5,9 @@ import CurrencySelector from "offer/components/CurrencySelector";
 import { Controller } from "react-hook-form";
 import FloatingInput from "global/components/controls/FloatingInput";
 import FloatingTextarea from "global/components/controls/FloatingTextarea";
+import AvatarUploadField from "global/components/controls/AvatarUploadField";
+import { useUserContext } from "user/UserProvider";
+import { CloudinaryFolderNames, CloudinaryTags } from "@shared/utils/CloudinaryUtil";
 
 const OfferFormStepThree: React.FC = () => {
 
@@ -12,6 +15,13 @@ const OfferFormStepThree: React.FC = () => {
     const required = FormValidator.required(t);
 
     const ctx = useOfferForm();
+    const { me } = useUserContext();
+
+    const uid = me?.uid || '';
+
+    if (!uid) {
+        return <div>Missing uid!!</div>;
+    }
 
     return (
         <>
@@ -27,7 +37,7 @@ const OfferFormStepThree: React.FC = () => {
                     render={({ field }) => (
                         <FloatingInput
                             label={t("offer.displayName")}
-                            name="STEP_FOUR.displayName"
+                            name="STEP_THREE.displayName"
                             className="w-full mb-5"
                             value={field.value || ''}
                             required
@@ -80,6 +90,23 @@ const OfferFormStepThree: React.FC = () => {
                         />
                     )}
                 />
+
+{/* TODO */}
+                {/* <Controller
+                    name="STEP_THREE.avatarRef"
+                    control={ctx.formCtx.control}
+                    rules={required}
+                    render={({ field }) => (
+                        <AvatarUploadField
+                            value={field.value || null}
+                            onChange={field.onChange}
+                            error={ctx.formCtx.formState.errors.STEP_THREE?.avatarRef}
+                            required
+                            folder={CloudinaryFolderNames.OFFERS}
+                            tags={[CloudinaryTags.AVATAR, CloudinaryTags.OFFER_AVATAR, CloudinaryTags.offerId(ctx.form.offerId) ]}
+                        />
+                    )}
+                /> */}
 
             </div>
         </>

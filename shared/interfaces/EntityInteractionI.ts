@@ -14,7 +14,7 @@ export type EntityInteractionEventType = typeof EntityInteractionEventTypes[keyo
 export interface EntityInteractionI {
   id: number;
   entityType: EntityInteractionEntityType;
-  entityId: number;
+  entityId: string;
   eventType: EntityInteractionEventType;
   userUid: string;
   date: Date;
@@ -22,7 +22,7 @@ export interface EntityInteractionI {
 
 export interface RecordInteractionRequest {
   entityType: EntityInteractionEntityType,
-  entityId: number,
+  entityId: string,
   userUid: string,
 }
 

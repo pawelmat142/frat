@@ -15,7 +15,7 @@ export class EntityInteractionRepo {
 
   public findRecentInteraction(
     entityType: EntityInteractionEntityType,
-    entityId: number,
+    entityId: string,
     userUid: string,
     eventType: EntityInteractionEventType,
     windowDays: number,

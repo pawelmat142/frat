@@ -50,7 +50,7 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         );
     }
 
-    public getOfferById(offerId: number): Promise<OfferI> {
+    public getOfferById(offerId: string): Promise<OfferI> {
         return this.offersRepo.getById(offerId);
     }
 
@@ -58,11 +58,11 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         return this.offersRepo.listOffersByUid(uid);
     }
 
-    public getOffersByIds(offerIds: number[]): Promise<OfferI[]> {
+    public getOffersByIds(offerIds: string[]): Promise<OfferI[]> {
         return this.offersRepo.getByIds(offerIds);
     }
 
-    public async activation(user: UserI, offerId: number): Promise<OfferI> {
+    public async activation(user: UserI, offerId: string): Promise<OfferI> {
         const offer = await this.offersRepo.getById(offerId);
         if (offer.uid !== user.uid) {
             throw new ForbiddenException()
@@ -73,7 +73,7 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         return result;
     }
 
-    public async deleteOffer(user: UserI, offerId: number): Promise<void> {
+    public async deleteOffer(user: UserI, offerId: string): Promise<void> {
         const offer = await this.offersRepo.getById(offerId);
         if (!offer) {
             throw new ToastException('validation.notFound', this);
@@ -84,7 +84,7 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         return this.deleteOfferFn(offerId, user.uid)
     }
 
-    public async deleteOfferFn(offerId: number, by: string): Promise<void> {
+    public async deleteOfferFn(offerId: string, by: string): Promise<void> {
         await this.offersRepo.delete(offerId);
         this.logger.log(`Offer ${offerId} deleted by user ${by}`);
     }
@@ -94,6 +94,11 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         this.logger.log(`All offers deleted by user ${by}`);
     }
 
+    public async generateOfferId(): Promise<string> {
+        // Generate UUID for atomic, collision-free ID without database interaction
+        return this.offersRepo.generateNextOfferId();
+    }
+
     public async createOffer(user: UserI, newOffer: OfferForm): Promise<OfferI> {
         const newEntity = await this.createOfferService.createOffer(user, newOffer);
         const createdOffer = await this.offersRepo.create(newEntity);
@@ -101,7 +106,7 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         return createdOffer;
     }
 
-    public async updateOffer(user: UserI, offerId: number, updatedOffer: OfferForm): Promise<OfferI> {
+    public async updateOffer(user: UserI, offerId: string, updatedOffer: OfferForm): Promise<OfferI> {
         const existingOffer = await this.offersRepo.getById(offerId);
         if (existingOffer.uid !== user.uid) {
             throw new ForbiddenException()
@@ -123,7 +128,7 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         }
     }
 
-    async notifyOfferView(offerId: number, user: UserI): Promise<void> {
+    async notifyOfferView(offerId: string, user: UserI): Promise<void> {
         const offer = await this.offersRepo.getById(offerId);
         if (offer.uid === user.uid) {
             this.logger.log(`Viewer ${user.uid} viewed own offer ${offerId}, skipping view increment`);
@@ -144,11 +149,11 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         }
     }
 
-    incrementFavoritesCount(offerId: number): Promise<void> {
+    incrementFavoritesCount(offerId: string): Promise<void> {
         return this.offersRepo.incrementFavoritesCount(offerId);
     }
 
-    decrementFavoritesCount(offerId: number): Promise<void> {
+    decrementFavoritesCount(offerId: string): Promise<void> {
         return this.offersRepo.decrementFavoritesCount(offerId);
     }
 }

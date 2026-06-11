@@ -17,7 +17,6 @@ import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
 import { CloudinaryTags } from '@shared/utils/CloudinaryUtil';
 import { EntityInteractionService } from 'entity-interaction/services/EntityInteractionService';
 import { EntityInteractionEntityTypes } from '@shared/interfaces/EntityInteractionI';
-import { WorkerUtil } from '@shared/utils/WorkerUtil';
 
 @Injectable()
 export class WorkersService implements OnModuleInit, OnModuleDestroy {
@@ -267,7 +266,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
 
         const isNew = await this.entityInteractionService.recordView({
             entityType: EntityInteractionEntityTypes.WORKER,
-            entityId: workerId,
+            entityId: `${workerId}`,
             userUid: user.uid,
         });
 

@@ -10,6 +10,7 @@ import CommunicationLanguagesSection from "../../components/CommunicationLanguag
 import AvatarUploadField from "global/components/controls/AvatarUploadField";
 import PhoneNumberFloatingInput from "global/components/controls/PhoneNumberFloatingInput";
 import { useUserContext } from "user/UserProvider";
+import { CloudinaryFolderNames, CloudinaryTags } from "@shared/utils/CloudinaryUtil";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -20,6 +21,12 @@ const WorkerFormpersonalData: React.FC<Props> = ({ formRef }) => {
     const { me } = useUserContext();
     const required = FormValidator.required(t);
     const { control, setValue, watch, formState } = formRef;
+
+    const uid = me?.uid || '';
+
+    if (!uid) {
+        return <div>Missing uid!!</div>;
+    }
 
     return (
         <>
@@ -91,9 +98,10 @@ const WorkerFormpersonalData: React.FC<Props> = ({ formRef }) => {
                         <AvatarUploadField
                             value={field.value}
                             onChange={field.onChange}
-                            uid={me?.uid}
                             error={formState.errors.personalData?.avatarRef}
                             required
+                            tags={[CloudinaryTags.AVATAR, CloudinaryTags.USER_AVATAR, CloudinaryTags.uid(uid)]}
+                            folder={`${CloudinaryFolderNames.AVATARS}/${uid}`}
                         />
                     )}
                 />

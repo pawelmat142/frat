@@ -34,6 +34,7 @@ export class CreateOfferService {
             salary: updatedOffer.STEP_THREE.salary,
             currency: updatedOffer.STEP_THREE.currency,
             description: updatedOffer.STEP_THREE?.description,
+            avatarRef: updatedOffer.STEP_THREE?.avatarRef,
         };
 
         return updatedEntity;
@@ -44,6 +45,7 @@ export class CreateOfferService {
         const newEntity: DeepPartial<OfferEntity> = {
             uid: user.uid,
             status: this.prepareStatus(newOffer),
+            offerId: newOffer.offerId,
 
             category: newOffer.STEP_ONE.category!,
             startDate: new Date(newOffer.STEP_ONE.startDate),
@@ -58,6 +60,7 @@ export class CreateOfferService {
             salary: newOffer.STEP_THREE.salary,
             currency: newOffer.STEP_THREE.currency,
             description: newOffer.STEP_THREE?.description,
+            avatarRef: newOffer.STEP_THREE?.avatarRef,
         }
 
         return newEntity;

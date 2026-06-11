@@ -9,13 +9,15 @@ import FormError from "./FormError";
 import Button from "./Button";
 import { AppConfig } from "@shared/AppConfig";
 import { FileUtil } from "global/utils/FileUtil";
+import { CloudinaryTags } from "@shared/utils/CloudinaryUtil";
 
 interface AvatarUploadFieldProps {
     value: AvatarRef | null;
     onChange: (avatarRef: AvatarRef | null) => void;
-    uid?: string;
     error?: { message?: string } | null;
     required?: boolean;
+    folder?: string; // Optional custom folder for Cloudinary upload
+    tags?: string[]; // Optional custom tags for Cloudinary upload
 }
 
 const AVATAR_PLACEHOLDER = AppConfig.AVATAR_PLACEHOLDER;
@@ -24,9 +26,10 @@ const ALLOWED_EXTENSIONS = [...AppConfig.UPLOAD_IMG_ALLOWED_EXTENSIONS] as strin
 const AvatarUploadField: React.FC<AvatarUploadFieldProps> = ({
     value,
     onChange,
-    uid,
     error,
     required,
+    folder,
+    tags
 }) => {
     const { t } = useTranslation();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -60,9 +63,9 @@ const AvatarUploadField: React.FC<AvatarUploadFieldProps> = ({
             setPreviewSrc(previewUrl);
 
             // Upload to Cloudinary
-            const folder = uid ? `avatars/${uid}` : 'avatars/temp';
-            const tags = uid ? ['avatar', 'user-avatar', `uid:${uid}`] : ['avatar', 'temp'];
-            const avatarRef = await CloudinaryService.uploadImage(optimizedFile, folder, tags);
+            const folderr = folder || 'avatars/temp';
+            const tagss = tags || [CloudinaryTags.AVATAR, CloudinaryTags.TEMP];
+            const avatarRef = await CloudinaryService.uploadImage(optimizedFile, folderr, tagss);
 
             // Update form value
             onChange(avatarRef);

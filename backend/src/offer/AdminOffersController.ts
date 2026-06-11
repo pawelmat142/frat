@@ -28,7 +28,7 @@ export class AdminOffersController {
     deleteOffer(
         @Param('offerId') offerId: string
     ): Promise<void> {
-        return this.offersService.deleteOfferFn(Number(offerId), 'ADMIN');
+        return this.offersService.deleteOfferFn(offerId, 'ADMIN');
     }
 
     @Delete()

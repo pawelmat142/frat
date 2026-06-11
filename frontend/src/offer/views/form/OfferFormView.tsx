@@ -53,13 +53,15 @@ const OfferFormContent: React.FC = () => {
     }, [])
 
     const initFormIfEditMode = async (offerId?: string) => {
-        if (!offerId) {
-            prefillFormIfNewOffer()
-            return
-        }
         try {
+            if (!offerId) {
+                setLoading(true);
+                await prefillFormIfNewOffer();
+                setLoading(false);
+                return
+            }
             setLoading(true);
-            const offer = await OffersService.getOfferById(Number(offerId));
+            const offer = await OffersService.getOfferById(offerId);
             ctx.initForm(OfferUtil.convertToForm(offer));
         } catch (error) {
             toast.error(t("offer.form.validation.notFound"));
@@ -69,6 +71,10 @@ const OfferFormContent: React.FC = () => {
     }
 
     const prefillFormIfNewOffer = async () => {
+
+        const offerId = await OffersService.generateOfferId();
+        ctx.formCtx.setValue("offerId", offerId);
+
         const position = await getGeoPosition()
         if (position) {
             const countryCode = position.country?.toLocaleLowerCase();
@@ -128,7 +134,7 @@ const OfferFormContent: React.FC = () => {
             ctx.saveFormToLocalStorage(ctx.form);
             let offer: OfferI | null = null;
             if (offerId) {
-                offer = await OffersService.updateOffer(Number(offerId), ctx.form);
+                offer = await OffersService.updateOffer(offerId, ctx.form);
                 if (!offer) {
                     throw new Error(t("offer.form.validation.createError"));
                 }

@@ -5,8 +5,12 @@ import { httpClient } from "global/services/http";
 
 export const OffersService = {
 
-    getOfferById(offerId: number): Promise<OfferI> {
+    getOfferById(offerId: string): Promise<OfferI> {
         return httpClient.get<OfferI>(`/offers/${offerId}`);
+    },
+
+    generateOfferId(): Promise<string> {
+        return httpClient.get<string>(`/offers/generate-offer-id`);
     },
 
     createOffer(form: OfferForm): Promise<OfferI | null> {
@@ -21,15 +25,15 @@ export const OffersService = {
         return httpClient.get<OfferI[]>(`/offers/user/${userId}`);
     },
 
-    activation(offerId: number): Promise<OfferI> {
+    activation(offerId: string): Promise<OfferI> {
         return httpClient.patch<OfferI>(`/offers/${offerId}/activation`, {});
     },
 
-    deleteOffer(offerId: number): Promise<void> {
+    deleteOffer(offerId: string): Promise<void> {
         return httpClient.delete<void>(`/offers/${offerId}`);
     },
 
-    updateOffer(offerId: number, form: OfferForm): Promise<OfferI | null> {
+    updateOffer(offerId: string, form: OfferForm): Promise<OfferI | null> {
         return httpClient.patch<OfferI>(`/offers/${offerId}`, form);
     },
 
@@ -50,7 +54,7 @@ export const OffersService = {
         return httpClient.get<OfferSearchResponse>(`/offers/search/list`, { params, skipAuth, headers });
     },
 
-    notifyOfferView(offerId: number): Promise<void> {
+    notifyOfferView(offerId: string): Promise<void> {
         return httpClient.get<void>(`/offers/notify-offer-view/${offerId}`);
     },
 }

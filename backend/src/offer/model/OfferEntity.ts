@@ -2,6 +2,7 @@ import { ParsedPhoneNumber, Point } from "@shared/interfaces/WorkerI";
 import { Currency, OfferI, OfferStatus } from "@shared/interfaces/OfferI";
 import { Expose } from "class-transformer";
 import { Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";
+import { AvatarRef } from "@shared/interfaces/UserI";
 
 const dateTransformer: ValueTransformer = {
     to: (value?: Date | null) => value ?? null,
@@ -17,9 +18,9 @@ const dateTransformer: ValueTransformer = {
 @Entity('jh_offers')
 export class OfferEntity implements OfferI {
 
-    @PrimaryGeneratedColumn({ name: 'offer_id' })
+    @PrimaryGeneratedColumn('uuid', { name: 'offer_id' })
     @Expose()
-    offerId: number;
+    offerId: string;
 
     @Column({ name: 'uid' })
     @Expose()
@@ -80,7 +81,10 @@ export class OfferEntity implements OfferI {
     @Expose()
     description?: string;
 
-
+    @Column({ name: 'avatar_ref', type: 'jsonb', nullable: true })
+    @Expose()
+    avatarRef?: AvatarRef
+    
     // slots
     @Column({ name: 'open_slots', type: 'int', default: 0 })
     @Expose()

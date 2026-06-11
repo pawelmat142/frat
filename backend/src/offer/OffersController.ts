@@ -20,10 +20,15 @@ export class OffersController {
         private readonly offersSearchService: OffersSearchService
     ) {}
 
+    @Get('generate-offer-id')
+    async generateOfferId(): Promise<string> {
+        return this.offersService.generateOfferId();
+    }
+
     @Get(':offerId')
     @Serialize(OfferEntity)
     getOfferById(
-        @Param('offerId') offerId: number
+        @Param('offerId') offerId: string
     ) {
         return this.offersService.getOfferById(offerId);
     }
@@ -60,7 +65,7 @@ export class OffersController {
     @Serialize(OfferEntity)
     activateOffer(
         @CurrentUser() user: UserI,
-        @Param('offerId') offerId: number
+        @Param('offerId') offerId: string
     ): Promise<OfferI> {
         return this.offersService.activation(user, offerId);
     }
@@ -69,7 +74,7 @@ export class OffersController {
     @UseGuards(JwtAuthGuard)
     deleteOffer(
         @CurrentUser() user: UserI,
-        @Param('offerId') offerId: number
+        @Param('offerId') offerId: string
     ): Promise<void> {
         return this.offersService.deleteOffer(user, offerId);
     }
@@ -79,7 +84,7 @@ export class OffersController {
     @Serialize(OfferEntity)
     updateOffer(
         @CurrentUser() user: UserI,
-        @Param('offerId') offerId: number,
+        @Param('offerId') offerId: string,
         @Body() form: OfferForm
     ): Promise<OfferI> {
         return this.offersService.updateOffer(user, offerId, form);
@@ -105,7 +110,7 @@ export class OffersController {
     @UseGuards(JwtAuthGuard)
     notifyOfferView(
         @CurrentUser() user: UserI,
-        @Param('offerId') offerId: number
+        @Param('offerId') offerId: string
     ): Promise<void> {
         return this.offersService.notifyOfferView(offerId, user);
     }

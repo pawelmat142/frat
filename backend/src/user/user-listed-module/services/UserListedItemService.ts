@@ -27,7 +27,7 @@ export class UserListedItemService {
             : this.repository.find({ where: { uid } }));
 
         const workerIds = items.filter(i => i.referenceType === UserListedItemReferenceTypes.WORKER).map(i => Number(i.reference));
-        const offerIds = items.filter(i => i.referenceType === UserListedItemReferenceTypes.OFFER).map(i => Number(i.reference));
+        const offerIds = items.filter(i => i.referenceType === UserListedItemReferenceTypes.OFFER).map(i => i.reference);
 
         const workersMap = new Map((await this.workersService.getWorkersByIds(workerIds)).map(w => [w.workerId, w]));
         const offersMap = new Map((await this.offersService.getOffersByIds(offerIds)).map(o => [o.offerId, o]));
@@ -47,7 +47,7 @@ export class UserListedItemService {
                 }
             }
             else if (item.referenceType === UserListedItemReferenceTypes.OFFER) {
-                const data = offersMap.get(Number(item.reference));
+                const data = offersMap.get(item.reference);
                 if (data) {
                     item.data = data;
                     result.push(item);
@@ -85,7 +85,7 @@ export class UserListedItemService {
             data = worker
         }
         else if (item.referenceType === UserListedItemReferenceTypes.OFFER) {
-            const offer = await this.offersService.getOfferById(Number(item.reference));
+            const offer = await this.offersService.getOfferById(item.reference);
             if (!offer) {
                 throw new ToastException(`Offer with ID ${item.reference} not found`, this);
             }
@@ -108,7 +108,7 @@ export class UserListedItemService {
         if (item.referenceType === UserListedItemReferenceTypes.WORKER) {
             await this.workersService.incrementFavoritesCount(Number(item.reference));
         } else if (item.referenceType === UserListedItemReferenceTypes.OFFER) {
-            await this.offersService.incrementFavoritesCount(Number(item.reference));
+            await this.offersService.incrementFavoritesCount(item.reference);
         }
         return result;
     }
@@ -163,7 +163,7 @@ export class UserListedItemService {
         if (item.referenceType === UserListedItemReferenceTypes.WORKER) {
             await this.workersService.decrementFavoritesCount(Number(item.reference));
         } else if (item.referenceType === UserListedItemReferenceTypes.OFFER) {
-            await this.offersService.decrementFavoritesCount(Number(item.reference));
+            await this.offersService.decrementFavoritesCount(item.reference);
         }
     }
 

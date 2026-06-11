@@ -18,11 +18,11 @@ export class OffersRepo {
         return this.offerRepository.find()
     }
 
-    public getById(offerId: number): Promise<OfferEntity> {
+    public getById(offerId: string): Promise<OfferEntity> {
         return this.offerRepository.findOneBy({ offerId });
     }
 
-    public async getByIds(offerIds: number[]): Promise<OfferEntity[]> {
+    public async getByIds(offerIds: string[]): Promise<OfferEntity[]> {
         return this.offerRepository.findByIds(offerIds);
     }
 
@@ -30,7 +30,7 @@ export class OffersRepo {
         return this.offerRepository.save(offer);
     }
 
-    public async delete(offerId: number): Promise<void> {
+    public async delete(offerId: string): Promise<void> {
         await this.offerRepository.delete(offerId);
     }
 
@@ -57,24 +57,30 @@ export class OffersRepo {
         await this.offerRepository.save(offers);
     }
 
-    public incrementUniqueViewsCount(offerId: number): Promise<void> {
+    public incrementUniqueViewsCount(offerId: string): Promise<void> {
         return this.offerRepository.increment({ offerId }, 'uniqueViewsCount', 1)
             .then(() => {
                 this.logger.log(`Incremented uniqueViewsCount for offer ${offerId}`);
             });
     }
 
-    public incrementFavoritesCount(offerId: number): Promise<void> {
+    public incrementFavoritesCount(offerId: string): Promise<void> {
         return this.offerRepository.increment({ offerId }, 'favoritesCount', 1)
             .then(() => {
                 this.logger.log(`Incremented favoritesCount for offer ${offerId}`);
             });
     }
 
-    public decrementFavoritesCount(offerId: number): Promise<void> {
+    public decrementFavoritesCount(offerId: string): Promise<void> {
         return this.offerRepository.decrement({ offerId }, 'favoritesCount', 1)
             .then(() => {
                 this.logger.log(`Decremented favoritesCount for offer ${offerId}`);
             });
+    }
+
+    public async generateNextOfferId(): Promise<string> {
+        // Generate UUID v4 for collision-free ID without database interaction
+        const { v4: uuidv4 } = await import('uuid');
+        return uuidv4();
     }
 }
