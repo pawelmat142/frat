@@ -53,9 +53,9 @@ export abstract class OfferUtil {
     }
     
     public static convertToForm(offer: OfferI): OfferForm {
-
         return {
             currentStep: OfferFormSteps.STEP_ONE,
+            offerId: offer.offerId,
             STEP_ONE: {
                 category: offer.category ?? null,
                 startDate: DateUtil.toLocalDateString(offer.startDate) ?? null,
