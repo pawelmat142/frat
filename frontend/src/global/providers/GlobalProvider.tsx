@@ -1,7 +1,7 @@
 import { DictionaryI } from "@shared/interfaces/DictionaryI"
 import { DictionaryService } from "global/services/DictionaryService"
 import React from "react"
-import { createContext, useRef, useState } from "react"
+import { createContext, useState } from "react"
 import { useIsDesktop } from "global/hooks/isMobile";
 import { Dictionaries } from "@shared/def/dictionary.def";
 
@@ -29,25 +29,6 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const [loading, setLoading] = useState(false)
     const [isFooterHidden, setIsFooterHidden] = useState(false)
-
-    const [floatingButton, setFloatingButtonState] = useState<React.ReactNode>(null)
-    const [floatingButtonKey, setFloatingButtonKey] = useState(0)
-    const [hideFloatingButton, setHideFloatingButton] = useState(false)
-    const floatingButtonIdRef = useRef<string | undefined>(undefined)
-
-    const setFloatingButton = (button: React.ReactNode, registrationId?: string) => {
-        setHideFloatingButton(false)
-        if (!button) {
-            floatingButtonIdRef.current = undefined
-            setFloatingButtonState(null)
-        } else {
-            if (registrationId !== floatingButtonIdRef.current) {
-                floatingButtonIdRef.current = registrationId
-                setFloatingButtonKey(k => k + 1)
-            }
-            setFloatingButtonState(button)
-        }
-    }
 
     React.useEffect(() => {
         const initLanguagesDictionary = async () => {

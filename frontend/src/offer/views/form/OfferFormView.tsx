@@ -23,6 +23,7 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import { AppConfig } from "@shared/AppConfig";
 import Header from "global/components/Header";
+import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 
 const DEFAUT_POSITION = AppConfig.DEFAUT_POSITION;
 
@@ -35,6 +36,8 @@ const OfferFormContent: React.FC = () => {
     const ctx = useOfferForm();
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
+    const fabCtx = useFloatingBtnContext();
+
     const [loading, setLoading] = useState(false);
 
     const param = useParams<{ offerId?: string }>();
@@ -42,7 +45,9 @@ const OfferFormContent: React.FC = () => {
 
     useEffect(() => {
         globalCtx.hideFooter();
+        fabCtx.hide();
         return () => {
+            fabCtx.show();
             globalCtx.showFooter();
         }
     }, [])

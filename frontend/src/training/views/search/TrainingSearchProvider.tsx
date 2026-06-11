@@ -4,8 +4,8 @@ import { TrainingSearchFilters, TrainingWithNextSession } from "@shared/interfac
 import { TrainingService } from "training/services/TrainingService";
 import { Path } from "../../../path";
 import { NavBus } from "global/utils/PseudoViewBus";
-import { useGlobalContext } from "global/providers/GlobalProvider";
 import { MenuItemIdentifiers } from "global/interface/controls.interface";
+import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 
 const INITIAL_LIMIT = 8;
 const LOAD_MORE_LIMIT = 4;
@@ -42,7 +42,7 @@ export const useTrainingSearch = () => {
 const TrainingSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const globalCtx = useGlobalContext();
+    const fabCtx = useFloatingBtnContext();
 
     const [filters, setFiltersState] = useState<TrainingSearchFilters>(defaultTrainingFilters);
     const [results, setResults] = useState<TrainingWithNextSession[]>([]);
@@ -59,7 +59,11 @@ const TrainingSearchProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }, []);
 
     const setOpenPseudoView = (open: boolean) => {
-        globalCtx.setHideFloatingButton(open);
+        if (open) {
+            fabCtx.hide();
+        } else {
+            fabCtx.show();
+        }
         setOpenPseudoViewState(open);
     };
 

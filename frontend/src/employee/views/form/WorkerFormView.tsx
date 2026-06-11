@@ -29,6 +29,7 @@ import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import WorkerFormStepAvailability from "./WorkerFormStepAvailability";
 import Header from "global/components/Header";
 import { WorkerUtil } from "@shared/utils/WorkerUtil";
+import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 
 const LOCAL_STORAGE_KEY = 'employeeProfileFormDraft';
 
@@ -42,12 +43,15 @@ const WorkerFormView: React.FC = () => {
     const isDevMode = Utils.isDevMode();
     const confirm = useConfirm();
     const globalCtx = useGlobalContext();
+    const fabCtx = useFloatingBtnContext();
 
     const me = userCtx?.me;
 
     useEffect(() => {
         globalCtx.hideFooter();
+        fabCtx.hide();
         return () => {
+            fabCtx.show();
             globalCtx.showFooter();
         }
     }, [])
