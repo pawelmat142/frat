@@ -27,10 +27,15 @@ export class UserListedItemService {
             : this.repository.find({ where: { uid } }));
 
         const workerIds = items.filter(i => i.referenceType === UserListedItemReferenceTypes.WORKER).map(i => Number(i.reference));
-        const offerIds = items.filter(i => i.referenceType === UserListedItemReferenceTypes.OFFER).map(i => i.reference);
+        
+        // Filter offer IDs to only include valid UUIDs (matches UUID format)
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        const offerItems = items.filter(i => i.referenceType === UserListedItemReferenceTypes.OFFER);
+        const validOfferIds = offerItems.filter(i => uuidRegex.test(i.reference)).map(i => i.reference);
+        const invalidOfferItemIds = offerItems.filter(i => !uuidRegex.test(i.reference)).map(i => i.id);
 
         const workersMap = new Map((await this.workersService.getWorkersByIds(workerIds)).map(w => [w.workerId, w]));
-        const offersMap = new Map((await this.offersService.getOffersByIds(offerIds)).map(o => [o.offerId, o]));
+        const offersMap = new Map((await this.offersService.getOffersByIds(validOfferIds)).map(o => [o.offerId, o]));
 
         const result: UserListedItem[] = [];
 
@@ -59,7 +64,8 @@ export class UserListedItemService {
 
         this.logger.log(`Listed items for user ${uid}, listedType: ${listedType}, result:`, result);
 
-        await this.removeItemsWithMissingData(itemsWithDataIds);
+        // Remove items with missing data and items with invalid offer UUIDs
+        await this.removeItemsWithMissingData([...itemsWithDataIds, ...invalidOfferItemIds]);
 
         return result;
     }
