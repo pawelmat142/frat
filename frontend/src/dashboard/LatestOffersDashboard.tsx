@@ -1,30 +1,22 @@
 import TileSection from "employee/components/TileSection";
 import OfferRecentViewListItem from "offer/components/ListItems/OfferRecentViewListItem";
-import { Path } from "../path";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
 
-const MyOffersDashboard: React.FC = () => {
+const LatestOffersDashboard: React.FC = () => {
 
     const userCtx = useUserContext();
     const { t } = useTranslation();
-    const naviagate = useNavigate();
 
-    const offers = userCtx.meCtx?.offers?.sort((a, b) => {
-        return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+    const offers = userCtx.meCtx?.latestOffers?.sort((a, b) => {
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
     }).slice(0, 3) ?? [];
 
     if (!offers?.length) {
         return null;
     }
 
-    const uid = userCtx?.me?.uid;
-    if (!uid) {
-        return "Something went wrong, user not found";
-    }
-
-    return <TileSection title={t("user.myOffers")} link={{ onClick: () => naviagate(Path.getOffersPath(uid)) }} >
+    return <TileSection title={t("user.latestOffers")} >
 
         {offers.map(offer => {
             return <div key={offer.offerId}>
@@ -34,4 +26,4 @@ const MyOffersDashboard: React.FC = () => {
     </TileSection>
 }
 
-export default MyOffersDashboard;
+export default LatestOffersDashboard;

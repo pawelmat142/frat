@@ -51,9 +51,13 @@ export class UserContextService {
         const notifications = await this.notificationService.getUserNotifications(user.uid);
         const chats = await this.chatService.getUserChats(user.uid);
         const listedItems = await this.userListedItemService.listUserItems(user.uid, UserListedItemTypes.DEFAULT);
+        
+        const trainingProvider = await this.trainingProviderService.getMyProfile(user);
+        
         const recentViewedWorkers = await this.getRecentViewedWorkersListedItems(user.uid);
         const recentViewedOffers = await this.getRecentViewedOffersListedItems(user.uid);
-        const trainingProvider = await this.trainingProviderService.getMyProfile(user);
+        const mostViewedProfiles = await this.workersService.getMostViewedProfiles(3);
+        const latestOffers = await this.offersService.getLatestOffers(3);
 
         const meCtx: MeUserContext = {
             ...ctx,
@@ -61,9 +65,12 @@ export class UserContextService {
             notifications,
             chats,
             listedItems,
+            trainingProvider,
+
             recentViewedWorkers,
             recentViewedOffers,
-            trainingProvider
+            mostViewedProfiles,
+            latestOffers,
         }
         await this.userService.updateLastSeenAt(user.uid);
         return meCtx;

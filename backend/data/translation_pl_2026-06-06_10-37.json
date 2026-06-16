@@ -68,7 +68,9 @@
       "addToListSuccess": "Dodano do ulubionych",
       "addWorkerProfile": "Dodaj swój profil technika",
       "removeFromListSuccess": "Usunięto z ulubionych",
-      "removeFromListPopupMessage": "Potwierdź usunięcie z ulubionych"
+      "removeFromListPopupMessage": "Potwierdź usunięcie z ulubionych",
+      "latestOffers": "Najnowsze oferty",
+      "mostViewedProfiles": "Najczęściej oglądani technicy"
     },
     "error": {
       "missingUserId": "Brak ID użytkownika",

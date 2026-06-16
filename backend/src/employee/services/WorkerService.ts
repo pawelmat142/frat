@@ -121,6 +121,10 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         return this.workerRepo.getById(id);
     }
 
+    public getMostViewedProfiles(limit: number): Promise<WorkerI[]> {
+        return this.workerRepo.getMostViewedProfiles(limit);
+    }
+
     public async getWorkerWithCertificates(user: UserI): Promise<WorkerWithCertificates | null> {
         const worker = await this.getWorker(user);
         if (!worker) {

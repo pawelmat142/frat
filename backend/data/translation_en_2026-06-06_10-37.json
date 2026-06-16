@@ -68,7 +68,9 @@
       "addToListSuccess": "Added to favourites",
       "addWorkerProfile": "Add technician profile",
       "removeFromListSuccess": "Removed from favourites",
-      "removeFromListPopupMessage": "Confirm removal from favourites"
+      "removeFromListPopupMessage": "Confirm removal from favourites",
+      "latestOffers": "Latest offers",
+      "mostViewedProfiles": "Most viewed technicians"
     },
     "error": {
       "missingUserId": "User ID is missing",

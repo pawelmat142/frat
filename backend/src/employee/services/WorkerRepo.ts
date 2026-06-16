@@ -1,11 +1,12 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { WorkerAvailabilityOptions, WorkerI, WorkerSkills, WorkerStatus } from "@shared/interfaces/WorkerI";
+import { WorkerAvailabilityOptions, WorkerI, WorkerSkills, WorkerStatus, WorkerStatuses } from "@shared/interfaces/WorkerI";
 import { ObjUtil } from "@shared/utils/ObjUtil";
 import { WorkerEntity } from "employee/model/WorkerEntity";
 import { ToastException } from "global/exceptions/ToastException";
 import { DeepPartial, FindManyOptions, Repository, SelectQueryBuilder } from "typeorm";
 import { DateRangeEntity } from "employee/model/DateRangeEntity";
+import { SearchUtil } from "global/utils/SearchUtil";
 
 @Injectable()
 export class WorkerRepo {
@@ -88,6 +89,14 @@ export class WorkerRepo {
 
     public async initialLoad(profiles: WorkerI[]): Promise<void> {
         await this.woerkersRepository.save(profiles);
+    }
+
+    public getMostViewedProfiles(limit: number): Promise<WorkerI[]> {
+        return this.getQueryBuilder()
+            .where('profile.status = :status', { status: WorkerStatuses.ACTIVE })
+            .orderBy('profile.unique_views_count', SearchUtil.DESC)
+            .limit(limit)
+            .getMany();
     }
 
     public async update(newWorker: DeepPartial<WorkerEntity>, anotherChange?: boolean): Promise<WorkerEntity> {
@@ -323,7 +332,7 @@ export class WorkerRepo {
             .then(() => {
                 this.logger.log(`Decremented favoritesCount for worker ${workerId}`);
             });
-        }
+    }
 
     public async incrementSearchAppearancesCount(workerIds: number[]): Promise<void> {
         if (!workerIds.length) {

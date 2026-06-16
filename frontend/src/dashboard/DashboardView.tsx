@@ -24,6 +24,8 @@ import MyListDashboard from "./MyListDashboard";
 import IconButton from "global/components/controls/IconButon";
 import { useDrawer } from "global/providers/DrawerProvider";
 import MyOffersDashboard from "./MyOffersDashboard";
+import LatestOffersDashboard from "./LatestOffersDashboard";
+import MostViewedWorkers from "./MostViewedWorkers";
 
 const DashboardView: React.FC = () => {
 
@@ -189,9 +191,13 @@ const DashboardView: React.FC = () => {
 
         <MyOffersDashboard></MyOffersDashboard>
 
-        <RecentViewedWorkers></RecentViewedWorkers>
+        <LatestOffersDashboard></LatestOffersDashboard>
+
+        <MostViewedWorkers></MostViewedWorkers>
 
         <RecentViewedOffers></RecentViewedOffers>
+
+        <RecentViewedWorkers></RecentViewedWorkers>
 
         <div className="view-margin">
             <ReportForm />

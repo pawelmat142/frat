@@ -1,6 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { OfferI } from "@shared/interfaces/OfferI";
+import { OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
+import { SearchUtil } from "global/utils/SearchUtil";
 import { OfferEntity } from "offer/model/OfferEntity";
 import { DeepPartial, Repository, SelectQueryBuilder } from "typeorm";
 
@@ -55,6 +56,14 @@ export class OffersRepo {
 
     public async initialLoad(offers: OfferI[]): Promise<void> {
         await this.offerRepository.save(offers);
+    }
+
+    public getLatestOffers(limit: number): Promise<OfferI[]> {
+        return this.getQueryBuilder()
+            .where('offer.status = :status', { status: OfferStatuses.ACTIVE })
+            .orderBy('offer.created_at', SearchUtil.DESC)
+            .limit(limit)
+            .getMany();
     }
 
     public incrementUniqueViewsCount(offerId: string): Promise<void> {

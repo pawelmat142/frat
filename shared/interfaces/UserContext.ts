@@ -6,7 +6,7 @@ import { SettingsI } from "./SettingsI";
 import { TrainingProviderProfileI } from "./TrainingI";
 import { UserI } from "./UserI";
 import { UserListedItem } from "./UserListedItem";
-import { WorkerWithCertificates } from "./WorkerI";
+import { WorkerI, WorkerWithCertificates } from "./WorkerI";
 
 export interface UserContext {
     user: UserI
@@ -25,4 +25,6 @@ export interface MeUserContext extends UserContext {
     
     recentViewedWorkers?: UserListedItem[]
     recentViewedOffers?: UserListedItem[]
+    mostViewedProfiles?: WorkerI[]
+    latestOffers?: OfferI[]
 }
