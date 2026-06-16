@@ -27,7 +27,7 @@ const WorkerListItem: React.FC<Props> = ({ worker, first, last, className, disab
             <ListItem
                 imgUrl={worker.avatarRef?.url || AVATAR_MOCK}
                 topLeft={worker.displayName}
-                bottomLeft={<WorkerStatItems worker={worker} />}
+                bottomLeft={<WorkerStatItems worker={worker} showStartsFrom />}
                 first={first}
                 last={last}
                 rightSection={rightSection}
