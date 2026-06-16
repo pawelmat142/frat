@@ -27,7 +27,7 @@ const OfferSearchView: React.FC = () => {
     const ctx = useOfferSearch();
     const userCtx = useUserContext();
 
-    const swipeRefs = useRef<Map<number, SwipeableRowRef>>(new Map());
+    const swipeRefs = useRef<Map<string, SwipeableRowRef>>(new Map());
     const [loading, setLoading] = React.useState(false);
 
     useFAB({
@@ -90,6 +90,10 @@ const OfferSearchView: React.FC = () => {
     const initialLoading = ctx.loading && ctx.results.length === 0;
     const noResults = !initialLoading && ctx.results.length === 0;
     const showEndOfResults = !initialLoading && !ctx.loadingMore && !ctx.hasMore && ctx.results.length > 0;
+
+    if (loading) {
+        return <Loading></Loading>
+    }
 
     return (
         <>

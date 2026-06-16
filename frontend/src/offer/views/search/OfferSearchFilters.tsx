@@ -3,6 +3,7 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useOfferSearch } from "./OfferSearchProvider";
 import { Utils } from "global/utils/utils";
 import { Ico } from "global/icon.def";
+import CategoriesChips from "global/components/chips/CategoriesChips";
 
 const OfferSearchFilters: React.FC = () => {
 
@@ -19,21 +20,18 @@ const OfferSearchFilters: React.FC = () => {
         : [];
 
     return (
-        <div className="filters-container primary-bg">
-            <div className="flex gap-x-3 flex-wrap items-center pb-1">
+        <div className="filters-container primary-bg view-margin">
+            <div className="flex gap-x-2 flex-wrap items-center pb-1">
                 {(!!ctx.filters.categories?.length) && (
-                    <div className="chip-container ml-2">
+                    <div className="chip-container">
                         <Ico.CATEGORIES className="secondary-text" />
-                        {(ctx.filters.categories || []).map(category => (
-                            <div key={category} className="search-chip primary">
-                                {category}
-                            </div>
-                        ))}
+
+                        <CategoriesChips categories={ctx.filters.categories} smaller color="primary" />
                     </div>
                 )}
 
                 {!!flags?.length && (
-                    <div className="chip-container ml-2">
+                    <div className="chip-container">
                         <Ico.LANGUAGE className="secondary-text" />
                         {(flags).map((src, index) => (
                             <img key={index} className="filters-flag-chip pl-1" src={src} alt={"flag-" + index} />
@@ -42,7 +40,7 @@ const OfferSearchFilters: React.FC = () => {
                 )}
 
                 {!!countryFlags?.length && (
-                    <div className="chip-container ml-2">
+                    <div className="chip-container">
                         <Ico.MARKER className="secondary-text" />
                         {(countryFlags).map((src, index) => (
                             <img key={index} className="filters-flag-chip pl-1" src={src} alt={"flag-" + index} />
