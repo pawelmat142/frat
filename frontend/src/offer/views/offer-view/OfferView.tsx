@@ -62,16 +62,15 @@ const OfferView: React.FC = () => {
 
     useEffect(() => {
         const initOffer = async () => {
-            const oid = Number(offerId);
-            if (oid) {
-                const o = userCtx.meCtx?.offers.find(o => o.offerId === oid);
+            if (offerId) {
+                const o = userCtx.meCtx?.offers.find(o => o.offerId === offerId);
                 if (o) {
                     _setOffer(o);
                     return;
                 }
                 try {
                     setLoading(true);
-                    const result = await OffersService.getOfferById(oid);
+                    const result = await OffersService.getOfferById(offerId);
                     _setOffer(result);
                 }
                 finally {
