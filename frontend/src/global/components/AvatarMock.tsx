@@ -20,7 +20,7 @@ const AvatarMock: React.FC<Props> = ({
                 height: '3.5rem'
             }}
         >
-            <span className="font-lora font-extrabold text-3xl select-none">
+            <span className="font-lora font-extrabold text-3xl select-none text-white">
                 {letter.toUpperCase()}
             </span>
         </div>

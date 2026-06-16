@@ -9,7 +9,6 @@ import { PositionUtil } from "@shared/utils/PositionUtil";
 import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import Chips, { ChipModes } from "global/components/chips/Chips";
 import { AppConfig } from "@shared/AppConfig";
-import { DateUtil } from "@shared/utils/DateUtil";
 import DateDisplay from "global/components/ui/DateDisplay";
 import AvatarMock from "global/components/AvatarMock";
 
@@ -24,6 +23,13 @@ interface Props {
 
 const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS; 
 
+const AVATAR_COLOR_BY_CATEGORY: Record<string, string> = {
+    ONSHORE: '#f97316',    // orange (distinct)
+    OFFSHORE: '#059669',   // emerald green (distinct from blue)
+    WIND: '#4338ca',       // indigo/purple (distinct)
+};
+const DEFAULT_AVATAR_COLOR = '#6B7280'; // neutral gray fallback
+
 const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder, rightSection, className }) => {
 
     const navigate = useNavigate();
@@ -32,6 +38,13 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
 
     const goToOfferView = () => {
         navigate(Path.getOfferPath(offer.offerId));
+    }
+
+    const getAvatarColor = (category?: string): string => {
+        if (!category) {
+            return DEFAULT_AVATAR_COLOR;
+        }
+        return AVATAR_COLOR_BY_CATEGORY[category] ?? DEFAULT_AVATAR_COLOR;
     }
 
     const getDistanceInfo = (): string => {
@@ -90,8 +103,13 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
         </div>
     </div>
 
+
+   const avatarColor = getAvatarColor(offer.category);
+
+   console.log('category: ', offer.category, 'avatarColor: ', avatarColor);
+
     const avatarMock = offer.avatarRef ? undefined : <AvatarMock 
-        color={"#4f46e5"}
+        color={avatarColor}
         letter={offer.displayName ? offer.displayName.charAt(0) : '?'}
     ></AvatarMock>
     
