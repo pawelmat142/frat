@@ -51,7 +51,7 @@ const UserOffersList: React.FC = () => {
     const isMyOffers = me?.uid === uid;
 
     const createBtn = !isMyOffers ? null : <div className="mt-auto flex flex-col mb-5 px-3">
-        <Button fullWidth onClick={() => navigate(Path.OFFER_FORM)} size={BtnSizes.LARGE}>{t("offer.add")}</Button>
+        <Button fullWidth onClick={() => navigate(Path.OFFER_FORM)} size={BtnSizes.LARGE}>{t("user.addOffer")}</Button>
     </div>
 
     if (!offers?.length) {

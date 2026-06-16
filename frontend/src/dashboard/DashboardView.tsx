@@ -23,6 +23,7 @@ import { useOfferSearch } from "offer/views/search/OfferSearchProvider";
 import MyListDashboard from "./MyListDashboard";
 import IconButton from "global/components/controls/IconButon";
 import { useDrawer } from "global/providers/DrawerProvider";
+import MyOffersDashboard from "./MyOffersDashboard";
 
 const DashboardView: React.FC = () => {
 
@@ -174,6 +175,7 @@ const DashboardView: React.FC = () => {
 
         <EmailVerificationWarning></EmailVerificationWarning>
 
+{/* TODO refactor pls - something more pretty ;p */}
         <div className="main-tiles view-margin py-7">
             {quickActions.filter(item => item.if === undefined || !!item.if).map((action, index) => {
                 return (<div className="ripple p-tile dashboard-tile col-tile bottom-bar-shadow py-2" onClick={action.onClick} key={index}>
@@ -184,6 +186,8 @@ const DashboardView: React.FC = () => {
         </div>
 
         <MyListDashboard></MyListDashboard>
+
+        <MyOffersDashboard></MyOffersDashboard>
 
         <RecentViewedWorkers></RecentViewedWorkers>
 
