@@ -6,11 +6,10 @@ import ListItem from "global/components/ListItem";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import { PositionUtil } from "@shared/utils/PositionUtil";
-import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
-import Chips, { ChipModes } from "global/components/chips/Chips";
 import { AppConfig } from "@shared/AppConfig";
 import DateDisplay from "global/components/ui/DateDisplay";
 import AvatarMock from "global/components/AvatarMock";
+import CategoriesChips from "global/components/chips/CategoriesChips";
 
 interface Props {
     offer: OfferI,
@@ -21,7 +20,7 @@ interface Props {
     className?: string
 }
 
-const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS; 
+const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS;
 
 const AVATAR_COLOR_BY_CATEGORY: Record<string, string> = {
     ONSHORE: '#f97316',    // orange (distinct)
@@ -62,10 +61,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
     const distance = getDistanceInfo();
 
     const categoryChip = offer.category ? (
-        <Chips
-            chips={[t(DictionaryUtil.getTranslationKey('WORK_CATEGORY', offer.category))]}
-            mode={ChipModes.SECONDARY}
-        />
+        <CategoriesChips categories={[offer.category]} smaller />
     ) : null;
 
     const topLeft = (
@@ -81,7 +77,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
         <span className="secondary-text">{t('common.from')} </span>
         <span>{DateDisplay({ date: offer.startDate, t, showYearIfNotCurrent: true })}</span>
     </span> : null;
-    
+
     const bottomLeft = <div className="flex flex-col gap-2 mt-2">
         <div className="flex items-center gap-3">
             {startsFrom}
@@ -103,16 +99,13 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
         </div>
     </div>
 
+    const avatarColor = getAvatarColor(offer.category);
 
-   const avatarColor = getAvatarColor(offer.category);
-
-   console.log('category: ', offer.category, 'avatarColor: ', avatarColor);
-
-    const avatarMock = offer.avatarRef ? undefined : <AvatarMock 
+    const avatarMock = offer.avatarRef ? undefined : <AvatarMock
         color={avatarColor}
         letter={offer.displayName ? offer.displayName.charAt(0) : '?'}
     ></AvatarMock>
-    
+
     return (
         <div onClick={goToOfferView} className={className}>
             <ListItem
