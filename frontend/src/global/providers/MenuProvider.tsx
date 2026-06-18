@@ -116,7 +116,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         return NavBus.subscribe((id) => {
             refreshItems(id);
         });
-    }, [authCtx.isAuthenticated, me])
+    }, [authCtx.isAuthenticated, me, notificationsCtx.unreadCount])
     
     useEffect(() => {
         if (navType === 'POP') {

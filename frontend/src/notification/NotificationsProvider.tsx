@@ -11,6 +11,7 @@ interface NotificationsContextType {
     notificationDeleted: (notificationId: number) => void;
     notificationReceived: (notification: NotificationI) => void;
     unreadCount: number;
+    removeNotification: (notificationId: number) => void;
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
@@ -92,12 +93,17 @@ export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({
         setNativeNotifications(prev => prev.filter(n => n.notificationId !== notificationId))
     }
 
+    const removeNotification = (notificationId: number) => {
+        setNotifications(prev => prev.filter(n => n.notificationId !== notificationId))
+    }
+
     return (<NotificationsContext.Provider value={{
         loading: loading,
         notifications,
         notificationDeleted,
         notificationReceived,
-        unreadCount
+        unreadCount,
+        removeNotification
     }}>{children}</NotificationsContext.Provider>)
 }
 

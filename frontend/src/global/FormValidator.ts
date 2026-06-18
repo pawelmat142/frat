@@ -1,4 +1,5 @@
 import { DateRange } from "@shared/interfaces/WorkerI";
+import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 
 export abstract class FormValidator {
 
@@ -17,6 +18,21 @@ export abstract class FormValidator {
         };
     }
     
+    public static dateRangeExpired = (t: any) => {
+        return {
+            validate: (value?: DateRange | null) => {
+                if (!value || !value.end) {
+                    return true
+                }
+                if (DateRangeUtil.isDateRangeExpired(value)) {
+                    return t('validation.form.dateRangeExpired');
+                }
+                return true;
+            }
+        };
+    }
+
+
     public static dateRangeRequired = (t: any) => {
         return {
             validate: (value?: DateRange | null) => {

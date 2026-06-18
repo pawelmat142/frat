@@ -26,6 +26,7 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
 
     const required = FormValidator.dateRangeRequired(t);
     const startDateRequired = FormValidator.required(t);
+    const dateRangeExpired = FormValidator.dateRangeExpired(t);
 
     const rangesStateRef = useRef<{
         [WorkerFormRangesOptions.AVAILABLE_ON]: DateRange[];
@@ -87,6 +88,10 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
             newRanges[idx] = dateRange;
         } else {
             newRanges.splice(idx, 1);
+        }
+
+        if (!newRanges.length) {
+            newRanges.push(getDefaultDateRange());
         }
 
         // Update form
@@ -246,7 +251,10 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                             <Controller
                                                 name={`availability.availabilityDateRanges.${idx}` as const}
                                                 control={control}
-                                                rules={required}
+                                                rules={{
+                                                    ...required,
+                                                    ...dateRangeExpired
+                                                }}
                                                 render={({ field }) => {
                                                     // Extract string message for this specific range error (RHF stores errors by index/key)
                                                     const fieldError = (formState?.errors?.availability?.availabilityDateRanges as any)?.[idx];
@@ -260,6 +268,7 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                                             className="w-full"
                                                             value={currentValue}
                                                             onChange={(dateRange) => {
+                                                                console.log("Date range changed:", dateRange);
                                                                 onRangeChange(dateRange || null, idx);
                                                             }}
                                                             error={errorMessage}
@@ -295,7 +304,7 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                         )}
                     </div>
                 </div>
-            </div >
+            </div>
         </>
     );
 };

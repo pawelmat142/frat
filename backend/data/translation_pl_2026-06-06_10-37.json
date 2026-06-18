@@ -638,7 +638,8 @@
         "phoneNumberTooLong": "Numer telefonu jest za długi (maks. 15 cyfr).",
         "phoneNumberRequired": "Numer telefonu jest wymagany.",
         "phoneNumberTooShort": "Numer telefonu jest za krótki (min. 6 cyfr).",
-        "dateRangeStartRequired": "Data rozpoczęcia jest wymagana."
+        "dateRangeStartRequired": "Data rozpoczęcia jest wymagana.",
+        "dateRangeExpired": "Termin nie może być w przeszłości."
       },
       "view": {
         "title": "Coś poszło nie tak!",

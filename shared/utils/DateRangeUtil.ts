@@ -95,5 +95,16 @@ export abstract class DateRangeUtil {
         return maxId + 1;
     }
 
+    public static isDateRangeExpired = (dateRange: DateRange): boolean => {
+        if (!dateRange.end) {
+            return false; // Open-ended range is not considered expired
+        }
+        const endDate = DateUtil.parseDateFromStringLocalDate(dateRange.end);
+        if (!endDate) {
+            return false; // Invalid end date, cannot determine expiration
+        }
+        return DateUtil.isBefore(endDate, new Date());
+    }
+
 
 }

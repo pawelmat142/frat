@@ -1,4 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
+import { randomInt } from "crypto";
 import { NotificationI, NotificationIcons, NotificationTypes } from "@shared/interfaces/NotificationI";
 import { DateRange, WorkerI } from "@shared/interfaces/WorkerI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
@@ -16,7 +17,7 @@ export class ExpirationNotificationService {
         }
 
         const notification: NotificationI = {
-            notificationId: -1, // This will be set by the database when saved
+            notificationId: -randomInt(1, 2147483647), // Negative ID for ephemeral notifications (generated on-the-fly, not persisted)
             recipientUid: worker.uid,
             type: NotificationTypes.WORKER_PROFILE_AVAILABILITY_EXPIRED,
             targetId: worker.workerId.toString(),
@@ -53,8 +54,7 @@ export class ExpirationNotificationService {
 
     private findExpiredDateRanges(worker: WorkerI): DateRange[] {
         return worker.availabilityDateRanges?.map(dateRange => DateRangeUtil.toDateRange(dateRange))
-        .filter(dateRange => !!dateRange?.end)
-        .filter(dateRange => DateUtil.isBefore(new Date(dateRange.end), new Date()))
+        .filter(dateRange => DateRangeUtil.isDateRangeExpired(dateRange))
     }
 
 }

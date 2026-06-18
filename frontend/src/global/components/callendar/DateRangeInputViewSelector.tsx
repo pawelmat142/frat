@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import FormError from '../controls/FormError';
 import FloatingLabel from '../controls/FloatingLabel';
 import { DateRange } from '@shared/interfaces/WorkerI';
@@ -10,6 +10,7 @@ import PseudoView from '../PseudoView';
 import { AppConfig } from '@shared/AppConfig';
 import { wait } from 'global/utils/utils';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
+import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
 
 
 interface DateRangeProps {
@@ -165,6 +166,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
                         globalCtx.showFooter();
                     }}
                     onClose={() => {
+                        setFocus(false);
                         setOpenPseudoView(false)
                         globalCtx.showFooter();
                     }}

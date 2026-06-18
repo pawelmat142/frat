@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { DateRange, WorkerAvailabilityOptions, WorkerForm, WorkerWithCertificates } from "@shared/interfaces/WorkerI";
+import { DateRange, WorkerAvailabilityOptions, WorkerForm, WorkerI, WorkerWithCertificates } from "@shared/interfaces/WorkerI";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import Header from "global/components/Header";
@@ -13,6 +13,8 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { WorkerService } from "employee/services/WorkerService";
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
+import { useNotificationsContext } from "notification/NotificationsProvider";
+import { NotificationTypes } from "@shared/interfaces/NotificationI";
 
 const WorkerAvailabilityEditView: React.FC = () => {
 
@@ -20,6 +22,7 @@ const WorkerAvailabilityEditView: React.FC = () => {
     const navigate = useNavigate();
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
+    const notificationsCtx = useNotificationsContext();
 
     const [loading, setLoading] = useState(false);
 
@@ -27,6 +30,7 @@ const WorkerAvailabilityEditView: React.FC = () => {
 
     useEffect(() => {
         globalCtx.hideFooter();
+        formRef.trigger()
         return globalCtx.showFooter
     }, [])
 
@@ -51,10 +55,18 @@ const WorkerAvailabilityEditView: React.FC = () => {
     });
 
     const handleSave = async () => {
+        // Validate form before saving
+        const isValid = await formRef.trigger();
+        if (!isValid) {
+            return;
+        }
+
         try {
             const availabilityData = formRef.getValues("availability");
             setLoading(true);
             const result = await WorkerService.updateAvailability(availabilityData);
+            // remove notification for availability update
+            removeNotificationAboutAvailabilityExpirationIfExists(result);
             userCtx.initWorker();
             toast.success(t("employeeProfile.form.submitSuccess"));
             handleBack();
@@ -63,6 +75,20 @@ const WorkerAvailabilityEditView: React.FC = () => {
             setLoading(false);
         }
     };
+
+    const removeNotificationAboutAvailabilityExpirationIfExists = (worker: WorkerI) => {
+        const anyExpiredRange = worker.availabilityDateRanges?.some(dateRange => {
+            const range = DateRangeUtil.toDateRange(dateRange);
+            return range && DateRangeUtil.isDateRangeExpired(range);
+        })
+        if (anyExpiredRange) {
+            return; 
+        }
+        const notification = notificationsCtx.notifications.find(n => n.type === NotificationTypes.WORKER_PROFILE_AVAILABILITY_EXPIRED);
+        if (notification) {
+            notificationsCtx.removeNotification(notification.notificationId);
+        }
+    }
 
     const handleBack = () => {
         navigate(-1);

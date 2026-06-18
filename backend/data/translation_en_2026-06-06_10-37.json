@@ -636,7 +636,8 @@
         "phoneNumberTooLong": "Phone number is too long (max. 15 digits).",
         "phoneNumberRequired": "Phone number is required.",
         "phoneNumberTooShort": "Phone number is too short (min. 6 digits).",
-        "dateRangeStartRequired": "Start date is required."
+        "dateRangeStartRequired": "Start date is required.",
+        "dateRangeExpired": "Date range cannot be in the past."
       },
       "view": {
         "title": "Something went wrong!",

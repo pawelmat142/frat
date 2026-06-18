@@ -200,6 +200,10 @@ input {
     outline: $focus-outline
   }
 
+  &.error {
+    outline: $error-outline;
+  }
+
   &.focus,
   &:hover {
     box-shadow: $focus-ring;
