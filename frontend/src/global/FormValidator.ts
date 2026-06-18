@@ -21,8 +21,8 @@ export abstract class FormValidator {
     public static dateRangeExpired = (t: any) => {
         return {
             validate: (value?: DateRange | null) => {
-                if (!value || !value.end) {
-                    return true
+                if (!value || !value.start || !value.end) {
+                    return t('validation.form.dateRangeRequired');
                 }
                 if (DateRangeUtil.isDateRangeExpired(value)) {
                     return t('validation.form.dateRangeExpired');

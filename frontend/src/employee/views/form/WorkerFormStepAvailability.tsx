@@ -24,7 +24,6 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
     const availabilityDateRanges = watch("availability.availabilityDateRanges") || [];
     const rangesOption = watch("availability.rangesOption");
 
-    const required = FormValidator.dateRangeRequired(t);
     const startDateRequired = FormValidator.required(t);
     const dateRangeExpired = FormValidator.dateRangeExpired(t);
 
@@ -251,10 +250,7 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                             <Controller
                                                 name={`availability.availabilityDateRanges.${idx}` as const}
                                                 control={control}
-                                                rules={{
-                                                    ...required,
-                                                    ...dateRangeExpired
-                                                }}
+                                                rules={dateRangeExpired}
                                                 render={({ field }) => {
                                                     // Extract string message for this specific range error (RHF stores errors by index/key)
                                                     const fieldError = (formState?.errors?.availability?.availabilityDateRanges as any)?.[idx];
@@ -270,15 +266,17 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                                             onChange={(dateRange) => {
                                                                 console.log("Date range changed:", dateRange);
                                                                 onRangeChange(dateRange || null, idx);
+                                                                formRef.trigger()
                                                             }}
                                                             error={errorMessage}
                                                             rightIcon={
-                                                                (idx > 0 && <IconButton
+                                                                (ranges?.length > 1 && <IconButton
                                                                     className="mb-1"
                                                                     icon={<DeleteIcon />}
                                                                     mode={BtnModes.ERROR_TXT}
                                                                     onClick={() => {
                                                                         removeDateRange(dateRange.id);
+                                                                        formRef.trigger()
                                                                     }}
                                                                 />)
                                                             }

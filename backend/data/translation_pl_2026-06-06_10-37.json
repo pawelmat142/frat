@@ -776,7 +776,7 @@
         },
         "locationCountry": {
           "label": "Kraj lokalizacji",
-          "worldwide": "Całym światem"
+          "worldwide": "Cały świat"
         },
         "validationError": "Proszę wypełnić wszystkie wymagane pola w tym kroku",
         "noLocationAccess": "Brak dostępu do lokalizacji. Włącz uprawnienia do lokalizacji w przeglądarce.",
