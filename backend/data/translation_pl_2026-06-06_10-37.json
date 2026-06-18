@@ -682,7 +682,10 @@
       "unreadNotificationsFew": "Masz {{count}} nieprzeczytane powiadomienia",
       "unreadNotificationsOne": "Masz {{count}} nieprzeczytane powiadomienie",
       "acceptInvitationMessage": "Użytkownik {{name}} zaakceptował Twoje zaproszenie do znajomych.",
-      "unreadNotificationsMany": "Masz {{count}} nieprzeczytanych powiadomień"
+      "unreadNotificationsMany": "Masz {{count}} nieprzeczytanych powiadomień",
+      "workerExpiredTitle": "Twoja dostępność jest przestarzała",
+      "workerExpiredMessage": "Zaktualizuj swój Profil Technika. Twoja dostępność wygasła w dniu {{date}}.",
+      "updateAvailability": "Zaktualizuj dostępność"
     },
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",

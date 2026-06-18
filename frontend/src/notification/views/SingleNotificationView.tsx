@@ -18,6 +18,7 @@ import { Ico } from "global/icon.def";
 import { ChatService } from "chat/services/ChatService";
 import { useUserContext } from "user/UserProvider";
 import Header from "global/components/Header";
+import { isOneOf } from "@shared/utils/util";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -69,6 +70,9 @@ const SingleNotificationView: React.FC = () => {
 
     const markNotificationAsRead = async () => {
         if (!notification || notification.readAt) {
+            return true
+        }
+        if (skipMarkAsRead()) {
             return
         }
         try {
@@ -77,7 +81,15 @@ const SingleNotificationView: React.FC = () => {
             notificationsCtx.notificationReceived(notification)
         } catch (error) {
         }
+    }
 
+    const skipMarkAsRead = (): boolean => {
+        if (isOneOf([
+            NotificationTypes.WORKER_PROFILE_AVAILABILITY_EXPIRED
+        ], notification?.type)) {
+            return true
+        }
+        return false
     }
 
     const deleteNotification = async () => {
@@ -120,7 +132,19 @@ const SingleNotificationView: React.FC = () => {
         }
     }
 
+    const getWorkerExpirationActions = (): React.ReactNode => {
+        return <>
+            <Button fullWidth mode={BtnModes.PRIMARY}
+                onClick={() => {
+                    navigate(Path.WORKER_AVAILABILITY_EDIT)
+                }}><Ico.CHAT></Ico.CHAT>{t('notification.updateAvailability')}</Button>
+        </>
+    }
+
     const getActions = (): React.ReactNode => {
+        if (NotificationTypes.WORKER_PROFILE_AVAILABILITY_EXPIRED === notification?.type) {
+            return getWorkerExpirationActions()
+        }
 
         const deleteButton = <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={deleteNotification}
         ><Ico.DELETE className="mr-2" />{t('notification.deleteNotification')}</Button>
@@ -177,7 +201,7 @@ const SingleNotificationView: React.FC = () => {
     return (
         <>
             <Header title={t(notification.title)}></Header>
-            
+
             <div className="view-container">
 
                 <div className="flex flex-col justify-center gap-4 mb-6">

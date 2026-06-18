@@ -2,11 +2,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, Repository } from 'typeorm';
-import { NotificationI, NotificationTypes, NotificationIcons } from '@shared/interfaces/NotificationI';
+import { NotificationI } from '@shared/interfaces/NotificationI';
 import { NotificationEntity } from 'notification/model/NotificationEntity';
 import { ToastException } from 'global/exceptions/ToastException';
 import { UserI } from '@shared/interfaces/UserI';
-import { UserService } from 'user/services/UserService';
+import { ExpirationNotificationService } from './ExpirationNotificationService';
+import { MeUserContextNotificationsRequest } from 'notification/model/interfaces';
 
 @Injectable()
 export class NotificationService {
@@ -16,14 +17,24 @@ export class NotificationService {
   constructor(
     @InjectRepository(NotificationEntity)
     private readonly notificationRepository: Repository<NotificationEntity>,
-    private readonly userService: UserService,
+    private readonly expirationNotificationService: ExpirationNotificationService,
   ) {}
 
+  async getMeUserContextNotifications(request: MeUserContextNotificationsRequest): Promise<NotificationI[]> {
+    let notifications = await this.getUserNotifications(request.recipientUid, request.limit, request.offset);
+    if (request.worker) {
+      const expirationNotification = this.expirationNotificationService.createExpirationNotificationForWorker(request.worker);
+      if (expirationNotification) {
+        return [expirationNotification, ...notifications];
+      }
+    }
+    return notifications;
+  }
 
   /**
    * Retrieves the list of notifications for a user (with pagination)
    */
-  async getUserNotifications(recipientUid: string, limit = 20, offset = 0): Promise<NotificationI[]> {
+  private async getUserNotifications(recipientUid: string, limit = 20, offset = 0): Promise<NotificationI[]> {
     return await this.notificationRepository.find({
       where: { recipientUid },
       order: { createdAt: 'DESC' },

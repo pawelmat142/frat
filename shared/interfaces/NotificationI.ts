@@ -40,6 +40,7 @@ export const NotificationTypes = {
     FRIEND_ACCEPTED: 'FRIEND_ACCEPTED',
     FRIEND_REMOVED: 'FRIEND_REMOVED',
     NEW_MESSAGE: 'NEW_MESSAGE',
+    WORKER_PROFILE_AVAILABILITY_EXPIRED: 'WORKER_PROFILE_AVAILABILITY_EXPIRED',
 } as const;
 
 export type NotificationType = typeof NotificationTypes[keyof typeof NotificationTypes];
@@ -56,6 +57,7 @@ export const NotificationEvents = {
 export const NotificationIcons = {
     CHAT: 'chat',
     FRIEND: 'friend',
+    EXPIRATION: 'expiration',
 } as const;
 
 export type NotificationIcon = typeof NotificationIcons[keyof typeof NotificationIcons];

@@ -680,7 +680,10 @@
       "unreadNotificationsFew": "You have {{count}} unread notifications",
       "unreadNotificationsOne": "You have {{count}} unread notification",
       "acceptInvitationMessage": "User {{name}} accepted your friend invitation.",
-      "unreadNotificationsMany": "You have {{count}} unread notifications"
+      "unreadNotificationsMany": "You have {{count}} unread notifications",
+      "workerExpiredTitle": "Your availability is expired",
+      "workerExpiredMessage": "Please update your availability on your Technician Profile. Your availability expired on {{date}}.",
+      "updateAvailability": "Update Availability"
     },
     "employeeProfile": {
       "edit": "Edit technician profile",

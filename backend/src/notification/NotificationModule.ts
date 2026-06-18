@@ -8,6 +8,7 @@ import { NotificationsController } from './NotificationController';
 import { AuthModule } from 'auth/AuthModule';
 import { UserModule } from 'user/UserModule';
 import { FriendshipNotificationService } from './services/FriendshipNotificationService';
+import { ExpirationNotificationService } from './services/ExpirationNotificationService';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { FriendshipNotificationService } from './services/FriendshipNotification
     NotificationService,
     FriendshipNotificationService,
     NotificationSocketHandler,
+    ExpirationNotificationService
   ],
   exports: [
     NotificationService,

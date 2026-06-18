@@ -48,7 +48,10 @@ export class UserContextService {
         const ctx = await this.getUserContext(user, user.uid);
 
         const settings = await this.settingsService.getSettings(user.uid);
-        const notifications = await this.notificationService.getUserNotifications(user.uid);
+        const notifications = await this.notificationService.getMeUserContextNotifications({
+            recipientUid: user.uid,
+            worker: ctx.workerProfile,
+        });
         const chats = await this.chatService.getUserChats(user.uid);
         const listedItems = await this.userListedItemService.listUserItems(user.uid, UserListedItemTypes.DEFAULT);
         
