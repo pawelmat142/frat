@@ -22,13 +22,25 @@ export class NotificationService {
 
   async getMeUserContextNotifications(request: MeUserContextNotificationsRequest): Promise<NotificationI[]> {
     let notifications = await this.getUserNotifications(request.recipientUid, request.limit, request.offset);
+
+    const offersExpirations = this.expirationNotificationService.createExpirationNotificationsForOffers(request.offers);
+
+    const allNotifications = [
+      ...offersExpirations, 
+      ...notifications
+    ];
+
     if (request.worker) {
       const expirationNotification = this.expirationNotificationService.createExpirationNotificationForWorker(request.worker);
       if (expirationNotification) {
-        return [expirationNotification, ...notifications];
+        return [
+          expirationNotification, 
+          ...allNotifications
+        ];
       }
     }
-    return notifications;
+    
+    return allNotifications;
   }
 
   /**

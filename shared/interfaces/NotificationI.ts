@@ -41,6 +41,7 @@ export const NotificationTypes = {
     FRIEND_REMOVED: 'FRIEND_REMOVED',
     NEW_MESSAGE: 'NEW_MESSAGE',
     WORKER_PROFILE_AVAILABILITY_EXPIRED: 'WORKER_PROFILE_AVAILABILITY_EXPIRED',
+    OFFER_EXPIRATION: 'OFFER_EXPIRATION',
 } as const;
 
 export type NotificationType = typeof NotificationTypes[keyof typeof NotificationTypes];

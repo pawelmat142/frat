@@ -28,7 +28,7 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
     }
 
     const getIcon = (): React.ReactNode => {
-        const result = notification.avatarRef ? null : NotificationFrontUtil.getIcon(notification)
+        const result = notification.avatarRef ? null : <div className="p-2">{NotificationFrontUtil.getIcon(notification, 2.5)}</div>
         return result;
     }
 

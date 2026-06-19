@@ -684,7 +684,12 @@
       "unreadNotificationsMany": "You have {{count}} unread notifications",
       "workerExpiredTitle": "Your availability is expired",
       "workerExpiredMessage": "Please update your availability on your Technician Profile. Your availability expired on {{date}}.",
-      "updateAvailability": "Update Availability"
+      "updateAvailability": "Update Availability",
+      "displayProfile": "Display Profile",
+      "offerExpiredTitle": "Your offer is expired",
+      "offerExpiredMessage": "Please update your offer. Your offer expired on {{date}}",
+      "updateOffer": "Update Offer",
+      "displayOffer": "Display Offer"
     },
     "employeeProfile": {
       "edit": "Edit technician profile",

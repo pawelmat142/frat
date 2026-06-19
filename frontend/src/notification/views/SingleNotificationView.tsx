@@ -90,7 +90,8 @@ const SingleNotificationView: React.FC = () => {
 
     const skipMarkAsRead = (): boolean => {
         if (isOneOf([
-            NotificationTypes.WORKER_PROFILE_AVAILABILITY_EXPIRED
+            NotificationTypes.WORKER_PROFILE_AVAILABILITY_EXPIRED,
+            NotificationTypes.OFFER_EXPIRATION
         ], notification?.type)) {
             return true
         }
@@ -138,17 +139,52 @@ const SingleNotificationView: React.FC = () => {
     }
 
     const getWorkerExpirationActions = (): React.ReactNode => {
+        const displayName = notification?.requesterName
+        if (!displayName) {
+            return null
+        }
         return <>
             <Button fullWidth mode={BtnModes.PRIMARY}
                 onClick={() => {
                     navigate(Path.WORKER_AVAILABILITY_EDIT)
-                }}><Ico.CHAT></Ico.CHAT>{t('notification.updateAvailability')}</Button>
+                }}><Ico.EDIT></Ico.EDIT>{t('notification.updateAvailability')}</Button>
+            <Button fullWidth mode={BtnModes.PRIMARY_TXT}
+                onClick={() => {
+                    navigate(Path.getWorkerProfilePath(displayName))
+                }}>{t('notification.displayProfile')}</Button>
         </>
+    }
+
+    const getOfferExpirationActions = (): React.ReactNode => {
+        const offerId = notification?.targetId
+        if (!offerId) {
+            return null
+        }
+        return <>
+            <Button fullWidth mode={BtnModes.PRIMARY}
+                onClick={() => {
+                    navigate(Path.getOfferFormEditPath(offerId))
+                }}><Ico.EDIT></Ico.EDIT>{t('notification.updateOffer')}</Button>
+            <Button fullWidth mode={BtnModes.PRIMARY_TXT}
+                onClick={() => {
+                    navigate(Path.getOfferPath(offerId))
+                }}>{t('notification.displayOffer')}</Button>
+        </>
+    }
+
+    const getAdditionalTextRow = (): React.ReactNode => {
+        if (NotificationTypes.OFFER_EXPIRATION === notification?.type) {
+            return <h3 className="text-xl font-semibold mt-5">{notification.requesterName}</h3>
+        }
+        return null
     }
 
     const getActions = (): React.ReactNode => {
         if (NotificationTypes.WORKER_PROFILE_AVAILABILITY_EXPIRED === notification?.type) {
             return getWorkerExpirationActions()
+        }
+        if (NotificationTypes.OFFER_EXPIRATION === notification?.type) {
+            return getOfferExpirationActions()
         }
 
         const deleteButton = <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={deleteNotification}
@@ -199,10 +235,11 @@ const SingleNotificationView: React.FC = () => {
         </>
     }
 
+    
     if (loading || !notification) {
         return <Loading></Loading>
     }
-
+    
     return (
         <>
             <Header title={t(notification.title)}></Header>
@@ -223,6 +260,7 @@ const SingleNotificationView: React.FC = () => {
 
                     <div className="text-center mx-10">
                         <h2 className="text-xl font-bold mt-5">{t(notification.title)}</h2>
+                        {getAdditionalTextRow()}
                         <p className="secondary-text mt-5 mb-5 ">{t(notification.message, notification.messageParams)}</p>
                     </div>
 

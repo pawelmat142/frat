@@ -686,7 +686,12 @@
       "unreadNotificationsMany": "Masz {{count}} nieprzeczytanych powiadomień",
       "workerExpiredTitle": "Twoja dostępność jest przestarzała",
       "workerExpiredMessage": "Zaktualizuj swój Profil Technika. Twoja dostępność wygasła w dniu {{date}}.",
-      "updateAvailability": "Zaktualizuj dostępność"
+      "updateAvailability": "Zaktualizuj dostępność",
+      "displayProfile": "Wyświetl profil",
+      "offerExpiredTitle": "Twoja oferta jest przestarzała",
+      "offerExpiredMessage": "Zaktualizuj swoją ofertę. Twoja oferta wygasła w dniu {{date}}.",
+      "updateOffer": "Zaktualizuj ofertę",
+      "displayOffer": "Wyświetl ofertę"
     },
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",
