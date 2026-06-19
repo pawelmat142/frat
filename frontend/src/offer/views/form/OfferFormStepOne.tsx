@@ -13,6 +13,7 @@ const OfferFormStepOne: React.FC = () => {
 
     const { t } = useTranslation();
     const required = FormValidator.required(t);
+    const requiredDateNotInPast = FormValidator.requiredLocalStringDateNotInPast(t);
     const ctx = useOfferForm();
 
     return (
@@ -45,7 +46,7 @@ const OfferFormStepOne: React.FC = () => {
                 <Controller
                     name={`STEP_ONE.startDate`}
                     control={ctx.formCtx.control}
-                    rules={required}
+                    rules={requiredDateNotInPast}
                     render={({ field }) => <DateInputViewSelector
                         label={t("offer.dateRange")}
                         className="w-full"

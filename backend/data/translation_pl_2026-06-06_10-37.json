@@ -689,7 +689,7 @@
       "updateAvailability": "Zaktualizuj dostępność",
       "displayProfile": "Wyświetl profil",
       "offerExpiredTitle": "Twoja oferta jest przestarzała",
-      "offerExpiredMessage": "Zaktualizuj swoją ofertę. Twoja oferta wygasła w dniu {{date}}.",
+      "offerExpiredMessage": "Zaktualizuj lub usuń swoją ofertę. Twoja oferta wygasła w dniu {{date}}.",
       "updateOffer": "Zaktualizuj ofertę",
       "displayOffer": "Wyświetl ofertę"
     },

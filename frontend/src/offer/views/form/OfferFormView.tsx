@@ -24,6 +24,8 @@ import { DictionaryUtil } from "@shared/utils/DictionaryUtil";
 import { AppConfig } from "@shared/AppConfig";
 import Header from "global/components/Header";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
+import { useNotificationsContext } from "notification/NotificationsProvider";
+import { NotificationTypes } from "@shared/interfaces/NotificationI";
 
 const DEFAUT_POSITION = AppConfig.DEFAUT_POSITION;
 
@@ -37,6 +39,7 @@ const OfferFormContent: React.FC = () => {
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
     const fabCtx = useFloatingBtnContext();
+    const notificationsCtx = useNotificationsContext();
 
     const [loading, setLoading] = useState(false);
 
@@ -46,6 +49,7 @@ const OfferFormContent: React.FC = () => {
     useEffect(() => {
         globalCtx.hideFooter();
         fabCtx.hide();
+
         return () => {
             fabCtx.show();
             globalCtx.showFooter();
@@ -63,11 +67,20 @@ const OfferFormContent: React.FC = () => {
             setLoading(true);
             const offer = await OffersService.getOfferById(offerId);
             ctx.initForm(OfferUtil.convertToForm(offer));
+            triggerStartDateValidation();
         } catch (error) {
             toast.error(t("offer.form.validation.notFound"));
         } finally {
             setLoading(false);
         }
+    }
+
+    const triggerStartDateValidation = async () => {
+        // required for validation when navigate from expiration notification
+        // will not be triggered by creation form because if prefilled with valid date
+        setTimeout(() => {
+            ctx.formCtx.trigger('STEP_ONE.startDate');
+        }, 100);
     }
 
     const prefillFormIfNewOffer = async () => {
@@ -138,6 +151,7 @@ const OfferFormContent: React.FC = () => {
                 if (!offer) {
                     throw new Error(t("offer.form.validation.createError"));
                 }
+                removeNotificationAboutOfferExpirationIfExists(offer);
             } else {
                 offer = await OffersService.createOffer(ctx.form);
                 if (!offer) {
@@ -157,6 +171,17 @@ const OfferFormContent: React.FC = () => {
         } finally {
             setLoading(false);
             ctx.removeFormFromLocalStorage();
+        }
+    }
+
+    const removeNotificationAboutOfferExpirationIfExists = (offer: OfferI) => {
+        const isOfferExpired = DateUtil.isBefore(offer.startDate, new Date());
+        if (isOfferExpired) {
+            return;
+        }
+        const notification = notificationsCtx.notifications.find(n => n.type === NotificationTypes.OFFER_EXPIRATION && n.targetId === offer.offerId);
+        if (notification) {
+            notificationsCtx.removeNotification(notification.notificationId);
         }
     }
 

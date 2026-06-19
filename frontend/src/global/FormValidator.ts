@@ -1,10 +1,27 @@
 import { DateRange } from "@shared/interfaces/WorkerI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 export abstract class FormValidator {
 
     public static required = (t: any) => {
         return { required: t('validation.form.required') };
+    }
+
+    public static requiredLocalStringDateNotInPast = (t: any) => {
+        return {
+            validate: (value: string | null | undefined) => {
+                if (!value) {
+                    return t('validation.form.required');
+                }
+                const inputDate = new Date(value);
+                const today = new Date();
+                if (DateUtil.isBefore(inputDate, today)) {
+                    return t('validation.form.dateNotInPast');
+                }
+                return true;
+            }
+        };
     }
 
     public static requiredArray = (t: any) => {

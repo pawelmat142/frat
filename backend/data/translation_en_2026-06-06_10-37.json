@@ -637,7 +637,8 @@
         "phoneNumberRequired": "Phone number is required.",
         "phoneNumberTooShort": "Phone number is too short (min. 6 digits).",
         "dateRangeStartRequired": "Start date is required.",
-        "dateRangeExpired": "Date range cannot be in the past."
+        "dateRangeExpired": "Date range cannot be in the past.",
+        "dateNotInPast": "Date cannot be in the past."
       },
       "view": {
         "title": "Something went wrong!",
@@ -687,7 +688,7 @@
       "updateAvailability": "Update Availability",
       "displayProfile": "Display Profile",
       "offerExpiredTitle": "Your offer is expired",
-      "offerExpiredMessage": "Please update your offer. Your offer expired on {{date}}",
+      "offerExpiredMessage": "Please update or remove your offer. Your offer expired on {{date}}",
       "updateOffer": "Update Offer",
       "displayOffer": "Display Offer"
     },
