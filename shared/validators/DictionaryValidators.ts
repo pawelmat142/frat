@@ -29,9 +29,9 @@ export abstract class DictionaryValidators {
     }
 
     public static validateCode(code: string): string | null {
-        const codeRegex = /^[A-Za-z_]+$/;
+        const codeRegex = /^[A-Za-z_0-9]+$/;
         if (!codeRegex.test(code)) {
-            return `Invalid code format: ${code}. Only letters and underscores are allowed.`;
+            return `Invalid code format: ${code}. Only letters, digits and underscores are allowed.`;
         }
         return null;
     }

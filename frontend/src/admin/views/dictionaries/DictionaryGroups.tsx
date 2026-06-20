@@ -55,50 +55,51 @@ const DictionaryGroups: React.FC<DictionaryGroupsProps> = ({ dictionary, onRemov
                 return (
                     <div key={group.code} className="">
                         <div className="font-mono font-bold mb-2">Group: {group.code}</div>
-                        {groupElements.length === 0 ? (
-                            <div className="secondary-text">No elements in this group.</div>
-                        ) : (
-                            <div className="overflow-x-auto w-full rounded-lg shadow border border-color secondary-bg">
-                                <table className="w-full text-left border-collapse">
-                                    <thead>
-                                        <tr>
-                                            <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Code</th>
-                                            {dictionary.columns.map(col => (
-                                                <th key={col.code} className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
-                                                    {col.required && (<span>*</span>)}
-                                                    <span>{col.code}</span>
-                                                </th>
-                                            ))}
-                                            <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Status</th>
 
-                                            <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
-                                                <div className="flex gap-2 justify-end">
-                                                    <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditDictionaryGroup(group)} />
-                                                    <RoleGuard roles={[UserRoles.SUPERADMIN]}>
-                                                        <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => handleRemoveDictionaryGroup(group)} />
-                                                    </RoleGuard>
-                                                </div>
+                        <div className="overflow-x-auto w-full rounded-lg shadow border border-color secondary-bg">
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Code</th>
+                                        {dictionary.columns.map(col => (
+                                            <th key={col.code} className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
+                                                {col.required && (<span>*</span>)}
+                                                <span>{col.code}</span>
                                             </th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {groupElements.map(el => (
-                                            <tr key={el.code}>
-                                                <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text"}>{el.code}</td>
-                                                {dictionary.columns.map(col => (
-                                                    <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
-                                                        {displayElementValue(el.values[col.code], col.type, col.translatable)}
-                                                    </td>
-                                                ))}
-                                                <td className={"px-6 py-3 border-b border-color"}>{el.active ? <span className="primary-color font-semibold">ACTIVE</span> : <span className="secondary-text">INACTIVE</span>}</td>
-                                                <td className={"px-6 py-3 border-b border-color "}></td>
-                                            </tr>
                                         ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
+                                        <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Status</th>
+
+                                        <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
+                                            <div className="flex gap-2 justify-end">
+                                                <IconButton icon={<EditIcon />} size={BtnSizes.SMALL} mode={BtnModes.PRIMARY} onClick={() => handleEditDictionaryGroup(group)} />
+                                                <RoleGuard roles={[UserRoles.SUPERADMIN]}>
+                                                    <IconButton icon={<DeleteIcon />} size={BtnSizes.SMALL} mode={BtnModes.ERROR_TXT} onClick={() => handleRemoveDictionaryGroup(group)} />
+                                                </RoleGuard>
+                                            </div>
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                {groupElements.length === 0 ? (
+                                    <div className="secondary-text">No elements in this group.</div>
+                                ) : (null)}
+
+                                <tbody>
+                                    {groupElements?.map(el => (
+                                        <tr key={el.code}>
+                                            <td className={"px-6 py-3 border-b border-color font-mono text-base primary-text"}>{el.code}</td>
+                                            {dictionary.columns.map(col => (
+                                                <td key={col.code} className="px-6 py-3 border-b border-color primary-text">
+                                                    {displayElementValue(el.values[col.code], col.type, col.translatable)}
+                                                </td>
+                                            ))}
+                                            <td className={"px-6 py-3 border-b border-color"}>{el.active ? <span className="primary-color font-semibold">ACTIVE</span> : <span className="secondary-text">INACTIVE</span>}</td>
+                                            <td className={"px-6 py-3 border-b border-color "}></td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 );
             })}
