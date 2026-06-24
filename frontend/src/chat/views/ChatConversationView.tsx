@@ -20,13 +20,15 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import { CloudinaryService } from "user/services/CloudinaryService";
 import { FileUtil } from "global/utils/FileUtil";
 import { AppConfig } from "@shared/AppConfig";
-import { FaImage } from "react-icons/fa";
+import { FaFileUpload, FaImage, FaFileAlt } from "react-icons/fa";
 import { AvatarRef } from "@shared/interfaces/UserI";
 import LongTapHandler from "global/components/LongTapHandler";
 
-interface PendingImage {
-    previewUrl: string;
+interface PendingAttachment {
+    file: File;
     optimizedFile: File;
+    previewUrl?: string;
+    isImage: boolean;
 }
 
 const ChatConversationView: React.FC = () => {
@@ -43,7 +45,7 @@ const ChatConversationView: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [sending, setSending] = useState(false);
     const [inputFocused, setInputFocused] = useState(false);
-    const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
+    const [pendingAttachments, setPendingAttachments] = useState<PendingAttachment[]>([]);
     const [optimizing, setOptimizing] = useState(false);
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -51,16 +53,22 @@ const ChatConversationView: React.FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const isInitialized = useRef(false);
 
-    const removePendingImage = (index: number) => {
-        setPendingImages(prev => {
-            URL.revokeObjectURL(prev[index].previewUrl);
+    const removePendingAttachment = (index: number) => {
+        setPendingAttachments(prev => {
+            const attachment = prev[index];
+            if (attachment?.previewUrl) {
+                URL.revokeObjectURL(attachment.previewUrl);
+            }
             return prev.filter((_, i) => i !== index);
         });
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
-    const clearPendingImages = () => {
-        setPendingImages(prev => { prev.forEach(p => URL.revokeObjectURL(p.previewUrl)); return []; });
+    const clearPendingAttachments = () => {
+        setPendingAttachments(prev => {
+            prev.forEach(p => p.previewUrl && URL.revokeObjectURL(p.previewUrl));
+            return [];
+        });
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
@@ -68,20 +76,28 @@ const ChatConversationView: React.FC = () => {
         if (!files.length) return;
         setOptimizing(true);
         try {
-            const newImages = await Promise.all(
+            const newAttachments = await Promise.all(
                 Array.from(files).map(async (file) => {
-                    const optimizedFile = await FileUtil.resizeForMobile(file);
-                    return { previewUrl: URL.createObjectURL(optimizedFile), optimizedFile };
+                    const isImage = file.type.startsWith('image/');
+                    const optimizedFile = isImage
+                        ? await FileUtil.resizeForMobile(file)
+                        : file;
+                    return {
+                        file,
+                        optimizedFile,
+                        previewUrl: isImage ? URL.createObjectURL(optimizedFile) : undefined,
+                        isImage,
+                    };
                 })
             );
 
             // TODO translacje 
 
-            const incomingBytes = newImages.reduce((sum, img) => sum + img.optimizedFile.size, 0);
+            const incomingBytes = newAttachments.reduce((sum, attachment) => sum + attachment.optimizedFile.size, 0);
             const totalAfter = getExistingStorageBytes() + getPendingBytes() + incomingBytes;
 
             if (totalAfter > MAX_STORAGE_BYTES) {
-                newImages.forEach(img => URL.revokeObjectURL(img.previewUrl));
+                newAttachments.forEach(att => att.previewUrl && URL.revokeObjectURL(att.previewUrl));
                 confirm({
                     title: t('chat.storageLimitTitle'),
                     message: t('chat.storageLimitMessage', { limit: AppConfig.CHAT_MAX_IMAGE_STORAGE_MB }),
@@ -91,9 +107,9 @@ const ChatConversationView: React.FC = () => {
                 return;
             }
 
-            setPendingImages(prev => [...prev, ...newImages]);
+            setPendingAttachments(prev => [...prev, ...newAttachments]);
         } catch (error) {
-            toast.error(t('chat.error.imageOptimizationFailed'));
+            toast.error(t('chat.error.fileOptimizationFailed'));
         } finally {
             setOptimizing(false);
         }
@@ -140,7 +156,7 @@ const ChatConversationView: React.FC = () => {
         messages.reduce((sum, msg) => sum + (msg.imageRefs?.length ?? 0) * AppConfig.UPLOAD_IMG_TARGET_OUTPUT_SIZE_BYTES, 0);
 
     const getPendingBytes = () =>
-        pendingImages.reduce((sum, p) => sum + p.optimizedFile.size, 0);
+        pendingAttachments.reduce((sum, p) => sum + p.optimizedFile.size, 0);
 
     const blockedByMe = chat?.blockedByUid === me?.uid;
 
@@ -306,7 +322,6 @@ const ChatConversationView: React.FC = () => {
         }
     }
 
-    // TODO translacja
     const handleDeleteMessage = async (msg: ChatMessageI) => {
         const confirmed = await confirm({
             message: t('chat.deleteMessageConfirm'),
@@ -318,10 +333,9 @@ const ChatConversationView: React.FC = () => {
         }
     };
 
-    // TODO translacje
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
-        if ((!newMessage.trim() && !pendingImages.length) || !chatId || sending) return;
+        if ((!newMessage.trim() && !pendingAttachments.length) || !chatId || sending) return;
 
         const numericChatId = parseInt(chatId, 10);
         setSending(true);
@@ -329,9 +343,9 @@ const ChatConversationView: React.FC = () => {
         try {
             let imageRefs: AvatarRef[] | undefined;
 
-            if (pendingImages.length) {
+            if (pendingAttachments.length) {
                 const uploaded = await Promise.all(
-                    pendingImages.map(p => CloudinaryService.uploadChatImage(p.optimizedFile, numericChatId))
+                    pendingAttachments.map(p => CloudinaryService.uploadChatImage(p.optimizedFile, numericChatId))
                 );
                 imageRefs = uploaded.map(r => ({ url: r.url, publicId: r.publicId }));
             }
@@ -343,7 +357,7 @@ const ChatConversationView: React.FC = () => {
             });
             if (response.success && response.message) {
                 setNewMessage("");
-                clearPendingImages();
+                clearPendingAttachments();
                 inputRef.current?.focus();
             }
         } catch (error) {
@@ -353,6 +367,10 @@ const ChatConversationView: React.FC = () => {
             setSending(false);
         }
     };
+    
+    const handleFileInputClick = () => {
+        fileInputRef.current?.click();
+    }
 
 
     if (loading) {
@@ -430,17 +448,24 @@ const ChatConversationView: React.FC = () => {
                 <div ref={messagesEndRef} />
             </div>
 
-            {/* Image preview bar above input */}
-            {pendingImages.length > 0 && (
+            {/* Attachment preview bar above input */}
+            {pendingAttachments.length > 0 && (
                 <div className="chat-view-image-preview">
-                    {pendingImages.map((img, i) => (
+                    {pendingAttachments.map((attachment, i) => (
                         <div key={i} className="chat-view-image-preview-thumb">
-                            <img src={img.previewUrl} alt="" />
+                            {attachment.isImage && attachment.previewUrl ? (
+                                <img src={attachment.previewUrl} alt={attachment.file.name} />
+                            ) : (
+                                <div className="chat-view-file-preview">
+                                    <FaFileAlt size={20} />
+                                    <span>{attachment.file.name}</span>
+                                </div>
+                            )}
                             <button
                                 type="button"
                                 className="chat-view-image-preview-remove"
-                                onClick={() => removePendingImage(i)}
-                                aria-label={t('chat.removeImage')}
+                                onClick={() => removePendingAttachment(i)}
+                                aria-label={t('chat.removeAttachment')}
                             >
                                 <Ico.CANCEL size={14} />
                             </button>
@@ -455,7 +480,7 @@ const ChatConversationView: React.FC = () => {
                 <input
                     ref={fileInputRef}
                     type="file"
-                    accept="image/*"
+                    accept="*/*"
                     multiple
                     className="hidden"
                     onChange={(e) => {
@@ -466,6 +491,15 @@ const ChatConversationView: React.FC = () => {
                 {/* Upload button - visible only when not focused and no text typed */}
                 {!inputFocused && !newMessage && !chat?.blockedByUid && (
                     <div className="chat-view-input-left">
+                        <Button
+                            mode={BtnModes.PRIMARY_TXT}
+                            type="button"
+                            className="px-2"
+                            onClick={() => handleFileInputClick()}
+                            disabled={sending || optimizing}
+                        >
+                            <FaFileUpload size={iconSize} />
+                        </Button>
                         <Button
                             mode={BtnModes.PRIMARY_TXT}
                             type="button"
@@ -484,7 +518,7 @@ const ChatConversationView: React.FC = () => {
                         type="text"
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder={pendingImages.length ? t('chat.addCaption') : t('chat.typeMessage')}
+                        placeholder={pendingAttachments.length ? t('chat.addCaption') : t('chat.typeMessage')}
                         className="chat-view-input-content-control"
                         disabled={sending || !!chat?.blockedByUid}
                         enterKeyHint="send"
@@ -504,7 +538,7 @@ const ChatConversationView: React.FC = () => {
                     {(sending || optimizing) ? (
                         <Button
                             mode={BtnModes.PRIMARY_TXT}
-                            disabled={(!newMessage.trim() && !pendingImages.length)}
+                            disabled={(!newMessage.trim() && !pendingAttachments.length)}
                             className="px-2"
                         >
                             <Ico.WAIT size={iconSize * 1.2} />
@@ -513,7 +547,7 @@ const ChatConversationView: React.FC = () => {
                         <Button
                             mode={BtnModes.PRIMARY_TXT}
                             type="submit"
-                            disabled={(!newMessage.trim() && !pendingImages.length)}
+                            disabled={(!newMessage.trim() && !pendingAttachments.length)}
                             className="px-2"
                         >
                             <Ico.MSG size={iconSize * 1.2} />

@@ -29,7 +29,7 @@
       "deleteChat": "Usuń czat",
       "noMessages": "Brak wiadomości",
       "blockedByMe": "Zablokowane przez Ciebie",
-      "typeMessage": "Pisz wiadomość...",
+      "typeMessage": "Wiadomość...",
       "blockedByOther": "Zablokowane przez ",
       "blockUserConfirm": "Czy na pewno chcesz zablokować tego użytkownika? Nie będziesz mógł wysyłać ani odbierać od niego wiadomości.",
       "blockUserSuccess": "Użytkownik został pomyślnie zablokowany",
@@ -39,7 +39,14 @@
       "deleteChatSuccess": "Czat został pomyślnie usunięty",
       "unblockUserConfirm": "Czy na pewno chcesz odblokować tego użytkownika? Będziesz mógł ponownie wysyłać i odbierać od niego wiadomości.",
       "unblockUserSuccess": "Użytkownik został pomyślnie odblokowany",
-      "imageOptimizationFailed": "Nie udało się zoptymalizować obrazów, spróbuj ponownie później."
+      "imageOptimizationFailed": "Nie udało się zoptymalizować obrazu, spróbuj ponownie później.",
+      "fileOptimizationFailed": "Nie udało się zoptymalizować pliku, spróbuj ponownie później.",
+      "addCaption": "Dodaj wiadomość...",
+      "deleteMessageConfirm": "Czy na pewno chcesz usunąć tę wiadomość? Tej akcji nie można cofnąć.",
+      "error": {
+        "deleteFailed": "Nie udało się usunąć czatu",
+        "sendFailed": "Nie udało się wysłać wiadomości"
+      }
     },
     "lang": {
       "select": "Wybierz język",

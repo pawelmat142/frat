@@ -29,7 +29,7 @@
       "deleteChat": "Delete chat",
       "noMessages": "No messages",
       "blockedByMe": "Blocked by you",
-      "typeMessage": "Type your message...",
+      "typeMessage": "Message...",
       "blockedByOther": "Blocked by ",
       "blockUserConfirm": "Are you sure you want to block this user? You will no longer be able to send or receive messages from them.",
       "blockUserSuccess": "User blocked successfully",
@@ -39,7 +39,14 @@
       "deleteChatSuccess": "Chat deleted successfully",
       "unblockUserConfirm": "Are you sure you want to unblock this user? You will be able to send and receive messages from them again.",
       "unblockUserSuccess": "User unblocked successfully",
-      "imageOptimizationFailed": "Failed to optimize images, please try again later."
+      "imageOptimizationFailed": "Failed to optimize image, please try again later.",
+      "fileOptimizationFailed": "Failed to optimize file, please try again later.",
+      "addCaption": "Add message...",
+      "deleteMessageConfirm": "Are you sure you want to delete this message? This action cannot be undone.",
+      "error": {
+        "deleteFailed": "Failed to delete chat",
+        "sendFailed": "Failed to send message"
+      }
     },
     "lang": {
       "select": "Select Language",
