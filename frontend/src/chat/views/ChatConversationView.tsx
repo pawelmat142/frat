@@ -360,7 +360,7 @@ const ChatConversationView: React.FC = () => {
     }
 
     const iconSize = 22
-    
+
     return (<>
         {!!chat && !!otherUser && (
             <div className="sticky-header">
@@ -501,14 +501,25 @@ const ChatConversationView: React.FC = () => {
                 </div>
 
                 <div className="chat-view-input-left">
-                    <Button
-                        mode={BtnModes.PRIMARY_TXT}
-                        type="submit"
-                        disabled={(!newMessage.trim() && !pendingImages.length) || sending || optimizing}
-                        className="px-2"
-                    >
-                        <Ico.MSG size={iconSize * 1.2} />
-                    </Button>
+                    {(sending || optimizing) ? (
+                        <Button
+                            mode={BtnModes.PRIMARY_TXT}
+                            disabled={(!newMessage.trim() && !pendingImages.length)}
+                            className="px-2"
+                        >
+                            <Ico.WAIT size={iconSize * 1.2} />
+                        </Button>
+                    ) : (
+                        <Button
+                            mode={BtnModes.PRIMARY_TXT}
+                            type="submit"
+                            disabled={(!newMessage.trim() && !pendingImages.length)}
+                            className="px-2"
+                        >
+                            <Ico.MSG size={iconSize * 1.2} />
+                        </Button>
+                    )}
+
                 </div>
 
             </form>
