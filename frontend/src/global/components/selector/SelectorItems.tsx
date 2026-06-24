@@ -95,18 +95,38 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
     const isSelected = (value: T) => localSelectedValues.includes(value);
 
-    const sortedItems = useMemo(() => {
-        if (!enableSearchText || !searchText.trim()) {
-            return items;
+    const normalizedSearch = searchText.trim().toLowerCase();
+
+    const highlightLabel = (label: string) => {
+        if (!enableSearchText || !normalizedSearch) {
+            return label;
         }
 
-        const normalizedSearch = searchText.trim().toLowerCase();
+        const escapedSearch = normalizedSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedSearch})`, 'gi');
+        const parts = label.split(regex);
+
+        return parts.map((part, index) =>
+            part.toLowerCase() === normalizedSearch ? (
+                <span className="highlight font-bold" key={index}>
+                    {part}
+                </span>
+            ) : (
+                part
+            )
+        );
+    };
+
+    const sortedItems = useMemo(() => {
+        if (!enableSearchText || !normalizedSearch) {
+            return items;
+        }
 
         return items.filter((item) => {
             const label = translateItems ? t(item.label) : item.label;
             return label.toLowerCase().includes(normalizedSearch);
         });
-    }, [searchText]);
+    }, [normalizedSearch]);
 
     return (
         <>
@@ -157,7 +177,9 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                                             className="bottom-sheet-item-image"
                                         />
                                     )}
-                                    <span className="bottom-sheet-item-label">{displayLabel}</span>
+                                    <span className="bottom-sheet-item-label">
+                                        {highlightLabel(displayLabel)}
+                                    </span>
                                 </div>
                             </div>
                             {renderAfterItem?.(item, selected)}
@@ -194,7 +216,9 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                                             className="bottom-sheet-item-image"
                                         />
                                     )}
-                                    <span className="bottom-sheet-item-label">{displayLabel}</span>
+                                    <span className="bottom-sheet-item-label">
+                                        {highlightLabel(displayLabel)}
+                                    </span>
                                 </div>
                             </div>
                             {renderAfterItem?.(item, selected)}
