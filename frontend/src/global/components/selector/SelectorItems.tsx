@@ -95,11 +95,18 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
     const isSelected = (value: T) => localSelectedValues.includes(value);
 
-    // If enableSearchText is false, use items in original order (already organized by parent)
-    // If enableSearchText is true, can reorganize based on search
     const sortedItems = useMemo(() => {
-        return items;
-    }, [items]);
+        if (!enableSearchText || !searchText.trim()) {
+            return items;
+        }
+
+        const normalizedSearch = searchText.trim().toLowerCase();
+
+        return items.filter((item) => {
+            const label = translateItems ? t(item.label) : item.label;
+            return label.toLowerCase().includes(normalizedSearch);
+        });
+    }, [searchText]);
 
     return (
         <>
