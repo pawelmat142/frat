@@ -6,35 +6,104 @@ import Button from "../controls/Button";
 import FloatingInput from "../controls/FloatingInput";
 import { Close, Search } from "@mui/icons-material";
 
+// ---------------------------------------------------------------------------
+// Props
+// ---------------------------------------------------------------------------
+
 interface Props<T extends SelectorValue = SelectorValue> {
-    items: SelectorItem<T>[]
-    onClose?: () => void;
+    items: SelectorItem<T>[];
     selectedValues?: T[];
-    onSelect?: (item: T) => void;
-    onSelectMulti?: (items: T[]) => void;
     multiSelect?: boolean;
-    translateItems?: boolean
+    translateItems?: boolean;
     enableSearchText?: boolean;
-    onClean?: () => void;
-    automatedMode?: boolean;
-    renderAfterItem?: (item: SelectorItem<T>, isSelected: boolean) => ReactNode;
-    emitAllSelectedValues?: boolean;
+    /** Items pinned at the top of the list (shown before the main list, never re-sorted). */
     initialSelectedItems?: SelectorItem<T>[];
+    /** Called after the "Confirm" button is pressed (multi-select non-automated mode). */
+    onSelectMulti?: (items: T[]) => void;
+    /** Called on every selection change immediately – skips the "Confirm" button.
+     *  When provided, the component operates in "automated" mode. */
+    onChangeImmediate?: (items: T[]) => void;
+    /** Called for single-select mode. */
+    onSelect?: (item: T) => void;
+    /** Called when the "Reset" button is pressed. Also closes the sheet. */
+    onClean?: () => void;
+    /** Called to close the parent bottom sheet / popup. */
+    onClose?: () => void;
+    /** Render additional content after each item row. */
+    renderAfterItem?: (item: SelectorItem<T>, isSelected: boolean) => ReactNode;
 }
+
+// ---------------------------------------------------------------------------
+// SelectorItemRow – extracted to eliminate duplicate JSX
+// ---------------------------------------------------------------------------
+
+interface ItemRowProps<T extends SelectorValue> {
+    item: SelectorItem<T>;
+    selected: boolean;
+    last: boolean;
+    multiSelect: boolean;
+    highlightLabel: (label: string) => ReactNode;
+    onItemClick: (item: SelectorItem<T>) => void;
+    renderAfterItem?: (item: SelectorItem<T>, isSelected: boolean) => ReactNode;
+}
+
+function SelectorItemRow<T extends SelectorValue>({
+    item,
+    selected,
+    last,
+    multiSelect,
+    highlightLabel,
+    onItemClick,
+    renderAfterItem,
+}: ItemRowProps<T>) {
+    return (
+        <div key={String(item.value)}>
+            <div
+                className={`bottom-sheet-item ripple${selected ? ' selected' : ''}${last ? ' last' : ''}`}
+                onClick={() => onItemClick(item)}
+            >
+                {multiSelect && (
+                    <div className={`bottom-sheet-checkbox mr-3 ${selected ? 'checked' : ''}`}>
+                        {selected && <FaCheck size={14} />}
+                    </div>
+                )}
+                <div className="bottom-sheet-item-content">
+                    {item.icon && (
+                        <span className="bottom-sheet-item-icon">{item.icon}</span>
+                    )}
+                    {item.src && (
+                        <img
+                            src={item.src}
+                            alt={item.label}
+                            className="bottom-sheet-item-image"
+                        />
+                    )}
+                    <span className="bottom-sheet-item-label">
+                        {highlightLabel(item.label)}
+                    </span>
+                </div>
+            </div>
+            {renderAfterItem?.(item, selected)}
+        </div>
+    );
+}
+
+// ---------------------------------------------------------------------------
+// SelectorItems
+// ---------------------------------------------------------------------------
 
 const SelectorItems = <T extends SelectorValue = SelectorValue>({
     items,
     multiSelect = false,
     onSelect,
     onSelectMulti,
+    onChangeImmediate,
     selectedValues = [],
     translateItems = false,
     enableSearchText = false,
     onClose,
     onClean,
-    automatedMode = false,
     renderAfterItem,
-    emitAllSelectedValues = false,
     initialSelectedItems = [],
 }: Props<T>) => {
     const { t } = useTranslation();
@@ -42,114 +111,96 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     const [localSelectedValues, setLocalSelectedValues] = useState<T[]>(selectedValues);
     const [searchText, setSearchText] = useState<string>('');
 
+    // Keep local state in sync when external selection changes (e.g. parent re-render).
     useEffect(() => {
         setLocalSelectedValues(selectedValues);
     }, [selectedValues]);
 
+    // ----- helpers ----------------------------------------------------------
+
+    const getDisplayLabel = (item: SelectorItem<T>): string => {
+        const raw = translateItems ? t(item.label) : item.label;
+        return raw.charAt(0).toUpperCase() + raw.slice(1);
+    };
+
+    const normalizedSearch = searchText.trim().toLowerCase();
+
+    const highlightLabel = (label: string): ReactNode => {
+        if (!enableSearchText || !normalizedSearch) return label;
+
+        const escaped = normalizedSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escaped})`, 'gi');
+        return label.split(regex).map((part, i) =>
+            part.toLowerCase() === normalizedSearch
+                ? <span className="highlight font-bold" key={i}>{part}</span>
+                : part
+        );
+    };
+
+    // Fixed: all dependencies included so the list stays up-to-date.
+    const filteredItems = useMemo(() => {
+        if (!enableSearchText || !normalizedSearch) return items;
+        return items.filter(item => {
+            const label = translateItems ? t(item.label) : item.label;
+            return label.toLowerCase().includes(normalizedSearch);
+        });
+    }, [items, normalizedSearch, translateItems, t]);
+
+    const isSelected = (value: T) => localSelectedValues.includes(value);
+
+    // ----- interaction ------------------------------------------------------
+
+    const emitImmediate = (values: T[]) => {
+        onChangeImmediate?.(values);
+    };
+
     const handleItemClick = (item: SelectorItem<T>) => {
-        if (multiSelect) {
-            const newValues = [...localSelectedValues];
-            const selected = newValues.includes(item.value);
-
-            if (selected) {
-                const index = newValues.indexOf(item.value);
-                if (index > -1) {
-                    newValues.splice(index, 1);
-                }
-            } else {
-                if (item.exclusionCode) {
-                    const exclusionValues = items
-                        .filter(i => i.exclusionCode === item.exclusionCode && i.value !== item.value)
-                        .map(i => i.value);
-                    const filtered = newValues.filter(v => !exclusionValues.includes(v));
-                    filtered.push(item.value);
-                    setLocalSelectedValues(filtered);
-                    if (automatedMode && onSelectMulti) {
-                        if (emitAllSelectedValues) {
-                            onSelectMulti(filtered);
-                        } else {
-                            const selectedItems = items.filter((listItem) => filtered.includes(listItem.value));
-                            onSelectMulti(selectedItems.map((listItem) => listItem.value));
-                        }
-                    }
-                    return;
-                }
-                newValues.push(item.value);
-            }
-
-            setLocalSelectedValues(newValues);
-            if (automatedMode && onSelectMulti) {
-                if (emitAllSelectedValues) {
-                    onSelectMulti(newValues);
-                } else {
-                    const selectedItems = items.filter((listItem) => newValues.includes(listItem.value));
-                    onSelectMulti(selectedItems.map((listItem) => listItem.value));
-                }
-            }
-        } else {
+        if (!multiSelect) {
             onSelect?.(item.value);
+            return;
+        }
+
+        let newValues = [...localSelectedValues];
+        const alreadySelected = newValues.includes(item.value);
+
+        if (alreadySelected) {
+            newValues = newValues.filter(v => v !== item.value);
+        } else if (item.exclusionCode) {
+            // Remove mutually-exclusive siblings, then add the clicked item.
+            const siblings = items
+                .filter(i => i.exclusionCode === item.exclusionCode && i.value !== item.value)
+                .map(i => i.value);
+            newValues = [...newValues.filter(v => !siblings.includes(v)), item.value];
+        } else {
+            newValues = [...newValues, item.value];
+        }
+
+        setLocalSelectedValues(newValues);
+
+        if (onChangeImmediate) {
+            emitImmediate(newValues);
         }
     };
 
     const handleConfirm = () => {
-        if (multiSelect && onSelectMulti) {
-            if (emitAllSelectedValues) {
-                onSelectMulti(localSelectedValues);
-            } else {
-                const selectedItems = items.filter((item) => localSelectedValues.includes(item.value));
-                onSelectMulti(selectedItems.map((item) => item.value));
-            }
-        }
+        onSelectMulti?.(localSelectedValues);
         onClose?.();
     };
 
     const handleClean = () => {
-        if (onClean) {
-            onClean();
-        }
+        onClean?.();
         onClose?.();
-    }
-
-    const isSelected = (value: T) => localSelectedValues.includes(value);
-
-    const normalizedSearch = searchText.trim().toLowerCase();
-
-    const highlightLabel = (label: string) => {
-        if (!enableSearchText || !normalizedSearch) {
-            return label;
-        }
-
-        const escapedSearch = normalizedSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`(${escapedSearch})`, 'gi');
-        const parts = label.split(regex);
-
-        return parts.map((part, index) =>
-            part.toLowerCase() === normalizedSearch ? (
-                <span className="highlight font-bold" key={index}>
-                    {part}
-                </span>
-            ) : (
-                part
-            )
-        );
     };
 
-    const sortedItems = useMemo(() => {
-        if (!enableSearchText || !normalizedSearch) {
-            return items;
-        }
+    // Whether the "Confirm" / "Reset" footer should be visible.
+    const isAutomated = !!onChangeImmediate;
 
-        return items.filter((item) => {
-            const label = translateItems ? t(item.label) : item.label;
-            return label.toLowerCase().includes(normalizedSearch);
-        });
-    }, [normalizedSearch]);
+    // ----- render -----------------------------------------------------------
 
     return (
         <>
             {enableSearchText && (
                 <div className="px-4 py-2">
-
                     <FloatingInput
                         mode={FloatingInputModes.THIN}
                         name="freeText"
@@ -157,103 +208,54 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                         onChange={e => setSearchText(e.target.value)}
                         label={t("common.search")}
                         fullWidth
-                        icon={ !!searchText ? <Close /> : <Search /> }
-                        onIconClick={(e) => {
+                        icon={!!searchText ? <Close /> : <Search />}
+                        onIconClick={e => {
                             e.preventDefault();
                             setSearchText('');
                         }}
                     />
                 </div>
             )}
+
             <div className="bottom-sheet-content">
-                {/* Initially selected items - always shown at top, never reorganized */}
-                {initialSelectedItems.map((item) => {
-                    const translatedLabel = translateItems ? t(item.label) : item.label;
-                    const displayLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
-                    const selected = isSelected(item.value);
+                {/* Pinned items – always at the top, never re-sorted */}
+                {initialSelectedItems.map(item => (
+                    <SelectorItemRow
+                        key={String(item.value)}
+                        item={{ ...item, label: getDisplayLabel(item) }}
+                        selected={isSelected(item.value)}
+                        last={false}
+                        multiSelect={multiSelect}
+                        highlightLabel={highlightLabel}
+                        onItemClick={handleItemClick}
+                        renderAfterItem={renderAfterItem}
+                    />
+                ))}
 
-                    return (
-                        <div key={String(item.value)}>
-                            <div
-                                className={`bottom-sheet-item ripple${selected ? ' selected' : ''}`}
-                                onClick={() => handleItemClick(item)}
-                            >
-                                {multiSelect && (
-                                    <div className={`bottom-sheet-checkbox mr-3 ${selected ? 'checked' : ''}`}>
-                                        {selected && <FaCheck size={14} />}
-                                    </div>
-                                )}
-                                <div className="bottom-sheet-item-content">
-                                    {item.icon && (
-                                        <span className="bottom-sheet-item-icon">{item.icon}</span>
-                                    )}
-                                    {item.src && (
-                                        <img
-                                            src={item.src}
-                                            alt={displayLabel}
-                                            className="bottom-sheet-item-image"
-                                        />
-                                    )}
-                                    <span className="bottom-sheet-item-label">
-                                        {highlightLabel(displayLabel)}
-                                    </span>
-                                </div>
-                            </div>
-                            {renderAfterItem?.(item, selected)}
-                        </div>
-                    );
-                })}
-
-                {/* Other items */}
-                {sortedItems.map((item) => {
-                    const translatedLabel = translateItems ? t(item.label) : item.label;
-                    const displayLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
-                    const last = item === sortedItems[sortedItems.length - 1];
-                    const selected = isSelected(item.value);
-
-                    return (
-                        <div key={String(item.value)}>
-                            <div
-                                className={`bottom-sheet-item ripple${selected ? ' selected' : ''}${last ? ' last' : ''}`}
-                                onClick={() => handleItemClick(item)}
-                            >
-                                {multiSelect && (
-                                    <div className={`bottom-sheet-checkbox mr-3 ${selected ? 'checked' : ''}`}>
-                                        {selected && <FaCheck size={14} />}
-                                    </div>
-                                )}
-                                <div className="bottom-sheet-item-content">
-                                    {item.icon && (
-                                        <span className="bottom-sheet-item-icon">{item.icon}</span>
-                                    )}
-                                    {item.src && (
-                                        <img
-                                            src={item.src}
-                                            alt={displayLabel}
-                                            className="bottom-sheet-item-image"
-                                        />
-                                    )}
-                                    <span className="bottom-sheet-item-label">
-                                        {highlightLabel(displayLabel)}
-                                    </span>
-                                </div>
-                            </div>
-                            {renderAfterItem?.(item, selected)}
-                        </div>
-                    );
-                })}
+                {/* Main list */}
+                {filteredItems.map((item, index) => (
+                    <SelectorItemRow
+                        key={String(item.value)}
+                        item={{ ...item, label: getDisplayLabel(item) }}
+                        selected={isSelected(item.value)}
+                        last={index === filteredItems.length - 1}
+                        multiSelect={multiSelect}
+                        highlightLabel={highlightLabel}
+                        onItemClick={handleItemClick}
+                        renderAfterItem={renderAfterItem}
+                    />
+                ))}
             </div>
 
-            {!automatedMode && (
+            {!isAutomated && (
                 <div className="flex gap-2 bottom-sheet-footer py-3">
                     {onClean && (
-                        <Button onClick={handleClean} mode={BtnModes.ERROR_TXT} fullWidth={true}>
+                        <Button onClick={handleClean} mode={BtnModes.ERROR_TXT} fullWidth>
                             {t("common.reset")}
                         </Button>
                     )}
-
                     {multiSelect && (
-                        <Button onClick={handleConfirm} mode={BtnModes.PRIMARY_TXT} fullWidth={true}>
+                        <Button onClick={handleConfirm} mode={BtnModes.PRIMARY_TXT} fullWidth>
                             {t("common.confirm")}
                         </Button>
                     )}
@@ -261,6 +263,6 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
             )}
         </>
     );
-}
+};
 
 export default SelectorItems;

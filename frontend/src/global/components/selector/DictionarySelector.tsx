@@ -1,5 +1,4 @@
-
-import { useState, useEffect, forwardRef } from 'react';
+import { useState, useEffect, useCallback, forwardRef } from 'react';
 import { DictionarySelectorInterface, SelectorItem, SelectorValue } from 'global/interface/controls.interface';
 import { DictionaryI } from '@shared/interfaces/DictionaryI';
 import { DictionaryService } from 'global/services/DictionaryService';
@@ -8,16 +7,103 @@ import { useTranslation } from 'react-i18next';
 import FloatingSelector from '../selector/FloatingSelector';
 import FloatingSelectorMulti from './FloatingSelectorMulti';
 
+// ---------------------------------------------------------------------------
+// Props
+// ---------------------------------------------------------------------------
+
 interface DictionarySelectorProps extends DictionarySelectorInterface<string> {
     disabledValues?: string[];
-    elementLabelTranslationKey?: string
-    showLabel?: boolean
+    /** i18n key suffix used for element labels (default: 'NAME'). */
+    elementLabelTranslationKey?: string;
     emitValueCode?: string;
     onDictionaryChange?: (dictionary: DictionaryI | null) => void;
-    enableSearchText?: boolean;
     skipSort?: boolean;
 }
-const DictionarySelector = forwardRef((
+
+// ---------------------------------------------------------------------------
+// useDictionary – data-fetching hook (separated from rendering concern)
+// ---------------------------------------------------------------------------
+
+interface UseDictionaryResult {
+    loading: boolean;
+    items: SelectorItem<string>[];
+    dictionary: DictionaryI | null;
+}
+
+function useDictionary(
+    code: string,
+    groupCode: string | undefined,
+    options: {
+        disabledValues: string[];
+        elementLabelTranslationKey: string;
+        skipSort: boolean;
+        onDictionaryChange?: (dictionary: DictionaryI | null) => void;
+    }
+): UseDictionaryResult {
+    const { t } = useTranslation();
+    const [loading, setLoading] = useState(false);
+    const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
+
+    useEffect(() => {
+        let cancelled = false;
+        const load = async () => {
+            setLoading(true);
+            try {
+                const res = await DictionaryService.getDictionary(code);
+                if (!cancelled) {
+                    setDictionary(res);
+                    options.onDictionaryChange?.(res);
+                }
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        };
+        load();
+        return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [code]);
+
+    // Notify parent when groupCode changes (dictionary stays the same).
+    useEffect(() => {
+        options.onDictionaryChange?.(dictionary);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [groupCode]);
+
+    const elements = useCallback((): DictionaryI['elements'] => {
+        if (!dictionary) return [];
+        if (!groupCode) return dictionary.elements;
+        const group = dictionary.groups.find(g => g.code === groupCode);
+        if (!group) return dictionary.elements;
+        return dictionary.elements.filter(el => group.elementCodes.includes(el.code));
+    }, [dictionary, groupCode]);
+
+    const items: SelectorItem<string>[] = (() => {
+        const filtered = elements();
+        const sorted = options.skipSort
+            ? filtered
+            : [...filtered].sort((a, b) => a.code.localeCompare(b.code));
+
+        return sorted.map(element => {
+            const key = `dictionary.${dictionary?.code}.${options.elementLabelTranslationKey}.${element.code}`;
+            const raw = t(key);
+            return {
+                label: raw.charAt(0).toUpperCase() + raw.slice(1),
+                value: String(element.code),
+                src: element.values.SRC,
+                disabled: options.disabledValues.includes(String(element.code)),
+                exclusionCode: element.values.EXCLUSION_CODE ?? undefined,
+            };
+        });
+    })();
+
+    return { loading, items, dictionary };
+}
+
+// ---------------------------------------------------------------------------
+// DictionarySelector
+// ---------------------------------------------------------------------------
+
+const DictionarySelector = forwardRef<HTMLDivElement, DictionarySelectorProps>((
     {
         onSelect,
         id,
@@ -38,137 +124,75 @@ const DictionarySelector = forwardRef((
         enableSearchText = false,
         showLabel,
         onDictionaryChange,
-        skipSort = false
-    }: DictionarySelectorProps,
-    ref: React.Ref<any>
+        skipSort = false,
+    },
+    ref
 ) => {
-
-    if (valueInput) {
-        if (type === 'single' && Array.isArray(valueInput)) {
-            throw new Error("For single select, value must not be an array");
-        }
-        if (type === 'multi' && !Array.isArray(valueInput)) {
-            throw new Error("For multi select, value must be an array");
-        }
-    }
-
-    const [loading, setLoading] = useState(false);
-    const [dictionary, setDictionary] = useState<DictionaryI | null>(null);
-
     const { t } = useTranslation();
 
-    useEffect(() => {
-        const initDictionary = async () => {
-            setLoading(true);
-            const res = await DictionaryService.getDictionary(code);
-            setDictionary(res);
-            onDictionaryChange?.(res);
-            setLoading(false);
-        }
-        initDictionary();
-    }, [code, onDictionaryChange]);
+    const { loading, items, dictionary } = useDictionary(code, groupCode, {
+        disabledValues,
+        elementLabelTranslationKey,
+        skipSort,
+        onDictionaryChange,
+    });
 
-    // Filter elements by groupCode if provided
-    const getFilteredElements = (dict: DictionaryI | null): DictionaryI['elements'] => {
+    if (loading) return <Loading />;
+    if (!dictionary) return <div>{t('validation.dictionaryNotFound')}</div>;
 
-        if (!dict) return [];
-        
-        if (!groupCode) {
-            return dict.elements;
-        }
-
-        const group = dict.groups.find(g => g.code === groupCode);
-        if (!group) {
-            return dict.elements;
-        }
-
-        return dict.elements.filter(el => group.elementCodes.includes(el.code));
+    const commonProps = {
+        id,
+        label,
+        fullWidth,
+        disabled,
+        required,
+        center,
+        className,
+        error,
+        enableSearchText,
+        showLabel,
     };
 
-    // Emit dictionary change when groupCode changes
-    useEffect(() => {
-        onDictionaryChange?.(dictionary);
-    }, [groupCode, onDictionaryChange, dictionary]);
-
-    if (loading) {
-        return <Loading />;
-    }
-
-    if (!dictionary) {
-        return <div>{t('validation.dictionaryNotFound')}</div>;
-    }
-
-    const handleSelect = (item: string | null): void => {
-        if (onSelect) {
-            const element = dictionary.elements.find(el => el.code === item);
-            onSelect(item, element);
-        }
-    }
-
-    const filteredElements = getFilteredElements(dictionary);
-
-    const sortedElements = skipSort ? filteredElements : filteredElements.sort((a, b) => a.code.localeCompare(b.code));
-
-    const items: SelectorItem<string>[] = sortedElements
-        .map(element => {
-            const translationKey = `dictionary.${dictionary.code}.${elementLabelTranslationKey}.${element.code}`;
-            const translatedLabel = t(translationKey);
-            const capitalizedLabel = translatedLabel.charAt(0).toUpperCase() + translatedLabel.slice(1);
-            return {
-                label: capitalizedLabel,
-                value: String(element.code),
-                src: element.values.SRC,
-                disabled: disabledValues.includes(String(element.code)),
-                exclusionCode: element.values.EXCLUSION_CODE ?? undefined,
-            };
-        });
-
     if (type === 'single') {
-        const selectedItem: SelectorItem<string> | null = items.find(item => item.value === valueInput) || null;
-        return <FloatingSelector
-            ref={ref}
-            items={items}
-            id={id}
-            label={label}
-            fullWidth={fullWidth}
-            disabled={disabled}
-            required={required}
-            center={center}
-            className={className}
-            value={selectedItem}
-            onSelect={handleSelect as (item: SelectorValue | null) => void}
-            error={error}
-            enableSearchText={enableSearchText}
-            showLabel={showLabel}
-        />;
+        const selectedItem = items.find(item => item.value === valueInput) ?? null;
+
+        const handleSelect = (value: SelectorValue | null) => {
+            if (!onSelect) return;
+            const element = dictionary.elements.find(el => el.code === value);
+            onSelect(value as string | null, element);
+        };
+
+        return (
+            <FloatingSelector
+                ref={ref}
+                {...commonProps}
+                items={items}
+                value={selectedItem}
+                onSelect={handleSelect}
+            />
+        );
     }
 
     if (type === 'multi') {
-        // valueInput is array of selected values
-        const selectedItems: SelectorItem<string>[] = Array.isArray(valueInput)
+        const selectedItems = Array.isArray(valueInput)
             ? items.filter(item => valueInput.includes(item.value))
             : [];
-        const handleSelectMulti = onSelectMulti ?? (() => {});
-        return <FloatingSelectorMulti
-            items={items}
-            values={selectedItems}
-            onSelect={handleSelectMulti}
-            id={id}
-            label={label}
-            fullWidth={fullWidth}
-            disabled={disabled}
-            required={required}
-            center={center}
-            className={className}
-            error={error}
-            displayElementsAsChips={true}
-            enableSearchText={enableSearchText}
-            showLabel={showLabel}
-        />;
+
+        return (
+            <FloatingSelectorMulti
+                ref={ref}
+                {...commonProps}
+                items={items}
+                values={selectedItems}
+                onSelect={onSelectMulti ?? (() => {})}
+                displayElementsAsChips
+            />
+        );
     }
 
     return null;
-
 });
+
+DictionarySelector.displayName = 'DictionarySelector';
 
 export default DictionarySelector;

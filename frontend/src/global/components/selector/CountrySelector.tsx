@@ -33,7 +33,7 @@ interface CountrySelectorProps {
  * Country selector component that uses LANGUAGES dictionary
  * but displays COUNTRY_NAME and emits COUNTRY_CODE
  */
-const CountrySelector = forwardRef((
+const CountrySelector = forwardRef<HTMLDivElement, CountrySelectorProps>((
     {
         value,
         onSelect,
@@ -50,7 +50,7 @@ const CountrySelector = forwardRef((
         groupCode,
         includeWorldwide = false,
     }: CountrySelectorProps,
-    ref: React.Ref<any>
+    ref: React.Ref<HTMLDivElement>
 ) => {
     const [loading, setLoading] = useState(false);
     const [dictionary, setDictionary] = useState<DictionaryI | null>(null);

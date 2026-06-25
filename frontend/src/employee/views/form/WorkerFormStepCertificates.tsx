@@ -107,12 +107,10 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                             items={items}
                             selectedValues={selectedCertificates}
                             multiSelect
-                            automatedMode
                             translateItems
-                            emitAllSelectedValues
-                            onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
+                            onChangeImmediate={(vals) => formRef.setValue('certificates.certificates', vals)}
                             onClean={() => formRef.setValue('certificates.certificates', [])}
-                        ></SelectorItems>
+                        />
                     )}
 
                     <h3 className="form-subheader mt-5">
@@ -123,12 +121,10 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                         items={mainItems}
                         selectedValues={selectedCertificates}
                         multiSelect
-                        automatedMode
                         translateItems
-                        emitAllSelectedValues
-                        onSelectMulti={(items) => formRef.setValue('certificates.certificates', items)}
+                        onChangeImmediate={(vals) => formRef.setValue('certificates.certificates', vals)}
                         onClean={() => formRef.setValue('certificates.certificates', [])}
-                    ></SelectorItems>
+                    />
                 </>
             )}
         </>

@@ -1,109 +1,77 @@
-import { SelectorValue, SelectorMultiProps, SelectorItem } from 'global/interface/controls.interface';
+import { forwardRef } from 'react';
+import { SelectorValue, SelectorMultiProps } from 'global/interface/controls.interface';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
-import ArrowIcon from '../controls/ArrowIcon';
-import FloatingLabel from '../controls/FloatingLabel';
-import FormError from '../controls/FormError';
+import SelectorTrigger from './SelectorTrigger';
 
-function FloatingSelectorMulti<T extends SelectorValue = SelectorValue>({
-    items,
-    values,
-    onSelect,
-    id,
-    label,
-    fullWidth = false,
-    disabled = false,
-    required = false,
-    center = false,
-    className = '',
-    error,
-    displayElementsAsChips = false,
-    enableSearchText = false,
-}: SelectorMultiProps<T>) {
-
+const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValue>(
+    {
+        items,
+        values,
+        onSelect,
+        id,
+        label,
+        fullWidth = false,
+        disabled = false,
+        required = false,
+        center = false,
+        className = '',
+        error,
+        displayElementsAsChips = false,
+        enableSearchText = false,
+    }: SelectorMultiProps<T>,
+    ref: React.Ref<HTMLDivElement>
+) => {
     const bottomSheet = useBottomSheet();
-    
-    let myClass = `pp-control min-height pp-dropdown floating-input`;
-    if (fullWidth) {
-        myClass += ' w-full';
-    } else {
-        myClass += ' w-fit';
-    }
-    if (disabled) {
-        myClass += ' opacity-20';
-    }
-    if (error) {
-        myClass += ' pp-control-error';
-    }
 
-    const hasValue = () => {
-        return Array.isArray(values) && values.length > 0;
-    };
-
-    const isLabelFloating = hasValue();
+    const hasValue = Array.isArray(values) && values.length > 0;
 
     const handleOpen = () => {
         bottomSheet.openSelector({
-            items: items,
-            selectedValues: values ? values.map(v => v.value) : [],
-            title: label || '',
+            items,
+            selectedValues: values.map(v => v.value),
+            title: label ?? '',
             multiSelect: true,
-            enableSearchText: enableSearchText,
-            onSelectMulti: (items) => {
-                onSelect(items);
-            },
-            onClean() {
-                onSelect([]);
-            },
+            enableSearchText,
+            onSelectMulti: (selected) => onSelect(selected as T[]),
+            onClean: () => onSelect([]),
         });
-    }
+    };
 
     return (
-        <div
-            className={`floating-input-wrapper ${className || ''}${center ? ' mx-auto' : ''}`}
-            style={{ position: 'relative' }}
+        <SelectorTrigger
+            ref={ref}
+            id={id}
+            label={label}
+            fullWidth={fullWidth}
+            disabled={disabled}
+            required={required}
+            center={center}
+            className={className}
+            error={error}
+            isActive={hasValue}
+            onClick={handleOpen}
         >
-            <div className="floating-input-container">
-                <div
-                    className={myClass}
-                    tabIndex={disabled ? -1 : 0}
-                    aria-disabled={disabled}
-                    onClick={() => {
-                        if (disabled) return;
-                        handleOpen();
-                    }}
-                >
-                    <span className="dropdown-selected">
-                            {displayElementsAsChips ? (
-                                <div className="chip-container">
-                                    {Array.isArray(values) && values.length > 0
-                                        ? values.map(v => (
-                                            <div key={String(v.value)} className="search-chip primary">
-                                                {v.label}
-                                            </div>
-                                        ))
-                                        : <div className='empty-chips'></div>}
+            <span className="dropdown-selected">
+                {displayElementsAsChips ? (
+                    <div className="chip-container">
+                        {hasValue
+                            ? values.map(v => (
+                                <div key={String(v.value)} className="search-chip primary">
+                                    {v.label}
                                 </div>
-                            ) : (
-                                Array.isArray(values) && values.length > 0
-                                    ? values.map(v => v.label).join(', ')
-                                    : <span className="opacity-0">placeholder</span>
-                            )}
-                            <ArrowIcon open={true} />
-                    </span>
-                </div>
-
-                <FloatingLabel
-                    htmlFor={id}
-                    label={label}
-                    required={required}
-                    isActive={isLabelFloating}
-                    error={error}
-                />
-            </div>
-
-            <FormError error={error} />
-        </div>
+                            ))
+                            : <div className="empty-chips" />}
+                    </div>
+                ) : (
+                    hasValue
+                        ? values.map(v => v.label).join(', ')
+                        : <span className="opacity-0">placeholder</span>
+                )}
+            </span>
+        </SelectorTrigger>
     );
-}
+});
+
+FloatingSelectorMulti.displayName = 'FloatingSelectorMulti';
 
 export default FloatingSelectorMulti;

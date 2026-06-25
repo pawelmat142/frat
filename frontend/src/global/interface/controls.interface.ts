@@ -67,60 +67,42 @@ export interface InputInterface {
     mode?: FloatingInputMode;
 }
 
-export interface SelectorInterface<T extends SelectorValue = SelectorValue> {
+/** Shared layout/styling props common to all selector variants. */
+export interface BaseSelectorProps {
+    id?: string;
+    label?: string;
+    fullWidth?: boolean;
+    disabled?: boolean;
+    required?: boolean;
+    center?: boolean;
+    className?: string;
+    error?: { message?: string } | null;
+    enableSearchText?: boolean;
+    showLabel?: boolean;
+}
+
+export interface SelectorInterface<T extends SelectorValue = SelectorValue> extends BaseSelectorProps {
     items: SelectorItem<T>[];
     value: SelectorItem<T> | null;
     onSelect: (item: T | null) => void;
-    id?: string;
-    label?: string;
-    fullWidth?: boolean;
-    disabled?: boolean;
-    required?: boolean;
-    center?: boolean;
-    className?: string;
-    error?: { message?: string } | null
-    enableSearchText?: boolean,
-    showLabel?: boolean,
 }
 
-export interface SelectorMultiProps<T extends SelectorValue = SelectorValue> {
+export interface SelectorMultiProps<T extends SelectorValue = SelectorValue> extends BaseSelectorProps {
     items: SelectorItem<T>[];
     values: SelectorItem<T>[];
     onSelect: (items: T[]) => void;
-    id?: string;
-    label?: string;
-    fullWidth?: boolean;
-    disabled?: boolean;
-    required?: boolean;
-    center?: boolean;
-    className?: string;
-    error?: { message?: string } | null
-    enableSearchText?: boolean,
-    displayElementsAsChips?: boolean,
-    showChipsRemoveButton?: boolean,
-    showLabel?: boolean,
+    displayElementsAsChips?: boolean;
+    showChipsRemoveButton?: boolean;
 }
 
-export interface DictionarySelectorInterface<T extends SelectorValue = SelectorValue> {
+export interface DictionarySelectorInterface<T extends SelectorValue = SelectorValue> extends BaseSelectorProps {
     type?: 'single' | 'multi';
     code: string;
     groupCode?: string;
-    
     valueInput?: string | string[];
     onSelect?: (value: T | null, dictionaryElement?: DictionaryElement) => void;
     onSelectMulti?: (items: T[]) => void;
-    
-    id?: string;
-    label?: string;
-    fullWidth?: boolean;
-    disabled?: boolean;
-    required?: boolean;
-    center?: boolean;
-    className?: string;
-    error?: { message?: string } | null
-    enableSearchText?: boolean,
-    displayElementsAsChips?: boolean,
-    showLabel?: boolean,
+    displayElementsAsChips?: boolean;
 }
 
 export type SelectorValue = string | number | Date;
