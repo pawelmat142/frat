@@ -58,7 +58,6 @@
 					- ControlLabel.tsx
 					- DateInput.tsx
 					- Selector.tsx
-					- SelectorMulti.tsx
 					- SelectorOptions.tsx
 					- IconButon.tsx
 					- Input.tsx
