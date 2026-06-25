@@ -136,6 +136,18 @@ const DictionaryView: React.FC = () => {
                     <div className="mb-4 secondary-text">Description: {dictionary.description}</div>
                 )}
 
+                {/* Add element button and form */}
+                <DictionaryActionsBar
+                    dictionary={dictionary}
+                    onSave={handleSave}
+                    onToggleStatus={() => setDictionary({
+                        ...dictionary,
+                        status: dictionary.status === DictionaryStatuses.ACTIVE
+                            ? DictionaryStatuses.INACTIVE
+                            : DictionaryStatuses.ACTIVE
+                    })}
+                />
+
                 <SearchAndPagination
                     searchText={searchText}
                     onSearchChange={setSearchText}
@@ -151,19 +163,6 @@ const DictionaryView: React.FC = () => {
                     dictionary={dictionary}
                     elements={paginatedElements}
                     onDeleteElement={handleDeleteElement}
-                />
-
-
-                {/* Add element button and form */}
-                <DictionaryActionsBar
-                    dictionary={dictionary}
-                    onSave={handleSave}
-                    onToggleStatus={() => setDictionary({
-                        ...dictionary,
-                        status: dictionary.status === DictionaryStatuses.ACTIVE
-                            ? DictionaryStatuses.INACTIVE
-                            : DictionaryStatuses.ACTIVE
-                    })}
                 />
 
                 <DictionaryGroups

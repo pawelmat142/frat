@@ -40,8 +40,8 @@ const SearchAndPagination: React.FC<Props> = ({
                     onChange={(e) => onSearchChange(e.target.value)}
                 />
             </div>
-            {totalPages > 1 && (
-                <div className="flex-[2] flex justify-end items-center gap-4">
+            <div className="flex-[2] flex justify-end items-center gap-4">
+            {totalPages > 1 && (<>
                     <Button
                         mode={BtnModes.PRIMARY_TXT}
                         onClick={() => onPageChange(currentPage - 1)}
@@ -59,8 +59,9 @@ const SearchAndPagination: React.FC<Props> = ({
                     >
                         Next
                     </Button>
-                </div>
+                </>
             )}
+            </div>
         </div>
     );
 };
