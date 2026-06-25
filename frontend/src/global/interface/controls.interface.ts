@@ -131,6 +131,7 @@ export interface SelectorItem<T extends SelectorValue = SelectorValue> {
     icon?: React.ReactNode;
     src?: string;
     onClick?: () => void;
+    exclusionCode?: string;
 }
 
 export interface MenuItem {

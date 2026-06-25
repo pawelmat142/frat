@@ -57,6 +57,23 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                     newValues.splice(index, 1);
                 }
             } else {
+                if (item.exclusionCode) {
+                    const exclusionValues = items
+                        .filter(i => i.exclusionCode === item.exclusionCode && i.value !== item.value)
+                        .map(i => i.value);
+                    const filtered = newValues.filter(v => !exclusionValues.includes(v));
+                    filtered.push(item.value);
+                    setLocalSelectedValues(filtered);
+                    if (automatedMode && onSelectMulti) {
+                        if (emitAllSelectedValues) {
+                            onSelectMulti(filtered);
+                        } else {
+                            const selectedItems = items.filter((listItem) => filtered.includes(listItem.value));
+                            onSelectMulti(selectedItems.map((listItem) => listItem.value));
+                        }
+                    }
+                    return;
+                }
                 newValues.push(item.value);
             }
 

@@ -119,6 +119,7 @@ const DictionarySelector = forwardRef((
                 value: String(element.code),
                 src: element.values.SRC,
                 disabled: disabledValues.includes(String(element.code)),
+                exclusionCode: element.values.EXCLUSION_CODE ?? undefined,
             };
         });
 
