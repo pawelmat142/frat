@@ -150,10 +150,6 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
 
     // ----- interaction ------------------------------------------------------
 
-    const emitImmediate = (values: T[]) => {
-        onChangeImmediate?.(values);
-    };
-
     const handleItemClick = (item: SelectorItem<T>) => {
         if (!multiSelect) {
             onSelect?.(item.value);
@@ -176,10 +172,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
         }
 
         setLocalSelectedValues(newValues);
-
-        if (onChangeImmediate) {
-            emitImmediate(newValues);
-        }
+        onChangeImmediate?.(newValues);
     };
 
     const handleConfirm = () => {

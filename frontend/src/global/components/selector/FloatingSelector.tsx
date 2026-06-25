@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import React from 'react';
 import { SelectorValue, SelectorInterface } from 'global/interface/controls.interface';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import SelectorTrigger from './SelectorTrigger';
@@ -69,4 +70,8 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
 
 FloatingSelector.displayName = 'FloatingSelector';
 
-export default FloatingSelector;
+// Cast preserves the generic type parameter T and exposes `ref` in JSX,
+// which plain `forwardRef` inference loses for generic components.
+export default FloatingSelector as <T extends SelectorValue = SelectorValue>(
+    props: SelectorInterface<T> & React.RefAttributes<HTMLDivElement>
+) => React.ReactElement | null;
