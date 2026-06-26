@@ -8,6 +8,7 @@ export const CloudinaryTags = {
     WORKER_PROFILE: 'worker-profile',
     CHAT: 'chat',
     CHAT_IMAGE: 'chat-image',
+    CHAT_FILE: 'chat-file',
     chatId: (chatId: string) => `chat-id:${chatId}`,
 } as const 
 
@@ -19,6 +20,7 @@ export const CloudinaryFolderNames = {
     OFFERS: 'offers',
     WORKER_PROFILE: 'worker-profile',
     CHAT_IMAGES: 'chat-images',
+    CHAT_FILES: 'chat-files',
 } as const;
 
 export type CloudinaryFolderName = (typeof CloudinaryFolderNames)[keyof typeof CloudinaryFolderNames];

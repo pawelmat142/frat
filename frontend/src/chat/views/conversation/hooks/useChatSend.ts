@@ -32,7 +32,9 @@ export const useChatSend = ({ chatId, pendingAttachments, clearPendingAttachment
 
             if (pendingAttachments.length) {
                 const uploaded = await Promise.all(
-                    pendingAttachments.map(p => CloudinaryService.uploadChatImage(p.optimizedFile, numericChatId)),
+                    pendingAttachments.map(p => p.isImage
+                        ? CloudinaryService.uploadChatImage(p.optimizedFile, numericChatId)
+                        : CloudinaryService.uploadChatFile(p.file, numericChatId)),
                 );
                 imageRefs = uploaded.map(r => ({ url: r.url, publicId: r.publicId }));
             }

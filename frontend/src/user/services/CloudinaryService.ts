@@ -31,6 +31,41 @@ const validateCloudinaryConfig = (): void => {
 };
 
 export const CloudinaryService = {
+
+    /**
+     * Uploads a chat file with optional compression
+     * @param file - The file to upload
+     * @param chatId - Chat ID for organizing files and tagging
+     * @returns Promise with the AvatarRef (url + publicId)
+     */
+    uploadChatFile: async (file: File, chatId: number): Promise<AvatarRef> => {
+        const tags = [
+            CloudinaryTags.CHAT,
+            CloudinaryTags.CHAT_FILE,
+            CloudinaryTags.chatId(String(chatId)),
+        ];
+        const folder = `${CloudinaryFolderNames.CHAT_FILES}/${chatId}`;
+        return CloudinaryService.uploadFile(file, folder, tags);
+    },
+
+    /**
+     * Uploads a chat image with optional compression
+     * @param file - The image file to upload
+     * @param chatId - Chat ID for organizing files and tagging
+     * @returns Promise with the AvatarRef (url + publicId)
+     */
+    uploadChatImage: async (file: File, chatId: number): Promise<AvatarRef> => {
+        const resizedFile = await FileUtil.resizeForMobile(file);
+        const tags = [
+            CloudinaryTags.CHAT,
+            CloudinaryTags.CHAT_IMAGE,
+            CloudinaryTags.chatId(String(chatId)),
+        ];
+        const folder = `${CloudinaryFolderNames.CHAT_IMAGES}/${chatId}`;
+        return CloudinaryService.uploadImage(resizedFile, folder, tags);
+    },
+
+
     /**
      * Uploads an image file to Cloudinary
      * @param file - The image file to upload
@@ -83,20 +118,38 @@ export const CloudinaryService = {
     },
 
     /**
-     * Uploads a chat image with optional compression
-     * @param file - The image file to upload
-     * @param chatId - Chat ID for organizing files and tagging
-     * @returns Promise with the AvatarRef (url + publicId)
+     * Uploads a raw (non-image) file to Cloudinary (e.g. txt, pdf, csv)
+     * @param file - The file to upload
+     * @param folder - Optional folder path in Cloudinary
+     * @param tags - Optional tags for searching/filtering assets
+     * @returns Promise with the upload result containing URL and public ID
      */
-    uploadChatImage: async (file: File, chatId: number): Promise<AvatarRef> => {
-        const resizedFile = await FileUtil.resizeForMobile(file);
-        const tags = [
-            CloudinaryTags.CHAT,
-            CloudinaryTags.CHAT_IMAGE,
-            CloudinaryTags.chatId(String(chatId)),
-        ];
-        const folder = `${CloudinaryFolderNames.CHAT_IMAGES}/${chatId}`;
-        return CloudinaryService.uploadImage(resizedFile, folder, tags);
+    uploadFile: async (file: File, folder?: string, tags?: string[]): Promise<AvatarRef> => {
+        validateCloudinaryConfig();
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET!);
+
+        if (folder) {
+            formData.append('folder', folder);
+        }
+
+        if (tags?.length) {
+            formData.append('tags', tags.join(','));
+        }
+
+        const { data } = await axios.post<CloudinaryUploadResponse>(
+            `${CLOUDINARY_BASE_URL}/${CLOUDINARY_CLOUD_NAME}/raw/upload`,
+            formData
+        );
+
+        return {
+            url: data.secure_url,
+            publicId: data.public_id,
+        };
     },
+
+
 
 }
