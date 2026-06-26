@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { Controller, Get, Post, Param, Query, UseGuards, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Param, Query, UseGuards, Delete } from '@nestjs/common';
 import { ChatService } from './services/ChatService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
@@ -99,6 +99,32 @@ export class ChatController {
     const result = await this.chatService.unblockChat(user.uid, Number(chatId));
     this.chatGateway.notifyAboutRefreshChat(result);
     return result;
+  }
+
+  // ─── E2E public key endpoints ─────────────────────────────────────────────
+
+  /**
+   * Save or update the caller's E2E chat public key (Curve25519, base64).
+   * Called once per device after key pair generation.
+   */
+  @Put('e2e/public-key')
+  async saveChatPublicKey(
+    @CurrentUser() user: UserI,
+    @Body('publicKey') publicKey: string,
+  ): Promise<{ success: boolean }> {
+    await this.chatService.saveChatPublicKey(user.uid, publicKey);
+    return { success: true };
+  }
+
+  /**
+   * Fetch the E2E chat public key for any user by uid.
+   * Returns null if the user has not yet published a key (E2E not set up on any device).
+   */
+  @Get('e2e/public-key/:uid')
+  getChatPublicKey(
+    @Param('uid') uid: string,
+  ): Promise<{ publicKey: string | null }> {
+    return this.chatService.getChatPublicKey(uid).then(publicKey => ({ publicKey }));
   }
 
   /**

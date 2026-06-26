@@ -4,10 +4,14 @@ import { createContext, useRef, useState } from "react";
 import { chatSocket } from "./services/ChatSocketService";
 import { NotificationI, NotificationIcons, NotificationTypes } from "@shared/interfaces/NotificationI";
 import { useUserContext } from "user/UserProvider";
+import ChatCryptoService from "./services/ChatCryptoService";
 
 interface ChatsContextType {
     chats: ChatWithMembers[],
     unreadMsgNotifications: NotificationI[],
+    /** True when E2E is enabled and keys were freshly generated on this device (no prior key in localStorage).
+     *  Used to show a one-time "new device" warning in the UI. */
+    isNewE2EDevice: boolean,
 }
 
 const ChatsContext = createContext<ChatsContextType | undefined>(undefined);
@@ -19,6 +23,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const [chats, setChats] = useState<ChatWithMembers[]>([])
     const [unreadMsgNotifications, setUnreadMsgNotifications] = useState<NotificationI[]>([])
+    const [isNewE2EDevice, setIsNewE2EDevice] = useState(false)
 
     const chatsRef = useRef<ChatWithMembers[]>(chats)
     chatsRef.current = chats
@@ -46,6 +51,27 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const onInit = async () => {
         loadChats()
         chatSocket.registerChatListener(loadChatListener);
+        await initE2EKeys();
+    }
+
+    const initE2EKeys = async () => {
+        if (!ChatCryptoService.isE2EEnabled()) return;
+
+        let keyPair = ChatCryptoService.loadKeyPair();
+        const isNewDevice = !keyPair;
+
+        if (isNewDevice) {
+            keyPair = ChatCryptoService.generateKeyPair();
+            ChatCryptoService.saveKeyPair(keyPair);
+            setIsNewE2EDevice(true);
+        }
+
+        try {
+            // Idempotent upsert — ensures server always has the current device's public key.
+            await ChatCryptoService.publishPublicKey(keyPair.publicKey);
+        } catch (err) {
+            console.error('ChatCryptoService: failed to publish public key', err);
+        }
     }
 
     const loadChats = async () => {
@@ -110,13 +136,20 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     unreadCount++
                 }
 
+                // For E2E-encrypted messages, never show ciphertext in notifications.
+                // The backend already stores '🔒 Encrypted message' as latestMessageContent,
+                // but real-time message.content may still be a raw ciphertext payload.
+                const notifMessage = isCurrentMsg
+                    ? (ChatCryptoService.isE2EContent(message.content) ? '🔒 Encrypted message' : message.content)
+                    : (chat.latestMessageContent || '');
+
                 const notification: NotificationI = {
                     notificationId: timestamp + chat.chatId,
                     recipientUid: meChatMember.uid,
                     type: NotificationTypes.NEW_MESSAGE,
                     targetId: chat.chatId.toString(),
                     title: `notification.newMessageTitle`,
-                    message: isCurrentMsg ? message.content : (chat.latestMessageContent || ''),
+                    message: notifMessage,
                     icon: NotificationIcons.CHAT,
                     avatarRef: otherMember.user?.avatarRef,
                     requesterUid: otherMember.user?.uid,
@@ -141,6 +174,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return <ChatsContext.Provider value={{
         chats,
         unreadMsgNotifications,
+        isNewE2EDevice,
     }}>
         {children}
     </ChatsContext.Provider>

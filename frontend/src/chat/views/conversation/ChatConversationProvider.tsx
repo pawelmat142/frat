@@ -39,6 +39,9 @@ interface ChatConversationContextType {
     inputRef: React.RefObject<HTMLInputElement>;
     messagesEndRef: React.RefObject<HTMLDivElement>;
     scrollToBottom: () => void;
+    /** True when all loaded messages are E2E-encrypted but cannot be decrypted on this device.
+     *  When true, the message list is empty and a single info banner is shown instead. */
+    historyUnavailable: boolean;
 }
 
 const ChatConversationContext = createContext<ChatConversationContextType | undefined>(undefined);
@@ -54,11 +57,12 @@ export const ChatConversationProvider: React.FC<{ children: React.ReactNode }> =
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 
-    const { chat, messages, loading, setLoading, handleDeleteMessage } = useChatConversation(chatId);
+    const { chat, messages, loading, setLoading, handleDeleteMessage, recipientPublicKey, historyUnavailable } =
+        useChatConversation(chatId, me?.uid);
     const { pendingAttachments, optimizing, imageInputRef, fileInputRef, handleImagesSelected, handleFilesSelected, removePendingAttachment, clearPendingAttachments } =
         useChatAttachments(messages);
     const { newMessage, setNewMessage, sending, inputFocused, setInputFocused, handleSendMessage, inputRef } =
-        useChatSend({ chatId, pendingAttachments, clearPendingAttachments });
+        useChatSend({ chatId, pendingAttachments, clearPendingAttachments, recipientPublicKey });
 
     const otherUser = useMemo(
         () => chat?.members?.find(m => m.uid !== me?.uid)?.user ?? null,
@@ -134,6 +138,7 @@ export const ChatConversationProvider: React.FC<{ children: React.ReactNode }> =
             pendingAttachments, optimizing, imageInputRef, fileInputRef, handleImagesSelected, handleFilesSelected, removePendingAttachment, clearPendingAttachments,
             newMessage, setNewMessage, sending, inputFocused, setInputFocused, handleSendMessage, inputRef,
             messagesEndRef, scrollToBottom,
+            historyUnavailable,
         }}>
             {children}
         </ChatConversationContext.Provider>

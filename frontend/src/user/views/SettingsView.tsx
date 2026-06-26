@@ -14,6 +14,8 @@ import { toast } from 'react-toastify';
 import { MenuItem } from 'global/interface/controls.interface';
 import ListUi from 'global/components/ui/ListUi';
 import Header from 'global/components/Header';
+import ChatCryptoService from 'chat/services/ChatCryptoService';
+import { useChatsContext } from 'chat/ChatsProvider';
 
 const chevron = <FaChevronDown size={20} className="secondary-text m-auto" />;
 
@@ -23,8 +25,9 @@ const SettingsView: React.FC = () => {
     const { i18n, t } = useTranslation();
     const { theme } = useTheme();
     const confirm = useConfirm();
-    
-    const [loading, setLoading] = useState(false);  
+    const { isNewE2EDevice } = useChatsContext();
+
+    const [loading, setLoading] = useState(false);
 
     const isDarkMode = theme === Themes.DARK;
     const langCode = i18n.language;
@@ -82,7 +85,15 @@ const SettingsView: React.FC = () => {
 
     return (<>
         <Header title={t('common.settings')}></Header>
-        
+
+        {/* New device warning — shown when keys were freshly generated on this device */}
+        {isNewE2EDevice && ChatCryptoService.isE2EEnabled() && (
+            <div className="mx-4 mt-3 rounded-lg border border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20 px-4 py-3 text-sm text-yellow-800 dark:text-yellow-300">
+                {/* TODO: add translation key — chat.e2eNewDeviceWarning */}
+                🔒 You are on a new device. Encrypted chat history from other devices is not accessible.
+            </div>
+        )}
+
         <div className="list-view">
             <ListUi items={items} itemClassName="m-font py-3"></ListUi>
         </div>

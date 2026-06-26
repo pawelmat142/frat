@@ -65,4 +65,9 @@ export class UserEntity implements UserI {
   @Column({ name: 'last_seen_at', nullable: true })
   @Expose()
   lastSeenAt?: Date;
+
+  // E2E chat encryption — Curve25519 public key (base64), set per device via ChatCryptoService
+  // Not exposed in serialized user responses — fetched only via dedicated endpoint
+  @Column({ name: 'chat_public_key', type: 'varchar', nullable: true })
+  chatPublicKey?: string;
 }

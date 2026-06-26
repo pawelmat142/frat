@@ -74,6 +74,15 @@ export class UserRepo {
         await this.userRepository.update({ uid }, { lastSeenAt: new Date() });
     }
 
+    public async saveChatPublicKey(uid: string, publicKey: string): Promise<void> {
+        await this.userRepository.update({ uid }, { chatPublicKey: publicKey });
+    }
+
+    public async getChatPublicKey(uid: string): Promise<string | null> {
+        const user = await this.userRepository.findOne({ where: { uid }, select: { chatPublicKey: true } });
+        return user?.chatPublicKey ?? null;
+    }
+
     public async searchUsers(query: string, skip: number, limit: number): Promise<{ users: UserEntity[]; count: number }> {
         const qb = this.userRepository.createQueryBuilder('user')
             .where('user.status = :status', { status: UserStatuses.ACTIVE })

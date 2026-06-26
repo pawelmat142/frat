@@ -105,8 +105,21 @@ try {
       throw new ToastException('chat.error.emptyMessage', this);
     }
 
+    const isE2EPayload = content?.startsWith('e2e:');
+
     const message = await this.chatRepo.createMessage(chatId, senderUid, content.trim(), imageRefs);
-    const latestContent = message.imageRefs?.length ? (message.content || '📷 Image') : message.content;
+
+    // If the content is an E2E-encrypted payload, store a placeholder so the
+    // chat list preview never exposes ciphertext to the server or other clients.
+    let latestContent: string;
+    if (message.imageRefs?.length) {
+      latestContent = message.content || '📷 Image';
+    } else if (isE2EPayload) {
+      latestContent = '🔒 Encrypted message';
+    } else {
+      latestContent = message.content;
+    }
+
     await this.chatRepo.updateLatestMessageContent(chatId, latestContent);
     // Inkrementuj unreadCount dla wszystkich poza nadawcą i onlineUids
     await this.chatRepo.incrementUnreadForMembersExceptSender(chatId, senderUid);
@@ -206,5 +219,15 @@ try {
       );
     }
     return messageId;
+  }
+
+  // ─── E2E public key management ───────────────────────────────────────────────
+
+  saveChatPublicKey(uid: string, publicKey: string): Promise<void> {
+    return this.userService.saveChatPublicKey(uid, publicKey);
+  }
+
+  getChatPublicKey(uid: string): Promise<string | null> {
+    return this.userService.getChatPublicKey(uid);
   }
 }

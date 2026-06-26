@@ -63,6 +63,14 @@ export class UserService {
         return this.userRepo.updateEntity(user);
     }
 
+    public saveChatPublicKey(uid: string, publicKey: string): Promise<void> {
+        return this.userRepo.saveChatPublicKey(uid, publicKey);
+    }
+
+    public getChatPublicKey(uid: string): Promise<string | null> {
+        return this.userRepo.getChatPublicKey(uid);
+    }
+
     public async deleteUser(uid: string): Promise<void> {
         const user = await this.userRepo.getUserByUid(uid);
         if (!user) {

@@ -5,14 +5,17 @@ import { AvatarRef } from "@shared/interfaces/UserI";
 import { chatSocket } from "chat/services/ChatSocketService";
 import { CloudinaryService } from "user/services/CloudinaryService";
 import { PendingAttachment } from "./useChatAttachments";
+import ChatCryptoService from "chat/services/ChatCryptoService";
 
 interface UseChatSendParams {
     chatId: string | undefined;
     pendingAttachments: PendingAttachment[];
     clearPendingAttachments: () => void;
+    /** Curve25519 public key of the other participant. Required for E2E encryption of text messages. */
+    recipientPublicKey: Uint8Array | null;
 }
 
-export const useChatSend = ({ chatId, pendingAttachments, clearPendingAttachments }: UseChatSendParams) => {
+export const useChatSend = ({ chatId, pendingAttachments, clearPendingAttachments, recipientPublicKey }: UseChatSendParams) => {
     const { t } = useTranslation();
 
     const [newMessage, setNewMessage] = useState("");
@@ -39,9 +42,21 @@ export const useChatSend = ({ chatId, pendingAttachments, clearPendingAttachment
                 imageRefs = uploaded.map(r => ({ url: r.url, publicId: r.publicId }));
             }
 
+            const plainText = newMessage.trim();
+
+            // Encrypt text content when E2E is enabled, recipient key is available, and
+            // the message has no image attachments (images are uploaded to Cloudinary — not encrypted).
+            let content = plainText;
+            if (ChatCryptoService.isE2EEnabled() && !imageRefs?.length && recipientPublicKey) {
+                const keyPair = ChatCryptoService.loadKeyPair();
+                if (keyPair) {
+                    content = ChatCryptoService.encrypt(plainText, recipientPublicKey, keyPair.secretKey);
+                }
+            }
+
             const response = await chatSocket.sendMessage({
                 chatId: numericChatId,
-                content: newMessage.trim(),
+                content,
                 imageRefs,
             });
 
