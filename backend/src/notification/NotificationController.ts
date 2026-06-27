@@ -4,6 +4,7 @@ import { CurrentUser } from "auth/decorators/CurrentUserDecorator";
 import { JwtAuthGuard } from "auth/guards/JwtAuthGuard";
 import { LogInterceptor } from "global/interceptors/LogInterceptor";
 import { NotificationService } from "./services/NotificationService";
+import { NotificationI } from "@shared/interfaces/NotificationI";
 
 @Controller('api/notifications')
 @UseInterceptors(LogInterceptor)
@@ -18,7 +19,7 @@ export class NotificationsController {
     getNotification(
         @CurrentUser() user: UserI,
         @Param('notificationId') notificationId: string,
-    ) {
+    ): Promise<NotificationI | null> {
         return this.notificationService.getNotification(user, Number(notificationId));
     }
 

@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
 import { MeUserContext, UserContext } from "@shared/interfaces/UserContext";
 import { UserI } from "@shared/interfaces/UserI";
 import { UserListedItem, UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/interfaces/UserListedItem";
@@ -62,6 +63,7 @@ export class UserContextService {
         const recentViewedOffers = await this.getRecentViewedOffersListedItems(user.uid);
         const mostViewedProfiles = await this.workersService.getMostViewedProfiles(3);
         const latestOffers = await this.offersService.getLatestOffers(3);
+        const friendsDashboard = await this.getDashboardFriends(ctx.friendships, user.uid, 3);
 
         const meCtx: MeUserContext = {
             ...ctx,
@@ -75,6 +77,7 @@ export class UserContextService {
             recentViewedOffers,
             mostViewedProfiles,
             latestOffers,
+            friendsDashboard,
         }
         await this.userService.updateLastSeenAt(user.uid);
         return meCtx;
@@ -110,5 +113,12 @@ export class UserContextService {
             listedAt: recentViews.find(v => v.entityId === offer.offerId)?.date,
         }))
         return recentViewedOffers;
+    }
+
+    private async getDashboardFriends(friendships: FriendshipI[], uid: string, limit: number = 3): Promise<UserI[]> {
+        // get 3 latest active friends (accepted friendships) for dashboard
+        const acceptedFriendships = friendships.filter(f => f.status === FriendshipStatuses.ACCEPTED);
+        const friendUids = acceptedFriendships.map(f => f.requesterUid === uid ? f.addresseeUid : f.requesterUid);
+        return await this.userService.getUsersByUids(friendUids.slice(0, limit));
     }
 }

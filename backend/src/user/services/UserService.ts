@@ -39,6 +39,10 @@ export class UserService {
         return this.userRepo.getUserByUid(uid);
     }
 
+    public getUsersByUids(uids: string[]): Promise<UserEntity[]> {
+        return this.userRepo.getUsersByUids(uids);
+    }
+
     public findUserByEmail(email: string): Promise<UserEntity | null> {
         return this.userRepo.findUserByEmail(email);
     }

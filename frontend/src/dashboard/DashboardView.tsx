@@ -26,6 +26,7 @@ import { useDrawer } from "global/providers/DrawerProvider";
 import MyOffersDashboard from "./MyOffersDashboard";
 import LatestOffersDashboard from "./LatestOffersDashboard";
 import MostViewedWorkers from "./MostViewedWorkers";
+import FriendsDashboard from "./FriendsDashboard";
 
 const DashboardView: React.FC = () => {
 
@@ -188,6 +189,8 @@ const DashboardView: React.FC = () => {
         </div>
 
         <MyListDashboard></MyListDashboard>
+
+        <FriendsDashboard></FriendsDashboard>
 
         <MyOffersDashboard></MyOffersDashboard>
 

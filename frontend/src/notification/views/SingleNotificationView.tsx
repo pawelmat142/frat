@@ -64,6 +64,10 @@ const SingleNotificationView: React.FC = () => {
         try {
             setLoading(true)
             const notification = await NotificationService.getNotification(notificationId!)
+            if (!notification) {
+                navigate(-1)
+                return
+            }
             setNotification(notification)
         } catch (error) {
             setNotification(null)

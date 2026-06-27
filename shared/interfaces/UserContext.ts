@@ -23,6 +23,7 @@ export interface MeUserContext extends UserContext {
 
     trainingProvider?: TrainingProviderProfileI | null
     
+    friendsDashboard?: UserI[] 
     recentViewedWorkers?: UserListedItem[]
     recentViewedOffers?: UserListedItem[]
     mostViewedProfiles?: WorkerI[]

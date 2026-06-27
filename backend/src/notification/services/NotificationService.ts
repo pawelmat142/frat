@@ -72,7 +72,7 @@ export class NotificationService {
   /**
    * Retrieves a single notification by its ID, ensuring it belongs to the user
    */
-  async getNotification(user: UserI, notificationId: number): Promise<NotificationI> {
+  async getNotification(user: UserI, notificationId: number): Promise<NotificationI | null> {
     const notification = await this.notificationRepository.findOne({
       where: {
         notificationId,
@@ -80,7 +80,7 @@ export class NotificationService {
       },
     });
     if (!notification) {
-      throw new ToastException('notification.error.notFound', this);
+      return null;
     }
     return notification;
   }
