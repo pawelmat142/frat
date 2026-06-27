@@ -6,7 +6,6 @@ import { useFriendsContext } from "friends/FriendsProvider"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI"
 import { UserI } from "@shared/interfaces/UserI"
-import FriendshipListItem from "friends/components/FriendshipListItem"
 import { FriendsService } from "friends/services/FriendsService"
 import Loading from "global/components/Loading"
 import { Ico } from "global/icon.def"
@@ -18,6 +17,7 @@ import { Search, Close } from "@mui/icons-material"
 import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter"
 import UserInvitationListItem from "user/components/UserInvitationListItem"
 import Header from "global/components/Header"
+import FriendListItem from "friends/components/FriendListItem"
 
 const FriendsListView: React.FC = () => {
 
@@ -168,7 +168,7 @@ const FriendsListView: React.FC = () => {
     return (
         <>
             <Header title={t('account.friends')}></Header>
-            
+
             <div className="list-view">
 
                 {!!isMyAccount && (
@@ -203,7 +203,10 @@ const FriendsListView: React.FC = () => {
                             <div className="flex flex-col gap-1">
                                 {searchUsers.map((user, index) => (
                                     <div className={`list-view-item list-item-border${index === 0 ? " first" : ""}${index === (searchUsers.length ?? 0) - 1 ? " last" : ""}`} key={user.uid}>
-                                        <UserInvitationListItem user={user} />
+                                        <UserInvitationListItem
+                                            user={user}
+                                            refresh={() => setFreeTextInput('')}
+                                        />
                                     </div>
                                 ))}
                                 <InfiniteScrollEventEmitter emitEvent={loadMore} />
@@ -233,12 +236,10 @@ const FriendsListView: React.FC = () => {
                             )}
 
                             {friends.map(({ user, friendship }, index) => (
-                                <div className={`list-view-item list-item-border${index === 0 ? " first" : ""}${index === (friends.length ?? 0) - 1 ? " last" : ""}`} key={user.uid}>
-                                    <FriendshipListItem
-                                        user={user}
-                                        friendship={friendship}
-                                    />
-                                </div>
+                                <FriendListItem
+                                    user={user}
+                                    friendship={friendship}
+                                />
                             ))}
                         </div>
                     </>

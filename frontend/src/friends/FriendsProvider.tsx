@@ -44,6 +44,15 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ child
         try {
             const result = await FriendsService.getFriendships(me.uid);
             setFriendships(result || []);
+
+            const meCtx = userCtx.meCtx;
+
+            if (meCtx) {
+                userCtx.updateMeCtx({
+                    ...meCtx,
+                    friendships: result || [],
+                });
+            }
         } catch {
             setFriendships([]);
         }

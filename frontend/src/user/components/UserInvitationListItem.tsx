@@ -18,9 +18,10 @@ import { Ico } from "global/icon.def";
 
 interface Props {
     user: UserI
+    refresh?: () => void
 }
 
-const UserInvitationListItem: React.FC<Props> = ({ user }) => {
+const UserInvitationListItem: React.FC<Props> = ({ user, refresh }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -40,7 +41,7 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
             const result = await FriendsService.sendInvite(user.uid);
             friendsCtx.putFriendship(result);
             toast.success(t('friends.invitationSent'));
-            navigate(-1)
+            friendsCtx.initFriendships()
         } finally {
             setLoading(false);
         }
@@ -70,6 +71,7 @@ const UserInvitationListItem: React.FC<Props> = ({ user }) => {
             const result = await FriendsService.acceptInvite(friendship.friendshipId)
             navigate(Path.getProfilePath(user.uid));
             toast.success(t('friends.accept'));
+            friendsCtx.initFriendships()
         }
         finally {
             setLoading(false);

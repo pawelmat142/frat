@@ -1,9 +1,10 @@
 import TileSection from "employee/components/TileSection";
-import FriendshipListItem from "friends/components/FriendshipListItem";
 import { Path } from "../path";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
+import FriendListItem from "friends/components/FriendListItem";
+import { useEffect } from "react";
 
 const FriendsDashboard: React.FC = () => {
 
@@ -15,6 +16,8 @@ const FriendsDashboard: React.FC = () => {
 
     const uid = userCtx.me?.uid;
 
+    useEffect(() => {}, [userCtx.meCtx?.friendships])
+    
     if (!uid) {
         return null;
     }
@@ -30,7 +33,7 @@ const FriendsDashboard: React.FC = () => {
             }
             
             return <div key={user.uid}>
-                <FriendshipListItem user={user} friendship={friendship} /> 
+                <FriendListItem user={user} friendship={friendship}/> 
             </div>
         })}
 

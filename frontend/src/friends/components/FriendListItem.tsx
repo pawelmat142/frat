@@ -1,29 +1,32 @@
-import { UserI } from "@shared/interfaces/UserI";
-import { useNavigate } from "react-router-dom";
+import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI"
+import { UserI } from "@shared/interfaces/UserI"
+import { ChatService } from "chat/services/ChatService";
+import { useFriendsContext } from "friends/FriendsProvider";
+import Loading from "global/components/Loading";
+import { Path } from "../../path";
+import { useConfirm } from "global/providers/PopupProvider";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Path } from "../../path";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useUserContext } from "user/UserProvider";
-import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
-import { useFriendsContext } from "friends/FriendsProvider";
+import { FriendsService } from "friends/services/FriendsService";
+import { FrontDateUtil } from "global/utils/FrontDateUtil";
+import ListItem from "global/components/ListItem";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
-import UserItem from "user/components/UserItem";
-import { useConfirm } from "global/providers/PopupProvider";
-import { FriendsService } from "friends/services/FriendsService";
-import { toast } from "react-toastify";
-import Loading from "global/components/Loading";
-import { ChatService } from "chat/services/ChatService";
 import IconButton from "global/components/controls/IconButon";
 import { Ico } from "global/icon.def";
-import { FrontDateUtil } from "global/utils/FrontDateUtil";
+import { AVATAR_MOCK } from "user/components/AvatarTile";
 
 interface Props {
     user: UserI,
-    friendship: FriendshipI
+    friendship?: FriendshipI,
+    first?: boolean,
+    last?: boolean,
 }
 
-const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
+const FriendListItem: React.FC<Props> = ({ user, friendship, first, last }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -35,10 +38,16 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
     const [loading, setLoading] = useState(false);
     const friendships = friendsCtx.friendships;
 
-    useEffect(() => { { } }, [friendships]);
+    useEffect(() => { 
+
+        console.log()
+
+
+ }, [friendships]);
 
     const acceptInvitation = async (e?: React.MouseEvent<HTMLButtonElement>) => {
         e?.stopPropagation();
+        if (!friendship) return;
         try {
             setLoading(true);
             const result = await FriendsService.acceptInvite(friendship.friendshipId)
@@ -51,6 +60,7 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
 
     const cancelInvitation = async (e?: React.MouseEvent<HTMLButtonElement>) => {
         e?.stopPropagation();
+        if (!friendship) return;
         const confirmed = await confirm({
             title: t('friends.cancelInvitation'),
             message: t('friends.cancelInvitationConfirm'),
@@ -67,7 +77,6 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
             setLoading(false);
         }
     }
-
 
     const openChat = async () => {
         try {
@@ -92,40 +101,61 @@ const FriendshipListItem: React.FC<Props> = ({ user, friendship }) => {
         return `${t('user.lastSeen')} ${FrontDateUtil.displayShortDateOrDayOrTimeIfToday(t, user.lastSeenAt)}`
     }
 
-    return (
-        <div className="flex justify-between items-center w-full" onClick={() => navigate(Path.getProfilePath(user.uid))}>
-            <UserItem
-                user={user}
-                allowNavigate={false}
-                bottomRow={
-                    (isFriend && <div className="secondary-text xs-font">
-                        {getLastSeenText()}
-                    </div>)
-                    || (isInvited && <div className="secondary-text xs-font">{t('friends.invited')}</div>)
-                    || (isInvitationReceived && <div className="secondary-text xs-font">{t('friends.invitationReceived')}</div>)
-                }
-            ></UserItem>
-
-            {isInvitationReceived && <Button
+    const getRightSection = () => {
+        if (isInvitationReceived) {
+            return <Button
                 size={BtnSizes.SMALL}
                 onClick={acceptInvitation}
-            >{t('friends.accept')}</Button>}
+            >{t('friends.accept')}</Button>
+        }
 
-            {isInvited && <Button
+        if (isInvited) {
+            return <Button
                 mode={BtnModes.ERROR_TXT}
                 size={BtnSizes.SMALL}
                 onClick={cancelInvitation}
-            >{t('friends.cancel')}</Button>}
-
-            {isFriend && user.uid !== me?.uid && <IconButton onClick={(e) => {
+            >{t('friends.cancel')}</Button>
+        }
+        if (isFriend && user.uid !== me?.uid) {
+            return <IconButton onClick={(e) => {
                 e.stopPropagation();
                 openChat();
             }}
                 icon={<Ico.MSG size={20} />}
-            ></IconButton>}
+            ></IconButton>
+        }
 
+        return null
+    }
+
+    const getBottomRow = () => {
+        if (isFriend) {
+            return <div className="secondary-text xs-font">
+                {getLastSeenText()}
+            </div>
+        }
+        if (isInvited) {
+            return <div className="secondary-text xs-font">{t('friends.invited')}</div>
+        }
+        if (isInvitationReceived) {
+            return <div className="secondary-text xs-font">{t('friends.invitationReceived')}</div>
+        }
+    }
+
+
+    return (
+        <div onClick={() => navigate(Path.getProfilePath(user.uid))}>
+            <ListItem
+                imgUrl={user?.avatarRef?.url || AVATAR_MOCK}
+                topLeft={<div className="font-medium">{user?.displayName}</div>}
+                bottomLeft={getBottomRow()}
+                first={first}
+                last={last}
+                rightSection={<div className="flex justify-end items-center gap-2">{getRightSection()}</div>}
+            />
         </div>
     )
+
 }
 
-export default FriendshipListItem;
+export default FriendListItem;
