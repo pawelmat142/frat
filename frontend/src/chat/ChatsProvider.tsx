@@ -66,6 +66,11 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             setIsNewE2EDevice(true);
         }
 
+        if (!keyPair) {
+            console.error('ChatCryptoService: failed to load or generate key pair');
+            return;
+        }
+
         try {
             // Idempotent upsert — ensures server always has the current device's public key.
             await ChatCryptoService.publishPublicKey(keyPair.publicKey);

@@ -43,7 +43,7 @@ const ChatCryptoService = {
      */
     encrypt(plaintext: string, recipientPublicKey: Uint8Array, mySecretKey: Uint8Array): string {
         const nonce = nacl.randomBytes(nacl.box.nonceLength);
-        const message = encodeUTF8(plaintext);
+        const message = decodeUTF8(plaintext);
         const box = nacl.box(message, nonce, recipientPublicKey, mySecretKey);
 
         const combined = new Uint8Array(nonce.length + box.length);
@@ -69,7 +69,7 @@ const ChatCryptoService = {
             const decrypted = nacl.box.open(box, nonce, senderPublicKey, mySecretKey);
             if (!decrypted) return null;
 
-            return decodeUTF8(decrypted);
+            return encodeUTF8(decrypted);
         } catch {
             return null;
         }
