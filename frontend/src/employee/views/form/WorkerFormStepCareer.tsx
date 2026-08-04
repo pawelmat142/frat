@@ -3,9 +3,7 @@ import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { WorkerForm } from "@shared/interfaces/WorkerI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
-import FloatingInput from "global/components/controls/FloatingInput";
 import BooleanSelector from "global/components/controls/BooleanSelector";
-import { FormValidator } from "global/FormValidator";
 import FloatingDateInput from "global/components/callendar/FloatingDateInput";
 import { DateUtil } from "@shared/utils/DateUtil";
 
@@ -37,6 +35,8 @@ const WorkerFormStepCareer: React.FC<Props> = ({ formRef }) => {
                             onSelectMulti={items => field.onChange(items)}
                             label={t("employeeProfile.form.career.categories")}
                             code="WORK_CATEGORY"
+                            elementLabelTranslationKey="NAME"
+                            chipTranslationKey="SHORT_NAME"
                             fullWidth
                         />
                     )}

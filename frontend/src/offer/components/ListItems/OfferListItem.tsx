@@ -78,7 +78,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
         <span>{DateDisplay({ date: offer.startDate, t, showYearIfNotCurrent: true })}</span>
     </span> : null;
 
-    const bottomLeft = <div className="flex flex-col gap-2 mt-2">
+    const bottomLeft = <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3">
             {startsFrom}
             <div className="flex items-center">

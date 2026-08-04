@@ -90,6 +90,8 @@ export interface SelectorInterface<T extends SelectorValue = SelectorValue> exte
 export interface SelectorMultiProps<T extends SelectorValue = SelectorValue> extends BaseSelectorProps {
     items: SelectorItem<T>[];
     values: SelectorItem<T>[];
+    /** When provided, chips in the trigger use these labels instead of `values`. Bottom sheet still uses `items`/`values`. */
+    chipValues?: SelectorItem<T>[];
     onSelect: (items: T[]) => void;
     displayElementsAsChips?: boolean;
     showChipsRemoveButton?: boolean;

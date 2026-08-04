@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { Path } from "../../../path";
 import { useWorkersSearch } from "../search/WorkersSearchProvider";
-import WorkerFormpersonalData from "./WorkerFormStepPersonalData";
+import WorkerFormPersonalData from "./WorkerFormStepPersonalData";
 import WorkerFormStepLocation from "./WorkerFormStepLocation";
 import { Utils } from "global/utils/utils";
 import { useConfirm } from "global/providers/PopupProvider";
@@ -291,7 +291,7 @@ const WorkerFormView: React.FC = () => {
     const renderStepByKey = (stepKey: WorkerFormStep) => {
         switch (stepKey) {
             case WorkerFormSteps.PERSONAL_DATA:
-                return <WorkerFormpersonalData formRef={formCtx} />;
+                return <WorkerFormPersonalData formRef={formCtx} />;
             case WorkerFormSteps.CAREER:
                 return <WorkerFormStepCareer formRef={formCtx} />;
             case WorkerFormSteps.LOCATION:

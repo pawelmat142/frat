@@ -671,6 +671,11 @@
           "WIND": "Turbiny wiatrowe",
           "ONSHORE": "Dostęp linowy (prace lądowe)",
           "OFFSHORE": "Platformy wiertnicze"
+        },
+        "SHORT_NAME": {
+          "WIND": "Wiatrowe",
+          "ONSHORE": "Lądowe",
+          "OFFSHORE": "Morskie"
         }
       }
     },

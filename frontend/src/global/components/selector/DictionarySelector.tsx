@@ -15,6 +15,7 @@ interface DictionarySelectorProps extends DictionarySelectorInterface<string> {
     disabledValues?: string[];
     /** i18n key segment used for element labels (default: 'NAME'). */
     elementLabelTranslationKey?: string;
+    chipTranslationKey?: string;
     emitValueCode?: string;
     onDictionaryChange?: (dictionary: DictionaryI | null) => void;
     skipSort?: boolean;
@@ -41,6 +42,7 @@ const DictionarySelector = forwardRef<HTMLDivElement, DictionarySelectorProps>((
         onSelectMulti,
         disabledValues = [],
         elementLabelTranslationKey = 'NAME',
+        chipTranslationKey = 'NAME',
         error,
         enableSearchText = false,
         showLabel,
@@ -51,9 +53,10 @@ const DictionarySelector = forwardRef<HTMLDivElement, DictionarySelectorProps>((
 ) => {
     const { t } = useTranslation();
 
-    const { loading, items, dictionary } = useDictionary(code, groupCode, {
+    const { loading, items, chipItems, dictionary } = useDictionary(code, groupCode, {
         disabledValues,
         elementLabelTranslationKey,
+        chipTranslationKey,
         skipSort,
         onDictionaryChange,
     });
@@ -99,12 +102,19 @@ const DictionarySelector = forwardRef<HTMLDivElement, DictionarySelectorProps>((
             ? items.filter(item => valueInput.includes(item.value))
             : [];
 
+        const selectedChipItems = chipItems === items
+            ? selectedItems
+            : Array.isArray(valueInput)
+                ? chipItems.filter(item => valueInput.includes(item.value))
+                : [];
+
         return (
             <FloatingSelectorMulti
                 ref={ref}
                 {...commonProps}
                 items={items}
                 values={selectedItems}
+                chipValues={selectedChipItems}
                 onSelect={onSelectMulti ?? (() => {})}
                 displayElementsAsChips
             />

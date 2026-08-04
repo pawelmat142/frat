@@ -16,7 +16,7 @@ interface Props {
     formRef: UseFormReturn<WorkerForm>;
 }
 
-const WorkerFormpersonalData: React.FC<Props> = ({ formRef }) => {
+const WorkerFormPersonalData: React.FC<Props> = ({ formRef }) => {
     const { t } = useTranslation();
     const { me } = useUserContext();
     const required = FormValidator.required(t);
@@ -110,4 +110,4 @@ const WorkerFormpersonalData: React.FC<Props> = ({ formRef }) => {
     );
 };
 
-export default WorkerFormpersonalData;
+export default WorkerFormPersonalData;

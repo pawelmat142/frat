@@ -669,6 +669,11 @@
           "WIND": "Wind Energy",
           "ONSHORE": "Rope Access ONSHORE",
           "OFFSHORE": "OFFSHORE Oil and Gas"
+        },
+        "SHORT_NAME": {
+          "WIND": "Wind",
+          "ONSHORE": "Onshore",
+          "OFFSHORE": "Offshore"
         }
       }
     },

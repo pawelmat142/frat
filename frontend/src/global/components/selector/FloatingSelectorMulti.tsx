@@ -8,6 +8,7 @@ const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValu
     {
         items,
         values,
+        chipValues,
         onSelect,
         id,
         label,
@@ -25,6 +26,7 @@ const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValu
     const bottomSheet = useBottomSheet();
 
     const hasValue = Array.isArray(values) && values.length > 0;
+    const displayedChips = chipValues ?? values;
 
     const handleOpen = () => {
         bottomSheet.openSelector({
@@ -56,7 +58,7 @@ const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValu
                 {displayElementsAsChips ? (
                     <div className="chip-container">
                         {hasValue
-                            ? values.map(v => (
+                            ? displayedChips.map(v => (
                                 <div key={String(v.value)} className="search-chip primary smaller">
                                     {v.label}
                                 </div>
@@ -65,7 +67,7 @@ const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValu
                     </div>
                 ) : (
                     hasValue
-                        ? values.map(v => v.label).join(', ')
+                        ? displayedChips.map(v => v.label).join(', ')
                         : <span className="opacity-0">placeholder</span>
                 )}
             </span>

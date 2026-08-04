@@ -9,6 +9,8 @@ export interface UseDictionaryOptions {
     disabledValues?: string[];
     /** i18n key segment used for labels, e.g. 'NAME' → `dictionary.CODE.NAME.ELEMENT`. Default: 'NAME'. */
     elementLabelTranslationKey?: string;
+    /** i18n key segment used for chips, e.g. 'NAME' → `dictionary.CODE.NAME.ELEMENT`. Default: 'NAME'. */
+    chipTranslationKey?: string;
     /** Skip alphabetical sort of elements. Default: false. */
     skipSort?: boolean;
     /** Called after the dictionary loads, and again whenever groupCode changes. */
@@ -17,8 +19,10 @@ export interface UseDictionaryOptions {
 
 export interface UseDictionaryResult {
     loading: boolean;
-    /** Ready-to-use selector items (translated, capitalised, sorted). */
+    /** Ready-to-use selector items (translated, capitalised, sorted). Uses elementLabelTranslationKey. */
     items: SelectorItem<string>[];
+    /** Selector items translated with chipTranslationKey. Equals `items` when both keys are the same. */
+    chipItems: SelectorItem<string>[];
     /** Raw dictionary, useful when the caller needs access to groups/elements directly. */
     dictionary: DictionaryI | null;
 }
@@ -38,6 +42,7 @@ export function useDictionary(
     const {
         disabledValues = [],
         elementLabelTranslationKey = 'NAME',
+        chipTranslationKey = 'NAME',
         skipSort = false,
         onDictionaryChange,
     } = options;
@@ -87,14 +92,14 @@ export function useDictionary(
             : dictionary.elements;
     }, [dictionary, groupCode]);
 
-    const items: SelectorItem<string>[] = (() => {
+    const buildItems = (translationKey: string): SelectorItem<string>[] => {
         const filtered = getElements();
         const sorted = skipSort
             ? filtered
             : [...filtered].sort((a, b) => a.code.localeCompare(b.code));
 
         return sorted.map(el => {
-            const key = `dictionary.${dictionary?.code}.${elementLabelTranslationKey}.${el.code}`;
+            const key = `dictionary.${dictionary?.code}.${translationKey}.${el.code}`;
             const raw = t(key);
             return {
                 label: raw.charAt(0).toUpperCase() + raw.slice(1),
@@ -104,7 +109,12 @@ export function useDictionary(
                 exclusionCode: el.values.EXCLUSION_CODE ?? undefined,
             };
         });
-    })();
+    };
 
-    return { loading, items, dictionary };
+    const items = buildItems(elementLabelTranslationKey);
+    const chipItems = chipTranslationKey === elementLabelTranslationKey
+        ? items
+        : buildItems(chipTranslationKey);
+
+    return { loading, items, chipItems, dictionary };
 }
