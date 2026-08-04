@@ -9,7 +9,8 @@ interface Props {
     color?: 'primary' | 'secondary' | 'tertiary';
 }
 
-const CategoriesChips: React.FC<Props> = ({ categories, smaller, color='tertiary' }) => {
+const CategoriesChips: React.FC<Props> = ({ categories, smaller, color='secondary' }) => {
+// const CategoriesChips: React.FC<Props> = ({ categories, smaller, color='tertiary' }) => {
 
     const { t } = useTranslation();
 

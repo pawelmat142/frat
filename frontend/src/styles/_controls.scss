@@ -400,23 +400,24 @@ input {
   font-size: $sFont;
 
   &.primary {
-    color: $primary-color;
-    border: .5px solid $primary-color;
+    background-color: $primary-color;
+    color: $primary-bg;
   }
 
   &.secondary {
-    color: $primary-text;
-    border: .5px solid $primary-text;
+    background-color: $primary-text;
+    color: $primary-bg;
   }
 
   &.tertiary {
-    color: $secondary-text;
-    border: .5px solid $secondary-text;
+    background-color: $secondary-text;
+    color: $primary-bg;
   }
 
   &.smaller {
     font-size: $xsFont;
     padding: .05rem .25rem;
+    border-radius: .35rem;
   }
 }
 
