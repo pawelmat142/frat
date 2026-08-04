@@ -57,7 +57,7 @@ const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValu
                     <div className="chip-container">
                         {hasValue
                             ? values.map(v => (
-                                <div key={String(v.value)} className="search-chip primary">
+                                <div key={String(v.value)} className="search-chip primary smaller">
                                     {v.label}
                                 </div>
                             ))

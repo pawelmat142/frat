@@ -91,7 +91,7 @@ const WorkersSearchFiltersBar: React.FC = () => {
                     <div className="flex items-center">
                         <div className="chip-container">
                             {(ctx.filters.certificates || []).map(cert => (
-                                <div key={cert} className="search-chip secondary">
+                                <div key={cert} className="search-chip primary smaller">
                                     {t(DictionaryUtil.getTranslationKey(Dictionaries.CERTIFICATES, cert))}
                                 </div>
                             ))}

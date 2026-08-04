@@ -69,7 +69,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
             <div className="font-medium truncate">
                 {offer.displayName || t('offer.untitled')}
             </div>
-            {categoryChip}
+            {/*{categoryChip}*/}
         </div>
     );
 
