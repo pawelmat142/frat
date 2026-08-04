@@ -1,36 +1,38 @@
-import React, { useEffect, useId, useRef } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { FaUserSlash } from "react-icons/fa";
 import Loading from "global/components/Loading";
 import { useWorkersSearch } from "./WorkersSearchProvider";
 import WorkersSearchFiltersBar from "./WorkersSearchFiltersBar";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import InfiniteScrollEventEmitter from "global/components/InfiniteScrollEventEmitter";
-import { FaUserSlash } from "react-icons/fa";
 import FloatingActionButton from "global/fab/FloatingActionButton";
 import { Ico } from "global/icon.def";
 import { AppConfig } from "@shared/AppConfig";
-import WorkerSearchListItem from "employee/components/ListItems/WorkerSearchListItem";
 import Header from "global/components/Header";
-import SwipeableRow, { SwipeableRowRef } from "global/components/SwipeableRow";
 import IconButton from "global/components/controls/IconButon";
-import { UserListedItemService } from "user/services/UserListedItemService";
-import { WorkerI } from "@shared/interfaces/WorkerI";
-import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/interfaces/UserListedItem";
-import { useUserContext } from "user/UserProvider";
-import { toast } from "react-toastify";
 import { BtnModes } from "global/interface/controls.interface";
 import { useFAB } from "global/fab";
 import { FABkey, FABtype } from "global/fab/useFAB";
+import WorkersMapSearchResults from "./WorkersMapSearchResults";
+import WorkersListSearchResults from "./WorkersListSearchResults";
+
+type ViewMode = 'list' | 'map';
 
 const WorkersSearchView: React.FC = () => {
 
     const ctx = useWorkersSearch()
-    const userCtx = useUserContext();
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
 
-    const swipeRefs = useRef<Map<number, SwipeableRowRef>>(new Map());
-    const [loading, setLoading] = React.useState(false);
+    const [viewMode, setViewMode] = React.useState<ViewMode>(
+        () => (localStorage.getItem('workerSearchResultViewMode') as ViewMode | null) ?? 'list'
+    );
+
+    const toggleViewMode = () => setViewMode(prev => {
+        const next: ViewMode = prev === 'list' ? 'map' : 'list';
+        localStorage.setItem('workerSearchResultViewMode', next);
+        return next;
+    });
 
     useFAB({
         type: FABtype.filters,
@@ -47,54 +49,17 @@ const WorkersSearchView: React.FC = () => {
 
     const initialLoading = ctx.loading && ctx.results.length === 0;
     const noResults = !initialLoading && ctx.results.length === 0;
-    const showEndOfResults = !initialLoading && !ctx.loadingMore && !ctx.hasMore && ctx.results.length > 0;
 
-    const addItemToMyList = async (worker: WorkerI) => {
-        const meCtx = userCtx.meCtx;
-        if (worker.uid === userCtx.me?.uid || !meCtx) return;
-        try {
-            setLoading(true);
-            const item = await UserListedItemService.addItem({
-                reference: worker.workerId.toString(),
-                referenceType: UserListedItemReferenceTypes.WORKER,
-                listedType: UserListedItemTypes.DEFAULT
-            });
-            if (!item) {
-                toast.error(t('user.addToListError'));
-                return;
-            }
-            userCtx.updateMeCtx({
-                ...meCtx,
-                listedItems: [...(meCtx.listedItems ?? []), item]
-            });
-            toast.success(t('user.addToListSuccess'));
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    const removeListItem = async (worker: WorkerI) => {
-        if (worker.uid === userCtx.me?.uid || !userCtx.meCtx) return;
-        const listItem = (userCtx.meCtx.listedItems ?? [])
-            .find(item => item.reference === worker.workerId.toString() && item.referenceType === UserListedItemReferenceTypes.WORKER);
-        if (!listItem) return;
-        const meCtx = userCtx.meCtx;
-        try {
-            setLoading(true);
-            await UserListedItemService.removeItem(listItem.id.toString());
-            userCtx.updateMeCtx({
-                ...meCtx,
-                listedItems: (meCtx.listedItems ?? []).filter(item => item.id !== listItem.id)
-            } as Parameters<typeof userCtx.updateMeCtx>[0]);
-            toast.success(t('user.removeFromListSuccess'));
-        }
-        finally {
-            setLoading(false);
-        }
-    }
+    const viewToggleBtn = (
+        <IconButton
+            mode={BtnModes.PRIMARY_TXT}
+            icon={viewMode === 'list' ? <Ico.MAP size={20} /> : <Ico.LIST size={20} />}
+            onClick={toggleViewMode}
+        />
+    );
 
     return (<>
-        <Header title={t('employeeProfile.searchTitle')}></Header>
+        <Header title={t('employeeProfile.searchTitle')} rightBtn={viewToggleBtn}></Header>
 
         <div className="list-view pt-0">
 
@@ -102,57 +67,19 @@ const WorkersSearchView: React.FC = () => {
                 <WorkersSearchFiltersBar />
             </div>
 
-            {initialLoading || loading ? (
+            {initialLoading ? (
                 <div className="flex flex-col items-center justify-center mt-20">
-                    <Loading></Loading>
+                    <Loading />
                 </div>
             ) : noResults ? (
                 <div className="flex flex-col items-center justify-center mt-20">
                     <FaUserSlash className="mx-auto text-4xl mb-2 opacity-50" />
                     <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
                 </div>
+            ) : viewMode === 'map' ? (
+                <WorkersMapSearchResults />
             ) : (
-                <div className="results flex flex-col">
-                    {(ctx.results).map((worker, index) => {
-
-                        const isSavedOnList = (userCtx.meCtx?.listedItems ?? [])
-                            .some(item => item.reference === worker?.workerId?.toString() && item.referenceType === UserListedItemReferenceTypes.WORKER);
-
-                        const rowActions = <>
-                            {isSavedOnList ? (
-                                <IconButton className="p-3" mode={BtnModes.ERROR_TXT} icon={<Ico.STAR_OUTLINE />} onClick={() => { removeListItem(worker) }}></IconButton>
-                            ) : (
-                                <IconButton className="p-3" icon={<Ico.STAR />} onClick={() => { addItemToMyList(worker) }}></IconButton>
-                            )}
-                        </>
-
-                        return (
-                            <SwipeableRow disable={worker.uid === userCtx.me?.uid}
-                                key={worker.workerId}
-                                ref={el => el ? swipeRefs.current.set(worker.workerId, el) : swipeRefs.current.delete(worker.workerId)} actions={rowActions}>
-                                <WorkerSearchListItem className="primary-bg"
-                                    worker={worker}
-                                    first={index === 0}
-                                    last={index === (ctx.results?.length ?? 0) - 1}
-                                ></WorkerSearchListItem>
-                            </SwipeableRow>
-
-                        )
-                    })}
-                    <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} />
-                </div>
-            )}
-
-            {ctx.loadingMore && ctx.results.length > 0 && (
-                <div className="flex justify-center py-6">
-                    <Loading></Loading>
-                </div>
-            )}
-
-            {showEndOfResults && (
-                <div className="flex justify-center py-4">
-                    <span className="secondary-text s-font">{t('common.endOfResults', { defaultValue: 'No more profiles to display.' })}</span>
-                </div>
+                <WorkersListSearchResults />
             )}
 
         </div>
