@@ -87,7 +87,7 @@ const WorkersSearchView: React.FC = () => {
                         exit="exit"
                         transition={{ duration: 0.22, ease: 'easeInOut' }}
                     >
-                        {viewMode === 'map' ? <WorkersMapSearchResults /> : <WorkersListSearchResults />}
+                        { viewMode === 'map' ? <WorkersMapSearchResults /> : <WorkersListSearchResults /> }
                     </motion.div>
                 </AnimatePresence>
             )}
