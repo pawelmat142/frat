@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FaUserSlash } from "react-icons/fa";
 import Loading from "global/components/Loading";
@@ -26,9 +27,11 @@ const WorkersSearchView: React.FC = () => {
     const [viewMode, setViewMode] = React.useState<ViewMode>(
         () => (localStorage.getItem('workerSearchResultViewMode') as ViewMode | null) ?? 'list'
     );
+    const directionRef = useRef(1);
 
     const toggleViewMode = () => setViewMode(prev => {
         const next: ViewMode = prev === 'list' ? 'map' : 'list';
+        directionRef.current = next === 'map' ? 1 : -1;
         localStorage.setItem('workerSearchResultViewMode', next);
         return next;
     });
@@ -69,10 +72,24 @@ const WorkersSearchView: React.FC = () => {
                     <FaUserSlash className="mx-auto text-4xl mb-2 opacity-50" />
                     <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
                 </div>
-            ) : viewMode === 'map' ? (
-                <WorkersMapSearchResults />
             ) : (
-                <WorkersListSearchResults />
+                <AnimatePresence mode="wait" custom={directionRef.current}>
+                    <motion.div
+                        key={viewMode}
+                        custom={directionRef.current}
+                        variants={{
+                            enter: (d: number) => ({ x: 40 * d, opacity: 0 }),
+                            center: { x: 0, opacity: 1 },
+                            exit: (d: number) => ({ x: -40 * d, opacity: 0 }),
+                        }}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={{ duration: 0.22, ease: 'easeInOut' }}
+                    >
+                        {viewMode === 'map' ? <WorkersMapSearchResults /> : <WorkersListSearchResults />}
+                    </motion.div>
+                </AnimatePresence>
             )}
 
         </div>
