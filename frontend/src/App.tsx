@@ -32,6 +32,7 @@ import OfferFormView from 'offer/views/form/OfferFormView';
 import UserOffersList from 'offer/views/UserOffersList';
 import OfferView from 'offer/views/offer-view/OfferView';
 import { useRippleEffect } from 'global/hooks/useRippleEffect';
+import { useScrollRestoration } from 'global/hooks/useScrollRestoration';
 import OfferSearchView from 'offer/views/search/OfferSearchView';
 import AdminOffers from 'admin/views/offer/AdminOffers';
 import TelegramSignPage from 'auth/views/TelegramSignPage';
@@ -57,6 +58,7 @@ const trainingAccess = [UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.
 const App: React.FC = () => {
     const location = useLocation();
     useRippleEffect();
+    useScrollRestoration();
     const direction = location.state?.direction === 'back' ? -1 : 1;
 
     const popupCtx = usePopup();
