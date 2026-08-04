@@ -9,12 +9,11 @@ import FloatingActionButton from "global/fab/FloatingActionButton";
 import { Ico } from "global/icon.def";
 import { AppConfig } from "@shared/AppConfig";
 import Header from "global/components/Header";
-import IconButton from "global/components/controls/IconButon";
-import { BtnModes } from "global/interface/controls.interface";
 import { useFAB } from "global/fab";
 import { FABkey, FABtype } from "global/fab/useFAB";
 import WorkersMapSearchResults from "./WorkersMapSearchResults";
 import WorkersListSearchResults from "./WorkersListSearchResults";
+import WorkersViewModeToggle from "./WorkersViewModeToggle";
 
 type ViewMode = 'list' | 'map';
 
@@ -50,13 +49,7 @@ const WorkersSearchView: React.FC = () => {
     const initialLoading = ctx.loading && ctx.results.length === 0;
     const noResults = !initialLoading && ctx.results.length === 0;
 
-    const viewToggleBtn = (
-        <IconButton
-            mode={BtnModes.PRIMARY_TXT}
-            icon={viewMode === 'list' ? <Ico.MAP size={20} /> : <Ico.LIST size={20} />}
-            onClick={toggleViewMode}
-        />
-    );
+    const viewToggleBtn = <WorkersViewModeToggle viewMode={viewMode} onClick={toggleViewMode} />;
 
     return (<>
         <Header title={t('employeeProfile.searchTitle')} rightBtn={viewToggleBtn}></Header>
