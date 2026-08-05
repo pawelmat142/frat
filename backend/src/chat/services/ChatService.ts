@@ -164,8 +164,8 @@ try {
     // Usuń wszystkie wiadomości z chatu
     await this.chatRepo.deleteAllMessagesFromChat(chatId);
     await this.chatRepo.updateLatestMessageContent(chatId, null);
-    this.cloudinaryService.deleteChatImages(chatId).catch(err =>
-      this.logger.error(`Failed to delete Cloudinary images for chat ${chatId}`, err)
+    this.cloudinaryService.deleteChatFiles(chatId).catch(err =>
+      this.logger.error(`Failed to delete Cloudinary files for chat ${chatId}`, err)
     );
     this.logger.log(`User ${uid} cleaned chat history for chat ${chatId}`);
     return this.findChat(chatId);
@@ -191,8 +191,8 @@ try {
     await this.validateMembership(uid, chatId);
     // Delete chat itself (cascades to members and messages in DB)
     await this.chatRepo.deleteChat(chatId);
-    this.cloudinaryService.deleteChatImages(chatId).catch(err =>
-      this.logger.error(`Failed to delete Cloudinary images for chat ${chatId}`, err)
+    this.cloudinaryService.deleteChatFiles(chatId).catch(err =>
+      this.logger.error(`Failed to delete Cloudinary files for chat ${chatId}`, err)
     );
     this.logger.log(`User ${uid} deleted chat ${chatId}`);
     return { success: true }

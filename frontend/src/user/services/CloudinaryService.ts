@@ -61,7 +61,7 @@ export const CloudinaryService = {
             CloudinaryTags.CHAT_IMAGE,
             CloudinaryTags.chatId(String(chatId)),
         ];
-        const folder = `${CloudinaryFolderNames.CHAT_IMAGES}/${chatId}`;
+        const folder = `${CloudinaryFolderNames.CHAT_FILES}/${chatId}`;
         return CloudinaryService.uploadImage(resizedFile, folder, tags);
     },
 

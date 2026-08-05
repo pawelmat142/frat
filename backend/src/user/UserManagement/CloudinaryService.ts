@@ -133,25 +133,32 @@ export class CloudinaryService {
     }
 
     /**
-     * Deletes all chat images associated with a given chatId tag.
+     * Deletes all chat assets associated with a given chatId tag.
+     * Includes both image and raw file resources.
      */
-    public async deleteChatImages(chatId: number): Promise<void> {
+    public async deleteChatFiles(chatId: number): Promise<void> {
         this.validateConfig();
         const tag = CloudinaryTags.chatId(String(chatId));
-        try {
-            const auth = Buffer.from(`${this.apiKey}:${this.apiSecret}`).toString('base64');
-            const response = await axios.delete(
-                `${BASE_URL}/${this.cloudName}/resources/image/tags/${tag}`,
-                { headers: { Authorization: `Basic ${auth}` } }
-            );
-            this.logger.log(`Deleted chat images for chatId: ${chatId}, result: ${JSON.stringify(response.data)}`);
-        } catch (error: any) {
-            if (error.response?.status === 404) {
-                this.logger.log(`No chat images found for chatId: ${chatId}`);
-                return;
+        const auth = Buffer.from(`${this.apiKey}:${this.apiSecret}`).toString('base64');
+
+        const deleteResourceType = async (resourceType: 'image' | 'raw'): Promise<void> => {
+            try {
+                const response = await axios.delete(
+                    `${BASE_URL}/${this.cloudName}/resources/${resourceType}/tags/${tag}`,
+                    { headers: { Authorization: `Basic ${auth}` } }
+                );
+                this.logger.log(`Deleted chat ${resourceType} assets for chatId: ${chatId}, result: ${JSON.stringify(response.data)}`);
+            } catch (error: any) {
+                if (error.response?.status === 404) {
+                    this.logger.log(`No chat ${resourceType} assets found for chatId: ${chatId}`);
+                    return;
+                }
+                this.logger.error(`Error deleting chat ${resourceType} assets for chatId: ${chatId}`, error);
             }
-            this.logger.error(`Error deleting chat images for chatId: ${chatId}`, error);
-        }
+        };
+
+        await deleteResourceType('image');
+        await deleteResourceType('raw');
     }
 
     /**
