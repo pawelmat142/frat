@@ -57,13 +57,11 @@ const ChatInputForm: React.FC = () => {
                 <div className="chat-view-input-left">
                     <Button mode={BtnModes.PRIMARY_TXT} type="button" className="px-2"
                         onClick={() => fileInputRef.current?.click()} disabled={isBusy}
-                        title={t("chat.uploadFile")}
                     >
                         <FaFileUpload size={ICON_SIZE} />
                     </Button>
                     <Button mode={BtnModes.PRIMARY_TXT} type="button" className="px-2"
                         onClick={() => imageInputRef.current?.click()} disabled={isBusy}
-                        title={t("chat.uploadImage")}
                     >
                         <FaImage size={ICON_SIZE} />
                     </Button>

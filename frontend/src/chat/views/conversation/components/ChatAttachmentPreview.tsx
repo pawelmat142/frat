@@ -18,8 +18,8 @@ const ChatAttachmentPreview: React.FC = () => {
                         <img src={attachment.previewUrl} alt={attachment.file.name} />
                     ) : (
                         <div className="chat-view-file-preview">
-                            <FaFileAlt size={20} />
-                            <span>{attachment.file.name}</span>
+                            <FaFileAlt size={30} />
+                            {/* <span>{attachment.file.name}</span> */}
                         </div>
                     )}
                     <button

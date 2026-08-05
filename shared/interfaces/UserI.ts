@@ -44,6 +44,8 @@ export type UserProvider = typeof UserProviders[keyof typeof UserProviders];
 export interface AvatarRef {
     url: string;
     publicId: string;
+    isImage: boolean;
+    filename?: string;
 }
 
 export interface UserSearchFilters {

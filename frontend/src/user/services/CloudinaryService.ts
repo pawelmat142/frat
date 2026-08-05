@@ -96,6 +96,8 @@ export const CloudinaryService = {
         return {
             url: data.secure_url,
             publicId: data.public_id,
+            isImage: true,
+            filename: file.name,
         };
     },
 
@@ -147,6 +149,8 @@ export const CloudinaryService = {
         return {
             url: data.secure_url,
             publicId: data.public_id,
+            isImage: false,
+            filename: file.name,
         };
     },
 

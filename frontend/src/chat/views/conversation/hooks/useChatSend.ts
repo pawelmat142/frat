@@ -39,7 +39,7 @@ export const useChatSend = ({ chatId, pendingAttachments, clearPendingAttachment
                         ? CloudinaryService.uploadChatImage(p.optimizedFile, numericChatId)
                         : CloudinaryService.uploadChatFile(p.file, numericChatId)),
                 );
-                imageRefs = uploaded.map(r => ({ url: r.url, publicId: r.publicId }));
+                imageRefs = uploaded.map(r => ({ ...r }));
             }
 
             const plainText = newMessage.trim();
