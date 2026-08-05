@@ -11,6 +11,7 @@ import { MenuItem, MenuItemIdentifier, MenuItemIdentifiers } from 'global/interf
 import { useWorkersSearch } from 'employee/views/search/WorkersSearchProvider';
 import { useOfferSearch } from 'offer/views/search/OfferSearchProvider';
 import { useNotificationsContext } from 'notification/NotificationsProvider';
+import { useChatsContext } from 'chat/ChatsProvider';
 import { NavBus } from 'global/utils/PseudoViewBus';
 import { useAuthContext } from 'auth/AuthProvider';
 
@@ -37,9 +38,15 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     const workerSearchCtx = useWorkersSearch()
     const offerSearchCtx = useOfferSearch()
     const notificationsCtx = useNotificationsContext();
+    const chatsCtx = useChatsContext();
 
     const location = useLocation();
     const navType = useNavigationType(); // 'POP' | 'PUSH' | 'REPLACE'
+
+    const unreadChatCount = chatsCtx.chats
+        .flatMap(chat => chat.members ?? [])
+        .filter(member => member.user?.uid === me?.uid && member.unreadCount && member.unreadCount > 0)
+        .reduce((sum, member) => sum + (member.unreadCount || 0), 0);
 
     const getItems = (id?: MenuItemIdentifier): MenuItem[] => {
         const isAdmin = me?.roles.some(role => isOneOf([UserRoles.ADMIN, UserRoles.SUPERADMIN], role));
@@ -76,6 +83,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
             items.push({
                 label: t('chat.chats'),
                 id: MenuItemIdentifiers.MESSAGES,
+                badge: unreadChatCount > 0 ? unreadChatCount.toString() : undefined,
                 active: location.pathname.includes(Path.CHATS),
                 onClick: () => {
                     NavBus.emit(MenuItemIdentifiers.MESSAGES);
