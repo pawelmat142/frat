@@ -56,6 +56,7 @@ export const ChatEvents = {
     LEAVE_CHAT: 'leaveChat',
     DELETE_MESSAGE: 'deleteMessage',
     MESSAGE_DELETED: 'messageDeleted',
+    CHAT_DELETED: 'chatDeleted',
 
     CONNECT: 'connect',
     DISCONNECT: 'disconnect',

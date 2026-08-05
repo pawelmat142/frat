@@ -53,6 +53,19 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         })().catch(err => console.error('ChatsProvider: notification handler failed', err));
     }
 
+    const chatDeletedListener = (chatId: number) => {
+        setChats(prev => {
+            const newChats = prev.filter(c => c.chatId !== chatId);
+            // update meCtx if present
+            if (userCtx.meCtx) {
+                userCtx.updateMeCtx({ ...userCtx.meCtx, chats: newChats });
+            }
+            // recompute notifications for remaining chats
+            setUnreadMsgNotifications(prepareUnreadMsgNotificationsFromChats(newChats));
+            return newChats;
+        });
+    }
+
     useEffect(() => {
         if (me) {
             onInit()
@@ -70,6 +83,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const onDestroy = () => {
         chatSocket.unregisterChatListener(loadChatListener);
         chatSocket.unregisterNotificationMessageListener();
+        chatSocket.unregisterChatDeletedListener(chatDeletedListener);
         setChats([])
         setUnreadMsgNotifications([])
     }
@@ -78,6 +92,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         loadChats()
         chatSocket.registerChatListener(loadChatListener);
         chatSocket.registerNotificationMessageListener(notificationMessageListener);
+        chatSocket.registerChatDeletedListener(chatDeletedListener);
         await initE2EKeys();
     }
 

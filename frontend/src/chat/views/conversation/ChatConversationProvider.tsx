@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { chatSocket } from "../../services/ChatSocketService";
 import { ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
 import { UserI } from "@shared/interfaces/UserI";
 import { MenuItem } from "global/interface/controls.interface";
@@ -131,6 +132,17 @@ export const ChatConversationProvider: React.FC<{ children: React.ReactNode }> =
         viewport.addEventListener("resize", scrollToBottom);
         return () => viewport.removeEventListener("resize", scrollToBottom);
     }, []);
+
+    useEffect(() => {
+        const handler = (deletedChatId: number) => {
+            if (!chatId) return;
+            if (parseInt(chatId, 10) === deletedChatId) {
+                navigate(-1);
+            }
+        };
+        chatSocket.registerChatDeletedListener(handler);
+        return () => chatSocket.unregisterChatDeletedListener(handler);
+    }, [chatId]);
 
     return (
         <ChatConversationContext.Provider value={{

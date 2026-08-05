@@ -5,6 +5,7 @@ class ChatSocketService {
     private webSocket: WebSocketService;
     private messageListeners: Map<number, (message: ChatMessageI) => void> = new Map();
     private loadChatListeners: Set<(chat: ChatI) => void> = new Set();
+    private chatDeletedListeners: Set<(chatId: number) => void> = new Set();
     private messageDeletedListeners: Set<(data: { messageId: number; chatId: number }) => void> = new Set();
     private notificationMessageListener: ((message: ChatMessageI) => void) | null = null;
 
@@ -29,6 +30,11 @@ class ChatSocketService {
         this.webSocket.on(ChatEvents.LOAD_CHAT, (chat: ChatI) => {
             console.log('on(ChatEvents.LOAD_CHAT', chat);
             this.loadChatListeners.forEach(listener => listener(chat));
+        });
+
+        this.webSocket.on(ChatEvents.CHAT_DELETED, (chatId: number) => {
+            console.log('on(ChatEvents.CHAT_DELETED', chatId);
+            this.chatDeletedListeners.forEach(listener => listener(chatId));
         });
 
         this.webSocket.on(ChatEvents.MESSAGE_DELETED, (data: { messageId: number; chatId: number }) => {
@@ -86,6 +92,14 @@ class ChatSocketService {
 
     unregisterChatListener(loadChatListener: (chat: ChatI) => void): void {
         this.loadChatListeners.delete(loadChatListener);
+    }
+
+    registerChatDeletedListener(listener: (chatId: number) => void): void {
+        this.chatDeletedListeners.add(listener);
+    }
+
+    unregisterChatDeletedListener(listener: (chatId: number) => void): void {
+        this.chatDeletedListeners.delete(listener);
     }
 
     registerMessageDeletedListener(listener: (data: { messageId: number; chatId: number }) => void): void {

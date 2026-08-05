@@ -135,6 +135,6 @@ export class ChatSocketHandler implements SocketHandler, OnModuleInit {
   }
 
   notifyAboutDeleteChat(chatId: number): void {
-    this.socketGateway.emitToRoom(ChatUtil.chatRoom(chatId), ChatEvents.LOAD_CHAT, null);
+    this.socketGateway.emitToRoom(ChatUtil.chatRoom(chatId), ChatEvents.CHAT_DELETED, chatId);
   }
 }
