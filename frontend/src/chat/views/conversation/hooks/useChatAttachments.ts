@@ -26,7 +26,7 @@ export const useChatAttachments = (messages: ChatMessageI[]) => {
 
     const getExistingStorageBytes = () =>
         messages.reduce(
-            (sum, msg) => sum + (msg.imageRefs?.length ?? 0) * AppConfig.UPLOAD_IMG_TARGET_OUTPUT_SIZE_BYTES,
+            (sum, msg) => sum + (msg.fileRefs?.length ?? 0) * AppConfig.UPLOAD_IMG_TARGET_OUTPUT_SIZE_BYTES,
             0,
         );
 

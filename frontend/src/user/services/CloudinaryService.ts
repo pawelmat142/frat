@@ -1,4 +1,4 @@
-import { AvatarRef, UserI } from '@shared/interfaces/UserI';
+import { FileRef, UserI } from '@shared/interfaces/UserI';
 import axios from 'axios';
 import { UserManagementService } from './UserManagementService';
 import { FileUtil } from 'global/utils/FileUtil';
@@ -38,7 +38,7 @@ export const CloudinaryService = {
      * @param chatId - Chat ID for organizing files and tagging
      * @returns Promise with the AvatarRef (url + publicId)
      */
-    uploadChatFile: async (file: File, chatId: number): Promise<AvatarRef> => {
+    uploadChatFile: async (file: File, chatId: number): Promise<FileRef> => {
         const tags = [
             CloudinaryTags.CHAT,
             CloudinaryTags.CHAT_FILE,
@@ -54,7 +54,7 @@ export const CloudinaryService = {
      * @param chatId - Chat ID for organizing files and tagging
      * @returns Promise with the AvatarRef (url + publicId)
      */
-    uploadChatImage: async (file: File, chatId: number): Promise<AvatarRef> => {
+    uploadChatImage: async (file: File, chatId: number): Promise<FileRef> => {
         const resizedFile = await FileUtil.resizeForMobile(file);
         const tags = [
             CloudinaryTags.CHAT,
@@ -73,7 +73,7 @@ export const CloudinaryService = {
      * @param tags - Optional tags for searching/filtering assets
      * @returns Promise with the upload result containing URL and public ID
      */
-    uploadImage: async (file: File, folder?: string, tags?: string[]): Promise<AvatarRef> => {
+    uploadImage: async (file: File, folder?: string, tags?: string[]): Promise<FileRef> => {
         validateCloudinaryConfig();
 
         const formData = new FormData();
@@ -126,7 +126,7 @@ export const CloudinaryService = {
      * @param tags - Optional tags for searching/filtering assets
      * @returns Promise with the upload result containing URL and public ID
      */
-    uploadFile: async (file: File, folder?: string, tags?: string[]): Promise<AvatarRef> => {
+    uploadFile: async (file: File, folder?: string, tags?: string[]): Promise<FileRef> => {
         validateCloudinaryConfig();
 
         const formData = new FormData();

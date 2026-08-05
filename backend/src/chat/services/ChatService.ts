@@ -7,9 +7,9 @@ import { ToastException } from 'global/exceptions/ToastException';
 import { UserService } from 'user/services/UserService';
 import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
 import { ApiResponse } from '@shared/dto/dtos';
-import { AvatarRef } from '@shared/interfaces/UserI';
+import { FileRef } from '@shared/interfaces/UserI';
 import { Subscription } from 'rxjs/internal/Subscription';
-
+  
 @Injectable()
 export class ChatService implements OnModuleInit, OnModuleDestroy {
 
@@ -100,19 +100,19 @@ try {
     return this.chatRepo.isMember(chatId, uid);
   }
 
-  async createMessage(chatId: number, senderUid: string, content: string, imageRefs?: AvatarRef[]): Promise<ChatMessageI> {
-    if (!content?.trim() && !imageRefs?.length) {
+  async createMessage(chatId: number, senderUid: string, content: string, fileRefs?: FileRef[]): Promise<ChatMessageI> {
+    if (!content?.trim() && !fileRefs?.length) {
       throw new ToastException('chat.error.emptyMessage', this);
     }
 
     const isE2EPayload = content?.startsWith('e2e:');
 
-    const message = await this.chatRepo.createMessage(chatId, senderUid, content.trim(), imageRefs);
+    const message = await this.chatRepo.createMessage(chatId, senderUid, content.trim(), fileRefs);
 
     // If the content is an E2E-encrypted payload, store a placeholder so the
     // chat list preview never exposes ciphertext to the server or other clients.
     let latestContent: string;
-    if (message.imageRefs?.length) {
+    if (message.fileRefs?.length) {
       latestContent = message.content || '📷 Image';
     } else if (isE2EPayload) {
       latestContent = '🔒 Encrypted message';
@@ -212,8 +212,8 @@ try {
       throw new ToastException('chat.error.notMessageOwner', this);
     }
     await this.chatRepo.deleteMessage(messageId);
-    if (message.imageRefs?.length) {
-      const publicIds = message.imageRefs.map(ref => ref.publicId).filter(Boolean);
+    if (message.fileRefs?.length) {
+      const publicIds = message.fileRefs.map(ref => ref.publicId).filter(Boolean);
       this.cloudinaryService.deleteImagesByPublicIds(publicIds).catch(err =>
         this.logger.error(`Failed to delete Cloudinary images for message ${messageId}`, err)
       );

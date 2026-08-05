@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
 
-import { AvatarRef } from "./UserI";
+import { FileRef } from "./UserI";
 
 /**
  * Database entity dla powiadomienia
@@ -18,7 +18,7 @@ export interface NotificationI {
     message: string;
     messageParams?: Record<string, string>
     icon: NotificationIcon
-    avatarRef?: AvatarRef;
+    avatarRef?: FileRef;
     requesterUid?: string
     requesterName?: string
 

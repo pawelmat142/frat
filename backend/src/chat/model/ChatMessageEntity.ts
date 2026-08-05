@@ -3,7 +3,7 @@ import { ChatMessageI, MessageType, MessageTypes } from '@shared/interfaces/Chat
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { ChatEntity } from './ChatEntity';
 import { UserEntity } from 'user/model/UserEntity';
-import { AvatarRef } from '@shared/interfaces/UserI';
+import { FileRef } from '@shared/interfaces/UserI';
 
 @Entity('jh_chat_messages')
 export class ChatMessageEntity implements ChatMessageI {
@@ -24,7 +24,7 @@ export class ChatMessageEntity implements ChatMessageI {
   content: string;
 
   @Column({ name: 'image_refs', type: 'jsonb', nullable: true })
-  imageRefs: AvatarRef[] | null;
+  fileRefs?: FileRef[] | null;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

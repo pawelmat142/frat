@@ -15,9 +15,9 @@ const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onDelete }) => {
 
     const bubble = (
         <div className={`chat-view-message ${leftSide ? "left" : "right"} ${msg.type === MessageTypes.IMAGE ? "image" : ""}`}>
-            {msg.type === MessageTypes.IMAGE && !!msg.imageRefs?.length && (
-                <div className={`chat-view-message-images count-${Math.min(msg.imageRefs.length, 4)}`}>
-                    {msg.imageRefs.map((ref, i) => {
+            {msg.type === MessageTypes.IMAGE && !!msg.fileRefs?.length && (
+                <div className={`chat-view-message-images count-${Math.min(msg.fileRefs.length, 4)}`}>
+                    {msg.fileRefs.map((ref, i) => {
                         if (!ref.isImage) {
                             return (
                                 <div key={i} className="chat-view-message-file">

@@ -1,5 +1,5 @@
 import { TrainingProviderProfileI, TrainingProviderStatus, TrainingProviderStatuses } from '@shared/interfaces/TrainingI';
-import { AvatarRef } from '@shared/interfaces/UserI';
+import { FileRef } from '@shared/interfaces/UserI';
 import { ParsedPhoneNumber, Point } from '@shared/interfaces/WorkerI';
 import { Expose } from 'class-transformer';
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
@@ -37,7 +37,7 @@ export class TrainingProviderEntity implements TrainingProviderProfileI {
 
     @Column({ name: 'logo_ref', type: 'jsonb', nullable: true })
     @Expose()
-    logoRef?: AvatarRef;
+    logoRef?: FileRef;
 
     @Column({ name: 'location_country' })
     @Expose()

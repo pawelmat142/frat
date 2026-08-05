@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { WorkerI } from "@shared/interfaces/WorkerI";
-import { AvatarRef } from "@shared/interfaces/UserI";
+import { FileRef } from "@shared/interfaces/UserI";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import { FileUtil } from "global/utils/FileUtil";
@@ -48,7 +48,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) =
     const me = userCtx.me;
     const isMyProfile = me?.uid === worker.uid;
 
-    const savedImages: AvatarRef[] = userCtx.meCtx?.workerProfile?.images ?? worker.images ?? [];
+    const savedImages: FileRef[] = userCtx.meCtx?.workerProfile?.images ?? worker.images ?? [];
     const canAddMore = savedImages.length < MAX_IMAGES;
 
     const allDisplayUrls = [

@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { AvatarRef, UserI } from '@shared/interfaces/UserI';
+import { FileRef, UserI } from '@shared/interfaces/UserI';
 import { UserService } from '../services/UserService';
 import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
 import { Subscription } from 'rxjs';
@@ -32,7 +32,7 @@ export class UserManagementService implements OnModuleInit, OnModuleDestroy {
      * - Deletes old avatar assets from Cloudinary (with uid + user-avatar tags)
      * - Updates User entity (DB trigger syncs to Worker automatically)
      */
-    public async updateUserAvatar(user: UserI, newAvatarRef: AvatarRef): Promise<UserI> {
+    public async updateUserAvatar(user: UserI, newAvatarRef: FileRef): Promise<UserI> {
         return this.performUpdateUserAvatar(user, newAvatarRef);
     }
 
@@ -63,7 +63,7 @@ export class UserManagementService implements OnModuleInit, OnModuleDestroy {
         );
     }
 
-    private async performUpdateUserAvatar(user: UserI, newAvatarRef: AvatarRef): Promise<UserI> {
+    private async performUpdateUserAvatar(user: UserI, newAvatarRef: FileRef): Promise<UserI> {
         if (!user) {
             throw new Error('User is required to update avatar');
         }

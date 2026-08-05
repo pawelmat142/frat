@@ -4,16 +4,16 @@ import { useTranslation } from "react-i18next";
 import { AVATAR_SIZE, CloudinaryService } from "user/services/CloudinaryService";
 import Loading from "global/components/Loading";
 import { BtnModes } from "global/interface/controls.interface";
-import { AvatarRef } from "@shared/interfaces/UserI";
+import { FileRef } from "@shared/interfaces/UserI";
 import FormError from "./FormError";
 import Button from "./Button";
 import { AppConfig } from "@shared/AppConfig";
 import { FileUtil } from "global/utils/FileUtil";
 import { CloudinaryTags } from "@shared/utils/CloudinaryUtil";
 
-interface AvatarUploadFieldProps {
-    value: AvatarRef | null;
-    onChange: (avatarRef: AvatarRef | null) => void;
+interface FileUploadFieldProps {
+    value: FileRef | null;
+    onChange: (avatarRef: FileRef | null) => void;
     error?: { message?: string } | null;
     required?: boolean;
     folder?: string; // Optional custom folder for Cloudinary upload
@@ -25,7 +25,7 @@ interface AvatarUploadFieldProps {
 const AVATAR_PLACEHOLDER = AppConfig.AVATAR_PLACEHOLDER;
 const ALLOWED_EXTENSIONS = [...AppConfig.UPLOAD_IMG_ALLOWED_EXTENSIONS] as string[];
 
-const AvatarUploadField: React.FC<AvatarUploadFieldProps> = ({
+const AvatarUploadField: React.FC<FileUploadFieldProps> = ({
     value,
     onChange,
     error,

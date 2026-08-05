@@ -8,7 +8,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
-import { AvatarRef, UserI } from '@shared/interfaces/UserI';
+import { FileRef, UserI } from '@shared/interfaces/UserI';
 import { Serialize } from 'global/decorators/Serialize';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
@@ -29,7 +29,7 @@ export class UserManagementController {
   @UseGuards(JwtAuthGuard)
   updateAvatar(
     @CurrentUser() user: UserI,
-    @Body() avatarRef?: AvatarRef
+    @Body() avatarRef?: FileRef
   ): Promise<UserI> {
     return this.userManagementService.updateUserAvatar(user, avatarRef);
   }

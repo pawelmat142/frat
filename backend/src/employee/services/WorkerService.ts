@@ -2,7 +2,7 @@
 import { ForbiddenException, Injectable, Logger, NotFoundException, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { WorkerRepo } from './WorkerRepo';
 import { WorkerEntity } from 'employee/model/WorkerEntity';
-import { AvatarRef, UserI } from '@shared/interfaces/UserI';
+import { FileRef, UserI } from '@shared/interfaces/UserI';
 import { CertificatesDto, WorkerAvailabilityOptions, WorkerFormDto, WorkerFormStepAvailability, WorkerFormStepCertificates, WorkerI, WorkerSkills, WorkerStatus, WorkerStatuses, WorkerWithCertificates, WorkerWithMutualFriends } from '@shared/interfaces/WorkerI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { WorkerUtils } from './WorkerUtil';
@@ -223,7 +223,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         this.logger.log(`Updated bio for profile ID: ${profile.workerId}`);
     }
 
-    public async addImage(user: UserI, imageRef: AvatarRef): Promise<void> {
+    public async addImage(user: UserI, imageRef: FileRef): Promise<void> {
         const profile = await this.workerRepo.findByUid(user.uid);
         if (!profile) {
             throw new ToastException('employeeProfile.notFound', this);

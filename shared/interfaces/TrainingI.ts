@@ -1,5 +1,5 @@
 import { GeocodedPosition } from './MapsInterfaces';
-import { AvatarRef } from './UserI';
+import { FileRef } from './UserI';
 import { ParsedPhoneNumber, Point } from './WorkerI';
 
 // ─── Training Provider Profile ────────────────────────────────────────────────
@@ -12,7 +12,7 @@ export interface TrainingProviderProfileI {
     website?: string;
     contactEmail?: string;
     phoneNumber?: ParsedPhoneNumber;
-    logoRef?: AvatarRef;
+    logoRef?: FileRef;
     locationCountry: string;
     displayAddress?: string;
     point?: Point;

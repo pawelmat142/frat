@@ -1,6 +1,6 @@
 /** Created by Pawel Malek **/
 import { DateRangeI, WorkerAvailabilityOption, WorkerFormRangesOption, WorkerI, WorkerLocationOption, WorkerStatus, ParsedPhoneNumber, Point, WorkerSkills } from '@shared/interfaces/WorkerI';
-import { AvatarRef } from '@shared/interfaces/UserI';
+import { FileRef } from '@shared/interfaces/UserI';
 import { Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { DateRangeEntity } from './DateRangeEntity';
@@ -45,7 +45,7 @@ export class WorkerEntity implements WorkerI {
   
   @Column({ name: 'avatar_ref', type: 'jsonb', nullable: true })
   @Expose()
-  avatarRef: AvatarRef;
+  avatarRef: FileRef;
   
   @Column({ name: 'bio', type: 'text', nullable: true })
   @Expose()
@@ -115,7 +115,7 @@ export class WorkerEntity implements WorkerI {
   skills?: WorkerSkills;
 
   @Column({ name: 'images', type: 'jsonb', nullable: true })
-  images?: AvatarRef[];
+  images?: FileRef[];
 
 
   // STATS

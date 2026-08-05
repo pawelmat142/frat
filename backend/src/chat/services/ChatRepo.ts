@@ -7,7 +7,7 @@ import { ChatEntity } from '../model/ChatEntity';
 import { ChatMemberEntity } from '../model/ChatMemberEntity';
 import { ChatMessageEntity } from '../model/ChatMessageEntity';
 import { ChatI, ChatMemberStatuses, MessageTypes } from '@shared/interfaces/ChatI';
-import { AvatarRef } from '@shared/interfaces/UserI';
+import { FileRef } from '@shared/interfaces/UserI';
 
 @Injectable()
 export class ChatRepo {
@@ -103,14 +103,14 @@ export class ChatRepo {
     chatId: number,
     senderUid: string,
     content: string,
-    imageRefs?: AvatarRef[],
+    fileRefs?: FileRef[],
   ): Promise<ChatMessageEntity> {
     const message = this.messageRepository.create({
       chatId,
       senderUid,
       content,
-      type: imageRefs?.length ? MessageTypes.IMAGE : MessageTypes.TEXT,
-      imageRefs: imageRefs?.length ? imageRefs : null,
+      type: fileRefs?.length ? MessageTypes.IMAGE : MessageTypes.TEXT,
+      fileRefs: fileRefs?.length ? fileRefs : null,
     });
     return this.messageRepository.save(message);
   }

@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserRepo } from './UserRepo';
 import { UserEntity } from 'user/model/UserEntity';
 import { CreateUser } from 'user/model/UserInterface';
-import { AvatarRef, UserI, UserRole, UserRoles } from '@shared/interfaces/UserI';
+import { FileRef, UserI, UserRole, UserRoles } from '@shared/interfaces/UserI';
 import { ToastException } from 'global/exceptions/ToastException';
 import { Subject } from 'rxjs';
 
@@ -22,7 +22,7 @@ export class UserService {
         return this._userDeletedEvent$.asObservable()
     }
 
-    private _avatarUpdateRequest$ = new Subject<{ user: UserI; newAvatarRef: AvatarRef }>()
+    private _avatarUpdateRequest$ = new Subject<{ user: UserI; newAvatarRef: FileRef }>()
     /** 
      * Subscribe to this event to handle avatar updates centrally.
      * UserManagementService listens to this and handles Cloudinary cleanup + DB update.
@@ -112,7 +112,7 @@ export class UserService {
         return result;
     }
 
-    public async updateAvatarIfChanges(user: UserI, avatarRef: AvatarRef): Promise<void> {
+    public async updateAvatarIfChanges(user: UserI, avatarRef: FileRef): Promise<void> {
         if (user.avatarRef?.publicId === avatarRef?.publicId) {
             return
         }

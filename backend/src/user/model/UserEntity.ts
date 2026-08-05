@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { AvatarRef, UserI, UserProvider, UserRole, UserStatus, UserStatuses } from '@shared/interfaces/UserI';
+import { FileRef, UserI, UserProvider, UserRole, UserStatus, UserStatuses } from '@shared/interfaces/UserI';
 import { Expose } from 'class-transformer';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
@@ -54,7 +54,7 @@ export class UserEntity implements UserI {
 
   @Column({ name: 'avatar_ref', type: 'jsonb', nullable: true })
   @Expose()
-  avatarRef?: AvatarRef;
+  avatarRef?: FileRef;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

@@ -1,6 +1,6 @@
 import { CertificateI } from './CertificateI';
 import { GeocodedPosition } from './MapsInterfaces';
-import { AvatarRef } from './UserI';
+import { FileRef } from './UserI';
 
 export interface ParsedPhoneNumber {
   prefix: string;
@@ -20,7 +20,7 @@ export interface WorkerI {
   phoneNumber: ParsedPhoneNumber;
   email: string;
   communicationLanguages: string[];
-  avatarRef: AvatarRef;
+  avatarRef: FileRef;
   bio?: string;
 
   // 
@@ -47,7 +47,7 @@ export interface WorkerI {
   maxAltitude?: number; //[m] DEPRACATED
   readyToTravel?: boolean;
   skills?: WorkerSkills
-  images?: AvatarRef[]
+  images?: FileRef[]
 
   uniqueViewsCount: number;
   favoritesCount: number;
@@ -105,7 +105,7 @@ export interface WorkerFormStepPersonalData {
   phoneNumber: ParsedPhoneNumber;
   email: string;
   communicationLanguages: string[];
-  avatarRef: AvatarRef;
+  avatarRef: FileRef;
 }
 
 export interface WorkerFormStepCareer {
@@ -178,7 +178,7 @@ export interface WorkerFormDto {
   phoneNumber: ParsedPhoneNumber;
   email: string;
   communicationLanguages: string[];
-  avatarRef: AvatarRef;
+  avatarRef: FileRef;
 
   locationOption: WorkerLocationOption;
   // WorkerLocationOptions.POSITION

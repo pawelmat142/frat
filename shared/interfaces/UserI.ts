@@ -10,7 +10,7 @@ export interface UserI {
     provider: UserProvider
     verified: boolean
     photoURL?: string
-    avatarRef?: AvatarRef
+    avatarRef?: FileRef
     lastSeenAt?: Date
 }
 
@@ -41,7 +41,7 @@ export const UserProviders = {
 export type UserProvider = typeof UserProviders[keyof typeof UserProviders];
 
 
-export interface AvatarRef {
+export interface FileRef {
     url: string;
     publicId: string;
     isImage: boolean;

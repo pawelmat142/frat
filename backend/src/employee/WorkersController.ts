@@ -14,7 +14,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { LogInterceptor } from 'global/interceptors/LogInterceptor';
-import { AvatarRef, UserI, UserRoles } from '@shared/interfaces/UserI';
+import { FileRef, UserI, UserRoles } from '@shared/interfaces/UserI';
 import { WorkersService } from './services/WorkerService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
 import { CertificatesDto, WorkerFormDto, WorkerFormStepAvailability, WorkerFormStepCertificates, WorkerI, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerStatus, WorkerWithCertificates } from '@shared/interfaces/WorkerI';
@@ -165,7 +165,7 @@ export class WorkersController {
   @Serialize(WorkerEntity)
   addImage(
     @CurrentUser() user: UserI,
-    @Body() imageRef: AvatarRef
+    @Body() imageRef: FileRef
   ): Promise<void> {
     return this.workersService.addImage(user, imageRef);
   }

@@ -1,6 +1,6 @@
 import { httpClient } from "global/services/http";
 import { CertificatesDto, WorkerForm, WorkerFormDto, WorkerFormStepAvailability, WorkerFormStepCertificateDates, WorkerFormStepCertificates, WorkerI, WorkerSearchFilters, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerWithCertificates } from "@shared/interfaces/WorkerI";
-import { AvatarRef } from "@shared/interfaces/UserI";
+import { FileRef } from "@shared/interfaces/UserI";
 import { Position } from "@shared/interfaces/MapsInterfaces";
 import { Header } from "@shared/def/def";
 
@@ -97,7 +97,7 @@ export const WorkerService = {
 		return httpClient.put<WorkerI>(`/worker/bio`, { value: bio });
 	},
 
-	addImage(imageRef: AvatarRef): Promise<WorkerI> {
+	addImage(imageRef: FileRef): Promise<WorkerI> {
 		return httpClient.post<WorkerI>(`/worker/images`, imageRef);
 	},
 

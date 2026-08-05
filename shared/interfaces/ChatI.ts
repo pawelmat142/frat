@@ -1,4 +1,4 @@
-import { AvatarRef, UserI } from "./UserI";
+import { FileRef, UserI } from "./UserI";
 
 export interface ChatI {
     chatId: number;
@@ -31,7 +31,7 @@ export interface ChatMessageI {
     chatId: number;
     senderUid: string;
     content: string;
-    imageRefs?: AvatarRef[] | null;
+    fileRefs?: FileRef[] | null;
     createdAt: Date;
     readAt: Date | null;
 }
@@ -67,7 +67,7 @@ export type ChatEvent = typeof ChatEvents[keyof typeof ChatEvents];
 export interface SendMessageDto {
     chatId: number;
     content: string;
-    imageRefs?: AvatarRef[];
+    fileRefs?: FileRef[];
 }
 
 export interface SendMessageResponse {

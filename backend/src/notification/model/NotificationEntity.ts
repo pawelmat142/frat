@@ -2,7 +2,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { NotificationType, NotificationIcon, NotificationI } from '@shared/interfaces/NotificationI';
 import { Expose } from 'class-transformer';
-import { AvatarRef } from '@shared/interfaces/UserI';
+import { FileRef } from '@shared/interfaces/UserI';
 
 @Entity('jh_notifications')
 export class NotificationEntity implements NotificationI {
@@ -41,7 +41,7 @@ export class NotificationEntity implements NotificationI {
 
   @Column({ name: 'avatar_ref', type: 'jsonb', nullable: true })
   @Expose()
-  avatarRef?: AvatarRef;
+  avatarRef?: FileRef;
 
   @Column({ name: 'requester_uid', nullable: true })
   @Expose()

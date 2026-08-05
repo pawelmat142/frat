@@ -7,6 +7,7 @@ import { ToastException } from "global/exceptions/ToastException";
 import { DeepPartial, FindManyOptions, Repository, SelectQueryBuilder } from "typeorm";
 import { DateRangeEntity } from "employee/model/DateRangeEntity";
 import { SearchUtil } from "global/utils/SearchUtil";
+import { FileRef } from "@shared/interfaces/UserI";
 
 @Injectable()
 export class WorkerRepo {
@@ -142,9 +143,8 @@ export class WorkerRepo {
         if (worker.avatarRef?.publicId !== newWorker.avatarRef?.publicId) {
             this.logger.log(`Updating EmployeeProfile avatarRef from ${JSON.stringify(worker.avatarRef)} to ${JSON.stringify(newWorker.avatarRef)}`);
             worker.avatarRef = {
-                publicId: newWorker.avatarRef?.publicId || '',
-                url: newWorker.avatarRef?.url || ''
-            };
+                ...newWorker.avatarRef
+            } as FileRef;
             updatedFlag = true;
         }
 
@@ -272,7 +272,7 @@ export class WorkerRepo {
 
         if (newWorker?.images?.length && this.imagesChanges(newWorker, worker)) {
             this.logger.log(`Updating EmployeeProfile images from ${JSON.stringify(worker.images)} to ${JSON.stringify(newWorker.images)}`);
-            worker.images = newWorker?.images?.map(i => ({ publicId: i.publicId ?? '', url: i.url ?? '' })) || [];
+            worker.images = newWorker?.images?.map(i => ({ ...i })) || [];
             updatedFlag = true;
         }
 

@@ -1,6 +1,6 @@
 import { ParsedPhoneNumber, Point } from "./WorkerI";
 import { GeocodedPosition } from "./MapsInterfaces";
-import { AvatarRef } from "./UserI";
+import { FileRef } from "./UserI";
 
 export interface OfferI {
 
@@ -23,7 +23,7 @@ export interface OfferI {
     currency?: Currency;
     salary?: number;
     description?: string
-    avatarRef?: AvatarRef
+    avatarRef?: FileRef
 
     availableSlots: number
     // TODO power fields
@@ -110,7 +110,7 @@ export interface OfferFormThree {
     currency: Currency | null;
     salary: number | null;
     description?: string | null;
-    avatarRef?: AvatarRef | null;
+    avatarRef?: FileRef | null;
 }
 
 export interface OfferSearchFilters {

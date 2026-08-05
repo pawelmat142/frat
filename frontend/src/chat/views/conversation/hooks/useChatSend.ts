@@ -1,7 +1,7 @@
 import { FormEvent, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { AvatarRef } from "@shared/interfaces/UserI";
+import { FileRef } from "@shared/interfaces/UserI";
 import { chatSocket } from "chat/services/ChatSocketService";
 import { CloudinaryService } from "user/services/CloudinaryService";
 import { PendingAttachment } from "./useChatAttachments";
@@ -31,7 +31,7 @@ export const useChatSend = ({ chatId, pendingAttachments, clearPendingAttachment
         setSending(true);
 
         try {
-            let imageRefs: AvatarRef[] | undefined;
+            let fileRefs: FileRef[] | undefined;
 
             if (pendingAttachments.length) {
                 const uploaded = await Promise.all(
@@ -39,7 +39,7 @@ export const useChatSend = ({ chatId, pendingAttachments, clearPendingAttachment
                         ? CloudinaryService.uploadChatImage(p.optimizedFile, numericChatId)
                         : CloudinaryService.uploadChatFile(p.file, numericChatId)),
                 );
-                imageRefs = uploaded.map(r => ({ ...r }));
+                fileRefs = uploaded.map(r => ({ ...r }));
             }
 
             const plainText = newMessage.trim();
@@ -47,7 +47,7 @@ export const useChatSend = ({ chatId, pendingAttachments, clearPendingAttachment
             // Encrypt text content when E2E is enabled, recipient key is available, and
             // the message has no image attachments (images are uploaded to Cloudinary — not encrypted).
             let content = plainText;
-            if (ChatCryptoService.isE2EEnabled() && !imageRefs?.length && recipientPublicKey) {
+            if (ChatCryptoService.isE2EEnabled() && !fileRefs?.length && recipientPublicKey) {
                 const keyPair = ChatCryptoService.loadKeyPair();
                 if (keyPair) {
                     content = ChatCryptoService.encrypt(plainText, recipientPublicKey, keyPair.secretKey);
@@ -57,7 +57,7 @@ export const useChatSend = ({ chatId, pendingAttachments, clearPendingAttachment
             const response = await chatSocket.sendMessage({
                 chatId: numericChatId,
                 content,
-                imageRefs,
+                fileRefs: fileRefs,
             });
 
             if (response.success && response.message) {
