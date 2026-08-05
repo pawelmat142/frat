@@ -2,6 +2,7 @@ import { ChatI, ChatMemberI, ChatMessageI, ChatWithMembers } from "@shared/inter
 import React, { useEffect } from "react";
 import { createContext, useRef, useState } from "react";
 import { chatSocket } from "./services/ChatSocketService";
+import { ChatService } from "./services/ChatService";
 import { NotificationI, NotificationIcons, NotificationTypes } from "@shared/interfaces/NotificationI";
 import { useUserContext } from "user/UserProvider";
 import ChatCryptoService from "./services/ChatCryptoService";
@@ -28,6 +29,30 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const chatsRef = useRef<ChatWithMembers[]>(chats)
     chatsRef.current = chats
 
+    const notificationMessageListener = (message: ChatMessageI) => {
+        (async () => {
+            // If we don't have this chat in current context, try to fetch and add it
+            const exists = chatsRef.current.some(c => c.chatId === message.chatId);
+            let effectiveChats = chatsRef.current;
+            if (!exists) {
+                try {
+                    const chat = await ChatService.getChatById(message.chatId);
+                    // Prepend new chat if not already present
+                    effectiveChats = [chat, ...chatsRef.current];
+                    setChats(prev => {
+                        if (prev.some(c => c.chatId === chat.chatId)) return prev;
+                        return [chat, ...prev];
+                    });
+                } catch (err) {
+                    console.error('ChatsProvider: failed to fetch chat for notification', err);
+                }
+            }
+
+            const unreadMSgNotifications = prepareUnreadMsgNotificationsFromChats(effectiveChats, message);
+            setUnreadMsgNotifications(unreadMSgNotifications);
+        })().catch(err => console.error('ChatsProvider: notification handler failed', err));
+    }
+
     useEffect(() => {
         if (me) {
             onInit()
@@ -44,6 +69,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const onDestroy = () => {
         chatSocket.unregisterChatListener(loadChatListener);
+        chatSocket.unregisterNotificationMessageListener();
         setChats([])
         setUnreadMsgNotifications([])
     }
@@ -51,6 +77,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const onInit = async () => {
         loadChats()
         chatSocket.registerChatListener(loadChatListener);
+        chatSocket.registerNotificationMessageListener(notificationMessageListener);
         await initE2EKeys();
     }
 
@@ -120,16 +147,16 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
 
-
     // CHAT NOTIFICATIONS
     const prepareUnreadMsgNotificationsFromChats = (chats: ChatWithMembers[], message?: ChatMessageI): NotificationI[] => {
         const timestamp = Date.now();
-        return chats.filter(c => c.members?.some(m => m.user?.uid === me?.uid && m.unreadCount && m.unreadCount > 0))
+        return chats
+            .filter(c => c.members?.some(m => m.user?.uid === me?.uid && m.unreadCount && m.unreadCount > 0))
             .map(chat => {
 
                 const otherMember = chat.members!.find(m => m.user?.uid !== me?.uid);
                 if (!otherMember) {
-                    throw new Error(`Chat ${chat.chatId} - other memebr not found`);
+                    throw new Error(`Chat ${chat.chatId} - other member not found`);
                 }
 
                 const meChatMember = getMeChatMember(chat);
@@ -141,9 +168,6 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     unreadCount++
                 }
 
-                // For E2E-encrypted messages, never show ciphertext in notifications.
-                // The backend already stores '🔒 Encrypted message' as latestMessageContent,
-                // but real-time message.content may still be a raw ciphertext payload.
                 const notifMessage = isCurrentMsg
                     ? (ChatCryptoService.isE2EContent(message.content) ? '🔒 Encrypted message' : message.content)
                     : (chat.latestMessageContent || '');
