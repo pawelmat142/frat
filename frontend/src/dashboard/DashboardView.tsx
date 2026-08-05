@@ -27,6 +27,7 @@ import MyOffersDashboard from "./MyOffersDashboard";
 import LatestOffersDashboard from "./LatestOffersDashboard";
 import MostViewedWorkers from "./MostViewedWorkers";
 import FriendsDashboard from "./FriendsDashboard";
+import Button from "global/components/controls/Button";
 
 const DashboardView: React.FC = () => {
 
@@ -65,6 +66,11 @@ const DashboardView: React.FC = () => {
         icon: Ico.SETTINGS,
         if: isDesktop && Util.hasPermission([UserRoles.ADMIN, UserRoles.SUPERADMIN], me),
         onClick: () => navigate(Path.ADMIN_DICTIONARIES)
+    }, {
+        label: t("pwa.install"),
+        if: isInstallable,
+        icon: Ico.DOWNLOAD,
+        onClick: install
     }, {
         label: t("notification.header"),
         icon: Ico.NOTIFICATION,
@@ -141,27 +147,6 @@ const DashboardView: React.FC = () => {
         return item;
     });
 
-    const quickActions: MenuItem[] = [{
-        label: t("pwa.install"),
-        if: isInstallable,
-        icon: Ico.DOWNLOAD,
-        onClick: install
-    }, {
-        if: !!userCtx.meCtx?.workerProfile,
-        icon: Ico.EDIT,
-        label: t("user.myWorkerProfile"),
-        onClick: () => navigate(Path.getWorkerProfilePath(userCtx.meCtx!.workerProfile!.displayName)),
-    }, {
-        if: !userCtx.meCtx?.workerProfile,
-        icon: Ico.ADD_USER,
-        label: t("user.addWorkerProfile"),
-        onClick: () => navigate(Path.WORKER_FORM)
-    }, {
-        icon: Ico.FRIENDS,
-        label: t("account.friends"),
-        onClick: () => navigate(Path.getFriendsPath(me.uid))
-    }]
-
     const menu = <IconButton className="py-3 px-3" icon={<Ico.BURGER />} mode={BtnModes.SECONDARY_TXT} onClick={() => {
         drawer.open({
             showClose: true,
@@ -178,14 +163,22 @@ const DashboardView: React.FC = () => {
 
         <EmailVerificationWarning></EmailVerificationWarning>
 
-{/* TODO refactor pls - something more pretty ;p */}
-        <div className="main-tiles view-margin py-7">
-            {quickActions.filter(item => item.if === undefined || !!item.if).map((action, index) => {
-                return (<div className="ripple p-tile dashboard-tile col-tile bottom-bar-shadow py-2" onClick={action.onClick} key={index}>
-                    {action.icon && <action.icon size={32} className="primary-color" />}
-                    <div className="s-font letter-spacing">{action.label}</div>
-                </div>);
-            })}
+        <div className="flex justify-end w-full">
+            {userCtx.meCtx?.workerProfile ? (
+                <Button
+                    onClick={() => navigate(Path.getWorkerProfilePath(userCtx.meCtx!.workerProfile!.displayName))}
+                    mode={BtnModes.PRIMARY_TXT}>
+                    {t("user.myWorkerProfile")}
+                    <Ico.CHEVRON_RIGHT />
+                </Button>
+            ) : (
+                <Button
+                    onClick={() => navigate(Path.WORKER_FORM)}
+                    mode={BtnModes.PRIMARY_TXT}>
+                    {t("user.addWorkerProfile")}
+                    <Ico.CHEVRON_RIGHT />
+                </Button>
+            )}
         </div>
 
         <MyListDashboard></MyListDashboard>
