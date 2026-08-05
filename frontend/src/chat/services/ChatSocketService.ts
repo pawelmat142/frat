@@ -1,10 +1,10 @@
-import { ChatEvents, ChatI, ChatMessageI, DeleteMessageDto, DeleteMessageResponse, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
+import { ChatEvents, ChatI, ChatMessageI, ChatWithMembers, DeleteMessageDto, DeleteMessageResponse, SendMessageDto, SendMessageResponse } from '@shared/interfaces/ChatI';
 import WebSocketService from 'global/web-socket/WebSocketService';
 
 class ChatSocketService {
     private webSocket: WebSocketService;
     private messageListeners: Map<number, (message: ChatMessageI) => void> = new Map();
-    private loadChatListeners: Set<(chat: ChatI) => void> = new Set();
+    private loadChatListeners: Set<(chat: ChatWithMembers) => void> = new Set();
     private chatDeletedListeners: Set<(chatId: number) => void> = new Set();
     private messageDeletedListeners: Set<(data: { messageId: number; chatId: number }) => void> = new Set();
     private notificationMessageListener: ((message: ChatMessageI) => void) | null = null;
@@ -27,7 +27,7 @@ class ChatSocketService {
             }
         });
 
-        this.webSocket.on(ChatEvents.LOAD_CHAT, (chat: ChatI) => {
+        this.webSocket.on(ChatEvents.LOAD_CHAT, (chat: ChatWithMembers) => {
             console.log('on(ChatEvents.LOAD_CHAT', chat);
             this.loadChatListeners.forEach(listener => listener(chat));
         });
@@ -86,11 +86,11 @@ class ChatSocketService {
         this.messageListeners.delete(chatId);
     }
 
-    registerChatListener(loadChatListener: (chat: ChatI) => void): void {
+    registerChatListener(loadChatListener: (chat: ChatWithMembers) => void): void {
         this.loadChatListeners.add(loadChatListener);
     }
 
-    unregisterChatListener(loadChatListener: (chat: ChatI) => void): void {
+    unregisterChatListener(loadChatListener: (chat: ChatWithMembers) => void): void {
         this.loadChatListeners.delete(loadChatListener);
     }
 

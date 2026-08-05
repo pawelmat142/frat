@@ -130,7 +130,7 @@ export const useChatConversation = (chatId: string | undefined, meUid: string | 
             }
         };
 
-        const loadChatListener = (chatEvent: ChatI) => {
+        const loadChatListener = (chatEvent: ChatWithMembers) => {
             if (!chatEvent) {
                 navigate(Path.CHATS, { replace: true });
                 toast.warn(t("chat.chatDeleted"));

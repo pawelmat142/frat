@@ -1,4 +1,4 @@
-import { ChatI, ChatMemberI, ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
+import { ChatMemberI, ChatMemberWithUserI, ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
 import React, { useEffect } from "react";
 import { createContext, useRef, useState } from "react";
 import { chatSocket } from "./services/ChatSocketService";
@@ -126,28 +126,28 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
 
-    const loadChatListener = async (chat: ChatI) => {
+    const loadChatListener = async (chat: ChatWithMembers) => {
         setChats(prev => {
             const chatExists = prev.some(c => c.chatId === chat?.chatId);
             if (!chatExists) {
                 loadChats();
                 return prev;
             }
-            // Jeśli chat nie istnieje, dodaj go na początek listy
+            // Jeśli chat istnieje, zaktualizuj go w istniejącej liście
             const newChats = prev.map(c => {
                 if (c.chatId === chat.chatId) {
-                    // Przepisz members z chat, ale zachowaj user z poprzedniego stanu jeśli istnieje
-                    const newMembers = chat.members?.map(newMember => {
-                        const oldMember = c.members!.find(m => m.uid === newMember.uid)!;
-                        // user musi być zawsze typu UserI (nie undefined)
+                    const incomingMembers: ChatMemberWithUserI[] = chat.members || [];
+                    const existingMembers: ChatMemberWithUserI[] = c.members || [];
+                    const newMembers = incomingMembers.map(newMember => {
+                        const oldMember = existingMembers.find(m => m.uid === newMember.uid);
                         return {
                             ...newMember,
-                            user: oldMember.user!
+                            user: oldMember?.user ?? newMember.user
                         };
-                    }) || [];
+                    });
                     return {
                         ...chat,
-                        members: newMembers
+                        members: newMembers.length ? newMembers : existingMembers
                     };
                 }
                 return c;
@@ -168,13 +168,16 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         return chats
             .filter(c => c.members?.some(m => m.user?.uid === me?.uid && m.unreadCount && m.unreadCount > 0))
             .map(chat => {
-
-                const otherMember = chat.members!.find(m => m.user?.uid !== me?.uid);
+                const members = chat.members || [];
+                const otherMember = members.find(m => m.user?.uid !== me?.uid);
                 if (!otherMember) {
-                    throw new Error(`Chat ${chat.chatId} - other member not found`);
+                    return null;
                 }
 
-                const meChatMember = getMeChatMember(chat);
+                const meChatMember = members.find(m => m.user?.uid === me?.uid);
+                if (!meChatMember) {
+                    return null;
+                }
 
                 const isCurrentMsg = message?.chatId === chat.chatId;
 
@@ -204,6 +207,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 }
                 return notification
             })
+            .filter((notification): notification is NotificationI => notification !== null)
     }
 
     const getMeChatMember = (chat: ChatWithMembers): ChatMemberI => {
