@@ -12,6 +12,7 @@ import { useWorkersSearch } from 'employee/views/search/WorkersSearchProvider';
 import { useOfferSearch } from 'offer/views/search/OfferSearchProvider';
 import { useNotificationsContext } from 'notification/NotificationsProvider';
 import { useChatsContext } from 'chat/ChatsProvider';
+import { NotificationTypes } from '@shared/interfaces/NotificationI';
 import { NavBus } from 'global/utils/PseudoViewBus';
 import { useAuthContext } from 'auth/AuthProvider';
 
@@ -48,13 +49,17 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         .filter(member => member.user?.uid === me?.uid && member.unreadCount && member.unreadCount > 0)
         .reduce((sum, member) => sum + (member.unreadCount || 0), 0);
 
+    const unreadNotificationsCount = notificationsCtx.notifications
+        .filter(n => n.readAt == null && n.type !== NotificationTypes.NEW_MESSAGE)
+        .length;
+
     const getItems = (id?: MenuItemIdentifier): MenuItem[] => {
         const isAdmin = me?.roles.some(role => isOneOf([UserRoles.ADMIN, UserRoles.SUPERADMIN], role));
 
         const items: MenuItem[] = [{
             label: t('nav.start'),
             id: MenuItemIdentifiers.START,
-            badge: notificationsCtx.unreadCount > 0 ? notificationsCtx.unreadCount.toString() : undefined,
+            badge: unreadNotificationsCount > 0 ? unreadNotificationsCount.toString() : undefined,
             active: !!matchPath({ path: Path.HOME, end: true }, location.pathname),
             onClick: () => {
                 NavBus.emit(MenuItemIdentifiers.START);
