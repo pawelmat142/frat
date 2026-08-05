@@ -107,6 +107,29 @@ export const useChatConversation = (chatId: string | undefined, meUid: string | 
             });
         };
 
+        const refreshMessages = async () => {
+            try {
+                const messagesData = await ChatService.getChatMessages(numericChatId);
+
+                if (ChatCryptoService.isE2EEnabled() && meUid && recipientPublicKeyRef.current) {
+                    const keyPair = ChatCryptoService.loadKeyPair();
+                    if (keyPair) {
+                        const decrypted = messagesData.map(m => decryptMessage(m, recipientPublicKeyRef.current!, keyPair.secretKey));
+                        const textMessages = decrypted.filter(m => m.type === MessageTypes.TEXT);
+                        const allUndecryptable = textMessages.length > 0 && textMessages.every(m => m.content === '🔒 Message could not be decrypted.');
+
+                        setHistoryUnavailable(allUndecryptable);
+                        setMessages(allUndecryptable ? [] : decrypted);
+                        return;
+                    }
+                }
+
+                setMessages(messagesData);
+            } catch (error) {
+                console.error('Failed to refresh chat messages:', error);
+            }
+        };
+
         const loadChatListener = (chatEvent: ChatI) => {
             if (!chatEvent) {
                 navigate(Path.CHATS, { replace: true });
@@ -115,6 +138,7 @@ export const useChatConversation = (chatId: string | undefined, meUid: string | 
             }
             if (numericChatId !== chatEvent.chatId) return;
             setChat(prev => prev ? { ...chatEvent, members: prev.members } : null);
+            refreshMessages();
         };
 
         const messageDeletedListener = ({ messageId }: { messageId: number; chatId: number }) => {

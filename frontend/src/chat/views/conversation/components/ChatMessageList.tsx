@@ -11,8 +11,6 @@ const ChatMessageList: React.FC = () => {
 
     const isEmpty = !messages.length || !!chat?.blockedByUid;
 
-    console.log(messages)
-
     return (
         <div className="flex-1 overflow-y-auto pb-5">
             {historyUnavailable && (
