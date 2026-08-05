@@ -86,7 +86,7 @@ export const ChatsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const loadChatListener = async (chat: ChatI) => {
         setChats(prev => {
-            const chatExists = prev.some(c => c.chatId === chat.chatId);
+            const chatExists = prev.some(c => c.chatId === chat?.chatId);
             if (!chatExists) {
                 loadChats();
                 return prev;
