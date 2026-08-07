@@ -58,7 +58,7 @@ const MapWorkerOverlay: React.FC<MapWorkerOverlayProps> = ({ worker, selectedInd
         <div className="flex items-center justify-center gap-6 py-1 primary-bg">
             <IconButton icon={<FaChevronLeft />} onClick={onPrev} disabled={selectedIndex === 0} className="px-6"/>
             <span className="s-font secondary-text">{selectedIndex + 1}/{total}</span>
-            <IconButton icon={<FaChevronRight />} onClick={onNext} disabled={selectedIndex === total - 1} className="px-6" />
+            <IconButton icon={<FaChevronRight />} onClick={onNext} disabled={selectedIndex === total - 1} className="px-6 " />
         </div>
     </div>
 );
@@ -72,17 +72,17 @@ const useWorkerMap = (results: WorkerWithMutualFriends[], userPosition: Position
     const [selectedIndex, setSelectedIndex] = useState(0);
     const directionRef = useRef(1);
 
-    const mapRef        = useRef<HTMLDivElement>(null);
+    const mapRef         = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<google.maps.Map | null>(null);
-    const markersRef    = useRef<google.maps.Marker[]>([]);
+    const markersRef     = useRef<google.maps.Marker[]>([]);
 
     const center = userPosition ?? AppConfig.DEFAUT_POSITION;
 
-    const centerOnWorker = (worker?: WorkerWithMutualFriends) => {
+    const centerOnWorker = (worker?: WorkerWithMutualFriends, resetZoom = false) => {
         const map = mapInstanceRef.current;
         if (!map || !worker?.geocodedPosition) return;
         map.panTo({ lat: worker.geocodedPosition.lat, lng: worker.geocodedPosition.lng });
-        map.setZoom(12);
+        if (resetZoom) map.setZoom(12);
     };
 
     const placeWorkerMarkers = (map: google.maps.Map, sorted: WorkerWithMutualFriends[]) => {
@@ -134,7 +134,7 @@ const useWorkerMap = (results: WorkerWithMutualFriends[], userPosition: Position
             const sorted = sortByDistance(results, center);
             setSortedWorkers(sorted);
             placeWorkerMarkers(map, sorted);
-            centerOnWorker(sorted[0]);
+            centerOnWorker(sorted[0], true);
         };
 
         initMap();
@@ -149,7 +149,7 @@ const useWorkerMap = (results: WorkerWithMutualFriends[], userPosition: Position
         setSortedWorkers(sorted);
         setSelectedIndex(0);
         placeWorkerMarkers(map, sorted);
-        centerOnWorker(sorted[0]);
+        centerOnWorker(sorted[0], true);
     }, [results]); // eslint-disable-line
 
     // Pan to selected worker on index change
