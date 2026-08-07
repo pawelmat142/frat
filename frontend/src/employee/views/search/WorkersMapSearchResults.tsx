@@ -41,7 +41,7 @@ interface MapWorkerOverlayProps {
 }
 
 const MapWorkerOverlay: React.FC<MapWorkerOverlayProps> = ({ worker, selectedIndex, total, directionRef, onPrev, onNext }) => (
-    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+    <div style={{ overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.3)', flexShrink: 0 }}>
         <AnimatePresence mode="wait" custom={directionRef.current}>
             <motion.div
                 key={selectedIndex}
@@ -197,8 +197,7 @@ const WorkersMapSearchResults: React.FC = () => {
     const selectedWorker = sortedWorkers[selectedIndex];
 
     return (
-        <div style={{ position: 'relative', height: 'calc(100dvh - 80px)', width: '100%' }}>
-            <div ref={mapRef} style={{ position: 'absolute', inset: 0 }} />
+        <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 80px)', width: '100%' }}>
             {selectedWorker && (
                 <MapWorkerOverlay
                     worker={selectedWorker}
@@ -209,6 +208,7 @@ const WorkersMapSearchResults: React.FC = () => {
                     onNext={handleNext}
                 />
             )}
+            <div ref={mapRef} style={{ flex: 1, minHeight: 0 }} />
         </div>
     );
 };
