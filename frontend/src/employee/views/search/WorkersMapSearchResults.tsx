@@ -55,10 +55,10 @@ const MapWorkerOverlay: React.FC<MapWorkerOverlayProps> = ({ worker, selectedInd
                 <WorkerSearchListItem worker={worker} first last className="primary-bg" disableDefaultBorder />
             </motion.div>
         </AnimatePresence>
-        <div className="flex items-center justify-center gap-6 py-2 primary-bg">
-            <IconButton icon={<FaChevronLeft />} onClick={onPrev} disabled={selectedIndex === 0} />
+        <div className="flex items-center justify-center gap-6 py-1 primary-bg">
+            <IconButton icon={<FaChevronLeft />} onClick={onPrev} disabled={selectedIndex === 0} className="px-6"/>
             <span className="s-font secondary-text">{selectedIndex + 1}/{total}</span>
-            <IconButton icon={<FaChevronRight />} onClick={onNext} disabled={selectedIndex === total - 1} />
+            <IconButton icon={<FaChevronRight />} onClick={onNext} disabled={selectedIndex === total - 1} className="px-6" />
         </div>
     </div>
 );
@@ -179,7 +179,7 @@ const WorkersMapSearchResults: React.FC = () => {
     const globalCtx = useGlobalContext();
 
     const { mapRef, sortedWorkers, selectedIndex, directionRef, handlePrev, handleNext } =
-        useWorkerMap(ctx.results, userCtx.position);
+        useWorkerMap(ctx.results, userCtx.position ?? undefined);
 
     useEffect(() => {
         globalCtx.hideFooter();
