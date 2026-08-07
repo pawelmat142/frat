@@ -9,6 +9,7 @@ import { Path } from "../../../path";
 import GoogleMapsLoader from "global/utils/GoogleMapsLoader";
 import { WorkerWithMutualFriends } from "@shared/interfaces/WorkerI";
 import { Position } from "@shared/interfaces/MapsInterfaces";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 const MIN_BOUNDS_WORKERS = 5;
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY ?? '';
@@ -53,12 +54,19 @@ const WorkersMapSearchResults: React.FC = () => {
     const ctx = useWorkersSearch();
     const userCtx = useUserContext();
 
+    const globalCtx = useGlobalContext();
+
     const mapRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<google.maps.Map | null>(null);
     const markersRef = useRef<google.maps.Marker[]>([]);
     const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
     const navigateRef = useRef(navigate);
     navigateRef.current = navigate;
+
+    useEffect(() => {
+        globalCtx.hideFooter();
+        return () => globalCtx.showFooter();
+    }, []);
 
     useEffect(() => {
         let cancelled = false;
@@ -176,7 +184,7 @@ const WorkersMapSearchResults: React.FC = () => {
         );
     }
 
-    return <div ref={mapRef} style={{ height: 'calc(100vh - 160px)', width: '100%' }} />;
+    return <div ref={mapRef} style={{ height: 'calc(100dvh - 80px)', width: '100%' }} />;
 };
 
 export default WorkersMapSearchResults;
