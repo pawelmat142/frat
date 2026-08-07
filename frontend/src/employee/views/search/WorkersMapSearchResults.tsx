@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useWorkersSearch } from "./WorkersSearchProvider";
 import { useUserContext } from "user/UserProvider";
 import { AppConfig } from "@shared/AppConfig";
@@ -10,9 +11,18 @@ import GoogleMapsLoader from "global/utils/GoogleMapsLoader";
 import { WorkerWithMutualFriends } from "@shared/interfaces/WorkerI";
 import { Position } from "@shared/interfaces/MapsInterfaces";
 import { useGlobalContext } from "global/providers/GlobalProvider";
+import WorkerSearchListItem from "employee/components/ListItems/WorkerSearchListItem";
+import IconButton from "global/components/controls/IconButon";
 
-const MIN_BOUNDS_WORKERS = 5;
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY ?? '';
+
+const sortByDistance = (results: WorkerWithMutualFriends[], center: Position): WorkerWithMutualFriends[] => {
+    const withPos = results.filter(w => w.geocodedPosition?.lat != null && w.geocodedPosition?.lng != null);
+    return [...withPos].sort((a, b) =>
+        PositionUtil.getDistanceFromToInMeters(center, { lat: a.geocodedPosition!.lat, lng: a.geocodedPosition!.lng }) -
+        PositionUtil.getDistanceFromToInMeters(center, { lat: b.geocodedPosition!.lat, lng: b.geocodedPosition!.lng })
+    );
+};
 
 const escapeHtml = (str: string): string =>
     str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -53,8 +63,10 @@ const WorkersMapSearchResults: React.FC = () => {
     const navigate = useNavigate();
     const ctx = useWorkersSearch();
     const userCtx = useUserContext();
-
     const globalCtx = useGlobalContext();
+
+    const [sortedWorkers, setSortedWorkers] = useState<WorkerWithMutualFriends[]>([]);
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     const mapRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<google.maps.Map | null>(null);
@@ -103,7 +115,10 @@ const WorkersMapSearchResults: React.FC = () => {
                 zIndex: 100,
             });
 
-            placeWorkerMarkers(map, ctx.results);
+            const sorted = sortByDistance(ctx.results, center);
+            setSortedWorkers(sorted);
+            placeWorkerMarkers(map, sorted);
+            centerOnWorker(map, sorted[0]);
         };
 
         initMap();
@@ -112,8 +127,18 @@ const WorkersMapSearchResults: React.FC = () => {
 
     useEffect(() => {
         if (!mapInstanceRef.current) return;
-        placeWorkerMarkers(mapInstanceRef.current, ctx.results);
+        const center = userCtx.position ?? AppConfig.DEFAUT_POSITION;
+        const sorted = sortByDistance(ctx.results, center);
+        setSortedWorkers(sorted);
+        setSelectedIndex(0);
+        placeWorkerMarkers(mapInstanceRef.current, sorted);
+        centerOnWorker(mapInstanceRef.current, sorted[0]);
     }, [ctx.results]); // eslint-disable-line
+
+    useEffect(() => {
+        if (!mapInstanceRef.current) return;
+        centerOnWorker(mapInstanceRef.current, sortedWorkers[selectedIndex]);
+    }, [selectedIndex]); // eslint-disable-line
 
     const openInfoWindow = (
         map: google.maps.Map,
@@ -140,19 +165,15 @@ const WorkersMapSearchResults: React.FC = () => {
         });
     };
 
-    const placeWorkerMarkers = (map: google.maps.Map, results: WorkerWithMutualFriends[]) => {
+    const centerOnWorker = (map: google.maps.Map, worker?: WorkerWithMutualFriends) => {
+        if (!worker?.geocodedPosition) return;
+        map.panTo({ lat: worker.geocodedPosition.lat, lng: worker.geocodedPosition.lng });
+        map.setZoom(12);
+    };
+
+    const placeWorkerMarkers = (map: google.maps.Map, sorted: WorkerWithMutualFriends[]) => {
         markersRef.current.forEach(m => m.setMap(null));
         markersRef.current = [];
-
-        const withPos = results.filter(w => w.geocodedPosition?.lat != null && w.geocodedPosition?.lng != null);
-        if (!withPos.length) return;
-
-        const center: Position = userCtx.position ?? AppConfig.DEFAUT_POSITION;
-
-        const sorted = [...withPos].sort((a, b) =>
-            PositionUtil.getDistanceFromToInMeters(center, { lat: a.geocodedPosition!.lat, lng: a.geocodedPosition!.lng }) -
-            PositionUtil.getDistanceFromToInMeters(center, { lat: b.geocodedPosition!.lat, lng: b.geocodedPosition!.lng })
-        );
 
         sorted.forEach(worker => {
             const pos = { lat: worker.geocodedPosition!.lat, lng: worker.geocodedPosition!.lng };
@@ -167,14 +188,10 @@ const WorkersMapSearchResults: React.FC = () => {
             marker.addListener('click', () => openInfoWindow(map, marker, worker, distance));
             markersRef.current.push(marker);
         });
-
-        const bounds = new google.maps.LatLngBounds();
-        bounds.extend(center);
-        sorted.slice(0, MIN_BOUNDS_WORKERS).forEach(w =>
-            bounds.extend({ lat: w.geocodedPosition!.lat, lng: w.geocodedPosition!.lng })
-        );
-        map.fitBounds(bounds);
     };
+
+    const handlePrev = () => setSelectedIndex(i => Math.max(0, i - 1));
+    const handleNext = () => setSelectedIndex(i => Math.min(sortedWorkers.length - 1, i + 1));
 
     if (!API_KEY) {
         return (
@@ -184,7 +201,40 @@ const WorkersMapSearchResults: React.FC = () => {
         );
     }
 
-    return <div ref={mapRef} style={{ height: 'calc(100dvh - 80px)', width: '100%' }} />;
+    const selectedWorker = sortedWorkers[selectedIndex];
+
+    return (
+        <div style={{ position: 'relative', height: 'calc(100dvh - 80px)', width: '100%' }}>
+            <div ref={mapRef} style={{ position: 'absolute', inset: 0 }} />
+
+            {selectedWorker && (
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+                    <WorkerSearchListItem
+                        worker={selectedWorker}
+                        first
+                        last
+                        className="primary-bg"
+                        disableDefaultBorder
+                    />
+                    <div className="flex items-center justify-center gap-6 py-2 primary-bg">
+                        <IconButton
+                            icon={<FaChevronLeft />}
+                            onClick={handlePrev}
+                            disabled={selectedIndex === 0}
+                        />
+                        <span className="s-font secondary-text">
+                            {selectedIndex + 1}/{sortedWorkers.length}
+                        </span>
+                        <IconButton
+                            icon={<FaChevronRight />}
+                            onClick={handleNext}
+                            disabled={selectedIndex === sortedWorkers.length - 1}
+                        />
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default WorkersMapSearchResults;
