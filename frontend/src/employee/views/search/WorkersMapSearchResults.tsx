@@ -55,7 +55,7 @@ const MapWorkerOverlay: React.FC<MapWorkerOverlayProps> = ({ worker, selectedInd
                 <WorkerSearchListItem worker={worker} first last className="primary-bg" disableDefaultBorder />
             </motion.div>
         </AnimatePresence>
-        <div className="flex items-center justify-center gap-6 py-1 primary-bg">
+        <div className="flex items-center justify-center gap-6 primary-bg">
             <IconButton icon={<FaChevronLeft />} onClick={onPrev} disabled={selectedIndex === 0} className="px-6"/>
             <span className="s-font secondary-text">{selectedIndex + 1}/{total}</span>
             <IconButton icon={<FaChevronRight />} onClick={onNext} disabled={selectedIndex === total - 1} className="px-6 " />
