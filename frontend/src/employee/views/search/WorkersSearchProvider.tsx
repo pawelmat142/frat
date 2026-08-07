@@ -223,6 +223,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setFiltersState(newFilters);
         resultsLengthRef.current = 0;
         hasMoreRef.current = false;
+        sessionStorage.removeItem('workerMapSelectedIndex');
 
         const searchStr = WorkerUtil.prepareUrlParams(newFilters, WorkerDefaultFilters)
         const newUrl = searchStr ? `?${searchStr}` : ''

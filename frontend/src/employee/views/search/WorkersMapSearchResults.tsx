@@ -14,6 +14,7 @@ import WorkerSearchListItem from "employee/components/ListItems/WorkerSearchList
 import IconButton from "global/components/controls/IconButon";
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY ?? '';
+const MAP_INDEX_KEY = 'workerMapSelectedIndex';
 
 const SLIDE_VARIANTS = {
     enter: (d: number) => ({ x: 48 * d, opacity: 0 }),
@@ -72,11 +73,17 @@ const useWorkerMap = (results: WorkerWithMutualFriends[], userPosition: Position
     const [selectedIndex, setSelectedIndex] = useState(0);
     const directionRef = useRef(1);
 
-    const mapRef         = useRef<HTMLDivElement>(null);
-    const mapInstanceRef = useRef<google.maps.Map | null>(null);
-    const markersRef     = useRef<google.maps.Marker[]>([]);
+    const mapRef               = useRef<HTMLDivElement>(null);
+    const mapInstanceRef       = useRef<google.maps.Map | null>(null);
+    const markersRef           = useRef<google.maps.Marker[]>([]);
+    const hasRestoredIndex     = useRef(false);
 
     const center = userPosition ?? AppConfig.DEFAUT_POSITION;
+
+    const saveIndex = (index: number) => sessionStorage.setItem(MAP_INDEX_KEY, String(index));
+
+    const restoreIndex = (sorted: WorkerWithMutualFriends[]): number =>
+        Math.min(Math.max(parseInt(sessionStorage.getItem(MAP_INDEX_KEY) ?? '0', 10), 0), sorted.length - 1);
 
     const centerOnWorker = (worker?: WorkerWithMutualFriends, resetZoom = false) => {
         const map = mapInstanceRef.current;
@@ -98,6 +105,7 @@ const useWorkerMap = (results: WorkerWithMutualFriends[], userPosition: Position
             marker.addListener('click', () => {
                 setSelectedIndex(prev => {
                     directionRef.current = index > prev ? 1 : -1;
+                    saveIndex(index);
                     return index;
                 });
             });
@@ -134,7 +142,15 @@ const useWorkerMap = (results: WorkerWithMutualFriends[], userPosition: Position
             const sorted = sortByDistance(results, center);
             setSortedWorkers(sorted);
             placeWorkerMarkers(map, sorted);
-            centerOnWorker(sorted[0], true);
+
+            if (sorted.length > 0) {
+                // Results already available at mount (back-navigation) — restore index.
+                // If results are empty, ctx.results effect will handle it when they arrive.
+                const idx = restoreIndex(sorted);
+                hasRestoredIndex.current = true;
+                setSelectedIndex(idx);
+                centerOnWorker(sorted[idx], true);
+            }
         };
 
         initMap();
@@ -147,9 +163,16 @@ const useWorkerMap = (results: WorkerWithMutualFriends[], userPosition: Position
         if (!map) return;
         const sorted = sortByDistance(results, center);
         setSortedWorkers(sorted);
-        setSelectedIndex(0);
+
+        // initMap already restored the index when results were available at mount.
+        // Here we handle: (a) fresh page load where results arrive after map init,
+        // (b) new search while map is open → always reset to 0.
+        const idx = !hasRestoredIndex.current ? restoreIndex(sorted) : 0;
+        hasRestoredIndex.current = true;
+
+        setSelectedIndex(idx);
         placeWorkerMarkers(map, sorted);
-        centerOnWorker(sorted[0], true);
+        centerOnWorker(sorted[idx], true);
     }, [results]); // eslint-disable-line
 
     // Pan to selected worker on index change
@@ -159,12 +182,12 @@ const useWorkerMap = (results: WorkerWithMutualFriends[], userPosition: Position
 
     const handlePrev = () => {
         directionRef.current = -1;
-        setSelectedIndex(i => Math.max(0, i - 1));
+        setSelectedIndex(i => { const next = Math.max(0, i - 1); saveIndex(next); return next; });
     };
 
     const handleNext = () => {
         directionRef.current = 1;
-        setSelectedIndex(i => Math.min(sortedWorkers.length - 1, i + 1));
+        setSelectedIndex(i => { const next = Math.min(sortedWorkers.length - 1, i + 1); saveIndex(next); return next; });
     };
 
     return { mapRef, sortedWorkers, selectedIndex, directionRef, handlePrev, handleNext };
