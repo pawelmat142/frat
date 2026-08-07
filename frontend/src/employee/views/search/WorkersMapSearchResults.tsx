@@ -12,34 +12,9 @@ import { Position } from "@shared/interfaces/MapsInterfaces";
 
 const MIN_BOUNDS_WORKERS = 5;
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY ?? '';
-const CHIP_COLOR = '#0e0e0e';
-const MAX_NAME_LEN = 20;
 
 const escapeHtml = (str: string): string =>
     str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
-const createWorkerIcon = (name: string): google.maps.Icon => {
-    const label = escapeHtml(name.length > MAX_NAME_LEN ? name.slice(0, MAX_NAME_LEN) + '…' : name);
-    const charWidth = 7;
-    const hPad = 14;
-    const width = Math.max(80, label.length * charWidth + hPad * 2);
-    const chipH = 28;
-    const ptrH = 10;
-    const height = chipH + ptrH;
-    const midX = width / 2;
-    const svg = [
-        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">`,
-        `<rect x="0.75" y="0.75" width="${width - 1.5}" height="${chipH - 1.5}" rx="10" ry="10" fill="white" stroke="${CHIP_COLOR}" stroke-width="1.5"/>`,
-        `<text x="${midX}" y="${chipH / 2 + 5}" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#1a1a1a">${label}</text>`,
-        `<polygon points="${midX - 6},${chipH} ${midX + 6},${chipH} ${midX},${height}" fill="${CHIP_COLOR}"/>`,
-        `</svg>`,
-    ].join('');
-    return {
-        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
-        anchor: new google.maps.Point(midX, height),
-        scaledSize: new google.maps.Size(width, height),
-    };
-};
 
 const buildInfoContent = (
     worker: WorkerWithMutualFriends,
@@ -66,7 +41,7 @@ const buildInfoContent = (
                 <div style="font-size:12px;color:#666;display:flex;flex-wrap:wrap;gap:6px">${statParts}</div>
             </div>
         </div>
-        <button id="${btnId}" style="width:100%;background:${CHIP_COLOR};color:white;border:none;border-radius:8px;padding:8px 0;cursor:pointer;font-size:13px;font-weight:600">
+        <button id="${btnId}" style="width:100%;background:#0e0e0e;color:white;border:none;border-radius:8px;padding:8px 0;cursor:pointer;font-size:13px;font-weight:600">
             ${viewProfileLabel}
         </button>
     </div>`;
@@ -179,7 +154,7 @@ const WorkersMapSearchResults: React.FC = () => {
             const marker = new google.maps.Marker({
                 position: pos,
                 map,
-                icon: createWorkerIcon(worker.displayName ?? ''),
+                title: worker.displayName ?? '',
             });
             marker.addListener('click', () => openInfoWindow(map, marker, worker, distance));
             markersRef.current.push(marker);
@@ -196,7 +171,7 @@ const WorkersMapSearchResults: React.FC = () => {
     if (!API_KEY) {
         return (
             <div className="flex flex-col items-center justify-center mt-20">
-                <p className="xl-font secondary-text">{t('map.notAvailable', { defaultValue: 'Map not available.' })}</p>
+                <p className="xl-font secondary-text">{t('map.notAvailable')}</p>
             </div>
         );
     }
