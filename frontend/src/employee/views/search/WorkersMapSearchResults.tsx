@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
@@ -7,7 +6,6 @@ import { useWorkersSearch } from "./WorkersSearchProvider";
 import { useUserContext } from "user/UserProvider";
 import { AppConfig } from "@shared/AppConfig";
 import { PositionUtil } from "@shared/utils/PositionUtil";
-import { Path } from "../../../path";
 import GoogleMapsLoader from "global/utils/GoogleMapsLoader";
 import { WorkerWithMutualFriends } from "@shared/interfaces/WorkerI";
 import { Position } from "@shared/interfaces/MapsInterfaces";
@@ -25,43 +23,8 @@ const sortByDistance = (results: WorkerWithMutualFriends[], center: Position): W
     );
 };
 
-const escapeHtml = (str: string): string =>
-    str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
-const buildInfoContent = (
-    worker: WorkerWithMutualFriends,
-    distance: string,
-    btnId: string,
-    viewProfileLabel: string,
-): string => {
-    const avatarUrl = worker.avatarRef?.url ?? '';
-    const views = worker.uniqueViewsCount ?? 0;
-    const favorites = worker.favoritesCount ?? 0;
-    const mutual = (worker.mutualFriendsUids ?? []).length;
-
-    const statParts = [
-        `<span>&#128065; ${views}</span>`,
-        favorites > 0 ? `<span>&#9733; ${favorites}</span>` : '',
-        mutual > 0 ? `<span>&#128101; ${mutual}</span>` : '',
-        distance ? `<span>&#128205; ${escapeHtml(distance)}</span>` : '',
-    ].filter(Boolean).join('<span style="color:#ccc;margin:0 4px">&middot;</span>');
-
-    return `<div style="min-width:200px;padding:4px 0;font-family:Arial,sans-serif">
-        <div style="display:flex;align-items:center;margin-bottom:10px">
-            <div style="flex:1;min-width:0">
-                <div style="font-weight:700;font-size:14px;margin-bottom:4px">${escapeHtml(worker.displayName)}</div>
-                <div style="font-size:12px;color:#666;display:flex;flex-wrap:wrap;gap:6px">${statParts}</div>
-            </div>
-        </div>
-        <button id="${btnId}" style="width:100%;background:#0e0e0e;color:white;border:none;border-radius:8px;padding:8px 0;cursor:pointer;font-size:13px;font-weight:600">
-            ${viewProfileLabel}
-        </button>
-    </div>`;
-};
-
 const WorkersMapSearchResults: React.FC = () => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
     const ctx = useWorkersSearch();
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
@@ -73,9 +36,7 @@ const WorkersMapSearchResults: React.FC = () => {
     const mapRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<google.maps.Map | null>(null);
     const markersRef = useRef<google.maps.Marker[]>([]);
-    const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
-    const navigateRef = useRef(navigate);
-    navigateRef.current = navigate;
+    const sortedWorkersRef = useRef<WorkerWithMutualFriends[]>([]);
 
     useEffect(() => {
         globalCtx.hideFooter();
@@ -100,7 +61,6 @@ const WorkersMapSearchResults: React.FC = () => {
                 fullscreenControl: false,
             });
             mapInstanceRef.current = map;
-            infoWindowRef.current = new google.maps.InfoWindow();
 
             new google.maps.Marker({
                 position: center,
@@ -142,31 +102,6 @@ const WorkersMapSearchResults: React.FC = () => {
         centerOnWorker(mapInstanceRef.current, sortedWorkers[selectedIndex]);
     }, [selectedIndex]); // eslint-disable-line
 
-    const openInfoWindow = (
-        map: google.maps.Map,
-        marker: google.maps.Marker,
-        worker: WorkerWithMutualFriends,
-        distance: string,
-    ) => {
-        const infoWindow = infoWindowRef.current;
-        if (!infoWindow) return;
-
-        const btnId = `iw-worker-${worker.workerId}`;
-        infoWindow.setContent(buildInfoContent(
-            worker,
-            distance,
-            btnId,
-            t('common.viewProfile', { defaultValue: 'View profile' }),
-        ));
-        infoWindow.open(map, marker);
-
-        google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
-            document.getElementById(btnId)?.addEventListener('click', () => {
-                navigateRef.current(Path.getWorkerProfilePath(worker.displayName));
-            });
-        });
-    };
-
     const centerOnWorker = (map: google.maps.Map, worker?: WorkerWithMutualFriends) => {
         if (!worker?.geocodedPosition) return;
         map.panTo({ lat: worker.geocodedPosition.lat, lng: worker.geocodedPosition.lng });
@@ -176,18 +111,21 @@ const WorkersMapSearchResults: React.FC = () => {
     const placeWorkerMarkers = (map: google.maps.Map, sorted: WorkerWithMutualFriends[]) => {
         markersRef.current.forEach(m => m.setMap(null));
         markersRef.current = [];
+        sortedWorkersRef.current = sorted;
 
-        sorted.forEach(worker => {
+        sorted.forEach((worker, index) => {
             const pos = { lat: worker.geocodedPosition!.lat, lng: worker.geocodedPosition!.lng };
-            const distance = worker.point
-                ? userCtx.getDistanceInfo(PositionUtil.fromGeoPoint(worker.point))
-                : '';
             const marker = new google.maps.Marker({
                 position: pos,
                 map,
                 title: worker.displayName ?? '',
             });
-            marker.addListener('click', () => openInfoWindow(map, marker, worker, distance));
+            marker.addListener('click', () => {
+                setSelectedIndex(prev => {
+                    directionRef.current = index > prev ? 1 : -1;
+                    return index;
+                });
+            });
             markersRef.current.push(marker);
         });
     };
