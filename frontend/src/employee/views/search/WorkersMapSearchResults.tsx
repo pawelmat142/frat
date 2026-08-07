@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { AnimatePresence, motion } from "framer-motion";
 import { useWorkersSearch } from "./WorkersSearchProvider";
 import { useUserContext } from "user/UserProvider";
 import { AppConfig } from "@shared/AppConfig";
@@ -67,6 +68,7 @@ const WorkersMapSearchResults: React.FC = () => {
 
     const [sortedWorkers, setSortedWorkers] = useState<WorkerWithMutualFriends[]>([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const directionRef = useRef(1);
 
     const mapRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<google.maps.Map | null>(null);
@@ -190,8 +192,14 @@ const WorkersMapSearchResults: React.FC = () => {
         });
     };
 
-    const handlePrev = () => setSelectedIndex(i => Math.max(0, i - 1));
-    const handleNext = () => setSelectedIndex(i => Math.min(sortedWorkers.length - 1, i + 1));
+    const handlePrev = () => {
+        directionRef.current = -1;
+        setSelectedIndex(i => Math.max(0, i - 1));
+    };
+    const handleNext = () => {
+        directionRef.current = 1;
+        setSelectedIndex(i => Math.min(sortedWorkers.length - 1, i + 1));
+    };
 
     if (!API_KEY) {
         return (
@@ -208,14 +216,30 @@ const WorkersMapSearchResults: React.FC = () => {
             <div ref={mapRef} style={{ position: 'absolute', inset: 0 }} />
 
             {selectedWorker && (
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
-                    <WorkerSearchListItem
-                        worker={selectedWorker}
-                        first
-                        last
-                        className="primary-bg"
-                        disableDefaultBorder
-                    />
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, boxShadow: '0 2px 8px rgba(0,0,0,0.3)', overflow: 'hidden' }}>
+                    <AnimatePresence mode="wait" custom={directionRef.current}>
+                        <motion.div
+                            key={selectedIndex}
+                            custom={directionRef.current}
+                            variants={{
+                                enter: (d: number) => ({ x: 48 * d, opacity: 0 }),
+                                center: { x: 0, opacity: 1 },
+                                exit: (d: number) => ({ x: -48 * d, opacity: 0 }),
+                            }}
+                            initial="enter"
+                            animate="center"
+                            exit="exit"
+                            transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        >
+                            <WorkerSearchListItem
+                                worker={selectedWorker}
+                                first
+                                last
+                                className="primary-bg"
+                                disableDefaultBorder
+                            />
+                        </motion.div>
+                    </AnimatePresence>
                     <div className="flex items-center justify-center gap-6 py-2 primary-bg">
                         <IconButton
                             icon={<FaChevronLeft />}
