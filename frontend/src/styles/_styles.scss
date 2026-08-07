@@ -1074,3 +1074,32 @@ $cellRadiusBig: 1rem;
 .border-swiper-row {
     box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.35);
 }
+
+
+
+// ─── Map Search Layout ────────────────────────────────────────────────────────
+
+.map-search-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100dvh - 80px);
+    width: 100%;
+}
+
+.map-canvas {
+    flex: 1;
+    min-height: 0;
+}
+
+.map-overlay-panel {
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.map-overlay-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
