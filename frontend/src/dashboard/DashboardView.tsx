@@ -28,93 +28,6 @@ import LatestOffersDashboard from "./LatestOffersDashboard";
 import MostViewedWorkers from "./MostViewedWorkers";
 import FriendsDashboard from "./FriendsDashboard";
 import Button from "global/components/controls/Button";
-import { useState, useEffect } from "react";
-
-// TODO remove - temporary debug
-const FONT_STACK = [
-    "system-ui",
-    "-apple-system",
-    "BlinkMacSystemFont",
-    "Segoe UI",
-    "Roboto",
-    "Helvetica Neue",
-    "Arial",
-];
-
-function detectActualFont(): string {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return "unknown (no canvas)";
-
-    const testText = "mmmmmmmmmmlli";
-    const size = "72px";
-
-    ctx.font = `${size} monospace`;
-    const baseline = ctx.measureText(testText).width;
-
-    for (const font of FONT_STACK) {
-        ctx.font = `${size} '${font}', monospace`;
-        if (ctx.measureText(testText).width !== baseline) {
-            return font;
-        }
-    }
-    return "monospace (brak dopasowania)";
-}
-
-const FontDebugOverlay: React.FC = () => {
-    const [visible, setVisible] = useState(true);
-    const [resolvedFont, setResolvedFont] = useState("");
-    const [declaredStack, setDeclaredStack] = useState("");
-
-    useEffect(() => {
-        setDeclaredStack(getComputedStyle(document.body).fontFamily);
-        setResolvedFont(detectActualFont());
-    }, []);
-
-    if (!visible) return null;
-
-    return (
-        <div style={{
-            position: "fixed",
-            bottom: 80,
-            left: 8,
-            zIndex: 9999,
-            background: "rgba(0,0,0,0.88)",
-            color: "#fff",
-            borderRadius: 8,
-            padding: "10px 12px",
-            fontSize: 11,
-            maxWidth: "92vw",
-            lineHeight: 1.6,
-            boxShadow: "0 2px 8px rgba(0,0,0,0.5)",
-        }}>
-            <div style={{ fontWeight: "bold", marginBottom: 4 }}>🔤 Font debug</div>
-            <div>
-                <span style={{ opacity: 0.6 }}>Używany font: </span>
-                <span style={{ color: "#4ade80", fontWeight: "bold" }}>{resolvedFont}</span>
-            </div>
-            <div style={{ marginTop: 4 }}>
-                <span style={{ opacity: 0.6 }}>Stos CSS: </span>
-                <span style={{ opacity: 0.75, wordBreak: "break-all" }}>{declaredStack}</span>
-            </div>
-            <button
-                onClick={() => setVisible(false)}
-                style={{
-                    marginTop: 8,
-                    background: "rgba(255,255,255,0.15)",
-                    border: "none",
-                    borderRadius: 4,
-                    color: "#fff",
-                    padding: "3px 10px",
-                    cursor: "pointer",
-                    fontSize: 11,
-                }}
-            >
-                Zamknij
-            </button>
-        </div>
-    );
-};
 
 const DashboardView: React.FC = () => {
 
@@ -238,8 +151,6 @@ const DashboardView: React.FC = () => {
     }}></IconButton>;
 
     return (<div className="w-full">
-
-        <FontDebugOverlay />
 
         <NotificationsGlobalBar />
 
