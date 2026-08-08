@@ -47,7 +47,7 @@ const DictionaryElementsTable: React.FC<Props> = ({
                             <th key={col.code} className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">
                                 {col.required && (<span>*</span>)}
                                 <span>{col.code}</span>
-                                {col.translatable && (<span className="ml-1 text-xs bg-blue-100 text-blue-800 px-1 py-0.5 rounded">T</span>)}
+                                {col.translatable && (<span className="ml-1 xs-font bg-blue-100 text-blue-800 px-1 py-0.5 rounded">T</span>)}
                             </th>
                         ))}
                         <th className="px-6 py-3 border-b-2 border-color text-sm font-semibold secondary-text">Status</th>

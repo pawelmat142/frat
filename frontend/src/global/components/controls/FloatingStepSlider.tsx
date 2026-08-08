@@ -113,8 +113,8 @@ const FloatingStepSlider: React.FC<FloatingStepSliderProps> = ({
                     disabled={disabled}
                 />
                 <div className="flex justify-between mt-1 px-1">
-                    <span className="text-xs secondary-text">{minLabel}{unit ? ` ${unit}` : ''}</span>
-                    <span className="text-xs secondary-text">{maxLabel}{unit ? ` ${unit}` : ''}</span>
+                    <span className="xs-font secondary-text">{minLabel}{unit ? ` ${unit}` : ''}</span>
+                    <span className="xs-font secondary-text">{maxLabel}{unit ? ` ${unit}` : ''}</span>
                 </div>
             </div>
         </div>

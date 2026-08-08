@@ -1,5 +1,13 @@
 export abstract class DateUtil {
 
+    public static isSameDay(a: Date | string, b: Date | string): boolean {
+        const da = new Date(a);
+        const db = new Date(b);
+        return da.getFullYear() === db.getFullYear() &&
+            da.getMonth() === db.getMonth() &&
+            da.getDate() === db.getDate();
+    }
+
     public static isIsoDateString(value: unknown): boolean {
         return (
             typeof value === 'string' &&

@@ -106,7 +106,7 @@ const SelectedProfile: React.FC<SelectedProfileProps> = (props: SelectedProfileP
         </div>
       )}
 
-      <div className="px-6 pb-4 mt-2 text-xs secondary-text">Created: {localWorker.createdAt ? new Date(localWorker.createdAt).toLocaleString() : '-'}</div>
+      <div className="px-6 pb-4 mt-2 xs-font secondary-text">Created: {localWorker.createdAt ? new Date(localWorker.createdAt).toLocaleString() : '-'}</div>
     </div>
   );
 };

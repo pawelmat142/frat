@@ -34,7 +34,6 @@ export abstract class FrontDateUtil {
         return DateUtil.displayDateWithTime(d);
     }
 
-
     public static prepareDisplayShortDate = (t: any, date: Date): string => {
         const now = new Date();
         const diffTime = now.getTime() - date.getTime();

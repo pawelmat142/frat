@@ -351,7 +351,7 @@ const FloatingCitySearch = forwardRef<HTMLInputElement, FloatingCitySearchProps>
                                 <div className="font-medium">
                                     {prediction.mainText}
                                 </div>
-                                <div className="text-gray-500 text-xs">
+                                <div className="text-gray-500 xs-font">
                                     {prediction.secondaryText}
                                 </div>
                             </div>

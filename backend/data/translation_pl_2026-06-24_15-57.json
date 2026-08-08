@@ -43,6 +43,7 @@
       "fileOptimizationFailed": "Nie udało się zoptymalizować pliku, spróbuj ponownie później.",
       "addCaption": "Dodaj wiadomość...",
       "deleteMessageConfirm": "Czy na pewno chcesz usunąć tę wiadomość? Tej akcji nie można cofnąć.",
+      "e2eHistoryUnavailable": "🔒 Historia czatu nie jest dostępna na tym urządzeniu z powodu szyfrowania E2E. Zaimportuj swój klucz szyfrowania w Ustawieniach, aby przywrócić dostęp.",
       "error": {
         "deleteFailed": "Nie udało się usunąć czatu",
         "sendFailed": "Nie udało się wysłać wiadomości"
