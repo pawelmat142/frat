@@ -57,7 +57,6 @@ const ChatMessageList: React.FC = () => {
                                 <ChatMessageBubble
                                     msg={msg}
                                     isOwn={isOwn}
-                                    onDelete={() => handleDeleteMessage(msg)}
                                 />
                             </div>
                         </React.Fragment>

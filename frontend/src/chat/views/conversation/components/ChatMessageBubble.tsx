@@ -7,13 +7,20 @@ import {FaFileAlt} from "react-icons/fa";
 interface Props {
     msg: ChatMessageI;
     isOwn: boolean;
-    onDelete: () => void;
 }
 
-const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onDelete }) => {
+const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn }) => {
     const leftSide = !isOwn;
 
-    const downloadFile = async (url: string, filename?: string) => {
+    const openImage = (e: React.MouseEvent, url: string) => {
+        e.stopPropagation();
+        e.preventDefault();
+        window.open(url, "_blank");
+    }
+
+    const downloadFile = async (e: React.MouseEvent, url: string, filename?: string) => {
+        e.stopPropagation();
+        e.preventDefault();
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -45,7 +52,7 @@ const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onDelete }) => {
                                 <div key={i} className="chat-view-message-file">
                                     <button
                                         type="button"
-                                        onClick={() => downloadFile(ref.url, ref.filename)}
+                                        onClick={(e) => downloadFile(e, ref.url, ref.filename)}
                                         className="flex items-center justify-center h-full gap-2 flex-col pt-3 px-3"
                                     >
                                         <FaFileAlt size={50}/>
@@ -60,7 +67,7 @@ const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onDelete }) => {
                                 src={ref.url}
                                 alt=""
                                 className="chat-view-message-image"
-                                onClick={() => window.open(ref.url, "_blank")}
+                                onClick={(e) => openImage(e, ref.url)}
                             />
                         )
                     })}

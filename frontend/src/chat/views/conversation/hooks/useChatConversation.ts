@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChatI, ChatMessageI, ChatWithMembers, MessageTypes } from "@shared/interfaces/ChatI";
+import { ChatMessageI, ChatWithMembers, MessageTypes } from "@shared/interfaces/ChatI";
 import { ChatService } from "chat/services/ChatService";
 import { chatSocket } from "chat/services/ChatSocketService";
 import { useConfirm } from "global/providers/PopupProvider";
@@ -10,17 +10,17 @@ import { Path } from "../../../../path";
 import ChatCryptoService from "chat/services/ChatCryptoService";
 
 /** Decrypts a single message content in-place. Returns a mutated copy of the message.
- *  If decryption fails (wrong device key), content is replaced with a safe fallback.
+ *  If decryption fails (wrong device key), content is replaced with `fallbackContent`.
  *  Images are never decrypted — only TEXT content with the 'e2e:' prefix is touched. */
 const decryptMessage = (
     msg: ChatMessageI,
     recipientPublicKey: Uint8Array,
     mySecretKey: Uint8Array,
+    fallbackContent: string,
 ): ChatMessageI => {
     if (msg.type !== MessageTypes.TEXT || !ChatCryptoService.isE2EContent(msg.content)) return msg;
     const plain = ChatCryptoService.decrypt(msg.content, recipientPublicKey, mySecretKey);
-    // TODO: add translation key for the fallback text
-    return { ...msg, content: plain ?? '🔒 Message could not be decrypted.' };
+    return { ...msg, content: plain ?? fallbackContent };
 };
 
 export const useChatConversation = (chatId: string | undefined, meUid: string | undefined) => {
@@ -45,6 +45,8 @@ export const useChatConversation = (chatId: string | undefined, meUid: string | 
 
         const numericChatId = parseInt(chatId, 10);
 
+        const fallbackContent = t('chat.e2eDecryptFailed');
+
         const loadChat = async () => {
             try {
                 const [chatData, messagesData] = await Promise.all([
@@ -64,13 +66,12 @@ export const useChatConversation = (chatId: string | undefined, meUid: string | 
                             setRecipientPublicKey(pubKey);
                             recipientPublicKeyRef.current = pubKey;
 
-                            const decrypted = messagesData.map(m => decryptMessage(m, pubKey, keyPair.secretKey));
+                            const decrypted = messagesData.map(m => decryptMessage(m, pubKey, keyPair.secretKey, fallbackContent));
 
                             // If every TEXT message failed to decrypt → history unavailable on this device
                             const textMessages = decrypted.filter(m => m.type === MessageTypes.TEXT);
                             const allUndecryptable = textMessages.length > 0 &&
-                                // TODO: add translation key for the fallback text used below
-                                textMessages.every(m => m.content === '🔒 Message could not be decrypted.');
+                                textMessages.every(m => m.content === fallbackContent);
 
                             setHistoryUnavailable(allUndecryptable);
                             setMessages(allUndecryptable ? [] : decrypted);
@@ -96,7 +97,7 @@ export const useChatConversation = (chatId: string | undefined, meUid: string | 
             const keyPair = ChatCryptoService.isE2EEnabled() ? ChatCryptoService.loadKeyPair() : null;
             const pubKey = recipientPublicKeyRef.current;
             const resolved = (keyPair && pubKey)
-                ? decryptMessage(message, pubKey, keyPair.secretKey)
+                ? decryptMessage(message, pubKey, keyPair.secretKey, fallbackContent)
                 : message;
 
             setMessages(prev => {
@@ -114,9 +115,9 @@ export const useChatConversation = (chatId: string | undefined, meUid: string | 
                 if (ChatCryptoService.isE2EEnabled() && meUid && recipientPublicKeyRef.current) {
                     const keyPair = ChatCryptoService.loadKeyPair();
                     if (keyPair) {
-                        const decrypted = messagesData.map(m => decryptMessage(m, recipientPublicKeyRef.current!, keyPair.secretKey));
+                        const decrypted = messagesData.map(m => decryptMessage(m, recipientPublicKeyRef.current!, keyPair.secretKey, fallbackContent));
                         const textMessages = decrypted.filter(m => m.type === MessageTypes.TEXT);
-                        const allUndecryptable = textMessages.length > 0 && textMessages.every(m => m.content === '🔒 Message could not be decrypted.');
+                        const allUndecryptable = textMessages.length > 0 && textMessages.every(m => m.content === fallbackContent);
 
                         setHistoryUnavailable(allUndecryptable);
                         setMessages(allUndecryptable ? [] : decrypted);
