@@ -5,3 +5,8 @@ export const deleteWorkerProfileConfirm: (t: translateFn) => ConfirmOptions = (t
     title: t('employeeProfile.deleteButton'),
     message: t('employeeProfile.deleteConfirmMessage'),
 })
+
+export const deleteOfferConfirm: (t: translateFn) => ConfirmOptions = (t: translateFn) => ({
+    title: t('offer.deleteConfirmTitle'),
+    message: t('offer.deleteConfirmMessage'),
+})

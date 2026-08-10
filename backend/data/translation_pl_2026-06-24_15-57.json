@@ -689,6 +689,7 @@
       "form": {
         "required": "To pole jest wymagane.",
         "formInvalid": "Formularz jest nieprawidłowy, sprawdź wszystkie pola.",
+        "dateNotInPast": "Data nie może być w przeszłości.",
         "positiveInteger": "Wartość musi być dodatnią liczbą całkowitą.",
         "dateRangeExpired": "Termin nie może być w przeszłości.",
         "dateRangeRequired": "Daty rozpoczęcia i zakończenia są wymagane.",

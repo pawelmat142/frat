@@ -18,6 +18,7 @@ import { Utils } from "global/utils/utils";
 import UserItemTile from "user/components/UserItemTile";
 import { DateUtil } from "@shared/utils/DateUtil";
 import Header from "global/components/Header";
+import { deleteOfferConfirm } from "employee/def";
 
 const OfferView: React.FC = () => {
 
@@ -100,11 +101,7 @@ const OfferView: React.FC = () => {
     }
 
     const deleteOffer = async (offer: OfferI) => {
-        const confirmed = await confirm({
-            title: t('offer.deleteConfirmTitle'),
-            message: t('offer.deleteConfirmMessage'),
-        })
-        if (!confirmed) {
+        if (!(await confirm(deleteOfferConfirm(t)))) {
             return;
         }
         try {

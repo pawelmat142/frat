@@ -19,8 +19,9 @@ import { ChatService } from "chat/services/ChatService";
 import { useUserContext } from "user/UserProvider";
 import Header from "global/components/Header";
 import { isOneOf } from "@shared/utils/util";
-import { deleteWorkerProfileConfirm } from "employee/def";
+import { deleteOfferConfirm, deleteWorkerProfileConfirm } from "employee/def";
 import { WorkerService } from "employee/services/WorkerService";
+import { OffersService } from "offer/services/OffersService";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -167,6 +168,26 @@ const SingleNotificationView: React.FC = () => {
         }
     }
 
+    const deleteOffer = async (offerId: string) => {
+        if (!(await confirm(deleteOfferConfirm(t)))) {
+            return;
+        }
+        try {
+            setLoading(true);
+            await OffersService.deleteOffer(offerId);
+            if (notification) {
+                notificationsCtx.removeNotification(notification.notificationId);
+            }
+            await userCtx.initOffers();
+            toast.success(t('offer.deleteSuccessToast'));
+            navigate(-1);
+        }
+        finally {
+            setLoading(false);
+            userCtx.setLoading(false);
+        }
+    }
+
     const getWorkerExpirationActions = (): React.ReactNode => {
         const displayName = notification?.requesterName
         if (!displayName) {
@@ -200,6 +221,8 @@ const SingleNotificationView: React.FC = () => {
                 onClick={() => {
                     navigate(Path.getOfferPath(offerId))
                 }}>{t('notification.displayOffer')}</Button>
+            <Button fullWidth mode={BtnModes.ERROR_TXT}
+                onClick={() => deleteOffer(offerId)}>{t('offer.deleteButton')}</Button>
         </>
     }
 
