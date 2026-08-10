@@ -1,14 +1,15 @@
 import { DateRange } from "@shared/interfaces/WorkerI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { DateUtil } from "@shared/utils/DateUtil";
+import { translateFn } from "./def";
 
 export abstract class FormValidator {
 
-    public static required = (t: any) => {
+    public static required = (t: translateFn) => {
         return { required: t('validation.form.required') };
     }
 
-    public static requiredLocalStringDateNotInPast = (t: any) => {
+    public static requiredLocalStringDateNotInPast = (t: translateFn) => {
         return {
             validate: (value: string | null | undefined) => {
                 if (!value) {
@@ -24,7 +25,7 @@ export abstract class FormValidator {
         };
     }
 
-    public static requiredArray = (t: any) => {
+    public static requiredArray = (t: translateFn) => {
         return {
             validate: (value: any) => {
                 if (!value || (Array.isArray(value) && value.length === 0)) {
@@ -35,7 +36,7 @@ export abstract class FormValidator {
         };
     }
     
-    public static dateRangeExpired = (t: any) => {
+    public static dateRangeExpired = (t: translateFn) => {
         return {
             validate: (value?: DateRange | null) => {
                 if (!value || !value.start || !value.end) {
@@ -50,7 +51,7 @@ export abstract class FormValidator {
     }
 
 
-    public static dateRangeRequired = (t: any) => {
+    public static dateRangeRequired = (t: translateFn) => {
         return {
             validate: (value?: DateRange | null) => {
                 if (!value || !value.start || !value.end) {
@@ -61,7 +62,7 @@ export abstract class FormValidator {
         };
     }
     
-    public static dateRangeStartRequired = (t: any) => {
+    public static dateRangeStartRequired = (t: translateFn) => {
         return {
             validate: (value?: DateRange | null) => {
                 if (!value?.start) {
@@ -72,7 +73,7 @@ export abstract class FormValidator {
         };
     }
 
-    public static positiveInterger = (t: any) => {
+    public static positiveInterger = (t: translateFn) => {
         return {
             validate: (value: any) => {
                 if (value == null || value === '') return true; 
@@ -85,7 +86,7 @@ export abstract class FormValidator {
         };
     }
 
-    public static phoneNumber = (t: any) => {
+    public static phoneNumber = (t: translateFn) => {
         return {
             validate: (value: { prefix: string; number: string } | null | undefined) => {
                 if (!value || !value.number) {

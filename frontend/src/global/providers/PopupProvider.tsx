@@ -12,7 +12,7 @@ interface PopupContextType {
   close: () => void;
 }
 
-interface ConfirmOptions {
+export interface ConfirmOptions {
   title?: string;
   message: string;
   confirmText?: string;
@@ -198,7 +198,7 @@ const PopupDialog: React.FC<PopupDialogProps> = ({ open, onClose, config, classN
   return (
     <div className={overlayClass}>
       <div
-        className={`${className} primary-bg rounded-lg shadow-lg pt-4 min-w-[300px] transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}
+        className={`${className} active-bg rounded-lg shadow-lg pt-4 min-w-[300px] transform transition-all duration-200 ${show && !closing ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} popup-content`}
       >
 
         <div className="flex items-start justify-between mb-5 gap-2">

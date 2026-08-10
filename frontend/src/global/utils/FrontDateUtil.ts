@@ -1,4 +1,5 @@
 import { DateUtil } from "@shared/utils/DateUtil";
+import { translateFn } from "global/def";
 
 export abstract class FrontDateUtil {
 
@@ -20,7 +21,7 @@ export abstract class FrontDateUtil {
         return FrontDateUtil.prepareDisplayShortDate(t, date);
     }
 
-    public static displayDateWithTime(t: (input: string) => string, date: Date | string): string {
+    public static displayDateWithTime(t: translateFn, date: Date | string): string {
         const d = date instanceof Date ? date : new Date(date);
         if (DateUtil.isToday(d)) {
             return `${t('callendar.today')} ${t('callendar.at')} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;

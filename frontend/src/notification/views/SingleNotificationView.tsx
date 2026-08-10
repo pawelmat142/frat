@@ -19,6 +19,8 @@ import { ChatService } from "chat/services/ChatService";
 import { useUserContext } from "user/UserProvider";
 import Header from "global/components/Header";
 import { isOneOf } from "@shared/utils/util";
+import { deleteWorkerProfileConfirm } from "employee/def";
+import { WorkerService } from "employee/services/WorkerService";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -26,6 +28,7 @@ const SingleNotificationView: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { me } = useUserContext();
+    const userCtx = useUserContext();
     const confirm = useConfirm()
 
     const { notificationId } = useParams<{ notificationId: string }>();
@@ -142,6 +145,28 @@ const SingleNotificationView: React.FC = () => {
         }
     }
 
+    const deleteProfile = async () => {
+        if (!(await confirm(deleteWorkerProfileConfirm(t)))) {
+            return;
+        }
+
+        setLoading(true);
+        try {
+            await WorkerService.deleteProfile();
+            if (notification) {
+                notificationsCtx.removeNotification(notification.notificationId);
+            }
+            userCtx.initWorker();
+            toast.success(t('employeeProfile.deleteSuccessToast'));
+            navigate(Path.HOME, { replace: true });
+        } catch (error) {
+            toast.error(t('employeeProfile.deleteErrorToast'));
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
     const getWorkerExpirationActions = (): React.ReactNode => {
         const displayName = notification?.requesterName
         if (!displayName) {
@@ -156,6 +181,8 @@ const SingleNotificationView: React.FC = () => {
                 onClick={() => {
                     navigate(Path.getWorkerProfilePath(displayName))
                 }}>{t('notification.displayProfile')}</Button>
+            <Button fullWidth mode={BtnModes.ERROR_TXT}
+                onClick={deleteProfile}>{t('employeeProfile.deleteButton')}</Button>
         </>
     }
 
@@ -239,11 +266,11 @@ const SingleNotificationView: React.FC = () => {
         </>
     }
 
-    
+
     if (loading || !notification) {
         return <Loading></Loading>
     }
-    
+
     return (
         <>
             <Header title={t(notification.title)}></Header>

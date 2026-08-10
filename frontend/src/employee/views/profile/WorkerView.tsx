@@ -31,6 +31,7 @@ import { useFAB } from "global/fab";
 import { FABkey, FABtype } from "global/fab/useFAB";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 import WorkerCertificatesSection from "employee/components/WorkerCertificatesSection";
+import { deleteWorkerProfileConfirm } from "employee/def";
 
 const WorkerView: React.FC = () => {
 
@@ -45,7 +46,7 @@ const WorkerView: React.FC = () => {
     const confirm = useConfirm();
     const userCtx = useUserContext();
     const me = userCtx?.me;
-    
+
     const profileCtx = useWorkersSearch();
     const floatingBtnCtx = useFloatingBtnContext();
 
@@ -111,11 +112,7 @@ const WorkerView: React.FC = () => {
     }
 
     const deleteProfile = async () => {
-        const confirmed = await confirm({
-            title: t('employeeProfile.deleteButton'),
-            message: t('employeeProfile.deleteConfirmMessage'),
-        })
-        if (!confirmed) {
+        if (!(await confirm(deleteWorkerProfileConfirm(t)))) {
             return;
         }
 
@@ -289,6 +286,9 @@ const WorkerView: React.FC = () => {
 
                 <div className="worker-profile-top">
                     <div className="worker-profile-top-row one">
+                    {/* TODO nowe chipy */}
+                            {/* chipTranslationKey="SHORT_NAME" */}
+
                         <CategoriesChips categories={worker.categories} smaller />
                     </div>
                     <div className="worker-profile-top-row two">

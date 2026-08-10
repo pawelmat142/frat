@@ -5,3 +5,5 @@ export const Z_INDEX = {
     BOTTOM_BAR: 20,
     FLOATING_BUTTON: 40,
 }
+
+export type translateFn = (key: string, options?: Record<string, any>) => string;
