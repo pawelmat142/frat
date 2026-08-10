@@ -42,6 +42,8 @@
       "imageOptimizationFailed": "Nie udało się zoptymalizować obrazu, spróbuj ponownie później.",
       "fileOptimizationFailed": "Nie udało się zoptymalizować pliku, spróbuj ponownie później.",
       "addCaption": "Dodaj wiadomość...",
+      "copyMessage": "Kopiuj",
+      "deleteMessage": "Usuń",
       "deleteMessageConfirm": "Czy na pewno chcesz usunąć tę wiadomość? Tej akcji nie można cofnąć.",
       "e2eHistoryUnavailable": "🔒 Historia czatu nie jest dostępna na tym urządzeniu z powodu szyfrowania E2E. Zaimportuj swój klucz szyfrowania w Ustawieniach, aby przywrócić dostęp.",
       "e2eDecryptFailed": "🔒 Nie udało się odszyfrować wiadomości.",

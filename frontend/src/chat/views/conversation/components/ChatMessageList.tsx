@@ -5,10 +5,16 @@ import { useChatConversationContext } from "../ChatConversationProvider";
 import ChatMessageBubble from "./ChatMessageBubble";
 import DateDisplay from "global/components/ui/DateDisplay";
 import { DateUtil } from "@shared/utils/DateUtil";
+import {MenuItem} from "../../../../global/interface/controls.interface";
+import {FaCopy} from "react-icons/fa";
+import {Ico} from "../../../../global/icon.def";
+import {ChatMessageI} from "@shared/interfaces/ChatI";
+import {useBottomSheet} from "../../../../global/providers/BottomSheetProvider";
 
 const ChatMessageList: React.FC = () => {
     const { t } = useTranslation();
     const { me } = useUserContext();
+    const bottomSheetCtx = useBottomSheet()
     const { chat, messages, blockedByMe, otherUser, messagesEndRef, handleDeleteMessage, historyUnavailable } = useChatConversationContext();
 
     const isEmpty = !messages.length || !!chat?.blockedByUid;
@@ -20,6 +26,23 @@ const ChatMessageList: React.FC = () => {
         t,
         capitalize: false,
     }
+
+    const handleBubbleClick = (msg: ChatMessageI, isOwn: boolean) => {
+        const items: MenuItem[] = [
+            {
+                label: t('chat.copyMessage'),
+                icon: FaCopy,
+                onClick: () => navigator.clipboard.writeText(msg.content),
+            },
+            {
+                label: t('chat.deleteMessage'),
+                icon: Ico.DELETE,
+                if: isOwn,
+                onClick: () => handleDeleteMessage(msg),
+            },
+        ];
+        bottomSheetCtx.openMenu({ items });
+    };
 
     return (
         <div className="flex-1 overflow-y-auto pb-5">
@@ -53,7 +76,7 @@ const ChatMessageList: React.FC = () => {
                                     </span>
                                 </div>
                             )}
-                            <div className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
+                            <div className={`flex ${isOwn ? "justify-end" : "justify-start"}`} onClick={() => handleBubbleClick(msg, isOwn)}>
                                 <ChatMessageBubble
                                     msg={msg}
                                     isOwn={isOwn}

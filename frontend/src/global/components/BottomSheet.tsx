@@ -33,7 +33,7 @@ const BottomSheet = () => {
             >
                 <div className="bottom-sheet-header">
                     <div className="bottom-sheet-drag-handle" />
-                    {ctx.params?.title && <h3 className="bottom-sheet-title">{ctx.params.title}</h3>}
+                    {ctx.params?.title ? <h3 className="bottom-sheet-title">{ctx.params.title}</h3> : <span></span>}
                     <CloseBtn onClick={() => ctx.close(true)}></CloseBtn>
                 </div>
 
