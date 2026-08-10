@@ -1,7 +1,7 @@
 import { FormValidator } from "global/FormValidator";
 import { useTranslation } from "react-i18next";
 import { useOfferForm } from "./OfferFormProvider";
-import CurrencySelector from "offer/components/CurrencySelector";
+import CurrencySelector from "global/components/selector/CurrencySelector";
 import { Controller } from "react-hook-form";
 import FloatingInput from "global/components/controls/FloatingInput";
 import FloatingTextarea from "global/components/controls/FloatingTextarea";
