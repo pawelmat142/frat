@@ -1,21 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "user/UserProvider";
 import { useChatConversationContext } from "../ChatConversationProvider";
 import ChatMessageBubble from "./ChatMessageBubble";
 import DateDisplay from "global/components/ui/DateDisplay";
 import { DateUtil } from "@shared/utils/DateUtil";
-import {MenuItem} from "../../../../global/interface/controls.interface";
-import {FaCopy} from "react-icons/fa";
-import {Ico} from "../../../../global/icon.def";
-import {ChatMessageI} from "@shared/interfaces/ChatI";
-import {useBottomSheet} from "../../../../global/providers/BottomSheetProvider";
+import { MenuItem } from "global/interface/controls.interface";
+import { FaCopy } from "react-icons/fa";
+import { Ico } from "global/icon.def";
+import { ChatMessageI } from "@shared/interfaces/ChatI";
+import ContextMenu from "global/components/ui/ContextMenu";
+import {toast} from "react-toastify";
+
+interface MenuState {
+    position: { x: number; y: number };
+    items: MenuItem[];
+}
 
 const ChatMessageList: React.FC = () => {
     const { t } = useTranslation();
     const { me } = useUserContext();
-    const bottomSheetCtx = useBottomSheet()
     const { chat, messages, blockedByMe, otherUser, messagesEndRef, handleDeleteMessage, historyUnavailable } = useChatConversationContext();
+    const [menu, setMenu] = useState<MenuState | null>(null);
 
     const isEmpty = !messages.length || !!chat?.blockedByUid;
 
@@ -25,14 +31,17 @@ const ChatMessageList: React.FC = () => {
         displayDayOfWeekIfClose: true,
         t,
         capitalize: false,
-    }
+    };
 
-    const handleBubbleClick = (msg: ChatMessageI, isOwn: boolean) => {
+    const openMenu = (e: React.MouseEvent, msg: ChatMessageI, isOwn: boolean) => {
         const items: MenuItem[] = [
             {
                 label: t('chat.copyMessage'),
                 icon: FaCopy,
-                onClick: () => navigator.clipboard.writeText(msg.content),
+                onClick: () => {
+                    navigator.clipboard.writeText(msg.content)
+                    toast.info(t('chat.messageCopied'))
+                },
             },
             {
                 label: t('chat.deleteMessage'),
@@ -41,7 +50,7 @@ const ChatMessageList: React.FC = () => {
                 onClick: () => handleDeleteMessage(msg),
             },
         ];
-        bottomSheetCtx.openMenu({ items });
+        setMenu({ position: { x: e.clientX, y: e.clientY }, items });
     };
 
     return (
@@ -76,7 +85,8 @@ const ChatMessageList: React.FC = () => {
                                     </span>
                                 </div>
                             )}
-                            <div className={`flex ${isOwn ? "justify-end" : "justify-start"}`} onClick={() => handleBubbleClick(msg, isOwn)}>
+                            <div className={`flex ${isOwn ? "justify-end" : "justify-start"}`}
+                                 onClick={(e: React.MouseEvent) => openMenu(e, msg, isOwn)}>
                                 <ChatMessageBubble
                                     msg={msg}
                                     isOwn={isOwn}
@@ -87,6 +97,13 @@ const ChatMessageList: React.FC = () => {
                 })
             )}
             <div ref={messagesEndRef} />
+            {menu && (
+                <ContextMenu
+                    items={menu.items}
+                    position={menu.position}
+                    onClose={() => setMenu(null)}
+                />
+            )}
         </div>
     );
 };

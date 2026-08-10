@@ -44,7 +44,7 @@ const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn }) => {
     return (
         <div
             className={`chat-view-message ${leftSide ? "left" : "right"} ${msg.type === MessageTypes.IMAGE ? "image" : ""}`}
-            >
+        >
             {msg.type === MessageTypes.IMAGE && !!msg.fileRefs?.length && (
                 <div className={`chat-view-message-images count-${Math.min(msg.fileRefs.length, 4)}`}>
                     {msg.fileRefs.map((ref, i) => {
@@ -84,8 +84,7 @@ const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn }) => {
                 <span className="xs-font">{DateUtil.displayTime(msg.createdAt)}</span>
             </div>
         </div>
-    )
-    // if (!isOwn) return bubble;
+    );
 };
 
 export default ChatMessageBubble;
