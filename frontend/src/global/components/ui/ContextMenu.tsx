@@ -38,7 +38,7 @@ const ContextMenu: React.FC<Props> = ({ items, position, closing, onClose }) => 
         : position.y;
 
     useEffect(() => {
-        const onMouseDown = (e: MouseEvent) => {
+        const onPointerDown = (e: PointerEvent) => {
             if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
                 onClose();
             }
@@ -46,10 +46,10 @@ const ContextMenu: React.FC<Props> = ({ items, position, closing, onClose }) => 
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") onClose();
         };
-        document.addEventListener("mousedown", onMouseDown);
+        document.addEventListener("pointerdown", onPointerDown);
         document.addEventListener("keydown", onKeyDown);
         return () => {
-            document.removeEventListener("mousedown", onMouseDown);
+            document.removeEventListener("pointerdown", onPointerDown);
             document.removeEventListener("keydown", onKeyDown);
         };
     }, [onClose]);
