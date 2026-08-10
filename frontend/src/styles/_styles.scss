@@ -276,6 +276,12 @@ $inputGap: .5rem;
     cursor: pointer;
 }
 
+.chat-view-message-file {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+}
+
 .chat-view-image-preview {
     display: flex;
     align-items: center;

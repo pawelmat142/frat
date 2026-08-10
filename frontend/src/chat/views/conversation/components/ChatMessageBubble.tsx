@@ -57,10 +57,10 @@ const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onLongTap }) => {
                                     <button
                                         type="button"
                                         onClick={(e) => downloadFile(e, ref.url, ref.filename)}
-                                        className="flex items-center justify-center h-full gap-2 flex-col pt-3 px-3"
+                                        className="flex items-center justify-center w-full h-full gap-2 flex-col pt-3 px-3"
                                     >
                                         <FaFileAlt size={50}/>
-                                        <span className="truncate s-font secondary-text">{ref.filename}</span>
+                                        <span className="truncate w-full min-w-0 text-center s-font secondary-text">{ref.filename}</span>
                                     </button>
                                 </div>
                             );
