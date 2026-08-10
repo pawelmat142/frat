@@ -45,6 +45,7 @@
       "copyMessage": "Copy",
       "deleteMessage": "Delete",
       "messageCopied": "Message copied to clipboard",
+      "messageDeleted": "Message deleted",
       "deleteMessageConfirm": "Are you sure you want to delete this message? This action cannot be undone.",
       "e2eHistoryUnavailable": "🔒 Chat history is not available on this device due to E2E encryption. Import your encryption key in Settings to restore access.",
       "e2eDecryptFailed": "🔒 Message could not be decrypted.",

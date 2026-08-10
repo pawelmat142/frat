@@ -166,6 +166,8 @@ export const useChatConversation = (chatId: string | undefined, meUid: string | 
         const response = await chatSocket.deleteMessage({ messageId: msg.messageId, chatId: msg.chatId });
         if (response.error) {
             toast.error(t("chat.error.deleteFailed"));
+        } else {
+            toast.success(t("chat.messageDeleted"));
         }
     };
 

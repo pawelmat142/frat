@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { MenuItem } from "global/interface/controls.interface";
 
@@ -21,7 +21,12 @@ const ANIM_DURATION = 120;
 
 const ContextMenu: React.FC<Props> = ({ items, position, closing, onClose }) => {
     const menuRef = useRef<HTMLDivElement>(null);
+    const [mounted, setMounted] = useState(false);
     const visibleItems = items.filter(item => item.if === undefined || !!item.if);
+
+    useEffect(() => {
+        requestAnimationFrame(() => setMounted(true));
+    }, []);
     const menuHeight = visibleItems.length * ITEM_HEIGHT + PADDING * 2;
 
     const x = position.x + MENU_WIDTH > window.innerWidth
@@ -56,8 +61,8 @@ const ContextMenu: React.FC<Props> = ({ items, position, closing, onClose }) => 
                 top: y,
                 left: x,
                 width: MENU_WIDTH,
-                opacity: closing ? 0 : 1,
-                transform: closing ? "scale(0.92)" : "scale(1)",
+                opacity: closing || !mounted ? 0 : 1,
+                transform: closing || !mounted ? "scale(0.92)" : "scale(1)",
                 transformOrigin: "top left",
                 transition: `opacity ${ANIM_DURATION}ms ease, transform ${ANIM_DURATION}ms ease`,
             }}
