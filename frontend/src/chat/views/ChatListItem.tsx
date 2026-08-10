@@ -36,7 +36,13 @@ const ChatListItem: React.FC<Props> = ({ chat, otherMember: otherMember, first, 
         return null;
     }
 
-    const bottomLeft = <div className="s-font secondary-text">
+    const bottomLeft = <div className="s-font secondary-text" style={{
+        display: '-webkit-box',
+        WebkitLineClamp: 1,
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    }}>
         {chat.latestMessageContent || t('chat.joinedAt', {date: DateUtil.displayDate(otherMember?.joinedAt || chat.createdAt)})}
     </div>
 
