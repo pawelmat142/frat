@@ -193,25 +193,26 @@ export class ChatRepo {
   /**
    * Resetuje licznik nieprzeczytanych wiadomości dla użytkownika w czacie.
    */
-  openChatAnd(chatId: number, uid: string): Promise<UpdateResult> {
+  openChatAnd(chatId: number, readerUid: string): Promise<UpdateResult> {
     return this.memberRepository
       .createQueryBuilder()
       .update()
       .set({ unreadCount: 0, status: ChatMemberStatuses.OPEN })
       .where('chat_id = :chatId', { chatId })
-      .andWhere('uid = :uid', { uid })
+      .andWhere('uid = :uid', { uid: readerUid })
       .execute();
   }
 
   /**
-   * Ustawia readAt dla wszystkich wiadomości w czacie.
+   * Ustawia readAt dla wiadomości w czacie wysłanych przez kogoś innego niż readerUid.
    */
-  markMessageAsRead(chatId: number): Promise<UpdateResult> {
+  markMessageAsRead(chatId: number, readerUid: string): Promise<UpdateResult> {
      return this.messageRepository
       .createQueryBuilder()
       .update()
       .set({ readAt: () => 'CURRENT_TIMESTAMP' })
       .where('chat_id = :chatId', { chatId })
+      .andWhere('sender_uid != :readerUid', { readerUid })
       .andWhere('read_at IS NULL')
       .execute();
   }

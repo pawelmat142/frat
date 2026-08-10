@@ -141,9 +141,9 @@ try {
     }
   }
 
-  async openChatAndMarkMessages(uid: string, chatId: number): Promise<ChatI> {
-    await this.chatRepo.openChatAnd(chatId, uid);
-    await this.chatRepo.markMessageAsRead(chatId);
+  async openChatAndMarkMessages(readerUid: string, chatId: number): Promise<ChatI> {
+    await this.chatRepo.openChatAnd(chatId, readerUid);
+    await this.chatRepo.markMessageAsRead(chatId, readerUid);
     return this.chatRepo.findChat(chatId);
   }
 

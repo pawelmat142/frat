@@ -78,16 +78,16 @@ export class ChatSocketHandler implements SocketHandler, OnModuleInit {
 
   private async handleOpenChat(socket: AuthenticatedSocket, data: { chatId: number }): Promise<JoinChatResponse> {
     const { chatId } = data;
-    const uid = socket.user.uid;
+    const readerUid = socket.user.uid;
 
-    this.logger.warn(`User ${uid} requests to open chat ${chatId}`);
+    this.logger.warn(`User ${readerUid} requests to open chat ${chatId}`);
 
-    const isMember = await this.chatService.isUserMemberOfChat(uid, chatId);
+    const isMember = await this.chatService.isUserMemberOfChat(readerUid, chatId);
     if (!isMember) {
       return { error: 'Not a member of this chat' };
     }
 
-    const chat = await this.chatService.openChatAndMarkMessages(uid, chatId);
+    const chat = await this.chatService.openChatAndMarkMessages(readerUid, chatId);
     this.notifyAboutRefreshChat(chat);
     socket.join(ChatUtil.chatRoom(chatId));
     return { success: true };
