@@ -9,9 +9,10 @@ interface Props {
     msg: ChatMessageI;
     isOwn: boolean;
     onLongTap: (x: number, y: number) => void;
+    menuAvailable?: boolean;
 }
 
-const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onLongTap }) => {
+const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onLongTap, menuAvailable = false }) => {
     const leftSide = !isOwn;
 
     const openImage = (e: React.MouseEvent, url: string) => {
@@ -45,9 +46,11 @@ const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onLongTap }) => {
 
     return (
         <LongTapHandler
-            onLongTap={onLongTap}
             className={`chat-view-message ${leftSide ? "left" : "right"} ${msg.type === MessageTypes.IMAGE ? "image" : ""} relative`}
+            onLongTap={onLongTap}
+            disableLongTap={!menuAvailable}
         >
+
             {msg.type === MessageTypes.IMAGE && !!msg.fileRefs?.length && (
                 <div className={`chat-view-message-images count-${Math.min(msg.fileRefs.length, 4)}`}>
                     {msg.fileRefs.map((ref, i) => {

@@ -47,11 +47,16 @@ const ChatMessageList: React.FC = () => {
         }, ANIM_DURATION);
     }, []);
 
+    const messageMenuAvailable = (msg: ChatMessageI, isOwn: boolean): boolean => {
+        return !!msg.content || isOwn;
+    }
+
     const openMenu = (x: number, y: number, msg: ChatMessageI, isOwn: boolean) => {
         const items: MenuItem[] = [
             {
                 label: t('chat.copyMessage'),
                 icon: FaCopy,
+                if: !!msg.content,
                 onClick: () => {
                     navigator.clipboard.writeText(msg.content)
                     toast.info(t('chat.messageCopied'))
@@ -64,10 +69,12 @@ const ChatMessageList: React.FC = () => {
                 onClick: () => handleDeleteMessage(msg),
             },
         ];
+        const visibleItems = items.filter(item => item.if === undefined || !!item.if);
+        if (!visibleItems.length) return;
+
         const newMenu: MenuState = { position: { x, y }, items };
 
         if (menu) {
-            // Stare menu jest otwarte — odegraj animację zamknięcia, potem otwórz nowe
             if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
             pendingMenuRef.current = newMenu;
             setClosing(true);
@@ -102,6 +109,7 @@ const ChatMessageList: React.FC = () => {
                     const isOwn = msg.senderUid === me?.uid;
                     const prevMsg = messages[index - 1];
                     const showSeparator = !prevMsg || !DateUtil.isSameDay(prevMsg.createdAt, msg.createdAt);
+
                     return (
                         <React.Fragment key={msg.messageId}>
                             {showSeparator && (
@@ -118,6 +126,7 @@ const ChatMessageList: React.FC = () => {
                                 <ChatMessageBubble
                                     msg={msg}
                                     isOwn={isOwn}
+                                    menuAvailable={messageMenuAvailable(msg, isOwn)}
                                     onLongTap={(x, y) => openMenu(x, y, msg, isOwn)}
                                 />
                             </div>

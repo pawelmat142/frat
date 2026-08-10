@@ -7,6 +7,7 @@ interface LongTapHandlerProps {
     children: React.ReactNode;
     className?: string;
     style?: React.CSSProperties;
+    disableLongTap?: boolean;
 }
 
 const RING_CIRCUMFERENCE = 163.4; // 2π * r=26
@@ -18,11 +19,17 @@ const LongTapHandler: React.FC<LongTapHandlerProps> = ({
     children,
     className,
     style,
+    disableLongTap = false,
 }) => {
+
     const [showRing, setShowRing] = useState(false);
     const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const ringTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const pointerPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+
+    if (!children) {
+        return null;
+    }
 
     const clearTimers = () => {
         if (holdTimer.current) { clearTimeout(holdTimer.current); holdTimer.current = null; }
@@ -53,6 +60,10 @@ const LongTapHandler: React.FC<LongTapHandlerProps> = ({
         clearTimers();
         setShowRing(false);
     };
+
+    if (disableLongTap) {
+        return <div className={className} style={style}>{children}</div>;
+    }
 
     return (
         <>
