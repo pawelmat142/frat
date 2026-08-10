@@ -9,7 +9,21 @@ import { Path } from '../../path';
 import { FirebaseAuth } from 'auth/services/FirebaseAuth';
 import { DateUtil } from '@shared/utils/DateUtil';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const getApiUrl = (): string => {
+  let result;
+  const isProductionBackendEnabled = process.env.REACT_APP_ENABLE_PRODUCTION_BACKEND;
+  if (isProductionBackendEnabled) {
+    result = process.env.REACT_APP_API_URL_PRODUCTION_BACKEND;
+  } else {
+    result = process.env.REACT_APP_API_URL;
+  }
+  if (!result) {
+    throw new Error("API_URL is not defined in environment variables.");
+  }
+  return result;
+}
+
+const API_URL = getApiUrl();
 
 export const queryClient = new QueryClient();
 

@@ -1,7 +1,9 @@
 const path = require('path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-module.exports = {
+const isProductionBackendEnabled = process.env.REACT_APP_ENABLE_PRODUCTION_BACKEND;
+
+const config = {
   webpack: {
     alias: {
       '@shared': path.resolve(__dirname, '../shared'),
@@ -60,21 +62,6 @@ module.exports = {
       return webpackConfig;
     },
   },
-  // devServer: {
-  //   proxy: {
-  //     '/api': {
-  //       target: 'https://frat.com.pl',
-  //       changeOrigin: true,
-  //       secure: true,
-  //     },
-  //     '/socket.io': {
-  //       target: 'https://frat.com.pl',
-  //       changeOrigin: true,
-  //       secure: true,
-  //       ws: true,
-  //     },
-  //   },
-  // },
   jest: {
     configure: {
       moduleNameMapping: {
@@ -83,3 +70,23 @@ module.exports = {
     },
   },
 };
+
+if (isProductionBackendEnabled) {
+  config.devServer = {
+    proxy: {
+      '/api': {
+        target: 'https://frat.com.pl',
+        changeOrigin: true,
+        secure: true,
+      },
+      '/socket.io': {
+        target: 'https://frat.com.pl',
+        changeOrigin: true,
+        secure: true,
+        ws: true,
+      },
+    },
+  };
+}
+
+module.exports = config;
