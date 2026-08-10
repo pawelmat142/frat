@@ -15,7 +15,8 @@ export const AppConfig = {
 
     CLOUDINARY_BASE_URL: 'https://api.cloudinary.com/v1_1',
 
-    DEFAULT_AVATAR_SIZE: 3,
+    DEFAULT_AVATAR_SIZE: 3.5, // in rem
+    DEFAULT_AVATAR_SIZE_BIG: 8, // in rem
     DEFAULT_ICON_SIZE: 2,
     FAB_BTN_ICON_SIZE: 28,
 

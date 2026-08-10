@@ -6,6 +6,9 @@ import { useTranslation } from "react-i18next";
 
 import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
 import { FrontDateUtil } from "global/utils/FrontDateUtil";
+import { useUserContext } from "user/UserProvider";
+import OfferAvatarMock from "offer/components/OfferAvatarMock";
+import { AppConfig } from "@shared/AppConfig";
 
 interface Props {
     notification: NotificationI
@@ -17,6 +20,7 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
 
     const navigate = useNavigate()
     const { t } = useTranslation();
+    const userCtx = useUserContext();
 
     const goToNotification = () => {
         if (NotificationTypes.NEW_MESSAGE === notification.type) {
@@ -30,6 +34,19 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
     const getIcon = (): React.ReactNode => {
         const result = notification.avatarRef ? null : <div className="p-2">{NotificationFrontUtil.getIcon(notification, 2.5)}</div>
         return result;
+    }
+
+    const getAvatarComponent = (): React.ReactNode => {
+        if (NotificationTypes.OFFER_EXPIRATION === notification.type) {
+            const offerId = notification.targetId;  
+            if (offerId) {
+                const offer = userCtx?.meCtx?.offers?.find((o) => o.offerId === offerId);
+                if (offer) {
+                    return <OfferAvatarMock offer={offer} size={AppConfig.DEFAULT_AVATAR_SIZE} />
+                }
+            }
+        }
+        return getIcon();
     }
 
     const getDateMsg = () => {
@@ -54,7 +71,7 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
         <div onClick={goToNotification}>
             <ListItem
                 imgUrl={notification.avatarRef?.url}
-                imgComponent={getIcon()}
+                imgComponent={getAvatarComponent()}
                 iconOrAvatarBadge={badge}
                 topLeft={t(notification.title)}
                 bottomLeft={getDateMsg()}

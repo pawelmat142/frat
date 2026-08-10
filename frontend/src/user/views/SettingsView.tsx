@@ -40,8 +40,6 @@ const SettingsView: React.FC = () => {
         userCtx.selectTheme();
     };
 
-    const iconSize = `${AppConfig.DEFAULT_AVATAR_SIZE}rem`;
-
     const deleteAccount = async () => {
         const confirmed = await confirm({
             title: t('account.deleteAccountConfirmTitle'),

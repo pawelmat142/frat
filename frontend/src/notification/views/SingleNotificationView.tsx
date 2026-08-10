@@ -22,6 +22,8 @@ import { isOneOf } from "@shared/utils/util";
 import { deleteOfferConfirm, deleteWorkerProfileConfirm } from "employee/def";
 import { WorkerService } from "employee/services/WorkerService";
 import { OffersService } from "offer/services/OffersService";
+import OfferAvatarMock from "offer/components/OfferAvatarMock";
+import { AppConfig } from "@shared/AppConfig";
 
 const SingleNotificationView: React.FC = () => {
 
@@ -201,9 +203,9 @@ const SingleNotificationView: React.FC = () => {
             <Button fullWidth mode={BtnModes.PRIMARY_TXT}
                 onClick={() => {
                     navigate(Path.getWorkerProfilePath(displayName))
-                }}>{t('notification.displayProfile')}</Button>
+                }}><Ico.WORKER />{t('notification.displayProfile')}</Button>
             <Button fullWidth mode={BtnModes.ERROR_TXT}
-                onClick={deleteProfile}>{t('employeeProfile.deleteButton')}</Button>
+                onClick={deleteProfile}><Ico.DELETE />{t('employeeProfile.deleteButton')}</Button>
         </>
     }
 
@@ -220,9 +222,9 @@ const SingleNotificationView: React.FC = () => {
             <Button fullWidth mode={BtnModes.PRIMARY_TXT}
                 onClick={() => {
                     navigate(Path.getOfferPath(offerId))
-                }}>{t('notification.displayOffer')}</Button>
+                }}><Ico.OFFER />{t('notification.displayOffer')}</Button>
             <Button fullWidth mode={BtnModes.ERROR_TXT}
-                onClick={() => deleteOffer(offerId)}>{t('offer.deleteButton')}</Button>
+                onClick={() => deleteOffer(offerId)}><Ico.DELETE />{t('offer.deleteButton')}</Button>
         </>
     }
 
@@ -242,10 +244,14 @@ const SingleNotificationView: React.FC = () => {
         }
 
         const deleteButton = <Button fullWidth mode={BtnModes.ERROR_TXT} onClick={deleteNotification}
-        ><Ico.DELETE className="mr-2" />{t('notification.deleteNotification')}</Button>
+        ><Ico.DELETE />{t('notification.deleteNotification')}</Button>
 
-        const requesterProfileButton = !!notification?.requesterUid && <Button fullWidth mode={BtnModes.SECONDARY}
-            onClick={goToRequesterProfile}>{t('notification.viewProfile', { name: notification.requesterName })}</Button>
+        const requesterProfileButton = !!notification?.requesterUid && <Button
+            fullWidth mode={BtnModes.SECONDARY}
+            onClick={goToRequesterProfile}>
+            <Ico.ACCOUNT />
+            {t('notification.viewProfile', { name: notification.requesterName })}
+        </Button>
 
         const openChatButon = !!notification?.requesterUid && <Button fullWidth mode={BtnModes.PRIMARY}
             onClick={openChat}><Ico.CHAT></Ico.CHAT>{t('chat.openChat')}</Button>
@@ -294,6 +300,19 @@ const SingleNotificationView: React.FC = () => {
         return <Loading></Loading>
     }
 
+    const getAvatarComponent = (): React.ReactNode => {
+        if (NotificationTypes.OFFER_EXPIRATION === notification.type) {
+            const offerId = notification.targetId;
+            if (offerId) {
+                const offer = userCtx?.meCtx?.offers?.find((o) => o.offerId === offerId);
+                if (offer) {
+                    return <OfferAvatarMock offer={offer} size={AppConfig.DEFAULT_AVATAR_SIZE_BIG} />
+                }
+            }
+        }
+        return NotificationFrontUtil.getIcon(notification)
+    }
+
     return (
         <>
             <Header title={t(notification.title)}></Header>
@@ -309,7 +328,7 @@ const SingleNotificationView: React.FC = () => {
                             uid={""}
                         />
                     </div>) : (
-                        <div className="notification-view-icon mt-5">{NotificationFrontUtil.getIcon(notification)}</div>
+                        <div className="notification-view-icon mt-5">{getAvatarComponent()}</div>
                     )}
 
                     <div className="text-center mx-10">

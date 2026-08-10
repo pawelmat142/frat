@@ -46,7 +46,8 @@ const OfferFormStepOne: React.FC = () => {
                 <Controller
                     name={`STEP_ONE.startDate`}
                     control={ctx.formCtx.control}
-                    rules={requiredDateNotInPast}
+                    // TODO
+                    // rules={requiredDateNotInPast}
                     render={({ field }) => <DateInputViewSelector
                         label={t("offer.dateRange")}
                         className="w-full"
