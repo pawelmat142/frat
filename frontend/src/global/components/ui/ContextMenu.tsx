@@ -66,20 +66,20 @@ const ContextMenu: React.FC<Props> = ({ items, position, closing, onClose }) => 
                 transformOrigin: "top left",
                 transition: `opacity ${ANIM_DURATION}ms ease, transform ${ANIM_DURATION}ms ease`,
             }}
-            className="fixed z-50 rounded-xl shadow-xl bg-white dark:bg-zinc-800 border border-black/10 dark:border-white/10 py-1 overflow-hidden"
+            className="fixed z-50 rounded-xl shadow-xl active-bg py-1 overflow-hidden select-none"
         >
             {visibleItems.map((item, i) => (
                 <button
                     key={i}
                     type="button"
-                    className="flex items-center gap-3 w-full px-4 text-sm text-left hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                    className="primary-text flex items-center gap-3 w-full px-4 text-sm text-left transition-colors hover-secondary-bg"
                     style={{ height: ITEM_HEIGHT }}
                     onClick={() => {
                         item.onClick?.();
                         onClose();
                     }}
                 >
-                    {item.icon && <item.icon size={15} className="secondary-text flex-shrink-0" />}
+                    {item.icon && <item.icon size={15} className="primary-text flex-shrink-0" />}
                     <span>{item.label}</span>
                 </button>
             ))}

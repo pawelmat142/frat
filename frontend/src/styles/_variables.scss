@@ -123,6 +123,10 @@ textarea::placeholder,
   background-color: $error-color;
 }
 
+.hover-secondary-bg:hover {
+  background-color: $secondary-bg;
+}
+
 .hover-light-bg:hover {
   background-color: rgba(var(--primary-color), 0.1);
 }

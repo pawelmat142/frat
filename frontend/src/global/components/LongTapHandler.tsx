@@ -14,7 +14,7 @@ const RING_CIRCUMFERENCE = 163.4; // 2π * r=26
 const LongTapHandler: React.FC<LongTapHandlerProps> = ({
     onLongTap,
     onTap,
-    holdMs = 600,
+    holdMs = 300,
     children,
     className,
     style,
