@@ -217,6 +217,30 @@ export class ChatRepo {
       .execute();
   }
 
+  /**
+   * Oznacza wiadomości senderUid jako przeczytane, jeśli w czacie istnieje odbiorca ze statusem OPEN.
+   * Wywoływane tuż po zapisaniu nowej wiadomości, by auto-oznaczyć ją gdy receiver ma otwarty czat.
+   */
+  markSenderMessagesAsReadIfReceiverOpen(chatId: number, senderUid: string): Promise<UpdateResult> {
+    return this.messageRepository
+      .createQueryBuilder()
+      .update()
+      .set({ readAt: () => 'CURRENT_TIMESTAMP' })
+      .where('chat_id = :chatId', { chatId })
+      .andWhere('sender_uid = :senderUid', { senderUid })
+      .andWhere('read_at IS NULL')
+      .andWhere(
+        `EXISTS (
+          SELECT 1 FROM jh_chat_members m
+          WHERE m.chat_id = :chatId
+          AND m.uid != :senderUid
+          AND m.status = :openStatus
+        )`,
+        { openStatus: ChatMemberStatuses.OPEN },
+      )
+      .execute();
+  }
+
   blockChat(chatId: number, blockedByUid: string): Promise<UpdateResult> {
     return this.chatRepository.update(
       { chatId },

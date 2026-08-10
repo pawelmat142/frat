@@ -121,8 +121,8 @@ try {
     }
 
     await this.chatRepo.updateLatestMessageContent(chatId, latestContent);
-    // Inkrementuj unreadCount dla wszystkich poza nadawcą i onlineUids
     await this.chatRepo.incrementUnreadForMembersExceptSender(chatId, senderUid);
+    await this.chatRepo.markSenderMessagesAsReadIfReceiverOpen(chatId, senderUid);
     return message;
   }
 
