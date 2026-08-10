@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "user/UserProvider";
 import { useChatConversationContext } from "../ChatConversationProvider";
@@ -9,8 +9,8 @@ import { MenuItem } from "global/interface/controls.interface";
 import { FaCopy } from "react-icons/fa";
 import { Ico } from "global/icon.def";
 import { ChatMessageI } from "@shared/interfaces/ChatI";
-import ContextMenu from "global/components/ui/ContextMenu";
-import {toast} from "react-toastify";
+import ContextMenu, { ANIM_DURATION } from "global/components/ui/ContextMenu";
+import { toast } from "react-toastify";
 
 interface MenuState {
     position: { x: number; y: number };
@@ -22,6 +22,8 @@ const ChatMessageList: React.FC = () => {
     const { me } = useUserContext();
     const { chat, messages, blockedByMe, otherUser, messagesEndRef, handleDeleteMessage, historyUnavailable } = useChatConversationContext();
     const [menu, setMenu] = useState<MenuState | null>(null);
+    const [closing, setClosing] = useState(false);
+    const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const isEmpty = !messages.length || !!chat?.blockedByUid;
 
@@ -33,7 +35,22 @@ const ChatMessageList: React.FC = () => {
         capitalize: false,
     };
 
+    const closeMenu = useCallback(() => {
+        setClosing(true);
+        closeTimerRef.current = setTimeout(() => {
+            setMenu(null);
+            setClosing(false);
+        }, ANIM_DURATION);
+    }, []);
+
     const openMenu = (e: React.MouseEvent, msg: ChatMessageI, isOwn: boolean) => {
+        // If a menu is already open, skip its close animation and open the new one immediately
+        if (closeTimerRef.current) {
+            clearTimeout(closeTimerRef.current);
+            closeTimerRef.current = null;
+        }
+        setClosing(false);
+
         const items: MenuItem[] = [
             {
                 label: t('chat.copyMessage'),
@@ -85,11 +102,11 @@ const ChatMessageList: React.FC = () => {
                                     </span>
                                 </div>
                             )}
-                            <div className={`flex ${isOwn ? "justify-end" : "justify-start"}`}
-                                 onClick={(e: React.MouseEvent) => openMenu(e, msg, isOwn)}>
+                            <div className={`flex  ${isOwn ? "justify-end" : "justify-start"}`}>
                                 <ChatMessageBubble
                                     msg={msg}
                                     isOwn={isOwn}
+                                    onClick={(e: React.MouseEvent) => openMenu(e, msg, isOwn)}
                                 />
                             </div>
                         </React.Fragment>
@@ -101,7 +118,8 @@ const ChatMessageList: React.FC = () => {
                 <ContextMenu
                     items={menu.items}
                     position={menu.position}
-                    onClose={() => setMenu(null)}
+                    closing={closing}
+                    onClose={closeMenu}
                 />
             )}
         </div>

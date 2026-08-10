@@ -10,14 +10,16 @@ interface Position {
 interface Props {
     items: MenuItem[];
     position: Position;
+    closing: boolean;
     onClose: () => void;
 }
 
 const MENU_WIDTH = 180;
 const ITEM_HEIGHT = 40;
 const PADDING = 8;
+const ANIM_DURATION = 120;
 
-const ContextMenu: React.FC<Props> = ({ items, position, onClose }) => {
+const ContextMenu: React.FC<Props> = ({ items, position, closing, onClose }) => {
     const menuRef = useRef<HTMLDivElement>(null);
     const visibleItems = items.filter(item => item.if === undefined || !!item.if);
     const menuHeight = visibleItems.length * ITEM_HEIGHT + PADDING * 2;
@@ -50,9 +52,16 @@ const ContextMenu: React.FC<Props> = ({ items, position, onClose }) => {
     return ReactDOM.createPortal(
         <div
             ref={menuRef}
-            style={{ top: y, left: x, width: MENU_WIDTH }}
-            className="fixed z-50 rounded-xl shadow-xl bg-white dark:bg-zinc-800 border border-black/10 dark:border-white/10 py-1 overflow-hidden
-                        animate-[contextMenuIn_0.12s_ease-out]"
+            style={{
+                top: y,
+                left: x,
+                width: MENU_WIDTH,
+                opacity: closing ? 0 : 1,
+                transform: closing ? "scale(0.92)" : "scale(1)",
+                transformOrigin: "top left",
+                transition: `opacity ${ANIM_DURATION}ms ease, transform ${ANIM_DURATION}ms ease`,
+            }}
+            className="fixed z-50 rounded-xl shadow-xl bg-white dark:bg-zinc-800 border border-black/10 dark:border-white/10 py-1 overflow-hidden"
         >
             {visibleItems.map((item, i) => (
                 <button
@@ -74,4 +83,5 @@ const ContextMenu: React.FC<Props> = ({ items, position, onClose }) => {
     );
 };
 
+export { ANIM_DURATION };
 export default ContextMenu;

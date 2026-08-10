@@ -7,9 +7,10 @@ import {FaFileAlt} from "react-icons/fa";
 interface Props {
     msg: ChatMessageI;
     isOwn: boolean;
+    onClick: (e: React.MouseEvent) => void;
 }
 
-const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn }) => {
+const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onClick }) => {
     const leftSide = !isOwn;
 
     const openImage = (e: React.MouseEvent, url: string) => {
@@ -43,6 +44,7 @@ const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn }) => {
 
     return (
         <div
+            onClick={onClick}
             className={`chat-view-message ${leftSide ? "left" : "right"} ${msg.type === MessageTypes.IMAGE ? "image" : ""}`}
         >
             {msg.type === MessageTypes.IMAGE && !!msg.fileRefs?.length && (
