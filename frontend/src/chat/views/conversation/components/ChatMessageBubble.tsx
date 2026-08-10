@@ -73,8 +73,11 @@ const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onLongTap, menuAvailab
                                 key={i}
                                 src={ref.url}
                                 alt=""
+                                draggable={false}
                                 className="chat-view-message-image"
                                 onClick={(e) => openImage(e, ref.url)}
+                                onContextMenu={(e) => e.preventDefault()}
+                                onDragStart={(e) => e.preventDefault()}
                             />
                         )
                     })}
