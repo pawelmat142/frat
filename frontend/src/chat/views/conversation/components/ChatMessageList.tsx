@@ -24,6 +24,7 @@ const ChatMessageList: React.FC = () => {
     const [menu, setMenu] = useState<MenuState | null>(null);
     const [closing, setClosing] = useState(false);
     const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const pendingMenuRef = useRef<MenuState | null>(null);
 
     const isEmpty = !messages.length || !!chat?.blockedByUid;
 
@@ -36,21 +37,17 @@ const ChatMessageList: React.FC = () => {
     };
 
     const closeMenu = useCallback(() => {
+        if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+        pendingMenuRef.current = null;
         setClosing(true);
         closeTimerRef.current = setTimeout(() => {
             setMenu(null);
             setClosing(false);
+            closeTimerRef.current = null;
         }, ANIM_DURATION);
     }, []);
 
     const openMenu = (e: React.MouseEvent, msg: ChatMessageI, isOwn: boolean) => {
-        // If a menu is already open, skip its close animation and open the new one immediately
-        if (closeTimerRef.current) {
-            clearTimeout(closeTimerRef.current);
-            closeTimerRef.current = null;
-        }
-        setClosing(false);
-
         const items: MenuItem[] = [
             {
                 label: t('chat.copyMessage'),
@@ -67,7 +64,22 @@ const ChatMessageList: React.FC = () => {
                 onClick: () => handleDeleteMessage(msg),
             },
         ];
-        setMenu({ position: { x: e.clientX, y: e.clientY }, items });
+        const newMenu: MenuState = { position: { x: e.clientX, y: e.clientY }, items };
+
+        if (menu) {
+            // Stare menu jest otwarte — odegraj animację zamknięcia, potem otwórz nowe
+            if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+            pendingMenuRef.current = newMenu;
+            setClosing(true);
+            closeTimerRef.current = setTimeout(() => {
+                setMenu(pendingMenuRef.current);
+                pendingMenuRef.current = null;
+                setClosing(false);
+                closeTimerRef.current = null;
+            }, ANIM_DURATION);
+        } else {
+            setMenu(newMenu);
+        }
     };
 
     return (
