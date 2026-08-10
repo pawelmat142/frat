@@ -286,10 +286,7 @@ const WorkerView: React.FC = () => {
 
                 <div className="worker-profile-top">
                     <div className="worker-profile-top-row one">
-                    {/* TODO nowe chipy */}
-                            {/* chipTranslationKey="SHORT_NAME" */}
-
-                        <CategoriesChips categories={worker.categories} smaller />
+                        <CategoriesChips categories={worker.categories} smaller color="primary" />
                     </div>
                     <div className="worker-profile-top-row two">
                         <div>

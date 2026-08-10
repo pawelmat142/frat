@@ -22,7 +22,7 @@ const CategoriesChips: React.FC<Props> = ({ categories, smaller, color='tertiary
             <div className="chip-container">
                 {(categories || []).map(category => (
                     <div key={category} className={`search-chip ${color}${smaller ? ' smaller' : ''}`}>
-                        {Util.captializeFirstLetter(t(DictionaryUtil.getTranslationKey(Dictionaries.WORK_CATEGORY, category)))}
+                        {Util.captializeFirstLetter(t(DictionaryUtil.getTranslationKeyWithCol(Dictionaries.WORK_CATEGORY, "SHORT_NAME", category)))}
                     </div>
                 ))}
             </div>
