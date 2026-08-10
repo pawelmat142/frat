@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 
 interface LongTapHandlerProps {
-    onLongTap: () => void;
+    onLongTap: (x: number, y: number) => void;
     onTap?: () => void;
     holdMs?: number;
     children: React.ReactNode;
@@ -21,14 +21,16 @@ const LongTapHandler: React.FC<LongTapHandlerProps> = ({
 }) => {
     const [holding, setHolding] = useState(false);
     const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const pointerPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
     const startHold = (e: React.PointerEvent) => {
         e.currentTarget.setPointerCapture(e.pointerId);
+        pointerPos.current = { x: e.clientX, y: e.clientY };
         setHolding(true);
         holdTimer.current = setTimeout(() => {
             holdTimer.current = null;
             setHolding(false);
-            onLongTap();
+            onLongTap(pointerPos.current.x, pointerPos.current.y);
         }, holdMs);
     };
 

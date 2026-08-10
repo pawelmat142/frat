@@ -3,14 +3,15 @@ import {ChatMessageI, MessageTypes} from "@shared/interfaces/ChatI";
 import {DateUtil} from "@shared/utils/DateUtil";
 import {Ico} from "global/icon.def";
 import {FaFileAlt} from "react-icons/fa";
+import LongTapHandler from "global/components/LongTapHandler";
 
 interface Props {
     msg: ChatMessageI;
     isOwn: boolean;
-    onClick: (e: React.MouseEvent) => void;
+    onLongTap: (x: number, y: number) => void;
 }
 
-const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onClick }) => {
+const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onLongTap }) => {
     const leftSide = !isOwn;
 
     const openImage = (e: React.MouseEvent, url: string) => {
@@ -43,9 +44,9 @@ const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onClick }) => {
     }
 
     return (
-        <div
-            onClick={onClick}
-            className={`chat-view-message ${leftSide ? "left" : "right"} ${msg.type === MessageTypes.IMAGE ? "image" : ""}`}
+        <LongTapHandler
+            onLongTap={onLongTap}
+            className={`chat-view-message ${leftSide ? "left" : "right"} ${msg.type === MessageTypes.IMAGE ? "image" : ""} relative`}
         >
             {msg.type === MessageTypes.IMAGE && !!msg.fileRefs?.length && (
                 <div className={`chat-view-message-images count-${Math.min(msg.fileRefs.length, 4)}`}>
@@ -85,7 +86,7 @@ const ChatMessageBubble: React.FC<Props> = ({ msg, isOwn, onClick }) => {
                 )}
                 <span className="xs-font">{DateUtil.displayTime(msg.createdAt)}</span>
             </div>
-        </div>
+        </LongTapHandler>
     );
 };
 

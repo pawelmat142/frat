@@ -47,7 +47,7 @@ const ChatMessageList: React.FC = () => {
         }, ANIM_DURATION);
     }, []);
 
-    const openMenu = (e: React.MouseEvent, msg: ChatMessageI, isOwn: boolean) => {
+    const openMenu = (x: number, y: number, msg: ChatMessageI, isOwn: boolean) => {
         const items: MenuItem[] = [
             {
                 label: t('chat.copyMessage'),
@@ -64,7 +64,7 @@ const ChatMessageList: React.FC = () => {
                 onClick: () => handleDeleteMessage(msg),
             },
         ];
-        const newMenu: MenuState = { position: { x: e.clientX, y: e.clientY }, items };
+        const newMenu: MenuState = { position: { x, y }, items };
 
         if (menu) {
             // Stare menu jest otwarte — odegraj animację zamknięcia, potem otwórz nowe
@@ -118,7 +118,7 @@ const ChatMessageList: React.FC = () => {
                                 <ChatMessageBubble
                                     msg={msg}
                                     isOwn={isOwn}
-                                    onClick={(e: React.MouseEvent) => openMenu(e, msg, isOwn)}
+                                    onLongTap={(x, y) => openMenu(x, y, msg, isOwn)}
                                 />
                             </div>
                         </React.Fragment>
