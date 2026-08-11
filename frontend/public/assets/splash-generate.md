@@ -1,0 +1,2 @@
+cd frontend
+npx pwa-asset-generator public/assets/icons/splash.png public/assets/splash --background "#16151A" --splash-only --portrait-only --type png --index public/index.html --manifest public/manifest.json
