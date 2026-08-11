@@ -13,20 +13,19 @@ const CookieBanner: React.FC = () => {
 
   return (
     <div className="cookie-banner-overlay">
-      <div className="cookie-banner container">
-          <div className="cookie-banner-actions card">
-            <Button 
-              onClick={acceptCookies}
-              className="cookie-btn cookie-btn-primary h-fit"
-              size={BtnSizes.MEDIUM}
-            >
-              {t('cookies.accept')}
-            </Button>
-          </div>
+      <div className="cookie-banner">
         <div className="cookie-banner-content">
           <h3 className="cookie-banner-title">{t('cookies.title')}</h3>
           <p className="cookie-banner-description">{t('cookies.description')}</p>
-
+        </div>
+        <div className="cookie-banner-actions">
+          <Button
+            onClick={acceptCookies}
+            className="cookie-btn cookie-btn-primary"
+            size={BtnSizes.MEDIUM}
+          >
+            {t('cookies.accept')}
+          </Button>
         </div>
       </div>
     </div>
