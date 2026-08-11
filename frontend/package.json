@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "start": "dotenv -e ../.env -- craco start",
-    "build": "cross-env FAST_REFRESH=false craco build",
+    "build": "cross-env FAST_REFRESH=false node scripts/build-with-version.cjs",
     "test": "craco test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
