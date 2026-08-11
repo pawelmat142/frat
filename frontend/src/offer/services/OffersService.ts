@@ -37,6 +37,10 @@ export const OffersService = {
         return httpClient.patch<OfferI>(`/offers/${offerId}`, form);
     },
 
+    updateOfferStartDate(offerId: string, startDate: string): Promise<OfferI | null> {
+        return httpClient.patch<OfferI>(`/offers/${offerId}/update-start-date`, { startDate });
+    },
+
     searchOffers(
         params: OfferSearchFilters,
         skipAuth: boolean = false,

@@ -23,11 +23,12 @@ export abstract class Path {
     public static readonly WORKER_AVAILABILITY_EDIT = '/worker-availability-edit';
     public static readonly WORKER_CERTIFICATES_EDIT = '/worker-certificates-edit';
     public static readonly WORKER_CERTIFICATE_DATES_EDIT = '/worker-certificate-dates-edit';
-    public static readonly WORKERS_SEARCH = '/workers-search';    
+    public static readonly WORKERS_SEARCH = '/workers-search';
 
     // OFFERS
     public static readonly OFFER_FORM = '/offer-form';
     public static readonly OFFER_FORM_EDIT = '/offer-form/:offerId';
+    public static readonly OFFER_AVAILABILITY_EDIT = '/offer-availability-edit/:offerId';
     public static readonly OFFERS_SEARCH = '/offers-search';
     public static readonly OFFER = '/offer/:offerId';
     public static readonly USER_OFFERS = '/offers/:uid';
@@ -70,6 +71,7 @@ export abstract class Path {
     public static getOfferPath = (offerId: string) => `${Path.OFFER.replace(':offerId', `${offerId}`)}`;
     public static getOffersPath = (uid: string) => `${Path.USER_OFFERS.replace(':uid', uid)}`;
     public static getOfferFormEditPath = (offerId: string) => `${Path.OFFER_FORM_EDIT.replace(':offerId', `${offerId}`)}`;
+    public static getOfferAvailabilityEditPath = (offerId: string) => `${Path.OFFER_AVAILABILITY_EDIT.replace(':offerId', `${offerId}`)}`;
     public static getConversationPath = (chatId: number) => `${Path.CHAT_CONVERSATION.replace(':chatId', `${chatId}`)}`;
     public static getFriendsPath = (uid: string) => `${Path.FRIENDS.replace(':uid', uid)}`;
     public static getNotificationPath = (notificationId: string) => `${Path.NOTIFICATION.replace(':notificationId', `${notificationId}`)}`;

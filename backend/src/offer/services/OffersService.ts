@@ -10,6 +10,7 @@ import { Subscription } from "rxjs/internal/Subscription";
 import { UserService } from "user/services/UserService";
 import { EntityInteractionService } from "entity-interaction/services/EntityInteractionService";
 import { EntityInteractionEntityTypes } from "@shared/interfaces/EntityInteractionI";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 @Injectable()
 export class OffersService implements OnModuleInit, OnModuleDestroy {
@@ -117,7 +118,25 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
         }
         const updatedEntity = await this.createOfferService.updateOffer(existingOffer, updatedOffer);
         const savedOffer = await this.offersRepo.update(updatedEntity);
-        this.logger.log(`Offer ${savedOffer.offerId} updated by user ${user.uid}`);
+        this.logger.log(`Offer ${savedOffer.offerId} - updated by user ${user.uid}`);
+        return savedOffer;
+    }
+
+    public async updateOfferStartDate(user: UserI, offerId: string, startDate: string): Promise<OfferI> {
+        const existingOffer = await this.offersRepo.getById(offerId);
+        if (existingOffer.uid !== user.uid) {
+            throw new ForbiddenException()
+        }
+        console.log("startDate", startDate);
+        if (!DateUtil.isLocalDateString(startDate)) {
+            throw new ToastException('validation.dateString', this);
+        }
+        const date = DateUtil.parseLocalDateString(startDate);
+        console.log("parsed date", date);
+
+        existingOffer.startDate = date;
+        const savedOffer = await this.offersRepo.update(existingOffer);
+        this.logger.log(`Offer ${savedOffer.offerId} - updated start date by user ${user.uid}`);
         return savedOffer;
     }
 

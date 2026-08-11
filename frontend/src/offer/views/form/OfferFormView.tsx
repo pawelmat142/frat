@@ -162,10 +162,11 @@ const OfferFormContent: React.FC = () => {
             userCtx.setLoading(false);
             if (offerId) {
                 toast.success(t("offer.form.successUpdate"));
+                navigate(Path.getOfferPath(offer.offerId));
             } else {
                 toast.success(t("offer.form.success"));
+                navigate(Path.getOffersPath(offer!.uid));
             }
-            navigate(Path.getOffersPath(offer!.uid));
         } catch (error) {
             toast.error(t("offer.form.validation.createError"));
         } finally {

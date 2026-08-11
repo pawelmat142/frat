@@ -727,6 +727,7 @@
       "readAt": "Przeczytano: {{date}}",
       "sentAt": "Otrzymano: {{date}}",
       "updateOffer": "Zaktualizuj ofertę",
+      "updateDate": "Zaktualizuj datę rozpoczęcia",
       "viewProfile": "Zobacz profil {{name}}",
       "displayOffer": "Wyświetl ofertę",
       "displayProfile": "Wyświetl profil",

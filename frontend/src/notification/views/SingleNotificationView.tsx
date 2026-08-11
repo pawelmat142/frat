@@ -217,8 +217,8 @@ const SingleNotificationView: React.FC = () => {
         return <>
             <Button fullWidth mode={BtnModes.PRIMARY}
                 onClick={() => {
-                    navigate(Path.getOfferFormEditPath(offerId))
-                }}><Ico.EDIT></Ico.EDIT>{t('notification.updateOffer')}</Button>
+                    navigate(Path.getOfferAvailabilityEditPath(offerId))
+                }}><Ico.EDIT></Ico.EDIT>{t('notification.updateDate')}</Button>
             <Button fullWidth mode={BtnModes.PRIMARY_TXT}
                 onClick={() => {
                     navigate(Path.getOfferPath(offerId))

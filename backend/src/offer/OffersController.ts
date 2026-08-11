@@ -90,6 +90,17 @@ export class OffersController {
         return this.offersService.updateOffer(user, offerId, form);
     }
 
+    @Patch(':offerId/update-start-date')
+    @UseGuards(JwtAuthGuard)
+    @Serialize(OfferEntity)
+    updateOfferStartDate(
+        @CurrentUser() user: UserI,
+        @Param('offerId') offerId: string,
+        @Body() form: { startDate: string }
+    ): Promise<OfferI> {
+        return this.offersService.updateOfferStartDate(user, offerId, form.startDate);
+    }
+
     @Get('search/list')
     @Serialize(OfferEntity)
     searchOffers(

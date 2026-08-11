@@ -126,6 +126,10 @@ export abstract class DateUtil {
         return `${year}-${month}-${day}`;
     };
 
+    public static isLocalDateString = (value: string): boolean => {
+        return /^\d{4}-\d{2}-\d{2}$/.test(value);
+    }
+
     public static getMonth(localDateString: string): number | null {
         const date = this.parseLocalDateString(localDateString);
         return isNaN(date.getTime()) ? null : date.getMonth();

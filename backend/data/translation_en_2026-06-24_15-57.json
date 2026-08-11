@@ -715,7 +715,8 @@
       "firebaseError": "Registration failed. Please try again later.",
       "passwordMatch": "Password and confirm password must match.",
       "invalidFileType": "Invalid file type. Allowed: {{allowed}}",
-      "dictionaryNotFound": "Dictionary not found"
+      "dictionaryNotFound": "Dictionary not found",
+      "dateString": "Invalid date format. Expected format: YYYY-MM-DD"
     },
     "notification": {
       "error": {
@@ -725,6 +726,7 @@
       "readAt": "Read at {{date}}",
       "sentAt": "Received at {{date}}",
       "updateOffer": "Update Offer",
+      "updateDate": "Update start date",
       "viewProfile": "See profile {{name}}",
       "displayOffer": "Display Offer",
       "displayProfile": "Display Profile",

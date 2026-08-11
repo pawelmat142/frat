@@ -52,6 +52,7 @@ import MyTrainingsList from 'training/views/MyTrainingsList';
 import TrainingProviderFormView from 'training/views/provider/TrainingProviderFormView';
 import WorkerCertificatesEditView from 'employee/views/form/WorkerCertificatesEditView';
 import WorkerCertificateDatesEditView from 'employee/views/form/WorkerCertificateDatesEditView';
+import OfferAvailabilityEditView from 'offer/views/form/OfferAvailabilityEditView';
 
 const trainingAccess = [UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.SUPERADMIN]
 
@@ -98,6 +99,7 @@ const App: React.FC = () => {
                 {/* OFFERS */}
                 <Route path={Path.OFFER_FORM} element={<PageWrapper isProtected><OfferFormView/></PageWrapper>} />
                 <Route path={Path.OFFER_FORM_EDIT} element={<PageWrapper isProtected><OfferFormView/></PageWrapper>} />
+                <Route path={Path.OFFER_AVAILABILITY_EDIT} element={<PageWrapper isProtected><OfferAvailabilityEditView/></PageWrapper>} />
                 <Route path={Path.USER_OFFERS} element={<PageWrapper isProtected><UserOffersList/></PageWrapper>} />
                 {/* unprotected */}
                 <Route path={Path.OFFER} element={<PageWrapper><OfferView/></PageWrapper>} />
