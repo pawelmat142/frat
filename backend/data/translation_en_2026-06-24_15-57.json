@@ -1,6 +1,6 @@
 {
   "langCode": "en",
-  "version": 89,
+  "version": 90,
   "data": {
     "nav": {
       "start": "Start",
@@ -49,6 +49,7 @@
       "deleteMessageConfirm": "Are you sure you want to delete this message? This action cannot be undone.",
       "e2eHistoryUnavailable": "🔒 Chat history is not available on this device due to E2E encryption. Import your encryption key in Settings to restore access.",
       "e2eDecryptFailed": "🔒 Message could not be decrypted.",
+      "e2eNewDeviceWarning": "🔒 You are on a new device. Encrypted chat history from other devices is not accessible.",
       "error": {
         "deleteFailed": "Failed to delete chat",
         "sendFailed": "Failed to send message"

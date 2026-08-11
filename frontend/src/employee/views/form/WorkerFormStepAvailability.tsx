@@ -250,8 +250,7 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                             <Controller
                                                 name={`availability.availabilityDateRanges.${idx}` as const}
                                                 control={control}
-                                                // TODO temp
-                                                // rules={dateRangeExpired}
+                                                rules={dateRangeExpired}
                                                 render={({ field }) => {
                                                     // Extract string message for this specific range error (RHF stores errors by index/key)
                                                     const fieldError = (formState?.errors?.availability?.availabilityDateRanges as any)?.[idx];

@@ -1,6 +1,6 @@
 {
   "langCode": "pl",
-  "version": 62,
+  "version": 63,
   "data": {
     "nav": {
       "start": "Start",
@@ -49,6 +49,7 @@
       "deleteMessageConfirm": "Czy na pewno chcesz usunąć tę wiadomość? Tej akcji nie można cofnąć.",
       "e2eHistoryUnavailable": "🔒 Historia czatu nie jest dostępna na tym urządzeniu z powodu szyfrowania E2E. Zaimportuj swój klucz szyfrowania w Ustawieniach, aby przywrócić dostęp.",
       "e2eDecryptFailed": "🔒 Nie udało się odszyfrować wiadomości.",
+      "e2eNewDeviceWarning": "🔒 Jesteś na nowym urządzeniu. Historia zaszyfrowanych czatów z innych urządzeń nie jest dostępna.",
       "error": {
         "deleteFailed": "Nie udało się usunąć czatu",
         "sendFailed": "Nie udało się wysłać wiadomości"

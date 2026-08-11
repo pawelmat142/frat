@@ -87,8 +87,7 @@ const SettingsView: React.FC = () => {
         {/* New device warning — shown when keys were freshly generated on this device */}
         {isNewE2EDevice && ChatCryptoService.isE2EEnabled() && (
             <div className="mx-4 mt-3 rounded-lg border border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20 px-4 py-3 text-sm text-yellow-800 dark:text-yellow-300">
-                {/* TODO: add translation key — chat.e2eNewDeviceWarning */}
-                🔒 You are on a new device. Encrypted chat history from other devices is not accessible.
+                {t('chat.e2eNewDeviceWarning')}
             </div>
         )}
 
