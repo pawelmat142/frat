@@ -291,7 +291,7 @@ describe('WorkersService', () => {
             workerRepo.findByUid.mockResolvedValue(worker);
             workerRepo.update.mockResolvedValue(worker);
 
-            await service.addImage(mockUser(), { publicId: 'img-1', url: 'https://example.com/img.jpg' });
+            await service.addImage(mockUser(), { publicId: 'img-1', url: 'https://example.com/img.jpg', isImage: true });
 
             expect(worker.images).toHaveLength(1);
             expect(worker.images[0].publicId).toBe('img-1');
@@ -300,8 +300,8 @@ describe('WorkersService', () => {
         it('should remove image from profile and delete from Cloudinary', async () => {
             const worker = mockWorkerEntity({
                 images: [
-                    { publicId: 'img-1', url: 'https://example.com/1.jpg' },
-                    { publicId: 'img-2', url: 'https://example.com/2.jpg' },
+                    { publicId: 'img-1', url: 'https://example.com/1.jpg', isImage: true },
+                    { publicId: 'img-2', url: 'https://example.com/2.jpg', isImage: true },
                 ],
             });
             workerRepo.findByUid.mockResolvedValue(worker);
@@ -317,7 +317,7 @@ describe('WorkersService', () => {
         it('should throw when profile not found for addImage', async () => {
             workerRepo.findByUid.mockResolvedValue(null);
 
-            await expect(service.addImage(mockUser(), { publicId: 'x', url: 'x' }))
+            await expect(service.addImage(mockUser(), { publicId: 'x', url: 'x', isImage: true }))
                 .rejects.toThrow(ToastException);
         });
     });
