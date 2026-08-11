@@ -4,7 +4,7 @@ import MainTiles from "./MainTiles";
 import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
 import DashboardView from "dashboard/DashboardView";
-import Logo from "global/components/Logo";
+import LogoOld from "../components/LogoOld";
 
 const HomePage: React.FC = () => {
   const authCtx = useAuthContext();
@@ -23,7 +23,7 @@ const HomePage: React.FC = () => {
       <div className="header">
         <div className="header-content">
           <div className="header-content-left">
-            <Logo></Logo>
+            <LogoOld></LogoOld>
             <div className="primary-color xl-font font-bold ml-3">FRAT</div>
           </div>
         </div>

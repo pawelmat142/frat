@@ -7,7 +7,7 @@ interface DrawItLogoProps {
   showName?: boolean;
 }
 
-const Logo: React.FC<DrawItLogoProps> = ({ 
+const LogoOld: React.FC<DrawItLogoProps> = ({
   color, 
   size = 56, 
   className = "",
@@ -70,4 +70,4 @@ const Logo: React.FC<DrawItLogoProps> = ({
   );
 };
 
-export default Logo;
+export default LogoOld;

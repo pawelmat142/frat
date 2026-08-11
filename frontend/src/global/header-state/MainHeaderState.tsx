@@ -1,9 +1,9 @@
-import Logo from "global/components/Logo";
+import LogoOld from "../components/LogoOld";
 
 const MainHeaderState: React.FC = () => {
     return (
         <div className="logo">
-            <Logo size={42} showName={true} />
+            <LogoOld size={42} showName={true} />
         </div>
     )
 }

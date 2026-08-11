@@ -67,7 +67,7 @@
                 - Footer.tsx
                 - Loading.tsx
 				- DesktopMenu.tsx
-				- Logo.tsx
+				- LogoOld.tsx
 				- MobileMenu.tsx
 				- MobileMock.tsx
 			- services
