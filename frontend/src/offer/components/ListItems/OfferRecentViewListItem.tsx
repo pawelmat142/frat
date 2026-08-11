@@ -8,19 +8,21 @@ interface Props {
     first?: boolean,
     last?: boolean,
     disableDefaultBorder?: boolean
-    date: Date
+    date?: Date
 }
 
 const OfferRecentViewListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder, date }) => {
 
     const { t } = useTranslation();
     
-    const rightSection = <div className="flex justify-end items-center gap-2">
-        <div className="secondary-text s-font no-wrap pr-3">{DateDisplay({
-            date,
-            t,
-        })} </div>
-    </div>
+    const rightSection = date ? (
+        <div className="flex justify-end items-center gap-2">
+            <div className="secondary-text s-font no-wrap pr-3">{DateDisplay({
+                date,
+                t,
+            })} </div>
+        </div>
+    ) : null;
 
     return <OfferListItem
         offer={offer}

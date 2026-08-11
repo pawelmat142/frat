@@ -21,7 +21,7 @@ const MostViewedWorkers: React.FC = () => {
     return <TileSection title={t("user.mostViewedProfiles")}>
         {workers.map(worker => {
             return <div key={worker.workerId}>
-                <WorkerRecentViewListItem worker={worker} date={worker.createdAt} disableDefaultBorder />
+                <WorkerRecentViewListItem worker={worker} disableDefaultBorder />
             </div>
         })}
     </TileSection>

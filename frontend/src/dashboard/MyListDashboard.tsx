@@ -28,7 +28,6 @@ const MyListDashboard: React.FC = () => {
                     <WorkerRecentViewListItem key={`w${item.data.workerId}`}
                         worker={item.data as WorkerI}
                         disableDefaultBorder
-                        date={item.listedAt}
                     ></WorkerRecentViewListItem>
 
                 )
@@ -41,7 +40,6 @@ const MyListDashboard: React.FC = () => {
                         first={index === 0}
                         last={index === (items?.length ?? 0) - 1}
                         disableDefaultBorder
-                        date={item.listedAt}
                     ></OfferRecentViewListItem>
 
                 )

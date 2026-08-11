@@ -17,7 +17,7 @@ const RecentViewedWorkers: React.FC = () => {
         {userCtx.meCtx.recentViewedWorkers.map(item => {
             const worker = item.data as WorkerI;
             return <div key={item.id}>
-                <WorkerRecentViewListItem worker={worker} date={item.listedAt} disableDefaultBorder />
+                <WorkerRecentViewListItem worker={worker} disableDefaultBorder />
             </div>
         })}
     </TileSection>

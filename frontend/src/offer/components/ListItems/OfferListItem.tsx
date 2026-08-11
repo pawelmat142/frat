@@ -62,20 +62,20 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
     </span> : null;
 
     const bottomLeft = <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
             {startsFrom}
-            <div className="flex items-center">
-                <Ico.VIEWS size={14} className="secondary-text mr-1" />
+            <div className="flex items-center gap05">
+                <Ico.VIEWS size={14} className="secondary-text" />
                 <span className="xs-font">{offer.uniqueViewsCount || 0}</span>
             </div>
-            <div className="flex items-center">
-                <Ico.STAR size={14} className="secondary-text mr-1" />
+            <div className="flex items-center gap05">
+                <Ico.STAR size={14} className="secondary-text" />
                 <span className="xs-font">{offer.favoritesCount || 0}</span>
             </div>
 
             {!!distance && (
-                <div className="flex items-center">
-                    <Ico.MARKER size={14} className="secondary-text mr-1" />
+                <div className="flex items-center gap05">
+                    <Ico.MARKER size={14} className="secondary-text" />
                     <span className="xs-font">{distance}</span>
                 </div>
             )}

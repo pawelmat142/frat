@@ -28,7 +28,7 @@ const MyOffersDashboard: React.FC = () => {
 
         {offers.map(offer => {
             return <div key={offer.offerId}>
-                <OfferRecentViewListItem offer={offer} date={offer.createdAt} disableDefaultBorder />
+                <OfferRecentViewListItem offer={offer} disableDefaultBorder />
             </div>
         })}
     </TileSection>
