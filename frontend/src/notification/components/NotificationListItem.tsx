@@ -37,6 +37,9 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
     }
 
     const getAvatarComponent = (): React.ReactNode => {
+        if (notification.avatarRef) {
+            return null;
+        }
         if (NotificationTypes.OFFER_EXPIRATION === notification.type) {
             const offerId = notification.targetId;  
             if (offerId) {
