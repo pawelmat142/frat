@@ -53,8 +53,8 @@ export abstract class NativeNotificationService {
             navigator.serviceWorker.ready.then(registration => {
                 const options: Record<string, unknown> = {
                     body,
-                    icon: '/assets/icons/icon-192.png',
-                    badge: '/assets/icons/icon-192.png',
+                    icon: '/assets/icons/icon-transparent-192.png',
+                    badge: '/assets/icons/icon-transparent-192.png',
                     tag: NOTIFICATION_TAG,
                     renotify: true,
                     data: notificationData,
@@ -67,7 +67,7 @@ export abstract class NativeNotificationService {
         // Fallback to regular Notification API
         new Notification(title, {
             body,
-            icon: '/assets/icons/icon-192.png',
+            icon: '/assets/icons/icon-transparent-192.png',
             tag: NOTIFICATION_TAG,
             data: notificationData,
         });
