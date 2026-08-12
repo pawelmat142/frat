@@ -13,6 +13,9 @@ export interface NukeResult {
     firebase: string;
 }
 
+/** Tables considered "admin" reference data - excluded from the nuke unless explicitly requested. */
+const ADMIN_TABLES = ['jh_dictionaries', 'jh_translations'];
+
 @Injectable()
 export class UsersAdminService {
 
@@ -53,15 +56,18 @@ export class UsersAdminService {
      * all data.
      * Each target is cleared independently (Promise.allSettled) so a failure in
      * one system doesn't prevent cleanup of the others.
+     *
+     * @param includeAdminTables when false (default), admin reference tables
+     * (e.g. dictionaries, translations) are preserved and not truncated.
      */
-    public async nukeEverything(): Promise<NukeResult> {
-        this.logger.warn('NUKE EVERYTHING requested - wiping Postgres, Cloudinary and Firebase');
+    public async nukeEverything(includeAdminTables = false): Promise<NukeResult> {
+        this.logger.warn(`NUKE EVERYTHING requested - wiping Postgres, Cloudinary and Firebase (includeAdminTables=${includeAdminTables})`);
 
         // Fetch uids before truncating Postgres, otherwise the list is lost.
         const uids = await this.getAllUserUids();
 
         const [postgres, cloudinary, firebase] = await Promise.allSettled([
-            this.truncateAllTables(),
+            this.truncateAllTables(includeAdminTables),
             this.cloudinaryService.deleteAllResources(),
             this.deleteFirebaseUsersByUids(uids),
         ]);
@@ -79,10 +85,13 @@ export class UsersAdminService {
         return summary;
     }
 
-    private async truncateAllTables(): Promise<void> {
-        const tables: { tablename: string }[] = await this.dataSource.query(
+    private async truncateAllTables(includeAdminTables: boolean): Promise<void> {
+        let tables: { tablename: string }[] = await this.dataSource.query(
             `SELECT tablename FROM pg_tables WHERE schemaname = 'public'`
         );
+        if (!includeAdminTables) {
+            tables = tables.filter(t => !ADMIN_TABLES.includes(t.tablename));
+        }
         if (!tables.length) {
             this.logger.warn('No Postgres tables found to truncate');
             return;

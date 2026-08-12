@@ -24,11 +24,14 @@ export class SuperAdminController {
 
     // DANGER: wipes all Postgres tables, Cloudinary assets and Firebase accounts.
     // Test-environment only.
-    @Get('/:password/nuke')
+    // :includeAdminTables ('true'/'false') decides whether admin reference tables
+    // (e.g. dictionaries, translations) are also wiped. Defaults to false when omitted.
+    @Get(['/:password/nuke', '/:password/nuke/:includeAdminTables'])
     nukeEverything(
-        @Param('password') password: string
+        @Param('password') password: string,
+        @Param('includeAdminTables') includeAdminTables?: string
     ): Promise<NukeResult> {
         this.usersAdminService.checkPassword(password);
-        return this.usersAdminService.nukeEverything();
+        return this.usersAdminService.nukeEverything(includeAdminTables === 'true');
     }
 }
