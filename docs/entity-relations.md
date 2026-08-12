@@ -12,6 +12,7 @@ skrypty `db/init/03_create_tables.sql`, `db/migrations/*.sql` oraz logika kaskad
 | `──▶` (linia ciągła) | **FK CASCADE (DB)** | Prawdziwy klucz obcy w bazie z `ON DELETE CASCADE`. Usunięcie rodzica **zawsze** kasuje dziecko, niezależnie od kodu aplikacji. |
 | `┄┄▶` (linia przerywana, "app-event") | **Kaskada aplikacyjna** | Brak FK w bazie. Usunięcie rodzica emituje zdarzenie (RxJS `Subject`), na które inny serwis reaguje i ręcznie kasuje powiązane rekordy. |
 | `┄┄▶` (linia przerywana, "orphan risk") | **Referencja miękka bez kaskady** | Kolumna trzyma tylko `uid`/id jako zwykły `VARCHAR`, bez FK i bez obsługi w kodzie. Po usunięciu rodzica rekordy **zostają osierocone** (potencjalny dług/bug). |
+| `┄┄▶` (linia przerywana, "self-healing") | **Referencja miękka z leniwym czyszczeniem w aplikacji** | Kolumna trzyma tylko id jako `VARCHAR`, bez FK, ale kod aplikacji przy każdym odczycie danych filtruje i kasuje wiersze wskazujące na nieistniejący już target — osierocony wpis nigdy nie jest widoczny w UI. |
 
 ## Diagram
 
@@ -59,11 +60,8 @@ graph LR
     Chat =="chat_id · FK CASCADE"==> ChatMember
     Chat =="chat_id · FK CASCADE"==> ChatMessage
 
-    Offer -."reference · orphan risk"..-> Listed
-    Worker -."reference · orphan risk"..-> Listed
-    Training -."reference · orphan risk"..-> Listed
-    Offer -."targetId · orphan risk"..-> Notification
-    Worker -."targetId · orphan risk"..-> Notification
+    Offer -."reference · self-healing"..-> Listed
+    Worker -."reference · self-healing"..-> Listed
 ```
 
 ## Szczegóły relacji (per encja nadrzędna)
@@ -128,8 +126,8 @@ z userem przez FK, zanim baza je skasuje kaskadowo.
 |---|---|---|---|
 | DateRangeEntity | `worker_id` (`@ManyToOne` + `@JoinColumn`, `onDelete: 'CASCADE'`) | FK CASCADE | Realna relacja TypeORM, kasowana też z `cascade: true` przy zapisie |
 | `jh_worker_search_appearances` (tabela bez encji TypeORM) | `worker_id` | FK CASCADE | Deduplikacja wyświetleń w wyszukiwarce |
-| UserListedItemEntity | `reference` (+ `referenceType='WORKER'`, bez FK) | **Brak kaskady** | Ulubieni pracownicy pozostają na liście usera po usunięciu profilu (orphan) |
-| NotificationEntity | `targetId` (bez FK, polimorficzne) | **Brak kaskady** | Powiadomienie może wskazywać na nieistniejącego workera |
+| UserListedItemEntity | `reference` (+ `referenceType='WORKER'`, bez FK) | **Self-healing (aplikacja)** | Wiersz nie jest kasowany od razu, ale `UserListedItemService.listUserItems` przy każdym odczycie listy ulubionych odfiltrowuje pozycje wskazujące na nieistniejącego workera i kasuje je (`removeItemsWithMissingData`) — usunięty profil nigdy nie jest widoczny w UI |
+| NotificationEntity (`WORKER_PROFILE_AVAILABILITY_EXPIRED`) | `targetId` | **Nie dotyczy — brak realnej relacji** | Ta notyfikacja jest generowana efemerycznie w `ExpirationNotificationService` (ujemny pseudo-ID) i nigdy nie jest zapisywana do bazy (`repository.save`) — nie może więc wskazywać na osieroconego workera |
 
 ### ChatEntity (`jh_chats`, klucz: `chat_id`)
 
@@ -152,13 +150,20 @@ wymaga czyszczenia).
 | Encja zależna | Pole | Mechanizm |
 |---|---|---|
 | TrainingSessionEntity | `training_id` (`REFERENCES ... ON DELETE CASCADE` w SQL) | FK CASCADE (dodatkowo `TrainingService.deleteTraining` explicite kasuje sesje przed treningiem — redundantne, ale nieszkodliwe) |
-| UserListedItemEntity | `reference` (+ `referenceType='TRAINING'`, bez FK) | **Brak kaskady** — orphan risk |
+
+`UserListedItemReferenceTypes` (`shared/interfaces/UserListedItem.ts`) obsługuje obecnie tylko
+`WORKER` i `OFFER` — wartość `TRAINING` nie istnieje, więc ulubione szkolenia nie są jeszcze
+zaimplementowaną funkcją i nie generują żadnego ryzyka osierocenia.
 
 ### OfferEntity (`jh_offers`, klucz: `offer_id`, referencja logiczna: `uid`)
 
-Brak encji zależnych z realną relacją. Powiązania miękkie: `UserListedItemEntity.reference` i
-`NotificationEntity.targetId` mogą wskazywać na ofertę — żadne z nich nie jest czyszczone przy
-usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
+Brak encji zależnych z realną relacją. Powiązania miękkie:
+- `UserListedItemEntity.reference` (+ `referenceType='OFFER'`) — **self-healing**, tym samym
+  mechanizmem co dla `WorkerEntity`: `UserListedItemService.listUserItems` filtruje i kasuje wiersze
+  wskazujące na nieistniejącą już ofertę przy każdym odczycie listy ulubionych.
+- `NotificationEntity.targetId` (typ `OFFER_EXPIRATION`) — **nie dotyczy**, ta notyfikacja jest
+  generowana efemerycznie w `ExpirationNotificationService` i nigdy nie trafia do bazy, więc nie
+  może wskazywać na nieistniejącą ofertę.
 
 **Cloudinary (`avatarRef`)**: pokryte dwoma niezależnymi mechanizmami:
 - Upload avatara (`OfferFormStepThree.tsx`) jest tagowany m.in. `CloudinaryTags.uid(uid)`, więc
@@ -177,9 +182,15 @@ usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
 
 ## Znane luki / do weryfikacji
 
-1. **`UserListedItemEntity.reference`** (ulubione: oferty/pracownicy/szkolenia) i
-   **`NotificationEntity.targetId`** to referencje polimorficzne bez żadnego czyszczenia przy
-   usunięciu encji docelowej — mogą prowadzić do "martwych" wpisów w UI.
+Brak otwartych pozycji. Wszystkie encje z dawnej listy orphan-risk (`ChatEntity`,
+`NotificationEntity`, `FriendshipEntity`, `EntityInteractionEntity`) mają FK CASCADE, a tam gdzie
+druga strona musi się dowiedzieć o zmianie na żywo — pre-delete hook z emisją WebSocket.
+Polimorficzna referencja `UserListedItemEntity.reference` (`WORKER`/`OFFER`) jest self-healing w
+aplikacji (patrz sekcje `WorkerEntity`/`OfferEntity` wyżej). `NotificationEntity.targetId` dla
+typów `WORKER_PROFILE_AVAILABILITY_EXPIRED`/`OFFER_EXPIRATION` nigdy nie może osierocieć, bo te
+notyfikacje są generowane efemerycznie i nigdy nie trafiają do bazy. Jedyna świadomie
+zaakceptowana "luka" to `FeedbackEntity.uid` — zamierzone zachowanie (feedback przeżywa usunięcie
+konta).
 
 ## Historia zmian
 
@@ -235,3 +246,14 @@ usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
   interakcji (własne wyświetlenia) usuwanego usera; nie ma drugiej strony ani żadnego UI innego
   usera, które trzeba by o tym powiadomić, więc zwykły FK CASCADE w pełni domyka lukę. Domyka to
   ostatni wpis z listy orphan-risk w tym dokumencie.
+- Korekta dokumentacyjna sekcji `WorkerEntity`/`OfferEntity`/`TrainingEntity` oraz "Znane luki"
+  (bez zmian w kodzie) — dokument opisywał nieaktualny/błędny stan. W rzeczywistości
+  `UserListedItemEntity.reference` (dla `WORKER` i `OFFER`) jest już self-healing:
+  `UserListedItemService.listUserItems` filtruje i kasuje wiersze wskazujące na nieistniejący już
+  target przy każdym odczycie listy ulubionych, więc osierocony wpis nigdy nie jest widoczny w UI.
+  `NotificationEntity.targetId` dla `WORKER_PROFILE_AVAILABILITY_EXPIRED`/`OFFER_EXPIRATION` nigdy
+  nie może osierocieć, bo te notyfikacje są generowane efemerycznie w
+  `ExpirationNotificationService` (ujemny pseudo-ID) i nigdy nie są zapisywane do bazy. Usunięto
+  też wpis o `TrainingEntity` → `UserListedItemEntity.reference` z `referenceType='TRAINING'` —
+  taka wartość enuma (`UserListedItemReferenceTypes`) w ogóle nie istnieje (obsługiwane są tylko
+  `WORKER` i `OFFER`).
