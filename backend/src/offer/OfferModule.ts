@@ -10,8 +10,8 @@ import { OffersController } from './OffersController';
 import { CreateOfferService } from './services/CreateOfferService';
 import { OffersSearchService } from './services/OffersSearchService';
 import { AdminOffersController } from './AdminOffersController';
-import { UserModule } from 'user/UserModule';
 import { EntityInteractionModule } from 'entity-interaction/EntityInteractionModule';
+import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
 
 @Module({
     imports: [
@@ -21,8 +21,8 @@ import { EntityInteractionModule } from 'entity-interaction/EntityInteractionMod
 
         AuthModule,
         DictionariesModule,
-        UserModule,
         EntityInteractionModule,
+        UserManagementModule,
     ],
     providers: [
         OffersService,

@@ -42,7 +42,7 @@ graph LR
     User =="sender_uid · FK CASCADE"==> ChatMessage
     User =="uid · FK CASCADE"==> Worker
     User =="uid · FK CASCADE"==> Certificate
-    User -."uid · app-event"..-> Offer
+    User =="uid · FK CASCADE"==> Offer
     User -."uid (bug: brak filtra) · app-event"..-> Chat
     User -."recipientUid/requesterUid · orphan risk"..-> Notification
     User -."requesterUid/addresseeUid · orphan risk"..-> Friendship
@@ -78,7 +78,7 @@ graph LR
 | ChatMessageEntity | `sender_uid` | FK CASCADE | Usuwane automatycznie |
 | WorkerEntity | `uid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_workers_uid` po `synchronize`) | Usuwane automatycznie przez bazę |
 | CertificateEntity | `uid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_certificates_uid` po `synchronize`) | Usuwane automatycznie przez bazę, niezależnie od `WorkerEntity` (obie relacje wskazują bezpośrednio na `UserEntity.uid`) |
-| OfferEntity | `uid` (bez FK) | Kaskada aplikacyjna: `UserService.userDeletedEvent` → `OffersService` | Pobiera wszystkie oferty usera i kasuje jedną po drugiej |
+| OfferEntity | `uid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_offers_uid` po `synchronize`) | Usuwane automatycznie przez bazę |
 | ChatEntity | — (przez `ChatMemberEntity.uid`) | Kaskada aplikacyjna: `UserService.userDeletedEvent` → `ChatService` | ⚠️ **Podejrzenie buga**: `ChatRepo.getUserChatsWithoutJoins(uid)` nie filtruje po `uid` (parametr jest nieużywany w query builderze) — przy usuwaniu jednego usera efektywnie kasowane są **wszystkie** czaty w systemie. Wymaga weryfikacji/poprawki. |
 | NotificationEntity | `recipientUid`, `requesterUid` (bez FK) | **Brak kaskady** | Powiadomienia usuniętego usera oraz te, w których był `requester`, zostają w bazie jako osierocone |
 | FriendshipEntity | `requesterUid`, `addresseeUid` (bez FK) | **Brak kaskady** | Rekordy znajomości pozostają osierocone |
@@ -120,11 +120,19 @@ wymaga czyszczenia).
 | TrainingSessionEntity | `training_id` (`REFERENCES ... ON DELETE CASCADE` w SQL) | FK CASCADE (dodatkowo `TrainingService.deleteTraining` explicite kasuje sesje przed treningiem — redundantne, ale nieszkodliwe) |
 | UserListedItemEntity | `reference` (+ `referenceType='TRAINING'`, bez FK) | **Brak kaskady** — orphan risk |
 
-### OfferEntity (`jh_offers`, klucz: `offer_id`)
+### OfferEntity (`jh_offers`, klucz: `offer_id`, referencja logiczna: `uid`)
 
 Brak encji zależnych z realną relacją. Powiązania miękkie: `UserListedItemEntity.reference` i
 `NotificationEntity.targetId` mogą wskazywać na ofertę — żadne z nich nie jest czyszczone przy
 usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
+
+**Cloudinary (`avatarRef`)**: pokryte dwoma niezależnymi mechanizmami:
+- Upload avatara (`OfferFormStepThree.tsx`) jest tagowany m.in. `CloudinaryTags.uid(uid)`, więc
+  ogólne czyszczenie assetów usera (`UserManagementService.deleteAllAssetsForUid`, uruchamiane na
+  `userDeletedEvent`) usuwa też avatary jego ofert.
+- `OffersService.deleteOfferFn` dodatkowo jawnie kasuje assety po tagu `CloudinaryTags.offerId(offerId)`
+  (try/catch — błąd Cloudinary nie blokuje usunięcia wiersza), co pokrywa usunięcie pojedynczej
+  oferty bez usuwania konta.
 
 ## Encje bez zależności (liście drzewa)
 
@@ -151,3 +159,9 @@ usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
   endpoint `GET /api/super-admin/:password/nuke`. Usunięto tym samym niespójność
   `WorkerRepo.deleteAllProfiles()` vs `deleteProfile`/`deleteProfileByUid` w zakresie czyszczenia
   certyfikatów — teraz to zawsze robi baza.
+- `OfferEntity` przepięta analogicznie: `@ManyToOne` → `UserEntity` z `onDelete: 'CASCADE'`,
+  usunięta manualna subskrypcja `userDeletedEvent` w `OffersService`.
+- Domknięty dług dot. Cloudinary dla `OfferEntity.avatarRef`: frontend (`OfferFormStepThree.tsx`)
+  dodaje tag `CloudinaryTags.uid(uid)` do uploadu avatara oferty, a `OffersService.deleteOfferFn`
+  (po wstrzyknięciu `CloudinaryService` przez `UserManagementModule` w `OfferModule`) jawnie kasuje
+  assety po tagu `offerId` przy usunięciu pojedynczej oferty.
