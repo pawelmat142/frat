@@ -80,6 +80,7 @@ export class ChatRepo {
   async getUserChatsWithoutJoins(uid: string): Promise<ChatI[]> {
     return this.chatRepository
       .createQueryBuilder('chat')
+      .innerJoin('chat.members', 'member', 'member.uid = :uid', { uid })
       .orderBy('chat.createdAt', 'DESC')
       .getMany();
   }

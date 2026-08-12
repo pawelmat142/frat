@@ -43,7 +43,7 @@ graph LR
     User =="uid · FK CASCADE"==> Worker
     User =="uid · FK CASCADE"==> Certificate
     User =="uid · FK CASCADE"==> Offer
-    User -."uid (bug: brak filtra) · app-event"..-> Chat
+    User -."uid · app-event"..-> Chat
     User -."recipientUid/requesterUid · orphan risk"..-> Notification
     User -."requesterUid/addresseeUid · orphan risk"..-> Friendship
     User -."userUid · orphan risk"..-> Interaction
@@ -79,7 +79,7 @@ graph LR
 | WorkerEntity | `uid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_workers_uid` po `synchronize`) | Usuwane automatycznie przez bazę |
 | CertificateEntity | `uid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_certificates_uid` po `synchronize`) | Usuwane automatycznie przez bazę, niezależnie od `WorkerEntity` (obie relacje wskazują bezpośrednio na `UserEntity.uid`) |
 | OfferEntity | `uid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_offers_uid` po `synchronize`) | Usuwane automatycznie przez bazę |
-| ChatEntity | — (przez `ChatMemberEntity.uid`) | Kaskada aplikacyjna: `UserService.userDeletedEvent` → `ChatService` | ⚠️ **Podejrzenie buga**: `ChatRepo.getUserChatsWithoutJoins(uid)` nie filtruje po `uid` (parametr jest nieużywany w query builderze) — przy usuwaniu jednego usera efektywnie kasowane są **wszystkie** czaty w systemie. Wymaga weryfikacji/poprawki. |
+| ChatEntity | — (przez `ChatMemberEntity.uid`) | Kaskada aplikacyjna: `UserService.userDeletedEvent` → `ChatService` | `ChatRepo.getUserChatsWithoutJoins(uid)` filtruje po `uid` przez `innerJoin('chat.members', ...)` — usuwane są tylko czaty, w których usuwany user faktycznie uczestniczył (naprawione, patrz Historia zmian) |
 | NotificationEntity | `recipientUid`, `requesterUid` (bez FK) | **Brak kaskady** | Powiadomienia usuniętego usera oraz te, w których był `requester`, zostają w bazie jako osierocone |
 | FriendshipEntity | `requesterUid`, `addresseeUid` (bez FK) | **Brak kaskady** | Rekordy znajomości pozostają osierocone |
 | EntityInteractionEntity | `userUid` (bez FK) | **Brak kaskady** | Historia interakcji (views itp.) pozostaje — może być zamierzone (dane analityczne) |
@@ -143,11 +143,9 @@ usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
 
 ## Znane luki / do weryfikacji
 
-1. **`ChatRepo.getUserChatsWithoutJoins(uid)`** nie filtruje po `uid` — usunięcie dowolnego usera
-   kasuje wszystkie czaty w systemie zamiast tylko czatów usuwanego usera.
-2. **Brak kaskady** dla `NotificationEntity`, `FriendshipEntity`, `EntityInteractionEntity` przy
+1. **Brak kaskady** dla `NotificationEntity`, `FriendshipEntity`, `EntityInteractionEntity` przy
    usunięciu Usera — do decyzji, czy to zamierzone (dane historyczne) czy dług techniczny.
-3. **`UserListedItemEntity.reference`** (ulubione: oferty/pracownicy/szkolenia) i
+2. **`UserListedItemEntity.reference`** (ulubione: oferty/pracownicy/szkolenia) i
    **`NotificationEntity.targetId`** to referencje polimorficzne bez żadnego czyszczenia przy
    usunięciu encji docelowej — mogą prowadzić do "martwych" wpisów w UI.
 
@@ -165,3 +163,7 @@ usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
   dodaje tag `CloudinaryTags.uid(uid)` do uploadu avatara oferty, a `OffersService.deleteOfferFn`
   (po wstrzyknięciu `CloudinaryService` przez `UserManagementModule` w `OfferModule`) jawnie kasuje
   assety po tagu `offerId` przy usunięciu pojedynczej oferty.
+- Naprawiony bug w `ChatRepo.getUserChatsWithoutJoins(uid)`: metoda nie filtrowała po `uid` (parametr
+  był nieużywany w query builderze), przez co usunięcie dowolnego usera kasowało **wszystkie** czaty
+  w systemie (subskrypcja `userDeletedEvent` w `ChatService` iteruje po wyniku i wywołuje
+  `chatRepo.deleteChat` dla każdego). Naprawa: dodany `innerJoin('chat.members', 'member', 'member.uid = :uid', { uid })`.
