@@ -26,6 +26,7 @@ import { ExportedAuthService } from './services/ExportedAuthService';
   ],
   exports: [
     ExportedAuthService,
-  ],  
+    FirebaseConfig,
+  ],
 })
 export class AuthModule {}

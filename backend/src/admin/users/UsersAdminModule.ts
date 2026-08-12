@@ -5,11 +5,13 @@ import { UsersAdminService } from './UsersAdminService';
 import { UserModule } from 'user/UserModule';
 import { AuthModule } from 'auth/AuthModule';
 import { SuperAdminController } from './SuperAdminController';
+import { UserManagementModule } from 'user/UserManagement/UserManagementModule';
 
 @Module({
   imports: [
     UserModule,
-    AuthModule
+    AuthModule,
+    UserManagementModule,
   ],
   controllers: [
     UsersAdminController,

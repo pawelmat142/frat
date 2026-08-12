@@ -57,6 +57,46 @@ export class CloudinaryService {
     }
 
     /**
+     * Deletes ALL assets from the Cloudinary account, across all resource types
+     * (image, raw, video). Used by the super-admin "nuke" endpoint to fully wipe
+     * the test environment. Paginates through `next_cursor` since a single
+     * delete call is limited to ~1000 assets.
+     */
+    public async deleteAllResources(): Promise<void> {
+        this.validateConfig();
+        const auth = Buffer.from(`${this.apiKey}:${this.apiSecret}`).toString('base64');
+        const resourceTypes: Array<'image' | 'raw' | 'video'> = ['image', 'raw', 'video'];
+
+        for (const resourceType of resourceTypes) {
+            let nextCursor: string | undefined = undefined;
+            let deletedCount = 0;
+            do {
+                try {
+                    const response: any = await axios.delete(
+                        `${BASE_URL}/${this.cloudName}/resources/${resourceType}/upload`,
+                        {
+                            headers: { Authorization: `Basic ${auth}` },
+                            params: {
+                                all: true,
+                                next_cursor: nextCursor,
+                            },
+                        }
+                    );
+                    deletedCount += Object.keys(response.data.deleted || {}).length;
+                    nextCursor = response.data.next_cursor;
+                } catch (error: any) {
+                    if (error.response?.status === 404) {
+                        break;
+                    }
+                    this.logger.error(`Error deleting all '${resourceType}' resources from Cloudinary`, error);
+                    break;
+                }
+            } while (nextCursor);
+            this.logger.log(`Deleted ${deletedCount} '${resourceType}' resources from Cloudinary`);
+        }
+    }
+
+    /**
      * Deletes all Cloudinary assets matching ALL provided tags.
      * @param tags - Every tag must be present on the asset (AND logic)
      * @param exceptPublicId - Optional publicId to exclude from deletion
