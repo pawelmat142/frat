@@ -1,5 +1,5 @@
 /** Created by Pawel Malek **/
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { FriendshipRepo } from './FriendshipRepo';
 import { FriendshipEntity } from 'friends/model/FriendshipEntity';
 import { FriendshipStatuses } from '@shared/interfaces/FriendshipI';
@@ -10,7 +10,7 @@ import { FriendshipSocketHandler } from './FriendshipSocketHandler';
 import { NotificationSocketHandler } from 'notification/services/NotificationSocketHandler';
 
 @Injectable()
-export class FriendshipService {
+export class FriendshipService implements OnModuleInit {
 
     private readonly logger = new Logger(this.constructor.name);
 
@@ -20,6 +20,21 @@ export class FriendshipService {
         private readonly friendshipSocketHandler: FriendshipSocketHandler,
         private readonly notificationSocketHandler: NotificationSocketHandler,
     ) { }
+
+    onModuleInit() {
+        // Must run BEFORE the user row is deleted: FriendshipEntity rows (both as requester and
+        // addressee) are purged by a synchronous, non-deferrable ON DELETE CASCADE FK, so a
+        // post-delete event would already find no rows to look up (see
+        // UserService.registerPreDeleteHook). Notify the other party of each friendship/invite so
+        // it disappears live from their friends list instead of staying "zombie" until refresh.
+        this.userService.registerPreDeleteHook(async (user) => {
+            const friendships = await this.friendshipRepo.findFriendsByUid(user.uid);
+            friendships.forEach(friendship =>
+                this.friendshipSocketHandler.notifyFriendRemoved(friendship, friendship.friendshipId)
+            );
+            this.logger.log(`Notified removal of ${friendships.length} friendships for user being deleted ${user.uid}`);
+        });
+    }
 
     async sendInvite(requester: UserI, addresseeUid: string): Promise<FriendshipEntity> {
         if (requester.uid === addresseeUid) {
