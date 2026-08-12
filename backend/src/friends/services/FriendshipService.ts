@@ -29,9 +29,10 @@ export class FriendshipService implements OnModuleInit {
         // it disappears live from their friends list instead of staying "zombie" until refresh.
         this.userService.registerPreDeleteHook(async (user) => {
             const friendships = await this.friendshipRepo.findFriendsByUid(user.uid);
-            friendships.forEach(friendship =>
-                this.friendshipSocketHandler.notifyFriendRemoved(friendship, friendship.friendshipId)
-            );
+            friendships.forEach(friendship => {
+                this.friendshipSocketHandler.notifyFriendRemoved(friendship, friendship.friendshipId);
+                this.notificationSocketHandler.notifyFriendshipRemoved(user, friendship, friendship.friendshipId);
+            });
             this.logger.log(`Notified removal of ${friendships.length} friendships for user being deleted ${user.uid}`);
         });
     }
