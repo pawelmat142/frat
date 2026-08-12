@@ -1,6 +1,7 @@
 /** Created by Pawel Malek **/
-import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { EntityInteractionEntityType, EntityInteractionEventType, EntityInteractionI } from '@shared/interfaces/EntityInteractionI';
+import { UserEntity } from 'user/model/UserEntity';
 
 @Entity('jh_entity_interactions')
 @Index(['entityType', 'entityId'])
@@ -21,6 +22,10 @@ export class EntityInteractionEntity implements EntityInteractionI {
 
   @Column({ name: 'user_uid' })
   userUid: string;
+
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_uid', referencedColumnName: 'uid' })
+  user: UserEntity;
 
   @Column({ name: 'date', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;

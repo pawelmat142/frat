@@ -47,8 +47,8 @@ graph LR
     User =="requesterUid · FK CASCADE"==> Notification
     User =="requesterUid · FK CASCADE"==> Friendship
     User =="addresseeUid · FK CASCADE"==> Friendship
+    User =="userUid · FK CASCADE"==> Interaction
     User -."uid · app-event"..-> Chat
-    User -."userUid · orphan risk"..-> Interaction
     User -."uid (nullable) · orphan risk"..-> Feedback
 
     Worker =="worker_id · FK CASCADE"==> DateRange
@@ -84,7 +84,7 @@ graph LR
 | ChatEntity | — (przez `ChatMemberEntity.uid`) | Kaskada aplikacyjna: **pre-delete hook** (`UserService.registerPreDeleteHook` → `ChatService`) | `ChatRepo.getUserChatsWithoutJoins(uid)` filtruje po `uid` przez `innerJoin('chat.members', ...)` — wykonywane **przed** fizycznym `DELETE` usera (patrz niżej "Pre-delete hooks vs. `userDeletedEvent`"), bo FK `ChatMemberEntity.uid → CASCADE` jest `NOT DEFERRABLE` i kasuje wiersze `jh_chat_members` synchronicznie w tym samym statemencie. Pozostałym uczestnikom wysyłany jest `ChatEvents.CHAT_DELETED` przez `SocketGateway.emitToRoom` |
 | NotificationEntity | `recipientUid`, `requesterUid` (obie `@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_notifications_recipient_uid`, `fk_notifications_requester_uid` po `synchronize`) + **pre-delete hook** (`NotificationService`) | Usuwane automatycznie przez bazę — zarówno powiadomienia usuniętego odbiorcy, jak i te, w których był `requester`. Dodatkowo dla powiadomień, gdzie usuwany user był `requester` (a nie odbiorcą), hook emituje `NotificationEvents.NOTIFICATION_DELETED` do odbiorcy przed fizycznym skasowaniem — bez tego frontend nie dowiedziałby się o zniknięciu wpisu (np. "X zaakceptował zaproszenie") aż do odświeżenia listy |
 | FriendshipEntity | `requesterUid`, `addresseeUid` (obie `@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_friendships_requester_uid`, `fk_friendships_addressee_uid` po `synchronize`) + **pre-delete hook** (`FriendshipService`) | Usuwane automatycznie przez bazę — zarówno znajomości, gdzie usuwany user był requesterem, jak i addressee. Hook przed skasowaniem usera odczytuje jego znajomości/zaproszenia i emituje `FriendshipEvents.FRIEND_REMOVED` do drugiej strony — bez tego jej lista znajomych pokazywałaby "martwy" wpis aż do odświeżenia |
-| EntityInteractionEntity | `userUid` (bez FK) | **Brak kaskady** | Historia interakcji (views itp.) pozostaje — może być zamierzone (dane analityczne) |
+| EntityInteractionEntity | `userUid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_entity_interactions_user_uid` po `synchronize`) | Usuwane automatycznie przez bazę. Bez pre-delete hooka/socketu — to prywatna historia interakcji (własne wyświetlenia) usuwanego usera, nie ma drugiej strony, którą trzeba by powiadomić |
 | FeedbackEntity | `uid` (nullable, bez FK) | **Brak kaskady** | Zamierzone — feedback ma być zachowany nawet po usunięciu konta (pole `uid` jest opcjonalne) |
 
 Dodatkowo: `AuthService` (Firebase) i `UserManagementService` (Cloudinary — kasowanie assetów) też
@@ -177,9 +177,7 @@ usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
 
 ## Znane luki / do weryfikacji
 
-1. **Brak kaskady** dla `EntityInteractionEntity` przy usunięciu Usera — do decyzji, czy to
-   zamierzone (dane historyczne) czy dług techniczny.
-2. **`UserListedItemEntity.reference`** (ulubione: oferty/pracownicy/szkolenia) i
+1. **`UserListedItemEntity.reference`** (ulubione: oferty/pracownicy/szkolenia) i
    **`NotificationEntity.targetId`** to referencje polimorficzne bez żadnego czyszczenia przy
    usunięciu encji docelowej — mogą prowadzić do "martwych" wpisów w UI.
 
@@ -231,3 +229,9 @@ usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
   odczytywały payload jako obiekt `FriendshipI` (`friendship.friendshipId`), przez co filtrowanie
   usuniętej znajomości z listy nigdy realnie nie działało (dotyczyło też zwykłego, ręcznego
   usunięcia znajomego, nie tylko usunięcia konta) — poprawione na `number` po obu stronach.
+- `EntityInteractionEntity` przepięta z "brak kaskady" (miękka kolumna `userUid`) na prawdziwe FK
+  `ON DELETE CASCADE`: dodane `@ManyToOne` → `UserEntity`. Bez pre-delete hooka i bez emisji
+  socketu — w odróżnieniu od Chat/Notification/Friendship, ta encja to prywatna historia
+  interakcji (własne wyświetlenia) usuwanego usera; nie ma drugiej strony ani żadnego UI innego
+  usera, które trzeba by o tym powiadomić, więc zwykły FK CASCADE w pełni domyka lukę. Domyka to
+  ostatni wpis z listy orphan-risk w tym dokumencie.
