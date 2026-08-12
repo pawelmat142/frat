@@ -1,16 +1,18 @@
 /** Created by Pawel Malek **/
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, Repository } from 'typeorm';
-import { NotificationI } from '@shared/interfaces/NotificationI';
+import { NotificationEvents, NotificationI } from '@shared/interfaces/NotificationI';
 import { NotificationEntity } from 'notification/model/NotificationEntity';
 import { ToastException } from 'global/exceptions/ToastException';
 import { UserI } from '@shared/interfaces/UserI';
 import { ExpirationNotificationService } from './ExpirationNotificationService';
 import { MeUserContextNotificationsRequest } from 'notification/model/interfaces';
+import { UserService } from 'user/services/UserService';
+import { SocketGateway } from 'global/web-socket/SocketGateway';
 
 @Injectable()
-export class NotificationService {
+export class NotificationService implements OnModuleInit {
 
   private readonly logger = new Logger(NotificationService.name);
 
@@ -18,7 +20,26 @@ export class NotificationService {
     @InjectRepository(NotificationEntity)
     private readonly notificationRepository: Repository<NotificationEntity>,
     private readonly expirationNotificationService: ExpirationNotificationService,
+    private readonly userService: UserService,
+    private readonly socketGateway: SocketGateway,
   ) {}
+
+  onModuleInit() {
+    // Must run BEFORE the user row is deleted: NotificationEntity.requesterUid is purged by a
+    // synchronous, non-deferrable ON DELETE CASCADE FK, so a post-delete event would already
+    // find no rows to look up (see UserService.registerPreDeleteHook). Notifications where the
+    // deleted user is the requester (not the recipient) still matter to their recipient - notify
+    // them so the stale entry disappears from their notification list live.
+    this.userService.registerPreDeleteHook(async (user) => {
+      const notifications = await this.notificationRepository.find({ where: { requesterUid: user.uid } });
+      notifications
+        .filter(notification => notification.recipientUid !== user.uid)
+        .forEach(notification =>
+          this.socketGateway.emitToUser(notification.recipientUid, NotificationEvents.NOTIFICATION_DELETED, notification.notificationId)
+        );
+      this.logger.log(`Notified recipients about ${notifications.length} notifications removed due to requester ${user.uid} being deleted`);
+    });
+  }
 
   async getMeUserContextNotifications(request: MeUserContextNotificationsRequest): Promise<NotificationI[]> {
     let notifications = await this.getUserNotifications(request.recipientUid, request.limit, request.offset);

@@ -23,12 +23,26 @@ export class UserService {
     }
 
     private _avatarUpdateRequest$ = new Subject<{ user: UserI; newAvatarRef: FileRef }>()
-    /** 
+    /**
      * Subscribe to this event to handle avatar updates centrally.
      * UserManagementService listens to this and handles Cloudinary cleanup + DB update.
      */
     public get avatarUpdateRequest() {
         return this._avatarUpdateRequest$.asObservable()
+    }
+
+    /**
+     * Hooks run sequentially BEFORE the user row is deleted, while its DB relations
+     * (e.g. chat memberships) still exist. Needed because `ON DELETE CASCADE` FKs are
+     * NOT DEFERRABLE by default in Postgres, so they purge dependent rows synchronously
+     * within the same DELETE statement - by the time `userDeletedEvent` fires, any rows
+     * that only reference the user indirectly (e.g. via a join table) are already gone.
+     * Use this to capture data (like chat ids) needed for post-delete cleanup.
+     */
+    private preDeleteHooks: Array<(user: UserI) => Promise<void>> = [];
+
+    public registerPreDeleteHook(hook: (user: UserI) => Promise<void>): void {
+        this.preDeleteHooks.push(hook);
     }
 
     public async existsByUid(uid: string): Promise<boolean> {
@@ -80,6 +94,16 @@ export class UserService {
         if (!user) {
             throw new ToastException('user.error.notFound', this);
         }
+
+        // Run pre-delete hooks while the user's DB relations still exist.
+        for (const hook of this.preDeleteHooks) {
+            try {
+                await hook(user);
+            } catch (error) {
+                this.logger.error(`Pre-delete hook failed for user ${uid}`, error);
+            }
+        }
+
         const deleted = await this.userRepo.deleteEntity(user);
         if (!deleted) {
             throw new ToastException('user.error.cannotDelete', this);

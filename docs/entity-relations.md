@@ -3,7 +3,7 @@
 Dokument opisuje, jakie encje zależą od siebie oraz co dzieje się z encjami zależnymi, gdy encja
 nadrzędna zostaje usunięta. Źródła: dekoratory TypeORM w `backend/src/**/model/*Entity.ts`,
 skrypty `db/init/03_create_tables.sql`, `db/migrations/*.sql` oraz logika kaskadowa w serwisach
-(subskrypcje RxJS na `userDeletedEvent` itp.).
+(subskrypcje RxJS na `userDeletedEvent`/`registerPreDeleteHook` itp.).
 
 ## Legenda
 
@@ -43,8 +43,9 @@ graph LR
     User =="uid · FK CASCADE"==> Worker
     User =="uid · FK CASCADE"==> Certificate
     User =="uid · FK CASCADE"==> Offer
+    User =="recipientUid · FK CASCADE"==> Notification
+    User =="requesterUid · FK CASCADE"==> Notification
     User -."uid · app-event"..-> Chat
-    User -."recipientUid/requesterUid · orphan risk"..-> Notification
     User -."requesterUid/addresseeUid · orphan risk"..-> Friendship
     User -."userUid · orphan risk"..-> Interaction
     User -."uid (nullable) · orphan risk"..-> Feedback
@@ -79,14 +80,39 @@ graph LR
 | WorkerEntity | `uid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_workers_uid` po `synchronize`) | Usuwane automatycznie przez bazę |
 | CertificateEntity | `uid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_certificates_uid` po `synchronize`) | Usuwane automatycznie przez bazę, niezależnie od `WorkerEntity` (obie relacje wskazują bezpośrednio na `UserEntity.uid`) |
 | OfferEntity | `uid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_offers_uid` po `synchronize`) | Usuwane automatycznie przez bazę |
-| ChatEntity | — (przez `ChatMemberEntity.uid`) | Kaskada aplikacyjna: `UserService.userDeletedEvent` → `ChatService` | `ChatRepo.getUserChatsWithoutJoins(uid)` filtruje po `uid` przez `innerJoin('chat.members', ...)` — usuwane są tylko czaty, w których usuwany user faktycznie uczestniczył (naprawione, patrz Historia zmian) |
-| NotificationEntity | `recipientUid`, `requesterUid` (bez FK) | **Brak kaskady** | Powiadomienia usuniętego usera oraz te, w których był `requester`, zostają w bazie jako osierocone |
+| ChatEntity | — (przez `ChatMemberEntity.uid`) | Kaskada aplikacyjna: **pre-delete hook** (`UserService.registerPreDeleteHook` → `ChatService`) | `ChatRepo.getUserChatsWithoutJoins(uid)` filtruje po `uid` przez `innerJoin('chat.members', ...)` — wykonywane **przed** fizycznym `DELETE` usera (patrz niżej "Pre-delete hooks vs. `userDeletedEvent`"), bo FK `ChatMemberEntity.uid → CASCADE` jest `NOT DEFERRABLE` i kasuje wiersze `jh_chat_members` synchronicznie w tym samym statemencie. Pozostałym uczestnikom wysyłany jest `ChatEvents.CHAT_DELETED` przez `SocketGateway.emitToRoom` |
+| NotificationEntity | `recipientUid`, `requesterUid` (obie `@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_notifications_recipient_uid`, `fk_notifications_requester_uid` po `synchronize`) + **pre-delete hook** (`NotificationService`) | Usuwane automatycznie przez bazę — zarówno powiadomienia usuniętego odbiorcy, jak i te, w których był `requester`. Dodatkowo dla powiadomień, gdzie usuwany user był `requester` (a nie odbiorcą), hook emituje `NotificationEvents.NOTIFICATION_DELETED` do odbiorcy przed fizycznym skasowaniem — bez tego frontend nie dowiedziałby się o zniknięciu wpisu (np. "X zaakceptował zaproszenie") aż do odświeżenia listy |
 | FriendshipEntity | `requesterUid`, `addresseeUid` (bez FK) | **Brak kaskady** | Rekordy znajomości pozostają osierocone |
 | EntityInteractionEntity | `userUid` (bez FK) | **Brak kaskady** | Historia interakcji (views itp.) pozostaje — może być zamierzone (dane analityczne) |
 | FeedbackEntity | `uid` (nullable, bez FK) | **Brak kaskady** | Zamierzone — feedback ma być zachowany nawet po usunięciu konta (pole `uid` jest opcjonalne) |
 
 Dodatkowo: `AuthService` (Firebase) i `UserManagementService` (Cloudinary — kasowanie assetów) też
 subskrybują `userDeletedEvent`, ale nie dotyczą encji z bazy Postgres.
+
+#### Pre-delete hooks vs. `userDeletedEvent`
+
+`UserRepo.deleteEntity` wykonuje pojedynczy `DELETE FROM jh_users WHERE uid = ...`. Ponieważ FK-i
+`ON DELETE CASCADE` (np. `ChatMemberEntity.uid`) są domyślnie `NOT DEFERRABLE`, Postgres kasuje
+zależne wiersze **w ramach tego samego statementu** — zanim jeszcze `await` w `UserService.deleteUser`
+się rozwiąże. `userDeletedEvent` jest emitowany **po** tym fakcie, więc każdy handler, który
+próbowałby w nim odpytać bazę o rekordy powiązane z usuniętym userem **przez FK CASCADE** (np.
+`innerJoin('chat.members', ...)`), zawsze trafi na pustkę.
+
+Dlatego `UserService` udostępnia też `registerPreDeleteHook(hook)` — hooki rejestrowane tą metodą są
+wykonywane sekwencyjnie **przed** `userRepo.deleteEntity`, gdy powiązane wiersze jeszcze istnieją.
+`ChatService.onModuleInit` rejestruje w ten sposób hook, który zbiera `chatId`-y usera, kasuje te
+czaty (`chatRepo.deleteChat`) i powiadamia pozostałych uczestników przez `ChatEvents.CHAT_DELETED`
+(`SocketGateway.emitToRoom`), zanim jeszcze wiersz usera zniknie z bazy.
+
+Analogicznie `NotificationService.onModuleInit` rejestruje hook, który przed skasowaniem usera
+odczytuje notyfikacje, w których był `requesterUid` (te zostaną zaraz skasowane przez FK CASCADE),
+i dla każdej z nich (jeśli odbiorca to ktoś inny) emituje `NotificationEvents.NOTIFICATION_DELETED`
+do odbiorcy (`SocketGateway.emitToUser`) — inaczej UI odbiorcy pokazywałby "martwą" notyfikację aż
+do ręcznego odświeżenia.
+
+Zasada: **`userDeletedEvent`** — dla logiki niezależnej od DB-relacji usera (Firebase, Cloudinary po
+`uid` wprost). **`registerPreDeleteHook`** — dla logiki, która musi odpytać bazę o rekordy powiązane
+z userem przez FK, zanim baza je skasuje kaskadowo.
 
 ### WorkerEntity (`jh_workers`, klucz: `worker_id`, referencja logiczna: `uid`)
 
@@ -143,8 +169,8 @@ usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
 
 ## Znane luki / do weryfikacji
 
-1. **Brak kaskady** dla `NotificationEntity`, `FriendshipEntity`, `EntityInteractionEntity` przy
-   usunięciu Usera — do decyzji, czy to zamierzone (dane historyczne) czy dług techniczny.
+1. **Brak kaskady** dla `FriendshipEntity`, `EntityInteractionEntity` przy usunięciu Usera — do
+   decyzji, czy to zamierzone (dane historyczne) czy dług techniczny.
 2. **`UserListedItemEntity.reference`** (ulubione: oferty/pracownicy/szkolenia) i
    **`NotificationEntity.targetId`** to referencje polimorficzne bez żadnego czyszczenia przy
    usunięciu encji docelowej — mogą prowadzić do "martwych" wpisów w UI.
@@ -167,3 +193,22 @@ usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
   był nieużywany w query builderze), przez co usunięcie dowolnego usera kasowało **wszystkie** czaty
   w systemie (subskrypcja `userDeletedEvent` w `ChatService` iteruje po wyniku i wywołuje
   `chatRepo.deleteChat` dla każdego). Naprawa: dodany `innerJoin('chat.members', 'member', 'member.uid = :uid', { uid })`.
+- `NotificationEntity` przepięta z "brak kaskady" (miękkie `recipientUid`/`requesterUid` jako
+  zwykłe kolumny) na prawdziwe FK `ON DELETE CASCADE`: dodane `@ManyToOne` → `UserEntity` dla obu
+  kolumn. Usunięcie usera kasuje teraz automatycznie zarówno powiadomienia, w których był
+  odbiorcą, jak i te, w których był `requester` — decyzja świadoma, bo `requesterName`/`avatarRef`
+  są już zdenormalizowane w encji, ale uznano, że powiadomienie dotyczące nieistniejącego już
+  usera nie ma wartości dla nikogo.
+- Naprawiony **timing bug** w usuwaniu czatów przy usunięciu usera: subskrypcja `userDeletedEvent`
+  w `ChatService` odpytywała bazę o czaty usera **po** tym jak DB CASCADE (`ChatMemberEntity.uid`)
+  już zdążyło skasować jego wiersze `jh_chat_members` (FK `NOT DEFERRABLE` → kaskada synchroniczna
+  w ramach tego samego `DELETE`), więc `innerJoin('chat.members', ...)` zawsze zwracał 0 wyników.
+  Naprawa: dodany `UserService.registerPreDeleteHook`, wykonywany **przed** `userRepo.deleteEntity`;
+  `ChatService` przeniósł tam logikę zbierania/kasowania czatów. Przy okazji dodana emisja
+  `ChatEvents.CHAT_DELETED` (`SocketGateway.emitToRoom`) do pozostałych uczestników każdego
+  kasowanego czatu — wcześniej nie byli o tym w ogóle informowani przez WebSocket.
+- `NotificationService` również zarejestrował pre-delete hook (ten sam problem timingowy co przy
+  czatach dotyczy FK CASCADE na `requesterUid`): przed usunięciem usera odczytuje notyfikacje, w
+  których był `requesterUid`, i emituje `NotificationEvents.NOTIFICATION_DELETED` do odbiorców
+  (`SocketGateway.emitToUser`), żeby ich UI od razu usunął nieaktualny wpis (np. "X zaakceptował
+  zaproszenie do znajomych" po usunięciu konta X).

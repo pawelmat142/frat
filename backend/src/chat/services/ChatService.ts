@@ -1,50 +1,40 @@
 /** Created by Pawel Malek **/
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ChatRepo } from './ChatRepo';
 import { ChatEntity } from '../model/ChatEntity';
-import { ChatI, ChatTypes, ChatMessageI } from '@shared/interfaces/ChatI';
+import { ChatI, ChatTypes, ChatMessageI, ChatEvents } from '@shared/interfaces/ChatI';
+import { ChatUtil } from '@shared/utils/ChatUtil';
 import { ToastException } from 'global/exceptions/ToastException';
 import { UserService } from 'user/services/UserService';
 import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
+import { SocketGateway } from 'global/web-socket/SocketGateway';
 import { ApiResponse } from '@shared/dto/dtos';
 import { FileRef } from '@shared/interfaces/UserI';
-import { Subscription } from 'rxjs/internal/Subscription';
-  
+
 @Injectable()
-export class ChatService implements OnModuleInit, OnModuleDestroy {
+export class ChatService implements OnModuleInit {
 
   private readonly logger = new Logger(this.constructor.name);
-
-  private readonly subscription = new Subscription();
 
   constructor(
     private readonly chatRepo: ChatRepo,
     private readonly userService: UserService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly socketGateway: SocketGateway,
   ) { }
 
   onModuleInit() {
-    this.startSubscription();
-  }
-
-  onModuleDestroy() {
-    this.subscription.unsubscribe();
-  }
-
-  private startSubscription() {
-    this.subscription.add(
-      this.userService.userDeletedEvent.subscribe(async (user) => {
-        if (user) {
-try {
-            const chats = await this.chatRepo.getUserChatsWithoutJoins(user.uid);
-            await Promise.all(chats.map(chat => this.chatRepo.deleteChat(chat.chatId)));
-            this.logger.log(`Deleted ${chats.length} chats for deleted user ${user.uid}`);
-          } catch (error) {
-            this.logger.error(`Error deleting chats for user ${user.uid}`, error);
-          }
-        }
-      })
-    );
+    // Must run BEFORE the user row is deleted: ChatMemberEntity rows are purged by a
+    // synchronous, non-deferrable ON DELETE CASCADE FK, so a post-delete event would
+    // already find no members to join against (see UserService.registerPreDeleteHook).
+    this.userService.registerPreDeleteHook(async (user) => {
+      const chats = await this.chatRepo.getUserChatsWithoutJoins(user.uid);
+      await Promise.all(chats.map(chat => this.chatRepo.deleteChat(chat.chatId)));
+      chats.forEach(chat =>
+        this.socketGateway.emitToRoom(ChatUtil.chatRoom(chat.chatId), ChatEvents.CHAT_DELETED, chat.chatId)
+      );
+      this.logger.log(`Deleted ${chats.length} chats for user being deleted ${user.uid}`);
+    });
   }
 
   async getOrCreateDirectChat(initiatorUid: string, recipientUid: string): Promise<ChatI> {
