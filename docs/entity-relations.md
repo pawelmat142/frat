@@ -40,7 +40,8 @@ graph LR
     User =="uid · FK CASCADE"==> Provider
     User =="uid · FK CASCADE"==> ChatMember
     User =="sender_uid · FK CASCADE"==> ChatMessage
-    User -."uid · app-event"..-> Worker
+    User =="uid · FK CASCADE"==> Worker
+    User =="uid · FK CASCADE"==> Certificate
     User -."uid · app-event"..-> Offer
     User -."uid (bug: brak filtra) · app-event"..-> Chat
     User -."recipientUid/requesterUid · orphan risk"..-> Notification
@@ -49,7 +50,6 @@ graph LR
     User -."uid (nullable) · orphan risk"..-> Feedback
 
     Worker =="worker_id · FK CASCADE"==> DateRange
-    Worker -."uid · app-event"..-> Certificate
 
     Provider =="provider_id · FK CASCADE"==> Training
     Training =="training_id · FK CASCADE"==> Session
@@ -76,7 +76,8 @@ graph LR
 | TrainingEntity | `uid` | FK CASCADE (dodatkowy, równoległy do relacji przez Provider) | Usuwane automatycznie |
 | ChatMemberEntity | `uid` | FK CASCADE | Usuwane automatycznie |
 | ChatMessageEntity | `sender_uid` | FK CASCADE | Usuwane automatycznie |
-| WorkerEntity | `uid` (bez FK) | Kaskada aplikacyjna: `UserService.userDeletedEvent` → `WorkerService` | Serwis szuka profilu po `uid`, kasuje certyfikaty (`CertificatesWorkerService.deleteAllCertificatesForWorker`), potem profil |
+| WorkerEntity | `uid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_workers_uid` po `synchronize`) | Usuwane automatycznie przez bazę |
+| CertificateEntity | `uid` (`@ManyToOne` → `UserEntity`, `onDelete: 'CASCADE'`) | FK CASCADE (`fk_certificates_uid` po `synchronize`) | Usuwane automatycznie przez bazę, niezależnie od `WorkerEntity` (obie relacje wskazują bezpośrednio na `UserEntity.uid`) |
 | OfferEntity | `uid` (bez FK) | Kaskada aplikacyjna: `UserService.userDeletedEvent` → `OffersService` | Pobiera wszystkie oferty usera i kasuje jedną po drugiej |
 | ChatEntity | — (przez `ChatMemberEntity.uid`) | Kaskada aplikacyjna: `UserService.userDeletedEvent` → `ChatService` | ⚠️ **Podejrzenie buga**: `ChatRepo.getUserChatsWithoutJoins(uid)` nie filtruje po `uid` (parametr jest nieużywany w query builderze) — przy usuwaniu jednego usera efektywnie kasowane są **wszystkie** czaty w systemie. Wymaga weryfikacji/poprawki. |
 | NotificationEntity | `recipientUid`, `requesterUid` (bez FK) | **Brak kaskady** | Powiadomienia usuniętego usera oraz te, w których był `requester`, zostają w bazie jako osierocone |
@@ -92,7 +93,6 @@ subskrybują `userDeletedEvent`, ale nie dotyczą encji z bazy Postgres.
 | Encja zależna | Pole | Mechanizm | Uwagi |
 |---|---|---|---|
 | DateRangeEntity | `worker_id` (`@ManyToOne` + `@JoinColumn`, `onDelete: 'CASCADE'`) | FK CASCADE | Realna relacja TypeORM, kasowana też z `cascade: true` przy zapisie |
-| CertificateEntity | `uid` (bez FK) | Kaskada aplikacyjna, ale **tylko w wybranych ścieżkach kasowania** | `WorkerService.deleteProfile/deleteProfileByUid` wywołują `deleteAllCertificatesForWorker` ręcznie. `WorkerRepo.deleteAllProfiles()` (masowe kasowanie) **nie** czyści certyfikatów — potencjalna niespójność |
 | `jh_worker_search_appearances` (tabela bez encji TypeORM) | `worker_id` | FK CASCADE | Deduplikacja wyświetleń w wyszukiwarce |
 | UserListedItemEntity | `reference` (+ `referenceType='WORKER'`, bez FK) | **Brak kaskady** | Ulubieni pracownicy pozostają na liście usera po usunięciu profilu (orphan) |
 | NotificationEntity | `targetId` (bez FK, polimorficzne) | **Brak kaskady** | Powiadomienie może wskazywać na nieistniejącego workera |
@@ -137,10 +137,17 @@ usunięciu oferty (`OffersService.deleteOfferFn` kasuje tylko wiersz oferty).
 
 1. **`ChatRepo.getUserChatsWithoutJoins(uid)`** nie filtruje po `uid` — usunięcie dowolnego usera
    kasuje wszystkie czaty w systemie zamiast tylko czatów usuwanego usera.
-2. **`WorkerRepo.deleteAllProfiles()`** (masowe kasowanie) nie czyści `CertificateEntity` — niespójne
-   z `deleteProfile`/`deleteProfileByUid`.
-3. **Brak kaskady** dla `NotificationEntity`, `FriendshipEntity`, `EntityInteractionEntity` przy
+2. **Brak kaskady** dla `NotificationEntity`, `FriendshipEntity`, `EntityInteractionEntity` przy
    usunięciu Usera — do decyzji, czy to zamierzone (dane historyczne) czy dług techniczny.
-4. **`UserListedItemEntity.reference`** (ulubione: oferty/pracownicy/szkolenia) i
+3. **`UserListedItemEntity.reference`** (ulubione: oferty/pracownicy/szkolenia) i
    **`NotificationEntity.targetId`** to referencje polimorficzne bez żadnego czyszczenia przy
    usunięciu encji docelowej — mogą prowadzić do "martwych" wpisów w UI.
+
+## Historia zmian
+
+- `WorkerEntity` i `CertificateEntity` zostały przepięte z kaskady aplikacyjnej (RxJS
+  `userDeletedEvent`) na prawdziwy FK `ON DELETE CASCADE` (`@ManyToOne` → `UserEntity`, po `uid`).
+  Wymaga czystej bazy (brak osieroconych wierszy) przy pierwszym `synchronize` — do tego służy
+  endpoint `GET /api/super-admin/:password/nuke`. Usunięto tym samym niespójność
+  `WorkerRepo.deleteAllProfiles()` vs `deleteProfile`/`deleteProfileByUid` w zakresie czyszczenia
+  certyfikatów — teraz to zawsze robi baza.

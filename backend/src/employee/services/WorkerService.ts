@@ -45,13 +45,13 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         this.subscription.add(
             this.userService.userDeletedEvent.subscribe(async (user) => {
                 if (user) {
-                    const profile = await this.getWorker(user);
-                    if (profile) {
-                        // Delete certificates before deleting profile
-                        await this.certificatesWorkerService.deleteAllCertificatesForWorker(user.uid);
-                        await this.deleteProfile(profile.workerId);
-                    } else {
-                        this.logger.log(`No employee profile found for deleted user UID: ${user.uid}`);
+                    // WorkerEntity and CertificateEntity rows are removed automatically by the DB
+                    // via FK CASCADE on uid -> jh_users.uid. Only external Cloudinary assets
+                    // (outside the DB transaction) need manual cleanup here.
+                    try {
+                        await this.deleteAllWorkerProfileImages(user.uid);
+                    } catch (error) {
+                        this.logger.error(`Failed to clean up worker profile images for deleted user UID: ${user.uid}`, error as Error);
                     }
                 }
             })
