@@ -15,6 +15,7 @@ temp.md
 
 # Environment variables
 .env
+.env-old
 .env.local
 .env.production
 
