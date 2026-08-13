@@ -110,9 +110,9 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ child
         });
     };
 
-    const onRemoveFriend = (friendship: FriendshipI) => {
+    const onRemoveFriend = (removedFriendshipId: number) => {
         setFriendships(prev =>
-            prev.filter(f => f.friendshipId !== friendship.friendshipId)
+            prev.filter(f => f.friendshipId !== removedFriendshipId)
         );
     };
 

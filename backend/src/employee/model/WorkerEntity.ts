@@ -2,9 +2,10 @@
 import { DateRangeI, WorkerAvailabilityOption, WorkerFormRangesOption, WorkerI, WorkerLocationOption, WorkerStatus, ParsedPhoneNumber, Point, WorkerSkills } from '@shared/interfaces/WorkerI';
 import { FileRef } from '@shared/interfaces/UserI';
 import { Expose } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { DateRangeEntity } from './DateRangeEntity';
 import { GeocodedPosition } from '@shared/interfaces/MapsInterfaces';
+import { UserEntity } from 'user/model/UserEntity';
 
 
 @Entity('jh_workers')
@@ -17,7 +18,11 @@ export class WorkerEntity implements WorkerI {
   @Column({ name: 'uid' })
   @Expose()
   uid: string;
-  
+
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'uid', referencedColumnName: 'uid' })
+  user: UserEntity;
+
   @Column({ name: 'status' })
   @Expose()
   status: WorkerStatus;

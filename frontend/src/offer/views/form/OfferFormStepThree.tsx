@@ -107,7 +107,7 @@ const OfferFormStepThree: React.FC = () => {
                             btnTitle={t("common.upload")}
                             imgPlaceholder={AppConfig.IMG_PLACEHOLDER}
                             folder={CloudinaryFolderNames.OFFERS}
-                            tags={[CloudinaryTags.AVATAR, CloudinaryTags.OFFER_AVATAR, CloudinaryTags.offerId(ctx.form.offerId) ]}
+                            tags={[CloudinaryTags.AVATAR, CloudinaryTags.OFFER_AVATAR, CloudinaryTags.offerId(ctx.form.offerId), CloudinaryTags.uid(uid)]}
                         />
                     )}
                 />

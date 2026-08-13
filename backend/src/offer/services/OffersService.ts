@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
+import { ForbiddenException, Injectable, Logger } from "@nestjs/common";
 import { OffersRepo } from "./OffersRepo";
 import { OfferForm, OfferI, OfferStatuses } from "@shared/interfaces/OfferI";
 import { UserI } from "@shared/interfaces/UserI";
@@ -6,50 +6,26 @@ import { CreateOfferService } from "./CreateOfferService";
 import { Util } from "@shared/utils/util";
 import { ToastException } from "global/exceptions/ToastException";
 import { OffersInitialData } from "./OffersInitialData";
-import { Subscription } from "rxjs/internal/Subscription";
-import { UserService } from "user/services/UserService";
 import { EntityInteractionService } from "entity-interaction/services/EntityInteractionService";
 import { EntityInteractionEntityTypes } from "@shared/interfaces/EntityInteractionI";
 import { DateUtil } from "@shared/utils/DateUtil";
+import { CloudinaryService } from "user/UserManagement/CloudinaryService";
+import { CloudinaryTags } from "@shared/utils/CloudinaryUtil";
 
 @Injectable()
-export class OffersService implements OnModuleInit, OnModuleDestroy {
+export class OffersService {
 
     private readonly logger = new Logger(this.constructor.name);
-
-    private readonly subscription = new Subscription();
 
     constructor(
         private readonly offersRepo: OffersRepo,
         private readonly createOfferService: CreateOfferService,
-        private readonly userService: UserService,
         private readonly entityInteractionService: EntityInteractionService,
+        private readonly cloudinaryService: CloudinaryService,
     ) { }
 
-    onModuleInit() {
-        this.startSubscription();
-    }
-
-    onModuleDestroy() {
-        this.subscription.unsubscribe();
-    }
-
-    private startSubscription() {
-        this.subscription.add(
-            this.userService.userDeletedEvent.subscribe(async (user) => {
-                if (user) {
-                    const offers = await this.listOffersByUid(user.uid);
-                    if (offers?.length) {
-                        for (const offer of offers) {
-                            await this.deleteOfferFn(offer.offerId, user.uid);
-                        }
-                    } else {
-                        this.logger.log(`No offers found for deleted user UID: ${user.uid}`);
-                    }
-                }
-            })
-        );
-    }
+    // OfferEntity.uid has a DB-level FK CASCADE to UserEntity(uid), so offers
+    // belonging to a deleted user are removed automatically by the database.
 
     public getOfferById(offerId: string): Promise<OfferI> {
         return this.offersRepo.getById(offerId);
@@ -91,6 +67,11 @@ export class OffersService implements OnModuleInit, OnModuleDestroy {
 
     public async deleteOfferFn(offerId: string, by: string): Promise<void> {
         await this.offersRepo.delete(offerId);
+        try {
+            await this.cloudinaryService.deleteImagesWithTags([CloudinaryTags.offerId(offerId)]);
+        } catch (error) {
+            this.logger.error(`Failed to delete Cloudinary assets for offer ${offerId}`, error);
+        }
         this.logger.log(`Offer ${offerId} deleted by user ${by}`);
     }
 

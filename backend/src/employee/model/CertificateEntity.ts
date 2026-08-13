@@ -1,6 +1,7 @@
 import { CertificateI } from "@shared/interfaces/CertificateI";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Expose } from 'class-transformer';
+import { UserEntity } from 'user/model/UserEntity';
 
 @Entity('jh_certificates')
 export class CertificateEntity implements CertificateI {
@@ -12,6 +13,10 @@ export class CertificateEntity implements CertificateI {
     @Column({ name: 'uid' })
     @Expose()
     uid: string;
+
+    @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'uid', referencedColumnName: 'uid' })
+    user: UserEntity;
 
     @Column({ name: 'code' })
     @Expose()

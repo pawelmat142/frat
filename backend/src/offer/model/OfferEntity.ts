@@ -1,8 +1,9 @@
 import { ParsedPhoneNumber, Point } from "@shared/interfaces/WorkerI";
 import { Currency, OfferI, OfferStatus } from "@shared/interfaces/OfferI";
 import { Expose } from "class-transformer";
-import { Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ValueTransformer, ManyToOne, JoinColumn } from "typeorm";
 import { FileRef } from "@shared/interfaces/UserI";
+import { UserEntity } from "user/model/UserEntity";
 
 const dateTransformer: ValueTransformer = {
     to: (value?: Date | null) => value ?? null,
@@ -25,6 +26,10 @@ export class OfferEntity implements OfferI {
     @Column({ name: 'uid' })
     @Expose()
     uid: string;
+
+    @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'uid', referencedColumnName: 'uid' })
+    user: UserEntity;
 
     @Column({ name: 'status' })
     @Expose()
