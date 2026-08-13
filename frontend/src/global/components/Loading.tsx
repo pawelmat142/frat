@@ -1,7 +1,7 @@
 const Loading: React.FC = (
 ) => {
     return (
-        <div className="max-w-2xl mx-auto pb-20 pt-10 px-5">
+        <div className="max-w-2xl mx-auto pb-20 px-5">
             <div className="flex justify-center items-center py-10">
                 <svg
                     className="animate-spin h-8 w-8 text-gray-400"

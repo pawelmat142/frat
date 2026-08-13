@@ -20,6 +20,7 @@ interface AvatarTileProps {
 }
 
 export const AVATAR_MOCK = "/assets/img/default-avatar.png";
+export const EDIT_AVATAR_FLAG_KEY = "editAvatarFlag";
 const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 const MAX_FILE_SIZE_MB = 5;
 
@@ -36,6 +37,7 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
     const [isUploading, setIsUploading] = useState(false);
     const [previewSrc, setPreviewSrc] = useState<string | null>(null);
     const [pendingFile, setPendingFile] = useState<File | null>(null);
+    const [isEditing, setIsEditing] = useState(editable);
 
     const [localSrc, setLocalSrc] = useState<string>(src);
 
@@ -59,7 +61,7 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
     };
 
     const handleClick = () => {
-        if (editable && !isUploading && !pendingFile) {
+        if (isEditing && !isUploading && !pendingFile) {
             fileInputRef.current?.click();
         }
     };
@@ -109,6 +111,8 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
 
             toast.success(t('success.avatarUploaded'));
             clearPending();
+            setIsEditing(false);
+            localStorage.removeItem(EDIT_AVATAR_FLAG_KEY);
         } catch (error) {
             console.error('Avatar upload error:', error);
             toast.error(t('error.avatarUploadFailed'));
@@ -133,7 +137,9 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
     const displaySrc = previewSrc || localSrc;
 
     if (isUploading) {
-        return <Loading></Loading>
+        return <div style={{ width: `${size}rem`, height: `${size}rem` }}>
+            <Loading ></Loading>
+        </div>
     }
 
     return (
@@ -144,9 +150,7 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
                 style={{ width: `${size}rem`, height: `${size}rem` }}
                  className={circle ? 'rounded-full object-cover' : ''}
             />
-            {isUploading && <div className="avatar-loader" />}
-
-            {editable && (
+            {isEditing && (
                 <div className="avatar-actions">
 
                     {!pendingFile ? (

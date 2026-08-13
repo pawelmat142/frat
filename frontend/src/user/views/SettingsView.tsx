@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from 'global/providers/ThemeProvider';
 import { Ico } from 'global/icon.def';
 import { FaChevronDown, FaMoon, FaSun } from 'react-icons/fa';
@@ -16,6 +17,8 @@ import ListUi from 'global/components/ui/ListUi';
 import Header from 'global/components/Header';
 import ChatCryptoService from 'chat/services/ChatCryptoService';
 import { useChatsContext } from 'chat/ChatsProvider';
+import { Path } from '../../path';
+import { EDIT_AVATAR_FLAG_KEY } from 'user/components/AvatarTile';
 
 const chevron = <FaChevronDown size={20} className="secondary-text m-auto" />;
 
@@ -26,11 +29,17 @@ const SettingsView: React.FC = () => {
     const { theme } = useTheme();
     const confirm = useConfirm();
     const { isNewE2EDevice } = useChatsContext();
+    const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false);
 
     const isDarkMode = theme === Themes.DARK;
     const langCode = i18n.language;
+
+    const editAvatar = () => {
+        localStorage.setItem(EDIT_AVATAR_FLAG_KEY, 'true');
+        navigate(Path.HOME);
+    };
 
     const selectLanguage = () => {
         userCtx.selectLanguage();
@@ -64,6 +73,10 @@ const SettingsView: React.FC = () => {
     }
 
     const items: MenuItem[] = [{
+        label: t('employeeProfile.form.uploadAvatar'),
+        icon: Ico.EDIT,
+        onClick: editAvatar
+    }, {
         label: t('lang.language'),
         icon: Ico.LANGUAGE,
         onClick: selectLanguage

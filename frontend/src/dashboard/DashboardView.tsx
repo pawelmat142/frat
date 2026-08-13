@@ -5,6 +5,7 @@ import NotificationsGlobalBar from "notification/components/NotificationsGlobalB
 import { Path } from "../path";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
+import { EDIT_AVATAR_FLAG_KEY } from "user/components/AvatarTile";
 import { AuthService } from "auth/services/AuthService";
 import { useConfirm } from "global/providers/PopupProvider";
 import { BtnModes, MenuItem } from "global/interface/controls.interface";
@@ -42,6 +43,7 @@ const DashboardView: React.FC = () => {
     const { isDesktop } = useGlobalContext();
 
     const me = userCtx.me;
+    const editableAvatar = localStorage.getItem(EDIT_AVATAR_FLAG_KEY) === 'true';
 
     if (userCtx.loading || !me) {
         return <Loading></Loading>
@@ -154,7 +156,11 @@ const DashboardView: React.FC = () => {
 
         <NotificationsGlobalBar />
 
-        <UserProfileItem user={me} topRightComponent={menu} editableAvatar></UserProfileItem>
+        <UserProfileItem
+            user={me}
+            topRightComponent={menu}
+            editableAvatar={editableAvatar}
+        ></UserProfileItem>
 
         <EmailVerificationWarning></EmailVerificationWarning>
 
