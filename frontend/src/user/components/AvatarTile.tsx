@@ -8,12 +8,15 @@ import IconButton from "global/components/controls/IconButon";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
 import { FileUtil } from "global/utils/FileUtil";
+import {AppConfig} from "@shared/AppConfig";
 
 interface AvatarTileProps {
     src?: string;
     alt?: string;
     uid?: string;
     editable?: boolean;
+    size?: number // rem
+    circle?: boolean
 }
 
 export const AVATAR_MOCK = "/assets/img/default-avatar.png";
@@ -25,6 +28,8 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
     alt = "Avatar",
     uid,
     editable = false,
+    size = AppConfig.DEFAULT_AVATAR_SIZE,
+    circle=false,
 }) => {
     const { t } = useTranslation();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -133,9 +138,12 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
 
     return (
         <div
-            className={`p-tile square-tile col-tile avatar-tile`}
+            className={`col-tile avatar-tile`}
         >
-            <img src={displaySrc} alt={alt} />
+            <img src={displaySrc} alt={alt}
+                style={{ width: `${size}rem`, height: `${size}rem` }}
+                 className={circle ? 'rounded-full object-cover' : ''}
+            />
             {isUploading && <div className="avatar-loader" />}
 
             {editable && (

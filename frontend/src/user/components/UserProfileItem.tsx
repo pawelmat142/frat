@@ -1,14 +1,16 @@
 import { UserI } from "@shared/interfaces/UserI";
 import { UserUtil } from "@shared/utils/UserUtil";
 import UserItem from "user/components/UserItem";
+import AvatarTile from "./AvatarTile";
 
 interface Props {
     user: UserI,
     className?: string
-    topRightComponent?: React.ReactNode
+    topRightComponent?: React.ReactNode,
+    editableAvatar?: boolean
 }
 
-const UserProfileItem: React.FC<Props> = ({ user, className = "view-margin py-3", topRightComponent }) => {
+const UserProfileItem: React.FC<Props> = ({ user, className = "view-margin py-3", topRightComponent, editableAvatar = false }) => {
 
     return (
         <div className={className}>
@@ -16,6 +18,7 @@ const UserProfileItem: React.FC<Props> = ({ user, className = "view-margin py-3"
                 <UserItem
                     user={user} size={5}
                     allowNavigate={false}
+                    editableAvatar={editableAvatar}
                     bottomRow={<span className="secondary-text s-font">{UserUtil.getContactInfoLine(user)}</span>}
                 ></UserItem>
                 {topRightComponent && <div>{topRightComponent}</div>}

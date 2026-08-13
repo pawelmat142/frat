@@ -1,20 +1,22 @@
 import { UserI } from "@shared/interfaces/UserI";
 import { useNavigate } from "react-router-dom";
-import { AVATAR_MOCK } from "./AvatarTile";
+import AvatarTile, { AVATAR_MOCK } from "./AvatarTile";
 import { Path } from "../../path";
 import ListItemImg from "global/components/ListItemImg";
 import { UserUtil } from "@shared/utils/UserUtil";
 import { AppConfig } from "@shared/AppConfig";
+import {useUserContext} from "../UserProvider";
 
 interface Props {
     user: UserI
     size?: number //rem
     showNumber?: boolean
     allowNavigate?: boolean
-    bottomRow?: React.ReactNode
+    bottomRow?: React.ReactNode,
+    editableAvatar?: boolean
 }
 
-const UserItem: React.FC<Props> = ({ user, size = AppConfig.DEFAULT_AVATAR_SIZE, showNumber = false, allowNavigate = true, bottomRow }) => {
+const UserItem: React.FC<Props> = ({ user, size = AppConfig.DEFAULT_AVATAR_SIZE, showNumber = false, allowNavigate = true, bottomRow, editableAvatar=false }) => {
 
     const navigate = useNavigate();
 
@@ -23,7 +25,14 @@ const UserItem: React.FC<Props> = ({ user, size = AppConfig.DEFAULT_AVATAR_SIZE,
             if (!allowNavigate) return;
             navigate(Path.getProfilePath(user?.uid))
         }}>
-            <ListItemImg imgUrl={user?.avatarRef?.url || AVATAR_MOCK} size={size} />
+            <AvatarTile
+                uid={user.uid}
+                size={size}
+                editable={editableAvatar}
+                src={user.avatarRef?.url}
+                circle
+            ></AvatarTile>
+
             <div>
                 <div className="font-medium">{user?.displayName}</div>
                 {bottomRow ? (

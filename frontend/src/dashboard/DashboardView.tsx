@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import EmailVerificationWarning from "./EmailVerificationWarning";
 import { usePwaInstall } from "global/hooks/usePwaInstall";
 import { Util } from "@shared/utils/util";
-import { UserRole, UserRoles } from "@shared/interfaces/UserI";
+import { UserRoles } from "@shared/interfaces/UserI";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import RecentViewedWorkers from "./RecentViewedWorkers";
 import RecentViewedOffers from "./RecentViewedOffers";
@@ -154,7 +154,7 @@ const DashboardView: React.FC = () => {
 
         <NotificationsGlobalBar />
 
-        <UserProfileItem user={me} topRightComponent={menu}></UserProfileItem>
+        <UserProfileItem user={me} topRightComponent={menu} editableAvatar></UserProfileItem>
 
         <EmailVerificationWarning></EmailVerificationWarning>
 
