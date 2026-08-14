@@ -76,7 +76,7 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                 />
             )}
 
-            <h3 className="form-subheader mt-5">
+            <h3 className="form-subheader mt-10">
                 {t("employeeProfile.form.certificates.main")}
             </h3>
 
