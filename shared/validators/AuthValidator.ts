@@ -29,6 +29,9 @@ export abstract class AuthValidators {
                 return 'authError.tooManyRequests';
             case 'auth/user-disabled':
                 return 'authError.userDisabled';
+            case 'auth/email-already-exists':
+            case 'auth/email-already-in-use':
+                return 'authError.emailAlreadyInUse';
             default:
                 throw new Error(error);
         }

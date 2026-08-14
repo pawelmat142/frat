@@ -360,6 +360,7 @@
       "sessionExpired": "Sesja wygasła, zaloguj się ponownie.",
       "tooManyRequests": "Zbyt wiele prób. Spróbuj ponownie później.",
       "invalidCredential": "Nieprawidłowy email lub hasło",
+      "emailAlreadyInUse": "Ten adres email jest już zajęty.",
       "passwordResetNotError": "Błąd podczas wysyłania emaila do resetu hasła.",
       "passwordResetNotAvailable": "Reset hasła nie jest dostępny dla tego konta."
     },

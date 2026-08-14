@@ -358,6 +358,7 @@
       "sessionExpired": "Session expired, please log in again.",
       "tooManyRequests": "Too many attempts. Try again later.",
       "invalidCredential": "Invalid email or password",
+      "emailAlreadyInUse": "This email address is already in use.",
       "passwordResetNotError": "Error sending password reset email.",
       "passwordResetNotAvailable": "Password reset is not available for this account."
     },

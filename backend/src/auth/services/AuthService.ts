@@ -5,7 +5,7 @@ import { RegisterFormDto } from '@shared/dto/AuthDto';
 import { AuthValidators } from '@shared/validators/AuthValidator';
 import { ToastException } from 'global/exceptions/ToastException';
 import { FirebaseConfig } from './FirebaseConfig';
-import { UserRecord } from 'firebase-admin/auth';
+import {FirebaseAuthError, UserRecord} from 'firebase-admin/auth';
 import { PopupException } from 'global/exceptions/PopupException';
 import { EmailService } from 'email/EmailService';
 import { UserService } from 'user/services/UserService';
@@ -72,14 +72,11 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
   }
 
   private handleRegisterError(err: any): void {
-    try {
-      const msg = AuthValidators.handleFireAuthError(err);
-      if (msg) {
-        throw new PopupException(msg, this)
-      }
-    } catch (error) {
-      throw new SWWException(error, this);
+    const msg = AuthValidators.handleFireAuthError(err);
+    if (msg) {
+      throw new PopupException(msg, this)
     }
+    throw new SWWException(err, this);
   }
 
   private async createUserEntityByRegisterForm(userRecord: UserRecord, email: string): Promise<UserEntity> {
