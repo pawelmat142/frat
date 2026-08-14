@@ -71,6 +71,12 @@ const WorkerCertificateDatesEditView: React.FC = () => {
     });
 
     const handleSave = async () => {
+        const isValid = await formRef.trigger("certificateDates");
+        if (!isValid) {
+            toast.error(t("employeeProfile.form.validationError"));
+            return;
+        }
+
         try {
             const certificatesData = formRef.getValues("certificates");
             const certificateDates = formRef.getValues("certificateDates");
