@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,9 @@ import { useUserContext } from "user/UserProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import WorkerFormStepCertificates from "./WorkerFormStepCertificates";
 import { Path } from "../../../path";
+import { WorkerService } from "employee/services/WorkerService";
+import { toast } from "react-toastify";
+import Loading from "global/components/Loading";
 
 const WorkerCertificatesEditView: React.FC = () => {
 
@@ -19,6 +22,7 @@ const WorkerCertificatesEditView: React.FC = () => {
     const globalCtx = useGlobalContext();
 
     const worker: WorkerWithCertificates | null = userCtx?.meCtx?.workerProfile || null;
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         globalCtx.hideFooter();
@@ -62,8 +66,33 @@ const WorkerCertificatesEditView: React.FC = () => {
         }
     });
 
+    const selectedCertificates = formRef.watch("certificates.certificates") || [];
+    const hasSelectedCertificates = selectedCertificates.length > 0;
+
+    const handleSave = async () => {
+        try {
+            setLoading(true);
+            const certificatesData = formRef.getValues("certificates");
+            await WorkerService.updateCertificates({
+                certificates: certificatesData.certificates || [],
+                certificateDates: {},
+            });
+            userCtx.initWorker();
+            toast.success(t("employeeProfile.form.submitSuccess"));
+            navigate(-1);
+        } catch (error) {
+            console.error("Error saving certificates:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleNext = () => {
         const certificatesData = formRef.getValues("certificates");
+        if (!certificatesData.certificates || certificatesData.certificates.length === 0) {
+            handleSave();
+            return;
+        }
         navigate(Path.WORKER_CERTIFICATE_DATES_EDIT, {
             state: {
                 certificates: certificatesData.certificates || []
@@ -74,6 +103,10 @@ const WorkerCertificatesEditView: React.FC = () => {
     const handleBack = () => {
         navigate(-1);
     };
+
+    if (loading) {
+        return <Loading></Loading>
+    }
 
     return (
         <div className="relative flex flex-col w-full flex-1">
@@ -103,9 +136,9 @@ const WorkerCertificatesEditView: React.FC = () => {
                             size={BtnSizes.LARGE}
                             mode={BtnModes.PRIMARY}
                             className="flex-1"
-                            aria-label={t("common.next")}
+                            aria-label={hasSelectedCertificates ? t("common.next") : t("common.save")}
                         >
-                            {t("common.next")}
+                            {hasSelectedCertificates ? t("common.next") : t("common.save")}
                         </Button>
                     </div>
                 </div>
