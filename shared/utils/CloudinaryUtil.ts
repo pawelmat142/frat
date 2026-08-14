@@ -1,6 +1,7 @@
 export const CloudinaryTags = {
     uid: (uid: string) => `uid:${uid}`,
     offerId: (offerId: string) => `offerId:${offerId}`,
+    FRAT: 'FRAT',
     USER_AVATAR: 'user-avatar',
     AVATAR: 'avatar',
     OFFER_AVATAR: 'offer-avatar',

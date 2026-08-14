@@ -57,15 +57,18 @@ export class CloudinaryService {
     }
 
     /**
-     * Deletes ALL assets from the Cloudinary account, across all resource types
-     * (image, raw, video). Used by the super-admin "nuke" endpoint to fully wipe
-     * the test environment. Paginates through `next_cursor` since a single
-     * delete call is limited to ~1000 assets.
+     * Deletes ALL assets tagged with `FRAT` from the Cloudinary account, across
+     * all resource types (image, raw, video). Used by the super-admin "nuke"
+     * endpoint to fully wipe the test environment, without touching assets
+     * uploaded by other applications sharing the same Cloudinary account.
+     * Paginates through `next_cursor` since a single delete call is limited
+     * to ~1000 assets.
      */
     public async deleteAllResources(): Promise<void> {
         this.validateConfig();
         const auth = Buffer.from(`${this.apiKey}:${this.apiSecret}`).toString('base64');
         const resourceTypes: Array<'image' | 'raw' | 'video'> = ['image', 'raw', 'video'];
+        const tag = CloudinaryTags.FRAT;
 
         for (const resourceType of resourceTypes) {
             let nextCursor: string | undefined = undefined;
@@ -73,11 +76,10 @@ export class CloudinaryService {
             do {
                 try {
                     const response: any = await axios.delete(
-                        `${BASE_URL}/${this.cloudName}/resources/${resourceType}/upload`,
+                        `${BASE_URL}/${this.cloudName}/resources/${resourceType}/tags/${tag}`,
                         {
                             headers: { Authorization: `Basic ${auth}` },
                             params: {
-                                all: true,
                                 next_cursor: nextCursor,
                             },
                         }
@@ -88,11 +90,11 @@ export class CloudinaryService {
                     if (error.response?.status === 404) {
                         break;
                     }
-                    this.logger.error(`Error deleting all '${resourceType}' resources from Cloudinary`, error);
+                    this.logger.error(`Error deleting '${tag}'-tagged '${resourceType}' resources from Cloudinary`, error);
                     break;
                 }
             } while (nextCursor);
-            this.logger.log(`Deleted ${deletedCount} '${resourceType}' resources from Cloudinary`);
+            this.logger.log(`Deleted ${deletedCount} '${tag}'-tagged '${resourceType}' resources from Cloudinary`);
         }
     }
 

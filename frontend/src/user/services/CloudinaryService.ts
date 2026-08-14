@@ -84,9 +84,8 @@ export const CloudinaryService = {
             formData.append('folder', folder);
         }
 
-        if (tags?.length) {
-            formData.append('tags', tags.join(','));
-        }
+        const allTags = [CloudinaryTags.FRAT, ...(tags || [])];
+        formData.append('tags', allTags.join(','));
 
         const { data } = await axios.post<CloudinaryUploadResponse>(
             `${CLOUDINARY_BASE_URL}/${CLOUDINARY_CLOUD_NAME}/image/upload`,
@@ -137,9 +136,8 @@ export const CloudinaryService = {
             formData.append('folder', folder);
         }
 
-        if (tags?.length) {
-            formData.append('tags', tags.join(','));
-        }
+        const allTags = [CloudinaryTags.FRAT, ...(tags || [])];
+        formData.append('tags', allTags.join(','));
 
         const { data } = await axios.post<CloudinaryUploadResponse>(
             `${CLOUDINARY_BASE_URL}/${CLOUDINARY_CLOUD_NAME}/raw/upload`,
