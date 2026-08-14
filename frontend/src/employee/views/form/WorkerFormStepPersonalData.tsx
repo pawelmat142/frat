@@ -100,8 +100,8 @@ const WorkerFormPersonalData: React.FC<Props> = ({ formRef }) => {
                             onChange={field.onChange}
                             error={formState.errors.personalData?.avatarRef}
                             required
-                            tags={[CloudinaryTags.AVATAR, CloudinaryTags.USER_AVATAR, CloudinaryTags.uid(uid)]}
-                            folder={`${CloudinaryFolderNames.AVATARS}/${uid}`}
+                            tags={[CloudinaryTags.AVATAR, CloudinaryTags.WORKER_AVATAR, CloudinaryTags.uid(uid)]}
+                            folder={`${CloudinaryFolderNames.WORKER_AVATARS}/${uid}`}
                         />
                     )}
                 />

@@ -3,6 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig } from '@shared/AppConfig';
 import { CloudinaryTags } from '@shared/utils/CloudinaryUtil';
+import { FileRef } from '@shared/interfaces/UserI';
 import axios from 'axios';
 import * as crypto from 'crypto';
 import { ToastException } from 'global/exceptions/ToastException';
@@ -215,7 +216,7 @@ export class CloudinaryService {
 
         try {
             const timestamp = Math.floor(Date.now() / 1000);
-            const signature = this.generateSignature({ publicId, timestamp });
+            const signature = this.generateSignature({ public_id: publicId, timestamp });
 
             const response = await axios.post(
                 `${BASE_URL}/${this.cloudName}/image/destroy`,
@@ -242,20 +243,64 @@ export class CloudinaryService {
         }
     }
 
-    private generateSignature(params: {
-        publicId?: string;
-        tag?: string;
-        timestamp: number;
-    }): string {
-        const { publicId, tag, timestamp } = params;
-        
-        // Build params alphabetically (Cloudinary requirement)
-        const paramsArray: string[] = [];
-        if (publicId) paramsArray.push(`public_id=${publicId}`);
-        if (tag) paramsArray.push(`tag=${tag}`);
-        paramsArray.push(`timestamp=${timestamp}`);
-        
-        const toSign = paramsArray.sort().join('&') + this.apiSecret;
+    /**
+     * Clones an existing image asset (by URL) into a brand new, independent Cloudinary
+     * asset with its own public_id, folder and tags. Used to give Worker profiles their
+     * own copy of an avatar initially borrowed from the User account, so both lifecycles
+     * (edit/delete) stay fully decoupled afterwards.
+     */
+    public async cloneImage(params: {
+        sourceUrl: string;
+        tags: string[];
+        folder: string;
+        filename?: string;
+    }): Promise<FileRef> {
+        this.validateConfig();
+        const { sourceUrl, tags, folder, filename } = params;
+        if (!sourceUrl) {
+            throw new ToastException('cloudinary.missingSource', this);
+        }
+
+        try {
+            const timestamp = Math.floor(Date.now() / 1000);
+            const joinedTags = tags.join(',');
+            const signature = this.generateSignature({ folder, tags: joinedTags, timestamp });
+
+            const response = await axios.post(
+                `${BASE_URL}/${this.cloudName}/image/upload`,
+                {
+                    file: sourceUrl,
+                    folder,
+                    tags: joinedTags,
+                    api_key: this.apiKey,
+                    timestamp,
+                    signature,
+                }
+            );
+
+            this.logger.log(`Cloned image ${sourceUrl} -> ${response.data.public_id}`);
+            return {
+                url: response.data.secure_url,
+                publicId: response.data.public_id,
+                isImage: true,
+                filename,
+            };
+        } catch (error) {
+            this.logger.error(`Error cloning image from ${sourceUrl}`, error);
+            throw new ToastException('cloudinary.cloneFailed', this);
+        }
+    }
+
+    /**
+     * Builds a Cloudinary API signature from a set of request parameters.
+     * Cloudinary requires every parameter (except file, api_key, signature and
+     * resource_type) to be sorted alphabetically by key before hashing.
+     */
+    private generateSignature(params: Record<string, string | number>): string {
+        const toSign = Object.keys(params)
+            .sort()
+            .map(key => `${key}=${params[key]}`)
+            .join('&') + this.apiSecret;
         return crypto.createHash('sha1').update(toSign).digest('hex');
     }
 }

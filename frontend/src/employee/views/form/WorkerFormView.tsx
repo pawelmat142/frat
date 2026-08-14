@@ -119,7 +119,9 @@ const WorkerFormView: React.FC = () => {
         }
 
         if (me.avatarRef) {
-            formCtx.setValue("personalData.avatarRef", me.avatarRef);
+            // Copy the FileRef object so editing/removing the worker avatar in the wizard
+            // never mutates the user's own avatarRef reference before it's actually saved.
+            formCtx.setValue("personalData.avatarRef", { ...me.avatarRef });
         }
         if (position) {
             const element = DictionaryUtil.getElementByCountryCode(globalCtx.dics.languages!, position.country?.toLocaleLowerCase() || "");

@@ -439,7 +439,9 @@
     "cloudinary": {
       "missingConfig": "Cloudinary configuration is missing",
       "deletionFailed": "Failed to delete image from Cloudinary",
-      "missingPublicId": "Cloudinary public ID is missing"
+      "missingPublicId": "Cloudinary public ID is missing",
+      "missingSource": "Source image for cloning is missing",
+      "cloneFailed": "Failed to clone image in Cloudinary"
     },
     "dictionary": {
       "SKILLS": {

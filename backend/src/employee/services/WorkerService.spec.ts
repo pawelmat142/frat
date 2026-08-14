@@ -39,8 +39,8 @@ function mockWorkerEntity(overrides: Partial<WorkerEntity> = {}): WorkerEntity {
     } as WorkerEntity;
 }
 
-function mockUser(uid = 'user-123'): UserI {
-    return { uid, email: 'jan@example.com', displayName: 'Jan' } as UserI;
+function mockUser(uid = 'user-123', overrides: Partial<UserI> = {}): UserI {
+    return { uid, email: 'jan@example.com', displayName: 'Jan', ...overrides } as UserI;
 }
 
 function mockForm(overrides: Partial<WorkerFormDto> = {}): WorkerFormDto {
@@ -85,6 +85,7 @@ describe('WorkersService', () => {
 
         userService = {
             updateAvatarIfChanges: jest.fn(),
+            getUserByUid: jest.fn(),
             userDeletedEvent: { subscribe: jest.fn() },
         } as any;
 
@@ -98,6 +99,7 @@ describe('WorkersService', () => {
         cloudinaryService = {
             deleteImage: jest.fn(),
             deleteImagesWithTags: jest.fn(),
+            cloneImage: jest.fn(),
         } as any;
 
         entityInteractionService = {
@@ -159,8 +161,36 @@ describe('WorkersService', () => {
             const result = await service.createWorker(mockUser(), mockForm());
 
             expect(workerRepo.create).toHaveBeenCalled();
-            expect(userService.updateAvatarIfChanges).toHaveBeenCalled();
             expect(result.workerId).toBe(1);
+        });
+
+        it('should clone the user avatar when the submitted avatar is still the user avatar', async () => {
+            const user = mockUser('user-123', { avatarRef: { publicId: 'av-1', url: 'https://example.com/av.jpg', isImage: true } });
+            workerRepo.findByUid.mockResolvedValue(null);
+            workerRepo.create.mockResolvedValue(mockWorkerEntity());
+            cloudinaryService.cloneImage.mockResolvedValue({ publicId: 'worker-av-1', url: 'https://example.com/worker-av.jpg', isImage: true });
+
+            const form = mockForm({ avatarRef: { publicId: 'av-1', url: 'https://example.com/av.jpg', isImage: true } });
+            await service.createWorker(user, form);
+
+            expect(cloudinaryService.cloneImage).toHaveBeenCalled();
+            expect(workerRepo.create).toHaveBeenCalledWith(
+                expect.objectContaining({ avatarRef: { publicId: 'worker-av-1', url: 'https://example.com/worker-av.jpg', isImage: true } })
+            );
+        });
+
+        it('should not clone the avatar when the submitted avatar differs from the user avatar', async () => {
+            const user = mockUser('user-123', { avatarRef: { publicId: 'av-1', url: 'https://example.com/av.jpg', isImage: true } });
+            workerRepo.findByUid.mockResolvedValue(null);
+            workerRepo.create.mockResolvedValue(mockWorkerEntity());
+
+            const form = mockForm({ avatarRef: { publicId: 'worker-own-av', url: 'https://example.com/own.jpg', isImage: true } });
+            await service.createWorker(user, form);
+
+            expect(cloudinaryService.cloneImage).not.toHaveBeenCalled();
+            expect(workerRepo.create).toHaveBeenCalledWith(
+                expect.objectContaining({ avatarRef: { publicId: 'worker-own-av', url: 'https://example.com/own.jpg', isImage: true } })
+            );
         });
 
         it('should throw when profile already exists', async () => {
@@ -220,6 +250,42 @@ describe('WorkersService', () => {
             await service.updateWorker(mockUser(), mockForm());
 
             expect(workerRepo.update).toHaveBeenCalledWith(expect.anything(), true);
+        });
+
+        it('should not touch Cloudinary when the avatar is unchanged', async () => {
+            workerRepo.findByUid.mockResolvedValue(mockWorkerEntity({ avatarRef: { publicId: 'av-1', url: 'https://example.com/av.jpg', isImage: true } }));
+            workerRepo.update.mockResolvedValue(mockWorkerEntity());
+            certificatesService.syncCertificates.mockResolvedValue(false);
+
+            const form = mockForm({ avatarRef: { publicId: 'av-1', url: 'https://example.com/av.jpg', isImage: true } });
+            await service.updateWorker(mockUser(), form);
+
+            expect(cloudinaryService.cloneImage).not.toHaveBeenCalled();
+            expect(cloudinaryService.deleteImage).not.toHaveBeenCalled();
+        });
+
+        it('should delete the old worker avatar when replaced with a different, non-user asset', async () => {
+            const user = mockUser('user-123', { avatarRef: { publicId: 'user-av', url: 'https://example.com/user-av.jpg', isImage: true } });
+            workerRepo.findByUid.mockResolvedValue(mockWorkerEntity({ avatarRef: { publicId: 'old-worker-av', url: 'https://example.com/old.jpg', isImage: true } }));
+            workerRepo.update.mockResolvedValue(mockWorkerEntity());
+            certificatesService.syncCertificates.mockResolvedValue(false);
+
+            const form = mockForm({ avatarRef: { publicId: 'new-worker-av', url: 'https://example.com/new.jpg', isImage: true } });
+            await service.updateWorker(user, form);
+
+            expect(cloudinaryService.deleteImage).toHaveBeenCalledWith('old-worker-av');
+        });
+
+        it('should not delete the old worker avatar when it is the same asset as the user avatar', async () => {
+            const user = mockUser('user-123', { avatarRef: { publicId: 'shared-av', url: 'https://example.com/shared.jpg', isImage: true } });
+            workerRepo.findByUid.mockResolvedValue(mockWorkerEntity({ avatarRef: { publicId: 'shared-av', url: 'https://example.com/shared.jpg', isImage: true } }));
+            workerRepo.update.mockResolvedValue(mockWorkerEntity());
+            certificatesService.syncCertificates.mockResolvedValue(false);
+
+            const form = mockForm({ avatarRef: { publicId: 'new-worker-av', url: 'https://example.com/new.jpg', isImage: true } });
+            await service.updateWorker(user, form);
+
+            expect(cloudinaryService.deleteImage).not.toHaveBeenCalledWith('shared-av');
         });
     });
 
@@ -340,6 +406,28 @@ describe('WorkersService', () => {
             workerRepo.findByUid.mockResolvedValue(null);
 
             await expect(service.deleteProfileByUid(mockUser())).rejects.toThrow(ToastException);
+        });
+
+        it('should delete the worker avatar when it differs from the user avatar', async () => {
+            const worker = mockWorkerEntity({ avatarRef: { publicId: 'worker-own-av', url: 'https://example.com/own.jpg', isImage: true } });
+            workerRepo.findByUid.mockResolvedValue(worker);
+            workerRepo.getById.mockResolvedValue(worker);
+            userService.getUserByUid.mockResolvedValue(mockUser('user-123', { avatarRef: { publicId: 'user-av', url: 'https://example.com/user.jpg', isImage: true } }) as any);
+
+            await service.deleteProfileByUid(mockUser());
+
+            expect(cloudinaryService.deleteImage).toHaveBeenCalledWith('worker-own-av');
+        });
+
+        it('should not delete the worker avatar when it is the same asset as the user avatar', async () => {
+            const worker = mockWorkerEntity({ avatarRef: { publicId: 'shared-av', url: 'https://example.com/shared.jpg', isImage: true } });
+            workerRepo.findByUid.mockResolvedValue(worker);
+            workerRepo.getById.mockResolvedValue(worker);
+            userService.getUserByUid.mockResolvedValue(mockUser('user-123', { avatarRef: { publicId: 'shared-av', url: 'https://example.com/shared.jpg', isImage: true } }) as any);
+
+            await service.deleteProfileByUid(mockUser());
+
+            expect(cloudinaryService.deleteImage).not.toHaveBeenCalledWith('shared-av');
         });
     });
 });

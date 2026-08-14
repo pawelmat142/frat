@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 import { UserService } from 'user/services/UserService';
 import { CertificatesWorkerService } from './CertificatesWorkerService';
 import { CloudinaryService } from 'user/UserManagement/CloudinaryService';
-import { CloudinaryTags } from '@shared/utils/CloudinaryUtil';
+import { CloudinaryFolderNames, CloudinaryTags } from '@shared/utils/CloudinaryUtil';
 import { EntityInteractionService } from 'entity-interaction/services/EntityInteractionService';
 import { EntityInteractionEntityTypes } from '@shared/interfaces/EntityInteractionI';
 
@@ -91,6 +91,7 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
             throw new NotFoundException("employeeProfile.notFound");
         }
         await this.deleteAllWorkerProfileImages(profile.uid);
+        await this.deleteWorkerAvatarSafely(profile);
         return this.workerRepo.delete(profile);
     }
 
@@ -144,7 +145,8 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
             throw new ToastException('employeeProfile.exists', this);
         }
 
-        const profile = await this.prepareProfile(user, form);
+        const resolvedAvatarRef = await this.resolveWorkerAvatar(user, form.avatarRef);
+        const profile = await this.prepareProfile(user, { ...form, avatarRef: resolvedAvatarRef });
         const result = await this.workerRepo.create(profile);
 
         // Create certificates with validity dates if provided
@@ -153,7 +155,6 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
             this.logger.log(`Created certificates for new worker profile: ${result.workerId}`);
         }
 
-        await this.userService.updateAvatarIfChanges(user, form.avatarRef);
         return result;
     }
 
@@ -166,9 +167,14 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         // Sync certificates before updating profile
         const certificatesChanged = await this.updateCertificatesValidityDates(user.uid, form);
 
-        const profile = await this.prepareProfile(user, form);
+        let resolvedAvatarRef = profileBefore.avatarRef;
+        if (form.avatarRef?.publicId !== profileBefore.avatarRef?.publicId) {
+            resolvedAvatarRef = await this.resolveWorkerAvatar(user, form.avatarRef);
+            await this.deleteWorkerAvatarIfSafe(user, profileBefore.avatarRef, resolvedAvatarRef?.publicId);
+        }
+
+        const profile = await this.prepareProfile(user, { ...form, avatarRef: resolvedAvatarRef });
         const result = await this.workerRepo.update(profile, certificatesChanged); // Mark as changed since certificates might have changed
-        await this.userService.updateAvatarIfChanges(user, form.avatarRef);
         return result;
     }
 
@@ -250,6 +256,66 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
 
     private async deleteAllWorkerProfileImages(uid: string): Promise<void> {
         await this.cloudinaryService.deleteImagesWithTags([CloudinaryTags.uid(uid), CloudinaryTags.WORKER_PROFILE]);
+    }
+
+    /**
+     * Resolves the FileRef to persist as the worker's own avatar.
+     * If the submitted avatar is still the same asset as the user's account avatar
+     * (e.g. the value pre-filled in the wizard was never replaced), it gets cloned
+     * into a brand new, independent Cloudinary asset tagged WORKER_AVATAR so both
+     * lifecycles (edit/delete) stay fully decoupled. Otherwise the submitted ref
+     * (already uploaded by the form with its own WORKER_AVATAR tags) is used as-is.
+     */
+    private async resolveWorkerAvatar(user: UserI, newAvatarRef: FileRef | undefined): Promise<FileRef | undefined> {
+        if (!newAvatarRef) {
+            return undefined;
+        }
+        if (user.avatarRef && newAvatarRef.publicId === user.avatarRef.publicId) {
+            return this.cloudinaryService.cloneImage({
+                sourceUrl: newAvatarRef.url,
+                tags: [CloudinaryTags.AVATAR, CloudinaryTags.WORKER_AVATAR, CloudinaryTags.uid(user.uid)],
+                folder: `${CloudinaryFolderNames.WORKER_AVATARS}/${user.uid}`,
+                filename: newAvatarRef.filename,
+            });
+        }
+        return newAvatarRef;
+    }
+
+    /**
+     * Deletes the previous worker avatar asset from Cloudinary when it's being replaced,
+     * unless it's the same asset as the new one or the same asset as the user's account
+     * avatar (safety net so we never delete an asset the user account still relies on).
+     */
+    private async deleteWorkerAvatarIfSafe(user: UserI, oldAvatarRef: FileRef | undefined, exceptPublicId: string | undefined): Promise<void> {
+        if (!oldAvatarRef?.publicId || oldAvatarRef.publicId === exceptPublicId) {
+            return;
+        }
+        if (user.avatarRef?.publicId === oldAvatarRef.publicId) {
+            this.logger.log(`Skipping deletion of worker avatar for uid ${user.uid} - same asset as user avatar`);
+            return;
+        }
+        await this.cloudinaryService.deleteImage(oldAvatarRef.publicId);
+    }
+
+    /**
+     * Deletes a worker's avatar asset when its profile is removed, unless that avatar
+     * is still the same Cloudinary asset as the user's account avatar (in that case it
+     * must be kept, since the account may still be active and using it).
+     */
+    private async deleteWorkerAvatarSafely(profile: WorkerEntity): Promise<void> {
+        if (!profile.avatarRef?.publicId) {
+            return;
+        }
+        try {
+            const user = await this.userService.getUserByUid(profile.uid);
+            if (user?.avatarRef?.publicId === profile.avatarRef.publicId) {
+                this.logger.log(`Skipping avatar deletion for worker ${profile.workerId} - same asset as user avatar`);
+                return;
+            }
+            await this.cloudinaryService.deleteImage(profile.avatarRef.publicId);
+        } catch (error) {
+            this.logger.error(`Failed to delete avatar for worker profile ${profile.workerId}`, error as Error);
+        }
     }
 
     private async updateCertificatesValidityDates(uid: string, form: CertificatesDto): Promise<boolean> {

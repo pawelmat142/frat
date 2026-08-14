@@ -3,6 +3,7 @@ export const CloudinaryTags = {
     offerId: (offerId: string) => `offerId:${offerId}`,
     FRAT: 'FRAT',
     USER_AVATAR: 'user-avatar',
+    WORKER_AVATAR: 'worker-avatar',
     AVATAR: 'avatar',
     OFFER_AVATAR: 'offer-avatar',
     TEMP: 'temp',
@@ -18,6 +19,7 @@ export type CloudinaryTag = (typeof CloudinaryTags)[keyof typeof CloudinaryTags]
 
 export const CloudinaryFolderNames = {
     AVATARS: 'avatars',
+    WORKER_AVATARS: 'worker-avatars',
     OFFERS: 'offers',
     WORKER_PROFILE: 'worker-profile',
     CHAT_IMAGES: 'chat-images',

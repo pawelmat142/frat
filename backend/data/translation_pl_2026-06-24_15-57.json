@@ -441,7 +441,9 @@
     "cloudinary": {
       "missingConfig": "Brak konfiguracji Cloudinary",
       "deletionFailed": "Nie udało się usunąć obrazu z Cloudinary",
-      "missingPublicId": "Brak publicznego ID Cloudinary"
+      "missingPublicId": "Brak publicznego ID Cloudinary",
+      "missingSource": "Brak obrazu źródłowego do sklonowania",
+      "cloneFailed": "Nie udało się sklonować obrazu w Cloudinary"
     },
     "dictionary": {
       "SKILLS": {
