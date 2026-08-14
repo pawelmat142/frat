@@ -90,6 +90,7 @@ const SignUpPage: React.FC = () => {
                             onChange={e => setEmail(e.target.value)}
                             required
                             fullWidth
+                            autoComplete="username"
                         />
                         <FloatingInput
                             name="repeatEmail"
@@ -99,6 +100,7 @@ const SignUpPage: React.FC = () => {
                             onChange={e => setRepeatEmail(e.target.value)}
                             required
                             fullWidth
+                            autoComplete="username"
                         />
                         <FloatingInput
                             className="mt-3"
@@ -109,6 +111,7 @@ const SignUpPage: React.FC = () => {
                             onChange={e => setPassword(e.target.value)}
                             required
                             fullWidth
+                            autoComplete="new-password"
                         />
                         <FloatingInput
                             name="repeatPassword"
@@ -118,6 +121,7 @@ const SignUpPage: React.FC = () => {
                             onChange={e => setRepeatPassword(e.target.value)}
                             required
                             fullWidth
+                            autoComplete="new-password"
                         />
                     </div>
 

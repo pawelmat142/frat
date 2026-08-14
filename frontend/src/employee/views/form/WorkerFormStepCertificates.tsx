@@ -73,6 +73,7 @@ const WorkerFormStepCertificates: React.FC<Props> = ({ formRef }) => {
                     multiSelect
                     onChangeImmediate={handleChange}
                     onClean={handleClean}
+                    highlightQuery={debouncedQuery}
                 />
             )}
 

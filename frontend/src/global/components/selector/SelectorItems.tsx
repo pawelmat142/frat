@@ -16,6 +16,9 @@ interface Props<T extends SelectorValue = SelectorValue> {
     multiSelect?: boolean;
     translateItems?: boolean;
     enableSearchText?: boolean;
+    /** External search query used to highlight matching letters in item labels
+     *  (used when the search input is rendered outside this component). */
+    highlightQuery?: string;
     /** Items pinned at the top of the list (shown before the main list, never re-sorted). */
     initialSelectedItems?: SelectorItem<T>[];
     /** Called after the "Confirm" button is pressed (multi-select non-automated mode). */
@@ -101,6 +104,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     selectedValues = [],
     translateItems = false,
     enableSearchText = false,
+    highlightQuery,
     onClose,
     onClean,
     renderAfterItem,
@@ -123,10 +127,10 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
         return raw.charAt(0).toUpperCase() + raw.slice(1);
     };
 
-    const normalizedSearch = searchText.trim().toLowerCase();
+    const normalizedSearch = (highlightQuery ?? searchText).trim().toLowerCase();
 
     const highlightLabel = (label: string): ReactNode => {
-        if (!enableSearchText || !normalizedSearch) return label;
+        if (!normalizedSearch) return label;
 
         const escaped = normalizedSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const regex = new RegExp(`(${escaped})`, 'gi');

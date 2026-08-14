@@ -88,6 +88,7 @@ const SignInPage: React.FC = () => {
                             onChange={e => setEmail(e.target.value)}
                             required
                             fullWidth
+                            autoComplete="username"
                         />
                         <FloatingInput
                             name="password"
@@ -97,6 +98,7 @@ const SignInPage: React.FC = () => {
                             onChange={e => setPassword(e.target.value)}
                             required
                             fullWidth
+                            autoComplete="current-password"
                         />
                     </div>
 
