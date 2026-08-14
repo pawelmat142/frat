@@ -84,10 +84,10 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
             label: t('offer.form.sortOptions.' + option)
         }))
 
-    return (
+    return (<>
+        <Header onBack={() => onClose?.()} title={t("offer.filtersTitle")} />
         <div className="form-view relative flex flex-col primary-bg h-full">
 
-            <Header onBack={() => onClose?.()} title={t("offer.filtersTitle")} />
 
             <form className='flex flex-col flex-1'
                 noValidate
@@ -204,6 +204,7 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
             </form>
 
         </div>
+    </>
     )
 }
 export default OfferSearchFiltersView;
