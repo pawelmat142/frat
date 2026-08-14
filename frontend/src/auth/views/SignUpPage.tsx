@@ -6,7 +6,7 @@ import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { AuthService } from "auth/services/AuthService";
 import { useNavigate } from "react-router-dom";
-import { usePopup } from "global/providers/PopupProvider";
+import {useConfirm} from "global/providers/PopupProvider";
 import { Path } from "../../path";
 import Loading from "global/components/Loading";
 import FloatingInput from "global/components/controls/FloatingInput";
@@ -22,7 +22,7 @@ const SignUpPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
-    const popupCtx = usePopup();
+    const confirm = useConfirm();
 
     const isDevMode = Utils.isDevMode();
 
@@ -45,10 +45,10 @@ const SignUpPage: React.FC = () => {
                 confirmPassword: repeatPassword
             })
 
-            await popupCtx.popup({
+            await confirm({
                 title: t("signup.successTitle"),
                 message: t("signup.successMessage"),
-                buttons: [{ text: t("common.ok") }]
+                confirmText: t("common.ok")
             })
 
             navigate(Path.SIGN_IN);

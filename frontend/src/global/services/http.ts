@@ -145,7 +145,7 @@ export class HttpClient {
   private async handlePopupException(error: AxiosError) {
     if (!this.popupHandler) return;
     const confirmed = await this.popupHandler({
-
+      popupClassName: 'px-4 pb-4',
       title: 'validation.popup.title',
       message: this.getErrorMsg(error),
       buttons: [
