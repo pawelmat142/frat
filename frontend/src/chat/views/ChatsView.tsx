@@ -49,7 +49,7 @@ const ChatsView: React.FC = () => {
                             <Button
                                 fullWidth
                                 mode={BtnModes.SECONDARY}
-                                onClick={() => navigate(Path.FRIENDS)}
+                                onClick={() => navigate(Path.getFriendsPath(me.uid))}
                             >
                                 <Ico.SEARCH className="mr-2" />
                                 {t('friends.search')}
