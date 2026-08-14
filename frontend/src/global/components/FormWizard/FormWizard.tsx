@@ -16,6 +16,8 @@ type FormWizardProps<TForm extends FieldValues, TStep extends string> = {
     onFinalSubmit: (validateFn: () => Promise<boolean>) => void | Promise<void>;
     children: React.ReactNode;
     onSelectStep: (step: TStep) => void;
+    /** Allows the parent to mark a step as the effective last step (e.g. when a later step should be skipped). */
+    isLastStep?: (step: TStep) => boolean;
 };
 
 function FormWizard<TForm extends FieldValues, TStep extends string = string>({
@@ -26,6 +28,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
     onFinalSubmit,
     children,
     onSelectStep,
+    isLastStep,
 }: FormWizardProps<TForm, TStep>) {
 
     const { t } = useTranslation();
@@ -65,6 +68,10 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
             }
         }
     };
+
+    const isCurrentStepLast = isLastStep
+        ? isLastStep(currentStep)
+        : currentStep === stepsOrder[stepsOrder.length - 1];
 
     const handlePrev = () => {
         saveFormToLocalStorage();
@@ -122,7 +129,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
                             aria-label={t("common.previous")}
                         >{t("common.previous")}</Button>
 
-                        {currentStep !== stepsOrder[stepsOrder.length - 1] ? (
+                        {!isCurrentStepLast ? (
                             <Button
                                 type="button"
                                 onClick={handleNext}

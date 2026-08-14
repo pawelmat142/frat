@@ -373,6 +373,12 @@ const WorkerFormView: React.FC = () => {
         formCtx.setValue("currentStep", step);
     }
 
+    const isLastStep = (step: WorkerFormStep): boolean => {
+        if (step === WorkerFormSteps.CERTIFICATE_DATES) return true;
+        if (step === WorkerFormSteps.CERTIFICATES && shouldSkipCertificateDatesStep()) return true;
+        return false;
+    }
+
     return (<>
         <Header title={t("employeeProfile.form.title")}></Header>
         <FormWizard
@@ -382,6 +388,7 @@ const WorkerFormView: React.FC = () => {
             currentStep={form.currentStep}
             onFinalSubmit={onSubmit}
             onSelectStep={selectStep}
+            isLastStep={isLastStep}
         >
             {
                 <>
