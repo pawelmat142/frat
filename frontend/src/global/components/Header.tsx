@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ onBack, title, rightBtn, menu, leftBtn 
                             <HeaderBackBtn onBack={onBack} />
 
                             {title && (
-                                <div className="header-title ml-2 btn-font">
+                                <div className="header-title btn-font">
                                     {title}
                                 </div>
                             )}

@@ -144,7 +144,7 @@ const DashboardView: React.FC = () => {
         return item;
     });
 
-    const menu = <IconButton className="py-3 px-3" icon={<Ico.BURGER />} mode={BtnModes.SECONDARY_TXT} onClick={() => {
+    const menu = <IconButton icon={<Ico.BURGER />} mode={BtnModes.SECONDARY_TXT} onClick={() => {
         drawer.open({
             showClose: true,
             title: t("common.menu"),

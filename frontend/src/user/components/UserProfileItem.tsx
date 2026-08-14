@@ -10,17 +10,19 @@ interface Props {
     editableAvatar?: boolean
 }
 
-const UserProfileItem: React.FC<Props> = ({ user, className = "view-margin py-3", topRightComponent, editableAvatar = false }) => {
+const UserProfileItem: React.FC<Props> = ({ user, className, topRightComponent, editableAvatar = false }) => {
 
     return (
         <div className={className}>
             <div className="flex w-full justify-between">
-                <UserItem
-                    user={user} size={5}
-                    allowNavigate={false}
-                    editableAvatar={editableAvatar}
-                    bottomRow={<span className="secondary-text s-font">{UserUtil.getContactInfoLine(user)}</span>}
-                ></UserItem>
+                <div className="pt-3 pl-3">
+                    <UserItem
+                        user={user} size={5}
+                        allowNavigate={false}
+                        editableAvatar={editableAvatar}
+                        bottomRow={<span className="secondary-text s-font">{UserUtil.getContactInfoLine(user)}</span>}
+                    ></UserItem>
+                </div>
                 {topRightComponent && <div>{topRightComponent}</div>}
             </div>
         </div>

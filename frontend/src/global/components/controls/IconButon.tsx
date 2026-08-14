@@ -13,7 +13,7 @@ export interface IconBtnInterface {
 const IconButton: React.FC<IconBtnInterface> = ({
     onClick, size = BtnSizes.MEDIUM,
     icon,
-    className,
+    className="p-5",
     disabled,
     mode = BtnModes.PRIMARY_TXT
 }) => {
@@ -24,7 +24,7 @@ const IconButton: React.FC<IconBtnInterface> = ({
     }
     if (disabled) {
         myClass += ' control-disabled';
-        }
+    }
 
     const handleClick: MouseEventHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (disabled) {
