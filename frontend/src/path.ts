@@ -30,6 +30,7 @@ export abstract class Path {
     public static readonly OFFER_FORM_EDIT = '/offer-form/:offerId';
     public static readonly OFFER_AVAILABILITY_EDIT = '/offer-availability-edit/:offerId';
     public static readonly OFFERS_SEARCH = '/offers-search';
+    public static readonly OFFER_OLD = '/offer-old/:offerId';
     public static readonly OFFER = '/offer/:offerId';
     public static readonly USER_OFFERS = '/offers/:uid';
 
@@ -69,6 +70,7 @@ export abstract class Path {
     public static getProfilePath = (uid: string) => `${Path.PROFILE.replace(':uid', uid)}`;
     public static getWorkerProfilePath = (displayName: string) => `${Path.WORKER.replace(':displayName', displayName)}`;
     public static getOfferPath = (offerId: string) => `${Path.OFFER.replace(':offerId', `${offerId}`)}`;
+    public static getOfferPathOld = (offerId: string) => `${Path.OFFER_OLD.replace(':offerId', `${offerId}`)}`;
     public static getOffersPath = (uid: string) => `${Path.USER_OFFERS.replace(':uid', uid)}`;
     public static getOfferFormEditPath = (offerId: string) => `${Path.OFFER_FORM_EDIT.replace(':offerId', `${offerId}`)}`;
     public static getOfferAvailabilityEditPath = (offerId: string) => `${Path.OFFER_AVAILABILITY_EDIT.replace(':offerId', `${offerId}`)}`;

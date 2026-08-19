@@ -20,7 +20,7 @@ interface FloatingBtnContextType {
 const routesWithFAB = [
     Path.WORKER,
     Path.WORKERS_SEARCH,
-    Path.OFFER,
+    Path.OFFER_OLD,
     Path.OFFERS_SEARCH,
     Path.PROFILE,
 ].map(path => path.replace(/\/:\w+/g, '')); // Usuwamy dynamiczne segmenty z pathów, np. /offer/:id -> /offer

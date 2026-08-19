@@ -30,7 +30,7 @@ import AdminEmployeeProfiles from 'admin/views/employee_profiles/AdminEmployeePr
 import WorkerView from 'employee/views/profile/WorkerView';
 import OfferFormView from 'offer/views/form/OfferFormView';
 import UserOffersList from 'offer/views/UserOffersList';
-import OfferView from 'offer/views/offer-view/OfferView';
+import OfferViewOld from 'offer/views/offer-view/OfferViewOld';
 import { useRippleEffect } from 'global/hooks/useRippleEffect';
 import { useScrollRestoration } from 'global/hooks/useScrollRestoration';
 import OfferSearchView from 'offer/views/search/OfferSearchView';
@@ -53,6 +53,7 @@ import TrainingProviderFormView from 'training/views/provider/TrainingProviderFo
 import WorkerCertificatesEditView from 'employee/views/form/WorkerCertificatesEditView';
 import WorkerCertificateDatesEditView from 'employee/views/form/WorkerCertificateDatesEditView';
 import OfferAvailabilityEditView from 'offer/views/form/OfferAvailabilityEditView';
+import OfferView from 'offer/views/offer-view/OfferView';
 
 const trainingAccess = [UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.SUPERADMIN]
 
@@ -102,6 +103,7 @@ const App: React.FC = () => {
                 <Route path={Path.OFFER_AVAILABILITY_EDIT} element={<PageWrapper isProtected><OfferAvailabilityEditView/></PageWrapper>} />
                 <Route path={Path.USER_OFFERS} element={<PageWrapper isProtected><UserOffersList/></PageWrapper>} />
                 {/* unprotected */}
+                <Route path={Path.OFFER_OLD} element={<PageWrapper><OfferViewOld/></PageWrapper>} />                <Route path={Path.OFFER_OLD} element={<PageWrapper><OfferViewOld/></PageWrapper>} />
                 <Route path={Path.OFFER} element={<PageWrapper><OfferView/></PageWrapper>} />
                 <Route path={Path.OFFERS_SEARCH} element={<PageWrapper><OfferSearchView/></PageWrapper>} />
 

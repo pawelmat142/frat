@@ -31,7 +31,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
     const userCtx = useUserContext();
 
     const goToOfferView = () => {
-        navigate(Path.getOfferPath(offer.offerId));
+        navigate(Path.getOfferPathOld(offer.offerId));
     }
 
     const getDistanceInfo = (): string => {

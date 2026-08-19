@@ -85,7 +85,7 @@ const OfferAvailabilityEditView: React.FC = () => {
             removeNotificationAboutOfferExpirationIfExists(result);
             await userCtx.initOffers();
             toast.success(t("offer.form.successUpdate"));
-            navigate(Path.getOfferPath(result.offerId));
+            navigate(Path.getOfferPathOld(result.offerId));
         } catch (error) {
         } finally {
             setLoading(false);
