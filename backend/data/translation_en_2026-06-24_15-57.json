@@ -99,29 +99,20 @@
         "title": "Job offer form",
         "success": "Offer created successfully",
         "STEP_ONE": {
-          "label": "Step 1",
           "title": "Basic Information"
         },
         "STEP_TWO": {
           "msg": "*Providing an approximate location is required for the search functionality and helps others find your offer.",
-          "label": "Step 2",
           "title": "Location"
-        },
-        "STEP_FOUR": {
-          "label": "Step 4",
-          "title": "Details"
         },
         "STEP_THREE": {
           "info": "Add a photo, logo, or graphic to make your offer stand out. If you skip this step, we will automatically generate an avatar for you.",
-          "label": "Step 3",
           "title": "Description and salary"
         },
         "validation": {
           "notFound": "Offer not found.",
           "createError": "Error creating offer, please try again later.",
-          "formInvalid": "Form is invalid, please check all fields.",
-          "currencyRequired": "Currency is required.",
-          "atLeastOneSalaryRequired": "At least one salary (monthly or hourly) is required."
+          "formInvalid": "Form is invalid, please check all fields."
         },
         "sortOptions": {
           "title": "Sort by",
@@ -133,13 +124,10 @@
         },
         "successUpdate": "Offer updated successfully"
       },
-      "likes": "Likes",
-      "views": "Views",
       "salary": "Salary hourly from",
       "search": "Offers search",
       "created": "Added",
       "filters": {
-        "countries": "Countries",
         "startDate": "Available from",
         "categories": "Categories",
         "communicationLanguages": "Communication languages"
@@ -150,33 +138,21 @@
       "addedBy": "Added by",
       "offerMenu": "Offer menu",
       "editButton": "Edit Offer",
-      "likeButton": "Like Offer",
-      "management": "Offer management",
       "offersList": "Offers list",
       "description": "Short offer description",
       "descriptionTitle": "Description",
       "displayName": "Title",
       "searchTitle": "Offers",
-      "workCountry": "Work country",
       "deleteButton": "Delete Offer",
       "filtersTitle": "Filter offers",
       "recentlySeen": "Recently seen offers",
-      "removeButton": "Remove Offer",
-      "statusActive": "Active",
-      "unlikeButton": "Unlike Offer",
       "workCategory": "Work category",
       "workLocation": "Location",
       "activateButton": "Activate Offer",
       "offerViewTitle": "Offer details",
-      "statusInactive": "Inactive",
-      "likeRemoveToast": "Unliked the offer",
       "deactivateButton": "Deactivate Offer",
-      "likeSuccessToast": "Liked the offer",
       "languagesRequired": "Required languages",
-      "cannotLikeOwnOffer": "You cannot like your own offer",
       "deleteSuccessToast": "Offer deleted successfully",
-      "languagesNiceToHave": "Nice to have languages",
-      "activationErrorToast": "Error toggling offer activation",
       "deleteConfirmMessage": "Are you sure you want to delete this offer? This action cannot be undone.",
       "activationSuccessToast": "Offer activated successfully",
       "deactivationSuccessToast": "Offer deactivated successfully"

@@ -99,29 +99,19 @@
         "title": "Formularz oferty pracy",
         "success": "Oferta została pomyślnie utworzona",
         "STEP_ONE": {
-          "label": "Krok 1",
           "title": "Podstawowe informacje"
         },
         "STEP_TWO": {
-          "info": "*Podanie orientacyjnej lokalizacji jest wymagane do działania wyszukiwarki i ułatwia innym znalezienie Twojej oferty.",
-          "label": "Krok 2",
           "title": "Lokalizacja"
-        },
-        "STEP_FOUR": {
-          "label": "Krok 4",
-          "title": "Szczegóły"
         },
         "STEP_THREE": {
           "info": "Dodaj zdjęcie, logo lub grafikę, aby wyróżnić swoją ofertę. Jeśli pominiesz ten krok, automatycznie wygenerujemy avatar.",
-          "label": "Krok 3",
           "title": "Opis i wynagrodzenie"
         },
         "validation": {
           "notFound": "Nie znaleziono oferty.",
           "createError": "Błąd podczas tworzenia oferty, spróbuj ponownie później.",
-          "formInvalid": "Formularz jest nieprawidłowy, sprawdź wszystkie pola.",
-          "currencyRequired": "Waluta jest wymagana.",
-          "atLeastOneSalaryRequired": "Wymagane jest podanie wynagrodzenia (miesięczne lub godzinowe)."
+          "formInvalid": "Formularz jest nieprawidłowy, sprawdź wszystkie pola."
         },
         "sortOptions": {
           "title": "Sortuj według",
@@ -133,13 +123,10 @@
         },
         "successUpdate": "Oferta została pomyślnie zaktualizowana"
       },
-      "likes": "Polubienia",
-      "views": "Wyświetlenia",
       "salary": "Stawka godzinowa od",
       "search": "Szukaj ofert",
       "created": "Dodano",
       "filters": {
-        "countries": "Kraje",
         "startDate": "Mogę zacząć od",
         "categories": "Kategorie",
         "communicationLanguages": "Języki komunikacji"
@@ -150,34 +137,21 @@
       "addedBy": "Dodano przez",
       "offerMenu": "Menu oferty",
       "editButton": "Edytuj ofertę",
-      "likeButton": "Polub ofertę",
-      "management": "Zarządzanie ofertami",
       "offersList": "Lista ofert",
       "description": "Krótki opis oferty",
       "descriptionTitle": "Opis",
       "displayName": "Tytuł",
-      "myListTitle": "Moje oferty",
       "searchTitle": "Oferty",
-      "workCountry": "Kraj pracy",
       "deleteButton": "Usuń ofertę",
       "filtersTitle": "Filtruj oferty",
       "recentlySeen": "Ostatnio oglądane oferty",
-      "removeButton": "Usuń ofertę",
-      "statusActive": "Aktywna",
-      "unlikeButton": "Usuń polubienie oferty",
       "workCategory": "Kategoria",
       "workLocation": "Lokalizacja",
       "activateButton": "Aktywuj ofertę",
       "offerViewTitle": "Szczegóły oferty",
-      "statusInactive": "Nieaktywna",
-      "likeRemoveToast": "Usunąłeś polubienie",
       "deactivateButton": "Dezaktywuj ofertę",
-      "likeSuccessToast": "Polubiłeś ofertę",
       "languagesRequired": "Wymagane języki",
-      "cannotLikeOwnOffer": "Nie możesz polubić własnej oferty",
       "deleteSuccessToast": "Oferta została pomyślnie usunięta",
-      "languagesNiceToHave": "Mile widziane języki",
-      "activationErrorToast": "Błąd podczas zmiany statusu aktywacji oferty",
       "deleteConfirmMessage": "Czy na pewno chcesz usunąć tę ofertę? Tej akcji nie można cofnąć.",
       "activationSuccessToast": "Oferta została pomyślnie aktywowana",
       "deactivationSuccessToast": "Oferta została pomyślnie dezaktywowana"
