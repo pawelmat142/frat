@@ -45,7 +45,7 @@ const ListUi: React.FC<Props> = ({ items, className, itemClassName }) => {
 
                         {item.icon && <item.icon size={iconSize} />}
 
-                        <span>{item.label}</span>
+                        {item.labelComponent ? item.labelComponent : <span>{item.label}</span>}
 
                         {getRightIcon(item)}
 

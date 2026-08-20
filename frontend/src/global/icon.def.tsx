@@ -1,5 +1,5 @@
 import { IconType } from "react-icons";
-import { FaBan, FaBars, FaBell, FaBookmark, FaBriefcase, FaCalendarAlt, FaCheck, FaChevronRight, FaCog, FaComments, FaDownload, FaEdit, FaEllipsisV, FaFilter, FaGlobe, FaGraduationCap, FaHome, FaHourglassHalf, FaIdCard, FaList, FaMap, FaMapMarker, FaMapMarkerAlt, FaMarker, FaPaperPlane, FaPhone, FaPlus, FaRegBookmark, FaRegClock, FaRegCompass, FaRegEnvelope, FaRegStar, FaRulerVertical, FaSearch, FaSignInAlt, FaSignOutAlt, FaSlidersH, FaStar, FaStream, FaTags, FaTimes, FaTrash, FaUserCircle, FaUserFriends, FaUserPlus } from "react-icons/fa";
+import { FaBan, FaBars, FaBell, FaBookmark, FaBriefcase, FaCalendarAlt, FaCheck, FaChevronRight, FaCog, FaCoins, FaComments, FaDownload, FaEdit, FaEllipsisV, FaFilter, FaGlobe, FaGraduationCap, FaHome, FaHourglassHalf, FaIdCard, FaList, FaMap, FaMapMarker, FaMapMarkerAlt, FaMarker, FaMoneyBillWave, FaPaperPlane, FaPhone, FaPlus, FaRegBookmark, FaRegClock, FaRegCompass, FaRegEnvelope, FaRegStar, FaRulerVertical, FaSearch, FaSignInAlt, FaSignOutAlt, FaSlidersH, FaStar, FaStream, FaTags, FaTimes, FaTrash, FaUserCircle, FaUserFriends, FaUserPlus } from "react-icons/fa";
 import { MdThumbUp, MdVisibility } from "react-icons/md";
 
 export const Ico = {
@@ -16,6 +16,8 @@ export const Ico = {
     SIGN_OUT: FaSignOutAlt,
     OFFER: FaBriefcase,
     WORKER: FaIdCard,
+    SALARY: FaMoneyBillWave,
+    MONEY: FaCoins,
     DELETE: FaTrash,
     CANCEL: FaTimes,
     PHONE: FaPhone,

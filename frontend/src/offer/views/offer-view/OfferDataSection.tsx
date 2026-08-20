@@ -1,12 +1,21 @@
 import { OfferI } from "@shared/interfaces/OfferI";
+import { DateRange } from "@shared/interfaces/WorkerI";
+import { DateUtil } from "@shared/utils/DateUtil";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import TileSection from "employee/components/TileSection";
+import CallendarsView from "global/components/callendar/CallendarsView";
+import CategoriesChips from "global/components/chips/CategoriesChips";
+import PseudoView from "global/components/PseudoView";
 import DateDisplay from "global/components/ui/DateDisplay";
 import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
 import ListUi from "global/components/ui/ListUi";
+import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 import { useIsDesktop } from "global/hooks/isMobile";
 import { Ico } from "global/icon.def";
 import { MenuItem } from "global/interface/controls.interface";
+import { useBottomSheet } from "global/providers/BottomSheetProvider";
+import { useGlobalContext } from "global/providers/GlobalProvider";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useUserContext } from "user/UserProvider";
@@ -18,7 +27,12 @@ interface Props {
 const OfferDataSection: React.FC<Props> = ({ offer }) => {
   const userCtx = useUserContext();
   const isDesktop = useIsDesktop();
+  const globalCtx = useGlobalContext();
+  const floatingBtnCtx = useFloatingBtnContext();
+  const bottomSheetCtx = useBottomSheet();
   const { t } = useTranslation();
+
+  const [openPseudoView, setOpenPseudoView] = useState(false);
 
   const me = userCtx?.me;
 
@@ -52,8 +66,32 @@ const OfferDataSection: React.FC<Props> = ({ offer }) => {
     return `(${distanceInfo} ${t("others.away")})`;
   };
 
-//   TODO translations
+  const ranges: DateRange[] = [
+    { start: DateUtil.toLocalDateString(offer.startDate) },
+  ];
+
+  const onAvailabilityClick = () => {
+    setOpenPseudoView(true);
+    globalCtx.hideFooter();
+    floatingBtnCtx.hide();
+  };
+
+  //   TODO translations
   const listItems: MenuItem[] = [
+    {
+      label: "Kategoria",
+      labelComponent: (
+        <span className="flex gap-2 items-center">
+          Kategoria:{" "}
+          <CategoriesChips
+            categories={[offer.category]}
+            smaller
+            color="primary"
+          />
+        </span>
+      ),
+      icon: Ico.CATEGORIES,
+    },
     {
       label: `Starts from: ${DateDisplay({
         date: new Date(offer.startDate!),
@@ -61,6 +99,7 @@ const OfferDataSection: React.FC<Props> = ({ offer }) => {
         t,
       })}`,
       icon: Ico.CALENDAR,
+      onClick: onAvailabilityClick,
     },
     {
       if: offer.phoneNumber,
@@ -78,6 +117,11 @@ const OfferDataSection: React.FC<Props> = ({ offer }) => {
       label: `${t("offer.languagesRequired")}: ${offer.languagesRequired?.map((lang) => DictionaryDisplay({ dictionary: "LANGUAGES", value: lang, t }))}`,
       icon: Ico.LANGUAGE,
     },
+    {
+      if: offer.salary && offer.currency,
+      label: `${t("offer.salary")}: ${offer.salary} ${offer.currency}`,
+      icon: Ico.SALARY,
+    },
   ];
 
   return (
@@ -85,6 +129,19 @@ const OfferDataSection: React.FC<Props> = ({ offer }) => {
       <TileSection>
         <ListUi items={listItems} className="pb-1"></ListUi>
       </TileSection>
+
+      <PseudoView show={openPseudoView}>
+        <CallendarsView
+          title={t("offer.dateRange")}
+          ranges={ranges}
+          bottomSheetCtx={bottomSheetCtx}
+          onClose={() => {
+            setOpenPseudoView(false);
+            globalCtx.showFooter();
+            floatingBtnCtx.show();
+          }}
+        />
+      </PseudoView>
     </>
   );
 };

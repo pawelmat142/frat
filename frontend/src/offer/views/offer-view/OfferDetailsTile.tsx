@@ -91,10 +91,6 @@ const OfferDetailsTile: React.FC<OfferDetailsTileProps> = ({ offer }) => {
                     <Visibility fontSize="small" className="secondary-text mr-1" />
                     {t('offer.views')}: {offer.uniqueViewsCount || 0}
                 </span>
-                <span className="xs-font secondary-text">
-                    {t('offer.likes')}: {offer.likes?.length || 0}
-                    <ThumbUp fontSize="small" className="secondary-text ml-1" />
-                </span>
             </div>
 
             <div className="flex w-full justify-between mt-2">

@@ -120,6 +120,7 @@ export interface SelectorItem<T extends SelectorValue = SelectorValue> {
 
 export interface MenuItem {
     label: string
+    labelComponent?: React.ReactNode
     list?: MenuItemListItem[]
     id?: MenuItemIdentifier // specific for bottom bar, used to set active state
     active?: boolean

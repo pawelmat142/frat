@@ -20,6 +20,9 @@ import OfferAvatarMock from "offer/components/OfferAvatarMock";
 import ListItemImg from "global/components/ListItemImg";
 import { AppConfig } from "@shared/AppConfig";
 import OfferDataSection from "./OfferDataSection";
+import TileSection from "employee/components/TileSection";
+import { DateRange } from "@shared/interfaces/WorkerI";
+import { DateUtil } from "@shared/utils/DateUtil";
 
 const OfferView: React.FC = () => {
   const params = useParams<{ offerId?: string }>();
@@ -29,6 +32,7 @@ const OfferView: React.FC = () => {
   const navigate = useNavigate();
   const userCtx = useUserContext();
   const globalCtx = useGlobalContext();
+
   const confirm = useConfirm();
   const me = userCtx?.me;
 
@@ -107,8 +111,6 @@ const OfferView: React.FC = () => {
     return <div>{t("common.noResults")}</div>;
   }
 
-  console.log(offer)
-
   const goToEditForm = async (offer: OfferI) => {
     navigate(Path.getOfferFormEditPath(offer.offerId));
   };
@@ -159,16 +161,13 @@ const OfferView: React.FC = () => {
 
       <div className="w-full flex-1">
         <div className="flex gap-3 items-center view-margin">
-            <ListItemImg imgUrl={offer.avatarRef?.url} component={avatarMock} size={AppConfig.DEFAULT_AVATAR_SIZE_BIG} />
+          <ListItemImg
+            imgUrl={offer.avatarRef?.url}
+            component={avatarMock}
+            size={AppConfig.DEFAULT_AVATAR_SIZE_BIG}
+          />
 
           <div className="worker-profile-top">
-            <div className="worker-profile-top-row one">
-              {/* <CategoriesChips
-                categories={worker.categories}
-                smaller
-                color="primary"
-              /> */}
-            </div>
             <div className="worker-profile-top-row two">
               <div>
                 <div className="l-font font-semibold">{offer.displayName}</div>
@@ -182,18 +181,23 @@ const OfferView: React.FC = () => {
 
         <OfferDataSection offer={offer} />
 
-        <div className="view-container-two">
-          OFFER TEMP NEW VIEW
-          <div className="mt-10 mb-10">
-            <Button
-              onClick={() => navigate(Path.getOfferPathOld(offer.offerId))}
-              mode={BtnModes.PRIMARY_TXT}
-            >
-              dev swap view
-            </Button>
-          </div>
+        {/* TODO translations */}
+        <TileSection title={"Description"}>
+          <div className="p-3">{offer.description}</div>
+        </TileSection>
+
+        {/* TODO dodane przez tile */}
+
+        <div className="mt-10 mb-10">
+          <Button
+            onClick={() => navigate(Path.getOfferPathOld(offer.offerId))}
+            mode={BtnModes.PRIMARY_TXT}
+          >
+            dev swap view
+          </Button>
         </div>
       </div>
+
     </>
   );
 };
