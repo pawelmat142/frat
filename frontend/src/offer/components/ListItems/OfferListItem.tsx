@@ -21,7 +21,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
     const { t } = useTranslation();
 
     const goToOfferView = () => {
-        navigate(Path.getOfferPathOld(offer.offerId));
+        navigate(Path.getOfferPath(offer.offerId));
     }
 
     const topLeft = (

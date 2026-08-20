@@ -188,14 +188,6 @@ const OfferView: React.FC = () => {
 
         {/* TODO dodane przez tile */}
 
-        <div className="mt-10 mb-10">
-          <Button
-            onClick={() => navigate(Path.getOfferPathOld(offer.offerId))}
-            mode={BtnModes.PRIMARY_TXT}
-          >
-            dev swap view
-          </Button>
-        </div>
       </div>
 
     </>

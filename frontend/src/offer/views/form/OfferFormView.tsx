@@ -162,7 +162,7 @@ const OfferFormContent: React.FC = () => {
             userCtx.setLoading(false);
             if (offerId) {
                 toast.success(t("offer.form.successUpdate"));
-                navigate(Path.getOfferPathOld(offer.offerId));
+                navigate(Path.getOfferPath(offer.offerId));
             } else {
                 toast.success(t("offer.form.success"));
                 navigate(Path.getOffersPath(offer!.uid));

@@ -221,7 +221,7 @@ const SingleNotificationView: React.FC = () => {
                 }}><Ico.EDIT></Ico.EDIT>{t('notification.updateDate')}</Button>
             <Button fullWidth mode={BtnModes.PRIMARY_TXT}
                 onClick={() => {
-                    navigate(Path.getOfferPathOld(offerId))
+                    navigate(Path.getOfferPath(offerId))
                 }}><Ico.OFFER />{t('notification.displayOffer')}</Button>
             <Button fullWidth mode={BtnModes.ERROR_TXT}
                 onClick={() => deleteOffer(offerId)}><Ico.DELETE />{t('offer.deleteButton')}</Button>
