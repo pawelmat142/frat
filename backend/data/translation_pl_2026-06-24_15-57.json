@@ -134,6 +134,7 @@
       "currency": "Waluta",
       "noOffers": "Nie ma jeszcze żadnych ofert...",
       "dateRange": "Data rozpoczęcia",
+      "startsFrom": "Zaczyna się od",
       "addedBy": "Dodano przez",
       "offerMenu": "Menu oferty",
       "editButton": "Edytuj ofertę",

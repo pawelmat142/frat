@@ -135,6 +135,7 @@
       "currency": "Currency",
       "noOffers": "Has no offers yet...",
       "dateRange": "Start date",
+      "startsFrom": "Starts from",
       "addedBy": "Added by",
       "offerMenu": "Offer menu",
       "editButton": "Edit Offer",

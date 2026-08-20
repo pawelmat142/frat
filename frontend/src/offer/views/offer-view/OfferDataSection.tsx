@@ -76,13 +76,12 @@ const OfferDataSection: React.FC<Props> = ({ offer }) => {
     floatingBtnCtx.hide();
   };
 
-  //   TODO translations
   const listItems: MenuItem[] = [
     {
-      label: "Kategoria",
+      label: t("offer.workCategory"),
       labelComponent: (
         <span className="flex gap-2 items-center">
-          Kategoria:{" "}
+          {t("offer.workCategory")}:{" "}
           <CategoriesChips
             categories={[offer.category]}
             smaller
@@ -93,9 +92,10 @@ const OfferDataSection: React.FC<Props> = ({ offer }) => {
       icon: Ico.CATEGORIES,
     },
     {
-      label: `Starts from: ${DateDisplay({
+      label: `${t("offer.startsFrom")}: ${DateDisplay({
         date: new Date(offer.startDate!),
         showYear: false,
+        showFullMonthName: true,
         t,
       })}`,
       icon: Ico.CALENDAR,

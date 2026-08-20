@@ -6,6 +6,8 @@ interface Props {
     localDateString?: string | null;
     showYear?: boolean;
     showYearIfNotCurrent?: boolean;
+    /** Show the full month name instead of its abbreviated version. */
+    showFullMonthName?: boolean;
     showTimeIfToday?: boolean;
     todayAsTxt?: boolean;
     yesterdayAsTxt?: boolean;
@@ -20,7 +22,7 @@ interface Props {
 
 const DateDisplay = (props: Props): string | null => {
     const {
-        date, localDateString, showYear, showYearIfNotCurrent, t,
+        date, localDateString, showYear, showYearIfNotCurrent, showFullMonthName, t,
         todayAsTxt, yesterdayAsTxt, tomorrowAsTxt, displayDayOfWeekIfClose,
         capitalize,
     } = props;
@@ -57,13 +59,13 @@ const DateDisplay = (props: Props): string | null => {
             return FrontDateUtil.displayShortDateOrDayOrTimeIfToday(t, d);
 
         return applyCapitalize(
-            `${d.getDate()} ${t(`callendar.monthShort.${d.getMonth()}`)}${displayYear ? ` ${year}` : ''}`
+            `${d.getDate()} ${t(`callendar.${showFullMonthName ? 'month' : 'monthShort'}.${d.getMonth()}`)}${displayYear ? ` ${year}` : ''}`
         );
     }
 
     if (localDateString) {
         const [year, month, day] = localDateString.split('-').map(Number);
-        const monthName = t(`callendar.monthShort.${month - 1}`);
+        const monthName = t(`callendar.${showFullMonthName ? 'month' : 'monthShort'}.${month - 1}`);
         const displayYear = showYear || (showYearIfNotCurrent && year !== currentYear);
         return applyCapitalize(`${day} ${monthName}${displayYear ? ` ${year}` : ''}`);
     }
