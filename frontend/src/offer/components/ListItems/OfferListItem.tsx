@@ -3,13 +3,8 @@ import { Path } from "../../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ListItem from "global/components/ListItem";
-import { Ico } from "global/icon.def";
-import { useUserContext } from "user/UserProvider";
-import { PositionUtil } from "@shared/utils/PositionUtil";
-import { AppConfig } from "@shared/AppConfig";
-import DateDisplay from "global/components/ui/DateDisplay";
-import AvatarMock from "global/components/AvatarMock";
 import OfferAvatarMock from "../OfferAvatarMock";
+import OfferStatItems from "../OfferStatItems";
 
 interface Props {
     offer: OfferI,
@@ -20,33 +15,14 @@ interface Props {
     className?: string
 }
 
-const MINIMUM_DISTANCE_FOR_DISPLAY_METERS = AppConfig.MINIMUM_DISTANCE_FOR_DISPLAY_METERS;
-
-
-
 const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder, rightSection, className }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const userCtx = useUserContext();
 
     const goToOfferView = () => {
         navigate(Path.getOfferPathOld(offer.offerId));
     }
-
-    const getDistanceInfo = (): string => {
-        if (!userCtx.position || !offer.point) {
-            return '';
-        }
-        const meters = PositionUtil.getDistanceFromToInMeters(userCtx.position, PositionUtil.fromGeoPoint(offer.point));
-
-        if (meters < MINIMUM_DISTANCE_FOR_DISPLAY_METERS) {
-            return t("others.lessThan", { distance: MINIMUM_DISTANCE_FOR_DISPLAY_METERS / 1000, unit: 'km' });
-        }
-        return `${PositionUtil.displayDistance(meters)}`;
-    }
-
-    const distance = getDistanceInfo();
 
     const topLeft = (
         <div className="flex items-center gap-2">
@@ -55,32 +31,6 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
             </div>
         </div>
     );
-
-    const startsFrom = offer.startDate ? <span className="xs-font">
-        <span className="secondary-text">{t('common.from')} </span>
-        <span>{DateDisplay({ date: offer.startDate, t, showYearIfNotCurrent: true })}</span>
-    </span> : null;
-
-    const bottomLeft = <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-            {startsFrom}
-            <div className="flex items-center gap05">
-                <Ico.VIEWS size={14} className="secondary-text" />
-                <span className="xs-font">{offer.uniqueViewsCount || 0}</span>
-            </div>
-            <div className="flex items-center gap05">
-                <Ico.STAR size={14} className="secondary-text" />
-                <span className="xs-font">{offer.favoritesCount || 0}</span>
-            </div>
-
-            {!!distance && (
-                <div className="flex items-center gap05">
-                    <Ico.MARKER size={14} className="secondary-text" />
-                    <span className="xs-font">{distance}</span>
-                </div>
-            )}
-        </div>
-    </div>
 
     const avatarMock = offer.avatarRef ? undefined : <OfferAvatarMock
         offer={offer}
@@ -92,7 +42,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
                 imgUrl={offer.avatarRef ? offer.avatarRef.url : undefined}
                 imgComponent={avatarMock}
                 topLeft={topLeft}
-                bottomLeft={bottomLeft}
+                bottomLeft={<OfferStatItems offer={offer} showStartsFrom />}
                 first={first}
                 last={last}
                 rightSection={rightSection}
