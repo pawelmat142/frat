@@ -13,16 +13,13 @@ import Header from "global/components/Header";
 import { deleteOfferConfirm } from "employee/def";
 import { Ico } from "global/icon.def";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import Button from "global/components/controls/Button";
-import { BtnModes } from "global/interface/controls.interface";
 import OfferStatItems from "offer/components/OfferStatItems";
 import OfferAvatarMock from "offer/components/OfferAvatarMock";
 import ListItemImg from "global/components/ListItemImg";
 import { AppConfig } from "@shared/AppConfig";
 import OfferDataSection from "./OfferDataSection";
 import TileSection from "employee/components/TileSection";
-import { DateRange } from "@shared/interfaces/WorkerI";
-import { DateUtil } from "@shared/utils/DateUtil";
+import UserItemTile from "user/components/UserItemTile";
 
 const OfferView: React.FC = () => {
   const params = useParams<{ offerId?: string }>();
@@ -181,13 +178,19 @@ const OfferView: React.FC = () => {
 
         <OfferDataSection offer={offer} />
 
-        {/* TODO translations */}
-        <TileSection title={"Description"}>
+        <TileSection title={t("offer.descriptionTitle")}>
           <div className="p-3">{offer.description}</div>
         </TileSection>
 
-        {/* TODO dodane przez tile */}
+        <TileSection title={t("offer.addedBy")}>
+          <div>
+            <UserItemTile uid={offer.uid} showChat={!isMyOffer} showNumber />
+          </div>
+        </TileSection>
 
+{/* TODO do wizarda dodamy krok z opcjonalnymi certyfikatami */}
+{/* TODO opcjonalna sekcja z certyfikatami na offer view */}
+{/* TODO dodawanie do ulubionych */}
       </div>
 
     </>
