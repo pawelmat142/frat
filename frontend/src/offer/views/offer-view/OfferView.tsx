@@ -20,6 +20,7 @@ import { AppConfig } from "@shared/AppConfig";
 import OfferDataSection from "./OfferDataSection";
 import TileSection from "employee/components/TileSection";
 import UserItemTile from "user/components/UserItemTile";
+import OfferCertificatesSection from "./OfferCertificatesSection";
 
 const OfferView: React.FC = () => {
   const params = useParams<{ offerId?: string }>();
@@ -188,8 +189,7 @@ const OfferView: React.FC = () => {
           </div>
         </TileSection>
 
-{/* TODO do wizarda dodamy krok z opcjonalnymi certyfikatami */}
-{/* TODO opcjonalna sekcja z certyfikatami na offer view */}
+        <OfferCertificatesSection offer={offer} />
 {/* TODO dodawanie do ulubionych */}
       </div>
 
