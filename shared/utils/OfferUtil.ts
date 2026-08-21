@@ -72,6 +72,9 @@ export abstract class OfferUtil {
                 salary: offer.salary ?? null,
                 description: offer.description ?? null,
             },
+            STEP_FOUR: {
+                requiredCertificates: offer.requiredCertificates ?? [],
+            },
         };
     }
 

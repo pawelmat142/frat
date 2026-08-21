@@ -48,6 +48,10 @@ export class OfferEntity implements OfferI {
     @Expose()
     languagesRequired?: string[];
 
+    @Column({ name: 'required_certificates', type: 'text', array: true, nullable: true })
+    @Expose()
+    requiredCertificates?: string[];
+
     @Column({ name: 'phone_number', type: 'jsonb' })
     @Expose()
     phoneNumber: ParsedPhoneNumber;

@@ -8,6 +8,7 @@ import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import OfferFormStepOne from "./OfferFormStepOne";
 import OfferFormStepTwo from "./OfferFormStepTwo";
 import OfferFormStepThree from "./OfferFormStepThree";
+import OfferFormStepFour from "./OfferFormStepFour";
 import { OffersService } from "offer/services/OffersService";
 import { useEffect, useState } from "react";
 import Loading from "global/components/Loading";
@@ -194,6 +195,8 @@ const OfferFormContent: React.FC = () => {
                 return <OfferFormStepTwo />;
             case OfferFormSteps.STEP_THREE:
                 return <OfferFormStepThree />;
+            case OfferFormSteps.STEP_FOUR:
+                return <OfferFormStepFour />;
             default:
                 return null;
         }

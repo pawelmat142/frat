@@ -25,6 +25,7 @@ export class CreateOfferService {
             category: updatedOffer.STEP_ONE.category!,
             startDate: new Date(updatedOffer.STEP_ONE.startDate),
             languagesRequired: updatedOffer.STEP_ONE.communicationLanguages,
+            requiredCertificates: updatedOffer.STEP_FOUR?.requiredCertificates,
 
             locationCountry: updatedOffer.STEP_TWO.locationCountry!,
             point: PositionUtil.toGeoPoint(updatedOffer.STEP_TWO.geocodedPosition) || existingOffer.point,
@@ -50,6 +51,7 @@ export class CreateOfferService {
             category: newOffer.STEP_ONE.category!,
             startDate: new Date(newOffer.STEP_ONE.startDate),
             languagesRequired: newOffer.STEP_ONE.communicationLanguages,
+            requiredCertificates: newOffer.STEP_FOUR?.requiredCertificates,
             phoneNumber: newOffer.STEP_ONE.phoneNumber,
 
             locationCountry: newOffer.STEP_TWO.locationCountry!,

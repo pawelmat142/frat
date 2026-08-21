@@ -108,6 +108,12 @@
           "info": "Dodaj zdjęcie, logo lub grafikę, aby wyróżnić swoją ofertę. Jeśli pominiesz ten krok, automatycznie wygenerujemy avatar.",
           "title": "Opis i wynagrodzenie"
         },
+        "STEP_FOUR": {
+          "info": "Ten krok jest opcjonalny — jeśli oferta nie ma szczególnych wymagań, po prostu go pomiń.",
+          "searchLabel": "Wyszukaj certyfikat",
+          "selectorLabel": "Wymagane certyfikaty",
+          "title": "Wymagane certyfikaty"
+        },
         "validation": {
           "notFound": "Nie znaleziono oferty.",
           "createError": "Błąd podczas tworzenia oferty, spróbuj ponownie później.",
@@ -778,7 +784,8 @@
         "certificates": {
           "main": "Najczęściej wybierane certyfikaty",
           "label": "Krok 4",
-          "title": "Certyfikaty"
+          "title": "Certyfikaty",
+          "info": "Wskaż swoje certyfikaty i uprawnienia, aby wyróżnić profil i zdobyć więcej zleceń."
         },
         "confirmTitle": "Potwierdź zapisanie profilu",
         "optionalinfo": "Informacje opcjonalne - pokażemy je na Twoim profilu jeśli je wypełnisz.",

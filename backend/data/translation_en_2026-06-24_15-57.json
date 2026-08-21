@@ -109,6 +109,12 @@
           "info": "Add a photo, logo, or graphic to make your offer stand out. If you skip this step, we will automatically generate an avatar for you.",
           "title": "Description and salary"
         },
+        "STEP_FOUR": {
+          "info": "This step is optional — if there are no specific requirements, simply skip it.",
+          "searchLabel": "Search certificates",
+          "selectorLabel": "Required certificates",
+          "title": "Required certificates"
+        },
         "validation": {
           "notFound": "Offer not found.",
           "createError": "Error creating offer, please try again later.",
@@ -779,7 +785,8 @@
         "certificates": {
           "main": "Most common certificates",
           "label": "Step 4",
-          "title": "Certificates"
+          "title": "Certificates",
+          "info": "Select your certificates and permissions to stand out and get more offers."
         },
         "confirmTitle": "Confirm submission",
         "optionalinfo": "Optional information - we will show it on your profile if you fill it out.",

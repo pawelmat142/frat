@@ -138,6 +138,7 @@ CREATE TABLE IF NOT EXISTS jh_offers (
     category VARCHAR(255) NOT NULL,
     start_date DATE NOT NULL,
     languages_required TEXT[],
+    required_certificates TEXT[],
     phone_number JSONB NOT NULL,
     location_country VARCHAR(255) NOT NULL,
     point GEOGRAPHY(Point, 4326),

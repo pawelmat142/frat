@@ -17,7 +17,10 @@ const defaultNewForm = (): OfferForm => ({
         startDate: null,
         communicationLanguages: [],
         phoneNumber: null,
-    }
+    },
+    STEP_FOUR: {
+        requiredCertificates: [],
+    },
 })
 
 const saveFormToLocalStorage = (form: OfferForm) => {
