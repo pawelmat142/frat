@@ -5,9 +5,9 @@ import { PositionUtil } from "@shared/utils/PositionUtil";
 import TileSection from "employee/components/TileSection";
 import CallendarsView from "global/components/callendar/CallendarsView";
 import CategoriesChips from "global/components/chips/CategoriesChips";
+import LanguagesChips from "global/components/chips/LanguagesChips";
 import PseudoView from "global/components/PseudoView";
 import DateDisplay from "global/components/ui/DateDisplay";
-import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
 import ListUi from "global/components/ui/ListUi";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 import { useIsDesktop } from "global/hooks/isMobile";
@@ -114,7 +114,13 @@ const OfferDataSection: React.FC<Props> = ({ offer }) => {
     },
     {
       if: !!offer.languagesRequired?.length,
-      label: `${t("offer.languagesRequired")}: ${offer.languagesRequired?.map((lang) => DictionaryDisplay({ dictionary: "LANGUAGES", value: lang, t }))}`,
+      label: t("offer.languagesRequired"),
+      labelComponent: (
+        <span className="flex gap-2 items-center">
+          {t("offer.languagesRequired")}: {" "}
+          <LanguagesChips languages={offer.languagesRequired} smaller color="primary" />
+        </span>
+      ),
       icon: Ico.LANGUAGE,
     },
     {
