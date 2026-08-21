@@ -21,6 +21,8 @@ import OfferDataSection from "./OfferDataSection";
 import TileSection from "employee/components/TileSection";
 import UserItemTile from "user/components/UserItemTile";
 import OfferCertificatesSection from "./OfferCertificatesSection";
+import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/interfaces/UserListedItem";
+import { UserListedItemService } from "user/services/UserListedItemService";
 
 const OfferView: React.FC = () => {
   const params = useParams<{ offerId?: string }>();
@@ -33,6 +35,9 @@ const OfferView: React.FC = () => {
 
   const confirm = useConfirm();
   const me = userCtx?.me;
+
+  const isSavedOnList = (userCtx.meCtx?.listedItems ?? [])
+    .some(item => item.reference === offerId && item.referenceType === UserListedItemReferenceTypes.OFFER);
 
   const [offer, setOffer] = useState<OfferI | null>(null);
   const [loading, setLoading] = useState(false);
@@ -69,6 +74,18 @@ const OfferView: React.FC = () => {
             deleteOffer(offer);
           },
           icon: Ico.DELETE,
+        },
+        {
+          label: t("user.removeFromList"),
+          if: !isMyOffer && isSavedOnList,
+          onClick: removeListItem,
+          icon: Ico.STAR,
+        },
+        {
+          label: t("user.addToList"),
+          if: !isMyOffer && !isSavedOnList,
+          onClick: addListItem,
+          icon: Ico.STAR,
         },
       ],
     };
@@ -113,6 +130,49 @@ const OfferView: React.FC = () => {
     navigate(Path.getOfferFormEditPath(offer.offerId));
   };
 
+  const addListItem = async () => {
+    if (me?.uid === offer?.uid || !userCtx.meCtx || !offer) return;
+    const meCtx = userCtx.meCtx;
+    try {
+      setLoading(true);
+      const item = await UserListedItemService.addItem({
+        reference: offer.offerId.toString(),
+        referenceType: UserListedItemReferenceTypes.OFFER,
+        listedType: UserListedItemTypes.DEFAULT,
+      });
+      if (!item) {
+        toast.error(t("user.addToListError"));
+        return;
+      }
+      userCtx.updateMeCtx({
+        ...meCtx,
+        listedItems: [...(meCtx.listedItems ?? []), item],
+      });
+      toast.success(t("user.addToListSuccess"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const removeListItem = async () => {
+    if (me?.uid === offer?.uid || !userCtx.meCtx || !offer) return;
+    const listItem = (userCtx.meCtx.listedItems ?? [])
+      .find(item => item.reference === offer.offerId.toString() && item.referenceType === UserListedItemReferenceTypes.OFFER);
+    if (!listItem) return;
+    const meCtx = userCtx.meCtx;
+    try {
+      setLoading(true);
+      await UserListedItemService.removeItem(listItem.id.toString());
+      userCtx.updateMeCtx({
+        ...meCtx,
+        listedItems: (meCtx.listedItems ?? []).filter(item => item.id !== listItem.id),
+      } as Parameters<typeof userCtx.updateMeCtx>[0]);
+      toast.success(t("user.removeFromListSuccess"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const deleteOffer = async (offer: OfferI) => {
     if (!(await confirm(deleteOfferConfirm(t)))) {
       return;
@@ -147,7 +207,7 @@ const OfferView: React.FC = () => {
   const isMyOffer = me?.uid === offer.uid;
 
   const avatarMock = offer.avatarRef ? undefined : (
-    <OfferAvatarMock offer={offer} />
+    <OfferAvatarMock offer={offer} size={AppConfig.DEFAULT_AVATAR_SIZE_BIG}/>
   );
 
   return (
@@ -190,7 +250,6 @@ const OfferView: React.FC = () => {
         </TileSection>
 
         <OfferCertificatesSection offer={offer} />
-{/* TODO dodawanie do ulubionych */}
       </div>
 
     </>
