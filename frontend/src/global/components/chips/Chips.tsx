@@ -2,6 +2,7 @@ interface Props {
     chips: string[]
     mode?: ChipMode,
     size?: ChipSize,
+    smaller?: boolean,
     className?: string
 }
 
@@ -19,13 +20,13 @@ export const ChipSizes = {
 export type ChipMode = typeof ChipModes[keyof typeof ChipModes]; 
 export type ChipSize = typeof ChipSizes[keyof typeof ChipSizes]; 
 
-const Chips: React.FC<Props> = ({ chips, className, mode = ChipModes.PRIMARY, size = ChipSizes.MEDIUM }) => {
+const Chips: React.FC<Props> = ({ chips, className, mode = ChipModes.PRIMARY, size = ChipSizes.MEDIUM, smaller = false }) => {
 
     return (
         <div className={`chip-container ${className || ''}`}>
             {Array.isArray(chips) && !!chips.length
                 && chips.map(v => (
-                    <div key={String(v)} className={`search-chip ${mode} ${size}`}>
+                    <div key={String(v)} className={`search-chip ${mode} ${size}${smaller ? ' smaller' : ''}`}>
                         {v}
                     </div>
                 ))

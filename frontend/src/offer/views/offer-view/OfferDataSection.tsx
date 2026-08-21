@@ -5,6 +5,7 @@ import { PositionUtil } from "@shared/utils/PositionUtil";
 import TileSection from "employee/components/TileSection";
 import CallendarsView from "global/components/callendar/CallendarsView";
 import CategoriesChips from "global/components/chips/CategoriesChips";
+import Chips, { ChipModes } from "global/components/chips/Chips";
 import LanguagesChips from "global/components/chips/LanguagesChips";
 import PseudoView from "global/components/PseudoView";
 import DateDisplay from "global/components/ui/DateDisplay";
@@ -76,6 +77,13 @@ const OfferDataSection: React.FC<Props> = ({ offer }) => {
     floatingBtnCtx.hide();
   };
 
+  const startDate = DateDisplay({
+    date: new Date(offer.startDate!),
+    showYear: false,
+    showFullMonthName: true,
+    t,
+  });
+
   const listItems: MenuItem[] = [
     {
       label: t("offer.workCategory"),
@@ -92,12 +100,17 @@ const OfferDataSection: React.FC<Props> = ({ offer }) => {
       icon: Ico.CATEGORIES,
     },
     {
-      label: `${t("offer.startsFrom")}: ${DateDisplay({
-        date: new Date(offer.startDate!),
-        showYear: false,
-        showFullMonthName: true,
-        t,
-      })}`,
+      label: t("offer.startsFrom"),
+      labelComponent: (
+        <span className="flex gap-2 items-center">
+          {t("offer.startsFrom")}: {" "}
+          <Chips
+            chips={startDate ? [startDate] : []}
+            mode={ChipModes.PRIMARY}
+            smaller
+          />
+        </span>
+      ),
       icon: Ico.CALENDAR,
       onClick: onAvailabilityClick,
     },
