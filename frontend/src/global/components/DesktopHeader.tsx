@@ -59,6 +59,15 @@ const DesktopHeader: React.FC = () => {
                     {me && (
                         <>
                             <button
+                                className="desktop-header-user ripple"
+                                type="button"
+                                onClick={() => navigate(Path.HOME)}
+                                aria-label={`Go to dashboard, ${me.displayName}`}
+                            >
+                                <AvatarTile src={me.avatarRef?.url} alt={me.displayName} size={2.25} circle />
+                                <span className="desktop-header-user-name">{me.displayName}</span>
+                            </button>
+                            <button
                                 className="desktop-header-notifications ripple"
                                 type="button"
                                 onClick={() => navigate(Path.NOTIFICATIONS)}
@@ -74,16 +83,7 @@ const DesktopHeader: React.FC = () => {
                                 )}
                             </button>
                             <button
-                                className="desktop-header-user ripple"
-                                type="button"
-                                onClick={() => navigate(Path.HOME)}
-                                aria-label={`Go to dashboard, ${me.displayName}`}
-                            >
-                                <AvatarTile src={me.avatarRef?.url} alt={me.displayName} size={2.25} circle />
-                                <span className="desktop-header-user-name">{me.displayName}</span>
-                            </button>
-                            <button
-                                className="desktop-header-user-menu-toggle ripple"
+                                className="desktop-header-user-menu-toggle ripple burger"
                                 type="button"
                                 onClick={openUserContextMenu}
                                 aria-label="User menu"

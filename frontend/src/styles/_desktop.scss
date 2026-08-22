@@ -209,6 +209,10 @@
     color: $secondary-text;
     transition: $transition;
 
+    &.burger {
+      color: $primary-text;
+    }
+
     &:hover,
     &:focus-visible {
       color: $primary-text;
