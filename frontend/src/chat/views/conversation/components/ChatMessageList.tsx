@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "user/UserProvider";
 import { useChatConversationContext } from "../ChatConversationProvider";
@@ -9,22 +9,14 @@ import { MenuItem } from "global/interface/controls.interface";
 import { FaCopy } from "react-icons/fa";
 import { Ico } from "global/icon.def";
 import { ChatMessageI } from "@shared/interfaces/ChatI";
-import ContextMenu, { ANIM_DURATION } from "global/components/ui/ContextMenu";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 import { toast } from "react-toastify";
-
-interface MenuState {
-    position: { x: number; y: number };
-    items: MenuItem[];
-}
 
 const ChatMessageList: React.FC = () => {
     const { t } = useTranslation();
     const { me } = useUserContext();
     const { chat, messages, blockedByMe, otherUser, messagesEndRef, handleDeleteMessage, historyUnavailable } = useChatConversationContext();
-    const [menu, setMenu] = useState<MenuState | null>(null);
-    const [closing, setClosing] = useState(false);
-    const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const pendingMenuRef = useRef<MenuState | null>(null);
+    const { openContextMenu } = useGlobalContext();
 
     const isEmpty = !messages.length || !!chat?.blockedByUid;
 
@@ -35,17 +27,6 @@ const ChatMessageList: React.FC = () => {
         t,
         capitalize: false,
     };
-
-    const closeMenu = useCallback(() => {
-        if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
-        pendingMenuRef.current = null;
-        setClosing(true);
-        closeTimerRef.current = setTimeout(() => {
-            setMenu(null);
-            setClosing(false);
-            closeTimerRef.current = null;
-        }, ANIM_DURATION);
-    }, []);
 
     const messageMenuAvailable = (msg: ChatMessageI, isOwn: boolean): boolean => {
         return !!msg.content || isOwn;
@@ -69,24 +50,7 @@ const ChatMessageList: React.FC = () => {
                 onClick: () => handleDeleteMessage(msg),
             },
         ];
-        const visibleItems = items.filter(item => item.if === undefined || !!item.if);
-        if (!visibleItems.length) return;
-
-        const newMenu: MenuState = { position: { x, y }, items };
-
-        if (menu) {
-            if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
-            pendingMenuRef.current = newMenu;
-            setClosing(true);
-            closeTimerRef.current = setTimeout(() => {
-                setMenu(pendingMenuRef.current);
-                pendingMenuRef.current = null;
-                setClosing(false);
-                closeTimerRef.current = null;
-            }, ANIM_DURATION);
-        } else {
-            setMenu(newMenu);
-        }
+        openContextMenu({ x, y }, items);
     };
 
     return (
@@ -135,14 +99,6 @@ const ChatMessageList: React.FC = () => {
                 })
             )}
             <div ref={messagesEndRef} />
-            {menu && (
-                <ContextMenu
-                    items={menu.items}
-                    position={menu.position}
-                    closing={closing}
-                    onClose={closeMenu}
-                />
-            )}
         </div>
     );
 };

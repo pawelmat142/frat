@@ -34,6 +34,13 @@ export const AppConfig = {
 
     ROUTER_ANIMATION_DURATION: 150, // ms
 
+    CONTEXT_MENU: {
+        WIDTH: 180, // px
+        ITEM_HEIGHT: 40, // px
+        PADDING: 8, // px
+        ANIMATION_DURATION: 120, // ms
+    },
+
     DEFAULT_WORKER_SEARCH_SORT_OPTION: WorkerSearchSortOptions.MUTUAL_FRIENDS,
     DEFAULT_OFFER_SEARCH_SORT_OPTION: OfferSearchSortOptions.DISTANCE_ASC,
 } as const;

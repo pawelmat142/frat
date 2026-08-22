@@ -4,6 +4,9 @@ import React from "react"
 import { createContext, useState } from "react"
 import { useIsDesktop } from "global/hooks/isMobile";
 import { Dictionaries } from "@shared/def/dictionary.def";
+import { MenuItem } from "global/interface/controls.interface";
+import ContextMenu from "global/components/ui/ContextMenu";
+import { AppConfig } from "@shared/AppConfig";
 
 interface GlobalContextType {
     isDesktop: boolean;
@@ -13,10 +16,22 @@ interface GlobalContextType {
     getLanguagesList: () => string[];
     hideFooter: () => void;
     showFooter: () => void;
+    openContextMenu: (position: ContextMenuPosition, items: MenuItem[]) => void;
+    closeContextMenu: () => void;
 }
 
 interface Dictionaries {
 	languages: DictionaryI | null;
+}
+
+interface ContextMenuPosition {
+    x: number;
+    y: number;
+}
+
+interface ContextMenuState {
+    position: ContextMenuPosition;
+    items: MenuItem[];
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -29,6 +44,10 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const [loading, setLoading] = useState(false)
     const [isFooterHidden, setIsFooterHidden] = useState(false)
+    const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
+    const [isContextMenuClosing, setIsContextMenuClosing] = useState(false)
+    const contextMenuTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+    const pendingContextMenuRef = React.useRef<ContextMenuState | null>(null)
 
     React.useEffect(() => {
         const initLanguagesDictionary = async () => {
@@ -53,6 +72,41 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const hideFooter = () => setIsFooterHidden(true)
     const showFooter = () => setIsFooterHidden(false)
 
+    const closeContextMenu = React.useCallback(() => {
+        if (contextMenuTimerRef.current) clearTimeout(contextMenuTimerRef.current)
+        pendingContextMenuRef.current = null
+        setIsContextMenuClosing(true)
+        contextMenuTimerRef.current = setTimeout(() => {
+            setContextMenu(null)
+            setIsContextMenuClosing(false)
+            contextMenuTimerRef.current = null
+        }, AppConfig.CONTEXT_MENU.ANIMATION_DURATION)
+    }, [])
+
+    const openContextMenu = React.useCallback((position: ContextMenuPosition, items: MenuItem[]) => {
+        if (!items.some(item => item.if === undefined || !!item.if)) return
+
+        const nextMenu = { position, items }
+        if (contextMenu) {
+            if (contextMenuTimerRef.current) clearTimeout(contextMenuTimerRef.current)
+            pendingContextMenuRef.current = nextMenu
+            setIsContextMenuClosing(true)
+            contextMenuTimerRef.current = setTimeout(() => {
+                setContextMenu(pendingContextMenuRef.current)
+                pendingContextMenuRef.current = null
+                setIsContextMenuClosing(false)
+                contextMenuTimerRef.current = null
+            }, AppConfig.CONTEXT_MENU.ANIMATION_DURATION)
+            return
+        }
+
+        setContextMenu(nextMenu)
+    }, [contextMenu])
+
+    React.useEffect(() => () => {
+        if (contextMenuTimerRef.current) clearTimeout(contextMenuTimerRef.current)
+    }, [])
+
     return (
         <GlobalContext.Provider value={{
             isDesktop: isDesktop,
@@ -64,8 +118,18 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             getLanguagesList,
             hideFooter,
             showFooter,
+            openContextMenu,
+            closeContextMenu,
         }}>
             {children}
+            {contextMenu && (
+                <ContextMenu
+                    items={contextMenu.items}
+                    position={contextMenu.position}
+                    closing={isContextMenuClosing}
+                    onClose={closeContextMenu}
+                />
+            )}
         </GlobalContext.Provider>
     );
 }
