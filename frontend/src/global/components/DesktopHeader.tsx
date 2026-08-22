@@ -131,7 +131,7 @@ const DesktopHeader: React.FC = () => {
                                 onClick={openUserContextMenu}
                                 aria-label="User menu"
                             >
-                                <Ico.MENU size={18} aria-hidden="true" />
+                                <Ico.BURGER size={18} aria-hidden="true" />
                             </button>
                         </>
                     )}

@@ -5,6 +5,7 @@ import { AppConfig } from "@shared/AppConfig";
 
 const GROUP_DIVIDER_HEIGHT = 9;
 const GROUP_HEADER_HEIGHT = 29;
+const MENU_ANCHOR_OVERLAP = 12;
 
 interface Position {
     x: number;
@@ -39,9 +40,14 @@ const ContextMenu: React.FC<Props> = ({ groups, position, closing, onClose }) =>
         AppConfig.CONTEXT_MENU.PADDING * 2,
     );
 
-    const x = position.x + AppConfig.CONTEXT_MENU.WIDTH > window.innerWidth
-        ? window.innerWidth - AppConfig.CONTEXT_MENU.WIDTH - AppConfig.CONTEXT_MENU.PADDING
-        : position.x;
+    const opensToLeft = position.x > window.innerWidth / 2;
+    const idealX = opensToLeft
+        ? position.x - AppConfig.CONTEXT_MENU.WIDTH + MENU_ANCHOR_OVERLAP
+        : position.x - MENU_ANCHOR_OVERLAP;
+    const x = Math.min(
+        Math.max(AppConfig.CONTEXT_MENU.PADDING, idealX),
+        window.innerWidth - AppConfig.CONTEXT_MENU.WIDTH - AppConfig.CONTEXT_MENU.PADDING,
+    );
 
     const y = position.y + menuHeight > window.innerHeight
         ? position.y - menuHeight
