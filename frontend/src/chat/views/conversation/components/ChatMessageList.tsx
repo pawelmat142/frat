@@ -5,7 +5,7 @@ import { useChatConversationContext } from "../ChatConversationProvider";
 import ChatMessageBubble from "./ChatMessageBubble";
 import DateDisplay from "global/components/ui/DateDisplay";
 import { DateUtil } from "@shared/utils/DateUtil";
-import { MenuItem } from "global/interface/controls.interface";
+import { ContextMenuGroup, MenuItem } from "global/interface/controls.interface";
 import { FaCopy } from "react-icons/fa";
 import { Ico } from "global/icon.def";
 import { ChatMessageI } from "@shared/interfaces/ChatI";
@@ -50,7 +50,8 @@ const ChatMessageList: React.FC = () => {
                 onClick: () => handleDeleteMessage(msg),
             },
         ];
-        openContextMenu({ x, y }, items);
+        const groups: ContextMenuGroup[] = [{ items }];
+        openContextMenu({ x, y }, groups);
     };
 
     return (

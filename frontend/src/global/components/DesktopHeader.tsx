@@ -8,10 +8,11 @@ import AvatarTile from 'user/components/AvatarTile';
 import { useNotificationsContext } from 'notification/NotificationsProvider';
 import { NotificationTypes } from '@shared/interfaces/NotificationI';
 import { Ico } from 'global/icon.def';
-import { MenuItemIdentifiers } from 'global/interface/controls.interface';
+import { ContextMenuGroup, MenuItemIdentifiers } from 'global/interface/controls.interface';
 import { useTranslation } from 'react-i18next';
 import { useConfirm } from 'global/providers/PopupProvider';
 import { AuthService } from 'auth/services/AuthService';
+import { useGlobalContext } from 'global/providers/GlobalProvider';
 
 const DesktopHeader: React.FC = () => {
     const { items } = useMenuContext();
@@ -20,45 +21,56 @@ const DesktopHeader: React.FC = () => {
     const { notifications } = useNotificationsContext();
     const { t } = useTranslation();
     const confirm = useConfirm();
-    const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
-    const userMenuRef = React.useRef<HTMLDivElement>(null);
+    const { openContextMenu } = useGlobalContext();
     const unreadNotificationsCount = notifications.filter(
         notification => notification.readAt == null && notification.type !== NotificationTypes.NEW_MESSAGE,
     ).length;
 
-    React.useEffect(() => {
-        if (!isUserMenuOpen) return;
-
-        const closeOnOutsideClick = (event: MouseEvent) => {
-            if (!userMenuRef.current?.contains(event.target as Node)) {
-                setIsUserMenuOpen(false);
-            }
-        };
-        const closeOnEscape = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') setIsUserMenuOpen(false);
-        };
-
-        document.addEventListener('mousedown', closeOnOutsideClick);
-        document.addEventListener('keydown', closeOnEscape);
-        return () => {
-            document.removeEventListener('mousedown', closeOnOutsideClick);
-            document.removeEventListener('keydown', closeOnEscape);
-        };
-    }, [isUserMenuOpen]);
-
     const openPath = (path: string) => {
-        setIsUserMenuOpen(false);
         navigate(path);
     };
 
     const logout = async () => {
-        setIsUserMenuOpen(false);
         const confirmed = await confirm({
             title: t('signin.logoutPopupTitle'),
             message: t('signin.logoutPopupMessage'),
             confirmText: t('signin.logoutPopupConfirm'),
         });
         if (confirmed) await AuthService.logout();
+    };
+
+    const openUserContextMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (!me) return;
+
+        const { left, bottom } = event.currentTarget.getBoundingClientRect();
+        const userMenuGroups: ContextMenuGroup[] = [
+            {
+                items: [
+                    {
+                        label: t('account.showProfile'),
+                        icon: Ico.ACCOUNT,
+                        onClick: () => openPath(Path.getProfilePath(me.uid)),
+                    },
+                    {
+                        label: t('common.settings'),
+                        icon: Ico.SETTINGS,
+                        onClick: () => openPath(Path.SETTINGS),
+                    },
+                ],
+            },
+            {
+                items: [
+                    {
+                        label: t('signin.logout'),
+                        icon: Ico.SIGN_OUT,
+                        className: 'error-color',
+                        onClick: logout,
+                    },
+                ],
+            },
+        ];
+
+        openContextMenu({ x: left, y: bottom + 8 }, userMenuGroups);
     };
 
     return (
@@ -113,35 +125,14 @@ const DesktopHeader: React.FC = () => {
                                 <AvatarTile src={me.avatarRef?.url} alt={me.displayName} size={2.25} circle />
                                 <span className="desktop-header-user-name">{me.displayName}</span>
                             </button>
-                            <div className="desktop-header-user-menu" ref={userMenuRef}>
-                                <button
-                                    className="desktop-header-user-menu-toggle ripple"
-                                    type="button"
-                                    onClick={() => setIsUserMenuOpen(isOpen => !isOpen)}
-                                    aria-label="User menu"
-                                    aria-expanded={isUserMenuOpen}
-                                    aria-controls="desktop-header-user-menu-items"
-                                >
-                                    <Ico.MENU size={18} aria-hidden="true" />
-                                </button>
-                                {isUserMenuOpen && (
-                                    <div id="desktop-header-user-menu-items" className="desktop-header-user-menu-items" role="menu">
-                                        <button type="button" role="menuitem" onClick={() => openPath(Path.getProfilePath(me.uid))}>
-                                            <Ico.ACCOUNT aria-hidden="true" />
-                                            {t('account.showProfile')}
-                                        </button>
-                                        <button type="button" role="menuitem" onClick={() => openPath(Path.SETTINGS)}>
-                                            <Ico.SETTINGS aria-hidden="true" />
-                                            {t('common.settings')}
-                                        </button>
-                                        <div className="desktop-header-user-menu-divider" role="separator" />
-                                        <button type="button" role="menuitem" className="desktop-header-user-menu-logout" onClick={logout}>
-                                            <Ico.SIGN_OUT aria-hidden="true" />
-                                            {t('signin.logout')}
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
+                            <button
+                                className="desktop-header-user-menu-toggle ripple"
+                                type="button"
+                                onClick={openUserContextMenu}
+                                aria-label="User menu"
+                            >
+                                <Ico.MENU size={18} aria-hidden="true" />
+                            </button>
                         </>
                     )}
                 </div>

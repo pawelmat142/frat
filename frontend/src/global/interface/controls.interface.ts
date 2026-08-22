@@ -133,6 +133,11 @@ export interface MenuItem {
     onClick?: (e?: React.MouseEvent) => void
 }
 
+export interface ContextMenuGroup {
+    title?: string
+    items: MenuItem[]
+}
+
 export interface MenuItemListItem {
     label: string
 }
