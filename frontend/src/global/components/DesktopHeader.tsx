@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useMenuContext } from 'global/providers/MenuProvider';
 import { Path } from '../../path';
 import Logo from './Logo';
@@ -11,10 +11,13 @@ import { Ico } from 'global/icon.def';
 import { MenuItemIdentifiers } from 'global/interface/controls.interface';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
 import { useUserMenuGroups } from 'user/menu/useUserMenuGroups';
+import { useTranslation } from 'react-i18next';
 
 const DesktopHeader: React.FC = () => {
     const { items } = useMenuContext();
     const navigate = useNavigate();
+    const location = useLocation();
+    const { t } = useTranslation();
     const { me } = useUserContext();
     const { notifications } = useNotificationsContext();
     const { openContextMenu } = useGlobalContext();
@@ -53,6 +56,14 @@ const DesktopHeader: React.FC = () => {
                             )}
                         </button>
                     ))}
+                    <button
+                        className={`desktop-header-nav-item ripple${location.pathname === Path.ABOUT ? ' active' : ''}`}
+                        type="button"
+                        onClick={() => navigate(Path.ABOUT)}
+                    >
+                        <Ico.COMPASS size={20} aria-hidden="true" />
+                        <span>{t('nav.about')}</span>
+                    </button>
                 </div>
 
                 <div className="desktop-header-actions">

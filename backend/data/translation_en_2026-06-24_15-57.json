@@ -6,7 +6,8 @@
       "start": "Start",
       "offers": "Offers",
       "account": "Account",
-      "employees": "Technicians"
+      "employees": "Technicians",
+      "about": "About"
     },
     "pwa": {
       "install": "Install on home screen",

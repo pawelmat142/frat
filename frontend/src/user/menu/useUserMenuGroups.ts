@@ -82,6 +82,7 @@ export const useUserMenuGroups = ({ onAction }: UseUserMenuGroupsOptions = {}): 
         {
             items: [
                 { label: t("common.settings"), icon: Ico.SETTINGS, onClick: runAction(() => navigate(Path.SETTINGS)) },
+                { label: t("nav.about"), icon: Ico.COMPASS, onClick: runAction(() => navigate(Path.ABOUT)) },
                 { label: t("signin.logout"), icon: Ico.SIGN_OUT, className: "error-color", onClick: runAction(logout) },
             ],
         },

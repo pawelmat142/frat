@@ -53,6 +53,7 @@ import WorkerCertificatesEditView from 'employee/views/form/WorkerCertificatesEd
 import WorkerCertificateDatesEditView from 'employee/views/form/WorkerCertificateDatesEditView';
 import OfferAvailabilityEditView from 'offer/views/form/OfferAvailabilityEditView';
 import OfferView from 'offer/views/offer-view/OfferView';
+import AboutView from 'global/views/AboutView';
 
 const trainingAccess = [UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.SUPERADMIN]
 
@@ -86,6 +87,7 @@ const App: React.FC = () => {
                 <Route path={Path.NOTIFICATION} element={<PageWrapper isProtected><SingleNotificationView /></PageWrapper>} />
                 <Route path={Path.SETTINGS} element={<PageWrapper isProtected><SettingsView /></PageWrapper>} />
                 <Route path={Path.MY_LIST} element={<PageWrapper isProtected><MyListedItemsView /></PageWrapper>} />
+                <Route path={Path.ABOUT} element={<PageWrapper><AboutView /></PageWrapper>} />
 
                 {/* EMPLOYEE PROFILE */}
                 <Route path={Path.WORKER} element={<PageWrapper><WorkerView /></PageWrapper>} />

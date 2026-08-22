@@ -6,7 +6,8 @@
       "start": "Start",
       "offers": "Oferty",
       "account": "Konto",
-      "employees": "Technicy"
+      "employees": "Technicy",
+      "about": "O nas"
     },
     "pwa": {
       "install": "Zainstaluj na ekranie głównym",
