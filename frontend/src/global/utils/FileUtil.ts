@@ -2,8 +2,8 @@ import { AppConfig } from "@shared/AppConfig";
 
 export abstract class FileUtil {
 
-    static readonly ALLOWED_IMAGE_EXTENSIONS = [...AppConfig.UPLOAD_IMG_ALLOWED_EXTENSIONS] as string[];
-    static readonly MAX_FILE_SIZE_MB = AppConfig.UPLOAD_IMG_MAX_SIZE_MB;
+    static readonly ALLOWED_IMAGE_EXTENSIONS = [...AppConfig.UPLOAD_IMG.ALLOWED_EXTENSIONS] as string[];
+    static readonly MAX_FILE_SIZE_MB = AppConfig.UPLOAD_IMG.MAX_SIZE_MB;
 
     // Mobile gallery: scale down to fit within 1080px, preserve aspect ratio
 
@@ -25,7 +25,12 @@ export abstract class FileUtil {
      * Iteratively reduces JPEG quality until output is within the configured target size.
      */
     static resizeForMobile(file: File): Promise<File> {
-        return FileUtil._resizeContain(file, AppConfig.UPLOAD_IMG_MAX_PX, AppConfig.UPLOAD_IMG_QUALITY, AppConfig.UPLOAD_IMG_TARGET_OUTPUT_SIZE_BYTES);
+        return FileUtil._resizeContain(
+            file,
+            AppConfig.UPLOAD_IMG.MAX_PX,
+            AppConfig.UPLOAD_IMG.QUALITY,
+            AppConfig.UPLOAD_IMG.TARGET_OUTPUT_SIZE_BYTES,
+        );
     }
 
     /**
