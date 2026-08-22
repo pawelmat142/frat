@@ -1,7 +1,11 @@
 import Header from "global/components/Header";
 import Logo from "global/components/Logo";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
-const AboutView: React.FC = () => (
+const AboutView: React.FC = () => {
+    const { isDesktop } = useGlobalContext();
+
+    return (
 
     // TODO translacje
     <>
@@ -10,7 +14,7 @@ const AboutView: React.FC = () => (
         <main className="view-container flex flex-col gap-4 pb-8">
             <section className="card text-center">
                 <div className="flex justify-center mb-3">
-                    <Logo size={250} className="!ml-0" />
+                    <Logo size={isDesktop ? 250 : 150} className="!ml-0" />
                 </div>
                 <h1 className="text-2xl font-bold primary-text">FRAT</h1>
                 <p className="secondary-text mt-1">Find Rope Access Technicians</p>
@@ -38,6 +42,7 @@ const AboutView: React.FC = () => (
             </section>
         </main>
     </>
-);
+    );
+};
 
 export default AboutView;

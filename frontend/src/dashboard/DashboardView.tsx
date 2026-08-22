@@ -22,6 +22,7 @@ import MostViewedWorkers from "./MostViewedWorkers";
 import FriendsDashboard from "./FriendsDashboard";
 import Button from "global/components/controls/Button";
 import { useUserMenuGroups } from "user/menu/useUserMenuGroups";
+import AboutDashboard from "./AboutDashboard";
 
 const DashboardView: React.FC = () => {
 
@@ -89,6 +90,8 @@ const DashboardView: React.FC = () => {
         <RecentViewedOffers></RecentViewedOffers>
 
         <RecentViewedWorkers></RecentViewedWorkers>
+
+        <AboutDashboard />
 
         <div className="view-margin">
             <ReportForm />
