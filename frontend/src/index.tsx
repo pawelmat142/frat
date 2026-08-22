@@ -27,12 +27,14 @@ import FloatingButtonWrapper from 'global/fab/FloatingButtonWrapper';
 import { motion } from 'framer-motion';
 import FloatingBtnProvider from 'global/fab/FloatingBtnProvider';
 import { useAppVersionCheck } from 'global/hooks/useAppVersionCheck';
+import DesktopHeader from 'global/components/DesktopHeader';
 
 const AppShell: React.FC = () => {
   const { isFooterHidden } = useGlobalContext();
   useAppVersionCheck();
   return (
     <div className="app-shell">
+      <DesktopHeader />
       <motion.main layout transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }} className={`app-main${isFooterHidden ? ' hide-footer' : ''}`}>
         <App />
       </motion.main>

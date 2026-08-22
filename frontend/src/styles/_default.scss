@@ -182,20 +182,3 @@ a {
 .letter-spacing-0 {
   letter-spacing: 0;
 }
-
-
-// DISPLAY OR NOT
-.desktop-block,
-.desktop-flex {
-  display: none;
-}
-
-@media screen and (min-width: $desktop) {
-  .desktop-block {
-    display: block;
-  }
-
-  .desktop-flex {
-    display: flex;
-  }
-}

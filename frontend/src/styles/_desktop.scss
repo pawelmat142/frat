@@ -1,0 +1,123 @@
+@use 'variables.scss' as *;
+
+
+// DISPLAY OR NOT
+.desktop-block,
+.desktop-flex {
+  display: none;
+}
+
+.desktop-header {
+  display: none;
+}
+
+@media screen and (min-width: $desktop) {
+  .desktop-block {
+    display: block;
+  }
+
+  .desktop-flex {
+    display: flex;
+  }
+
+  // Page-level headers are designed for the mobile layout.
+  // The global desktop header replaces them at this breakpoint.
+  .header {
+    display: none;
+  }
+
+  .desktop-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    width: 100%;
+    min-height: 60px;
+    background-color: $secondary-bg;
+    border-bottom: 1px solid $border-color;
+    box-shadow: $box-shadow;
+  }
+
+  .desktop-header-content {
+    display: grid;
+    grid-template-columns: minmax(11rem, 1fr) auto minmax(11rem, 1fr);
+    align-items: center;
+    min-height: 60px;
+    padding: 0 .75rem;
+  }
+
+  .desktop-header-brand {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    width: fit-content;
+    color: $primary-color;
+    font-weight: $font-bold;
+  }
+
+  .desktop-header .desktop-header-logo {
+    margin-left: 0;
+  }
+
+  .desktop-header-title {
+    font-size: $xlFont;
+    letter-spacing: .04em;
+  }
+
+  .desktop-header-navigation {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+  }
+
+  .desktop-header-nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .5rem .75rem;
+    border-radius: .5rem;
+    color: $secondary-text;
+    font-size: $sFont;
+    font-weight: $font-normal;
+    transition: $transition;
+
+    &:hover,
+    &:focus-visible {
+      color: $primary-text;
+      background-color: $active-bg;
+      outline: none;
+    }
+
+    &:focus-visible {
+      box-shadow: $focus-ring;
+    }
+
+    &.active {
+      color: $primary-color;
+      background-color: $active-bg;
+    }
+  }
+
+  .desktop-header-badge {
+    position: absolute;
+    top: -.35rem;
+    right: -.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.2rem;
+    height: 1.2rem;
+    padding: 0 .25rem;
+    border-radius: 999px;
+    background-color: $error-color;
+    color: white;
+    font-size: .65rem;
+    font-weight: $font-bold;
+  }
+
+  .desktop-header-actions {
+    justify-self: end;
+    min-width: 1px;
+  }
+}
