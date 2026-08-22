@@ -120,8 +120,157 @@
   }
 
   .desktop-header-actions {
+    display: flex;
+    align-items: center;
+    gap: .35rem;
     justify-self: end;
     min-width: 1px;
+  }
+
+  .desktop-header-notifications {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: .5rem;
+    color: $secondary-text;
+    transition: $transition;
+
+    &:hover,
+    &:focus-visible {
+      color: $primary-text;
+      background-color: $active-bg;
+      outline: none;
+    }
+
+    &:focus-visible {
+      box-shadow: $focus-ring;
+    }
+  }
+
+  .desktop-header-notification-badge {
+    position: absolute;
+    top: -.15rem;
+    right: -.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.2rem;
+    height: 1.2rem;
+    padding: 0 .25rem;
+    border-radius: 999px;
+    background-color: $error-color;
+    color: white;
+    font-size: .65rem;
+    font-weight: $font-bold;
+  }
+
+  .desktop-header-user {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    max-width: 14rem;
+    padding: .35rem .5rem;
+    border-radius: 999px;
+    color: $primary-text;
+    font-size: $sFont;
+    font-weight: $font-medium;
+    transition: $transition;
+
+    &:hover,
+    &:focus-visible {
+      background-color: $active-bg;
+      outline: none;
+    }
+
+    &:focus-visible {
+      box-shadow: $focus-ring;
+    }
+
+    .avatar-tile img {
+      display: block;
+    }
+  }
+
+  .desktop-header-user-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .desktop-header-user-menu {
+    position: relative;
+  }
+
+  .desktop-header-user-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: .5rem;
+    color: $secondary-text;
+    transition: $transition;
+
+    &:hover,
+    &:focus-visible {
+      color: $primary-text;
+      background-color: $active-bg;
+      outline: none;
+    }
+
+    &:focus-visible {
+      box-shadow: $focus-ring;
+    }
+  }
+
+  .desktop-header-user-menu-items {
+    position: absolute;
+    top: calc(100% + .5rem);
+    right: 0;
+    z-index: 21;
+    width: max-content;
+    min-width: 12rem;
+    padding: .35rem;
+    border: 1px solid $border-color;
+    border-radius: .5rem;
+    background-color: $secondary-bg;
+    box-shadow: $box-shadow;
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      width: 100%;
+      padding: .6rem .75rem;
+      border-radius: .35rem;
+      color: $primary-text;
+      font-size: $sFont;
+      text-align: left;
+      transition: $transition;
+
+      &:hover,
+      &:focus-visible {
+        background-color: $active-bg;
+        outline: none;
+      }
+
+      &:focus-visible {
+        box-shadow: $focus-ring;
+      }
+    }
+  }
+
+  .desktop-header-user-menu-divider {
+    height: 1px;
+    margin: .35rem 0;
+    background-color: $border-color;
+  }
+
+  .desktop-header-user-menu-logout {
+    color: $error-color !important;
   }
 
   .footer {
