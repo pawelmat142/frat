@@ -1,15 +1,24 @@
+import React from "react";
 import { Ico } from "global/icon.def";
-import { MenuItem } from "global/interface/controls.interface";
+import { MenuGroup, MenuItem } from "global/interface/controls.interface";
 
 interface Props {
-    items: MenuItem[];
+    items?: MenuItem[];
+    groups?: MenuGroup[];
     className?: string;
     itemClassName?: string;
 }
 
-const ListUi: React.FC<Props> = ({ items, className, itemClassName }) => {
+const ListUi: React.FC<Props> = ({ items, groups, className, itemClassName }) => {
 
-    if (!items.length) {
+    const visibleGroups = (groups ?? [{ items: items ?? [] }])
+        .map(group => ({
+            ...group,
+            items: group.items.filter(item => item.if === undefined || !!item.if),
+        }))
+        .filter(group => group.items.length > 0);
+
+    if (!visibleGroups.length) {
         return null;
     }
 
@@ -36,31 +45,36 @@ const ListUi: React.FC<Props> = ({ items, className, itemClassName }) => {
 
     return (
         <div className={className ? className : ""}>
-            {items.filter(item => item.if === undefined || !!item.if).map((item, index) => {
+            {visibleGroups.map((group, groupIndex) => (
+                <React.Fragment key={groupIndex}>
+                    {groupIndex > 0 && <div className="mx-5 my-2 border-t border-[var(--border-color)]" role="separator" />}
+                    {group.title && <div className="secondary-text px-5 pt-3 text-sm font-medium">{group.title}</div>}
+                    {group.items.map((item, index) => {
 
-                const _itemClassName = `${defaultClassName}${item.className ? ` ${item.className}` : ""}${itemClassName ? ` ${itemClassName}` : ""}`;
+                        const _itemClassName = `${defaultClassName}${item.className ? ` ${item.className}` : ""}${itemClassName ? ` ${itemClassName}` : ""}`;
 
-                return <div key={index} className={`py-2${item.onClick ? " ripple" : ""}`} onClick={(e) => onItemClick(e, item)}>
-                    <div className={_itemClassName}>
+                        return <div key={index} className={`py-2${item.onClick ? " ripple" : ""}`} onClick={(e) => onItemClick(e, item)}>
+                            <div className={_itemClassName}>
 
-                        {item.icon && <item.icon size={iconSize} />}
+                                {item.icon && <item.icon size={iconSize} />}
 
-                        {item.labelComponent ? item.labelComponent : <span>{item.label}</span>}
+                                {item.labelComponent ? item.labelComponent : <span>{item.label}</span>}
 
-                        {getRightIcon(item)}
+                                {getRightIcon(item)}
 
-                    </div>
+                            </div>
 
-                    {!!item.list && (<ul className="xs-font view-margin ml-10 mt-1 list-disc">
-                        {item.list.map((subItem, subIndex) => (
-                            <li key={subIndex} className="list-disc"> {subItem.label}</li>
-                        ))}
-                    </ul>)}
+                            {!!item.list && (<ul className="xs-font view-margin ml-10 mt-1 list-disc">
+                                {item.list.map((subItem, subIndex) => (
+                                    <li key={subIndex} className="list-disc"> {subItem.label}</li>
+                                ))}
+                            </ul>)}
 
 
-                </div>
-                
-            })}
+                        </div>
+                    })}
+                </React.Fragment>
+            ))}
         </div>
     )
 };

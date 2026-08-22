@@ -4,7 +4,7 @@ import React from "react"
 import { createContext, useState } from "react"
 import { useIsDesktop } from "global/hooks/isMobile";
 import { Dictionaries } from "@shared/def/dictionary.def";
-import { ContextMenuGroup } from "global/interface/controls.interface";
+import { ContextMenuOptions, MenuGroup } from "global/interface/controls.interface";
 import ContextMenu from "global/components/ui/ContextMenu";
 import { AppConfig } from "@shared/AppConfig";
 
@@ -16,7 +16,7 @@ interface GlobalContextType {
     getLanguagesList: () => string[];
     hideFooter: () => void;
     showFooter: () => void;
-    openContextMenu: (position: ContextMenuPosition, groups: ContextMenuGroup[]) => void;
+    openContextMenu: (position: ContextMenuPosition, groups: MenuGroup[], options?: ContextMenuOptions) => void;
     closeContextMenu: () => void;
 }
 
@@ -31,7 +31,8 @@ interface ContextMenuPosition {
 
 interface ContextMenuState {
     position: ContextMenuPosition;
-    groups: ContextMenuGroup[];
+    groups: MenuGroup[];
+    options?: ContextMenuOptions;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -83,10 +84,10 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }, AppConfig.CONTEXT_MENU.ANIMATION_DURATION)
     }, [])
 
-    const openContextMenu = React.useCallback((position: ContextMenuPosition, groups: ContextMenuGroup[]) => {
+    const openContextMenu = React.useCallback((position: ContextMenuPosition, groups: MenuGroup[], options?: ContextMenuOptions) => {
         if (!groups.some(group => group.items.some(item => item.if === undefined || !!item.if))) return
 
-        const nextMenu = { position, groups }
+        const nextMenu = { position, groups, options }
         if (contextMenu) {
             if (contextMenuTimerRef.current) clearTimeout(contextMenuTimerRef.current)
             pendingContextMenuRef.current = nextMenu
@@ -125,6 +126,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             {contextMenu && (
                 <ContextMenu
                     groups={contextMenu.groups}
+                    width={contextMenu.options?.width}
                     position={contextMenu.position}
                     closing={isContextMenuClosing}
                     onClose={closeContextMenu}

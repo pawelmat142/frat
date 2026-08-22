@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import { ContextMenuGroup } from "global/interface/controls.interface";
+import { MenuGroup } from "global/interface/controls.interface";
 import { AppConfig } from "@shared/AppConfig";
 
 const GROUP_DIVIDER_HEIGHT = 9;
@@ -13,15 +13,17 @@ interface Position {
 }
 
 interface Props {
-    groups: ContextMenuGroup[];
+    groups: MenuGroup[];
     position: Position;
+    width?: number;
     closing: boolean;
     onClose: () => void;
 }
 
-const ContextMenu: React.FC<Props> = ({ groups, position, closing, onClose }) => {
+const ContextMenu: React.FC<Props> = ({ groups, position, width, closing, onClose }) => {
     const menuRef = useRef<HTMLDivElement>(null);
     const [mounted, setMounted] = useState(false);
+    const menuWidth = width ?? AppConfig.CONTEXT_MENU.WIDTH;
     const visibleGroups = groups
         .map(group => ({
             ...group,
@@ -39,19 +41,25 @@ const ContextMenu: React.FC<Props> = ({ groups, position, closing, onClose }) =>
             + (group.title ? GROUP_HEADER_HEIGHT : 0),
         AppConfig.CONTEXT_MENU.PADDING * 2,
     );
+    const maxMenuHeight = window.innerHeight - AppConfig.CONTEXT_MENU.PADDING * 2;
+    const renderedMenuHeight = Math.min(menuHeight, maxMenuHeight);
 
     const opensToLeft = position.x > window.innerWidth / 2;
     const idealX = opensToLeft
-        ? position.x - AppConfig.CONTEXT_MENU.WIDTH + MENU_ANCHOR_OVERLAP
+        ? position.x - menuWidth + MENU_ANCHOR_OVERLAP
         : position.x - MENU_ANCHOR_OVERLAP;
     const x = Math.min(
         Math.max(AppConfig.CONTEXT_MENU.PADDING, idealX),
-        window.innerWidth - AppConfig.CONTEXT_MENU.WIDTH - AppConfig.CONTEXT_MENU.PADDING,
+        window.innerWidth - menuWidth - AppConfig.CONTEXT_MENU.PADDING,
     );
 
-    const y = position.y + menuHeight > window.innerHeight
-        ? position.y - menuHeight
+    const idealY = position.y + renderedMenuHeight > window.innerHeight
+        ? position.y - renderedMenuHeight
         : position.y;
+    const y = Math.min(
+        Math.max(AppConfig.CONTEXT_MENU.PADDING, idealY),
+        window.innerHeight - renderedMenuHeight - AppConfig.CONTEXT_MENU.PADDING,
+    );
 
     useEffect(() => {
         const onPointerDown = (e: PointerEvent) => {
@@ -76,7 +84,9 @@ const ContextMenu: React.FC<Props> = ({ groups, position, closing, onClose }) =>
             style={{
                 top: y,
                 left: x,
-                width: AppConfig.CONTEXT_MENU.WIDTH,
+                width: menuWidth,
+                maxHeight: maxMenuHeight,
+                overflowY: "auto",
                 opacity: closing || !mounted ? 0 : 1,
                 transform: closing || !mounted ? "scale(0.92)" : "scale(1)",
                 transformOrigin: "top left",

@@ -133,9 +133,13 @@ export interface MenuItem {
     onClick?: (e?: React.MouseEvent) => void
 }
 
-export interface ContextMenuGroup {
+export interface MenuGroup {
     title?: string
     items: MenuItem[]
+}
+
+export interface ContextMenuOptions {
+    width?: number
 }
 
 export interface MenuItemListItem {

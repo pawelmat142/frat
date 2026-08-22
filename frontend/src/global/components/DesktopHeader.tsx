@@ -8,69 +8,26 @@ import AvatarTile from 'user/components/AvatarTile';
 import { useNotificationsContext } from 'notification/NotificationsProvider';
 import { NotificationTypes } from '@shared/interfaces/NotificationI';
 import { Ico } from 'global/icon.def';
-import { ContextMenuGroup, MenuItemIdentifiers } from 'global/interface/controls.interface';
-import { useTranslation } from 'react-i18next';
-import { useConfirm } from 'global/providers/PopupProvider';
-import { AuthService } from 'auth/services/AuthService';
+import { MenuItemIdentifiers } from 'global/interface/controls.interface';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
+import { useUserMenuGroups } from 'user/menu/useUserMenuGroups';
 
 const DesktopHeader: React.FC = () => {
     const { items } = useMenuContext();
     const navigate = useNavigate();
     const { me } = useUserContext();
     const { notifications } = useNotificationsContext();
-    const { t } = useTranslation();
-    const confirm = useConfirm();
     const { openContextMenu } = useGlobalContext();
+    const userMenuGroups = useUserMenuGroups();
     const unreadNotificationsCount = notifications.filter(
         notification => notification.readAt == null && notification.type !== NotificationTypes.NEW_MESSAGE,
     ).length;
-
-    const openPath = (path: string) => {
-        navigate(path);
-    };
-
-    const logout = async () => {
-        const confirmed = await confirm({
-            title: t('signin.logoutPopupTitle'),
-            message: t('signin.logoutPopupMessage'),
-            confirmText: t('signin.logoutPopupConfirm'),
-        });
-        if (confirmed) await AuthService.logout();
-    };
 
     const openUserContextMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (!me) return;
 
         const { left, bottom } = event.currentTarget.getBoundingClientRect();
-        const userMenuGroups: ContextMenuGroup[] = [
-            {
-                items: [
-                    {
-                        label: t('account.showProfile'),
-                        icon: Ico.ACCOUNT,
-                        onClick: () => openPath(Path.getProfilePath(me.uid)),
-                    },
-                    {
-                        label: t('common.settings'),
-                        icon: Ico.SETTINGS,
-                        onClick: () => openPath(Path.SETTINGS),
-                    },
-                ],
-            },
-            {
-                items: [
-                    {
-                        label: t('signin.logout'),
-                        icon: Ico.SIGN_OUT,
-                        className: 'error-color',
-                        onClick: logout,
-                    },
-                ],
-            },
-        ];
-
-        openContextMenu({ x: left, y: bottom + 8 }, userMenuGroups);
+        openContextMenu({ x: left, y: bottom + 8 }, userMenuGroups, { width: 260 });
     };
 
     return (
