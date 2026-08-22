@@ -53,7 +53,7 @@ const CountryAndLocationSelector: React.FC<Props> = ({
     onChange,
     errors,
     className = '',
-    radiusSteps = [...AppConfig.RADIUS_STEPS_KM],
+    radiusSteps = [...AppConfig.MAP.RADIUS_STEPS_KM],
     countryRequired = true,
     positionRequired = false,
     config = defaultConfig,

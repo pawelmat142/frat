@@ -4,7 +4,7 @@ import { Ico } from "global/icon.def";
 
 export abstract class NotificationFrontUtil {
     public static getIcon = (notification: NotificationI, size?: number): React.ReactNode => {
-        const iconSize = `${size || AppConfig.DEFAULT_ICON_SIZE}rem`;
+        const iconSize = `${size || AppConfig.SIZE.DEFAULT_ICON}rem`;
         if (NotificationIcons.FRIEND === notification.icon) {
             return <Ico.FRIENDS size={iconSize} />
         }

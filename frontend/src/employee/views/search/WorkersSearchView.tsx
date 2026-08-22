@@ -41,7 +41,7 @@ const WorkersSearchView: React.FC = () => {
         key: FABkey.workerSearch,
         component: <FloatingActionButton
             onClick={() => ctx.setOpenPseudoView(true)}
-            icon={<Ico.SLIDERS size={AppConfig.FAB_BTN_ICON_SIZE} />}
+            icon={<Ico.SLIDERS size={AppConfig.SIZE.FAB_BTN_ICON} />}
         />,
     });
 

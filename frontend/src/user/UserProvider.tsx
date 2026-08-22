@@ -213,7 +213,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	}
 
 	const selectTheme = () => {
-		const iconSize = `${AppConfig.DEFAULT_ICON_SIZE}rem`;
+		const iconSize = `${AppConfig.SIZE.DEFAULT_ICON}rem`;
 
 		const items: SelectorItem[] = Object.values(Themes).map(item => ({
 			label: t(`theme.${item}`),

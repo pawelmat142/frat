@@ -57,7 +57,7 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
             createMap(initialPosition);
         } else {
             // Fallback to default position (Warsaw) if no initial position provided
-            const defaultPosition = AppConfig.DEFAUT_POSITION
+            const defaultPosition = AppConfig.MAP.DEFAUT_POSITION
             createMap(defaultPosition);
         }
     };

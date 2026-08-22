@@ -45,7 +45,7 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
             if (offerId) {
                 const offer = userCtx?.meCtx?.offers?.find((o) => o.offerId === offerId);
                 if (offer) {
-                    return <OfferAvatarMock offer={offer} size={AppConfig.DEFAULT_AVATAR_SIZE} />
+                    return <OfferAvatarMock offer={offer} size={AppConfig.SIZE.DEFAULT_AVATAR} />
                 }
             }
         }

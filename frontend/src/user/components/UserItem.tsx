@@ -16,7 +16,7 @@ interface Props {
     editableAvatar?: boolean
 }
 
-const UserItem: React.FC<Props> = ({ user, size = AppConfig.DEFAULT_AVATAR_SIZE, showNumber = false, allowNavigate = true, bottomRow, editableAvatar=false }) => {
+const UserItem: React.FC<Props> = ({ user, size = AppConfig.SIZE.DEFAULT_AVATAR, showNumber = false, allowNavigate = true, bottomRow, editableAvatar=false }) => {
 
     const navigate = useNavigate();
 

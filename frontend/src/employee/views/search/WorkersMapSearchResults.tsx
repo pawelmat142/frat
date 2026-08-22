@@ -17,7 +17,7 @@ const WorkersMapSearchResults: React.FC = () => {
     const userCtx = useUserContext();
     const globalCtx = useGlobalContext();
 
-    const center = userCtx.position ?? AppConfig.DEFAUT_POSITION;
+    const center = userCtx.position ?? AppConfig.MAP.DEFAUT_POSITION;
 
     const { mapRef, sortedItems, selectedIndex, directionRef, handlePrev, handleNext } =
         useGoogleMapMarkers({

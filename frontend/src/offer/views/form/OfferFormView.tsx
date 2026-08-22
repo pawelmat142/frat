@@ -28,7 +28,7 @@ import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 import { useNotificationsContext } from "notification/NotificationsProvider";
 import { NotificationTypes } from "@shared/interfaces/NotificationI";
 
-const DEFAUT_POSITION = AppConfig.DEFAUT_POSITION;
+const DEFAUT_POSITION = AppConfig.MAP.DEFAUT_POSITION;
 
 const OfferFormContent: React.FC = () => {
 

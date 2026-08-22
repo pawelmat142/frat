@@ -12,7 +12,7 @@ const AvatarMock: React.FC<Props> = ({
     letter,
     color,
     className = "",
-    size = AppConfig.DEFAULT_AVATAR_SIZE
+    size = AppConfig.SIZE.DEFAULT_AVATAR
 }) => {
     return (
         <div 

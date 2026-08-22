@@ -83,7 +83,7 @@ export const WorkerDefaultFilters: WorkerSearchFilters = {
     endDate: null,
 
     locationCountry: null,
-    positionRadiusKm: AppConfig.RADIUS_STEPS_KM[4],
+    positionRadiusKm: AppConfig.MAP.RADIUS_STEPS_KM[4],
 
     communicationLanguages: [],
     categories: [],

@@ -7,7 +7,7 @@ import DateInputViewSelector from "global/components/callendar/DateInputViewSele
 import PhoneNumberFloatingInput from "global/components/controls/PhoneNumberFloatingInput";
 import { AppConfig } from "@shared/AppConfig";
 
-export const DEFAUT_POSITION = AppConfig.DEFAUT_POSITION
+export const DEFAUT_POSITION = AppConfig.MAP.DEFAUT_POSITION
 
 const OfferFormStepOne: React.FC = () => {
 

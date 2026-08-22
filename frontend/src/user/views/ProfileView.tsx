@@ -88,7 +88,7 @@ const ProfileView: React.FC = () => {
         props: { uid: worker?.uid },
         component: <FloatingActionButton
             onClick={openChat}
-            icon={<Ico.MSG size={AppConfig.FAB_BTN_ICON_SIZE} />}
+            icon={<Ico.MSG size={AppConfig.SIZE.FAB_BTN_ICON} />}
         />,
     });
 
