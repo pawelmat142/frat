@@ -10,9 +10,9 @@ const DesktopHeader: React.FC = () => {
 
     return (
         <header className="desktop-header" data-testid="desktop-header">
-            <nav className="desktop-header-content p-container" aria-label="Primary navigation">
+            <nav className="desktop-header-content w-full max-w-6xl" aria-label="Primary navigation">
                 <button className="desktop-header-brand" type="button" onClick={() => navigate(Path.HOME)} aria-label="FRAT home">
-                    <Logo size={32} className="desktop-header-logo" />
+                    <Logo size={52} className="desktop-header-logo" />
                     <span className="desktop-header-title">FRAT</span>
                 </button>
 

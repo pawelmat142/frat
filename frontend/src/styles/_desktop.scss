@@ -31,6 +31,7 @@
     top: 0;
     z-index: 20;
     display: flex;
+    justify-content: center;
     width: 100%;
     min-height: 60px;
     background-color: $secondary-bg;
@@ -121,5 +122,16 @@
   .desktop-header-actions {
     justify-self: end;
     min-width: 1px;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+    background-color: $secondary-bg;
+    border-top: 1px solid $border-color;
+    box-shadow: $box-shadow;
   }
 }

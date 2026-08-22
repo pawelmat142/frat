@@ -1,12 +1,12 @@
 const Footer: React.FC = () => {
   return (
     <footer className="footer">
-      <div className="container">
+      <div className="w-full max-w-6xl">
 
-        <div className="px-4">
+        <div className="flex items-center justify-between px-4">
           <p>2026 FRAT - Find Rope Access Technicians</p>
 
-          <div className="flex items-end gap-2">
+          <div className="flex items-center gap-2">
             <span className="xs-font opacity-40">by</span>
             <a href="https://drawit-pawel-malek.netlify.app/" title="drawit Pawel Malek" rel="noopener noreferrer" target="_blank">
               <img className="h-5 opacity-40" src="https://drawit-pawel-malek.netlify.app/assets/drawit-logo-name-white.png" alt="DrawIt Logo" />
