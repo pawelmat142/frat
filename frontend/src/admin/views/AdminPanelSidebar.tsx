@@ -1,7 +1,4 @@
 import { NavLink } from 'react-router-dom';
-import TranslateIcon from '@mui/icons-material/Translate';
-import HomeIcon from '@mui/icons-material/Home';
-import MessageIcon from '@mui/icons-material/Message';
 import { Path } from '../../path';
 import { Ico } from 'global/icon.def';
 
@@ -59,13 +56,6 @@ const AdminPanelSidebar: React.FC = () => {
         <span>Offers</span>
       </NavLink>
 
-      <NavLink
-        to={Path.HOME}
-        className={({ isActive }) => `btn ripple secondary-txt${isActive ? ' active' : ''}`}    
-      > 
-        <Ico.HOME className="svg-icon" />
-        <span>HOME</span>
-      </NavLink>
     </div>
   );
 }

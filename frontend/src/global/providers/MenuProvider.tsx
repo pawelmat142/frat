@@ -108,7 +108,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         if (isAdmin && globalCtx.isDesktop) {
             items.push({
                 label: t('header.admin'),
-                active: false,
+                active: location.pathname.startsWith(Path.ADMIN_PANEL),
                 onClick: () => navigate(Path.ADMIN_DICTIONARIES),
             });
         }
@@ -132,9 +132,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     }, [authCtx.isAuthenticated, me, notificationsCtx.unreadCount])
     
     useEffect(() => {
-        if (navType === 'POP') {
-            refreshItems();
-        }
+        refreshItems();
     }, [location, navType]);
 
     const setActiveBottomBarItem = (id: MenuItemIdentifier) => {
