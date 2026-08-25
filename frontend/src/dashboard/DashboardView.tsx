@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
 import { EDIT_AVATAR_FLAG_KEY } from "user/components/AvatarTile";
 import { BtnModes } from "global/interface/controls.interface";
-import ReportForm from "global/components/ReportForm";
 import UserProfileItem from "user/components/UserProfileItem";
 import { useTranslation } from "react-i18next";
 import EmailVerificationWarning from "./EmailVerificationWarning";
@@ -92,10 +91,6 @@ const DashboardView: React.FC = () => {
         <RecentViewedWorkers></RecentViewedWorkers>
 
         <AboutDashboard />
-
-        <div className="view-margin">
-            <ReportForm />
-        </div>
 
     </div>)
 }

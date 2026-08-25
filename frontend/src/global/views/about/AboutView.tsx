@@ -33,7 +33,7 @@ const AboutView: React.FC = () => {
 
         <main className="view-container !px-2 sm:!px-4 flex flex-col gap-4 pb-8">
             <Content isDesktop={isDesktop} />
-            <ReportForm />
+            <ReportForm className="!mt-4 !mb-0 !mx-3 !w-auto md:!mx-auto md:!w-full" />
         </main>
     </>
     );

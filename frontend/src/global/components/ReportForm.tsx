@@ -8,9 +8,10 @@ import FloatingInput from './controls/FloatingInput';
 
 interface ReportFormProps {
   title?: string;
+  className?: string;
 }
 
-const ReportForm: React.FC<ReportFormProps> = ({ title }) => {
+const ReportForm: React.FC<ReportFormProps> = ({ title, className }) => {
   const [message, setMessage] = useState('');
   const [contact, setContact] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -42,7 +43,7 @@ const ReportForm: React.FC<ReportFormProps> = ({ title }) => {
 
   if (submitted) {
     return (
-      <div className="card p-6 my-8 text-center">
+      <div className={`card p-6 my-8 text-center ${className ?? ''}`}>
         <h3 className="font-bold text-lg mb-2">{t('report.thankYouTitle')}</h3>
         <p>{t('report.thankYouMsg')}</p>
       </div>
@@ -50,7 +51,7 @@ const ReportForm: React.FC<ReportFormProps> = ({ title }) => {
   }
 
   return (
-  <form className="flex flex-col gap-4 mt-10 mb-8 w-full md:max-w-xl mx-auto" onSubmit={handleSubmit}>
+  <form className={`flex flex-col gap-4 mt-10 mb-8 w-full md:max-w-xl mx-auto ${className ?? ''}`} onSubmit={handleSubmit}>
       <h2 className="secondary-text">{title ?? t('report.title')}</h2>
       <FloatingTextarea
         name="message"
