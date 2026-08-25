@@ -53,7 +53,7 @@ import WorkerCertificatesEditView from 'employee/views/form/WorkerCertificatesEd
 import WorkerCertificateDatesEditView from 'employee/views/form/WorkerCertificateDatesEditView';
 import OfferAvailabilityEditView from 'offer/views/form/OfferAvailabilityEditView';
 import OfferView from 'offer/views/offer-view/OfferView';
-import AboutView from 'global/views/AboutView';
+import AboutView from 'global/views/about/AboutView';
 
 const trainingAccess = [UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.SUPERADMIN]
 
