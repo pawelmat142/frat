@@ -1,5 +1,4 @@
 
-import ReportForm from "global/components/ReportForm";
 import MainTiles from "./MainTiles";
 import { useAuthContext } from "auth/AuthProvider";
 import Loading from "global/components/Loading";
@@ -31,11 +30,7 @@ const HomePage: React.FC = () => {
 
       <div className="view-container">
         <MainTiles />
-
-        <ReportForm />
       </div>
-
-
 
     </div>
   );
