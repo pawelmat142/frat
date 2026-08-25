@@ -128,6 +128,9 @@
 
   .desktop-header-notifications {
     position: relative;
+    // The notification badge extends beyond the button's corner.
+    // Override .ripple's overflow: hidden so it remains fully visible.
+    overflow: visible;
     display: flex;
     align-items: center;
     justify-content: center;
