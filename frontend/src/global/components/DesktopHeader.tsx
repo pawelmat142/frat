@@ -25,6 +25,8 @@ const DesktopHeader: React.FC = () => {
     const unreadNotificationsCount = notifications.filter(
         notification => notification.readAt == null && notification.type !== NotificationTypes.NEW_MESSAGE,
     ).length;
+    const adminPanelItem = items.find(item => item.label === t('header.admin'));
+    const navigationItems = items.filter(item => item !== adminPanelItem);
 
     const openUserContextMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (!me) return;
@@ -42,7 +44,7 @@ const DesktopHeader: React.FC = () => {
                 </button>
 
                 <div className="desktop-header-navigation">
-                    {items.map((item) => (
+                    {navigationItems.map((item) => (
                         <button
                             key={item.id || item.label}
                             className={`desktop-header-nav-item ripple${item.active ? ' active' : ''}`}
@@ -61,9 +63,19 @@ const DesktopHeader: React.FC = () => {
                         type="button"
                         onClick={() => navigate(Path.ABOUT)}
                     >
-                        <Ico.COMPASS size={20} aria-hidden="true" />
+                        <Ico.INFO size={20} aria-hidden="true" />
                         <span>{t('nav.about')}</span>
                     </button>
+                    {adminPanelItem && (
+                        <button
+                            className={`desktop-header-nav-item ripple${adminPanelItem.active ? ' active' : ''}`}
+                            type="button"
+                            onClick={adminPanelItem.onClick}
+                        >
+                            {adminPanelItem.icon && <adminPanelItem.icon size={20} aria-hidden="true" />}
+                            <span>{adminPanelItem.label}</span>
+                        </button>
+                    )}
                 </div>
 
                 <div className="desktop-header-actions">
