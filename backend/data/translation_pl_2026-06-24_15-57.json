@@ -9,6 +9,37 @@
       "employees": "Technicy",
       "about": "O aplikacji"
     },
+    "about": {
+      "title": "O aplikacji",
+      "intro": {
+        "tagline": "Find Rope Access Technicians",
+        "description": "Miejsce dla ludzi z branży prac na wysokości, które ułatwia kontakt, sprawną komunikację i znalezienie odpowiednich osób bez marnowania czasu na przeszukiwanie wielu grup."
+      },
+      "whoWeAre": {
+        "title": "Kim jesteśmy?",
+        "firstParagraph": "Sami od lat pracujemy w tej branży i znamy ją nie tylko z opowieści. Wiemy, jak wygląda szukanie odpowiedniej osoby w krótkim terminie, sprawdzanie uprawnień i próba kontaktu, gdy zlecenie czeka.",
+        "secondParagraph": "Telefony do znajomych, posty na grupach i wiadomości do kilku osób — często właśnie tak powstaje ekipa. Chcemy to uprościć i dać branży jedno miejsce, w którym łatwiej znaleźć właściwy kontakt."
+      },
+      "whyFrat": {
+        "title": "Po co powstał FRAT?",
+        "description": "Chcemy, żeby komunikacja między technikami, firmami i ekipami była prostsza i sprawniejsza. FRAT pomaga szybko znaleźć właściwe osoby — blisko miejsca pracy, z potrzebnymi kwalifikacjami i dostępne wtedy, kiedy naprawdę są potrzebne. Czy to zlecenie na jutro, czy kontrakt na kilka tygodni, mniej czasu idzie na szukanie, a więcej na działanie."
+      },
+      "specialist": {
+        "title": "Szukasz specjalisty do pracy?",
+        "description": "We FRAT możesz znaleźć specjalistę, który pasuje do konkretnego zadania, a nie przypadkową osobę z branży. Od razu widać najważniejsze informacje, więc łatwiej podjąć decyzję i się skontaktować.",
+        "benefits": {
+          "qualifications": "Techników z konkretnymi uprawnieniami, na przykład IRATA lub SPRAT, oraz doświadczeniem.",
+          "details": "Informacje o ważności certyfikatów, zakresie prac, językach i gotowości do wyjazdu.",
+          "search": "Wyszukiwanie po okolicy, dostępności i kwalifikacjach — gdy potrzebujesz wsparcia w krótkim terminie.",
+          "engagement": "Specjalistów na krótkie zlecenie, do stałej ekipy albo na dłuższy kontrakt."
+        }
+      },
+      "work": {
+        "title": "Szukasz pracy lub budujesz ekipę?",
+        "firstParagraph": "Dodawaj i przeglądaj oferty pracy oraz współpracy w jednym miejscu. Możesz sprawdzić, gdzie będzie realizowane zlecenie, od kiedy się zaczyna, jakich umiejętności i języków wymaga oraz jakie są warunki.",
+        "secondParagraph": "Gdy znajdziesz właściwą osobę albo ofertę, możesz od razu napisać wiadomość. Mniej szukania w wielu miejscach, więcej konkretnych ustaleń — tak, żeby wszystkim pracowało się łatwiej."
+      }
+    },
     "pwa": {
       "install": "Zainstaluj na ekranie głównym",
       "success": "Aplikacja została pomyślnie zainstalowana",
@@ -193,6 +224,7 @@
       "items": "elementów",
       "month": "miesiąc",
       "reset": "Reset",
+      "readMore": "Czytaj więcej",
       "start": "Początek",
       "cancel": "Anuluj",
       "search": "Szukaj",

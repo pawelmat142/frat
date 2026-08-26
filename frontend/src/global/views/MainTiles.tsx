@@ -19,7 +19,7 @@ const MainTiles: React.FC = () => {
     const workerSearchCtx = useWorkersSearch()
     const offerSearchCtx = useOfferSearch()
 
-    const tileClass = "p-tile square-tile col-tile bottom-bar-shadow primary-color gap-1"
+    const tileClass = "p-tile square-tile col-tile primary-color gap-1"
     return (
         <div>
             <div className="main-tiles">

@@ -9,6 +9,37 @@
       "employees": "Technicians",
       "about": "About"
     },
+    "about": {
+      "title": "About FRAT",
+      "intro": {
+        "tagline": "Find Rope Access Technicians",
+        "description": "A place for people working at height to connect, communicate clearly, and find the right people without losing time scrolling through countless group posts."
+      },
+      "whoWeAre": {
+        "title": "Who we are",
+        "firstParagraph": "We have spent years working in this field, so we know the pressure of filling a position at short notice, checking credentials, and reaching the right person while a job is waiting to start.",
+        "secondParagraph": "Calls to colleagues, posts in groups, and messages to several people are often how a team comes together. FRAT gives the industry one focused place to make that process simpler."
+      },
+      "whyFrat": {
+        "title": "Why FRAT exists",
+        "description": "FRAT helps technicians, companies, and project teams communicate more easily and work together faster. Find people close to the job, with the right qualifications and availability — whether you need support tomorrow or are building a team for a longer contract."
+      },
+      "specialist": {
+        "title": "Looking for the right specialist?",
+        "description": "FRAT helps you find a specialist who fits the task, not simply someone who works at height. Key details are visible from the start, so choosing the right person and getting in touch takes less time.",
+        "benefits": {
+          "qualifications": "Technicians with specific qualifications, such as IRATA or SPRAT, and relevant experience.",
+          "details": "Certificate expiry dates, work categories, languages, and willingness to travel.",
+          "search": "Search by location, availability, and qualifications when you need support at short notice.",
+          "engagement": "Professionals for a short assignment, a regular crew, or a longer contract."
+        }
+      },
+      "work": {
+        "title": "Looking for work or building a team?",
+        "firstParagraph": "Post and browse work opportunities in one place. See where the job is based, when it starts, which skills and languages are needed, and what the terms are before you reach out.",
+        "secondParagraph": "When a profile or offer looks right, you can message the other person directly. Less searching across different groups and calls; more clear arrangements that help everyone get to work."
+      }
+    },
     "pwa": {
       "install": "Install on home screen",
       "success": "App installed successfully",
@@ -194,6 +225,7 @@
       "items": "items",
       "month": "month",
       "reset": "Reset",
+      "readMore": "Read more",
       "start": "Start",
       "cancel": "Cancel",
       "search": "Search",

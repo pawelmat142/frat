@@ -51,7 +51,7 @@ const ReportForm: React.FC<ReportFormProps> = ({ title, className }) => {
   }
 
   return (
-  <form className={`flex flex-col gap-4 mt-10 mb-8 w-full md:max-w-xl mx-auto ${className ?? ''}`} onSubmit={handleSubmit}>
+  <form className={`flex flex-col gap-4 mt-10 mb-8 w-full md:max-w-xl px-3 mx-auto ${className ?? ''}`} onSubmit={handleSubmit}>
       <h2 className="secondary-text">{title ?? t('report.title')}</h2>
       <FloatingTextarea
         name="message"
