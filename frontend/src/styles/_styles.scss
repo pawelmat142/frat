@@ -522,17 +522,6 @@ $tilePadding: .5rem .5rem;
 
     .p-tile {
         width: 100%;
-        border-radius: .6rem;
-    }
-
-    .sec-tile-label {
-        margin-top: .3rem;
-        text-align: center;
-        font-size: $sFont;
-        color: $primary-text;
-        width: 100%;
-        display: flex;
-        justify-content: center;
     }
 
     @media screen and (min-width: $tablet) {

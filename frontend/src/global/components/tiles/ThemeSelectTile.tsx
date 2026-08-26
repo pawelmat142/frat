@@ -21,13 +21,13 @@ const ThemeSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
 
     return (
         <div className="sec-tile-wrapper" onClick={() => { selectTheme() }}>
-            <div className="p-tile square-tile">
+            <div className="p-tile square-tile col-tile primary-color gap-3">
                 {isDarkMode
                     ? <FaMoon size={iconSize} />
                     : <FaSun size={iconSize} />
                 }
+                <div>{t("theme.title")}</div>
             </div>
-            <div className="sec-tile-label">{t("theme.title")}</div>
         </div>
     )
 
