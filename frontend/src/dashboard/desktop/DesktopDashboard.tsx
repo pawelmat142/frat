@@ -3,16 +3,16 @@ import { Ico } from "global/icon.def";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
-import { Path } from "../path";
-import DesktopDashSection from "./DesktopDashSection";
-import EmailVerificationWarning from "./EmailVerificationWarning";
-import FriendsDashboard from "./FriendsDashboard";
-import LatestOffersDashboard from "./LatestOffersDashboard";
-import MostViewedWorkers from "./MostViewedWorkers";
-import MyListDashboard from "./MyListDashboard";
-import MyOffersDashboard from "./MyOffersDashboard";
-import RecentViewedOffers from "./RecentViewedOffers";
-import RecentViewedWorkers from "./RecentViewedWorkers";
+import { Path } from "../../path";
+import DesktopDashSection from "../DesktopDashSection";
+import EmailVerificationWarning from "../EmailVerificationWarning";
+import FriendsDashboard from "../FriendsDashboard";
+import LatestOffersDashboard from "../LatestOffersDashboard";
+import MostViewedWorkers from "../MostViewedWorkers";
+import MyListDashboard from "../MyListDashboard";
+import MyOffersDashboard from "../MyOffersDashboard";
+import RecentViewedOffers from "../RecentViewedOffers";
+import RecentViewedWorkers from "../RecentViewedWorkers";
 
 const DesktopDashboard: React.FC = () => {
     const navigate = useNavigate();

@@ -21,9 +21,9 @@ import MostViewedWorkers from "./MostViewedWorkers";
 import FriendsDashboard from "./FriendsDashboard";
 import Button from "global/components/controls/Button";
 import { useUserMenuGroups } from "user/menu/useUserMenuGroups";
-import AboutDashboard from "./AboutDashboard";
+import AboutDashboard from "./mobile/AboutDashboard";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import DesktopDashboard from "./DesktopDashboard";
+import DesktopDashboard from "./desktop/DesktopDashboard";
 
 const DashboardView: React.FC = () => {
     const navigate = useNavigate();

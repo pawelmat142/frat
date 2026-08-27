@@ -1,5 +1,5 @@
 import TileSection from "employee/components/TileSection";
-import { Path } from "../path";
+import { Path } from "../../path";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
