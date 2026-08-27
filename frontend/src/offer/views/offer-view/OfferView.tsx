@@ -18,7 +18,7 @@ import OfferAvatarMock from "offer/components/OfferAvatarMock";
 import ListItemImg from "global/components/ListItemImg";
 import { AppConfig } from "@shared/AppConfig";
 import OfferDataSection from "./OfferDataSection";
-import TileSection from "employee/components/TileSection";
+import TileSection from "global/components/tiles/TileSection";
 import UserItemTile from "user/components/UserItemTile";
 import OfferCertificatesSection from "./OfferCertificatesSection";
 import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/interfaces/UserListedItem";

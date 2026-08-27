@@ -2,7 +2,7 @@ import { OfferI } from "@shared/interfaces/OfferI";
 import { DateRange } from "@shared/interfaces/WorkerI";
 import { DateUtil } from "@shared/utils/DateUtil";
 import { PositionUtil } from "@shared/utils/PositionUtil";
-import TileSection from "employee/components/TileSection";
+import TileSection from "global/components/tiles/TileSection";
 import CallendarsView from "global/components/callendar/CallendarsView";
 import CategoriesChips from "global/components/chips/CategoriesChips";
 import Chips, { ChipModes } from "global/components/chips/Chips";

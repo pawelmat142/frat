@@ -7,7 +7,7 @@ import Button from "global/components/controls/Button";
 import FloatingTextarea from "global/components/controls/FloatingTextarea";
 import SkeletonControl from "global/components/controls/SkeletonControl";
 import { WorkerService } from "employee/services/WorkerService";
-import TileSection from "./TileSection";
+import TileSection from "global/components/tiles/TileSection";
 
 interface Props {
     worker: WorkerI;

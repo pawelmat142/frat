@@ -2,7 +2,7 @@ import Button from "global/components/controls/Button";
 import { Ico } from "global/icon.def";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useTranslation } from "react-i18next";
-import TileSection from "employee/components/TileSection";
+import TileSection from "global/components/tiles/TileSection";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 
 interface Props {

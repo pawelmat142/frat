@@ -8,7 +8,7 @@ import Button from "global/components/controls/Button";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../../path";
 import ChecklistUi from "global/components/ui/ChecklistUi";
-import TileSection from "./TileSection";
+import TileSection from "global/components/tiles/TileSection";
 
 interface Props {
     worker: WorkerI;

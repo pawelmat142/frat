@@ -5,7 +5,7 @@ import { Path } from "../../path";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
-import TileSection from "./TileSection";
+import TileSection from "global/components/tiles/TileSection";
 import ChecklistUi from "global/components/ui/ChecklistUi";
 
 interface Props {

@@ -1,4 +1,4 @@
-import TileSection from "employee/components/TileSection";
+import TileSection from "global/components/tiles/TileSection";
 import { Path } from "../../path";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";

@@ -1,5 +1,5 @@
 import { OfferI } from "@shared/interfaces/OfferI";
-import TileSection from "employee/components/TileSection";
+import TileSection from "global/components/tiles/TileSection";
 import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
 import ChecklistUi from "global/components/ui/ChecklistUi";
 import { Ico } from "global/icon.def";

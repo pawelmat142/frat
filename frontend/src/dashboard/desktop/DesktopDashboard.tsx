@@ -1,4 +1,6 @@
+import { AuthService } from "auth/services/AuthService";
 import { Ico } from "global/icon.def";
+import { useConfirm } from "global/providers/PopupProvider";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
@@ -16,8 +18,18 @@ import MyWorkerProfileDashboard from "../MyWorkerProfileDashboard";
 const DesktopDashboard: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const confirm = useConfirm();
     const { me } = useUserContext();
     const firstName = me?.displayName?.split(/\s+/)[0] || "";
+
+    const logout = async () => {
+        const confirmed = await confirm({
+            title: t("signin.logoutPopupTitle"),
+            message: t("signin.logoutPopupMessage"),
+            confirmText: t("signin.logoutPopupConfirm"),
+        });
+        if (confirmed) await AuthService.logout();
+    };
 
     return (
         <div className="desktop-dashboard">
@@ -42,6 +54,15 @@ const DesktopDashboard: React.FC = () => {
                     >
                         <Ico.SETTINGS />
                         <span className="dashboard-action-tile-label">{t("common.settings")}</span>
+                        <Ico.CHEVRON_RIGHT />
+                    </button>
+                    <button
+                        type="button"
+                        className="dashboard-action-tile dashboard-action-tile--logout ripple"
+                        onClick={() => void logout()}
+                    >
+                        <Ico.SIGN_OUT />
+                        <span className="dashboard-action-tile-label">{t("signin.logout")}</span>
                         <Ico.CHEVRON_RIGHT />
                     </button>
                 </div>

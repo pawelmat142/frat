@@ -17,7 +17,7 @@ import { useConfirm } from "global/providers/PopupProvider";
 import LongTapHandler from "global/components/LongTapHandler";
 import PseudoView from "global/components/PseudoView";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import TileSection from "./TileSection";
+import TileSection from "global/components/tiles/TileSection";
 
 interface Props {
     worker: WorkerI;

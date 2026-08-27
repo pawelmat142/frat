@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useUserContext } from "user/UserProvider";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
-import TileSection from "./TileSection";
+import TileSection from "global/components/tiles/TileSection";
 
 interface Props {
     worker: WorkerI;
