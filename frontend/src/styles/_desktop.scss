@@ -43,7 +43,7 @@
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    column-gap: 1.5rem;
+    column-gap: 5rem;
     min-height: 60px;
     padding: 0 .75rem;
   }
@@ -124,7 +124,7 @@
   .desktop-header-actions {
     display: flex;
     align-items: center;
-    gap: .35rem;
+    gap: 1rem;
     justify-self: end;
     min-width: 1px;
   }

@@ -1,7 +1,7 @@
 const Footer: React.FC = () => {
   return (
     <footer className="footer">
-      <div className="w-full max-w-6xl">
+      <div className="w-full max-w-7xl">
 
         <div className="flex items-center justify-between px-4">
           <p>2026 FRAT - Find Rope Access Technicians</p>
