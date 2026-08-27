@@ -65,6 +65,7 @@ const DashboardView: React.FC = () => {
                 user={me}
                 topRightComponent={menu}
                 editableAvatar={editableAvatar}
+                allowNavigate
             ></UserProfileItem>
 
             <EmailVerificationWarning></EmailVerificationWarning>

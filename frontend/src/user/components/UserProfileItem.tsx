@@ -8,9 +8,10 @@ interface Props {
     className?: string
     topRightComponent?: React.ReactNode,
     editableAvatar?: boolean
+    allowNavigate?: boolean
 }
 
-const UserProfileItem: React.FC<Props> = ({ user, className, topRightComponent, editableAvatar = false }) => {
+const UserProfileItem: React.FC<Props> = ({ user, className, topRightComponent, editableAvatar = false, allowNavigate = false }) => {
 
     return (
         <div className={className}>
@@ -18,7 +19,7 @@ const UserProfileItem: React.FC<Props> = ({ user, className, topRightComponent, 
                 <div className="pt-3 pl-3">
                     <UserItem
                         user={user} size={5}
-                        allowNavigate={false}
+                        allowNavigate={allowNavigate}
                         editableAvatar={editableAvatar}
                         bottomRow={<span className="secondary-text s-font">{UserUtil.getContactInfoLine(user)}</span>}
                     ></UserItem>

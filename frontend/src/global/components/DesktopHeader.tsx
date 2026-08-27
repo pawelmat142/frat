@@ -84,8 +84,8 @@ const DesktopHeader: React.FC = () => {
                             <button
                                 className="desktop-header-user ripple"
                                 type="button"
-                                onClick={() => navigate(Path.HOME)}
-                                aria-label={`Go to dashboard, ${me.displayName}`}
+                                onClick={() => navigate(Path.getProfilePath(me.uid))}
+                                aria-label={`Go to profile, ${me.displayName}`}
                             >
                                 <AvatarTile src={me.avatarRef?.url} alt={me.displayName} size={2.25} circle />
                                 <span className="desktop-header-user-name">{me.displayName}</span>

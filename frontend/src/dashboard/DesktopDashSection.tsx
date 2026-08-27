@@ -20,7 +20,17 @@ const DesktopDashSection: React.FC<Props> = ({ title, link, empty, onClick, chil
     if (!isDesktop) {
         return (
             <TileSection title={title} link={link}>
-                {children}
+                {empty ? (
+                    <div className="px-5 pb-3">
+                        <p className="secondary-text s-font">{empty.text}</p>
+                        {empty.actionTitle && empty.onClick && (
+                            <Button mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} onClick={empty.onClick}>
+                                {empty.actionTitle}
+                                <Ico.CHEVRON_RIGHT />
+                            </Button>
+                        )}
+                    </div>
+                ) : children}
             </TileSection>
         );
     }

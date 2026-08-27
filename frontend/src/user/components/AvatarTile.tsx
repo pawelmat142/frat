@@ -60,7 +60,9 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
         return null;
     };
 
-    const handleClick = () => {
+    const handleClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+
         if (isEditing && !isUploading && !pendingFile) {
             fileInputRef.current?.click();
         }

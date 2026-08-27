@@ -62,9 +62,12 @@ const FriendsDashboard: React.FC = () => {
     return (
         <DesktopDashSection
             title={t("account.friends")}
-            link={{ onClick: goToFriends }}
-            empty={isDesktop && !friends.length ? {
-                text: "Nie masz jeszcze znajomych.",
+            link={{
+                title: !friends.length ? t("friends.search") : undefined,
+                onClick: goToFriends,
+            }}
+            empty={!friends.length ? {
+                text: t("friends.dashboardNoFriends"),
             } : undefined}
         >
             {friends.map(({ user, friendship }) => (

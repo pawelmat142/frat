@@ -341,6 +341,7 @@
       "remove": "Remove friend",
       "search": "Search friends",
       "invited": "Invited by you",
+      "dashboardNoFriends": "You have no friends yet",
       "noFriends": "You have no friends yet. Search and add some!",
       "endOfResults": "No more results to display.",
       "removeFailed": "Failed to remove friend",
