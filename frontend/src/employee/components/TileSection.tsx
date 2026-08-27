@@ -8,17 +8,29 @@ interface Props {
     className?: string,
     link?: { title?: string, onClick: () => void }
     primaryBg?: boolean,
+    onClick?: () => void,
     children?: React.ReactNode,
 }
 
-const TileSection: React.FC<Props> = ({ title, children, className, link, primaryBg }) => {
+const TileSection: React.FC<Props> = ({ title, children, className, link, primaryBg, onClick }) => {
 
     const { t } = useTranslation();
 
-    const classs = `mx-3 my-4 pt-2 pb-2 ${primaryBg ? "primary-bg" : "secondary-bg"} rounded-xl ${className || ""}`;
+    const classs = `mx-3 my-4 pt-2 pb-2 ${primaryBg ? "primary-bg" : "secondary-bg"} rounded-xl${onClick ? " tile-section--clickable ripple" : ""} ${className || ""}`;
 
     return (
-        <div className={classs}>
+        <div
+            className={classs}
+            onClick={onClick}
+            role={onClick ? "button" : undefined}
+            tabIndex={onClick ? 0 : undefined}
+            onKeyDown={onClick ? (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    onClick();
+                }
+            } : undefined}
+        >
 
             {!!title || !!link ? (
                 <div className="flex items-center justify-between pb-2">

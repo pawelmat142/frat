@@ -2,8 +2,6 @@ import Loading from "global/components/Loading";
 import ListUi from "global/components/ui/ListUi";
 import { Ico } from "global/icon.def";
 import NotificationsGlobalBar from "notification/components/NotificationsGlobalBar";
-import { Path } from "../path";
-import { useNavigate } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
 import { EDIT_AVATAR_FLAG_KEY } from "user/components/AvatarTile";
 import { BtnModes } from "global/interface/controls.interface";
@@ -19,14 +17,13 @@ import MyOffersDashboard from "./MyOffersDashboard";
 import LatestOffersDashboard from "./LatestOffersDashboard";
 import MostViewedWorkers from "./MostViewedWorkers";
 import FriendsDashboard from "./FriendsDashboard";
-import Button from "global/components/controls/Button";
 import { useUserMenuGroups } from "user/menu/useUserMenuGroups";
 import AboutDashboard from "./mobile/AboutDashboard";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import DesktopDashboard from "./desktop/DesktopDashboard";
+import MyWorkerProfileDashboard from "./MyWorkerProfileDashboard";
 
 const DashboardView: React.FC = () => {
-    const navigate = useNavigate();
     const { t } = useTranslation();
     const userCtx = useUserContext();
     const drawer = useDrawer();
@@ -70,22 +67,7 @@ const DashboardView: React.FC = () => {
 
             <EmailVerificationWarning></EmailVerificationWarning>
 
-            <div className="flex justify-end w-full">
-                {userCtx.meCtx?.workerProfile ? (
-                    <Button
-                        onClick={() => navigate(Path.getWorkerProfilePath(userCtx.meCtx!.workerProfile!.displayName))}
-                        mode={BtnModes.PRIMARY_TXT}
-                    >
-                        {t("user.myWorkerProfile")}
-                        <Ico.CHEVRON_RIGHT />
-                    </Button>
-                ) : (
-                    <Button onClick={() => navigate(Path.WORKER_FORM)} mode={BtnModes.PRIMARY_TXT}>
-                        {t("user.addWorkerProfile")}
-                        <Ico.CHEVRON_RIGHT />
-                    </Button>
-                )}
-            </div>
+            <MyWorkerProfileDashboard />
 
             <MyListDashboard></MyListDashboard>
             <FriendsDashboard></FriendsDashboard>
