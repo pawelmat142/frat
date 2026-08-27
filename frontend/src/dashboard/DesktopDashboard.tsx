@@ -25,7 +25,7 @@ const DesktopDashboard: React.FC = () => {
         <div className="desktop-dashboard">
             <div className="desktop-dashboard-welcome">
                 {/* TODO: translations */}
-                {/* TODO: avatar edit — mobile dashboard uses EDIT_AVATAR_FLAG_KEY on UserProfileItem */}
+                {/* TODO: avatar edit — see AVATAR_EDIT_UX.md; usunąć ten komentarz i plik po implementacji */}
                 <h1 className="desktop-dashboard-welcome-title">Cześć, {firstName}</h1>
             </div>
 
