@@ -74,6 +74,9 @@
 
   .desktop-header-nav-item {
     position: relative;
+    // Badges are positioned outside the button's corner, so they must not be
+    // clipped by .ripple's default overflow: hidden.
+    overflow: visible;
     display: flex;
     align-items: center;
     gap: .45rem;
@@ -327,7 +330,7 @@
   // LIST ITEMS
 
   .list-view-item {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
