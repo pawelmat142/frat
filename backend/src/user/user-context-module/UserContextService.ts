@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { AppConfig } from "@shared/AppConfig";
 import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
 import { MeUserContext, UserContext } from "@shared/interfaces/UserContext";
 import { UserI } from "@shared/interfaces/UserI";
@@ -13,6 +14,8 @@ import { TrainingProviderService } from "training/services/TrainingProviderServi
 import { UserService } from "user/services/UserService";
 import { SettingsService } from "user/settings-module/services/SettingsService";
 import { UserListedItemService } from "user/user-listed-module/services/UserListedItemService";
+
+const DASHBOARD_QUERY_LIMIT = AppConfig.DASHBOARD.DESKTOP_LIMIT;
 
 @Injectable()
 export class UserContextService {
@@ -61,9 +64,9 @@ export class UserContextService {
         
         const recentViewedWorkers = await this.getRecentViewedWorkersListedItems(user.uid);
         const recentViewedOffers = await this.getRecentViewedOffersListedItems(user.uid);
-        const mostViewedProfiles = await this.workersService.getMostViewedProfiles(3);
-        const latestOffers = await this.offersService.getLatestOffers(3);
-        const friendsDashboard = await this.getDashboardFriends(ctx.friendships, user.uid, 3);
+        const mostViewedProfiles = await this.workersService.getMostViewedProfiles(DASHBOARD_QUERY_LIMIT);
+        const latestOffers = await this.offersService.getLatestOffers(DASHBOARD_QUERY_LIMIT);
+        const friendsDashboard = await this.getDashboardFriends(ctx.friendships, user.uid, DASHBOARD_QUERY_LIMIT);
 
         const meCtx: MeUserContext = {
             ...ctx,
@@ -84,7 +87,7 @@ export class UserContextService {
     }
 
     private async getRecentViewedWorkersListedItems(uid: string): Promise<UserListedItem[]> {
-        const recentViews = await this.entityInteractionService.getRecentWorkersViews(uid);
+        const recentViews = await this.entityInteractionService.getRecentWorkersViews(uid, DASHBOARD_QUERY_LIMIT);
         const recentViewedWorkerIds = recentViews.map(v => Number(v.entityId));
         const recentViewedWorkerProfiles = await this.workersService.getWorkersByIds(recentViewedWorkerIds);
         const recentViewedWorkers: UserListedItem[] = recentViewedWorkerProfiles.map(profile => ({
@@ -100,7 +103,7 @@ export class UserContextService {
     }
 
     private async getRecentViewedOffersListedItems(uid: string): Promise<UserListedItem[]> {
-        const recentViews = await this.entityInteractionService.getRecentOffersViews(uid);
+        const recentViews = await this.entityInteractionService.getRecentOffersViews(uid, DASHBOARD_QUERY_LIMIT);
         const recentViewedOfferIds = recentViews.map(v => v.entityId);
         const recentViewedOffersEntities = await this.offersService.getOffersByIds(recentViewedOfferIds);
         const recentViewedOffers: UserListedItem[] = recentViewedOffersEntities.map(offer => ({

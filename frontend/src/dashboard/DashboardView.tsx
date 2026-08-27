@@ -22,77 +22,80 @@ import FriendsDashboard from "./FriendsDashboard";
 import Button from "global/components/controls/Button";
 import { useUserMenuGroups } from "user/menu/useUserMenuGroups";
 import AboutDashboard from "./AboutDashboard";
+import { useGlobalContext } from "global/providers/GlobalProvider";
+import DesktopDashboard from "./DesktopDashboard";
 
 const DashboardView: React.FC = () => {
-
     const navigate = useNavigate();
     const { t } = useTranslation();
     const userCtx = useUserContext();
     const drawer = useDrawer();
+    const { isDesktop } = useGlobalContext();
     const menuGroups = useUserMenuGroups({ onAction: drawer.close });
-
     const me = userCtx.me;
-    const editableAvatar = localStorage.getItem(EDIT_AVATAR_FLAG_KEY) === 'true';
+    const editableAvatar = localStorage.getItem(EDIT_AVATAR_FLAG_KEY) === "true";
 
     if (userCtx.loading || !me) {
-        return <Loading></Loading>
+        return <Loading></Loading>;
     }
 
-    const menu = <IconButton icon={<Ico.BURGER />} mode={BtnModes.SECONDARY_TXT} onClick={() => {
-        drawer.open({
-            showClose: true,
-            title: t("common.menu"),
-            children: <ListUi groups={menuGroups} itemClassName="m-font py-1"></ListUi>
-        })
-    }}></IconButton>;
+    if (isDesktop) {
+        return <DesktopDashboard />;
+    }
 
-    return (<div className="w-full">
+    const menu = (
+        <IconButton
+            icon={<Ico.BURGER />}
+            mode={BtnModes.SECONDARY_TXT}
+            onClick={() => {
+                drawer.open({
+                    showClose: true,
+                    title: t("common.menu"),
+                    children: <ListUi groups={menuGroups} itemClassName="m-font py-1"></ListUi>,
+                });
+            }}
+        ></IconButton>
+    );
 
-        <NotificationsGlobalBar />
+    return (
+        <div className="w-full">
+            <NotificationsGlobalBar />
 
-        <UserProfileItem
-            user={me}
-            topRightComponent={menu}
-            editableAvatar={editableAvatar}
-        ></UserProfileItem>
+            <UserProfileItem
+                user={me}
+                topRightComponent={menu}
+                editableAvatar={editableAvatar}
+            ></UserProfileItem>
 
-        <EmailVerificationWarning></EmailVerificationWarning>
+            <EmailVerificationWarning></EmailVerificationWarning>
 
-        <div className="flex justify-end w-full">
-            {userCtx.meCtx?.workerProfile ? (
-                <Button
-                    onClick={() => navigate(Path.getWorkerProfilePath(userCtx.meCtx!.workerProfile!.displayName))}
-                    mode={BtnModes.PRIMARY_TXT}>
-                    {t("user.myWorkerProfile")}
-                    <Ico.CHEVRON_RIGHT />
-                </Button>
-            ) : (
-                <Button
-                    onClick={() => navigate(Path.WORKER_FORM)}
-                    mode={BtnModes.PRIMARY_TXT}>
-                    {t("user.addWorkerProfile")}
-                    <Ico.CHEVRON_RIGHT />
-                </Button>
-            )}
+            <div className="flex justify-end w-full">
+                {userCtx.meCtx?.workerProfile ? (
+                    <Button
+                        onClick={() => navigate(Path.getWorkerProfilePath(userCtx.meCtx!.workerProfile!.displayName))}
+                        mode={BtnModes.PRIMARY_TXT}
+                    >
+                        {t("user.myWorkerProfile")}
+                        <Ico.CHEVRON_RIGHT />
+                    </Button>
+                ) : (
+                    <Button onClick={() => navigate(Path.WORKER_FORM)} mode={BtnModes.PRIMARY_TXT}>
+                        {t("user.addWorkerProfile")}
+                        <Ico.CHEVRON_RIGHT />
+                    </Button>
+                )}
+            </div>
+
+            <MyListDashboard></MyListDashboard>
+            <FriendsDashboard></FriendsDashboard>
+            <MyOffersDashboard></MyOffersDashboard>
+            <LatestOffersDashboard></LatestOffersDashboard>
+            <MostViewedWorkers></MostViewedWorkers>
+            <RecentViewedOffers></RecentViewedOffers>
+            <RecentViewedWorkers></RecentViewedWorkers>
+            <AboutDashboard />
         </div>
-
-        <MyListDashboard></MyListDashboard>
-
-        <FriendsDashboard></FriendsDashboard>
-
-        <MyOffersDashboard></MyOffersDashboard>
-
-        <LatestOffersDashboard></LatestOffersDashboard>
-
-        <MostViewedWorkers></MostViewedWorkers>
-
-        <RecentViewedOffers></RecentViewedOffers>
-
-        <RecentViewedWorkers></RecentViewedWorkers>
-
-        <AboutDashboard />
-
-    </div>)
-}
+    );
+};
 
 export default DashboardView;

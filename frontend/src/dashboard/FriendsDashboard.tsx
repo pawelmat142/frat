@@ -1,4 +1,3 @@
-import TileSection from "employee/components/TileSection";
 import { Path } from "../path";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -9,31 +8,31 @@ import FriendListItem from "friends/components/FriendListItem";
 import { useEffect, useState } from "react";
 import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI";
 import { UserI } from "@shared/interfaces/UserI";
-
-const DASHBOARD_FRIENDS_LIMIT = 3;
+import { useGlobalContext } from "global/providers/GlobalProvider";
+import { getDashboardLimit } from "./dashboard.def";
+import DesktopDashSection from "./DesktopDashSection";
 
 const FriendsDashboard: React.FC = () => {
-
     const userCtx = useUserContext();
     const friendsCtx = useFriendsContext();
     const usersStorage = useUsersStorage();
     const { t } = useTranslation();
     const navigate = useNavigate();
-
+    const { isDesktop } = useGlobalContext();
     const uid = userCtx.me?.uid;
-
+    const limit = getDashboardLimit(isDesktop);
     const [friends, setFriends] = useState<{ user: UserI, friendship: FriendshipI }[]>([]);
 
     useEffect(() => {
         initFriends();
-    }, [friendsCtx.friendships, uid]);
+    }, [friendsCtx.friendships, uid, limit]);
 
     const initFriends = async () => {
         if (!uid) return;
 
         const accepted = friendsCtx.friendships
             .filter(f => f.status === FriendshipStatuses.ACCEPTED)
-            .slice(0, DASHBOARD_FRIENDS_LIMIT);
+            .slice(0, limit);
 
         if (!accepted.length) {
             setFriends([]);
@@ -58,16 +57,23 @@ const FriendsDashboard: React.FC = () => {
         return null;
     }
 
-    return <TileSection title={t("account.friends")}
-        link={{ onClick: () => navigate(Path.getFriendsPath(uid)) }}>
+    const goToFriends = () => navigate(Path.getFriendsPath(uid));
 
-        {friends.map(({ user, friendship }) => (
-            <div key={user.uid}>
-                <FriendListItem user={user} friendship={friendship}/>
-            </div>
-        ))}
-
-    </TileSection>
-}
+    return (
+        <DesktopDashSection
+            title={t("account.friends")}
+            link={{ onClick: goToFriends }}
+            empty={isDesktop && !friends.length ? {
+                text: "Nie masz jeszcze znajomych.",
+            } : undefined}
+        >
+            {friends.map(({ user, friendship }) => (
+                <div key={user.uid}>
+                    <FriendListItem user={user} friendship={friendship} />
+                </div>
+            ))}
+        </DesktopDashSection>
+    );
+};
 
 export default FriendsDashboard;

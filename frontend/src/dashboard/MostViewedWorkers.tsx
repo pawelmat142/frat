@@ -1,30 +1,41 @@
 import WorkerRecentViewListItem from "employee/components/ListItems/WorkerRecentViewListItem";
-import TileSection from "employee/components/TileSection";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "user/UserProvider";
+import { useWorkersSearch } from "employee/views/search/WorkersSearchProvider";
+import { useGlobalContext } from "global/providers/GlobalProvider";
+import { getDashboardLimit } from "./dashboard.def";
+import DesktopDashSection from "./DesktopDashSection";
 
 const MostViewedWorkers: React.FC = () => {
-
     const userCtx = useUserContext();
     const { t } = useTranslation();
+    const workerSearchCtx = useWorkersSearch();
+    const { isDesktop } = useGlobalContext();
+    const workers = (userCtx.meCtx?.mostViewedProfiles ?? [])
+        .slice()
+        .sort((a, b) => (b.uniqueViewsCount ?? 0) - (a.uniqueViewsCount ?? 0))
+        .slice(0, getDashboardLimit(isDesktop));
 
-    const workers = userCtx.meCtx?.mostViewedProfiles?.sort((a, b) => {
-        a.uniqueViewsCount = a.uniqueViewsCount ?? 0;
-        b.uniqueViewsCount = b.uniqueViewsCount ?? 0;
-        return b.uniqueViewsCount - a.uniqueViewsCount;
-    }) ?? [];
-
-    if (!workers?.length) {
+    if (!workers.length && !isDesktop) {
         return null;
     }
 
-    return <TileSection title={t("user.mostViewedProfiles")}>
-        {workers.map(worker => {
-            return <div key={worker.workerId}>
-                <WorkerRecentViewListItem worker={worker} disableDefaultBorder />
-            </div>
-        })}
-    </TileSection>
-}
+    return (
+        <DesktopDashSection
+            title={t("user.mostViewedProfiles")}
+            empty={isDesktop && !workers.length ? {
+                text: "Brak najczęściej oglądanych techników.",
+                actionTitle: "Szukaj techników",
+                onClick: workerSearchCtx.navToSearch,
+            } : undefined}
+        >
+            {workers.map(worker => (
+                <div key={worker.workerId}>
+                    <WorkerRecentViewListItem worker={worker} disableDefaultBorder />
+                </div>
+            ))}
+        </DesktopDashSection>
+    );
+};
 
 export default MostViewedWorkers;

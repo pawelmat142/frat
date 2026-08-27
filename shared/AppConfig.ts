@@ -48,4 +48,9 @@ export const AppConfig = {
 
     DEFAULT_WORKER_SEARCH_SORT_OPTION: WorkerSearchSortOptions.MUTUAL_FRIENDS,
     DEFAULT_OFFER_SEARCH_SORT_OPTION: OfferSearchSortOptions.DISTANCE_ASC,
+
+    DASHBOARD: {
+        MOBILE_LIMIT: 3,
+        DESKTOP_LIMIT: 5,
+    },
 } as const;
