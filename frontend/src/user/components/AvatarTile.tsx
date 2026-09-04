@@ -29,7 +29,7 @@ const AvatarTile: React.FC<AvatarTileProps> = ({
     alt = "Avatar",
     uid,
     editable = false,
-    size = AppConfig.SIZE.DEFAULT_AVATAR,
+    size = AppConfig.AVATAR.SIZE.DEFAULT,
     circle=false,
 }) => {
     const { t } = useTranslation();

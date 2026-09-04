@@ -22,7 +22,7 @@ interface FileUploadFieldProps {
     imgPlaceholder?: string; 
 }
 
-const AVATAR_PLACEHOLDER = AppConfig.AVATAR_PLACEHOLDER;
+const AVATAR_PLACEHOLDER = AppConfig.AVATAR.PLACEHOLDER;
 const ALLOWED_EXTENSIONS = [...AppConfig.UPLOAD_IMG.ALLOWED_EXTENSIONS] as string[];
 
 const AvatarUploadField: React.FC<FileUploadFieldProps> = ({
