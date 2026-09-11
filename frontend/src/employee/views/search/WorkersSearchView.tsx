@@ -15,6 +15,7 @@ import { FABkey, FABtype } from "global/fab/useFAB";
 import WorkersMapSearchResults from "./WorkersMapSearchResults";
 import WorkersListSearchResults from "./WorkersListSearchResults";
 import WorkersViewModeToggle from "./WorkersViewModeToggle";
+import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
 
 type ViewMode = 'list' | 'map';
 
@@ -36,7 +37,7 @@ const WorkersSearchView: React.FC = () => {
         return next;
     });
 
-    useFAB({
+    useFAB(globalCtx.isDesktop ? null : {
         type: FABtype.filters,
         key: FABkey.workerSearch,
         component: <FloatingActionButton
@@ -57,41 +58,55 @@ const WorkersSearchView: React.FC = () => {
     return (<>
         <Header title={t('employeeProfile.searchTitle')} rightBtn={viewToggleBtn}></Header>
 
-        <div className="list-view pt-0">
-
-            <div className="infinite-scroll-filters">
-                <WorkersSearchFiltersBar />
-            </div>
-
-            {initialLoading ? (
-                <div className="flex flex-col items-center justify-center mt-20">
-                    <Loading />
-                </div>
-            ) : noResults ? (
-                <div className="flex flex-col items-center justify-center mt-20">
-                    <FaUserSlash className="mx-auto text-4xl mb-2 opacity-50" />
-                    <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
-                </div>
-            ) : (
-                <AnimatePresence mode="wait" custom={directionRef.current}>
-                    <motion.div
-                        key={viewMode}
-                        custom={directionRef.current}
-                        variants={{
-                            enter: (d: number) => ({ x: 40 * d, opacity: 0 }),
-                            center: { x: 0, opacity: 1 },
-                            exit: (d: number) => ({ x: -40 * d, opacity: 0 }),
-                        }}
-                        initial="enter"
-                        animate="center"
-                        exit="exit"
-                        transition={{ duration: 0.22, ease: 'easeInOut' }}
-                    >
-                        { viewMode === 'map' ? <WorkersMapSearchResults /> : <WorkersListSearchResults /> }
-                    </motion.div>
-                </AnimatePresence>
+        <div className="list-view workers-search-layout pt-0">
+            {globalCtx.isDesktop && (
+                <aside className="workers-search-sidebar" aria-label={t("employeeProfile.filtersTitle")}>
+                    <WorkersSearchFiltersView variant="sidebar" />
+                </aside>
             )}
 
+            <div className="workers-search-results-area">
+                <div className="infinite-scroll-filters">
+                    <WorkersSearchFiltersBar />
+                </div>
+
+                {globalCtx.isDesktop && (
+                    <div className="workers-search-results-toolbar">
+                        <h1 className="workers-search-results-title">{t('employeeProfile.searchTitle')}</h1>
+                        {viewToggleBtn}
+                    </div>
+                )}
+
+                {initialLoading ? (
+                    <div className="flex flex-col items-center justify-center mt-20">
+                        <Loading />
+                    </div>
+                ) : noResults ? (
+                    <div className="flex flex-col items-center justify-center mt-20">
+                        <FaUserSlash className="mx-auto text-4xl mb-2 opacity-50" />
+                        <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
+                    </div>
+                ) : (
+                    <AnimatePresence mode="wait" custom={directionRef.current}>
+                        <motion.div
+                            key={viewMode}
+                            className="workers-search-results-content"
+                            custom={directionRef.current}
+                            variants={{
+                                enter: (d: number) => ({ x: 40 * d, opacity: 0 }),
+                                center: { x: 0, opacity: 1 },
+                                exit: (d: number) => ({ x: -40 * d, opacity: 0 }),
+                            }}
+                            initial="enter"
+                            animate="center"
+                            exit="exit"
+                            transition={{ duration: 0.22, ease: 'easeInOut' }}
+                        >
+                            { viewMode === 'map' ? <WorkersMapSearchResults /> : <WorkersListSearchResults /> }
+                        </motion.div>
+                    </AnimatePresence>
+                )}
+            </div>
         </div>
     </>
 

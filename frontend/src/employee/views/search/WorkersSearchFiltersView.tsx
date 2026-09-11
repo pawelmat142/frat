@@ -22,16 +22,19 @@ import CertificatesSelector from "global/components/selector/CertificatesSelecto
 
 interface Props {
     onClose?: () => void;
+    variant?: 'overlay' | 'sidebar';
 }
 
-const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
+const WorkersSearchFiltersView: React.FC<Props> = ({ onClose, variant = 'overlay' }) => {
 
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
     const userCtx = useUserContext();
     const ctx: WorkersSearchContextProps = useWorkersSearch()
+    const isSidebar = variant === 'sidebar';
 
     const hasAutofilledLocation = useRef(false);
+    const hasSyncedSidebarFilters = useRef(false);
 
     const [loadingCountry, setLoadingCountry] = useState(false);
 
@@ -78,6 +81,15 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
             f.setValue('sortBy', WorkerSearchSortOptions.START_FROM_ASC);
         }
     }, [])
+
+    useEffect(() => {
+        if (!isSidebar) return;
+        if (!hasSyncedSidebarFilters.current) {
+            hasSyncedSidebarFilters.current = true;
+            return;
+        }
+        f.reset(ctx.filters);
+    }, [ctx.filters, f, isSidebar]);
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading></Loading>
@@ -126,11 +138,12 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
     };
 
     return (
-        <div className="mb-20">
-            <div className="relative flex flex-col primary-bg h-full w-full ">
-                <Header onBack={() => onClose?.()} title={t("employeeProfile.filtersTitle")} />
+        <div className={isSidebar ? "workers-search-filters-sidebar" : "mb-20"}>
+            <div className={isSidebar ? "workers-search-filters-sidebar-content" : "relative flex flex-col primary-bg h-full w-full"}>
+                {!isSidebar && <Header onBack={() => onClose?.()} title={t("employeeProfile.filtersTitle")} />}
+                {isSidebar && <h2 className="workers-search-filters-title">{t("employeeProfile.filtersTitle")}</h2>}
 
-                <form className='flex flex-col flex-1 form-view w-full'
+                <form className={`flex flex-col flex-1 w-full ${isSidebar ? 'workers-search-filters-form' : 'form-view'}`}
                     noValidate
                     onSubmit={f.handleSubmit(submit)}
                 >
