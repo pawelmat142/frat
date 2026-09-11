@@ -316,6 +316,11 @@
     font-size: $sFont;
   }
 
+  .workers-search-view-mode-toggle {
+    gap: .4rem;
+    padding: .5rem .75rem;
+  }
+
   .workers-search-results-content {
     min-width: 0;
   }

@@ -930,6 +930,8 @@
       "likeButton": "Like Technician Profile",
       "profileMenu": "Technician Profile menu",
       "searchTitle": "Technicians",
+      "showMap": "Show map",
+      "showList": "Show list",
       "availability": "Availability",
       "certificates": "Certificates",
       "deleteButton": "Delete Technician Profile",
