@@ -11,10 +11,12 @@ interface Props {
     last?: boolean,
     className?: string,
     disableDefaultBorder?: boolean
-    rightSection?: React.ReactNode
+    rightSection?: React.ReactNode,
+    onClick?: () => void,
+    selected?: boolean,
 }
 
-const WorkerListItem: React.FC<Props> = ({ worker, first, last, className, disableDefaultBorder, rightSection }) => {
+const WorkerListItem: React.FC<Props> = ({ worker, first, last, className, disableDefaultBorder, rightSection, onClick, selected }) => {
 
     const navigate = useNavigate();
 
@@ -23,7 +25,10 @@ const WorkerListItem: React.FC<Props> = ({ worker, first, last, className, disab
     }
 
     return (
-        <div onClick={goToProfileView} className={className}>
+        <div
+            onClick={onClick ?? goToProfileView}
+            className={`${className ?? ''}`}
+        >
             <ListItem
                 imgUrl={worker.avatarRef?.url || AVATAR_MOCK}
                 topLeft={worker.displayName}
@@ -32,6 +37,7 @@ const WorkerListItem: React.FC<Props> = ({ worker, first, last, className, disab
                 last={last}
                 rightSection={rightSection}
                 disableDefaultBorder={disableDefaultBorder}
+                className={selected ? ' worker-search-list-item-selected' : ''}
             ></ListItem>
         </div>
 

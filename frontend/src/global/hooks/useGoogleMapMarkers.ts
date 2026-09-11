@@ -18,6 +18,10 @@ export interface UseGoogleMapMarkersOptions<T> {
     getPosition: (item: T) => { lat: number; lng: number } | null | undefined;
     /** Returns the marker tooltip title for a given item. */
     getTitle?: (item: T) => string;
+    /** Item that should be selected when the map is opened. */
+    selectedItem?: T | null;
+    /** Compares an item with the externally selected item. */
+    isSelectedItem?: (item: T, selectedItem: T) => boolean;
 }
 
 function sortByDistance<T>(
@@ -48,6 +52,8 @@ export function useGoogleMapMarkers<T>({
     sessionKey,
     getPosition,
     getTitle = () => '',
+    selectedItem,
+    isSelectedItem,
 }: UseGoogleMapMarkersOptions<T>) {
     const { t } = useTranslation();
 
@@ -67,6 +73,16 @@ export function useGoogleMapMarkers<T>({
             Math.max(parseInt(sessionStorage.getItem(sessionKey) ?? '0', 10), 0),
             Math.max(sorted.length - 1, 0),
         );
+
+    const getInitialIndex = (sorted: T[]): number => {
+        if (selectedItem && isSelectedItem) {
+            const selectedIndex = sorted.findIndex(item => isSelectedItem(item, selectedItem));
+            if (selectedIndex >= 0) {
+                return selectedIndex;
+            }
+        }
+        return restoreIndex(sorted);
+    };
 
     const centerOnItem = (item?: T, resetZoom = false) => {
         const map = mapInstanceRef.current;
@@ -138,7 +154,7 @@ export function useGoogleMapMarkers<T>({
             placeMarkers(map, sorted);
 
             if (sorted.length > 0) {
-                const idx = restoreIndex(sorted);
+                const idx = getInitialIndex(sorted);
                 hasRestoredIndex.current = true;
                 setSelectedIndex(idx);
                 centerOnItem(sorted[idx], true);
@@ -156,7 +172,7 @@ export function useGoogleMapMarkers<T>({
         const sorted = sortByDistance(items, getPosition, center);
         setSortedItems(sorted);
 
-        const idx = !hasRestoredIndex.current ? restoreIndex(sorted) : 0;
+        const idx = !hasRestoredIndex.current ? getInitialIndex(sorted) : 0;
         hasRestoredIndex.current = true;
 
         setSelectedIndex(idx);

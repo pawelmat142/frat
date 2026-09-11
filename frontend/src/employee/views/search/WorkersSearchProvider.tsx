@@ -67,6 +67,8 @@ export interface WorkersSearchContextProps {
     setFiltersWithSearchAndNavigate: (filters: WorkerSearchFilters) => void;
     resetFilters: () => void;
     results: WorkerWithMutualFriends[];
+    selectedWorker: WorkerWithMutualFriends | null;
+    setSelectedWorker: (worker: WorkerWithMutualFriends | null) => void;
     totalResults: number | null;
     loading: boolean;
     loadingMore: boolean;
@@ -113,6 +115,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [filters, setFilters] = useState<WorkerSearchFilters>(WorkerUtil.parseFiltersFromSearch(location.search, WorkerDefaultFilters))
 
     const [results, setResults] = useState<WorkerWithMutualFriends[]>([]);
+    const [selectedWorker, setSelectedWorker] = useState<WorkerWithMutualFriends | null>(null);
     const [totalResults, setTotalResults] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
@@ -221,6 +224,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
         setFiltersState(newFilters);
         setResults([]);
+        setSelectedWorker(null);
         setTotalResults(null);
         resultsLengthRef.current = 0;
         hasMoreRef.current = false;
@@ -278,6 +282,9 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                     : profile);
             });
         }
+        setSelectedWorker(profile => profile?.uid === updatedProfile.uid
+            ? { ...updatedProfile, mutualFriendsUids: profile.mutualFriendsUids }
+            : profile);
     }
 
     return (
@@ -286,6 +293,8 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setFiltersWithSearchAndNavigate,
             hasMore: hasMoreRef.current,
             results,
+            selectedWorker,
+            setSelectedWorker,
             totalResults,
             loading,
             loadingMore,

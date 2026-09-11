@@ -774,6 +774,7 @@
       "unreadNotificationsMany": "Masz {{count}} nieprzeczytanych powiadomień"
     },
     "employeeProfile": {
+      "openProfile": "Wyświetl profil",
       "edit": "Edytuj profil pracownika",
       "searchResultsCount_0": "{{count}} wynik",
       "searchResultsCount_1": "{{count}} wyniki",

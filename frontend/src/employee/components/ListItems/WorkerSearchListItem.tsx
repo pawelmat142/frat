@@ -1,4 +1,4 @@
-import { WorkerI } from "@shared/interfaces/WorkerI"
+import { WorkerWithMutualFriends } from "@shared/interfaces/WorkerI"
 import { Path } from "../../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -9,16 +9,20 @@ import { useIsDesktop } from "global/hooks/isMobile";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import WorkerListItem from "./WorkerListItem";
+import Button from "global/components/controls/Button";
+import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 
 interface Props {
-    worker: WorkerI,
+    worker: WorkerWithMutualFriends,
     first?: boolean,
     last?: boolean,
     className?: string,
-    disableDefaultBorder?: boolean
+    disableDefaultBorder?: boolean,
+    onSelect?: (worker: WorkerWithMutualFriends) => void,
+    selected?: boolean,
 }
 
-const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className, disableDefaultBorder }) => {
+const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className, disableDefaultBorder, onSelect, selected }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -27,6 +31,11 @@ const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className,
 
     const isDesktop = useIsDesktop();
     const isMyProfile = me?.uid === worker.uid;
+    const showDesktopProfileButton = isDesktop && !!onSelect;
+
+    const openProfile = () => {
+        navigate(Path.getWorkerProfilePath(worker.displayName!));
+    };
 
     const openChat = async () => {
         if (!worker) return;
@@ -52,20 +61,36 @@ const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className,
         window.location.href = `tel:${worker.phoneNumber.prefix}${worker.phoneNumber.number}`;
     }
 
-    const rightSection = isMyProfile ? null : <div className="flex justify-end items-center gap-2">
-        <IconButton onClick={(e) => {
-            e.stopPropagation();
-            openPhoneCall();
-        }}
-            icon={<Ico.PHONE size={20} />}
-        ></IconButton>
-        <IconButton onClick={(e) => {
-            e.stopPropagation();
-            openChat();
-        }}
-            icon={<Ico.MSG size={20} />}
-        ></IconButton>
-    </div>
+    const rightSection = (showDesktopProfileButton || !isMyProfile) ? (
+        <div className="flex justify-end items-center gap-2">
+            {showDesktopProfileButton && (
+                <Button
+                    mode={BtnModes.SECONDARY_TXT}
+                    size={BtnSizes.SMALL}
+                    onClick={(event) => {
+                        event?.stopPropagation();
+                        openProfile();
+                    }}
+                >
+                    {t('employeeProfile.openProfile')}
+                </Button>
+            )}
+            {!isMyProfile && <>
+                <IconButton onClick={(e) => {
+                    e.stopPropagation();
+                    openPhoneCall();
+                }}
+                    icon={<Ico.PHONE size={20} />}
+                ></IconButton>
+                <IconButton onClick={(e) => {
+                    e.stopPropagation();
+                    openChat();
+                }}
+                    icon={<Ico.MSG size={20} />}
+                ></IconButton>
+            </>}
+        </div>
+    ) : null;
 
     return <WorkerListItem
         worker={worker}
@@ -74,6 +99,8 @@ const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className,
         className={className}
         disableDefaultBorder={disableDefaultBorder}
         rightSection={rightSection}
+        onClick={onSelect ? () => onSelect(worker) : undefined}
+        selected={selected}
     ></WorkerListItem>
 
 }

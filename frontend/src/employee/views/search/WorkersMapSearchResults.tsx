@@ -26,6 +26,8 @@ const WorkersMapSearchResults: React.FC = () => {
             sessionKey: MAP_SESSION_KEY,
             getPosition: w => w.geocodedPosition,
             getTitle: w => w.displayName ?? '',
+            selectedItem: ctx.selectedWorker,
+            isSelectedItem: (worker, selectedWorker) => worker.workerId === selectedWorker.workerId,
         });
 
     useEffect(() => {
@@ -42,6 +44,12 @@ const WorkersMapSearchResults: React.FC = () => {
     }
 
     const selectedWorker = sortedItems[selectedIndex];
+
+    useEffect(() => {
+        if (selectedWorker) {
+            ctx.setSelectedWorker(selectedWorker);
+        }
+    }, [selectedWorker]);
 
     return (
         <div className="map-search-container">

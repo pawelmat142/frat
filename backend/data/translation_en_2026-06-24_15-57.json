@@ -775,6 +775,7 @@
       "unreadNotificationsMany": "You have {{count}} unread notifications"
     },
     "employeeProfile": {
+      "openProfile": "Display profile",
       "edit": "Edit technician profile",
       "searchResultsCount": "{{count}} result",
       "searchResultsCount_plural": "{{count}} results",

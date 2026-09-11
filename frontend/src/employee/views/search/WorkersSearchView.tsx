@@ -16,6 +16,7 @@ import WorkersMapSearchResults from "./WorkersMapSearchResults";
 import WorkersListSearchResults from "./WorkersListSearchResults";
 import WorkersViewModeToggle from "./WorkersViewModeToggle";
 import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
+import WorkersSearchPreview from "./WorkersSearchPreview";
 
 type ViewMode = "list" | "map";
 
@@ -60,6 +61,7 @@ const WorkersSearchView: React.FC = () => {
 
   const initialLoading = ctx.loading && ctx.results.length === 0;
   const noResults = !initialLoading && ctx.results.length === 0;
+  const showWorkerPreview = globalCtx.isDesktop && viewMode === "list" && !!ctx.selectedWorker;
 
   const viewToggleBtn = (
     <WorkersViewModeToggle viewMode={viewMode} onClick={toggleViewMode} />
@@ -72,7 +74,7 @@ const WorkersSearchView: React.FC = () => {
         rightBtn={viewToggleBtn}
       ></Header>
 
-      <div className="list-view workers-search-layout">
+      <div className={`list-view workers-search-layout${showWorkerPreview ? " has-worker-preview" : ""}`}>
         {globalCtx.isDesktop && (
           <aside
             className="workers-search-sidebar"
@@ -150,6 +152,8 @@ const WorkersSearchView: React.FC = () => {
             </AnimatePresence>
           )}
         </div>
+
+        {showWorkerPreview && <WorkersSearchPreview worker={ctx.selectedWorker!} />}
       </div>
     </>
   );

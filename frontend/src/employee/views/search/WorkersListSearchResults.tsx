@@ -11,18 +11,24 @@ import { useWorkersSearch } from "./WorkersSearchProvider";
 import { useUserContext } from "user/UserProvider";
 import { UserListedItemService } from "user/services/UserListedItemService";
 import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/interfaces/UserListedItem";
-import { WorkerI } from "@shared/interfaces/WorkerI";
+import { WorkerI, WorkerWithMutualFriends } from "@shared/interfaces/WorkerI";
 import { toast } from "react-toastify";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 const WorkersListSearchResults: React.FC = () => {
     const ctx = useWorkersSearch();
     const userCtx = useUserContext();
+    const globalCtx = useGlobalContext();
     const { t } = useTranslation();
 
     const swipeRefs = useRef<Map<number, SwipeableRowRef>>(new Map());
     const [loading, setLoading] = React.useState(false);
 
     const showEndOfResults = !ctx.loadingMore && !ctx.hasMore && ctx.results.length > 0;
+
+    const toggleSelectedWorker = (worker: WorkerWithMutualFriends) => {
+        ctx.setSelectedWorker(ctx.selectedWorker?.workerId === worker.workerId ? null : worker);
+    };
 
     const addItemToMyList = async (worker: WorkerI) => {
         const meCtx = userCtx.meCtx;
@@ -101,6 +107,8 @@ const WorkersListSearchResults: React.FC = () => {
                                 worker={worker}
                                 first={index === 0}
                                 last={index === (ctx.results?.length ?? 0) - 1}
+                                onSelect={globalCtx.isDesktop ? toggleSelectedWorker : undefined}
+                                selected={ctx.selectedWorker?.workerId === worker.workerId}
                             />
                         </SwipeableRow>
                     );
