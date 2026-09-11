@@ -106,7 +106,7 @@ const ContextMenu: React.FC<Props> = ({ groups, position, width, closing, onClos
                         <button
                             key={itemIndex}
                             type="button"
-                            className={`primary-text flex items-center gap-3 w-full px-4 text-sm text-left transition-colors hover-secondary-bg${item.className ? ` ${item.className}` : ""}`}
+                            className={`primary-text rounded ripple flex items-center gap-3 w-full px-4 text-sm text-left transition-colors hover-secondary-bg${item.className ? ` ${item.className}` : ""}`}
                             style={{ height: AppConfig.CONTEXT_MENU.ITEM_HEIGHT }}
                             onClick={() => {
                                 item.onClick?.();

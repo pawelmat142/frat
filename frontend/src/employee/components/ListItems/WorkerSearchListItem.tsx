@@ -65,7 +65,7 @@ const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className,
         <div className="flex justify-end items-center gap-2">
             {showDesktopProfileButton && (
                 <Button
-                    mode={BtnModes.SECONDARY_TXT}
+                    mode={BtnModes.PRIMARY_TXT}
                     size={BtnSizes.SMALL}
                     onClick={(event) => {
                         event?.stopPropagation();

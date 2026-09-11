@@ -400,6 +400,7 @@
 
   .workers-search-preview-header {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: .75rem;
     padding: 1rem;
@@ -407,8 +408,26 @@
 
   .workers-search-preview .worker-avatar {
     flex-shrink: 0;
-    width: 5.5rem;
-    height: 5.5rem;
+    width: 70%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .workers-search-preview .worker-avatar img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .workers-search-preview .worker-profile-top {
+    align-items: center;
+    width: 100%;
+    text-align: center;
+  }
+
+  .workers-search-preview .worker-profile-top-row {
+    justify-content: center;
   }
 
   .workers-search-preview .rounded-xl {
