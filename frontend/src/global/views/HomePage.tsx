@@ -35,10 +35,10 @@ const HomePage: React.FC = () => {
       </div>
 
       <div className="view-container">
-        <div className="p-4 md:mt-10">
+        <div className="p-4 md:mt-10 mb-5 md:mb-10">
           <AboutIntroSection showLogo={false}></AboutIntroSection>
           <Button
-            className="ml-auto pb-5 pt-2"
+            className="ml-auto pt-3"
             mode={BtnModes.PRIMARY_TXT}
             size={BtnSizes.SMALL}
             onClick={() => navigate(Path.ABOUT)}

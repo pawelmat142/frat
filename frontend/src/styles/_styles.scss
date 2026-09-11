@@ -546,6 +546,10 @@ $tilePadding: .5rem .5rem;
     }
 }
 
+.p-tile-small {
+    border-radius: $tile-radius-small;
+}
+
 .dashboard-tile {
     letter-spacing: 0;
 }

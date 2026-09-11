@@ -8,7 +8,7 @@ interface LangSelectTileProps {
     iconSize?: number;
 }
 
-const ThemeSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
+const ThemeSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 18 }) => {
 
     const { theme } = useTheme();
     const isDarkMode = theme === Themes.DARK;
@@ -21,7 +21,7 @@ const ThemeSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
 
     return (
         <div className="sec-tile-wrapper" onClick={() => { selectTheme() }}>
-            <div className="p-tile square-tile col-tile primary-color gap-3">
+            <div className="p-tile square-tile col-tile primary-color gap-1 p-tile-small">
                 {isDarkMode
                     ? <FaMoon size={iconSize} />
                     : <FaSun size={iconSize} />

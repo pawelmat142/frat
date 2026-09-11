@@ -17,7 +17,7 @@ const LangSelectTile: React.FC<LangSelectTileProps> = ({ iconSize = 24 }) => {
 
     return (
         <div className="sec-tile-wrapper" onClick={() => selectLanguage()}>
-            <div className="p-tile square-tile col-tile primary-color gap-3">
+            <div className="p-tile square-tile col-tile primary-color gap-1 p-tile-small">
                 <Ico.LANGUAGE size={iconSize} />
                 <div>{t("lang.language")}</div>
             </div>

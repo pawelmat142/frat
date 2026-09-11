@@ -11,7 +11,8 @@ import { usePwaInstall } from "global/hooks/usePwaInstall";
 const MainTiles: React.FC = () => {
 
     const iconSize = 42
-
+    const iconSizeSmall = 32
+    
     const navigate = useNavigate()
     const { t } = useTranslation()
     const { install } = usePwaInstall();
@@ -50,9 +51,9 @@ const MainTiles: React.FC = () => {
                 <div className='desktop-flex'></div>
                 <div className=''></div>
 
-                <LangSelectTile iconSize={iconSize} />
+                <LangSelectTile iconSize={iconSizeSmall} />
 
-                <ThemeSelectTile iconSize={iconSize}></ThemeSelectTile>
+                <ThemeSelectTile iconSize={iconSizeSmall}></ThemeSelectTile>
 
             </div>
 
