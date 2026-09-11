@@ -246,6 +246,61 @@
     margin-top: 3rem;
   }
 
+  // Desktop uses a denser control scale than the touch-first mobile UI.
+  // Explicitly large buttons retain their existing size.
+  .btn.medium {
+    padding: .25rem .5rem;
+    font-size: .9375rem;
+    border-radius: .25rem;
+  }
+
+  .icon-btn.medium {
+    padding: .3rem;
+    font-size: .9375rem;
+    border-radius: .25rem;
+  }
+
+  .pp-control {
+    font-size: .9375rem;
+    border-radius: .375rem;
+
+    &.min-height {
+      min-height: 44px;
+    }
+  }
+
+  .skeleton-control {
+    min-height: 44px;
+    border-radius: .375rem;
+  }
+
+  .floating-input {
+    padding-top: 1rem;
+    padding-bottom: .125rem;
+  }
+
+  .floating-label {
+    font-size: .875rem;
+  }
+
+  .floating-label.floating-label-active {
+    top: .15rem;
+    font-size: .7rem;
+  }
+
+  .pp-phone-input {
+    .pp-phone-country-selector {
+      padding-top: 1rem;
+      padding-bottom: .125rem;
+    }
+
+    .pp-phone-number-input {
+      padding-top: 1rem;
+      padding-bottom: .125rem;
+      font-size: .9375rem;
+    }
+  }
+
   // WORKER SEARCH
   .workers-search-layout {
     display: grid;
@@ -316,9 +371,9 @@
     font-size: $sFont;
   }
 
-  .workers-search-view-mode-toggle {
+  .icon-btn.workers-search-view-mode-toggle {
     gap: .4rem;
-    padding: .5rem .75rem;
+    padding: .375rem .625rem;
   }
 
   .workers-search-results-content {
