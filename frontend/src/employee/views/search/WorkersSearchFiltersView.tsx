@@ -19,23 +19,23 @@ import Header from "global/components/Header";
 import { DateUtil } from "@shared/utils/DateUtil";
 import FloatingSelector from "global/components/selector/FloatingSelector";
 import CertificatesSelector from "global/components/selector/CertificatesSelector";
+import { useAutoApplyWorkerFilters } from "./useAutoApplyWorkerFilters";
 
 interface Props {
     onClose?: () => void;
-    variant?: 'overlay' | 'sidebar';
 }
 
-const WorkersSearchFiltersView: React.FC<Props> = ({ onClose, variant = 'overlay' }) => {
+const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
 
     const { t } = useTranslation()
     const globalCtx = useGlobalContext()
     const userCtx = useUserContext();
     const ctx: WorkersSearchContextProps = useWorkersSearch()
-    const isSidebar = variant === 'sidebar';
+    const isDesktop = globalCtx.isDesktop;
 
     const hasAutofilledLocation = useRef(false);
-    const initialSidebarFilters = useRef(ctx.filters);
-    const hasSkippedInitialSidebarSync = useRef(false);
+    const initialDesktopFilters = useRef(ctx.filters);
+    const hasSkippedInitialDesktopSync = useRef(false);
 
     const [loadingCountry, setLoadingCountry] = useState(false);
 
@@ -46,6 +46,15 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose, variant = 'overlay
     const formState = f.watch()
 
     const sortBy = formState.sortBy;
+
+    useAutoApplyWorkerFilters({
+        enabled: isDesktop,
+        form: f,
+        formFilters: formState,
+        appliedFilters: ctx.filters,
+        defaultFilters: WorkerDefaultFilters,
+        onApply: ctx.setFiltersWithSearchAndNavigate,
+    });
 
     useEffect(() => {
         const autofillLocationCountry = async () => {
@@ -84,14 +93,14 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose, variant = 'overlay
     }, [])
 
     useEffect(() => {
-        if (!isSidebar) return;
-        if (ctx.filters === initialSidebarFilters.current) return;
-        if (!hasSkippedInitialSidebarSync.current) {
-            hasSkippedInitialSidebarSync.current = true;
+        if (!isDesktop) return;
+        if (ctx.filters === initialDesktopFilters.current) return;
+        if (!hasSkippedInitialDesktopSync.current) {
+            hasSkippedInitialDesktopSync.current = true;
             return;
         }
         f.reset(ctx.filters);
-    }, [ctx.filters, f, isSidebar]);
+    }, [ctx.filters, f, isDesktop]);
 
     if (globalCtx.loading || !globalCtx.dics.languages) {
         return <Loading></Loading>
@@ -119,6 +128,10 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose, variant = 'overlay
 
     const resetFilters = () => {
         f.reset(WorkerDefaultFilters);
+        if (isDesktop) {
+            ctx.setFiltersWithSearchAndNavigate(WorkerDefaultFilters);
+            return;
+        }
         ctx.resetFilters()
     }
 
@@ -140,12 +153,12 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose, variant = 'overlay
     };
 
     return (
-        <div className={isSidebar ? "workers-search-filters-sidebar" : "mb-20"}>
-            <div className={isSidebar ? "workers-search-filters-sidebar-content" : "relative flex flex-col primary-bg h-full w-full"}>
-                {!isSidebar && <Header onBack={() => onClose?.()} title={t("employeeProfile.filtersTitle")} />}
-                {isSidebar && <h2 className="workers-search-filters-title">{t("employeeProfile.filtersTitle")}</h2>}
+        <div className={isDesktop ? "workers-search-filters-sidebar" : "mb-20"}>
+            <div className={isDesktop ? "workers-search-filters-sidebar-content" : "relative flex flex-col primary-bg h-full w-full"}>
+                {!isDesktop && <Header onBack={() => onClose?.()} title={t("employeeProfile.filtersTitle")} />}
+                {isDesktop && <h2 className="workers-search-filters-title">{t("employeeProfile.filtersTitle")}</h2>}
 
-                <form className={`flex flex-col flex-1 w-full ${isSidebar ? 'workers-search-filters-form' : 'form-view'}`}
+                <form className={`flex flex-col flex-1 w-full ${isDesktop ? 'workers-search-filters-form' : 'form-view'}`}
                     noValidate
                     onSubmit={f.handleSubmit(submit)}
                 >
@@ -245,17 +258,24 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose, variant = 'overlay
                         )}
                     />
 
-                    <div className="mt-10 mb-8">
-                        <Button
-                            size={BtnSizes.LARGE}
-                            mode={BtnModes.PRIMARY} fullWidth type="submit">
-                            <Ico.SEARCH size={22}></Ico.SEARCH>
-                            {t("common.search")}
-                        </Button>
-                        <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-3" fullWidth>
+                    {!isDesktop && (
+                        <div className="mt-10 mb-8">
+                            <Button
+                                size={BtnSizes.LARGE}
+                                mode={BtnModes.PRIMARY} fullWidth type="submit">
+                                <Ico.SEARCH size={22}></Ico.SEARCH>
+                                {t("common.search")}
+                            </Button>
+                            <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-3" fullWidth>
+                                {t("common.reset")}
+                            </Button>
+                        </div>
+                    )}
+                    {isDesktop && (
+                        <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-4" fullWidth>
                             {t("common.reset")}
                         </Button>
-                    </div>
+                    )}
 
                 </form>
             </div>
