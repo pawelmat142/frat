@@ -1,11 +1,9 @@
 import { UserI } from "@shared/interfaces/UserI";
 import { useNavigate } from "react-router-dom";
-import AvatarTile, { AVATAR_MOCK } from "./AvatarTile";
+import AvatarTile from "./AvatarTile";
 import { Path } from "../../path";
-import ListItemImg from "global/components/ListItemImg";
 import { UserUtil } from "@shared/utils/UserUtil";
 import { AppConfig } from "@shared/AppConfig";
-import {useUserContext} from "../UserProvider";
 
 interface Props {
     user: UserI
@@ -16,7 +14,7 @@ interface Props {
     editableAvatar?: boolean
 }
 
-const UserItem: React.FC<Props> = ({ user, size = AppConfig.SIZE.DEFAULT_AVATAR, showNumber = false, allowNavigate = true, bottomRow, editableAvatar=false }) => {
+const UserItem: React.FC<Props> = ({ user, size = AppConfig.AVATAR.SIZE.DEFAULT, showNumber = false, allowNavigate = true, bottomRow, editableAvatar=false }) => {
 
     const navigate = useNavigate();
 

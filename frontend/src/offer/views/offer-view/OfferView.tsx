@@ -207,7 +207,7 @@ const OfferView: React.FC = () => {
   const isMyOffer = me?.uid === offer.uid;
 
   const avatarMock = offer.avatarRef ? undefined : (
-    <OfferAvatarMock offer={offer} size={AppConfig.SIZE.DEFAULT_AVATAR_BIG}/>
+    <OfferAvatarMock offer={offer} size={AppConfig.AVATAR.SIZE.BIG}/>
   );
 
   return (
@@ -222,7 +222,7 @@ const OfferView: React.FC = () => {
           <ListItemImg
             imgUrl={offer.avatarRef?.url}
             component={avatarMock}
-            size={AppConfig.SIZE.DEFAULT_AVATAR_BIG}
+            size={AppConfig.AVATAR.SIZE.BIG}
           />
 
           <div className="worker-profile-top">

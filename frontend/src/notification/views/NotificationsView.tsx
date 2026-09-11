@@ -27,7 +27,7 @@ const NotificationsView: React.FC = () => {
 
     useEffect(() => { }, [notificationsCtx.notifications])
 
-    const iconSize = `${AppConfig.SIZE.DEFAULT_AVATAR}rem`;
+    const iconSize = `${AppConfig.AVATAR.SIZE.DEFAULT}rem`;
 
 
     return <>

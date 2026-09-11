@@ -17,13 +17,6 @@ export const AppConfig = {
 
     CLOUDINARY_BASE_URL: 'https://api.cloudinary.com/v1_1',
 
-    SIZE: {
-        DEFAULT_AVATAR: 3.5, // in rem
-        DEFAULT_AVATAR_BIG: 6, // in rem
-        DEFAULT_ICON: 2,
-        FAB_BTN_ICON: 28,
-    },
-
     UPLOAD_IMG: {
         ALLOWED_EXTENSIONS: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
         MAX_SIZE_MB: 50, // input limit - accept large files, they will be compressed on output
@@ -34,7 +27,30 @@ export const AppConfig = {
 
     CHAT_MAX_IMAGE_STORAGE_MB: 500, // max total image storage per conversation
 
-    AVATAR_PLACEHOLDER: "/assets/img/default-avatar.png",
+    ICON: {
+        SIZE: {
+            DEFAULT: 2, // rem
+            FAB_BTN: 28, // rem
+        }
+    },
+
+    AVATAR: {
+        DEFAULT_COLOR: '#6B7280', // neutral gray fallback
+
+        COLOR_BY_CATEGORY: {
+            ONSHORE: '#f97316',    // orange (distinct)
+            OFFSHORE: '#059669',   // emerald green (distinct from blue)
+            WIND: '#4338ca',       // indigo/purple (distinct)
+        },
+
+        SIZE: {
+            DEFAULT: 3.5, // in rem
+            BIG: 6, // in rem
+        },
+
+        PLACEHOLDER: "/assets/img/default-avatar.png",
+    },
+
     IMG_PLACEHOLDER: "/assets/img/img-placeholder.png",
 
     ROUTER_ANIMATION_DURATION: 150, // ms

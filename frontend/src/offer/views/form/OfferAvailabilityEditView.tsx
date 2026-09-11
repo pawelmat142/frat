@@ -110,7 +110,7 @@ const OfferAvailabilityEditView: React.FC = () => {
                     />
                 </div>) : (
                     <div className="notification-view-icon mt-5">
-                        <OfferAvatarMock offer={offer} size={AppConfig.SIZE.DEFAULT_AVATAR_BIG} />
+                        <OfferAvatarMock offer={offer} size={AppConfig.AVATAR.SIZE.BIG} />
                     </div>
                 )}
 
