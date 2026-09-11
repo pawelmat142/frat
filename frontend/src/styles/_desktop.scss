@@ -255,17 +255,19 @@
     width: 100%;
     max-width: 80rem;
     margin: 0 auto;
-    padding: 1.5rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    padding-bottom: .5rem;
+    height: 100%;
   }
 
   .workers-search-sidebar {
     position: sticky;
     top: 4.75rem;
     max-height: calc(100dvh - 8rem);
+    height: 100%;
     overflow-y: auto;
-    background-color: $secondary-bg;
-    border: 1px solid $border-color;
-    border-radius: $tile-radius;
+    border-right: 1px solid $border-color;
   }
 
   .workers-search-filters-sidebar-content {

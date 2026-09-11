@@ -12,6 +12,7 @@ import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
 import { NavBus } from "global/utils/PseudoViewBus";
 import { MenuItemIdentifiers } from "global/interface/controls.interface";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
+import { useIsDesktop } from "global/hooks/isMobile";
 
 const WORKER_SEARCH_SESSION_STORAGE_KEY = 'workerSearchSession';
 const WORKER_SEARCH_SESSION_TTL_MS = 30 * 60 * 1000;
@@ -135,10 +136,10 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const hasMoreRef = useRef(false);
 
     const filtersValid = !!filters.startDate && !!filters.locationCountry
-
+    const isDesktop = useIsDesktop();
 
     const navToSearch = () => {
-        if (filtersValid) {
+        if (isDesktop || filtersValid) {
             setFiltersWithSearchAndNavigate(filters)
         } else {
             openWorkersPseudoView(true)
@@ -146,6 +147,10 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
 
     const executeSearch = useCallback(async (searchFilters: WorkerSearchFilters, loadMore: boolean) => {
+        if (!searchFilters?.startDate || !searchFilters?.locationCountry) {
+            return;
+        }
+
         const requestId = ++requestIdRef.current;
         if (loadMore) {
             setLoadingMore(true);

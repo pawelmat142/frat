@@ -58,7 +58,7 @@ const WorkersSearchView: React.FC = () => {
     return (<>
         <Header title={t('employeeProfile.searchTitle')} rightBtn={viewToggleBtn}></Header>
 
-        <div className="list-view workers-search-layout pt-0">
+        <div className="list-view workers-search-layout">
             {globalCtx.isDesktop && (
                 <aside className="workers-search-sidebar" aria-label={t("employeeProfile.filtersTitle")}>
                     <WorkersSearchFiltersView variant="sidebar" />

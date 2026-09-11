@@ -34,7 +34,8 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose, variant = 'overlay
     const isSidebar = variant === 'sidebar';
 
     const hasAutofilledLocation = useRef(false);
-    const hasSyncedSidebarFilters = useRef(false);
+    const initialSidebarFilters = useRef(ctx.filters);
+    const hasSkippedInitialSidebarSync = useRef(false);
 
     const [loadingCountry, setLoadingCountry] = useState(false);
 
@@ -84,8 +85,9 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose, variant = 'overlay
 
     useEffect(() => {
         if (!isSidebar) return;
-        if (!hasSyncedSidebarFilters.current) {
-            hasSyncedSidebarFilters.current = true;
+        if (ctx.filters === initialSidebarFilters.current) return;
+        if (!hasSkippedInitialSidebarSync.current) {
+            hasSkippedInitialSidebarSync.current = true;
             return;
         }
         f.reset(ctx.filters);
