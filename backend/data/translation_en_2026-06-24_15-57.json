@@ -776,6 +776,8 @@
     },
     "employeeProfile": {
       "edit": "Edit technician profile",
+      "searchResultsCount": "{{count}} result",
+      "searchResultsCount_plural": "{{count}} results",
       "form": {
         "city": "City",
         "email": "Email",

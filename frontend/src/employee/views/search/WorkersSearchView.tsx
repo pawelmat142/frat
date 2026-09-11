@@ -72,7 +72,17 @@ const WorkersSearchView: React.FC = () => {
 
                 {globalCtx.isDesktop && (
                     <div className="workers-search-results-toolbar">
-                        <h1 className="workers-search-results-title">{t('employeeProfile.searchTitle')}</h1>
+                        <div>
+                            <h1 className="workers-search-results-title">{t('employeeProfile.searchTitle')}</h1>
+                            {ctx.totalResults !== null && (
+                                <p className="workers-search-results-count">
+                                    {t('employeeProfile.searchResultsCount', {
+                                        count: ctx.totalResults,
+                                        defaultValue: `${ctx.totalResults} result${ctx.totalResults === 1 ? '' : 's'}`,
+                                    })}
+                                </p>
+                            )}
+                        </div>
                         {viewToggleBtn}
                     </div>
                 )}

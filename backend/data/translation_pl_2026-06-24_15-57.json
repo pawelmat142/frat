@@ -775,6 +775,9 @@
     },
     "employeeProfile": {
       "edit": "Edytuj profil pracownika",
+      "searchResultsCount_0": "{{count}} wynik",
+      "searchResultsCount_1": "{{count}} wyniki",
+      "searchResultsCount_2": "{{count}} wyników",
       "form": {
         "city": "Miasto",
         "email": "Email",

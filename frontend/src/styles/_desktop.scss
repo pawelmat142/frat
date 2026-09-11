@@ -311,6 +311,12 @@
     font-weight: $font-semibold;
   }
 
+  .workers-search-results-count {
+    margin-top: .15rem;
+    color: $secondary-text;
+    font-size: $sFont;
+  }
+
   .workers-search-results-content {
     min-width: 0;
   }

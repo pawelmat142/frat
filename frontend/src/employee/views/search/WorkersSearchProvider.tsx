@@ -67,6 +67,7 @@ export interface WorkersSearchContextProps {
     setFiltersWithSearchAndNavigate: (filters: WorkerSearchFilters) => void;
     resetFilters: () => void;
     results: WorkerWithMutualFriends[];
+    totalResults: number | null;
     loading: boolean;
     loadingMore: boolean;
     hasMore: boolean;
@@ -112,6 +113,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [filters, setFilters] = useState<WorkerSearchFilters>(WorkerUtil.parseFiltersFromSearch(location.search, WorkerDefaultFilters))
 
     const [results, setResults] = useState<WorkerWithMutualFriends[]>([]);
+    const [totalResults, setTotalResults] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
     const [openPseudoView, setOpenPseudoView] = useState(false);
@@ -179,6 +181,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 setResults(result.profiles)
                 resultsLengthRef.current = result.profiles.length
             }
+            setTotalResults(result.count);
 
             const loaded = searchFilters.skip + result.profiles.length
             const hasMoreValue = loaded < result.count
@@ -218,6 +221,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
         setFiltersState(newFilters);
         setResults([]);
+        setTotalResults(null);
         resultsLengthRef.current = 0;
         hasMoreRef.current = false;
 
@@ -282,6 +286,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setFiltersWithSearchAndNavigate,
             hasMore: hasMoreRef.current,
             results,
+            totalResults,
             loading,
             loadingMore,
             loadMore,

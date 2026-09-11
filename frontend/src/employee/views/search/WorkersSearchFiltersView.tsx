@@ -156,7 +156,7 @@ const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
         <div className={isDesktop ? "workers-search-filters-sidebar" : "mb-20"}>
             <div className={isDesktop ? "workers-search-filters-sidebar-content" : "relative flex flex-col primary-bg h-full w-full"}>
                 {!isDesktop && <Header onBack={() => onClose?.()} title={t("employeeProfile.filtersTitle")} />}
-                {isDesktop && <h2 className="workers-search-filters-title">{t("employeeProfile.filtersTitle")}</h2>}
+                {isDesktop && <h2 className="workers-search-filters-title">{t("common.filters")}</h2>}
 
                 <form className={`flex flex-col flex-1 w-full ${isDesktop ? 'workers-search-filters-form' : 'form-view'}`}
                     noValidate
