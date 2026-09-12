@@ -16,7 +16,7 @@ import WorkersMapSearchResults from "./WorkersMapSearchResults";
 import WorkersListSearchResults from "./WorkersListSearchResults";
 import WorkersViewModeToggle from "./WorkersViewModeToggle";
 import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
-import WorkersSearchPreview from "./WorkersSearchPreview";
+import DesktopWorkersSearchProfilePreview from "./DesktopWorkersSearchProfilePreview";
 
 type ViewMode = "list" | "map";
 
@@ -48,6 +48,7 @@ const WorkersSearchView: React.FC = () => {
       return next;
     });
 
+    // TODO isdesktop jakos globalnie do faba dodac
   useFAB(
     globalCtx.isDesktop
       ? null
@@ -169,7 +170,7 @@ const WorkersSearchView: React.FC = () => {
           }}
         >
           {showWorkerPreview && (
-            <WorkersSearchPreview
+            <DesktopWorkersSearchProfilePreview
               key={ctx.selectedWorker!.workerId}
               worker={ctx.selectedWorker!}
             />

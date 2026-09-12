@@ -19,7 +19,7 @@ interface Props {
     worker: WorkerI;
 }
 
-const WorkersSearchPreview: React.FC<Props> = ({ worker }) => {
+const DesktopWorkersSearchProfilePreview: React.FC<Props> = ({ worker }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const openChat = useOpenChat();
@@ -80,4 +80,4 @@ const WorkersSearchPreview: React.FC<Props> = ({ worker }) => {
     );
 };
 
-export default WorkersSearchPreview;
+export default DesktopWorkersSearchProfilePreview;
