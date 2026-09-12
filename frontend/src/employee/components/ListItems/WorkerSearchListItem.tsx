@@ -34,7 +34,11 @@ const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className,
     const showDesktopProfileButton = isDesktop && !!onSelect;
 
     const openProfile = () => {
-        navigate(Path.getWorkerProfilePath(worker.displayName!));
+        navigate(Path.getWorkerProfilePath(worker.displayName!), {
+            state: {
+                fromSearchView: true,
+            },
+        });
     };
 
     const openPhoneCall = () => {

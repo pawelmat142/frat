@@ -64,7 +64,11 @@ const DesktopWorkersSearchProfilePreview: React.FC<Props> = ({ worker }) => {
                     )}
                     <Button
                         mode={BtnModes.PRIMARY}
-                        onClick={() => navigate(Path.getWorkerProfilePath(worker.displayName))}
+                        onClick={() => navigate(Path.getWorkerProfilePath(worker.displayName), {
+                            state: {
+                                fromSearchView: true,
+                            },
+                        })}
                     >
                         <span className="flex items-center gap-2">
                             {t('employeeProfile.openProfile')}

@@ -1,6 +1,6 @@
 {
   "langCode": "en",
-  "version": 90,
+  "version": 91,
   "data": {
     "nav": {
       "start": "Start",
@@ -956,7 +956,8 @@
       "worksInIndurstryYears": "Works in the industry for {{years}} years",
       "activationSuccessToast": "Technician profile activated successfully",
       "worksInIndurstryMonths": "Works in the industry for {{months}} months",
-      "deactivationSuccessToast": "Technician profile deactivated successfully"
+      "deactivationSuccessToast": "Technician profile deactivated successfully",
+      "backToSearch": "Back to search"
     }
   }
 }

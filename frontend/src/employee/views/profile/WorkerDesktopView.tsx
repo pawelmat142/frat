@@ -13,6 +13,8 @@ import PositionWidget from "employee/components/PositionWidget";
 import Button from "global/components/controls/Button";
 import { Ico } from "global/icon.def";
 import { useTranslation } from "react-i18next";
+import { FaArrowLeft } from "react-icons/fa";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface Props {
     worker: WorkerI;
@@ -21,6 +23,10 @@ interface Props {
 
 const WorkerDesktopView: React.FC<Props> = ({ worker, menuItems }) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const fromSearchView = location.state?.fromSearchView === true;
     const visibleMenuItems = menuItems.filter(item => item.if === undefined || !!item.if);
 
     const getActionMode = (item: MenuItem) => {
@@ -31,6 +37,16 @@ const WorkerDesktopView: React.FC<Props> = ({ worker, menuItems }) => {
 
     return (
         <div className="desktop-worker-profile">
+            {fromSearchView && (
+                <Button
+                    mode={BtnModes.SECONDARY_TXT}
+                    className="desktop-worker-profile-back"
+                    onClick={() => navigate(-1)}
+                >
+                    <FaArrowLeft size={14} />
+                    {t('employeeProfile.backToSearch')}
+                </Button>
+            )}
             <section className="desktop-worker-profile-header">
                 <div className="worker-avatar">
                     <img src={worker.avatarRef?.url || AVATAR_MOCK} alt={worker.displayName} />

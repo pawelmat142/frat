@@ -1,6 +1,6 @@
 {
   "langCode": "pl",
-  "version": 63,
+  "version": 64,
   "data": {
     "nav": {
       "start": "Start",
@@ -956,7 +956,8 @@
       "worksInIndurstryYears": "Pracuje w branży od {{years}} lat",
       "activationSuccessToast": "Profil pomyślnie aktywowany",
       "worksInIndurstryMonths": "Pracuje w branży od {{months}} miesięcy",
-      "deactivationSuccessToast": "Profil pomyślnie dezaktywowany"
+      "deactivationSuccessToast": "Profil pomyślnie dezaktywowany",
+      "backToSearch": "Powrót do wyszukiwania"
     }
   }
 }
