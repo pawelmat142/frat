@@ -29,7 +29,7 @@ const WorkerSkillsSection: React.FC<Props> = ({ worker }) => {
         label: skill.name
     })) || [];
 
-    return <TileSection
+    return <TileSection 
         link={isMyProfile ? {
             title: t(worker.skills?.items?.length ? 'common.edit' : 'common.add'),
             onClick: () => navigate(Path.WORKER_SKILLS_FORM),

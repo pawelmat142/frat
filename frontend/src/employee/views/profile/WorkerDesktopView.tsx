@@ -60,14 +60,14 @@ const WorkerDesktopView: React.FC<Props> = ({ worker }) => {
                     </section>
 
                     <WorkerBioSection worker={worker} />
-                    <WorkerSkillsSection worker={worker} />
                     <WorkerImagesSection worker={worker} />
+                    <PositionWidget position={worker.geocodedPosition || null} />
                 </main>
 
                 <aside className="desktop-worker-profile-sidebar">
                     <WorkerDataSection worker={worker} />
                     <WorkerCertificatesSection worker={worker} />
-                    <PositionWidget position={worker.geocodedPosition || null} />
+                    <WorkerSkillsSection worker={worker} />
                 </aside>
             </div>
         </div>

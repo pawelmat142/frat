@@ -8,6 +8,7 @@ import FloatingTextarea from "global/components/controls/FloatingTextarea";
 import SkeletonControl from "global/components/controls/SkeletonControl";
 import { WorkerService } from "employee/services/WorkerService";
 import TileSection from "global/components/tiles/TileSection";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 interface Props {
     worker: WorkerI;
@@ -16,7 +17,9 @@ interface Props {
 const WorkerBioSection: React.FC<Props> = ({ worker }) => {
     const { t } = useTranslation();
     const userCtx = useUserContext();
+    const globalCtx = useGlobalContext();
 
+    const isDesktop = globalCtx.isDesktop;
     const me = userCtx.me;
     const isMyProfile = me?.uid === worker.uid;
 
@@ -51,7 +54,7 @@ const WorkerBioSection: React.FC<Props> = ({ worker }) => {
         return <SkeletonControl></SkeletonControl>
     }
 
-    return <TileSection title={title} link={link} primaryBg={editMode}>
+    return <TileSection title={title} link={link} primaryBg={editMode || isDesktop}>
 
          {editMode ? (
             <div className="">
