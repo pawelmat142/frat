@@ -140,6 +140,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const requestIdRef = useRef(0);
     const resultsLengthRef = useRef(0);
     const hasMoreRef = useRef(false);
+    const lastSearchLocationKeyRef = useRef<string | null>(null);
 
     const filtersValid = !!filters.startDate && !!filters.locationCountry
     const isDesktop = globalCtx.isDesktop;
@@ -206,8 +207,13 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             return
         }
 
+        if (lastSearchLocationKeyRef.current === location.key) {
+            return;
+        }
+        lastSearchLocationKeyRef.current = location.key;
+
         onFiltersChange(location.search);
-    }, [location.search]);
+    }, [location.key, location.pathname, location.search]);
 
     const onFiltersChange = async (search: string) => {
         const newFilters = {
