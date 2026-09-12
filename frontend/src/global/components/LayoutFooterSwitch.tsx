@@ -26,21 +26,25 @@ const useIsKeyboardOpen = (): boolean => {
   return isOpen;
 };
 
-const LayoutFooterSwitch: React.FC = () => {
-  const globalCtx = useGlobalContext();
+const MobileBottomNavWrapper: React.FC<{ isFooterHidden: boolean }> = ({ isFooterHidden }) => {
   const isKeyboardOpen = useIsKeyboardOpen();
-
-  if (globalCtx.isDesktop) {
-    return <Footer />;
-  }
-
-  const show = !globalCtx.isFooterHidden && !isKeyboardOpen;
+  const show = !isFooterHidden && !isKeyboardOpen;
 
   return (
     <AnimatePresence>
       {show && <MobileBottomNav />}
     </AnimatePresence>
   );
+};
+
+const LayoutFooterSwitch: React.FC = () => {
+  const globalCtx = useGlobalContext();
+
+  if (globalCtx.isDesktop) {
+    return <Footer />;
+  }
+
+  return <MobileBottomNavWrapper isFooterHidden={globalCtx.isFooterHidden} />;
 };
 
 export default LayoutFooterSwitch;
