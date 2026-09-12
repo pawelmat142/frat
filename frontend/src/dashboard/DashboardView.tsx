@@ -23,22 +23,15 @@ import { useGlobalContext } from "global/providers/GlobalProvider";
 import DesktopDashboard from "./desktop/DesktopDashboard";
 import MyWorkerProfileDashboard from "./MyWorkerProfileDashboard";
 
-const DashboardView: React.FC = () => {
+const MobileDashboard: React.FC = () => {
     const { t } = useTranslation();
     const userCtx = useUserContext();
     const drawer = useDrawer();
-    const { isDesktop } = useGlobalContext();
     const menuGroups = useUserMenuGroups({ onAction: drawer.close });
     const me = userCtx.me;
     const editableAvatar = localStorage.getItem(EDIT_AVATAR_FLAG_KEY) === "true";
 
-    if (userCtx.loading || !me) {
-        return <Loading></Loading>;
-    }
-
-    if (isDesktop) {
-        return <DesktopDashboard />;
-    }
+    if (!me) return null;
 
     const menu = (
         <IconButton
@@ -79,6 +72,21 @@ const DashboardView: React.FC = () => {
             <AboutDashboard />
         </div>
     );
+};
+
+const DashboardView: React.FC = () => {
+    const userCtx = useUserContext();
+    const { isDesktop } = useGlobalContext();
+
+    if (userCtx.loading || !userCtx.me) {
+        return <Loading></Loading>;
+    }
+
+    if (isDesktop) {
+        return <DesktopDashboard />;
+    }
+
+    return <MobileDashboard />;
 };
 
 export default DashboardView;
