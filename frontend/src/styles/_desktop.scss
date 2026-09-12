@@ -443,7 +443,7 @@
   // FULL WORKER PROFILE
   .desktop-worker-profile {
     width: 100%;
-    max-width: 80rem;
+    max-width: 72rem;
     margin: 0 auto;
     padding: 1.5rem 1.5rem 3rem;
   }
@@ -456,12 +456,13 @@
 
   .desktop-worker-profile-header {
     display: grid;
-    grid-template-columns: minmax(15rem, 18rem) minmax(0, 1fr) minmax(12rem, 15rem);
+    grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
     gap: 1.5rem;
     align-items: center;
     padding: 1.5rem;
     background-color: $secondary-bg;
     border-radius: .5rem;
+    margin-bottom: 1.5rem;
   }
 
   .desktop-worker-profile-header .worker-avatar {
@@ -493,24 +494,11 @@
     gap: .75rem;
   }
 
-  .desktop-worker-profile-actions {
-    display: flex;
-    flex-direction: column;
-    gap: .5rem;
-    padding-left: 1.5rem;
-    border-left: 1px solid $border-color;
-  }
-
-  .desktop-worker-profile-actions .btn {
-    justify-content: flex-start;
-  }
-
   .desktop-worker-profile-content {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+    grid-template-columns: minmax(0, 1fr) minmax(21rem, 24rem);
     gap: 1.5rem;
     align-items: start;
-    margin-top: 1.5rem;
   }
 
   .desktop-worker-profile-main,
@@ -519,8 +507,6 @@
   }
 
   .desktop-worker-profile-sidebar {
-    position: sticky;
-    top: 1rem;
   }
 
   .desktop-worker-profile-main > .mx-3.my-4,

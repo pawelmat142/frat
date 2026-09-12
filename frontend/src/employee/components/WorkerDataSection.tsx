@@ -152,14 +152,14 @@ const WorkerDataSection: React.FC<Props> = ({ worker, desktopSearchPreviewMode =
         return [
             getAvailabilityMenuItem(),
             {
+                if: displayAddress,
+                label: displayAddress + ' ' + getDistanceInfo(),
+                icon: Ico.MARKER
+            }, {
                 if: !desktopSearchPreviewMode && !!worker.phoneNumber,
                 label: `${t('employeeProfile.form.phoneNumber')}: ${worker.phoneNumber.prefix} ${worker.phoneNumber.number}`,
                 icon: Ico.PHONE,
                 onClick: openPhoneCall
-            }, {
-                if: displayAddress,
-                label: displayAddress + ' ' + getDistanceInfo(),
-                icon: Ico.MARKER
             }, {
                 if: !desktopSearchPreviewMode && !!worker.email,
                 label: `${t("employeeProfile.form.email")}: ${worker.email}`,
