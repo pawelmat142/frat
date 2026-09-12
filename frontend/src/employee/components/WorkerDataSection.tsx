@@ -6,7 +6,6 @@ import PseudoView from "global/components/PseudoView";
 import DateDisplay from "global/components/ui/DateDisplay";
 import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
 import ListUi from "global/components/ui/ListUi";
-import { useIsDesktop } from "global/hooks/isMobile";
 import { Ico } from "global/icon.def";
 import { MenuItem } from "global/interface/controls.interface";
 import { useBottomSheet } from "global/providers/BottomSheetProvider";
@@ -30,7 +29,7 @@ const WorkerDataSection: React.FC<Props> = ({ worker, desktopSearchPreviewMode =
     const bottomSheetCtx = useBottomSheet();
     const globalCtx = useGlobalContext();
     const { t } = useTranslation();
-    const isDesktop = useIsDesktop();
+    const isDesktop = globalCtx.isDesktop;
     const userCtx = useUserContext();
     const navigate = useNavigate();
     const floatingBtnCtx = useFloatingBtnContext();

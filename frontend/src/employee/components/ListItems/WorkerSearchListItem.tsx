@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import IconButton from "global/components/controls/IconButon";
 import { toast } from "react-toastify";
 import { useOpenChat } from "chat/hooks/useOpenChat";
-import { useIsDesktop } from "global/hooks/isMobile";
 import { Ico } from "global/icon.def";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useUserContext } from "user/UserProvider";
 import WorkerListItem from "./WorkerListItem";
 
@@ -28,7 +28,7 @@ const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className,
     const userCtx = useUserContext();
     const { me } = userCtx
 
-    const isDesktop = useIsDesktop();
+    const { isDesktop } = useGlobalContext();
     const openChat = useOpenChat();
     const isMyProfile = me?.uid === worker.uid;
     const showDesktopProfileButton = isDesktop && !!onSelect;

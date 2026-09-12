@@ -12,7 +12,7 @@ import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
 import { NavBus } from "global/utils/PseudoViewBus";
 import { MenuItemIdentifiers } from "global/interface/controls.interface";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
-import { useIsDesktop } from "global/hooks/isMobile";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 const WORKER_SEARCH_SESSION_STORAGE_KEY = 'workerSearchSession';
 const WORKER_SEARCH_SESSION_TTL_MS = 30 * 60 * 1000;
@@ -111,6 +111,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const navigate = useNavigate();
     const userCtx = useUserContext();
     const floatingBtnCtx = useFloatingBtnContext();
+    const globalCtx = useGlobalContext();
 
     const [filters, setFilters] = useState<WorkerSearchFilters>(WorkerUtil.parseFiltersFromSearch(location.search, WorkerDefaultFilters))
 
@@ -141,7 +142,7 @@ const WorkersSearchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const hasMoreRef = useRef(false);
 
     const filtersValid = !!filters.startDate && !!filters.locationCountry
-    const isDesktop = useIsDesktop();
+    const isDesktop = globalCtx.isDesktop;
 
     const navToSearch = () => {
         if (isDesktop || filtersValid) {

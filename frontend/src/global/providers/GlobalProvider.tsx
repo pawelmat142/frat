@@ -2,7 +2,6 @@ import { DictionaryI } from "@shared/interfaces/DictionaryI"
 import { DictionaryService } from "global/services/DictionaryService"
 import React from "react"
 import { createContext, useState } from "react"
-import { useIsDesktop } from "global/hooks/isMobile";
 import { Dictionaries } from "@shared/def/dictionary.def";
 import { ContextMenuOptions, MenuGroup } from "global/interface/controls.interface";
 import ContextMenu from "global/components/ui/ContextMenu";
@@ -37,9 +36,21 @@ interface ContextMenuState {
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
+const useDesktopBreakpoint = (breakpoint = 1024): boolean => {
+    const [isDesktop, setIsDesktop] = useState(() => window.innerWidth > breakpoint);
+
+    React.useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth > breakpoint);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [breakpoint]);
+
+    return isDesktop;
+};
+
 export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    const isDesktop = useIsDesktop();
+    const isDesktop = useDesktopBreakpoint();
 
     const [languagesDictionary, setLanguagesDictionary] = useState<DictionaryI | null>(null)
 

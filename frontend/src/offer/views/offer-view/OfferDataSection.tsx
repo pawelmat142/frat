@@ -11,7 +11,6 @@ import PseudoView from "global/components/PseudoView";
 import DateDisplay from "global/components/ui/DateDisplay";
 import ListUi from "global/components/ui/ListUi";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
-import { useIsDesktop } from "global/hooks/isMobile";
 import { Ico } from "global/icon.def";
 import { MenuItem } from "global/interface/controls.interface";
 import { useBottomSheet } from "global/providers/BottomSheetProvider";
@@ -27,14 +26,14 @@ interface Props {
 
 const OfferDataSection: React.FC<Props> = ({ offer }) => {
   const userCtx = useUserContext();
-  const isDesktop = useIsDesktop();
   const globalCtx = useGlobalContext();
   const floatingBtnCtx = useFloatingBtnContext();
   const bottomSheetCtx = useBottomSheet();
   const { t } = useTranslation();
-
+  
   const [openPseudoView, setOpenPseudoView] = useState(false);
-
+  
+  const isDesktop = globalCtx.isDesktop;
   const me = userCtx?.me;
 
   const isMyOffer = me?.uid === offer!.uid;
