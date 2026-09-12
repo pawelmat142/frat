@@ -1,9 +1,15 @@
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 const FloatingButtonWrapper: React.FC = () => {
     const { current, isVisible } = useFloatingBtnContext();
+    const { isDesktop } = useGlobalContext();
+
+    if (isDesktop) {
+        return null;
+    }
 
     return (
         <AnimatePresence mode="wait">

@@ -48,21 +48,16 @@ const WorkersSearchView: React.FC = () => {
       return next;
     });
 
-    // TODO isdesktop jakos globalnie do faba dodac
-  useFAB(
-    globalCtx.isDesktop
-      ? null
-      : {
-          type: FABtype.filters,
-          key: FABkey.workerSearch,
-          component: (
-            <FloatingActionButton
-              onClick={() => ctx.setOpenPseudoView(true)}
-              icon={<Ico.SLIDERS size={AppConfig.ICON.SIZE.FAB_BTN} />}
-            />
-          ),
-        },
-  );
+  useFAB({
+    type: FABtype.filters,
+    key: FABkey.workerSearch,
+    component: (
+      <FloatingActionButton
+        onClick={() => ctx.setOpenPseudoView(true)}
+        icon={<Ico.SLIDERS size={AppConfig.ICON.SIZE.FAB_BTN} />}
+      />
+    ),
+  });
 
   if (globalCtx.loading || !globalCtx.dics.languages) {
     return <Loading></Loading>;

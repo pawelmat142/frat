@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useFloatingBtnContext, FABConfig } from 'global/fab/FloatingBtnProvider';
+import { useGlobalContext } from 'global/providers/GlobalProvider';
 import { useUserContext } from 'user/UserProvider';
 
 /**
@@ -18,9 +19,15 @@ import { useUserContext } from 'user/UserProvider';
  */
 export const useFAB = (config: FABConfig | null) => {
     const { setFAB, show } = useFloatingBtnContext();
+    const { isDesktop } = useGlobalContext();
 
     const { me } = useUserContext();
     useEffect(() => {
+        if (isDesktop) {
+            setFAB(null);
+            return;
+        }
+
         if (config) {
             const uid = config.props?.uid;
             if (!!uid && uid === me?.uid) {
@@ -33,7 +40,7 @@ export const useFAB = (config: FABConfig | null) => {
         } else {
             setFAB(null);
         }
-    }, [config?.key]);
+    }, [config?.key, isDesktop]);
 };
 
 export const FABkey = {
