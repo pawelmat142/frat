@@ -10,10 +10,13 @@ import WorkerImagesSection from "employee/components/WorkerImagesSection";
 import WorkerBioSection from "employee/components/WorkerBioSection";
 import PositionWidget from "employee/components/PositionWidget";
 import Button from "global/components/controls/Button";
-import { BtnModes, BtnSizes } from "global/interface/controls.interface";
+import { BtnModes } from "global/interface/controls.interface";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Path } from "../../../path";
+import { Ico } from "global/icon.def";
+import { ChatService } from "chat/services/ChatService";
+import { useUserContext } from "user/UserProvider";
 
 interface Props {
     worker: WorkerI;
@@ -22,6 +25,17 @@ interface Props {
 const WorkersSearchPreview: React.FC<Props> = ({ worker }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { me } = useUserContext();
+    const isMyProfile = me?.uid === worker.uid;
+
+    const openChat = async () => {
+        try {
+            const chat = await ChatService.getOrCreateDirectChat(worker.uid);
+            navigate(Path.getConversationPath(chat.chatId));
+        } catch (error) {
+            console.error('Failed to open chat:', error);
+        }
+    };
 
     return (
         <aside className="workers-search-preview">
@@ -40,13 +54,28 @@ const WorkersSearchPreview: React.FC<Props> = ({ worker }) => {
                         <WorkerStatItems worker={worker} />
                     </div>
                 </div>
-                <Button
-                    mode={BtnModes.PRIMARY}
-                    size={BtnSizes.SMALL}
-                    onClick={() => navigate(Path.getWorkerProfilePath(worker.displayName))}
-                >
-                    {t('employeeProfile.openProfile')}
-                </Button>
+                <div className="flex items-center justify-center gap-2">
+                    {!isMyProfile && (
+                        <Button
+                            mode={BtnModes.PRIMARY_TXT}
+                            onClick={openChat}
+                        >
+                            <span className="flex items-center gap-2">
+                                <Ico.MSG size={16} />
+                                {t('chat.openChat')}
+                            </span>
+                        </Button>
+                    )}
+                    <Button
+                        mode={BtnModes.PRIMARY}
+                        onClick={() => navigate(Path.getWorkerProfilePath(worker.displayName))}
+                    >
+                        <span className="flex items-center gap-2">
+                            {t('employeeProfile.openProfile')}
+                            <Ico.CHEVRON_RIGHT size={16} />
+                        </span>
+                    </Button>
+                </div>
             </div>
 
             <WorkerDataSection worker={worker} />

@@ -9,8 +9,6 @@ import { useIsDesktop } from "global/hooks/isMobile";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import WorkerListItem from "./WorkerListItem";
-import Button from "global/components/controls/Button";
-import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 
 interface Props {
     worker: WorkerWithMutualFriends,
@@ -63,25 +61,13 @@ const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className,
 
     const rightSection = (showDesktopProfileButton || !isMyProfile) ? (
         <div className="flex justify-end items-center gap-2">
-            {showDesktopProfileButton && (
-                <Button
-                    mode={BtnModes.PRIMARY_TXT}
-                    size={BtnSizes.SMALL}
-                    onClick={(event) => {
-                        event?.stopPropagation();
-                        openProfile();
-                    }}
-                >
-                    {t('employeeProfile.openProfile')}
-                </Button>
-            )}
             {!isMyProfile && <>
-                <IconButton onClick={(e) => {
+                {!isDesktop && <IconButton onClick={(e) => {
                     e.stopPropagation();
                     openPhoneCall();
                 }}
                     icon={<Ico.PHONE size={20} />}
-                ></IconButton>
+                ></IconButton>}
                 <IconButton onClick={(e) => {
                     e.stopPropagation();
                     openChat();
@@ -89,6 +75,15 @@ const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className,
                     icon={<Ico.MSG size={20} />}
                 ></IconButton>
             </>}
+            {showDesktopProfileButton && (
+                <IconButton
+                    icon={<Ico.CHEVRON_RIGHT size={20} />}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        openProfile();
+                    }}
+                />
+            )}
         </div>
     ) : null;
 

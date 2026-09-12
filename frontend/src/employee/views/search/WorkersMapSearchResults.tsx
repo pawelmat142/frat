@@ -11,6 +11,8 @@ import MapOverlayCarousel from "global/components/map/MapOverlayCarousel";
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY ?? '';
 const MAP_SESSION_KEY = 'workerMapSelectedIndex';
 
+// TODO opcje z mapa dostosowac na desktop
+
 const WorkersMapSearchResults: React.FC = () => {
     const { t } = useTranslation();
     const ctx = useWorkersSearch();
