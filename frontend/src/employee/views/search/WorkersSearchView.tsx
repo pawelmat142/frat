@@ -31,6 +31,14 @@ const WorkersSearchView: React.FC = () => {
       "list",
   );
   const directionRef = useRef(1);
+  const showWorkerPreview = globalCtx.isDesktop && viewMode === "list" && !!ctx.selectedWorker;
+  const [isPreviewSlotVisible, setIsPreviewSlotVisible] = React.useState(showWorkerPreview);
+
+  React.useEffect(() => {
+    if (showWorkerPreview) {
+      setIsPreviewSlotVisible(true);
+    }
+  }, [showWorkerPreview]);
 
   const toggleViewMode = () =>
     setViewMode((prev) => {
@@ -61,7 +69,6 @@ const WorkersSearchView: React.FC = () => {
 
   const initialLoading = ctx.loading && ctx.results.length === 0;
   const noResults = !initialLoading && ctx.results.length === 0;
-  const showWorkerPreview = globalCtx.isDesktop && viewMode === "list" && !!ctx.selectedWorker;
 
   const viewToggleBtn = (
     <WorkersViewModeToggle viewMode={viewMode} onClick={toggleViewMode} />
@@ -74,7 +81,7 @@ const WorkersSearchView: React.FC = () => {
         rightBtn={viewToggleBtn}
       ></Header>
 
-      <div className={`list-view workers-search-layout${showWorkerPreview ? " has-worker-preview" : ""}`}>
+      <div className={`list-view workers-search-layout${showWorkerPreview || isPreviewSlotVisible ? " has-worker-preview" : ""}`}>
         {globalCtx.isDesktop && (
           <aside
             className="workers-search-sidebar"
@@ -153,7 +160,21 @@ const WorkersSearchView: React.FC = () => {
           )}
         </div>
 
-        {showWorkerPreview && <WorkersSearchPreview worker={ctx.selectedWorker!} />}
+        <AnimatePresence
+          mode="wait"
+          onExitComplete={() => {
+            if (!showWorkerPreview) {
+              setIsPreviewSlotVisible(false);
+            }
+          }}
+        >
+          {showWorkerPreview && (
+            <WorkersSearchPreview
+              key={ctx.selectedWorker!.workerId}
+              worker={ctx.selectedWorker!}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </>
   );

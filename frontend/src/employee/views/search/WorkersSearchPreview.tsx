@@ -17,6 +17,7 @@ import { Path } from "../../../path";
 import { Ico } from "global/icon.def";
 import { useOpenChat } from "chat/hooks/useOpenChat";
 import { useUserContext } from "user/UserProvider";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface Props {
     worker: WorkerI;
@@ -28,9 +29,16 @@ const WorkersSearchPreview: React.FC<Props> = ({ worker }) => {
     const openChat = useOpenChat();
     const { me } = useUserContext();
     const isMyProfile = me?.uid === worker.uid;
+    const shouldReduceMotion = useReducedMotion();
 
     return (
-        <aside className="workers-search-preview">
+        <motion.aside
+            className="workers-search-preview"
+            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: 32, scale: 0.98 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: -20, scale: 0.98 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.22, ease: [0.22, 0.7, 0.3, 1] }}
+        >
             <div className="workers-search-preview-header">
                 <div className="worker-avatar">
                     <img src={worker.avatarRef?.url || AVATAR_MOCK} alt={worker.displayName} />
@@ -78,7 +86,7 @@ const WorkersSearchPreview: React.FC<Props> = ({ worker }) => {
             <div className="view-margin mb-10">
                 <PositionWidget position={worker.geocodedPosition || null} />
             </div>
-        </aside>
+        </motion.aside>
     );
 };
 
