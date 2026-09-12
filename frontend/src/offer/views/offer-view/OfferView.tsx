@@ -114,10 +114,15 @@ const OfferView: React.FC = () => {
 
   const _setOffer = (offer: OfferI | null) => {
     setOffer(offer);
-    if (offer?.offerId) {
-      OffersService.notifyOfferView(offer.offerId);
-    }
   };
+
+  useEffect(() => {
+    if (!offer?.offerId || !me?.uid) {
+      return;
+    }
+
+    void OffersService.notifyOfferView(offer.offerId);
+  }, [offer?.offerId, me?.uid]);
 
   if (loading || globalCtx.loading || !globalCtx.dics.languages) {
     return <Loading />;
