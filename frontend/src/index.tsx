@@ -34,13 +34,19 @@ const AppShell: React.FC = () => {
   useAppVersionCheck();
   return (
     <div className="app-shell">
-      <DesktopHeader />
+
+      {isDesktop && <DesktopHeader />}
+
       <motion.main layout transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }} className={`app-main${isFooterHidden ? ' hide-footer' : ''}`}>
+        
         <App />
         {isDesktop && <LayoutFooterSwitch />}
+
       </motion.main>
+
       {!isDesktop && <LayoutFooterSwitch />}
       <FloatingButtonWrapper />
+
     </div>
   );
 };
