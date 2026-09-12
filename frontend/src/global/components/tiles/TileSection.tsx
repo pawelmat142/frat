@@ -1,12 +1,12 @@
 import Button from "global/components/controls/Button";
 import { Ico } from "global/icon.def";
-import { BtnModes, BtnSizes } from "global/interface/controls.interface";
+import { BtnMode, BtnModes, BtnSizes } from "global/interface/controls.interface";
 import { useTranslation } from "react-i18next";
 
 export interface TileSectionProps {
     title?: string;
     className?: string;
-    link?: { title?: string; onClick: () => void };
+    link?: { title?: string; onClick: () => void; mode?: BtnMode };
     primaryBg?: boolean;
     onClick?: () => void;
     children?: React.ReactNode;
@@ -33,7 +33,7 @@ const TileSection: React.FC<TileSectionProps> = ({ title, children, className, l
                 <div className="flex items-center justify-between pb-2">
                     {title && <div className="px-5 secondary-text">{title}</div>}
                     {link && (
-                        <Button mode={BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} onClick={link.onClick}>
+                        <Button mode={link.mode || BtnModes.PRIMARY_TXT} size={BtnSizes.SMALL} onClick={link.onClick}>
                             {link.title || t("common.showMore")}
                             <Ico.CHEVRON_RIGHT />
                         </Button>

@@ -23,8 +23,9 @@ const WorkerBioSection: React.FC<Props> = ({ worker }) => {
     const [editMode, setEditMode] = React.useState(false);
     const [bio, setBio] = React.useState(worker.bio || '');
     const [loading, setLoading] = React.useState(false);
+    const bioExists = !!bio.trim();
 
-    if (!worker?.bio && !isMyProfile) {
+    if (!bioExists && !isMyProfile) {
         return null;
     }
 
@@ -39,7 +40,11 @@ const WorkerBioSection: React.FC<Props> = ({ worker }) => {
         }
     };
 
-    const link = isMyProfile && !editMode ? { title: t('employeeProfile.editBio'), onClick: () => setEditMode(true) } : undefined;
+    const link = isMyProfile && !editMode ? {
+        title: t(bioExists ? 'employeeProfile.editBio' : 'employeeProfile.addBio'),
+        onClick: () => setEditMode(true),
+        mode: bioExists ? BtnModes.SECONDARY_TXT : BtnModes.PRIMARY_TXT,
+    } : undefined;
     const title = editMode ? undefined : t('employeeProfile.form.bioLabel');
 
     if (loading) {

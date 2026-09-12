@@ -32,6 +32,8 @@ import { FABkey, FABtype } from "global/fab/useFAB";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 import WorkerCertificatesSection from "employee/components/WorkerCertificatesSection";
 import { deleteWorkerProfileConfirm } from "employee/def";
+import { useGlobalContext } from "global/providers/GlobalProvider";
+import WorkerDesktopView from "./WorkerDesktopView";
 
 const WorkerView: React.FC = () => {
 
@@ -46,6 +48,7 @@ const WorkerView: React.FC = () => {
     const confirm = useConfirm();
     const userCtx = useUserContext();
     const me = userCtx?.me;
+    const globalCtx = useGlobalContext();
 
     const profileCtx = useWorkersSearch();
     const floatingBtnCtx = useFloatingBtnContext();
@@ -91,7 +94,7 @@ const WorkerView: React.FC = () => {
         initWorker()
     }, []);
 
-    useFAB({
+    useFAB(globalCtx.isDesktop ? null : {
         type: FABtype.chat,
         key: FABkey.chat(worker?.uid || ''),
         props: { uid: worker?.uid },
@@ -276,6 +279,9 @@ const WorkerView: React.FC = () => {
     return (<>
         <Header title={t('employeeProfile.title')} menu={menuConfig}></Header>
 
+        {globalCtx.isDesktop ? (
+            <WorkerDesktopView worker={worker} menuItems={menuItems} />
+        ) : (
         <div className="w-full flex-1">
 
             <div className="flex gap-3 items-center view-margin">
@@ -321,6 +327,7 @@ const WorkerView: React.FC = () => {
             </div>
 
         </div>
+        )}
     </>);
 }
 
