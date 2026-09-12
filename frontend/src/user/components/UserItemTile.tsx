@@ -1,7 +1,7 @@
 import { UserI } from "@shared/interfaces/UserI";
 import UserItemWithLoading from "./UserItemWithLoading";
 import UserItem from "./UserItem";
-import Button from "global/components/controls/Button";
+import IconButton from "global/components/controls/IconButon";
 import { BtnModes } from "global/interface/controls.interface";
 import { useOpenChat } from "chat/hooks/useOpenChat";
 import { Ico } from "global/icon.def";
@@ -27,13 +27,11 @@ const UserItemTile: React.FC<Props> = ({ uid, user, size = 3.5, showNumber = fal
         <div className="user-item-tile">
             {komponent}
             {showChat && <div>
-                <Button
+                <IconButton
                     onClick={() => openChat(uid || user!.uid)}
                     mode={BtnModes.PRIMARY_TXT}
-                    type="submit"
-                    className="p-0">
-                    <Ico.MSG size={20} />
-                </Button>
+                    icon={<Ico.MSG size={20} />}
+                />
 
             </div>}
         </div>
