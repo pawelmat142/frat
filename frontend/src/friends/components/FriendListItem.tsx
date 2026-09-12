@@ -1,6 +1,6 @@
 import { FriendshipI, FriendshipStatuses } from "@shared/interfaces/FriendshipI"
 import { UserI } from "@shared/interfaces/UserI"
-import { ChatService } from "chat/services/ChatService";
+import { useOpenChat } from "chat/hooks/useOpenChat";
 import { useFriendsContext } from "friends/FriendsProvider";
 import Loading from "global/components/Loading";
 import { Path } from "../../path";
@@ -34,6 +34,7 @@ const FriendListItem: React.FC<Props> = ({ user, friendship, first, last }) => {
     const friendsCtx = useFriendsContext();
     const me = userCtx?.me;
     const confirm = useConfirm();
+    const openChat = useOpenChat();
 
     const [loading, setLoading] = useState(false);
     const friendships = friendsCtx.friendships;
@@ -78,16 +79,6 @@ const FriendListItem: React.FC<Props> = ({ user, friendship, first, last }) => {
         }
     }
 
-    const openChat = async () => {
-        try {
-            const chat = await ChatService.getOrCreateDirectChat(user.uid)
-            navigate(Path.getConversationPath(chat.chatId))
-        } catch (error) {
-            console.error('Failed to open chat:', error)
-            toast.error(t('chat.error.cannotOpen'))
-        }
-    }
-
     if (loading) {
         return <Loading></Loading>
     }
@@ -119,7 +110,7 @@ const FriendListItem: React.FC<Props> = ({ user, friendship, first, last }) => {
         if (isFriend && user.uid !== me?.uid) {
             return <IconButton onClick={(e) => {
                 e.stopPropagation();
-                openChat();
+                openChat(user?.uid);
             }}
                 icon={<Ico.MSG size={20} />}
             ></IconButton>

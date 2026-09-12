@@ -3,8 +3,8 @@ import { Path } from "../../../path";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import IconButton from "global/components/controls/IconButon";
-import { ChatService } from "chat/services/ChatService";
 import { toast } from "react-toastify";
+import { useOpenChat } from "chat/hooks/useOpenChat";
 import { useIsDesktop } from "global/hooks/isMobile";
 import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
@@ -28,23 +28,13 @@ const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className,
     const { me } = userCtx
 
     const isDesktop = useIsDesktop();
+    const openChat = useOpenChat();
     const isMyProfile = me?.uid === worker.uid;
     const showDesktopProfileButton = isDesktop && !!onSelect;
 
     const openProfile = () => {
         navigate(Path.getWorkerProfilePath(worker.displayName!));
     };
-
-    const openChat = async () => {
-        if (!worker) return;
-        try {
-            const chat = await ChatService.getOrCreateDirectChat(worker.uid)
-            navigate(Path.getConversationPath(chat.chatId))
-        } catch (error) {
-            console.error('Failed to open chat:', error)
-            toast.error(t('chat.error.cannotOpen'))
-        }
-    }
 
     const openPhoneCall = () => {
         if (!worker.phoneNumber) return;
@@ -70,7 +60,7 @@ const WorkerSearchListItem: React.FC<Props> = ({ worker, first, last, className,
                 ></IconButton>}
                 <IconButton onClick={(e) => {
                     e.stopPropagation();
-                    openChat();
+                    openChat(worker?.uid);
                 }}
                     icon={<Ico.MSG size={20} />}
                 ></IconButton>

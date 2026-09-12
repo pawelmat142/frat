@@ -3,10 +3,7 @@ import UserItemWithLoading from "./UserItemWithLoading";
 import UserItem from "./UserItem";
 import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
-import { useNavigate } from "react-router";
-import { Path } from "../../path";
-import { ChatService } from "chat/services/ChatService";
-import { profile } from "console";
+import { useOpenChat } from "chat/hooks/useOpenChat";
 import { Ico } from "global/icon.def";
 
 interface Props {
@@ -18,10 +15,9 @@ interface Props {
 }
 
 const UserItemTile: React.FC<Props> = ({ uid, user, size = 3.5, showNumber = false, showChat = false }) => {
+    const openChat = useOpenChat();
 
     if (!uid && !user) return null;
-
-    const navigate = useNavigate()
 
     const komponent = uid
         ? <UserItemWithLoading uid={uid} size={size} showNumber={showNumber}></UserItemWithLoading>
@@ -32,10 +28,7 @@ const UserItemTile: React.FC<Props> = ({ uid, user, size = 3.5, showNumber = fal
             {komponent}
             {showChat && <div>
                 <Button
-                    onClick={async () => {
-                        const chat = await ChatService.getOrCreateDirectChat(uid || user!.uid)
-                        navigate(Path.getConversationPath(chat.chatId))
-                    }}
+                    onClick={() => openChat(uid || user!.uid)}
                     mode={BtnModes.PRIMARY_TXT}
                     type="submit"
                     className="p-0">

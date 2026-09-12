@@ -5,9 +5,7 @@ import { useConfirm } from 'global/providers/PopupProvider';
 import { useFriendsContext } from 'friends/FriendsProvider';
 import { FriendsService } from 'friends/services/FriendsService';
 import { FriendshipI } from '@shared/interfaces/FriendshipI';
-import { ChatService } from 'chat/services/ChatService';
-import { Path } from '../path';
-import { useNavigate } from 'react-router-dom';
+import { useOpenChat } from 'chat/hooks/useOpenChat';
 
 interface UseFriendshipActionsParams {
     targetUid: string;
@@ -19,7 +17,7 @@ export const useFriendshipActions = ({
     const { t } = useTranslation();
     const confirm = useConfirm();
     const friendsCtx = useFriendsContext();
-    const navigate = useNavigate();
+    const openChatForUid = useOpenChat();
     const [loading, setLoading] = useState(false);
 
     const getFriendship = useCallback((): FriendshipI | undefined => {
@@ -28,16 +26,10 @@ export const useFriendshipActions = ({
         );
     }, [friendsCtx.friendships, targetUid]);
 
-    const openChat = async () => {
+    const openChat = useCallback(() => {
         if (!targetUid) return;
-        try {
-            const chat = await ChatService.getOrCreateDirectChat(targetUid);
-            navigate(Path.getConversationPath(chat.chatId));
-        } catch (error) {
-            console.error('Failed to open chat:', error);
-            toast.error(t('chat.error.cannotOpen'));
-        }
-    }
+        return openChatForUid(targetUid);
+    }, [openChatForUid, targetUid]);
 
     const sendInvite = useCallback(async () => {
         try {

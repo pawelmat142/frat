@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Path } from "../../../path";
 import { Ico } from "global/icon.def";
-import { ChatService } from "chat/services/ChatService";
+import { useOpenChat } from "chat/hooks/useOpenChat";
 import { useUserContext } from "user/UserProvider";
 
 interface Props {
@@ -25,17 +25,9 @@ interface Props {
 const WorkersSearchPreview: React.FC<Props> = ({ worker }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const openChat = useOpenChat();
     const { me } = useUserContext();
     const isMyProfile = me?.uid === worker.uid;
-
-    const openChat = async () => {
-        try {
-            const chat = await ChatService.getOrCreateDirectChat(worker.uid);
-            navigate(Path.getConversationPath(chat.chatId));
-        } catch (error) {
-            console.error('Failed to open chat:', error);
-        }
-    };
 
     return (
         <aside className="workers-search-preview">
@@ -58,7 +50,7 @@ const WorkersSearchPreview: React.FC<Props> = ({ worker }) => {
                     {!isMyProfile && (
                         <Button
                             mode={BtnModes.PRIMARY_TXT}
-                            onClick={openChat}
+                            onClick={() => openChat(worker?.uid)}
                         >
                             <span className="flex items-center gap-2">
                                 <Ico.MSG size={16} />

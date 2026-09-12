@@ -15,13 +15,13 @@ import { NotificationFrontUtil } from "notification/NotificationFrontUtil";
 import { FrontDateUtil } from "global/utils/FrontDateUtil";
 import { useNotificationsContext } from "notification/NotificationsProvider";
 import { Ico } from "global/icon.def";
-import { ChatService } from "chat/services/ChatService";
 import { useUserContext } from "user/UserProvider";
 import Header from "global/components/Header";
 import { isOneOf } from "@shared/utils/util";
 import { deleteOfferConfirm, deleteWorkerProfileConfirm } from "employee/def";
 import { WorkerService } from "employee/services/WorkerService";
 import { OffersService } from "offer/services/OffersService";
+import { useOpenChat } from "chat/hooks/useOpenChat";
 import OfferAvatarMock from "offer/components/OfferAvatarMock";
 import { AppConfig } from "@shared/AppConfig";
 
@@ -33,6 +33,7 @@ const SingleNotificationView: React.FC = () => {
     const { me } = useUserContext();
     const userCtx = useUserContext();
     const confirm = useConfirm()
+    const openChatForUid = useOpenChat();
 
     const { notificationId } = useParams<{ notificationId: string }>();
     const [notification, setNotification] = useState<NotificationI | null>(null)
@@ -139,13 +140,7 @@ const SingleNotificationView: React.FC = () => {
         if (!notification?.requesterUid) {
             return
         }
-        try {
-            const chat = await ChatService.getOrCreateDirectChat(notification.requesterUid)
-            navigate(Path.getConversationPath(chat.chatId))
-        } catch (error) {
-            console.error('Failed to open chat:', error)
-            toast.error(t('chat.error.cannotOpen'))
-        }
+        await openChatForUid(notification.requesterUid)
     }
 
     const deleteProfile = async () => {
