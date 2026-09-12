@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "user/UserProvider";
 import TileSection from "global/components/tiles/TileSection";
 import ChecklistUi from "global/components/ui/ChecklistUi";
+import { BtnModes } from "global/interface/controls.interface";
 
 interface Props {
     worker: WorkerI;
@@ -20,18 +21,26 @@ const WorkerCertificatesSection: React.FC<Props> = ({ worker }) => {
 
     const me = userCtx?.me;
     const isMyProfile = me?.uid === worker?.uid;
+    const hasCertificates = !!worker.certificates?.length;
 
-    if (!isMyProfile && !worker.certificates?.length) {
+    if (!isMyProfile && !hasCertificates) {
         return null;
     }
 
-    return <>
-        <TileSection title={t('employeeProfile.form.certificates.title')} link={isMyProfile ? { title: t('common.edit'), onClick: () => navigate(Path.WORKER_CERTIFICATES_EDIT) } : undefined}>
-            <ChecklistUi icon={Ico.CHECK} className="pb-1"
-                items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []}
-            ></ChecklistUi>
-        </TileSection>
-    </>
+    return <TileSection
+        link={isMyProfile ? {
+            title: t(hasCertificates ? 'common.edit' : 'common.add'),
+            onClick: () => navigate(Path.WORKER_CERTIFICATES_EDIT),
+            mode: hasCertificates ? BtnModes.SECONDARY_TXT : BtnModes.PRIMARY_TXT,
+        } : undefined}
+        title={t('employeeProfile.form.certificates.title')}
+    >
+        <ChecklistUi
+            icon={Ico.CHECK}
+            className="view-margin"
+            items={worker.certificates?.map(cert => ({ label: DictionaryDisplay({ dictionary: "CERTIFICATES", value: cert, t }) })) || []}
+        />
+    </TileSection>
 }
 
 export default WorkerCertificatesSection;
