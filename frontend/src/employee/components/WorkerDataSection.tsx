@@ -22,9 +22,10 @@ import TileSection from "global/components/tiles/TileSection";
 
 interface Props {
     worker: WorkerI;
+    desktopSearchPreviewMode?: boolean;
 }
 
-const WorkerDataSection: React.FC<Props> = ({ worker }) => {
+const WorkerDataSection: React.FC<Props> = ({ worker, desktopSearchPreviewMode = false }) => {
 
     const bottomSheetCtx = useBottomSheet();
     const globalCtx = useGlobalContext();
@@ -145,7 +146,7 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
         return [
             getAvailabilityMenuItem(),
             {
-                if: worker.phoneNumber,
+                if: !desktopSearchPreviewMode && !!worker.phoneNumber,
                 label: `${t('employeeProfile.form.phoneNumber')}: ${worker.phoneNumber.prefix} ${worker.phoneNumber.number}`,
                 icon: Ico.PHONE,
                 onClick: openPhoneCall
@@ -154,6 +155,7 @@ const WorkerDataSection: React.FC<Props> = ({ worker }) => {
                 label: displayAddress + ' ' + getDistanceInfo(),
                 icon: Ico.MARKER
             }, {
+                if: !desktopSearchPreviewMode && !!worker.email,
                 label: `${t("employeeProfile.form.email")}: ${worker.email}`,
                 icon: Ico.EMAIL
             }, {

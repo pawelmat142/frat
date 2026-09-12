@@ -10,6 +10,7 @@ import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import WorkerListItem from "./WorkerListItem";
 
+// TODO bug: dostepny od zaraz w list itemie pokazuje date ?dzis
 interface Props {
     worker: WorkerWithMutualFriends,
     first?: boolean,

@@ -5,10 +5,6 @@ import CategoriesChips from "global/components/chips/CategoriesChips";
 import WorkerStatItems from "employee/components/WorkerStatItems";
 import WorkerDataSection from "employee/components/WorkerDataSection";
 import WorkerCertificatesSection from "employee/components/WorkerCertificatesSection";
-import WorkerSkillsSection from "employee/components/WorkerSkillsSection";
-import WorkerImagesSection from "employee/components/WorkerImagesSection";
-import WorkerBioSection from "employee/components/WorkerBioSection";
-import PositionWidget from "employee/components/PositionWidget";
 import Button from "global/components/controls/Button";
 import { BtnModes } from "global/interface/controls.interface";
 import { useNavigate } from "react-router-dom";
@@ -78,14 +74,8 @@ const WorkersSearchPreview: React.FC<Props> = ({ worker }) => {
                 </div>
             </div>
 
-            <WorkerDataSection worker={worker} />
+            <WorkerDataSection worker={worker} desktopSearchPreviewMode />
             <WorkerCertificatesSection worker={worker} />
-            <WorkerSkillsSection worker={worker} />
-            <WorkerImagesSection worker={worker} />
-            <WorkerBioSection worker={worker} />
-            <div className="view-margin mb-10">
-                <PositionWidget position={worker.geocodedPosition || null} />
-            </div>
         </motion.aside>
     );
 };
