@@ -776,6 +776,8 @@
     "employeeProfile": {
       "openProfile": "Wyświetl profil",
       "edit": "Edytuj profil pracownika",
+      "phoneNumberCopied": "Numer telefonu {{number}} został skopiowany do schowka",
+      "emailCopied": "Adres e-mail {{email}} został skopiowany do schowka",
       "searchResultsCount_0": "{{count}} wynik",
       "searchResultsCount_1": "{{count}} wyniki",
       "searchResultsCount_2": "{{count}} wyników",

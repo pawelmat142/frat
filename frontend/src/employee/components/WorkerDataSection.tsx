@@ -65,6 +65,13 @@ const WorkerDataSection: React.FC<Props> = ({ worker, desktopSearchPreviewMode =
         window.location.href = `tel:${worker.phoneNumber.prefix}${worker.phoneNumber.number}`;
     }
 
+    const copyEmail = () => {
+        if (!worker.email) return;
+
+        navigator.clipboard.writeText(worker.email);
+        toast.info(t('employeeProfile.emailCopied', { email: worker.email }));
+    }
+
     const getDistanceInfo = (): string => {
         if (!worker?.point) {
             return '';
@@ -157,7 +164,8 @@ const WorkerDataSection: React.FC<Props> = ({ worker, desktopSearchPreviewMode =
             }, {
                 if: !desktopSearchPreviewMode && !!worker.email,
                 label: `${t("employeeProfile.form.email")}: ${worker.email}`,
-                icon: Ico.EMAIL
+                icon: Ico.EMAIL,
+                onClick: copyEmail
             }, {
                 if: worksInIndurstry,
                 label: worksInIndurstry,

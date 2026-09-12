@@ -777,6 +777,8 @@
     "employeeProfile": {
       "openProfile": "Display profile",
       "edit": "Edit technician profile",
+      "phoneNumberCopied": "Phone number {{number}} copied to clipboard",
+      "emailCopied": "Email address {{email}} copied to clipboard",
       "searchResultsCount": "{{count}} result",
       "searchResultsCount_plural": "{{count}} results",
       "form": {
