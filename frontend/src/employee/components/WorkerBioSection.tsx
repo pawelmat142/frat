@@ -80,7 +80,7 @@ const WorkerBioSection: React.FC<Props> = ({ worker }) => {
 
             </div>
         ) : (
-            <div className="view-margin pb-2 s-font font-light">{bio}</div>
+            <div className="view-margin pb-2 s-font font-light whitespace-pre-wrap">{bio}</div>
         )}
 
     </TileSection>
