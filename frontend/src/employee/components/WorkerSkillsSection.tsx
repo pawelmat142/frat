@@ -33,7 +33,7 @@ const WorkerSkillsSection: React.FC<Props> = ({ worker }) => {
         link={isMyProfile ? {
             title: t(worker.skills?.items?.length ? 'common.edit' : 'common.add'),
             onClick: () => navigate(Path.WORKER_SKILLS_FORM),
-            mode: worker.skills?.items?.length ? BtnModes.SECONDARY_TXT : BtnModes.PRIMARY_TXT,
+            mode: worker.skills?.items?.length ? BtnModes.TERTIARY_TXT : BtnModes.PRIMARY_TXT,
         } : undefined}
         title={t('employeeProfile.skills')}>
         <ChecklistUi

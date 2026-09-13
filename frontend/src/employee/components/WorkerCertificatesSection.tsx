@@ -31,7 +31,7 @@ const WorkerCertificatesSection: React.FC<Props> = ({ worker }) => {
         link={isMyProfile ? {
             title: t(hasCertificates ? 'common.edit' : 'common.add'),
             onClick: () => navigate(Path.WORKER_CERTIFICATES_EDIT),
-            mode: hasCertificates ? BtnModes.SECONDARY_TXT : BtnModes.PRIMARY_TXT,
+            mode: hasCertificates ? BtnModes.TERTIARY_TXT : BtnModes.PRIMARY_TXT,
         } : undefined}
         title={t('employeeProfile.form.certificates.title')}
     >

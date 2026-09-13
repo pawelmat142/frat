@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { WorkerI } from "@shared/interfaces/WorkerI";
 import { FileRef } from "@shared/interfaces/UserI";
-import { Ico } from "global/icon.def";
 import { useUserContext } from "user/UserProvider";
 import { FileUtil } from "global/utils/FileUtil";
 import { WorkerService } from "employee/services/WorkerService";
@@ -149,9 +148,20 @@ const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) =
         return <Loading />;
     }
 
-    const link = (isMyProfile && canAddMore && !pending) ? { title: t('gallery.addImage'), onClick: openFilePicker } : undefined;
+    const link = (isMyProfile && canAddMore && !pending) ? {
+        title: t('gallery.addImage'),
+        onClick: openFilePicker,
+        mode: savedImages.length ? BtnModes.TERTIARY_TXT : BtnModes.PRIMARY_TXT,
+    } : undefined;
 
     return <>
+        <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileChange}
+        />
         <TileSection title={t('gallery.title')} link={link} primaryBg>
             <div className="grid grid-cols-2 gap-2">
                 {/* Saved images */}
