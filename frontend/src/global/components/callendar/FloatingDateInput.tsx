@@ -95,7 +95,9 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
         }
     };
 
-    const datePicker = (
+    // Create the picker only when its active UI container is displayed.
+    // On mobile this is after a tap; on desktop after the popover mounts.
+    const renderDatePicker = () => (
         <DatePickerSheet
             value={value}
             onChange={date => {
@@ -124,7 +126,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
         bottomSheetCtx.open({
             title: label,
             showClose: true,
-            children: datePicker,
+            children: renderDatePicker(),
         });
     };
 
@@ -134,7 +136,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
             role="dialog"
             aria-label={label}
         >
-            {datePicker}
+            {renderDatePicker()}
         </div>
     ) : null;
 
