@@ -35,7 +35,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
         const globalCtx = useGlobalContext();
 
         const [selectedPosition, setSelectedPosition] = useState<GeocodedPosition | null>(value || null);
-        const [openPseudoView, setOpenPseudoView] = useState(false);
+        const [isSelectorOpen, setIsSelectorOpen] = useState(false);
 
         useEffect(() => {
             setSelectedPosition(value || null);
@@ -53,10 +53,29 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
             myClass += ' control-disabled';
         }
 
-        const handleInputClick = async () => {
+        const handleInputClick = () => {
             if (disabled) return;
-            setOpenPseudoView(true);
-            globalCtx.hideFooter();
+            setIsSelectorOpen(true);
+            if (!globalCtx.isDesktop) globalCtx.hideFooter();
+        };
+
+        const closeSelector = () => {
+            setIsSelectorOpen(false);
+            if (!globalCtx.isDesktop) globalCtx.showFooter();
+        };
+
+        const confirmPosition = async (position: GeocodedPosition | null) => {
+            closeSelector();
+            if (!globalCtx.isDesktop) await wait(AppConfig.ROUTER_ANIMATION_DURATION);
+            onChange?.(position);
+            setSelectedPosition(position);
+        };
+
+        const 
+        handleInputKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            handleInputClick();
         };
 
         const displayValue = selectedPosition
@@ -74,7 +93,11 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                     <div
                         className={myClass + (error ? ' pp-control-error' : '')}
                         onClick={handleInputClick}
+                        onKeyDown={handleInputKeyDown}
                         tabIndex={disabled ? -1 : 0}
+                        role="button"
+                        aria-haspopup="dialog"
+                        aria-expanded={isSelectorOpen}
                         aria-disabled={disabled}
                     >
                         <input
@@ -99,22 +122,24 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
                 </div>
                 <FormError error={error} />
 
-                <PseudoView show={openPseudoView}>
-                    <PositionSelectorContent
-                        initialPosition={initialPosition}
-                        onChange={async (position) => {
-                            setOpenPseudoView(false);
-                            await wait(AppConfig.ROUTER_ANIMATION_DURATION);
-                            onChange?.(position);
-                            setSelectedPosition(position);
-                            globalCtx.showFooter();
-                        }}
-                        close={() => {
-                            setOpenPseudoView(false);
-                            globalCtx.showFooter();
-                        }}
-                    ></PositionSelectorContent>
-                </PseudoView>
+                {globalCtx.isDesktop ? (
+                    isSelectorOpen && (
+                        <PositionSelectorContent
+                            initialPosition={selectedPosition ?? initialPosition}
+                            onChange={confirmPosition}
+                            close={closeSelector}
+                            desktop
+                        />
+                    )
+                ) : (
+                    <PseudoView show={isSelectorOpen}>
+                        <PositionSelectorContent
+                            initialPosition={selectedPosition ?? initialPosition}
+                            onChange={confirmPosition}
+                            close={closeSelector}
+                        />
+                    </PseudoView>
+                )}
             </div>
         );
     });

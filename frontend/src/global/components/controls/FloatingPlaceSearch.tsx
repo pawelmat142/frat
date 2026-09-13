@@ -27,6 +27,7 @@ interface FloatingPlaceSearchProps {
     onSelect: (result: PlaceSearchResult) => void;
     onClear?: () => void;
     icon?: React.ReactNode;
+    clearIconClassName: string;
     mapInstanceRef?: google.maps.Map | null;
     fullWidth?: boolean;
     disabled?: boolean;
@@ -48,6 +49,7 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
         onSelect,
         onClear,
         icon,
+        clearIconClassName,
         mapInstanceRef,
         fullWidth = false,
         disabled = false,
@@ -286,7 +288,7 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
                         />
                         { hasSelection ? (
                             <Close
-                                className="absolute right-3 top-1/2 -translate-y-1/2 secondary-text cursor-pointer"
+                                className={`absolute right-1 top-1/2 -translate-y-1/2 secondary-text cursor-pointer ${clearIconClassName}`}
                                 style={{ fontSize: '1.4rem', fontWeight: 'bold' }}
                                 onClick={handleClear}
                             />

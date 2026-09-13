@@ -158,6 +158,7 @@ const CountryAndLocationSelector: React.FC<Props> = ({
                     <FloatingPlaceSearch
                         fullWidth
                         displayValue={value.geocodedPosition?.fullAddress || ''}
+                        clearIconClassName=""
                         label={t('employeeProfile.form.city')}
                         error={errors?.geocodedPosition}
                         required={positionRequired}

@@ -8,18 +8,19 @@ import { GoogleMapService } from 'global/services/GoogleMapService';
 import { Position, GeocodedPosition } from '@shared/interfaces/MapsInterfaces';
 import { AppConfig } from '@shared/AppConfig';
 import FloatingPlaceSearch from 'global/components/controls/FloatingPlaceSearch';
-import HeaderBackBtn from 'global/header-state/HeaderBackBtn';
 
 interface PositionSelectorContentProps {
     initialPosition?: Position;
     onChange: (position: GeocodedPosition | null) => void;
     close: () => void;
+    desktop?: boolean;
 }
 
 const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     initialPosition,
     onChange,
     close,
+    desktop = false,
 }) => {
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''; // provide via .env.local
     if (!apiKey) {
@@ -38,6 +39,17 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     useEffect(() => {
         initializeMap();
     }, []);
+
+    useEffect(() => {
+        if (!desktop) return;
+
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') close();
+        };
+
+        window.addEventListener('keydown', closeOnEscape);
+        return () => window.removeEventListener('keydown', closeOnEscape);
+    }, [close, desktop]);
 
     const initializeMap = async () => {
         if (!mapRef.current || !apiKey) {
@@ -115,18 +127,23 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
     };
 
     return (
-        <div className="position-selector-popup-overlay fixed inset-0 z-50 flex items-center justify-center bg-opacity-50">
-            <div className="position-selector-popup secondary-bg rounded-lg shadow-xl w-full h-full md:w-[90%] md:h-[90%] max-w-6xl flex flex-col">
+        <div
+            className={`position-selector-popup-overlay${desktop ? ' position-selector-popup-overlay--desktop' : ''}`}
+            role="dialog"
+            aria-modal={desktop}
+            aria-label={t('employeeProfile.form.location')}
+            onClick={desktop ? close : undefined}
+        >
+            <div className="position-selector-popup secondary-bg" onClick={event => event.stopPropagation()}>
 
-                <div className='px-2 py-1 primary-bg flex items-center'>
+                <div className='px-2 py-2 primary-bg flex items-center'>
 
-                    <HeaderBackBtn onBack={() => close()}/>
-        
                     <FloatingPlaceSearch
-                        className='w-full'
+                        className="position-selector-searchbar"
                         mode={FloatingInputModes.THIN}
                         name="freeText"
                         displayValue={selectedPosition?.fullAddress}
+                        clearIconClassName="position-selector-search-clear"
                         onSelect={result => updatePosition({ lat: result.lat, lng: result.lng })}
                         mapInstanceRef={mapInstanceRef.current}
                         label={t('employeeProfile.form.freeText')}
@@ -138,13 +155,18 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
                     <div ref={mapRef} className="w-full h-full" />
                 </div>
 
-                <div className="position-selector-footer px-4 py-2 flex gap-4 justify-between border-t ">
+                <div className="position-selector-footer px-4 py-3 flex gap-4 justify-between border-t ">
                     <Button onClick={() => onChange(null)} mode={BtnModes.ERROR_TXT}>
-                        {t('common.reset')}
+                        {t('common.clear')}
                     </Button>
-                    <Button onClick={() => onChange(selectedPosition || currentPosition)}>
-                        {t('common.confirm')}
-                    </Button>
+                    <div className="flex gap-2">
+                        <Button onClick={close} mode={BtnModes.SECONDARY_TXT}>
+                            {t('common.cancel')}
+                        </Button>
+                        <Button onClick={() => onChange(selectedPosition || currentPosition)}>
+                            {t('common.confirm')}
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
