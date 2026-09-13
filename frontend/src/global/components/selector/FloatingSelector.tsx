@@ -27,7 +27,7 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     const bottomSheet = useBottomSheet();
     const { isDesktop } = useGlobalContext();
     const triggerRef = React.useRef<HTMLDivElement | null>(null);
-    const { closePopover, isPopoverMounted, isPopoverOpen, togglePopover } = useAnchoredPopover(isDesktop, triggerRef);
+    const { closePopover, isPopoverMounted, isPopoverOpen, popoverPlacement, togglePopover } = useAnchoredPopover(isDesktop, triggerRef);
 
     const setRefs = React.useCallback((node: HTMLDivElement | null) => {
         triggerRef.current = node;
@@ -65,7 +65,7 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     };
 
     const desktopPopover = isDesktop && isPopoverMounted ? (
-        <div className={`desktop-selector-popover${isPopoverOpen ? ' open' : ''}`} role="listbox" aria-label={label}>
+        <div className={`desktop-selector-popover${isPopoverOpen ? ' open' : ''}${popoverPlacement === 'top' ? ' upward' : ''}`} role="listbox" aria-label={label}>
             <SelectorItems
                 items={items}
                 selectedValues={value ? [value.value] : []}

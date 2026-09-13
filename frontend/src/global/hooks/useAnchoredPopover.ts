@@ -1,6 +1,10 @@
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 const POPOVER_ANIMATION_DURATION = 160;
+const DESKTOP_POPOVER_MAX_HEIGHT = 320;
+const VIEWPORT_GUTTER = 16;
+
+type PopoverPlacement = 'top' | 'bottom';
 
 export const useAnchoredPopover = (
     isDesktop: boolean,
@@ -8,8 +12,20 @@ export const useAnchoredPopover = (
 ) => {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [isPopoverMounted, setIsPopoverMounted] = useState(false);
+    const [popoverPlacement, setPopoverPlacement] = useState<PopoverPlacement>('bottom');
     const popoverCloseTimeoutRef = useRef<number | null>(null);
     const popoverOpenFrameRef = useRef<number | null>(null);
+
+    const updatePopoverPlacement = useCallback(() => {
+        const triggerRect = triggerRef.current?.getBoundingClientRect();
+        if (!triggerRect) return;
+
+        const spaceAbove = triggerRect.top - VIEWPORT_GUTTER;
+        const spaceBelow = window.innerHeight - triggerRect.bottom - VIEWPORT_GUTTER;
+        const shouldOpenUpward = spaceBelow < DESKTOP_POPOVER_MAX_HEIGHT && spaceAbove > spaceBelow;
+
+        setPopoverPlacement(shouldOpenUpward ? 'top' : 'bottom');
+    }, [triggerRef]);
 
     const openPopover = useCallback(() => {
         if (popoverCloseTimeoutRef.current) {
@@ -20,12 +36,13 @@ export const useAnchoredPopover = (
             window.cancelAnimationFrame(popoverOpenFrameRef.current);
         }
 
+        updatePopoverPlacement();
         setIsPopoverMounted(true);
         popoverOpenFrameRef.current = window.requestAnimationFrame(() => {
             setIsPopoverOpen(true);
             popoverOpenFrameRef.current = null;
         });
-    }, []);
+    }, [updatePopoverPlacement]);
 
     const closePopover = useCallback(() => {
         if (popoverOpenFrameRef.current) {
@@ -54,6 +71,8 @@ export const useAnchoredPopover = (
     useEffect(() => {
         if (!isDesktop || !isPopoverOpen) return;
 
+        updatePopoverPlacement();
+
         const closeOnOutsideClick = (event: MouseEvent) => {
             if (!triggerRef.current?.contains(event.target as Node)) {
                 closePopover();
@@ -65,11 +84,15 @@ export const useAnchoredPopover = (
 
         document.addEventListener('mousedown', closeOnOutsideClick);
         document.addEventListener('keydown', closeOnEscape);
+        window.addEventListener('resize', updatePopoverPlacement);
+        document.addEventListener('scroll', updatePopoverPlacement, true);
         return () => {
             document.removeEventListener('mousedown', closeOnOutsideClick);
             document.removeEventListener('keydown', closeOnEscape);
+            window.removeEventListener('resize', updatePopoverPlacement);
+            document.removeEventListener('scroll', updatePopoverPlacement, true);
         };
-    }, [closePopover, isDesktop, isPopoverOpen, triggerRef]);
+    }, [closePopover, isDesktop, isPopoverOpen, triggerRef, updatePopoverPlacement]);
 
     useEffect(() => {
         if (!isDesktop) {
@@ -87,5 +110,5 @@ export const useAnchoredPopover = (
         }
     }, []);
 
-    return { closePopover, isPopoverMounted, isPopoverOpen, togglePopover };
+    return { closePopover, isPopoverMounted, isPopoverOpen, popoverPlacement, togglePopover };
 };
