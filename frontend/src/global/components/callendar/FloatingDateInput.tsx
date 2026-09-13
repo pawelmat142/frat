@@ -117,14 +117,26 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     return (
         <div className={`floating-input-wrapper ${myClass}${center ? ' mx-auto' : ''}`}>
             <div className="floating-input-container">
-                <div className="pp-control pp-input-row justify-between">
+                <div
+                    className="pp-control pp-input-row floating-date-input-control justify-between"
+                    role="button"
+                    tabIndex={disabled ? -1 : 0}
+                    aria-haspopup="dialog"
+                    aria-disabled={disabled}
+                    onClick={handleInputClick}
+                    onKeyDown={event => {
+                        if (!disabled && (event.key === 'Enter' || event.key === ' ')) {
+                            event.preventDefault();
+                            handleInputClick();
+                        }
+                    }}
+                >
                     <input
                         ref={inputRef}
                         id={id}
                         name={name || id}
                         type="text"
                         value={_value}
-                        onClick={handleInputClick}
                         className={`floating-input pr-10 primary-text ${mode}`}
                         disabled={disabled}
                         required={required}
@@ -134,7 +146,6 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
                     />
                     <span
                         className={`pp-date-input-calendar MuiSvgIcon-root${disabled ? ' disabled' : ''}`}
-                        onClick={handleInputClick}
                     >
                         <CalendarTodayIcon fontSize="medium" />
                     </span>

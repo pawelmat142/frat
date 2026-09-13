@@ -377,6 +377,24 @@ $desktop-view-size-two: 80rem;
     padding-bottom: .125rem;
   }
 
+  .floating-date-input-control {
+    min-height: 44px;
+    cursor: pointer;
+
+    input,
+    .pp-date-input-calendar {
+      cursor: pointer;
+    }
+
+    .pp-date-input-calendar {
+      color: $secondary-text;
+
+      &.disabled {
+        color: $disabled-text;
+      }
+    }
+  }
+
   .floating-label {
     font-size: .875rem;
   }
