@@ -150,6 +150,15 @@ $btnPaddingY: 0.375rem;
     }
   }
 
+  &.tertiary-txt {
+    background-color: transparent;
+    color: $secondary-text;
+
+    &.active {
+      color: $primary-color;
+    }
+  }
+
   .svg-icon,
   .MuiSvgIcon-root {
     font-size: $xxxlFont;

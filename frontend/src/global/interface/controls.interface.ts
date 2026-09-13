@@ -29,6 +29,7 @@ export const BtnModes = {
     SECONDARY: 'secondary',
     PRIMARY_TXT: 'primary-txt',
     SECONDARY_TXT: 'secondary-txt',
+    TERTIARY_TXT: 'tertiary-txt',
     ERROR: 'error',
     ERROR_TXT: 'error-txt',
     WARNING: 'warning',

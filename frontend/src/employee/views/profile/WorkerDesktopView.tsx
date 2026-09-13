@@ -35,7 +35,7 @@ const WorkerDesktopView: React.FC<Props> = ({ worker, menu }) => {
             <header className="desktop-worker-profile-view-header">
                 {fromSearchView && (
                     <Button
-                        mode={BtnModes.SECONDARY_TXT}
+                        mode={BtnModes.TERTIARY_TXT}
                         className="desktop-worker-profile-back"
                         onClick={() => navigate(-1)}
                     >
