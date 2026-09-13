@@ -28,16 +28,19 @@ const WorkerDesktopView: React.FC<Props> = ({ worker }) => {
 
     return (
         <div className="desktop-worker-profile">
-            {fromSearchView && (
-                <Button
-                    mode={BtnModes.SECONDARY_TXT}
-                    className="desktop-worker-profile-back"
-                    onClick={() => navigate(-1)}
-                >
-                    <FaArrowLeft size={14} />
-                    {t('employeeProfile.backToSearch')}
-                </Button>
-            )}
+            <header className="desktop-worker-profile-view-header">
+                {fromSearchView && (
+                    <Button
+                        mode={BtnModes.SECONDARY_TXT}
+                        className="desktop-worker-profile-back"
+                        onClick={() => navigate(-1)}
+                    >
+                        <FaArrowLeft size={14} />
+                        {t('employeeProfile.backToSearch')}
+                    </Button>
+                )}
+                <h1 className="desktop-worker-profile-view-title">{t('employeeProfile.title')}</h1>
+            </header>
             <div className="desktop-worker-profile-content">
                 <main className="desktop-worker-profile-main">
                     <section className="desktop-worker-profile-header">
@@ -46,16 +49,22 @@ const WorkerDesktopView: React.FC<Props> = ({ worker }) => {
                         </div>
 
                         <div className="worker-profile-top">
-                            <p className="desktop-worker-profile-kicker">{t('employeeProfile.title')}</p>
-                            <div className="worker-profile-top-row one">
-                                <CategoriesChips categories={worker.categories} smaller color="primary" />
+                            <div className="desktop-worker-profile-summary">
+                                <div className="worker-profile-top-row one">
+                                    <h1 className="desktop-worker-profile-name">{worker.displayName}</h1>
+                                </div>
+                                <div className="worker-profile-top-row two">
+                                    <WorkerStatItems worker={worker} detailed />
+                                </div>
                             </div>
-                            <div className="worker-profile-top-row two">
-                                <h1 className="desktop-worker-profile-name">{worker.displayName}</h1>
-                            </div>
-                            <div className="worker-profile-top-row three">
-                                <WorkerStatItems worker={worker} />
-                            </div>
+                            {!!worker.categories?.length && (
+                                <div className="worker-profile-top-row desktop-worker-profile-categories">
+                                    <span className="desktop-worker-profile-categories-label">
+                                        {t('employeeProfile.preferredCategories', 'Preferred categories')}
+                                    </span>
+                                    <CategoriesChips categories={worker.categories} color="primary" translationColumn="NAME"/>
+                                </div>
+                            )}
                         </div>
                     </section>
 

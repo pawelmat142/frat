@@ -445,13 +445,26 @@
     width: 100%;
     max-width: 72rem;
     margin: 0 auto;
-    padding: 1.5rem 1.5rem 3rem;
+    padding: .5rem 1.5rem 3rem;
+  }
+
+  .desktop-worker-profile-view-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .desktop-worker-profile-view-title {
+    color: $primary-text;
+    font-size: $xxlFont;
+    font-weight: $font-semibold;
   }
 
   .desktop-worker-profile-back {
     align-items: center;
     gap: .5rem;
-    margin-bottom: .75rem;
   }
 
   .desktop-worker-profile-header {
@@ -459,7 +472,7 @@
     grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
     gap: 1.5rem;
     align-items: center;
-    padding: 1.5rem;
+    padding: 0 1.5rem 1.5rem;
     margin-bottom: 1.5rem;
   }
 
@@ -477,19 +490,37 @@
     object-fit: cover;
   }
 
-  .desktop-worker-profile-kicker {
-    color: $secondary-text;
-    font-size: $sFont;
-  }
-
   .desktop-worker-profile-name {
     color: $primary-text;
     font-size: $xxlFont;
     font-weight: $font-semibold;
   }
 
+  .desktop-worker-profile-categories {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+  }
+
+  .desktop-worker-profile-categories-label {
+    color: $secondary-text;
+    font-size: $sFont;
+    white-space: nowrap;
+  }
+
   .desktop-worker-profile-header .worker-profile-top {
+    position: relative;
     gap: .75rem;
+  }
+
+  .desktop-worker-profile-summary {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    transform: translateY(-1rem);
   }
 
   .desktop-worker-profile-content {
@@ -502,9 +533,6 @@
   .desktop-worker-profile-main,
   .desktop-worker-profile-sidebar {
     min-width: 0;
-  }
-
-  .desktop-worker-profile-sidebar {
   }
 
   .desktop-worker-profile-main > .mx-3.my-4,

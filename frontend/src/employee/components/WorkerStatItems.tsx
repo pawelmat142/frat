@@ -1,4 +1,3 @@
-import { ThumbUp, Visibility } from "@mui/icons-material";
 import { WorkerI, WorkerWithMutualFriends } from "@shared/interfaces/WorkerI";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import DateDisplay from "global/components/ui/DateDisplay";
@@ -8,19 +7,22 @@ import { IconType } from "react-icons";
 import { useUserContext } from "user/UserProvider";
 
 interface StatItem {
+    id: 'views' | 'favourites' | 'mutualFriends' | 'distance';
     icon: IconType,
-    display: string | number
-    if: any
+    label: string;
+    display: string | number;
+    if: any;
 }
 
 interface Props {
-    worker: WorkerI,
-    showStartsFrom?: boolean
+    worker: WorkerI;
+    showStartsFrom?: boolean;
+    detailed?: boolean;
 }
 
 const iconSize = 14;
 
-const WorkerStatItems: React.FC<Props> = ({ worker, showStartsFrom }) => {
+const WorkerStatItems: React.FC<Props> = ({ worker, showStartsFrom, detailed = false }) => {
 
     const userCtx = useUserContext();
     const { t } = useTranslation();
@@ -41,19 +43,27 @@ const WorkerStatItems: React.FC<Props> = ({ worker, showStartsFrom }) => {
     const distance = getDistanceInfo();
 
     const items: StatItem[] = [{
+        id: 'views',
         icon: Ico.VIEWS,
+        label: t('employeeProfile.views'),
         if: true,
         display: worker.uniqueViewsCount || 0,
     }, {
+        id: 'favourites',
         icon: Ico.STAR,
+        label: t('user.myList'),
         if: worker.favoritesCount,
         display: worker.favoritesCount || 0,
     }, {
+        id: 'mutualFriends',
         icon: Ico.FRIENDS,
+        label: t('employeeProfile.mutualFriends', 'Mutual friends'),
         if: mutualFriendsUids.length,
         display: mutualFriendsUids.length,
     }, {
+        id: 'distance',
         icon: Ico.MARKER,
+        label: t('common.distance'),
         if: distance,
         display: distance,
     }]
@@ -67,10 +77,10 @@ const WorkerStatItems: React.FC<Props> = ({ worker, showStartsFrom }) => {
 
         {startsFrom}
 
-        {items.filter(i => !!i.if).map(i => {
-            return (<div className="flex items-center gap05" key={i.icon.toString()}>
+        {items.filter(i => !!i.if && (!detailed || i.id !== 'distance')).map(i => {
+            return (<div className="flex items-center gap05" key={i.id}>
                 <i.icon size={iconSize} className="secondary-text" />
-                <span className="xs-font">{i.display}</span>
+                <span className="xs-font">{detailed ? `${i.label}: ${i.display}` : i.display}</span>
             </div>)
         })}
     </div>)

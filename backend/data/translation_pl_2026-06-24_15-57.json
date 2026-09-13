@@ -963,7 +963,9 @@
       "activationSuccessToast": "Profil pomyślnie aktywowany",
       "worksInIndurstryMonths": "Pracuje w branży od {{months}} miesięcy",
       "deactivationSuccessToast": "Profil pomyślnie dezaktywowany",
-      "backToSearch": "Powrót do wyszukiwania"
+      "backToSearch": "Powrót do wyszukiwania",
+      "preferredCategories": "Preferowane kategorie",
+      "mutualFriends": "Wspólni znajomi"
     }
   }
 }

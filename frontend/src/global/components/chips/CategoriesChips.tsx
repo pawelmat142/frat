@@ -5,14 +5,15 @@ interface Props {
     categories?: string[]
     smaller?: boolean;
     color?: 'primary' | 'secondary' | 'tertiary';
+    translationColumn?: string;
 }
 
-const CategoriesChips: React.FC<Props> = ({ categories, smaller, color='tertiary' }) => {
+const CategoriesChips: React.FC<Props> = ({ categories, smaller, color='tertiary',translationColumn = "SHORT_NAME" }) => {
     return (
         <DictionaryChips
             values={categories}
             dictionaryCode={Dictionaries.WORK_CATEGORY}
-            translationColumn="SHORT_NAME"
+            translationColumn={translationColumn}
             smaller={smaller}
             color={color}
         />

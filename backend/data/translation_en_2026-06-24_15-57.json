@@ -963,7 +963,9 @@
       "activationSuccessToast": "Technician profile activated successfully",
       "worksInIndurstryMonths": "Works in the industry for {{months}} months",
       "deactivationSuccessToast": "Technician profile deactivated successfully",
-      "backToSearch": "Back to search"
+      "backToSearch": "Back to search",
+      "preferredCategories": "Preferred categories",
+      "mutualFriends": "Mutual friends"
     }
   }
 }
