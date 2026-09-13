@@ -14,17 +14,21 @@ import Button from "global/components/controls/Button";
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
+import { MenuConfig } from "global/components/selector/MenuItems";
+import { AppConfig } from "@shared/AppConfig";
 
 interface Props {
     worker: WorkerI;
+    menu: MenuConfig;
 }
 
-const WorkerDesktopView: React.FC<Props> = ({ worker }) => {
+const WorkerDesktopView: React.FC<Props> = ({ worker, menu }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
 
     const fromSearchView = location.state?.fromSearchView === true;
+    const menuItems = menu.items.filter(item => item.if === undefined || !!item.if);
 
     return (
         <div className="desktop-worker-profile">
@@ -74,6 +78,27 @@ const WorkerDesktopView: React.FC<Props> = ({ worker }) => {
                 </main>
 
                 <aside className="desktop-worker-profile-sidebar">
+                    {menuItems.length > 0 && (
+                        <section className="desktop-worker-profile-menu active-bg rounded-xl shadow-xl py-1 overflow-hidden select-none">
+                            {menu.title && (
+                                <div className="secondary-text px-4 pt-2 pb-1 text-xs font-medium">
+                                    {menu.title}
+                                </div>
+                            )}
+                            {menuItems.map((item, index) => (
+                                <button
+                                    key={`${item.label}-${index}`}
+                                    type="button"
+                                    className={`rounded ripple flex items-center gap-3 w-full px-4 text-sm text-left transition-colors hover-secondary-bg${item.className ? ` ${item.className}` : ""}`}
+                                    style={{ height: AppConfig.CONTEXT_MENU.ITEM_HEIGHT }}
+                                    onClick={() => item.onClick?.()}
+                                >
+                                    {item.icon && <item.icon size={15} className="flex-shrink-0" />}
+                                    <span>{item.label}</span>
+                                </button>
+                            ))}
+                        </section>
+                    )}
                     <WorkerDataSection worker={worker} />
                     <WorkerCertificatesSection worker={worker} />
                     <WorkerSkillsSection worker={worker} />

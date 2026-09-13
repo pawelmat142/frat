@@ -280,7 +280,7 @@ const WorkerView: React.FC = () => {
         <Header title={t('employeeProfile.title')} menu={menuConfig}></Header>
 
         {globalCtx.isDesktop ? (
-            <WorkerDesktopView worker={worker} />
+            <WorkerDesktopView worker={worker} menu={menuConfig} />
         ) : (
         <div className="w-full flex-1">
 

@@ -34,7 +34,8 @@ export const buildFriendshipMenuItems = ({
         {
             label: t('chat.openChat'),
             if: !isMyAccount,
-            icon: Ico.CHAT,
+            icon: Ico.MSG,
+            className: 'primary-color',
             onClick: onOpenChat
         },
         {
