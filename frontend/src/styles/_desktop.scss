@@ -289,6 +289,19 @@ $desktop-view-size-two: 80rem;
     padding: 0;
   }
 
+  // Keep the actions aligned with the desktop view header without changing
+  // the width of the form content above them.
+  .form-wizard-buttons-wrapper {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+  }
+
+  .form-wizard-buttons {
+    max-width: $desktop-view-size-one;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
   // Desktop uses a denser control scale than the touch-first mobile UI.
   // Explicitly large buttons retain their existing size.
   .btn.medium {

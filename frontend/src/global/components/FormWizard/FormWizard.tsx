@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import Stepper from './Stepper';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AppConfig } from '@shared/AppConfig';
+import { Ico } from 'global/icon.def';
 
 type FormWizardProps<TForm extends FieldValues, TStep extends string> = {
     localStorageKey: string;
@@ -137,17 +138,23 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
                             disabled={currentStep === stepsOrder[0]}
                             className="flex-1"
                             aria-label={t("common.previous")}
-                        >{t("common.previous")}</Button>
+                        >
+                            <Ico.CHEVRON_LEFT size={16} aria-hidden="true" />
+                            {t("common.previous")}
+                        </Button>
 
                         {!isCurrentStepLast ? (
                             <Button
                                 type="button"
                                 onClick={handleNext}
                                 size={BtnSizes.LARGE}
-                                mode={BtnModes.PRIMARY}
+                                mode={BtnModes.PRIMARY_TXT}
                                 className="flex-1"
-                                aria-label={t("common.next")}
-                            >{t("common.next")}</Button>
+                                aria-label={t("common.nextStep")}
+                            >
+                                {t("common.nextStep")}
+                                <Ico.CHEVRON_RIGHT size={16} aria-hidden="true" />
+                            </Button>
                         ) : (
                             <Button
                                 type="button"
