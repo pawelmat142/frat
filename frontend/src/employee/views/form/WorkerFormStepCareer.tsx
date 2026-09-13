@@ -12,8 +12,13 @@ interface Props {
 }
 
 const WorkerFormStepCareer: React.FC<Props> = ({ formRef }) => {
-    const { control, formState } = formRef;
+    const { control } = formRef;
     const { t } = useTranslation();
+    const today = React.useMemo(() => {
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        return date;
+    }, []);
 
     return (
         <>
@@ -53,6 +58,7 @@ const WorkerFormStepCareer: React.FC<Props> = ({ formRef }) => {
                             onChange={date => {
                                 field.onChange(DateUtil.toLocalDateString(date) ?? null)
                             }}
+                            maxDate={today}
                         />
                     )}
                 />

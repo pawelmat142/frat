@@ -889,10 +889,20 @@ input {
   border: 1px solid $primary-color;
 }
 
-.react-datepicker__day--disabled {
-  color: $disabled-text;
-  // background: $gray-100;
+.react-datepicker__day--disabled,
+.react-datepicker__month-text--disabled,
+.react-datepicker__year-text--disabled {
+  color: $disabled-text !important;
+  opacity: .45;
   cursor: not-allowed;
+  pointer-events: none;
+  user-select: none;
+}
+
+.react-datepicker__day--disabled:hover,
+.react-datepicker__month-text--disabled:hover,
+.react-datepicker__year-text--disabled:hover {
+  background: transparent !important;
 }
 
 .react-datepicker__day--in-range,
@@ -963,6 +973,13 @@ input {
   .react-datepicker__navigation-icon {
     z-index: 1;
   }
+}
+
+.react-datepicker__navigation--previous--disabled,
+.react-datepicker__navigation--next--disabled {
+  cursor: not-allowed;
+  opacity: .4;
+  pointer-events: none;
 }
 
 .react-datepicker .react-datepicker__navigation-icon::before {

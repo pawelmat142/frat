@@ -16,6 +16,7 @@ interface DatePickerSheetProps {
     disabled?: boolean;
     config?: DatePickerConfig;
     minDate?: Date;
+    maxDate?: Date;
 }
 
 type YearPageAnimation = {
@@ -30,6 +31,7 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
     disabled,
     config = defaultDatePickerConfig,
     minDate,
+    maxDate,
 }) => {
     const today = React.useMemo(() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; }, []);
     const effectiveMinDate = config.futureDatesOnly ? today : minDate;
@@ -112,6 +114,7 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
                                 inline
                                 disabled={disabled}
                                 minDate={config.futureDatesOnly ? today : minDate}
+                                maxDate={maxDate}
                                 calendarClassName={yearPageAnimation
                                     ? `date-picker-year-page date-picker-year-page--${yearPageAnimation.direction}-${yearPageAnimation.sequence % 2}`
                                     : 'date-picker-year-page'}
@@ -135,6 +138,7 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
                                 inline
                                 disabled={disabled}
                                 minDate={config.futureDatesOnly ? today : minDate}
+                                maxDate={maxDate}
                                 calendarClassName={monthPageAnimation
                                     ? `date-picker-month-page date-picker-month-page--${monthPageAnimation.direction}-${monthPageAnimation.sequence % 2}`
                                     : 'date-picker-month-page'}
@@ -148,6 +152,7 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
                                 inline
                                 disabled={disabled}
                                 minDate={effectiveMinDate}
+                                maxDate={maxDate}
                             />
                         )}
 

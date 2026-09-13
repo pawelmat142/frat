@@ -46,6 +46,7 @@ interface DateInputProps extends Omit<InputInterface, 'type' | 'value' | 'onChan
     onChange?: (date: Date | null) => void;
     config?: DatePickerConfig;
     minDate?: Date;
+    maxDate?: Date;
 }
 
 const FloatingDateInput: React.FC<DateInputProps> = ({
@@ -64,6 +65,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     config = defaultDatePickerConfig,
     mode,
     minDate,
+    maxDate,
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomSheetCtx = useBottomSheet();
@@ -107,6 +109,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
             disabled={disabled}
             config={config}
             minDate={minDate}
+            maxDate={maxDate}
         />
     );
 
