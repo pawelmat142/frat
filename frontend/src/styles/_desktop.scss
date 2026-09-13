@@ -11,6 +11,9 @@
   display: none;
 }
 
+$desktop-view-size-one: 72rem;
+$desktop-view-size-two: 80rem;
+
 @media screen and (min-width: $desktop) {
   .desktop-block {
     display: block;
@@ -46,6 +49,7 @@
     column-gap: 5rem;
     min-height: 60px;
     padding: 0 .75rem;
+    max-width: $desktop-view-size-two;
   }
 
   .desktop-header-brand {
@@ -241,6 +245,12 @@
     border-top: 1px solid $border-color;
     box-shadow: $box-shadow;
   }
+
+  .desktop-footer-content {
+    width: 100%;
+    max-width: $desktop-view-size-two;
+  }
+  
   // FORMS
   .form-view {
     margin-top: 3rem;
@@ -308,7 +318,7 @@
     align-items: start;
     gap: 1.5rem;
     width: 100%;
-    max-width: 80rem;
+    max-width: $desktop-view-size-two;
     margin: 0 auto;
     padding-left: .5rem;
     padding-right: .5rem;
@@ -443,7 +453,7 @@
   // FULL WORKER PROFILE
   .desktop-worker-profile {
     width: 100%;
-    max-width: 72rem;
+    max-width: $desktop-view-size-one;
     margin: 0 auto;
     padding: .5rem 1.5rem 3rem;
   }
@@ -551,7 +561,7 @@
 
   .desktop-dashboard {
     width: 100%;
-    max-width: 72rem;
+    max-width: $desktop-view-size-one;
     margin: 0 auto;
     padding: 1.5rem 1.5rem 3rem;
   }
