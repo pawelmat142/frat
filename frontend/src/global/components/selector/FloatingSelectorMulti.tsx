@@ -85,7 +85,7 @@ const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValu
             disabled={disabled}
             required={required}
             center={center}
-            className={className}
+            className={`${className}${displayElementsAsChips ? ' multi-chip-selector' : ''}`}
             error={error}
             isActive={hasValue}
             isOpen={isDesktop ? isPopoverOpen : true}

@@ -379,6 +379,11 @@ $desktop-view-size-two: 80rem;
     padding-bottom: .125rem;
   }
 
+  // Chips need a little more room below in compact desktop controls.
+  .multi-chip-selector .pp-dropdown {
+    padding-bottom: .3rem;
+  }
+
   .floating-date-input-control {
     min-height: 44px;
     cursor: pointer;
