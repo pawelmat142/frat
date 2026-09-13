@@ -434,6 +434,15 @@ $desktop-view-size-two: 80rem;
     background-color: $secondary-bg;
     border-radius: .375rem;
     box-shadow: 0 .5rem 1.25rem rgba(0, 0, 0, .2);
+    opacity: 0;
+    transform: translateY(-.375rem) scale(.98);
+    transform-origin: top center;
+    transition: opacity .16s ease, transform .16s ease;
+
+    &.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
   .desktop-selector-popover .selector-list {

@@ -347,7 +347,7 @@ input {
   justify-content: space-between;
   cursor: pointer;
   transition: $transition;
-  border-radius: .75rem;
+  border-radius: .25rem;
 
   &.selected {
     color: $primary-color;
