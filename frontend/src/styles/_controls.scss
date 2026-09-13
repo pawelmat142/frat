@@ -830,6 +830,44 @@ input {
   top: 16px;
 }
 
+.react-datepicker__navigation--next {
+  right: 8px;
+}
+.react-datepicker__navigation--previous {
+  left: 8px;
+}
+.react-datepicker__navigation--previous,
+.react-datepicker__navigation--next {
+  width: 2.75rem;
+  padding-inline: 2.5rem;
+  border-radius: .25rem;
+  overflow: hidden;
+  padding-top: .4rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: $ripple-color;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity .2s ease;
+    pointer-events: none;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+
+  .react-datepicker__navigation-icon {
+    z-index: 1;
+  }
+}
+
+.react-datepicker .react-datepicker__navigation-icon::before {
+  border-color: $primary-text;
+}
+
 .react-datepicker__navigation-icon {
   color: $primary-color;
 }

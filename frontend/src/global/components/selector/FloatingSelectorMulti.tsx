@@ -5,7 +5,7 @@ import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import SelectorTrigger from './SelectorTrigger';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
 import SelectorItems from './SelectorItems';
-import { useSelectorPopover } from './useSelectorPopover';
+import { useAnchoredPopover } from 'global/hooks/useAnchoredPopover';
 
 const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -29,7 +29,7 @@ const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValu
     const bottomSheet = useBottomSheet();
     const { isDesktop } = useGlobalContext();
     const triggerRef = React.useRef<HTMLDivElement | null>(null);
-    const { closePopover, isPopoverMounted, isPopoverOpen, togglePopover } = useSelectorPopover(isDesktop, triggerRef);
+    const { closePopover, isPopoverMounted, isPopoverOpen, togglePopover } = useAnchoredPopover(isDesktop, triggerRef);
 
     const hasValue = Array.isArray(values) && values.length > 0;
     const displayedChips = chipValues ?? values;

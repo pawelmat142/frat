@@ -5,7 +5,7 @@ import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import SelectorTrigger from './SelectorTrigger';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
 import SelectorItems from './SelectorItems';
-import { useSelectorPopover } from './useSelectorPopover';
+import { useAnchoredPopover } from 'global/hooks/useAnchoredPopover';
 
 const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -27,7 +27,7 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     const bottomSheet = useBottomSheet();
     const { isDesktop } = useGlobalContext();
     const triggerRef = React.useRef<HTMLDivElement | null>(null);
-    const { closePopover, isPopoverMounted, isPopoverOpen, togglePopover } = useSelectorPopover(isDesktop, triggerRef);
+    const { closePopover, isPopoverMounted, isPopoverOpen, togglePopover } = useAnchoredPopover(isDesktop, triggerRef);
 
     const setRefs = React.useCallback((node: HTMLDivElement | null) => {
         triggerRef.current = node;

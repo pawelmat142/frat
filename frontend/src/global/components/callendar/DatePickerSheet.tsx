@@ -5,7 +5,7 @@ import Button from '../controls/Button';
 import { BtnModes } from 'global/interface/controls.interface';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft } from 'react-icons/fa';
 import { DatePickerConfig, DatePickerView, DatePickerViews, defaultDatePickerConfig } from './FloatingDateInput';
 import { isOneOf } from '@shared/utils/util';
 
@@ -57,6 +57,7 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
             <div className="date-picker-sheet-calendar overflow-hidden relative">
                 <AnimatePresence mode="wait" custom={direction}>
                     <motion.div
+                        className="date-picker-sheet-view"
                         key={view}
                         custom={direction}
                         initial={{ opacity: 0, x: direction * 40 }}
@@ -105,9 +106,9 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
                         )}
 
                         {isOneOf([DatePickerViews.MONTH, DatePickerViews.DAY], view) && (
-                            <div className='flex justify-end items-center mt-5'>
+                            <div className='flex justify-start items-center mt-5'>
                                 <Button mode={BtnModes.SECONDARY_TXT} onClick={handleViewBack}>
-                                    {t("common.back")} <FaChevronRight />
+                                    <FaChevronLeft /> {t("common.back")}
                                 </Button>
                             </div>
                         )}
@@ -116,10 +117,10 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
             </div>
 
             <div className="date-picker-sheet-actions">
-                <Button onClick={reset} mode={BtnModes.SECONDARY_TXT} fullWidth={true}>
+                <Button onClick={reset} mode={BtnModes.ERROR_TXT} fullWidth={true}>
                     {t("common.reset")}
                 </Button>
-                <Button onClick={handleConfirm} mode={BtnModes.PRIMARY} fullWidth={true}>
+                <Button onClick={handleConfirm} mode={BtnModes.PRIMARY_TXT} fullWidth={true}>
                     {t("common.confirm")}
                 </Button>
             </div>

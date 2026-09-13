@@ -2,7 +2,7 @@ import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'reac
 
 const POPOVER_ANIMATION_DURATION = 160;
 
-export const useSelectorPopover = (
+export const useAnchoredPopover = (
     isDesktop: boolean,
     triggerRef: MutableRefObject<HTMLDivElement | null>,
 ) => {

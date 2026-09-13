@@ -441,7 +441,8 @@ $desktop-view-size-two: 80rem;
   }
 
   // Single-select controls use a local, scrollable popover on desktop.
-  .desktop-selector-popover {
+  .desktop-selector-popover,
+  .desktop-date-picker-popover {
     position: absolute;
     top: calc(100% + .25rem);
     left: 0;
@@ -466,6 +467,66 @@ $desktop-view-size-two: 80rem;
   .desktop-selector-popover .selector-list {
     max-height: min(20rem, calc(100dvh - 8rem));
     padding-bottom: 0;
+  }
+
+  .desktop-date-picker-popover {
+    width: max(100%, 22rem);
+    max-height: calc(100dvh - 8rem);
+    overflow-y: auto;
+
+    .date-picker-sheet {
+      align-items: stretch;
+      padding: .75rem;
+      background-color: $secondary-bg;
+    }
+
+    .date-picker-sheet-calendar {
+      min-height: unset;
+    }
+
+    .date-picker-sheet-view {
+      width: 100%;
+    }
+
+    .react-datepicker {
+      width: 100% !important;
+      background-color: transparent;
+    }
+
+    .react-datepicker__header {
+      background-color: transparent;
+    }
+
+    .react-datepicker__day:not([aria-disabled=true]),
+    .react-datepicker__month-text:not([aria-disabled=true]),
+    .react-datepicker__year-text:not([aria-disabled=true]) {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: $ripple-color;
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity .2s ease;
+        pointer-events: none;
+      }
+
+      &:hover {
+        background-color: transparent;
+      }
+
+      &:hover::after {
+        opacity: 1;
+      }
+    }
+
+    .date-picker-sheet-actions {
+      padding-top: .75rem;
+    }
   }
 
   .desktop-selector-popover .selector-list.hide-last-item-border .selector-item.last .selector-item-label {

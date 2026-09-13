@@ -6,6 +6,8 @@ import FormError from '../controls/FormError';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import DatePickerSheet from './DatePickerSheet';
 import { useTranslation } from 'react-i18next';
+import { useGlobalContext } from 'global/providers/GlobalProvider';
+import { useAnchoredPopover } from 'global/hooks/useAnchoredPopover';
 
 export const DatePickerViews = {
     YEAR: 'year',
@@ -65,7 +67,10 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomSheetCtx = useBottomSheet();
+    const { isDesktop } = useGlobalContext();
     const { i18n } = useTranslation();
+    const wrapperRef = useRef<HTMLDivElement | null>(null);
+    const { closePopover, isPopoverMounted, isPopoverOpen, togglePopover } = useAnchoredPopover(isDesktop, wrapperRef);
 
     let myClass = `  ${className}`;
     if (fullWidth) {
@@ -80,31 +85,55 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
         myClass += ' pp-control-error';
     }
 
+    const closeDatePicker = () => {
+        if (isDesktop) {
+            closePopover();
+        } else {
+            bottomSheetCtx.close();
+        }
+    };
+
+    const datePicker = (
+        <DatePickerSheet
+            value={value}
+            onChange={date => {
+                onChange?.(date);
+                closeDatePicker();
+            }}
+            reset={() => {
+                onChange?.(null);
+                closeDatePicker();
+            }}
+            disabled={disabled}
+            config={config}
+            minDate={minDate}
+        />
+    );
+
     const handleInputClick = () => {
         if (disabled) return;
 
-        bottomSheetCtx?.open({
+        if (isDesktop) {
+            togglePopover();
+            return;
+        }
+
+        bottomSheetCtx.open({
             title: label,
             showClose: true,
-            children: (
-                <DatePickerSheet
-                    value={value}
-                    onChange={(date) => {
-                        if (onChange) onChange(date);
-                        bottomSheetCtx.close();
-                    }}
-                    reset={() => {
-                        if (onChange) onChange(null);
-                        bottomSheetCtx.close();
-                    }}
-
-                    disabled={disabled}
-                    config={config}
-                    minDate={minDate}
-                />
-            )
+            children: datePicker,
         });
     };
+
+    const desktopPopover = isDesktop && isPopoverMounted ? (
+        <div
+            className={`desktop-date-picker-popover${isPopoverOpen ? ' open' : ''}`}
+            role="dialog"
+            aria-label={label}
+        >
+            {datePicker}
+        </div>
+    ) : null;
 
     const _value = value instanceof Date
         ? config.disableShowDays
@@ -115,7 +144,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     const isLabelFloating = !!_value;
 
     return (
-        <div className={`floating-input-wrapper ${myClass}${center ? ' mx-auto' : ''}`}>
+        <div ref={wrapperRef} className={`floating-input-wrapper ${myClass}${center ? ' mx-auto' : ''}`}>
             <div className="floating-input-container">
                 <div
                     className="pp-control pp-input-row floating-date-input-control justify-between"
@@ -157,6 +186,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
                         error={error}
                     />
                 </div>
+                {desktopPopover}
             </div>
             <FormError error={error} />
         </div>
