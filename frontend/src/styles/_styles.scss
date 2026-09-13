@@ -856,6 +856,12 @@ $cellRadiusBig: 1rem;
     justify-content: space-between;
 }
 
+// Mobile uses the page Header for the view title. The wizard title is only
+// revealed by the desktop layout, where page Headers are intentionally hidden.
+.form-wizard-view-title {
+    display: none;
+}
+
 .wizard-stepper {
     display: flex;
     justify-content: center;

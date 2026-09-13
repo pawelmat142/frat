@@ -252,8 +252,37 @@ $desktop-view-size-two: 80rem;
   }
   
   // FORMS
-  .form-view {
-    margin-top: 3rem;
+
+  .form-subheader {
+    margin-top: 1rem;
+  }
+  // Keep the current step visible while the form's scroll container moves.
+  // Only the view-header content is constrained, so the sticky background
+  // still spans the complete application viewport.
+  .form-wizard-progress {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    box-shadow: $box-shadow;
+  }
+
+  .form-wizard-progress-content {
+    width: 100%;
+    max-width: $desktop-view-size-one;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .form-wizard-view-title {
+    display: block;
+    margin-bottom: 2rem;
+    color: $primary-text;
+    font-size: $xxlFont;
+    font-weight: $font-semibold;
+    line-height: 1.2;
+  }
+
+  .form-wizard-progress .wizard-stepper {
+    padding: 0;
   }
 
   // Desktop uses a denser control scale than the touch-first mobile UI.

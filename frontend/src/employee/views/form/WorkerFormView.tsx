@@ -383,6 +383,7 @@ const WorkerFormView: React.FC = () => {
         <Header title={t("employeeProfile.form.title")}></Header>
         <FormWizard
             localStorageKey={LOCAL_STORAGE_KEY}
+            title={t("employeeProfile.form.title")}
             formRef={formCtx}
             stepsOrder={WORKER_FORM_STEPS_ORDER}
             currentStep={form.currentStep}

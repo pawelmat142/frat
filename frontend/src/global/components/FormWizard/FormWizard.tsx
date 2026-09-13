@@ -10,6 +10,8 @@ import { AppConfig } from '@shared/AppConfig';
 
 type FormWizardProps<TForm extends FieldValues, TStep extends string> = {
     localStorageKey: string;
+    /** Displayed in the wizard's desktop view header. */
+    title?: string;
     formRef: UseFormReturn<TForm>;
     stepsOrder: TStep[];
     currentStep: TStep;
@@ -22,6 +24,7 @@ type FormWizardProps<TForm extends FieldValues, TStep extends string> = {
 
 function FormWizard<TForm extends FieldValues, TStep extends string = string>({
     localStorageKey,
+    title,
     formRef,
     stepsOrder,
     currentStep,
@@ -85,8 +88,11 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
 
     return (
         <div className="form-view relative flex flex-col">
-            <div className="sticky top-0 z-10 primary-bg py-5">
-                <Stepper stepsOrder={stepsOrder} currentStep={currentStep}></Stepper>
+            <div className="form-wizard-progress sticky top-0 z-10 primary-bg py-5">
+                <div className="form-wizard-progress-content">
+                    {title && <h1 className="form-wizard-view-title">{title}</h1>}
+                    <Stepper stepsOrder={stepsOrder} currentStep={currentStep}></Stepper>
+                </div>
             </div>
             <form className='flex flex-col flex-1'
                 onSubmit={formRef.handleSubmit(() => { }, (errors) => {
