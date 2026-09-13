@@ -18,6 +18,11 @@ interface DatePickerSheetProps {
     minDate?: Date;
 }
 
+type YearPageAnimation = {
+    direction: 'next' | 'previous';
+    sequence: number;
+};
+
 const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
     value,
     onChange,
@@ -32,6 +37,10 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(value || new Date());
     const [view, setView] = React.useState<DatePickerView>(config.startView);
     const [direction, setDirection] = React.useState<1 | -1>(1);
+    const displayedYearRef = React.useRef(selectedDate?.getFullYear() ?? new Date().getFullYear());
+    const [yearPageAnimation, setYearPageAnimation] = React.useState<YearPageAnimation | null>(null);
+    const displayedMonthYearRef = React.useRef(selectedDate?.getFullYear() ?? new Date().getFullYear());
+    const [monthPageAnimation, setMonthPageAnimation] = React.useState<YearPageAnimation | null>(null);
 
     const changeView = (next: DatePickerView) => {
         const order: DatePickerView[] = [DatePickerViews.YEAR, DatePickerViews.MONTH, DatePickerViews.DAY];
@@ -49,8 +58,33 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
         const order: DatePickerView[] = [DatePickerViews.YEAR, DatePickerViews.MONTH, DatePickerViews.DAY];
         const prevView = order[Math.max(0, order.indexOf(view) - 1)];
         setDirection(order.indexOf(prevView) > order.indexOf(view) ? 1 : -1);
+        if (prevView === DatePickerViews.MONTH && selectedDate) {
+            displayedMonthYearRef.current = selectedDate.getFullYear();
+        }
         setView(prevView);
     }
+
+    const handleYearPageChange = (date: Date) => {
+        const nextYear = date.getFullYear();
+        const animationDirection = nextYear > displayedYearRef.current ? 'next' : 'previous';
+
+        displayedYearRef.current = nextYear;
+        setYearPageAnimation((current) => ({
+            direction: animationDirection,
+            sequence: (current?.sequence ?? 0) + 1,
+        }));
+    };
+
+    const handleMonthPageChange = (date: Date) => {
+        const nextYear = date.getFullYear();
+        const animationDirection = nextYear > displayedMonthYearRef.current ? 'next' : 'previous';
+
+        displayedMonthYearRef.current = nextYear;
+        setMonthPageAnimation((current) => ({
+            direction: animationDirection,
+            sequence: (current?.sequence ?? 0) + 1,
+        }));
+    };
 
     return (
         <div className="date-picker-sheet">
@@ -69,11 +103,19 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
                             <DatePicker
                                 className='w-full'
                                 selected={selectedDate}
-                                onChange={(date) => { setSelectedDate(date); changeView(DatePickerViews.MONTH); }}
+                                onChange={(date) => {
+                                    setSelectedDate(date);
+                                    if (date) displayedMonthYearRef.current = date.getFullYear();
+                                    changeView(DatePickerViews.MONTH);
+                                }}
                                 showYearPicker
                                 inline
                                 disabled={disabled}
                                 minDate={config.futureDatesOnly ? today : minDate}
+                                calendarClassName={yearPageAnimation
+                                    ? `date-picker-year-page date-picker-year-page--${yearPageAnimation.direction}-${yearPageAnimation.sequence % 2}`
+                                    : 'date-picker-year-page'}
+                                onYearChange={handleYearPageChange}
                             />
                         )}
                         {view === DatePickerViews.MONTH && (
@@ -93,6 +135,10 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
                                 inline
                                 disabled={disabled}
                                 minDate={config.futureDatesOnly ? today : minDate}
+                                calendarClassName={monthPageAnimation
+                                    ? `date-picker-month-page date-picker-month-page--${monthPageAnimation.direction}-${monthPageAnimation.sequence % 2}`
+                                    : 'date-picker-month-page'}
+                                onYearChange={handleMonthPageChange}
                             />
                         )}
                         {view === DatePickerViews.DAY && (
