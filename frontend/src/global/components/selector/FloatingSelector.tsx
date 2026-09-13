@@ -3,6 +3,7 @@ import React from 'react';
 import { SelectorValue, SelectorInterface } from 'global/interface/controls.interface';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import SelectorTrigger from './SelectorTrigger';
+import { useGlobalContext } from 'global/providers/GlobalProvider';
 
 const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -22,29 +23,94 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     ref: React.Ref<HTMLDivElement>
 ) => {
     const bottomSheet = useBottomSheet();
+    const { isDesktop } = useGlobalContext();
+    const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+    const triggerRef = React.useRef<HTMLDivElement | null>(null);
+
+    const setRefs = React.useCallback((node: HTMLDivElement | null) => {
+        triggerRef.current = node;
+        if (typeof ref === 'function') {
+            ref(node);
+        } else if (ref) {
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }
+    }, [ref]);
+
+    React.useEffect(() => {
+        if (!isDesktop || !isPopoverOpen) return;
+
+        const closeOnOutsideClick = (event: MouseEvent) => {
+            if (!triggerRef.current?.contains(event.target as Node)) {
+                setIsPopoverOpen(false);
+            }
+        };
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') setIsPopoverOpen(false);
+        };
+
+        document.addEventListener('mousedown', closeOnOutsideClick);
+        document.addEventListener('keydown', closeOnEscape);
+        return () => {
+            document.removeEventListener('mousedown', closeOnOutsideClick);
+            document.removeEventListener('keydown', closeOnEscape);
+        };
+    }, [isDesktop, isPopoverOpen]);
+
+    const selectItem = (itemValue: T) => {
+        if (itemValue === value?.value) {
+            if (!required) onSelect(null);
+        } else {
+            onSelect(itemValue);
+        }
+    };
 
     const handleOpen = () => {
+        if (isDesktop) {
+            setIsPopoverOpen(open => !open);
+            return;
+        }
+
         bottomSheet.openSelector({
             items,
             selectedValues: value ? [value.value] : [],
             title: label ?? '',
             enableSearchText,
             onSelect: (item) => {
-                const itemValue = item as T;
-                // Clicking the already-selected item deselects it (unless required).
-                if (itemValue === value?.value) {
-                    if (!required) onSelect(null);
-                } else {
-                    onSelect(itemValue);
-                }
+                selectItem(item as T);
             },
             onClean: () => onSelect(null),
         });
     };
 
+    const desktopPopover = isDesktop && isPopoverOpen ? (
+        <div className="desktop-selector-popover" role="listbox" aria-label={label}>
+            {items.map(item => {
+                const selected = item.value === value?.value;
+                return (
+                    <button
+                        key={String(item.value)}
+                        type="button"
+                        className={`desktop-selector-option${selected ? ' selected' : ''}`}
+                        role="option"
+                        aria-selected={selected}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            selectItem(item.value);
+                            setIsPopoverOpen(false);
+                        }}
+                    >
+                        {item.icon && <span className="desktop-selector-option-icon">{item.icon}</span>}
+                        {item.src && <img className="desktop-selector-option-image" src={item.src} alt="" />}
+                        <span>{item.label}</span>
+                    </button>
+                );
+            })}
+        </div>
+    ) : null;
+
     return (
         <SelectorTrigger
-            ref={ref}
+            ref={setRefs}
             id={id}
             label={label}
             fullWidth={fullWidth}
@@ -54,7 +120,9 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             className={className}
             error={error}
             isActive={!!value?.value}
+            isOpen={isDesktop ? isPopoverOpen : true}
             onClick={handleOpen}
+            popover={desktopPopover}
         >
             <span className="dropdown-selected flex items-center gap-2">
                 {value?.src && (

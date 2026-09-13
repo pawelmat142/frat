@@ -7,8 +7,10 @@ import { BaseSelectorProps } from 'global/interface/controls.interface';
 interface SelectorTriggerProps extends BaseSelectorProps {
     /** Content rendered inside the trigger button (selected value display). */
     children: React.ReactNode;
+    popover?: React.ReactNode;
     /** Whether the floating label should be in its active (raised) position. */
     isActive: boolean;
+    isOpen?: boolean;
     onClick: () => void;
 }
 
@@ -20,7 +22,9 @@ interface SelectorTriggerProps extends BaseSelectorProps {
  */
 const SelectorTrigger = forwardRef<HTMLDivElement, SelectorTriggerProps>(({
     children,
+    popover,
     isActive,
+    isOpen = false,
     onClick,
     // BaseSelectorProps
     id,
@@ -51,6 +55,7 @@ const SelectorTrigger = forwardRef<HTMLDivElement, SelectorTriggerProps>(({
                     tabIndex={disabled ? -1 : 0}
                     aria-haspopup="listbox"
                     aria-disabled={disabled}
+                    aria-expanded={isOpen}
                     onClick={() => {
                         if (!disabled) onClick();
                     }}
@@ -62,7 +67,7 @@ const SelectorTrigger = forwardRef<HTMLDivElement, SelectorTriggerProps>(({
                     }}
                 >
                     {children}
-                    <ArrowIcon open={true} />
+                    <ArrowIcon open={isOpen} />
                 </div>
 
                 <FloatingLabel
@@ -72,6 +77,8 @@ const SelectorTrigger = forwardRef<HTMLDivElement, SelectorTriggerProps>(({
                     isActive={isActive}
                     error={error}
                 />
+
+                {popover}
             </div>
 
             <FormError error={error} />
