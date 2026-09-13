@@ -62,26 +62,26 @@ function SelectorItemRow<T extends SelectorValue>({
     return (
         <div key={String(item.value)}>
             <div
-                className={`bottom-sheet-item ripple${selected ? ' selected' : ''}${last ? ' last' : ''}`}
+                className={`selector-item ripple${selected ? ' selected' : ''}${last ? ' last' : ''}`}
                 onClick={() => onItemClick(item)}
             >
                 {multiSelect && (
-                    <div className={`bottom-sheet-checkbox mr-3 ${selected ? 'checked' : ''}`}>
+                    <div className={`selector-checkbox mr-3 ${selected ? 'checked' : ''}`}>
                         {selected && <FaCheck size={14} />}
                     </div>
                 )}
-                <div className="bottom-sheet-item-content">
+                <div className="selector-item-content">
                     {item.icon && (
-                        <span className="bottom-sheet-item-icon">{item.icon}</span>
+                        <span className="selector-item-icon">{item.icon}</span>
                     )}
                     {item.src && (
                         <img
                             src={item.src}
                             alt={item.label}
-                            className="bottom-sheet-item-image"
+                            className="selector-item-image"
                         />
                     )}
-                    <span className="bottom-sheet-item-label">
+                    <span className="selector-item-label">
                         {highlightLabel(item.label)}
                     </span>
                 </div>
@@ -214,7 +214,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                 </div>
             )}
 
-            <div className="bottom-sheet-content">
+            <div className="selector-list">
                 {/* Pinned items – always at the top, never re-sorted */}
                 {initialSelectedItems.map(item => (
                     <SelectorItemRow
@@ -244,8 +244,8 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                 ))}
             </div>
 
-            {!isAutomated && (
-                <div className="flex gap-2 bottom-sheet-footer py-3">
+            {!isAutomated && (onClean || multiSelect) && (
+                <div className="selector-footer flex gap-2 py-3">
                     {onClean && (
                         <Button onClick={handleClean} mode={BtnModes.ERROR_TXT} fullWidth>
                             {t("common.reset")}

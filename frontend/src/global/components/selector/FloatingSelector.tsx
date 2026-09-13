@@ -4,6 +4,7 @@ import { SelectorValue, SelectorInterface } from 'global/interface/controls.inte
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import SelectorTrigger from './SelectorTrigger';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
+import SelectorItems from './SelectorItems';
 
 const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -84,27 +85,14 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
 
     const desktopPopover = isDesktop && isPopoverOpen ? (
         <div className="desktop-selector-popover" role="listbox" aria-label={label}>
-            {items.map(item => {
-                const selected = item.value === value?.value;
-                return (
-                    <button
-                        key={String(item.value)}
-                        type="button"
-                        className={`desktop-selector-option${selected ? ' selected' : ''}`}
-                        role="option"
-                        aria-selected={selected}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            selectItem(item.value);
-                            setIsPopoverOpen(false);
-                        }}
-                    >
-                        {item.icon && <span className="desktop-selector-option-icon">{item.icon}</span>}
-                        {item.src && <img className="desktop-selector-option-image" src={item.src} alt="" />}
-                        <span>{item.label}</span>
-                    </button>
-                );
-            })}
+            <SelectorItems
+                items={items}
+                selectedValues={value ? [value.value] : []}
+                onSelect={item => {
+                    selectItem(item as T);
+                    setIsPopoverOpen(false);
+                }}
+            />
         </div>
     ) : null;
 

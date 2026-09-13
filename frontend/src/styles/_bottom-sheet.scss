@@ -85,7 +85,8 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         animation: slideDown 0.3s ease-in forwards;
     }
 
-    .bottom-sheet-item {
+    .bottom-sheet-item,
+    .selector-item {
         min-width: 300px;
     }
 }
@@ -99,51 +100,12 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
 }
 
-.bottom-sheet-drag-handle {
-    position: absolute;
-    top: 0.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 3rem;
-    height: 0.25rem;
-    background-color: $border-color;
-    border-radius: 0.25rem;
-}
-
-.bottom-sheet-title {
-    margin: 0;
-    font-size: $lFont;
-    font-weight: $font-medium;
-    color: $primary-text;
-    padding-top: 0.5rem;
-}
-
-.bottom-sheet-close-btn {
-    background: none;
-    border: none;
-    color: $primary-text;
-    cursor: pointer;
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: $transition;
-
-    &:hover {
-        color: $primary-color;
-    }
-}
-
 .bottom-sheet-content {
     overflow-y: auto;
-    padding: 0 0 0.5rem;
+    padding: 0 0 .5rem;
 }
 
-
-
-
 .bottom-sheet-item {
-    // padding: .75rem .75rem;
     padding: 0 1rem;
     display: flex;
     align-items: center;
@@ -187,30 +149,47 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 .bottom-sheet-item-icon {
     display: flex;
     align-items: center;
-    //color: $primary-color;
     font-size: 1.5rem;
 }
 
 .bottom-sheet-item-image {
     width: 2rem;
-    border-radius: 0.25rem;
+    border-radius: .25rem;
     object-fit: cover;
 }
 
-.bottom-sheet-checkbox {
-    width: 1.5rem;
-    height: 1.5rem;
-    border: 2px solid $border-color;
+.bottom-sheet-drag-handle {
+    position: absolute;
+    top: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3rem;
+    height: 0.25rem;
+    background-color: $border-color;
     border-radius: 0.25rem;
+}
+
+.bottom-sheet-title {
+    margin: 0;
+    font-size: $lFont;
+    font-weight: $font-medium;
+    color: $primary-text;
+    padding-top: 0.5rem;
+}
+
+.bottom-sheet-close-btn {
+    background: none;
+    border: none;
+    color: $primary-text;
+    cursor: pointer;
+    padding: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: $transition;
 
-    &.checked {
-        background-color: $primary-color;
-        border-color: $primary-color;
-        color: white;
+    &:hover {
+        color: $primary-color;
     }
 }
 
@@ -240,6 +219,11 @@ $animationTransition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     .bottom-sheet-content {
         max-height: 70vh;
         overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .selector-list {
+        max-height: 70vh;
         overflow-x: hidden;
     }
 }
