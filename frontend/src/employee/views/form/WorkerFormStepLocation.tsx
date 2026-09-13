@@ -112,7 +112,7 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
                     onChange={handleLocationOptionChange}
                 />
 
-                <div className="w-full flex overflow-x-hidden">
+                <div className="w-full flex">
                     <AnimatePresence mode="wait" custom={tabTransitionDirection.current} initial={false}>
                     <motion.div
                         key={locationOption}
