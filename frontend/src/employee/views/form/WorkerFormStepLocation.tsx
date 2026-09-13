@@ -10,6 +10,7 @@ import { BtnModes } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
 import { toast } from "react-toastify";
 import CountryAndLocationSelector from "global/components/controls/CountryAndLocationSelector";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -26,6 +27,7 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
     register("location.geocodedPosition", required);
 
     const locationOption = watch("location.locationOption");
+    const tabTransitionDirection = React.useRef<1 | -1>(1);
 
     const tabOptions: TabSwitcherOption[] = [
         {
@@ -56,9 +58,24 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
         }
     }
 
+    const handleLocationOptionChange = (code: string) => {
+        const currentIndex = tabOptions.findIndex(option => option.code === locationOption);
+        const nextIndex = tabOptions.findIndex(option => option.code === code);
+
+        if (currentIndex !== -1 && nextIndex !== -1 && currentIndex !== nextIndex) {
+            tabTransitionDirection.current = nextIndex > currentIndex ? 1 : -1;
+        }
+
+        setValue("location.locationOption", code as WorkerLocationOption);
+    };
+
     return (
         <>
             <h2 className="form-subheader">{t("employeeProfile.form.location.title")}</h2>
+
+            <p className={`${msgClass} s-font mt-2`}>
+                {t("employeeProfile.form.location.info")}
+            </p>
 
             <CountryAndLocationSelector
                 value={{
@@ -78,8 +95,6 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
                 }}
             ></CountryAndLocationSelector>
 
-            <p className={`${msgClass} s-font mt-2 mb-0`}>{t("employeeProfile.form.location.info")}</p>
-
             <div>
                 <Button fullWidth mode={BtnModes.PRIMARY_TXT} onClick={resetLocation}>{t("employeeProfile.form.resetLocation")}</Button>
             </div>
@@ -91,11 +106,25 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
                 <TabSwitcher
                     options={tabOptions}
                     value={locationOption}
-                    onChange={code => setValue("location.locationOption", code as WorkerLocationOption)}
+                    onChange={handleLocationOptionChange}
                 />
 
-                <div className="w-full flex">
-                    <div className="primary-text w-full">
+                <div className="w-full flex overflow-x-hidden">
+                    <AnimatePresence mode="wait" custom={tabTransitionDirection.current} initial={false}>
+                    <motion.div
+                        key={locationOption}
+                        custom={tabTransitionDirection.current}
+                        variants={{
+                            enter: (direction: number) => ({ x: 24 * direction, opacity: 0 }),
+                            center: { x: 0, opacity: 1 },
+                            exit: (direction: number) => ({ x: -24 * direction, opacity: 0 }),
+                        }}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                        className="primary-text w-full"
+                    >
                         {locationOption === WorkerLocationOptions.ALL_EUROPE && (
                             <div className={msgClass}>
                                 {t("employeeProfile.form.locationOption.ALL_EUROPE.msg")}
@@ -134,7 +163,8 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
                                 </div>
                             </div>
                         )}
-                    </div>
+                    </motion.div>
+                    </AnimatePresence>
                 </div>
             </div>
 

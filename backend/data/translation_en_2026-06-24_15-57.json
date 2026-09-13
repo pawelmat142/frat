@@ -805,7 +805,7 @@
         "freeText": "Search...",
         "fullName": "Full name",
         "location": {
-          "info": "*Providing an approximate location is required for the search functionality and helps others find your profile.",
+          "info": "Your approximate location, where you are currently based, is required for search and helps others find your profile.",
           "label": "Step 2",
           "title": "Location",
           "chooseOptions": "Choose option:"
@@ -852,7 +852,7 @@
         "uploadAvatar": "Upload avatar",
         "confirmSubmit": "Are you sure you want to save the technician profile?",
         "locationPoint": "Exact location [lat, lng]",
-        "resetLocation": "Reset location",
+        "resetLocation": "Use current location",
         "submitSuccess": "Profile saved successfully",
         "locationOption": {
           "POSITION": {

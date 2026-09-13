@@ -805,7 +805,7 @@
         "freeText": "Szukaj...",
         "fullName": "Imię i nazwisko",
         "location": {
-          "info": "*Podanie orientacyjnej lokalizacji jest wymagane do działania wyszukiwarki i ułatwia innym znalezienie Twojego profilu.",
+          "info": "Podaj swoją przybliżoną lokalizację, czyli miejsce, w którym obecnie przebywasz. Jest ona wymagana do działania wyszukiwarki i ułatwia innym znalezienie Twojego profilu.",
           "label": "Krok 2",
           "title": "Lokalizacja",
           "chooseOptions": "Wybierz opcje:"
@@ -852,7 +852,7 @@
         "uploadAvatar": "Prześlij avatar",
         "confirmSubmit": "Czy na pewno chcesz zapisać profil pracownika?",
         "locationPoint": "Dokładna lokalizacja [lat lng]",
-        "resetLocation": "Resetuj lokalizację",
+        "resetLocation": "Użyj bieżącej lokalizacji",
         "submitSuccess": "Profil został zapisany pomyślnie",
         "locationOption": {
           "POSITION": {
