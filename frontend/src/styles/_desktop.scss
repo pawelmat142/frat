@@ -413,6 +413,15 @@ $desktop-view-size-two: 80rem;
     }
   }
 
+  // Preserve visual breathing room below language flags in compact controls.
+  .communication-language-selector .dropdown-selected {
+    padding-bottom: .125rem;
+  }
+
+  .communication-language-selector .pp-dropdown-icon {
+    height: 1rem;
+  }
+
   // WORKER SEARCH
   .workers-search-layout {
     display: grid;

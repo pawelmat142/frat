@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { FormValidator } from "global/FormValidator";
 import { WorkerForm } from "@shared/interfaces/WorkerI";
 import DictionarySelector from "global/components/selector/DictionarySelector";
+import { Ico } from "global/icon.def";
 
 interface Props {
   control: Control<any>;
@@ -26,14 +27,14 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
   return (
     <div>
       <div className="flex flex-col gap-3 md:gap-2">
-        {communicationLanguages.map((lang, idx) => (
+        {communicationLanguages.map((_, idx) => (
           <div key={idx} className="flex gap-2 items-center">
             <Controller
               name={`personalData.communicationLanguages.${idx}` as const}
               control={control}
               rules={required}
               render={({ field }) => <DictionarySelector
-                className="w-full"
+                className="w-full communication-language-selector"
                 valueInput={field.value ?? ""}
                 onSelect={item => field.onChange(item ? String(item) : "")}
                 label={t("employeeProfile.form.communicationLanguage") + (communicationLanguages.length > 1 ? ` #${idx + 1}` : "")}
@@ -64,13 +65,14 @@ const CommunicationLanguagesSection: React.FC<Props> = ({ control, setValue, wat
         ))}
       </div>
       <Button
-        mode={BtnModes.PRIMARY_TXT}
+        mode={BtnModes.SECONDARY_TXT}
         size={BtnSizes.SMALL}
         className="ml-auto"
         onClick={() => {
           setValue("personalData.communicationLanguages", [...communicationLanguages, '']);
         }}
       >
+        <Ico.PLUS size={14} aria-hidden="true" />
         {t("employeeProfile.form.addLanguage")}
       </Button>
     </div>
