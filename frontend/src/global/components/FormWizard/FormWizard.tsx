@@ -136,7 +136,6 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
                             size={BtnSizes.LARGE}
                             mode={BtnModes.SECONDARY_TXT}
                             disabled={currentStep === stepsOrder[0]}
-                            className="flex-1"
                             aria-label={t("common.previous")}
                         >
                             <Ico.CHEVRON_LEFT size={16} aria-hidden="true" />
@@ -149,7 +148,6 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
                                 onClick={handleNext}
                                 size={BtnSizes.LARGE}
                                 mode={BtnModes.PRIMARY_TXT}
-                                className="flex-1"
                                 aria-label={t("common.nextStep")}
                             >
                                 {t("common.nextStep")}
@@ -161,9 +159,10 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
                                 onClick={() => { onFinalSubmit(validateCurrentStep) }}
                                 size={BtnSizes.LARGE}
                                 mode={BtnModes.PRIMARY}
-                                className="flex-1 font-bold"
+                                className="font-bold px-10"
                                 aria-label={t("common.save")}
                             >
+                                <Ico.CHECK size={16} aria-hidden="true" />
                                 {t("common.save")}
                             </Button>
                         )}
