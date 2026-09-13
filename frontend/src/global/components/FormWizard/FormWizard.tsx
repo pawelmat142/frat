@@ -15,6 +15,7 @@ type FormWizardProps<TForm extends FieldValues, TStep extends string> = {
     title?: string;
     formRef: UseFormReturn<TForm>;
     stepsOrder: TStep[];
+    stepLabels?: Partial<Record<TStep, string>>;
     currentStep: TStep;
     onFinalSubmit: (validateFn: () => Promise<boolean>) => void | Promise<void>;
     children: React.ReactNode;
@@ -28,6 +29,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
     title,
     formRef,
     stepsOrder,
+    stepLabels,
     currentStep,
     onFinalSubmit,
     children,
@@ -96,7 +98,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
             </div>
             <div className="form-wizard-stepper-sticky sticky top-0 z-10 primary-bg py-5">
                 <div className="form-wizard-progress-content">
-                    <Stepper stepsOrder={stepsOrder} currentStep={currentStep}></Stepper>
+                        <Stepper stepsOrder={stepsOrder} stepLabels={stepLabels} currentStep={currentStep}></Stepper>
                 </div>
             </div>
             <form className='flex flex-col flex-1'

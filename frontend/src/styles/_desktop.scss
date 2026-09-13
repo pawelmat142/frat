@@ -289,6 +289,48 @@ $desktop-view-size-two: 80rem;
     padding: 0;
   }
 
+  .wizard-stepper.has-labels,
+  .wizard-stepper.has-labels .wizard-stepper-item {
+    align-items: flex-start;
+  }
+
+  // Labels are positioned outside the marker so their varying widths do not
+  // affect the flex space assigned to the progress lines.
+  .wizard-stepper.has-labels {
+    padding-bottom: 1.75rem;
+  }
+
+  .wizard-stepper.has-labels .wizard-stepper-marker {
+    position: relative;
+    width: 0;
+  }
+
+  .wizard-stepper.has-labels .wizard-stepper-line {
+    align-self: flex-start;
+    margin-top: .375rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .wizard-stepper-label {
+    display: block;
+    position: absolute;
+    top: calc(100% + .5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 9rem;
+    color: $secondary-text;
+    font-size: $xsFont;
+    line-height: 1.15;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .wizard-stepper-marker.current .wizard-stepper-label {
+    color: $primary-text;
+    font-weight: $font-semibold;
+  }
+
   // Keep the actions aligned with the desktop view header without changing
   // the width of the form content above them.
   .form-wizard-buttons-wrapper {

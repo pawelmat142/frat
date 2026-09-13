@@ -386,6 +386,14 @@ const WorkerFormView: React.FC = () => {
             title={t("employeeProfile.form.title")}
             formRef={formCtx}
             stepsOrder={WORKER_FORM_STEPS_ORDER}
+            stepLabels={{
+                [WorkerFormSteps.PERSONAL_DATA]: t("employeeProfile.form.personalData.title"),
+                [WorkerFormSteps.CAREER]: t("employeeProfile.form.career.title"),
+                [WorkerFormSteps.LOCATION]: t("employeeProfile.form.location.title"),
+                [WorkerFormSteps.AVAILABILITY]: t("employeeProfile.form.availability.title"),
+                [WorkerFormSteps.CERTIFICATES]: t("employeeProfile.form.certificates.title"),
+                [WorkerFormSteps.CERTIFICATE_DATES]: t("employeeProfile.form.certificateDates.title"),
+            }}
             currentStep={form.currentStep}
             onFinalSubmit={onSubmit}
             onSelectStep={selectStep}
