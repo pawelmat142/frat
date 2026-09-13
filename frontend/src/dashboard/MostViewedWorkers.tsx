@@ -24,8 +24,8 @@ const MostViewedWorkers: React.FC = () => {
         <DesktopDashSection
             title={t("user.mostViewedProfiles")}
             empty={isDesktop && !workers.length ? {
-                text: "Brak najczęściej oglądanych techników.",
-                actionTitle: "Szukaj techników",
+                text: t("employeeProfile.dashboardNoMostViewed"),
+                actionTitle: t("employeeProfile.search"),
                 onClick: workerSearchCtx.navToSearch,
             } : undefined}
         >

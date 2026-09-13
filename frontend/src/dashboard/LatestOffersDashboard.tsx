@@ -23,8 +23,8 @@ const LatestOffersDashboard: React.FC = () => {
         <DesktopDashSection
             title={t("user.latestOffers")}
             empty={isDesktop && !offers.length ? {
-                text: "Brak najnowszych ofert.",
-                actionTitle: "Szukaj ofert",
+                text: t("user.dashboardNoLatestOffers"),
+                actionTitle: t("user.browseOffers"),
                 onClick: offerSearchCtx.navToSearch,
             } : undefined}
         >

@@ -116,7 +116,11 @@
       "addWorkerProfile": "Add technician profile",
       "mostViewedProfiles": "Most viewed technicians",
       "removeFromListSuccess": "Removed from favourites",
-      "removeFromListPopupMessage": "Confirm removal from favourites"
+      "removeFromListPopupMessage": "Confirm removal from favourites",
+      "dashboardUserNotFound": "Something went wrong, user not found",
+      "dashboardNoOffers": "You don't have any offers yet.",
+      "dashboardNoLatestOffers": "There are no latest offers.",
+      "dashboardNoRecentlyViewedOffers": "You haven't viewed any offers yet."
     },
     "error": {
       "missingUserId": "User ID is missing",
@@ -942,6 +946,8 @@
       "deleteButton": "Delete Technician Profile",
       "filtersTitle": "Filter Technicians",
       "recentlySeen": "Recently seen technicians",
+      "dashboardNoRecentlyViewed": "You haven't viewed any technicians yet.",
+      "dashboardNoMostViewed": "There are no most viewed technicians.",
       "unlikeButton": "Unlike Technician Profile",
       "submitSuccess": "Technician profile saved successfully.",
       "activateButton": "Activate Technician Profile",

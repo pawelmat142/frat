@@ -22,8 +22,8 @@ const RecentViewedWorkers: React.FC = () => {
         <DesktopDashSection
             title={t("employeeProfile.recentlySeen")}
             empty={isDesktop && !items.length ? {
-                text: "Nie oglądałeś jeszcze żadnych techników.",
-                actionTitle: "Szukaj techników",
+                text: t("employeeProfile.dashboardNoRecentlyViewed"),
+                actionTitle: t("employeeProfile.search"),
                 onClick: workerSearchCtx.navToSearch,
             } : undefined}
         >

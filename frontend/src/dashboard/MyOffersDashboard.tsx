@@ -18,7 +18,7 @@ const MyOffersDashboard: React.FC = () => {
 
     const uid = userCtx?.me?.uid;
     if (!uid) {
-        return "Something went wrong, user not found";
+        return t("user.dashboardUserNotFound");
     }
 
     if (!offers.length && !isDesktop) {
@@ -30,8 +30,8 @@ const MyOffersDashboard: React.FC = () => {
             title={t("user.myOffers")}
             link={offers.length ? { onClick: () => navigate(Path.getOffersPath(uid)) } : undefined}
             empty={isDesktop && !offers.length ? {
-                text: "Nie masz jeszcze ofert.",
-                actionTitle: "Dodaj ofertę",
+                text: t("user.dashboardNoOffers"),
+                actionTitle: t("offer.add"),
                 onClick: () => navigate(Path.OFFER_FORM),
             } : undefined}
         >

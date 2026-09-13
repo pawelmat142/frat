@@ -22,8 +22,8 @@ const RecentViewedOffers: React.FC = () => {
         <DesktopDashSection
             title={t("offer.recentlySeen")}
             empty={isDesktop && !items.length ? {
-                text: "Nie oglądałeś jeszcze żadnych ofert.",
-                actionTitle: "Szukaj ofert",
+                text: t("user.dashboardNoRecentlyViewedOffers"),
+                actionTitle: t("user.browseOffers"),
                 onClick: offerSearchCtx.navToSearch,
             } : undefined}
         >

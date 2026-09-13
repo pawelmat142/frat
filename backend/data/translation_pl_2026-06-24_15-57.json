@@ -116,7 +116,11 @@
       "addWorkerProfile": "Dodaj swój profil technika",
       "mostViewedProfiles": "Najczęściej oglądani technicy",
       "removeFromListSuccess": "Usunięto z ulubionych",
-      "removeFromListPopupMessage": "Potwierdź usunięcie z ulubionych"
+      "removeFromListPopupMessage": "Potwierdź usunięcie z ulubionych",
+      "dashboardUserNotFound": "Coś poszło nie tak, nie znaleziono użytkownika",
+      "dashboardNoOffers": "Nie masz jeszcze ofert.",
+      "dashboardNoLatestOffers": "Brak najnowszych ofert.",
+      "dashboardNoRecentlyViewedOffers": "Nie oglądałeś jeszcze żadnych ofert."
     },
     "error": {
       "missingUserId": "Brak ID użytkownika",
@@ -942,6 +946,8 @@
       "deleteButton": "Usuń profil technika",
       "filtersTitle": "Filtruj techników",
       "recentlySeen": "Ostatnio oglądani technicy",
+      "dashboardNoRecentlyViewed": "Nie oglądałeś jeszcze żadnych techników.",
+      "dashboardNoMostViewed": "Brak najczęściej oglądanych techników.",
       "unlikeButton": "Usuń polubienie",
       "submitSuccess": "Profil technika zapisany pomyślnie.",
       "activateButton": "Aktywuj profil",
