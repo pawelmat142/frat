@@ -490,12 +490,17 @@ $desktop-view-size-two: 80rem;
 
     .date-picker-sheet {
       align-items: stretch;
-      padding: .75rem;
+      padding: 0 .75rem .75rem;
       background-color: $secondary-bg;
     }
 
     .date-picker-sheet-calendar {
       min-height: unset;
+
+      .react-datepicker .react-datepicker__day {
+        height: 2rem;
+        line-height: 2rem;
+      }
     }
 
     .date-picker-sheet-view {
@@ -541,6 +546,8 @@ $desktop-view-size-two: 80rem;
     .date-picker-sheet-actions {
       padding-top: .75rem;
     }
+
+
   }
 
   .desktop-selector-popover .selector-list.hide-last-item-border .selector-item.last .selector-item-label {

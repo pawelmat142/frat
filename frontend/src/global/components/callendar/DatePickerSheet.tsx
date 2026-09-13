@@ -148,7 +148,10 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
                         {view === DatePickerViews.DAY && (
                             <DatePicker
                                 selected={selectedDate}
-                                onChange={(date) => setSelectedDate(date)}
+                                onChange={(date) => {
+                                    setSelectedDate(date);
+                                    onChange(date);
+                                }}
                                 inline
                                 disabled={disabled}
                                 minDate={effectiveMinDate}
@@ -157,7 +160,7 @@ const DatePickerSheet: React.FC<DatePickerSheetProps> = ({
                         )}
 
                         {isOneOf([DatePickerViews.MONTH, DatePickerViews.DAY], view) && (
-                            <div className='flex justify-start items-center mt-5'>
+                            <div className='flex justify-start items-center mt-5 md:mt-0'>
                                 <Button mode={BtnModes.SECONDARY_TXT} onClick={handleViewBack}>
                                     <FaChevronLeft /> {t("common.back")}
                                 </Button>

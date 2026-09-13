@@ -72,7 +72,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
     const { isDesktop } = useGlobalContext();
     const { i18n } = useTranslation();
     const wrapperRef = useRef<HTMLDivElement | null>(null);
-    const { closePopover, isPopoverMounted, isPopoverOpen, togglePopover } = useAnchoredPopover(isDesktop, wrapperRef);
+    const { closePopover, isPopoverMounted, isPopoverOpen, popoverPlacement, togglePopover } = useAnchoredPopover(isDesktop, wrapperRef);
 
     let myClass = `  ${className}`;
     if (fullWidth) {
@@ -132,7 +132,7 @@ const FloatingDateInput: React.FC<DateInputProps> = ({
 
     const desktopPopover = isDesktop && isPopoverMounted ? (
         <div
-            className={`desktop-date-picker-popover${isPopoverOpen ? ' open' : ''}`}
+            className={`desktop-date-picker-popover${isPopoverOpen ? ' open' : ''}${popoverPlacement === 'top' ? ' upward' : ''}`}
             role="dialog"
             aria-label={label}
         >
