@@ -450,7 +450,7 @@ $desktop-view-size-two: 80rem;
     padding-bottom: 0;
   }
 
-  .desktop-selector-popover .selector-item.last .selector-item-label {
+  .desktop-selector-popover .selector-list.hide-last-item-border .selector-item.last .selector-item-label {
     border-bottom: none;
   }
 

@@ -16,6 +16,7 @@ interface Props<T extends SelectorValue = SelectorValue> {
     multiSelect?: boolean;
     translateItems?: boolean;
     enableSearchText?: boolean;
+    hideLastItemBorder?: boolean;
     /** External search query used to highlight matching letters in item labels
      *  (used when the search input is rendered outside this component). */
     highlightQuery?: string;
@@ -104,6 +105,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
     selectedValues = [],
     translateItems = false,
     enableSearchText = false,
+    hideLastItemBorder = false,
     highlightQuery,
     onClose,
     onClean,
@@ -214,7 +216,7 @@ const SelectorItems = <T extends SelectorValue = SelectorValue>({
                 </div>
             )}
 
-            <div className="selector-list">
+            <div className={`selector-list${hideLastItemBorder ? ' hide-last-item-border' : ''}`}>
                 {/* Pinned items – always at the top, never re-sorted */}
                 {initialSelectedItems.map(item => (
                     <SelectorItemRow

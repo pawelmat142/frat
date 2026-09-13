@@ -3,6 +3,9 @@ import React from 'react';
 import { SelectorValue, SelectorMultiProps } from 'global/interface/controls.interface';
 import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import SelectorTrigger from './SelectorTrigger';
+import { useGlobalContext } from 'global/providers/GlobalProvider';
+import SelectorItems from './SelectorItems';
+import { useSelectorPopover } from './useSelectorPopover';
 
 const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -24,11 +27,28 @@ const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValu
     ref: React.Ref<HTMLDivElement>
 ) => {
     const bottomSheet = useBottomSheet();
+    const { isDesktop } = useGlobalContext();
+    const triggerRef = React.useRef<HTMLDivElement | null>(null);
+    const { closePopover, isPopoverMounted, isPopoverOpen, togglePopover } = useSelectorPopover(isDesktop, triggerRef);
 
     const hasValue = Array.isArray(values) && values.length > 0;
     const displayedChips = chipValues ?? values;
 
+    const setRefs = React.useCallback((node: HTMLDivElement | null) => {
+        triggerRef.current = node;
+        if (typeof ref === 'function') {
+            ref(node);
+        } else if (ref) {
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }
+    }, [ref]);
+
     const handleOpen = () => {
+        if (isDesktop) {
+            togglePopover();
+            return;
+        }
+
         bottomSheet.openSelector({
             items,
             selectedValues: values.map(v => v.value),
@@ -40,9 +60,25 @@ const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValu
         });
     };
 
+    const desktopPopover = isDesktop && isPopoverMounted ? (
+        <div className={`desktop-selector-popover${isPopoverOpen ? ' open' : ''}`} role="listbox" aria-label={label}>
+            <SelectorItems
+                items={items}
+                selectedValues={values.map(value => value.value)}
+                multiSelect
+                enableSearchText={enableSearchText}
+                onSelectMulti={selected => {
+                    onSelect(selected as T[]);
+                    closePopover();
+                }}
+                onClean={() => onSelect([])}
+            />
+        </div>
+    ) : null;
+
     return (
         <SelectorTrigger
-            ref={ref}
+            ref={setRefs}
             id={id}
             label={label}
             fullWidth={fullWidth}
@@ -52,7 +88,9 @@ const FloatingSelectorMulti = forwardRef(<T extends SelectorValue = SelectorValu
             className={className}
             error={error}
             isActive={hasValue}
+            isOpen={isDesktop ? isPopoverOpen : true}
             onClick={handleOpen}
+            popover={desktopPopover}
         >
             <span className="dropdown-selected">
                 {displayElementsAsChips ? (

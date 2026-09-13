@@ -5,8 +5,7 @@ import { useBottomSheet } from 'global/providers/BottomSheetProvider';
 import SelectorTrigger from './SelectorTrigger';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
 import SelectorItems from './SelectorItems';
-
-const POPOVER_ANIMATION_DURATION = 160;
+import { useSelectorPopover } from './useSelectorPopover';
 
 const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
     {
@@ -27,11 +26,8 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
 ) => {
     const bottomSheet = useBottomSheet();
     const { isDesktop } = useGlobalContext();
-    const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
-    const [isPopoverMounted, setIsPopoverMounted] = React.useState(false);
     const triggerRef = React.useRef<HTMLDivElement | null>(null);
-    const popoverCloseTimeoutRef = React.useRef<number | null>(null);
-    const popoverOpenFrameRef = React.useRef<number | null>(null);
+    const { closePopover, isPopoverMounted, isPopoverOpen, togglePopover } = useSelectorPopover(isDesktop, triggerRef);
 
     const setRefs = React.useCallback((node: HTMLDivElement | null) => {
         triggerRef.current = node;
@@ -41,74 +37,6 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }
     }, [ref]);
-
-    const openPopover = React.useCallback(() => {
-        if (popoverCloseTimeoutRef.current) {
-            window.clearTimeout(popoverCloseTimeoutRef.current);
-            popoverCloseTimeoutRef.current = null;
-        }
-        if (popoverOpenFrameRef.current) {
-            window.cancelAnimationFrame(popoverOpenFrameRef.current);
-        }
-
-        setIsPopoverMounted(true);
-        popoverOpenFrameRef.current = window.requestAnimationFrame(() => {
-            setIsPopoverOpen(true);
-            popoverOpenFrameRef.current = null;
-        });
-    }, []);
-
-    const closePopover = React.useCallback(() => {
-        if (popoverOpenFrameRef.current) {
-            window.cancelAnimationFrame(popoverOpenFrameRef.current);
-            popoverOpenFrameRef.current = null;
-        }
-
-        setIsPopoverOpen(false);
-        if (popoverCloseTimeoutRef.current) {
-            window.clearTimeout(popoverCloseTimeoutRef.current);
-        }
-        popoverCloseTimeoutRef.current = window.setTimeout(() => {
-            setIsPopoverMounted(false);
-            popoverCloseTimeoutRef.current = null;
-        }, POPOVER_ANIMATION_DURATION);
-    }, []);
-
-    React.useEffect(() => {
-        if (!isDesktop || !isPopoverOpen) return;
-
-        const closeOnOutsideClick = (event: MouseEvent) => {
-            if (!triggerRef.current?.contains(event.target as Node)) {
-                closePopover();
-            }
-        };
-        const closeOnEscape = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') closePopover();
-        };
-
-        document.addEventListener('mousedown', closeOnOutsideClick);
-        document.addEventListener('keydown', closeOnEscape);
-        return () => {
-            document.removeEventListener('mousedown', closeOnOutsideClick);
-            document.removeEventListener('keydown', closeOnEscape);
-        };
-    }, [closePopover, isDesktop, isPopoverOpen]);
-
-    React.useEffect(() => {
-        if (!isDesktop) {
-            setIsPopoverOpen(false);
-            setIsPopoverMounted(false);
-        }
-    }, [isDesktop]);
-
-    React.useEffect(() => () => {
-        if (popoverCloseTimeoutRef.current) {
-            window.clearTimeout(popoverCloseTimeoutRef.current);
-        }
-        if (popoverOpenFrameRef.current) {
-            window.cancelAnimationFrame(popoverOpenFrameRef.current);
-        }
-    }, []);
 
     const selectItem = (itemValue: T) => {
         if (itemValue === value?.value) {
@@ -120,11 +48,7 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
 
     const handleOpen = () => {
         if (isDesktop) {
-            if (isPopoverOpen) {
-                closePopover();
-            } else {
-                openPopover();
-            }
+            togglePopover();
             return;
         }
 
@@ -145,6 +69,7 @@ const FloatingSelector = forwardRef(<T extends SelectorValue = SelectorValue>(
             <SelectorItems
                 items={items}
                 selectedValues={value ? [value.value] : []}
+                hideLastItemBorder
                 onSelect={item => {
                     selectItem(item as T);
                     closePopover();
