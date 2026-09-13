@@ -96,7 +96,7 @@ function FormWizard<TForm extends FieldValues, TStep extends string = string>({
                     {title && <h1 className="form-wizard-view-title">{title}</h1>}
                 </div>
             </div>
-            <div className="form-wizard-stepper-sticky sticky top-0 z-10 primary-bg py-5">
+            <div className="form-wizard-stepper-sticky sticky top-0 z-10 primary-bg py-5 md:pb-3">
                 <div className="form-wizard-progress-content">
                         <Stepper stepsOrder={stepsOrder} stepLabels={stepLabels} currentStep={currentStep}></Stepper>
                 </div>

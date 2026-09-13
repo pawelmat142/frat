@@ -286,7 +286,9 @@ $desktop-view-size-two: 80rem;
   }
 
   .form-wizard-stepper-sticky .wizard-stepper {
-    padding: 0;
+    // Keep edge labels within the stepper's available horizontal space.
+    padding: 0 3rem;
+    box-sizing: border-box;
   }
 
   .wizard-stepper.has-labels,
