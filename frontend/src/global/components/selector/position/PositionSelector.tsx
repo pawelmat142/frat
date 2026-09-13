@@ -43,7 +43,7 @@ const PositionSelector = forwardRef<HTMLInputElement, PositionSelectorProps>(
 
         let inputClass = ''
 
-        let myClass = `pp-control pp-position-selector floating-input ${className}`;
+        let myClass = `pp-control pp-position-selector floating-input min-height ${className}`;
         if (fullWidth) {
             myClass += ' w-full';
         } else {

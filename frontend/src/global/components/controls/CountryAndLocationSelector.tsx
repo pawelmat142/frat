@@ -168,6 +168,7 @@ const CountryAndLocationSelector: React.FC<Props> = ({
                     />
                 ) : config.locationOption === 'map' ? (
                     <PositionSelector
+                        fullWidth
                         label={t("offer.workLocation")}
                         name="location.geocodedPosition"
                         className="w-full"
