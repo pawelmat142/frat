@@ -808,7 +808,10 @@
           "info": "Podaj swoją przybliżoną lokalizację, czyli miejsce, w którym obecnie przebywasz. Jest ona wymagana do działania wyszukiwarki i ułatwia innym znalezienie Twojego profilu.",
           "label": "Krok 2",
           "title": "Lokalizacja",
-          "chooseOptions": "Wybierz opcje:"
+          "workArea": {
+            "title": "Gdzie chcesz podejmować zlecenia?",
+            "info": "Wybierz opcję, która najlepiej opisuje, gdzie chcesz podejmować zlecenia. Dzięki temu inni użytkownicy łatwiej znajdą Twój profil i dopasują do niego odpowiednie oferty."
+          }
         },
         "experience": "Doświadczenie",
         "addLanguage": "Dodaj język",

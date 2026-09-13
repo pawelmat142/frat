@@ -808,7 +808,10 @@
           "info": "Your approximate location, where you are currently based, is required for search and helps others find your profile.",
           "label": "Step 2",
           "title": "Location",
-          "chooseOptions": "Choose option:"
+          "workArea": {
+            "title": "Where are you open to working?",
+            "info": "Choose the option that best describes where you are willing to accept jobs. It helps other users find your profile and match you with relevant offers."
+          }
         },
         "experience": "Experience",
         "addLanguage": "Add language",

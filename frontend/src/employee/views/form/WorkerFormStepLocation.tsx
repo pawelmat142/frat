@@ -100,9 +100,12 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
             </div>
 
 
-            <h2 className="form-subheader mt-10">{t("employeeProfile.form.location.chooseOptions")}</h2>
+            <h2 className="form-subheader mt-10">{t("employeeProfile.form.location.workArea.title")}</h2>
+            <p className="secondary-text s-font -mt-3 mb-5">
+                {t("employeeProfile.form.location.workArea.info")}
+            </p>
 
-            <div className="flex flex-col gap-5 md:gap-8 mt-5">
+            <div className="flex flex-col gap-5 md:gap-8">
                 <TabSwitcher
                     options={tabOptions}
                     value={locationOption}
