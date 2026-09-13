@@ -39,7 +39,7 @@ const ForgotPassword: React.FC = () => {
 
                 <form className="mt-10" onSubmit={handleSubmit}>
 
-                    <div className="flex flex-col gap-5 md:gap-5">
+                    <div className="flex flex-col gap-5 md:gap-8">
                         <FloatingInput
                             name="email"
                             label={t("signin.email")}

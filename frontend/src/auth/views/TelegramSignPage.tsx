@@ -80,7 +80,7 @@ const TelegramSignPage: React.FC = () => {
 
                 <form className="mt-10" onSubmit={handleSubmit}>
 
-                    <div className="flex flex-col gap-5 md:gap-5">
+                    <div className="flex flex-col gap-5 md:gap-8">
                         <FloatingInput
                             name="pin"
                             label={t("signin.pin")}

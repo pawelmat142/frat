@@ -254,15 +254,13 @@ $desktop-view-size-two: 80rem;
   // FORMS
 
   .form-subheader {
-    margin-top: 1rem;
+    margin-top: 2rem;
   }
-  // Keep the current step visible while the form's scroll container moves.
-  // Only the view-header content is constrained, so the sticky background
-  // still spans the complete application viewport.
+  // The view title scrolls with the form; only the stepper stays visible.
   .form-wizard-progress {
     width: 100vw;
     margin-left: calc(50% - 50vw);
-    box-shadow: $box-shadow;
+    padding-top: 2rem;
   }
 
   .form-wizard-progress-content {
@@ -281,7 +279,13 @@ $desktop-view-size-two: 80rem;
     line-height: 1.2;
   }
 
-  .form-wizard-progress .wizard-stepper {
+  .form-wizard-stepper-sticky {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    box-shadow: $box-shadow;
+  }
+
+  .form-wizard-stepper-sticky .wizard-stepper {
     padding: 0;
   }
 

@@ -33,7 +33,7 @@ const WorkerFormPersonalData: React.FC<Props> = ({ formRef }) => {
             <h2 className="form-subheader">
                 {t("employeeProfile.form.personalData.title")}
             </h2>
-            <div className="flex flex-col gap-5 md:gap-5">
+            <div className="flex flex-col gap-5 md:gap-8">
 
                 <Controller
                     name="personalData.fullName"
