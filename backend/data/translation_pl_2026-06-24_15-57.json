@@ -829,7 +829,8 @@
         "submitError": "Proszę poprawnie wypełnić wszystkie wymagane pola",
         "availability": {
           "label": "Krok 3",
-          "title": "Dostępność"
+          "title": "Dostępność",
+          "info": "Wybierz opcję, która najlepiej opisuje Twoją dostępność i daj znać, kiedy możesz pracować. Pomoże to innym użytkownikom znaleźć Twój profil, gdy szukają technika dostępnego w konkretnym terminie."
         },
         "certificates": {
           "main": "Najczęściej wybierane certyfikaty",
@@ -845,11 +846,11 @@
         },
         "rangesOption": {
           "AVAILABLE_ON": {
-            "msg": "Wybierz daty, w których jesteś dostępny/a do pracy.",
+            "msg": "Wybierz tę opcję, jeśli jesteś dostępny/a w określonych terminach. Dzięki temu Twój profil będzie można wyszukać tylko na wybrane dni.",
             "tab": "Dostępny"
           },
           "NOT_AVAILABLE_ON": {
-            "msg": "Wybierz daty, w których nie jesteś dostępny/a do pracy.",
+            "msg": "Wybierz tę opcję, jeśli w określonych terminach nie możesz pracować. Pomoże to innym użytkownikom uwzględnić Twoją niedostępność podczas wyszukiwania.",
             "tab": "Niedostępny"
           }
         },
@@ -885,11 +886,11 @@
         "locationCountries": "Kraje",
         "availabilityOption": {
           "ANYTIME": {
-            "msg": "Szukam pracy od zaraz",
-            "tab": "Od zaraz"
+            "msg": "Wybierz tę opcję, jeśli możesz rozpocząć pracę od razu.",
+            "tab": "Kiedykolwiek"
           },
           "FROM_DATE": {
-            "msg": "Szukam pracy od dnia:",
+            "msg": "Wskaż datę, od której możesz rozpocząć pracę.",
             "tab": "Od dnia",
             "startLabel": "Data rozpoczęcia"
           },

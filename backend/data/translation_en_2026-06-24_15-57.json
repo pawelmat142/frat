@@ -829,7 +829,8 @@
         "submitError": "Please fill in all required fields correctly",
         "availability": {
           "label": "Step 3",
-          "title": "Availability"
+          "title": "Availability",
+          "info": "Choose the option that best describes your availability and let others know when you can work. This helps other users find your profile when they need a technician available on specific dates."
         },
         "certificates": {
           "main": "Most common certificates",
@@ -845,11 +846,11 @@
         },
         "rangesOption": {
           "AVAILABLE_ON": {
-            "msg": "Select the dates you are available to work.",
+            "msg": "Choose this option if you are available on specific dates. Your profile will only be searchable for the selected dates.",
             "tab": "Available"
           },
           "NOT_AVAILABLE_ON": {
-            "msg": "Select the dates you are not available to work.",
+            "msg": "Choose this option if you cannot work on specific dates. This helps others take your unavailability into account when searching.",
             "tab": "Not available"
           }
         },
@@ -885,11 +886,11 @@
         "locationCountries": "Location countries",
         "availabilityOption": {
           "ANYTIME": {
-            "msg": "I am available to start work immediately.",
-            "tab": "Immediately"
+            "msg": "Choose this option if you can start immediately.",
+            "tab": "Anytime"
           },
           "FROM_DATE": {
-            "msg": "I am available to start work from:",
+            "msg": "Choose the date from which you can start work.",
             "tab": "From date",
             "startLabel": "Start date"
           },

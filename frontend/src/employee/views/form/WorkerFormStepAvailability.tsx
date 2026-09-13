@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { DateRange, WorkerAvailabilityOption, WorkerAvailabilityOptions, WorkerForm, WorkerFormRangesOption, WorkerFormRangesOptions } from "@shared/interfaces/WorkerI";
@@ -6,12 +6,14 @@ import { FormValidator } from "global/FormValidator";
 import TabSwitcher, { TabSwitcherOption } from "../../components/TabSwitcher";
 import IconButton from "global/components/controls/IconButon";
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import Button from "global/components/controls/Button";
 import { BtnModes, BtnSizes } from "global/interface/controls.interface";
 import DateRangeInputViewSelector from "global/components/callendar/DateRangeInputViewSelector";
 import { DateUtil } from "@shared/utils/DateUtil";
 import FloatingDateInput, { datepickerWithDaysConfig } from "global/components/callendar/FloatingDateInput";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface Props {
     formRef: UseFormReturn<WorkerForm>;
@@ -23,6 +25,8 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
     const availabilityOption = watch("availability.availabilityOption");
     const availabilityDateRanges = watch("availability.availabilityDateRanges") || [];
     const rangesOption = watch("availability.rangesOption");
+    const availabilityTabTransitionDirection = useRef<1 | -1>(1);
+    const rangesTabTransitionDirection = useRef<1 | -1>(1);
 
     const startDateRequired = FormValidator.required(t);
     const dateRangeExpired = FormValidator.dateRangeExpired(t);
@@ -178,6 +182,28 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
         }
     }
 
+    const handleAvailabilityOptionChange = (code: string) => {
+        const currentIndex = tabOptions.findIndex(option => option.code === availabilityOption);
+        const nextIndex = tabOptions.findIndex(option => option.code === code);
+
+        if (currentIndex !== -1 && nextIndex !== -1 && currentIndex !== nextIndex) {
+            availabilityTabTransitionDirection.current = nextIndex > currentIndex ? 1 : -1;
+        }
+
+        setAvailabilityOption(code as WorkerAvailabilityOption);
+    };
+
+    const handleRangesOptionChange = (code: string) => {
+        const currentIndex = rangesOptions.findIndex(option => option.code === rangesOption);
+        const nextIndex = rangesOptions.findIndex(option => option.code === code);
+
+        if (currentIndex !== -1 && nextIndex !== -1 && currentIndex !== nextIndex) {
+            rangesTabTransitionDirection.current = nextIndex > currentIndex ? 1 : -1;
+        }
+
+        setValue("availability.rangesOption", code as WorkerFormRangesOption);
+    };
+
     const ranges = getRanges();
 
     return (
@@ -185,15 +211,32 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
             <h3 className="form-subheader">
                 {t("employeeProfile.form.availability.title")}
             </h3>
+            <p className="secondary-text s-font mb-5">
+                {t("employeeProfile.form.availability.info")}
+            </p>
 
             <div className="flex flex-col gap-3 md:gap-3">
                 <TabSwitcher
                     options={tabOptions}
                     value={availabilityOption}
-                    onChange={code => setAvailabilityOption(code as WorkerAvailabilityOption)}
+                    onChange={handleAvailabilityOptionChange}
                 />
                 <div className="w-full flex">
-                    <div className="primary-text w-full">
+                    <AnimatePresence mode="wait" custom={availabilityTabTransitionDirection.current} initial={false}>
+                    <motion.div
+                        key={availabilityOption}
+                        custom={availabilityTabTransitionDirection.current}
+                        variants={{
+                            enter: (direction: number) => ({ x: 24 * direction, opacity: 0 }),
+                            center: { x: 0, opacity: 1 },
+                            exit: (direction: number) => ({ x: -24 * direction, opacity: 0 }),
+                        }}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                        className="primary-text w-full"
+                    >
                         {availabilityOption === WorkerAvailabilityOptions.ANYTIME && (
                             <div className={msgClass}>
                                 {t("employeeProfile.form.availabilityOption.ANYTIME.msg")}
@@ -236,70 +279,88 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                 <TabSwitcher
                                     options={rangesOptions}
                                     value={rangesOption!}
-                                    onChange={code => setValue("availability.rangesOption", code as WorkerFormRangesOption)}
+                                    onChange={handleRangesOptionChange}
                                 />
 
-                                <div className={msgClass}>
-                                    {t(`employeeProfile.form.rangesOption.${rangesOption}.msg`)}
-                                </div>
-                                <div className="mb-5"></div>
-
-                                {ranges.map((dateRange, idx) => {
-                                    return (
-                                        <div key={`${rangesOption}-range-${idx}`} className="flex gap-2 items-end mt-4">
-                                            <Controller
-                                                name={`availability.availabilityDateRanges.${idx}` as const}
-                                                control={control}
-                                                rules={dateRangeExpired}
-                                                render={({ field }) => {
-                                                    // Extract string message for this specific range error (RHF stores errors by index/key)
-                                                    const fieldError = (formState?.errors?.availability?.availabilityDateRanges as any)?.[idx];
-                                                    const errorMessage = fieldError?.message as string | undefined;
-                                                    // Use availabilityDateRanges[idx] from watch() to ensure synchronization
-                                                    const currentValue = availabilityDateRanges[idx] || field.value || getDefaultDateRange();
-                                                    return (
-                                                        <DateRangeInputViewSelector
-                                                            required
-                                                            label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label") + (availabilityDateRanges.length ? ` #${idx + 1}` : "") + ` (${t(`employeeProfile.form.rangesOption.${rangesOption}.tab`)})`}
-                                                            className="w-full"
-                                                            value={currentValue}
-                                                            onChange={(dateRange) => {
-                                                                onRangeChange(dateRange || null, idx);
-                                                                formRef.trigger()
-                                                            }}
-                                                            error={errorMessage}
-                                                            rightIcon={
-                                                                (ranges?.length > 1 && <IconButton
-                                                                    className="mb-1"
-                                                                    icon={<DeleteIcon />}
-                                                                    mode={BtnModes.ERROR_TXT}
-                                                                    onClick={() => {
-                                                                        removeDateRange(dateRange.id);
-                                                                        formRef.trigger()
-                                                                    }}
-                                                                />)
-                                                            }
-                                                        />
-                                                    )
-                                                }}
-                                            />
-                                        </div>
-                                    )
-                                })}
-
-                                <Button
-                                    mode={BtnModes.PRIMARY_TXT}
-                                    size={BtnSizes.SMALL}
-                                    className="ml-auto mt-3"
-                                    onClick={() => {
-                                        addRateRange();
+                                <AnimatePresence mode="wait" custom={rangesTabTransitionDirection.current} initial={false}>
+                                <motion.div
+                                    key={rangesOption}
+                                    custom={rangesTabTransitionDirection.current}
+                                    variants={{
+                                        enter: (direction: number) => ({ x: 24 * direction, opacity: 0 }),
+                                        center: { x: 0, opacity: 1 },
+                                        exit: (direction: number) => ({ x: -24 * direction, opacity: 0 }),
                                     }}
+                                    initial="enter"
+                                    animate="center"
+                                    exit="exit"
+                                    transition={{ duration: 0.2, ease: "easeInOut" }}
                                 >
-                                    {t("employeeProfile.form.availabilityOption.DATE_RANGES.add")}
-                                </Button>
+                                    <div className={msgClass}>
+                                        {t(`employeeProfile.form.rangesOption.${rangesOption}.msg`)}
+                                    </div>
+                                    <div className="mb-5"></div>
+
+                                    {ranges.map((dateRange, idx) => {
+                                        return (
+                                            <div key={`${rangesOption}-range-${idx}`} className="flex gap-2 items-end mt-4">
+                                                <Controller
+                                                    name={`availability.availabilityDateRanges.${idx}` as const}
+                                                    control={control}
+                                                    rules={dateRangeExpired}
+                                                    render={({ field }) => {
+                                                        // Extract string message for this specific range error (RHF stores errors by index/key)
+                                                        const fieldError = (formState?.errors?.availability?.availabilityDateRanges as any)?.[idx];
+                                                        const errorMessage = fieldError?.message as string | undefined;
+                                                        // Use availabilityDateRanges[idx] from watch() to ensure synchronization
+                                                        const currentValue = availabilityDateRanges[idx] || field.value || getDefaultDateRange();
+                                                        return (
+                                                            <DateRangeInputViewSelector
+                                                                required
+                                                                label={t("employeeProfile.form.availabilityOption.DATE_RANGES.label") + (availabilityDateRanges.length ? ` #${idx + 1}` : "") + ` (${t(`employeeProfile.form.rangesOption.${rangesOption}.tab`)})`}
+                                                                className="w-full"
+                                                                value={currentValue}
+                                                                onChange={(dateRange) => {
+                                                                    onRangeChange(dateRange || null, idx);
+                                                                    formRef.trigger()
+                                                                }}
+                                                                error={errorMessage}
+                                                                rightIcon={
+                                                                    (ranges?.length > 1 && <IconButton
+                                                                        className="mb-1"
+                                                                        icon={<DeleteIcon />}
+                                                                        mode={BtnModes.ERROR_TXT}
+                                                                        onClick={() => {
+                                                                            removeDateRange(dateRange.id);
+                                                                            formRef.trigger()
+                                                                        }}
+                                                                    />)
+                                                                }
+                                                            />
+                                                        )
+                                                    }}
+                                                />
+                                            </div>
+                                        )
+                                    })}
+
+                                    <Button
+                                        mode={BtnModes.SECONDARY_TXT}
+                                        size={BtnSizes.SMALL}
+                                        className="ml-auto mt-1"
+                                        onClick={() => {
+                                            addRateRange();
+                                        }}
+                                    >
+                                        <AddIcon fontSize="small" />
+                                        {t("employeeProfile.form.availabilityOption.DATE_RANGES.add")}
+                                    </Button>
+                                </motion.div>
+                                </AnimatePresence>
                             </div>
                         )}
-                    </div>
+                    </motion.div>
+                    </AnimatePresence>
                 </div>
             </div>
         </>
