@@ -6,6 +6,7 @@ import { useDebouncedValue } from 'global/utils/useDebouncedValue';
 import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
 import { Close, Search } from '@mui/icons-material';
 import SkeletonControl from './SkeletonControl';
+import { useTranslation } from 'react-i18next';
 
 interface PlacePrediction {
     place_id: string;
@@ -27,7 +28,6 @@ interface FloatingPlaceSearchProps {
     onSelect: (result: PlaceSearchResult) => void;
     onClear?: () => void;
     icon?: React.ReactNode;
-    clearIconClassName: string;
     mapInstanceRef?: google.maps.Map | null;
     fullWidth?: boolean;
     disabled?: boolean;
@@ -49,7 +49,6 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
         onSelect,
         onClear,
         icon,
-        clearIconClassName,
         mapInstanceRef,
         fullWidth = false,
         disabled = false,
@@ -60,6 +59,7 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
         mode = FloatingInputModes.DEFAULT,
         countryRestriction,
     }, ref) => {
+        const { t } = useTranslation();
         const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '';
 
         const [inputValue, setInputValue] = useState('');
@@ -287,11 +287,14 @@ const FloatingPlaceSearch = forwardRef<HTMLInputElement, FloatingPlaceSearchProp
                             autoComplete="off"
                         />
                         { hasSelection ? (
-                            <Close
-                                className={`absolute right-1 top-1/2 -translate-y-1/2 secondary-text cursor-pointer ${clearIconClassName}`}
-                                style={{ fontSize: '1.4rem', fontWeight: 'bold' }}
+                            <button
+                                type="button"
+                                className="floating-input-clear secondary-text"
+                                aria-label={t('common.clear')}
                                 onClick={handleClear}
-                            />
+                            >
+                                <Close />
+                            </button>
                         ) : (
                             icon
                                 ? <span className="absolute right-3 top-1/2 -translate-y-1/2 secondary-text pointer-events-none flex items-center">{icon}</span>

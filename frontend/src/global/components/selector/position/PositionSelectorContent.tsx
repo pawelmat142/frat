@@ -143,7 +143,6 @@ const PositionSelectorContent: React.FC<PositionSelectorContentProps> = ({
                         mode={FloatingInputModes.THIN}
                         name="freeText"
                         displayValue={selectedPosition?.fullAddress}
-                        clearIconClassName="position-selector-search-clear"
                         onSelect={result => updatePosition({ lat: result.lat, lng: result.lng })}
                         mapInstanceRef={mapInstanceRef.current}
                         label={t('employeeProfile.form.freeText')}

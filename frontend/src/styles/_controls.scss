@@ -629,11 +629,24 @@ input {
   }
 }
 
-.position-selector-search-clear {
-  box-sizing: content-box;
-  padding: .4rem;
+.floating-input-clear {
+  position: absolute;
+  right: .25rem;
+  top: 50%;
+  box-sizing: border-box;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: .25rem;
   border-radius: 50%;
+  border: 0;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.7rem !important;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
   transition: background-color .15s ease, color .15s ease, transform .15s ease;
 
   &:hover {

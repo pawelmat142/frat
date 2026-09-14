@@ -5,6 +5,7 @@ import FloatingLabel from './FloatingLabel';
 
 interface FloatingInputProps extends InputInterface {
     icon?: ReactNode;
+    iconClassName?: string;
     onIconClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
@@ -26,6 +27,7 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
         center,
         error,
         icon,
+        iconClassName = '',
         onIconClick,
         mode = FloatingInputModes.DEFAULT,
     }, ref) => {
@@ -97,7 +99,7 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
                             placeholder=" "
                         />
                         {icon && (
-                            <div className="floating-input-icon" onClick={onIconClick}>
+                            <div className={`floating-input-icon ${iconClassName}`} onClick={onIconClick}>
                                 {icon}
                             </div>
                         )}

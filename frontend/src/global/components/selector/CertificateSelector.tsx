@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FieldPath, FieldValues, PathValue, UseFormReturn } from "react-hook-form";
 import { Close, Search } from "@mui/icons-material";
 import FloatingInput from "global/components/controls/FloatingInput";
@@ -60,6 +60,7 @@ const CertificateSelector = <TForm extends FieldValues>({
                     label={t("offer.form.STEP_FOUR.searchLabel")}
                     fullWidth
                     icon={isSearchMode ? <Close /> : <Search />}
+                    iconClassName={isSearchMode ? "floating-input-clear" : undefined}
                     onIconClick={isSearchMode ? event => { event.preventDefault(); setFreeTextInput(''); } : undefined}
                 />
             </div>
