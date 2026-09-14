@@ -1,7 +1,9 @@
-import { WorkerAvailabilityOptions, WorkerFormRangesOptions, WorkerI } from "@shared/interfaces/WorkerI";
+import { WorkerAvailabilityOptions, WorkerFormRangesOptions, WorkerI, WorkerLocationOptions } from "@shared/interfaces/WorkerI";
 import { DateRangeUtil } from "@shared/utils/DateRangeUtil";
 import { PositionUtil } from "@shared/utils/PositionUtil";
 import CallendarsView from "global/components/callendar/CallendarsView";
+import Chips, { ChipModes } from "global/components/chips/Chips";
+import DictionaryChips from "global/components/chips/DictionaryChips";
 import PseudoView from "global/components/PseudoView";
 import DateDisplay from "global/components/ui/DateDisplay";
 import DictionaryDisplay from "global/components/ui/DictionaryDisplay";
@@ -148,6 +150,19 @@ const WorkerDataSection: React.FC<Props> = ({ worker, desktopSearchPreviewMode =
         t,
     })}`;
 
+    const hasWorkArea = worker.locationOption === WorkerLocationOptions.ALL_EUROPE
+        || (worker.locationOption === WorkerLocationOptions.SELECTED_COUNTRIES && !!worker.locationCountries?.length);
+
+    const workAreaChips = worker.locationOption === WorkerLocationOptions.ALL_EUROPE
+        ? <Chips mode={ChipModes.SECONDARY} chips={[t(`employeeProfile.form.locationOption.${WorkerLocationOptions.ALL_EUROPE}.tab`)]} smaller={!isDesktop} />
+        : <DictionaryChips
+            values={worker.locationCountries}
+            dictionaryCode="LANGUAGES"
+            translationColumn="COUNTRY_NAME"
+            color="secondary"
+            smaller={!isDesktop}
+        />;
+
     const getListItems = (): MenuItem[] => {
         return [
             getAvailabilityMenuItem(),
@@ -155,6 +170,20 @@ const WorkerDataSection: React.FC<Props> = ({ worker, desktopSearchPreviewMode =
                 if: displayAddress,
                 label: displayAddress + ' ' + getDistanceInfo(),
                 icon: Ico.MARKER
+            }, {
+                if: hasWorkArea && !desktopSearchPreviewMode,
+                label: '',
+                labelComponent: worker.locationOption === WorkerLocationOptions.ALL_EUROPE
+                    ? <div className="flex items-center gap-2">
+                        <span>{t('employeeProfile.openToWorkIn')}:</span>
+                        {workAreaChips}
+                    </div>
+                    : <div className="flex flex-col gap-1">
+                        <span>{t('employeeProfile.openToWorkIn')}:</span>
+                        {workAreaChips}
+                    </div>,
+                icon: Ico.MAP,
+                className: "items-start"
             }, {
                 if: !desktopSearchPreviewMode && !!worker.phoneNumber,
                 label: `${t('employeeProfile.form.phoneNumber')}: ${worker.phoneNumber.prefix} ${worker.phoneNumber.number}`,
@@ -175,8 +204,18 @@ const WorkerDataSection: React.FC<Props> = ({ worker, desktopSearchPreviewMode =
                 icon: Ico.COMPASS
             }, {
                 if: !!worker.communicationLanguages.length,
-                label: `${t('others.languages')}: ${worker.communicationLanguages.map(lang => DictionaryDisplay({ dictionary: "LANGUAGES", value: lang, t }))}`,
-                icon: Ico.LANGUAGE
+                label: '',
+                labelComponent: <div className="flex flex-wrap items-center gap-2">
+                    <span>{t('others.languages')}:</span>
+                    <DictionaryChips
+                        values={worker.communicationLanguages}
+                        dictionaryCode="LANGUAGES"
+                        color="secondary"
+                        smaller={!isDesktop}
+                    />
+                </div>,
+                icon: Ico.LANGUAGE,
+                className: "items-center"
             }];
     }
 

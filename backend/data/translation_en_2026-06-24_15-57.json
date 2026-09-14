@@ -933,6 +933,7 @@
       "exists": "Technician profile already exists for this user",
       "joined": "Joined:",
       "mainData": "Main data",
+      "openToWorkIn": "Open to work in",
       "search": "Find Technicians",
       "skills": "Skills / experience",
       "editBio": "Edit about me",
