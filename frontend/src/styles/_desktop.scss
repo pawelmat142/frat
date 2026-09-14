@@ -355,7 +355,7 @@ $desktop-view-size-two: 80rem;
   }
 
   .icon-btn.medium {
-    padding: .5rem 1.5rem;
+    padding: 1.5rem;
     font-size: .9375rem;
     border-radius: .25rem;
   }
@@ -835,6 +835,113 @@ $desktop-view-size-two: 80rem;
     grid-template-columns: minmax(0, 1fr) minmax(21rem, 24rem);
     gap: 1.5rem;
     align-items: start;
+  }
+
+  // CHAT
+  // Uses the same content width, side-panel dimensions and gap as the worker profile.
+  .desktop-chat-layout {
+    display: grid;
+    grid-template-columns: minmax(21rem, 24rem) minmax(0, 1fr);
+    gap: 0;
+    flex: 1;
+    height: 100%;
+    min-height: 0;
+    width: 100%;
+    max-width: $desktop-view-size-one;
+    margin: 0 auto;
+    padding: .5rem 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .desktop-chat-page {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .desktop-chat-list,
+  .desktop-chat-conversation {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .desktop-chat-list {
+    display: flex;
+    flex-direction: column;
+    padding-right: 1rem;
+    border-right: 1px solid $border-color;
+  }
+
+  .desktop-chat-list .chat-list-panel {
+    flex: 1;
+    max-width: none;
+    overflow-y: auto;
+  }
+
+  .desktop-chat-list-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 1rem;
+  }
+
+  .desktop-chat-list-title {
+    margin-bottom: .75rem;
+    color: $primary-text;
+    font-size: $lFont;
+    font-weight: $font-semibold;
+  }
+
+  .desktop-chat-search-results {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .desktop-chat-search-result {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .5rem 1rem;
+
+    .btn {
+      flex-shrink: 0;
+      gap: .4rem;
+    }
+  }
+
+  .chat-list-panel-item {
+    cursor: pointer;
+  }
+
+  .desktop-chat-conversation {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1rem;
+    box-sizing: border-box;
+    background-color: $primary-bg;
+  }
+
+  .desktop-chat-conversation-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .desktop-chat-empty-state {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: $secondary-text;
+    text-align: center;
+  }
+
+  .desktop-chat-conversation .chat-view {
+    min-height: 0;
+    padding: 0;
   }
 
   .desktop-worker-profile-main,

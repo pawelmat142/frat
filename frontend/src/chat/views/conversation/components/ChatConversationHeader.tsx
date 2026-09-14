@@ -4,12 +4,16 @@ import Header from "global/components/Header";
 import HeaderBackBtn from "global/header-state/HeaderBackBtn";
 import UserItem from "user/components/UserItem";
 import { useChatConversationContext } from "../ChatConversationProvider";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 const ChatConversationHeader: React.FC = () => {
     const { t } = useTranslation();
     const { chat, otherUser, chatMenu } = useChatConversationContext();
+    const { isDesktop } = useGlobalContext();
 
     if (!chat || !otherUser) return null;
+
+    if (isDesktop) return null;
 
     return (
         <div className="sticky-header">

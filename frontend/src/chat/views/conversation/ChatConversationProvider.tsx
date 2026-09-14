@@ -1,19 +1,16 @@
 import React, { createContext, useContext, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { chatSocket } from "../../services/ChatSocketService";
 import { ChatMessageI, ChatWithMembers } from "@shared/interfaces/ChatI";
 import { UserI } from "@shared/interfaces/UserI";
-import { MenuItem } from "global/interface/controls.interface";
 import { useUserContext } from "user/UserProvider";
 import { useGlobalContext } from "global/providers/GlobalProvider";
-import { useConfirm } from "global/providers/PopupProvider";
-import { toast } from "react-toastify";
-import { ChatService } from "chat/services/ChatService";
 import { Path } from "../../../path";
 import { useChatConversation } from "./hooks/useChatConversation";
 import { useChatAttachments, PendingAttachment } from "./hooks/useChatAttachments";
 import { useChatSend } from "./hooks/useChatSend";
+import { useChatMenu } from "./hooks/useChatMenu";
+import { MenuItem } from "global/interface/controls.interface";
 
 interface ChatConversationContextType {
     chat: ChatWithMembers | null;
@@ -48,12 +45,10 @@ interface ChatConversationContextType {
 const ChatConversationContext = createContext<ChatConversationContextType | undefined>(undefined);
 
 export const ChatConversationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { t } = useTranslation();
     const navigate = useNavigate();
     const { chatId } = useParams<{ chatId: string }>();
     const { me } = useUserContext();
     const globalCtx = useGlobalContext();
-    const confirm = useConfirm();
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -71,58 +66,7 @@ export const ChatConversationProvider: React.FC<{ children: React.ReactNode }> =
     );
     const blockedByMe = chat?.blockedByUid === me?.uid;
 
-    const chatMenu = useMemo((): MenuItem[] => {
-        if (!chat) return [];
-        const items: MenuItem[] = [];
-        if (!chat.blockedByUid) {
-            items.push({ label: t("account.showProfile"), onClick: () => navigate(Path.getProfilePath(otherUser?.uid || "")) });
-            if (messages.length) {
-                items.push({
-                    label: t("chat.cleanChat"),
-                    onClick: async () => {
-                        if (!await confirm({ message: t("chat.cleanChatConfirm") })) return;
-                        setLoading(true);
-                        await ChatService.cleanChat(chat.chatId);
-                        setLoading(false);
-                        toast.success(t("chat.cleanChatSuccess"));
-                    },
-                });
-            }
-            items.push({
-                label: t("chat.blockUser"),
-                onClick: async () => {
-                    if (!await confirm({ message: t("chat.blockUserConfirm") })) return;
-                    setLoading(true);
-                    await ChatService.blockChat(chat.chatId);
-                    setLoading(false);
-                    toast.success(t("chat.blockUserSuccess"));
-                },
-            });
-        } else if (chat.blockedByUid === me?.uid) {
-            items.push({
-                label: t("chat.unblockUser"),
-                onClick: async () => {
-                    if (!await confirm({ message: t("chat.unblockUserConfirm") })) return;
-                    setLoading(true);
-                    await ChatService.unblockChat(chat.chatId);
-                    setLoading(false);
-                    toast.success(t("chat.unblockUserSuccess"));
-                },
-            });
-        }
-        if (chat.blockedByUid !== me?.uid) {
-            items.push({
-                label: t("chat.deleteChat"),
-                onClick: async () => {
-                    if (!await confirm({ message: t("chat.deleteChatConfirm") })) return;
-                    setLoading(true);
-                    await ChatService.deleteChat(chat.chatId);
-                    setLoading(false);
-                },
-            });
-        }
-        return items;
-    }, [chat, messages.length, otherUser, me]);
+    const chatMenu = useChatMenu({ chat, otherUser, messageCount: messages.length, setLoading });
 
     useEffect(() => { globalCtx.hideFooter(); return () => globalCtx.showFooter(); }, []);
     useEffect(() => { scrollToBottom(); }, [messages]);
@@ -137,12 +81,16 @@ export const ChatConversationProvider: React.FC<{ children: React.ReactNode }> =
         const handler = (deletedChatId: number) => {
             if (!chatId) return;
             if (parseInt(chatId, 10) === deletedChatId) {
-                navigate(-1);
+                if (globalCtx.isDesktop) {
+                    navigate(Path.CHATS);
+                } else {
+                    navigate(-1);
+                }
             }
         };
         chatSocket.registerChatDeletedListener(handler);
         return () => chatSocket.unregisterChatDeletedListener(handler);
-    }, [chatId]);
+    }, [chatId, globalCtx.isDesktop, navigate]);
 
     return (
         <ChatConversationContext.Provider value={{

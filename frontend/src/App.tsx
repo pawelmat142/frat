@@ -35,8 +35,7 @@ import { useScrollRestoration } from 'global/hooks/useScrollRestoration';
 import OfferSearchView from 'offer/views/search/OfferSearchView';
 import AdminOffers from 'admin/views/offer/AdminOffers';
 import TelegramSignPage from 'auth/views/TelegramSignPage';
-import ChatsView from 'chat/views/ChatsView';
-import ChatConversationView from 'chat/views/ChatConversationView';
+import ChatRouteView from 'chat/views/ChatRouteView';
 import FriendsListView from 'friends/views/FriendsListView';
 import SingleNotificationView from 'notification/views/SingleNotificationView';
 import NotificationsView from 'notification/views/NotificationsView';
@@ -62,6 +61,9 @@ const App: React.FC = () => {
     useRippleEffect();
     useScrollRestoration();
     const direction = location.state?.direction === 'back' ? -1 : 1;
+    const routeAnimationKey = location.pathname === Path.CHATS || location.pathname.startsWith(`${Path.CHATS}/`)
+        ? Path.CHATS
+        : location.pathname;
 
     const popupCtx = usePopup();
     const navigate = useNavigate()
@@ -75,13 +77,12 @@ const App: React.FC = () => {
 
     return (
         <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
+            <Routes location={location} key={routeAnimationKey}>
 
                 <Route path={Path.HOME} element={<PageWrapper direction={-1}><HomePage /></PageWrapper>} />
 
                 <Route path={Path.PROFILE} element={<PageWrapper isProtected><ProfileView /></PageWrapper>} />
-                <Route path={Path.CHATS} element={<PageWrapper isProtected><ChatsView /></PageWrapper>} />
-                <Route path={Path.CHAT_CONVERSATION} element={<PageWrapper isProtected><ChatConversationView /></PageWrapper>} />
+                <Route path={`${Path.CHATS}/:chatId?`} element={<PageWrapper className="w-full flex flex-col items-center flex-1 desktop-chat-page" isProtected><ChatRouteView /></PageWrapper>} />
                 <Route path={Path.FRIENDS} element={<PageWrapper isProtected><FriendsListView /></PageWrapper>} />
                 <Route path={Path.NOTIFICATIONS} element={<PageWrapper isProtected><NotificationsView /></PageWrapper>} />
                 <Route path={Path.NOTIFICATION} element={<PageWrapper isProtected><SingleNotificationView /></PageWrapper>} />

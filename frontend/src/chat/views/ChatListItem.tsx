@@ -12,9 +12,11 @@ interface Props {
     otherMember?: ChatMemberWithUserI;
     first?: boolean;
     last?: boolean;
+    className?: string;
+    rightSection?: React.ReactNode;
 }
 
-const ChatListItem: React.FC<Props> = ({ chat, otherMember: otherMember, first, last }) => {
+const ChatListItem: React.FC<Props> = ({ chat, otherMember: otherMember, first, last, className = "", rightSection }) => {
 
     const { t } = useTranslation();
     const { me } = useUserContext();
@@ -54,6 +56,8 @@ const ChatListItem: React.FC<Props> = ({ chat, otherMember: otherMember, first, 
         bottomRight={getReadStatusBadge()}
         first={first}
         last={last}
+        className={className}
+        rightSection={rightSection}
     ></ListItem>)
 }
 
