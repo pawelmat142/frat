@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
 import { WorkerUtil } from "@shared/utils/WorkerUtil";
 import WorkerFormStepCertificateDates from "./WorkerFormStepCertificateDates";
+import { Ico } from "global/icon.def";
 
 const WorkerCertificateDatesEditView: React.FC = () => {
 
@@ -104,24 +105,30 @@ const WorkerCertificateDatesEditView: React.FC = () => {
     }
 
     return (
-        <div className="relative flex flex-col w-full flex-1">
+        <div className="form-view relative flex flex-col">
             <Header title={t("employeeProfile.form.certificateDates.title")} />
 
+            <div className="form-wizard-progress">
+                <div className="form-wizard-progress-content">
+                    <h1 className="form-wizard-view-title">{t("employeeProfile.form.certificateDates.title")}</h1>
+                </div>
+            </div>
+
             <form className="flex flex-col flex-1">
-                <div className="flex-1 p-4">
+                <div className="flex-1">
                     <WorkerFormStepCertificateDates formRef={formRef} />
                 </div>
 
-                <div className="view-margin pb-3">
+                <div className="form-wizard-buttons-wrapper">
                     <div className="form-wizard-buttons">
                         <Button
                             type="button"
                             onClick={handleBack}
                             size={BtnSizes.LARGE}
                             mode={BtnModes.SECONDARY_TXT}
-                            className="flex-1"
                             aria-label={t("common.back")}
                         >
+                            <Ico.CHEVRON_LEFT size={16} aria-hidden="true" />
                             {t("common.back")}
                         </Button>
 
@@ -130,9 +137,10 @@ const WorkerCertificateDatesEditView: React.FC = () => {
                             onClick={handleSave}
                             size={BtnSizes.LARGE}
                             mode={BtnModes.PRIMARY}
-                            className="flex-1"
+                            className="font-bold px-10"
                             aria-label={t("common.save")}
                         >
+                            <Ico.CHECK size={16} aria-hidden="true" />
                             {t("common.save")}
                         </Button>
                     </div>

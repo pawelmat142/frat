@@ -13,6 +13,7 @@ import { Path } from "../../../path";
 import { WorkerService } from "employee/services/WorkerService";
 import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
+import { Ico } from "global/icon.def";
 
 const WorkerCertificatesEditView: React.FC = () => {
 
@@ -109,37 +110,57 @@ const WorkerCertificatesEditView: React.FC = () => {
     }
 
     return (
-        <div className="relative flex flex-col w-full flex-1">
+        <div className="form-view relative flex flex-col">
             <Header title={t("employeeProfile.form.certificates.title")} />
 
+            <div className="form-wizard-progress">
+                <div className="form-wizard-progress-content">
+                    <h1 className="form-wizard-view-title">{t("employeeProfile.form.certificates.title")}</h1>
+                </div>
+            </div>
+
             <form className="flex flex-col flex-1">
-                <div className="flex-1 p-4">
+                <div className="flex-1">
                     <WorkerFormStepCertificates formRef={formRef} />
                 </div>
 
-                <div className="view-margin pb-3">
+                <div className="form-wizard-buttons-wrapper">
                     <div className="form-wizard-buttons">
                         <Button
                             type="button"
                             onClick={handleBack}
                             size={BtnSizes.LARGE}
                             mode={BtnModes.SECONDARY_TXT}
-                            className="flex-1"
                             aria-label={t("common.back")}
                         >
+                            <Ico.CHEVRON_LEFT size={16} aria-hidden="true" />
                             {t("common.back")}
                         </Button>
 
-                        <Button
-                            type="button"
-                            onClick={handleNext}
-                            size={BtnSizes.LARGE}
-                            mode={BtnModes.PRIMARY}
-                            className="flex-1"
-                            aria-label={hasSelectedCertificates ? t("common.next") : t("common.save")}
-                        >
-                            {hasSelectedCertificates ? t("common.next") : t("common.save")}
-                        </Button>
+                        {hasSelectedCertificates ? (
+                            <Button
+                                type="button"
+                                onClick={handleNext}
+                                size={BtnSizes.LARGE}
+                                mode={BtnModes.PRIMARY_TXT}
+                                aria-label={t("common.next")}
+                            >
+                                {t("common.next")}
+                                <Ico.CHEVRON_RIGHT size={16} aria-hidden="true" />
+                            </Button>
+                        ) : (
+                            <Button
+                                type="button"
+                                onClick={handleNext}
+                                size={BtnSizes.LARGE}
+                                mode={BtnModes.PRIMARY}
+                                className="font-bold px-10"
+                                aria-label={t("common.save")}
+                            >
+                                <Ico.CHECK size={16} aria-hidden="true" />
+                                {t("common.save")}
+                            </Button>
+                        )}
                     </div>
                 </div>
             </form>

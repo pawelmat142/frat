@@ -74,8 +74,12 @@ const WorkerFormStepCertificateDates: React.FC<Props> = ({ formRef }) => {
                 {t("employeeProfile.form.certificateDates.title")}
             </h3>
 
+            <p className="secondary-text mb-5 s-font">
+                {t("employeeProfile.form.certificateDates.info")}
+            </p>
+
             {certificatesRequiringDates.map((cert) => (
-                <div key={cert.code} className="mb-4">
+                <div key={cert.code} className="mb-6">
                     <Controller
                         name={`certificateDates.certificateDates.${cert.code}`}
                         control={control}

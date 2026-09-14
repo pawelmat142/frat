@@ -880,7 +880,8 @@
         "validationError": "Please fill in all required fields in this step",
         "certificateDates": {
           "label": "Step 5",
-          "title": "Certificate validity dates"
+          "title": "Certificate validity dates",
+          "info": "These dates are hidden from other users. We just need them to keep the search working properly and to remind you before your tickets expire."
         },
         "noLocationAccess": "Location access is not available. Please enable location permissions in your browser.",
         "locationCountries": "Location countries",

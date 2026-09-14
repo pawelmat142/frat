@@ -80,60 +80,72 @@ const WorkerSkillsFormView: React.FC = () => {
     return (<>
 
         <Header title={t("employeeProfile.editSkills")}></Header>
-        
-        <div className="w-full max-w-lg px-3 py-6">
-            <h1 className="desktop-block form-header">{t("employeeProfile.editSkills")}</h1>
-            <p className="secondary-text s-font mb-6">
-                {t("employeeProfile.editSkillsInfo")}
-            </p>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex flex-col gap-3">
-                    {fields.map((field, idx) => (
-                        <div key={field.id} className="flex gap-2 items-center">
-                            <Controller
-                                name={`items.${idx}.name`}
-                                control={control}
-                                rules={required}
-                                render={({ field: f }) => (
-                                    <FloatingInput
-                                        {...f}
-                                        className="w-full"
-                                        label={`${t("employeeProfile.skill")} #${idx + 1}`}
-                                        fullWidth
-                                        required
-                                        error={formState.errors.items?.[idx]?.name}
-                                    />
-                                )}
-                            />
-                            <IconButton
-                                icon={<DeleteIcon />}
-                                mode={BtnModes.ERROR_TXT}
-                                onClick={() => remove(idx)}
-                            />
-                        </div>
-                    ))}
+        <div className="form-view relative flex flex-col">
+            <div className="form-wizard-progress">
+                <div className="form-wizard-progress-content">
+                    <h1 className="form-wizard-view-title">{t("employeeProfile.editSkills")}</h1>
+                </div>
+            </div>
+
+            <form className="flex flex-col flex-1" onSubmit={handleSubmit(onSubmit)}>
+                <div className="flex-1">
+                    <p className="secondary-text s-font mb-6">
+                        {t(
+                            "employeeProfile.editSkillsInfo",
+                            "List a few bullet points about what you've done so far and what you're good at. A profile with specific skills is the best way to catch other users' attention."
+                        )}
+                    </p>
+
+                    <div className="flex flex-col gap-3">
+                        {fields.map((field, idx) => (
+                            <div key={field.id} className="flex gap-2 items-center">
+                                <Controller
+                                    name={`items.${idx}.name`}
+                                    control={control}
+                                    rules={required}
+                                    render={({ field: f }) => (
+                                        <FloatingInput
+                                            {...f}
+                                            className="w-full"
+                                            label={`${t("employeeProfile.skill")} #${idx + 1}`}
+                                            fullWidth
+                                            required
+                                            error={formState.errors.items?.[idx]?.name}
+                                        />
+                                    )}
+                                />
+                                <IconButton
+                                    icon={<DeleteIcon />}
+                                    mode={BtnModes.ERROR_TXT}
+                                    onClick={() => remove(idx)}
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    <Button
+                        mode={BtnModes.PRIMARY_TXT}
+                        size={BtnSizes.SMALL}
+                        className="ml-auto pt-5"
+                        onClick={() => append({ name: "" })}
+                    >
+                        <Ico.PLUS className="w-4 h-4" />
+                        {t("employeeProfile.addSkill")}
+                    </Button>
                 </div>
 
-                <Button
-                    mode={BtnModes.PRIMARY_TXT}
-                    size={BtnSizes.SMALL}
-                    className="ml-auto pt-5"
-                    onClick={() => append({ name: "" })}
-                >
-                    <Ico.PLUS className="w-4 h-4" />
-                    {t("employeeProfile.addSkill")}
-                </Button>
-
-                <div className="flex justify-between mt-8">
-                    <Button mode={BtnModes.SECONDARY_TXT} onClick={() => navigate(-1)}>
-                        <Ico.CHEVRON_LEFT size={16} aria-hidden="true" />
-                        {t("common.back")}
-                    </Button>
-                    <Button mode={BtnModes.PRIMARY} type="submit" className="px-10">
-                        <Ico.CHECK size={16} aria-hidden="true" />
-                        {t("common.save")}
-                    </Button>
+                <div className="form-wizard-buttons-wrapper">
+                    <div className="form-wizard-buttons">
+                        <Button mode={BtnModes.SECONDARY_TXT} onClick={() => navigate(-1)}>
+                            <Ico.CHEVRON_LEFT size={16} aria-hidden="true" />
+                            {t("common.back")}
+                        </Button>
+                        <Button mode={BtnModes.PRIMARY} type="submit" className="px-10">
+                            <Ico.CHECK size={16} aria-hidden="true" />
+                            {t("common.save")}
+                        </Button>
+                    </div>
                 </div>
             </form>
         </div>

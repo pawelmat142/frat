@@ -880,7 +880,8 @@
         "validationError": "Proszę wypełnić wszystkie wymagane pola w tym kroku",
         "certificateDates": {
           "label": "Krok 5",
-          "title": "Daty ważności certyfikatów"
+          "title": "Daty ważności certyfikatów",
+          "info": "Te daty są niewidoczne dla innych. Potrzebujemy ich tylko do prawidłowego działania wyszukiwarki i po to, by przypomnieć Ci o kończących się uprawnieniach."
         },
         "noLocationAccess": "Brak dostępu do lokalizacji. Włącz uprawnienia do lokalizacji w przeglądarce.",
         "locationCountries": "Kraje",
