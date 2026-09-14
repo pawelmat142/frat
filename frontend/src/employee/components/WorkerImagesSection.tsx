@@ -163,7 +163,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) =
             onChange={handleFileChange}
         />
         <TileSection title={t('gallery.title')} link={link} primaryBg>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 lg:gap-3 lg:mt-2">
                 {/* Saved images */}
                 {savedImages.map((img, i) => (
                     isMyProfile ? (
@@ -223,7 +223,7 @@ const WorkerImagesSection: React.FC<Props> = ({ worker, onOpenCloseLightbox }) =
         </TileSection>
 
         {/* Lightbox */}
-        <PseudoView show={lightboxIndex !== null}>
+        <PseudoView show={lightboxIndex !== null} className="lg:top-[60px]">
             <GallerySwiper
                 images={allDisplayUrls}
                 startIndex={lightboxIndex ?? 0}

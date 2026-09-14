@@ -24,7 +24,7 @@ const GallerySwiper: React.FC<Props> = ({ images, startIndex, onClose }) => {
         <div className="bg-black h-full flex flex-col">
             {/* Close */}
             <button
-                className="absolute top-4 right-4 z-10 text-white text-2xl p-2"
+                className="absolute top-4 right-4 z-10 rounded-full border border-white/30 bg-black/60 p-2 text-2xl text-white transition duration-150 hover:scale-105 hover:border-white/70 hover:bg-white/25 hover:shadow-lg hover:shadow-white/20 focus:outline-none focus:ring-2 focus:ring-white"
                 onClick={onClose}
                 aria-label="Close"
             >
@@ -32,12 +32,32 @@ const GallerySwiper: React.FC<Props> = ({ images, startIndex, onClose }) => {
             </button>
 
             {/* Counter */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 text-white text-sm opacity-70">
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 text-sm text-white opacity-70 lg:left-auto lg:right-16 lg:flex lg:h-10 lg:items-center lg:translate-x-0">
                 {index + 1} / {images.length}
             </div>
 
             {/* Image */}
-            <div className="flex-1 flex items-center justify-center overflow-hidden">
+            <div className="flex-1 flex items-center justify-center overflow-hidden lg:pt-6">
+                {images.length > 1 && (
+                    <>
+                        <button
+                            type="button"
+                            className="hidden lg:flex absolute left-6 top-1/2 z-10 h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/60 p-3 text-white transition duration-150 hover:scale-105 hover:border-white/70 hover:bg-white/25 hover:shadow-lg hover:shadow-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+                            onClick={prev}
+                            aria-label="Previous image"
+                        >
+                            <Ico.CHEVRON_LEFT size={20} />
+                        </button>
+                        <button
+                            type="button"
+                            className="hidden lg:flex absolute right-6 top-1/2 z-10 h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/60 p-3 text-white transition duration-150 hover:scale-105 hover:border-white/70 hover:bg-white/25 hover:shadow-lg hover:shadow-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+                            onClick={next}
+                            aria-label="Next image"
+                        >
+                            <Ico.CHEVRON_RIGHT size={20} />
+                        </button>
+                    </>
+                )}
                 <motion.img
                     key={index}
                     src={images[index]}
@@ -56,7 +76,7 @@ const GallerySwiper: React.FC<Props> = ({ images, startIndex, onClose }) => {
 
             {/* Dots */}
             {images.length > 1 && (
-                <div className="flex justify-center gap-2 py-4">
+                <div className="flex justify-center gap-2 py-4 lg:hidden">
                     {images.map((_, i) => (
                         <button
                             key={i}

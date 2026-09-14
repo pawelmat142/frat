@@ -312,6 +312,8 @@ const WorkerView: React.FC = () => {
 
             <WorkerSkillsSection worker={worker} />
 
+            <WorkerBioSection worker={worker} />
+
             <WorkerImagesSection worker={worker} onWorkerUpdate={_setProfile} onOpenCloseLightbox={(open) => {
                 if (open) {
                     floatingBtnCtx.hide()
@@ -319,8 +321,6 @@ const WorkerView: React.FC = () => {
                     floatingBtnCtx.show()
                 }
             }} />
-
-            <WorkerBioSection worker={worker} />
 
             <div className="view-margin mb-10">
                 <PositionWidget position={worker.geocodedPosition || null}></PositionWidget>
