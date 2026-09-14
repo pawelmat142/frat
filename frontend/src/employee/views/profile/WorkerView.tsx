@@ -225,16 +225,6 @@ const WorkerView: React.FC = () => {
         onClick: () => { goToEditForm() },
         icon: Ico.EDIT
     }, {
-        label: worker.status === WorkerStatuses.ACTIVE ? t('employeeProfile.deactivateButton') : t('employeeProfile.activateButton'),
-        if: isMyAccount,
-        onClick: () => { profileActivation(worker) },
-        icon: worker.status === WorkerStatuses.ACTIVE ? Ico.CANCEL : Ico.CHECK
-    }, {
-        label: t('employeeProfile.deleteButton'),
-        if: isMyAccount,
-        onClick: () => { deleteProfile() },
-        icon: Ico.DELETE
-    }, {
         label: t('user.removeFromList'),
         if: !isMyAccount && isSavedOnList,
         onClick: removeListItem,
@@ -248,6 +238,16 @@ const WorkerView: React.FC = () => {
         label: t('user.openProfile'),
         onClick: goToUserProfile,
         icon: Ico.ACCOUNT
+    }, {
+        label: worker.status === WorkerStatuses.ACTIVE ? t('employeeProfile.deactivateButton') : t('employeeProfile.activateButton'),
+        if: isMyAccount,
+        onClick: () => { profileActivation(worker) },
+        icon: worker.status === WorkerStatuses.ACTIVE ? Ico.CANCEL : Ico.CHECK
+    }, {
+        label: t('employeeProfile.deleteButton'),
+        if: isMyAccount,
+        onClick: () => { deleteProfile() },
+        icon: Ico.DELETE
     }];
 
     const friendshipItems = buildFriendshipMenuItems({
