@@ -10,7 +10,7 @@ import PseudoView from '../PseudoView';
 import { AppConfig } from '@shared/AppConfig';
 import { wait } from 'global/utils/utils';
 import { useGlobalContext } from 'global/providers/GlobalProvider';
-import { DateRangeUtil } from '@shared/utils/DateRangeUtil';
+import { useAnchoredPopover } from 'global/hooks/useAnchoredPopover';
 
 
 interface DateRangeProps {
@@ -41,11 +41,13 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
     rightIcon,
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
     const bottomSheetCtx = useBottomSheet();
     const globalCtx = useGlobalContext();
     const { t } = useTranslation();
 
     const [openPseudoView, setOpenPseudoView] = useState(false);
+    const { closePopover, isPopoverMounted, isPopoverOpen, popoverPlacement, togglePopover } = useAnchoredPopover(globalCtx.isDesktop, wrapperRef);
 
     // Value is already in string format (YYYY-MM-DD), pass through directly
     const _value: DateRange = {
@@ -57,6 +59,12 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
     const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (disabled) return;
+
+        if (globalCtx.isDesktop) {
+            togglePopover();
+            return;
+        }
+
         setFocus(true);
         setOpenPseudoView(true);
         globalCtx.hideFooter();
@@ -109,10 +117,35 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
         return result;
     }
 
+    const desktopPopover = globalCtx.isDesktop && isPopoverMounted ? (
+        <div
+            className={`desktop-date-range-picker-popover${isPopoverOpen ? ' open' : ''}${popoverPlacement === 'top' ? ' upward' : ''}`}
+            role="dialog"
+            aria-label={label}
+        >
+            <CallendarsView
+                title={label || ''}
+                ranges={[_value]}
+                selectorMode
+                singleDateMode={singleDateMode}
+                desktopPopoverMode
+                bottomSheetCtx={bottomSheetCtx}
+                onSubmit={(dateRange) => {
+                    onChange?.(dateRange);
+                    closePopover();
+                }}
+                onCancel={() => {
+                    onChange?.(null);
+                    closePopover();
+                }}
+            />
+        </div>
+    ) : null;
+
     return (
-        <div className={`floating-input-wrapper ${myClass}`}>
+        <div ref={wrapperRef} className={`floating-input-wrapper ${myClass}`}>
             <div className="floating-input-container">
-                <div className="pp-control min-height pp-input-row">
+                <div className={`pp-control min-height pp-input-row${isPopoverOpen ? ' focus' : ''}`}>
                     <div className="flex items-center gap-2 w-full pp-input-row justify-between">
                         <input
                             ref={inputRef}
@@ -144,7 +177,9 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
             </div>
             <FormError error={error ? { message: error } : undefined} />
 
-            <PseudoView show={openPseudoView}>
+            {desktopPopover}
+
+            <PseudoView show={!globalCtx.isDesktop && openPseudoView}>
                 <CallendarsView
                     title={label || ''}
                     ranges={[_value]}

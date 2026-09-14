@@ -10,6 +10,7 @@ import CallendarViewDurationSelector from "./CallendarViewDurationSelector";
 import { BottomSheetContextType } from "global/providers/BottomSheetProvider";
 import { DateUtil } from "@shared/utils/DateUtil";
 import Header from "../Header";
+import { Ico } from "global/icon.def";
 
 
 interface CallendarsViewProps {
@@ -20,11 +21,13 @@ interface CallendarsViewProps {
     selectorMode?: boolean;
     /** When true, only single date selection is allowed (end date is ignored) */
     singleDateMode?: boolean;
+    /** Compact two-month layout displayed inside the desktop date range popover */
+    desktopPopoverMode?: boolean;
     bottomSheetCtx: BottomSheetContextType;
     title: string
 }
 
-const CallendarsView: React.FC<CallendarsViewProps> = ({ ranges, onSubmit, onCancel, onClose, selectorMode, singleDateMode, bottomSheetCtx, title }) => {
+const CallendarsView: React.FC<CallendarsViewProps> = ({ ranges, onSubmit, onCancel, onClose, selectorMode, singleDateMode, desktopPopoverMode = false, bottomSheetCtx, title }) => {
     
     const { t } = useTranslation();
 
@@ -35,6 +38,10 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ ranges, onSubmit, onCan
     const [activeControl, setActiveControl] = useState<'start' | 'end'>('start');
 
     const [currentRange, setCurrentRange] = useState<DateRange>(firstRange || {start: null, end: null});
+    const [desktopVisibleMonth, setDesktopVisibleMonth] = useState(() => {
+        const initialDate = firstRange?.start ? DateUtil.parseLocalDateString(firstRange.start) : new Date();
+        return new Date(initialDate.getFullYear(), initialDate.getMonth(), 1);
+    });
     
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const initialScrollDone = useRef(false);
@@ -153,6 +160,128 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ ranges, onSubmit, onCan
 
     const months = prepareMonthsArray(selectorMode ? [currentRange] : (ranges || []));
 
+    const selectorControls = selectorMode && <>
+        <CallendarsViewControl
+            onFocus={() => setActiveControl('start')}
+            onRemove={() => {
+                setCurrentRange({ start: null, end: singleDateMode ? null : (currentRange.end || null) });
+                setActiveControl('start');
+            }}
+            selected={activeControl === 'start'}
+            date={currentRange?.start}
+            placeholder={activeControl === 'start'
+                ? t("callendar.control.rangeStartPlaceholder")
+                : t('callendar.control.anytime')}
+            label={t("callendar.control.rangeStartLabel")}
+            id="start-date"
+        />
+
+        {!singleDateMode && (
+            <CallendarsViewControl
+                onFocus={() => setActiveControl('end')}
+                onRemove={() => {
+                    setCurrentRange({ start: currentRange.start || null, end: null });
+                    setActiveControl(currentRange.start ? 'end' : 'start');
+                }}
+                selected={activeControl === 'end'}
+                date={currentRange.end}
+                placeholder={activeControl === 'end'
+                    ? t("callendar.control.rangeEndPlaceholder")
+                    : t('callendar.control.anytime')}
+                label={t("callendar.control.rangeEndLabel")}
+                id="end-date"
+                injectRightComponent={!desktopPopoverMode && !!currentRange.start &&
+                    <CallendarViewDurationSelector
+                        bottomSheetCtx={bottomSheetCtx}
+                        initial={currentRange.end && currentRange.start ?
+                            (() => {
+                                const startDate = DateUtil.parseLocalDateString(currentRange.start);
+                                const endDate = DateUtil.parseLocalDateString(currentRange.end);
+                                return Math.max(1,
+                                    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+                                    (endDate.getMonth() - startDate.getMonth()));
+                            })()
+                            : 1}
+                        onSubmit={(value) => {
+                            if (!value) {
+                                setCurrentRange({ start: currentRange.start || null, end: null });
+                            } else {
+                                const startDate = DateUtil.parseLocalDateString(currentRange.start!);
+                                startDate.setMonth(startDate.getMonth() + value);
+                                setCurrentRange({ start: currentRange.start || null, end: DateUtil.toLocalDateString(startDate) });
+                            }
+                        }}
+                    />
+                }
+            />
+        )}
+    </>;
+
+    if (desktopPopoverMode) {
+        const nextMonth = new Date(desktopVisibleMonth.getFullYear(), desktopVisibleMonth.getMonth() + 1, 1);
+
+        return (
+            <div className="desktop-date-range-picker">
+                <div className="desktop-date-range-picker-controls">
+                    {selectorControls}
+                </div>
+
+                <div className="desktop-date-range-picker-navigation">
+                    <Button
+                        mode={BtnModes.SECONDARY_TXT}
+                        size={BtnSizes.SMALL}
+                        className="px-2"
+                        onClick={() => setDesktopVisibleMonth(current => new Date(current.getFullYear(), current.getMonth() - 1, 1))}
+                        aria-label={t("common.previous")}
+                    >
+                        <Ico.CHEVRON_LEFT size={14} aria-hidden="true" />
+                    </Button>
+                    <Button
+                        mode={BtnModes.SECONDARY_TXT}
+                        size={BtnSizes.SMALL}
+                        className="px-2"
+                        onClick={() => setDesktopVisibleMonth(current => new Date(current.getFullYear(), current.getMonth() + 1, 1))}
+                        aria-label={t("common.next")}
+                    >
+                        <Ico.CHEVRON_RIGHT size={14} aria-hidden="true" />
+                    </Button>
+                </div>
+
+                <div className="desktop-date-range-picker-months">
+                    {[desktopVisibleMonth, nextMonth].map(monthDate => (
+                        <div
+                            key={`${monthDate.getFullYear()}-${monthDate.getMonth()}`}
+                            className="desktop-date-range-picker-month"
+                        >
+                            <MonthCallendar
+                                date={monthDate}
+                                selectedRanges={[currentRange]}
+                                showOnlyDateMonth
+                                showMonthHeader
+                                onDayClick={handleClickDay}
+                            />
+                        </div>
+                    ))}
+                </div>
+
+                <div className="desktop-date-range-picker-footer">
+                    <Button onClick={onCancel} mode={BtnModes.ERROR_TXT} size={BtnSizes.SMALL}>
+                        {t("common.reset")}
+                    </Button>
+                    <Button
+                        disabled={!currentRange.start}
+                        onClick={() => onSubmit?.(currentRange)}
+                        mode={BtnModes.PRIMARY}
+                        size={BtnSizes.SMALL}
+                    >
+                        <Ico.CHECK size={14} aria-hidden="true" />
+                        {t("common.confirm")}
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
     return (
 
         <div className="callendars-view-wrapper primary-bg">
@@ -160,67 +289,7 @@ const CallendarsView: React.FC<CallendarsViewProps> = ({ ranges, onSubmit, onCan
             <Header onBack={() => onClose?.()} title={title} />
 
             <div className="callendars-view-header flex flex-col gap-1">
-                {selectorMode && (<>
-
-                    <CallendarsViewControl
-                        onFocus={() => setActiveControl('start')}
-                        onRemove={() => {
-                            setCurrentRange({ start: null, end: singleDateMode ? null : (currentRange.end || null) });
-                            setActiveControl('start');
-                        }}
-                        selected={activeControl === 'start'}
-                        date={currentRange?.start}
-                        placeholder={activeControl === 'start'
-                            ? t("callendar.control.rangeStartPlaceholder")
-                            : t('callendar.control.anytime')}
-                        label={t("callendar.control.rangeStartLabel")}
-                        id="start-date"
-                    ></CallendarsViewControl>
-
-                    {!singleDateMode && (
-                        <CallendarsViewControl
-                            onFocus={() => setActiveControl('end')}
-                            onRemove={() => {
-                                setCurrentRange({ start: currentRange.start || null, end: null });
-                                if (currentRange.start) {
-                                    setActiveControl('end');
-                                } else {
-                                    setActiveControl('start');
-                                }
-                            }}
-                            selected={activeControl === 'end'}
-                            date={currentRange.end}
-                            placeholder={activeControl === 'end'
-                                ? t("callendar.control.rangeEndPlaceholder")
-                                : t('callendar.control.anytime')}
-                            label={t("callendar.control.rangeEndLabel")}
-                            id="end-date"
-                            injectRightComponent={!!currentRange.start &&
-                                <CallendarViewDurationSelector
-                                    bottomSheetCtx={bottomSheetCtx}
-                                    initial={currentRange.end && currentRange.start ?
-                                        (() => {
-                                            const startDate = DateUtil.parseLocalDateString(currentRange.start);
-                                            const endDate = DateUtil.parseLocalDateString(currentRange.end);
-                                            return Math.max(1,
-                                                (endDate.getFullYear() - startDate.getFullYear()) * 12 +
-                                                (endDate.getMonth() - startDate.getMonth()));
-                                        })()
-                                        : 1}
-                                    onSubmit={(value) => {
-                                        if (!value) {
-                                            setCurrentRange({ start: currentRange.start || null, end: null });
-                                        } else {
-                                            const startDate = DateUtil.parseLocalDateString(currentRange.start!);
-                                            startDate.setMonth(startDate.getMonth() + value);
-                                            setCurrentRange({ start: currentRange.start || null, end: DateUtil.toLocalDateString(startDate) });
-                                        }
-                                    }}></CallendarViewDurationSelector>
-                            }
-                        ></CallendarsViewControl>
-                    )}
-
-                </>)}
+                {selectorControls}
 
                 <div>
                     <CallendarDaysHeader fullScreenMode={true} />

@@ -449,7 +449,8 @@ $desktop-view-size-two: 80rem;
 
   // Single-select controls use a local, scrollable popover on desktop.
   .desktop-selector-popover,
-  .desktop-date-picker-popover {
+  .desktop-date-picker-popover,
+  .desktop-date-range-picker-popover {
     position: absolute;
     top: calc(100% + .25rem);
     left: 0;
@@ -548,6 +549,58 @@ $desktop-view-size-two: 80rem;
     }
 
 
+  }
+
+  .desktop-date-range-picker-popover {
+    width: min(46rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 4rem);
+    overflow-y: auto;
+
+    .desktop-date-range-picker-controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .5rem;
+      padding: .75rem;
+      border-bottom: 1px solid $border-color;
+    }
+
+    .desktop-date-range-picker-navigation {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .25rem .75rem 0;
+    }
+
+    .desktop-date-range-picker-months {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      padding: .25rem .75rem .75rem;
+    }
+
+    .desktop-date-range-picker-month > div:nth-child(2) {
+      margin: .25rem 0 .5rem;
+      color: $primary-text;
+      font-size: $sFont;
+    }
+
+    .desktop-date-range-picker-month .month-callendar-cell {
+      min-height: 2.25rem;
+      cursor: pointer;
+    }
+
+    .desktop-date-range-picker-month .month-callendar-cell.disabled {
+      cursor: default;
+    }
+
+    .desktop-date-range-picker-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .625rem .75rem;
+      border-top: 1px solid $border-color;
+      background-color: $secondary-bg;
+    }
   }
 
   .desktop-selector-popover .selector-list.hide-last-item-border .selector-item.last .selector-item-label {
