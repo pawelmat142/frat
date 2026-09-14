@@ -943,6 +943,7 @@
       "noChanges": "Brak wykrytych zmian w profilu technika",
       "editButton": "Edytuj profil technika",
       "editSkills": "Edytuj umiejętności / doświadczenie",
+      "editSkillsInfo": "Napisz w kilku punktach, czym zajmowałeś się do tej pory i w czym jesteś dobry. Profil z konkretnymi skillami zawsze najlepiej przyciąga uwagę innych użytkowników.",
       "experience": "Doświadczenie",
       "likeButton": "Polub profil",
       "profileMenu": "Menu profilu",

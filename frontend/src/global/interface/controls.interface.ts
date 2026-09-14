@@ -60,6 +60,7 @@ export interface InputInterface {
     className?: string;
     required?: boolean;
     autoComplete?: string;
+    placeholder?: string;
     center?: boolean;
     valueType?: DictionaryColumnType,
     error?: { message?: string } | null

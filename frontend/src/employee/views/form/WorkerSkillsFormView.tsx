@@ -82,6 +82,10 @@ const WorkerSkillsFormView: React.FC = () => {
         <Header title={t("employeeProfile.editSkills")}></Header>
         
         <div className="w-full max-w-lg px-3 py-6">
+            <h1 className="desktop-block form-header">{t("employeeProfile.editSkills")}</h1>
+            <p className="secondary-text s-font mb-6">
+                {t("employeeProfile.editSkillsInfo")}
+            </p>
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-3">
@@ -121,11 +125,13 @@ const WorkerSkillsFormView: React.FC = () => {
                     {t("employeeProfile.addSkill")}
                 </Button>
 
-                <div className="flex gap-3 mt-8">
-                    <Button fullWidth mode={BtnModes.SECONDARY} onClick={() => navigate(-1)}>
+                <div className="flex justify-between mt-8">
+                    <Button mode={BtnModes.SECONDARY_TXT} onClick={() => navigate(-1)}>
+                        <Ico.CHEVRON_LEFT size={16} aria-hidden="true" />
                         {t("common.back")}
                     </Button>
-                    <Button fullWidth type="submit">
+                    <Button mode={BtnModes.PRIMARY} type="submit" className="px-10">
+                        <Ico.CHECK size={16} aria-hidden="true" />
                         {t("common.save")}
                     </Button>
                 </div>

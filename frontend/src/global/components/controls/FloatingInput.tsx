@@ -23,6 +23,7 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
         id,
         required,
         autoComplete,
+        placeholder,
         name,
         center,
         error,
@@ -96,7 +97,7 @@ const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
                             className={`${myClass}${icon ? ' pr-10' : ''}`}
                             disabled={disabled}
                             autoComplete={autoComplete}
-                            placeholder=" "
+                            placeholder={placeholder || " "}
                         />
                         {icon && (
                             <div className={`floating-input-icon ${iconClassName}`} onClick={onIconClick}>

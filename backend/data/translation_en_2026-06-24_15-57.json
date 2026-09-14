@@ -943,6 +943,7 @@
       "noChanges": "No changes detected in the technician profile",
       "editButton": "Edit Technician Profile",
       "editSkills": "Edit skills / experience",
+      "editSkillsInfo": "List a few bullet points about what you've done so far and what you're good at. A profile with specific skills is the best way to catch other users' attention.",
       "experience": "Experience",
       "likeButton": "Like Technician Profile",
       "profileMenu": "Technician Profile menu",
