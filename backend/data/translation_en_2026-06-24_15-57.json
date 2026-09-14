@@ -932,6 +932,7 @@
       "create": "Create a technician profile",
       "exists": "Technician profile already exists for this user",
       "joined": "Joined:",
+      "mainData": "Main data",
       "search": "Find Technicians",
       "skills": "Skills / experience",
       "editBio": "Edit about me",

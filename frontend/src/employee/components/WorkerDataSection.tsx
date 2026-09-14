@@ -181,7 +181,7 @@ const WorkerDataSection: React.FC<Props> = ({ worker, desktopSearchPreviewMode =
     }
 
     return <>
-        <TileSection>
+        <TileSection title={isDesktop ? t('employeeProfile.mainData') : undefined}>
             <ListUi items={getListItems()} className="pb-1"></ListUi>
         </TileSection>
 
