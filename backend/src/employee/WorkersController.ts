@@ -17,7 +17,7 @@ import { LogInterceptor } from 'global/interceptors/LogInterceptor';
 import { FileRef, UserI, UserRoles } from '@shared/interfaces/UserI';
 import { WorkersService } from './services/WorkerService';
 import { JwtAuthGuard } from 'auth/guards/JwtAuthGuard';
-import { CertificatesDto, WorkerFormDto, WorkerFormStepAvailability, WorkerFormStepCertificates, WorkerI, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerStatus, WorkerWithCertificates } from '@shared/interfaces/WorkerI';
+import { CertificatesDto, WorkerFormDto, WorkerFormStepAvailability, WorkerFormStepCertificates, WorkerI, WorkerSearchRequest, WorkerSearchResponse, WorkerSkills, WorkerStatus, WorkerWithCertificates, PROFILES_INITIAL_SEARCH_LIMIT } from '@shared/interfaces/WorkerI';
 import { Serialize } from 'global/decorators/Serialize';
 import { WorkerEntity } from './model/WorkerEntity';
 import { SearchWorkersService } from './services/SearchWorkerService';
@@ -28,6 +28,7 @@ import { OptionalJwtUser } from 'auth/guards/OptionalJwtUser';
 import { CurrentUser } from 'auth/decorators/CurrentUserDecorator';
 import { Position } from '@shared/interfaces/MapsInterfaces';
 import { Header } from '@shared/def/def';
+import { WorkerSearchQueryDto } from './dto/WorkerSearchQueryDto';
 
 @Controller('api/worker')
 @UseInterceptors(LogInterceptor)
@@ -80,7 +81,7 @@ export class WorkersController {
   @Serialize(WorkerEntity)
   @UseGuards(OptionalJwtUser)
   searchWorkers(
-    @Query() filters: WorkerSearchRequest,
+    @Query() filters: WorkerSearchQueryDto,
     @Headers(Header.LAT_HEADER) lat?: string,
     @Headers(Header.LNG_HEADER) lng?: string,
     @Headers(Header.SEARCH_SESSION) searchSessionId?: string,
@@ -91,7 +92,13 @@ export class WorkersController {
       lng: lng ? Number(lng ) : undefined,
     } : undefined;
 
-    return this.searchWorkerService.searchWorkers(filters, user, viewerLocation, searchSessionId);
+    const searchRequest: WorkerSearchRequest = {
+      ...filters,
+      skip: filters.skip ?? 0,
+      limit: filters.limit ?? PROFILES_INITIAL_SEARCH_LIMIT,
+    };
+
+    return this.searchWorkerService.searchWorkers(searchRequest, user, viewerLocation, searchSessionId);
   }
   
   @Get("/notify-profile-view/:workerId")

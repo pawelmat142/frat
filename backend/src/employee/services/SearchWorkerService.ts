@@ -25,8 +25,7 @@ export class SearchWorkersService {
         const normalizedViewerLocation = PositionUtil.normalizeViewerLocation(viewerLocation);
 
         // Step 1: Build base query for filtering (without eagerly loading relations to avoid row multiplication)
-        const baseQueryBuilder = this.workerRepo.getQueryBuilder()
-            .leftJoin('profile.availabilityDateRanges', 'ranges');
+        const baseQueryBuilder = this.workerRepo.getQueryBuilder();
 
         let hasFilter = false;
 
@@ -43,8 +42,7 @@ export class SearchWorkersService {
         // Step 3: Get paginated profile IDs (distinct, with sorting)
         // Using subquery approach to avoid DISTINCT + ORDER BY column mismatch
         const idsQueryBuilder = baseQueryBuilder.clone()
-            .select('profile.worker_id', 'id')
-            .groupBy('profile.worker_id');
+            .select('profile.worker_id', 'id');
 
         if (user) {
             this.addMutualFriendsSelect(idsQueryBuilder, user.uid);
@@ -109,7 +107,11 @@ export class SearchWorkersService {
                 profile.availability_option = '${WorkerAvailabilityOptions.ANYTIME}'
                 OR (
                     profile.ranges_option = '${WorkerFormRangesOptions.AVAILABLE_ON}'
-                    AND ranges.date_range @> daterange(:startDate, :endDate, '[]')
+                    AND EXISTS (
+                        SELECT 1 FROM jh_workers_date_ranges available_ranges
+                        WHERE available_ranges.worker_id = profile.worker_id
+                        AND available_ranges.date_range @> daterange(:startDate, :endDate, '[]')
+                    )
                 )
                 OR (
                     profile.ranges_option = '${WorkerFormRangesOptions.NOT_AVAILABLE_ON}'
@@ -157,7 +159,6 @@ export class SearchWorkersService {
                 ) mutual
             )`;
         idsQueryBuilder
-            .addGroupBy('profile.uid')
             .addSelect(mutualSubquery, 'mutual_friends_uids')
             .addSelect(`array_length(${mutualSubquery}, 1)`, 'mutual_friends_count')
             .setParameter('currentUserUid', currentUserUid);
@@ -225,7 +226,10 @@ export class SearchWorkersService {
                         .addSelect(`MIN(CASE
                             WHEN profile.location_option = :distanceLocationOption AND profile.point IS NOT NULL THEN ST_Distance(
                                 profile.point,
-                                ST_SetSRID(ST_MakePoint(:sortLng, :sortLat), 4326)::geography
+                                ST_SetSRID(ST_MakePoint(
+                                    CAST(:sortLng AS double precision),
+                                    CAST(:sortLat AS double precision)
+                                ), 4326)::geography
                             )
                             ELSE NULL
                         END)`, 'sort_distance_m')
@@ -265,11 +269,7 @@ export class SearchWorkersService {
 
 
     private getCount(queryBuilder: SelectQueryBuilder<WorkerEntity>): Promise<number> {
-        const countQuery = queryBuilder.clone()
-            .select('profile.worker_id')
-            .distinct(true)
-            .orderBy();
-        return countQuery.getCount();
+        return queryBuilder.clone().getCount();
     }
 
     private addPagination(queryBuilder: SelectQueryBuilder<WorkerEntity>, filters: WorkerSearchRequest) {
@@ -312,8 +312,11 @@ export class SearchWorkersService {
                 profile.location_option = '${WorkerLocationOptions.POSITION}'
                 AND ST_DWithin(
                     profile.point,
-                    ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography,
-                    :radiusMeters
+                    ST_SetSRID(ST_MakePoint(
+                        CAST(:lng AS double precision),
+                        CAST(:lat AS double precision)
+                    ), 4326)::geography,
+                    CAST(:radiusMeters AS double precision)
                 )
             )`);
             params.lng = filters.lng;
