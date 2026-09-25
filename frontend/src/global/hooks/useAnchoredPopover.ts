@@ -6,6 +6,11 @@ const VIEWPORT_GUTTER = 16;
 
 type PopoverPlacement = 'top' | 'bottom';
 
+interface PopoverPosition {
+    top: number;
+    left: number;
+}
+
 export const useAnchoredPopover = (
     isDesktop: boolean,
     triggerRef: MutableRefObject<HTMLDivElement | null>,
@@ -13,6 +18,7 @@ export const useAnchoredPopover = (
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [isPopoverMounted, setIsPopoverMounted] = useState(false);
     const [popoverPlacement, setPopoverPlacement] = useState<PopoverPlacement>('bottom');
+    const [popoverPosition, setPopoverPosition] = useState<PopoverPosition | null>(null);
     const popoverCloseTimeoutRef = useRef<number | null>(null);
     const popoverOpenFrameRef = useRef<number | null>(null);
 
@@ -25,6 +31,10 @@ export const useAnchoredPopover = (
         const shouldOpenUpward = spaceBelow < DESKTOP_POPOVER_MAX_HEIGHT && spaceAbove > spaceBelow;
 
         setPopoverPlacement(shouldOpenUpward ? 'top' : 'bottom');
+        setPopoverPosition({
+            top: shouldOpenUpward ? triggerRect.top - 4 : triggerRect.bottom + 4,
+            left: triggerRect.left,
+        });
     }, [triggerRef]);
 
     const openPopover = useCallback(() => {
@@ -110,5 +120,5 @@ export const useAnchoredPopover = (
         }
     }, []);
 
-    return { closePopover, isPopoverMounted, isPopoverOpen, popoverPlacement, togglePopover };
+    return { closePopover, isPopoverMounted, isPopoverOpen, popoverPlacement, popoverPosition, togglePopover };
 };

@@ -25,7 +25,6 @@ interface Props {
     onClose?: () => void;
 }
 
-// TODO desktop pamietac zaznaczonego technika kiedy wchodze z profil i wracam - wyszukiwarka
 const WorkersSearchFiltersView: React.FC<Props> = ({ onClose }) => {
 
     const { t } = useTranslation()

@@ -47,7 +47,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
     const { t } = useTranslation();
 
     const [openPseudoView, setOpenPseudoView] = useState(false);
-    const { closePopover, isPopoverMounted, isPopoverOpen, popoverPlacement, togglePopover } = useAnchoredPopover(globalCtx.isDesktop, wrapperRef);
+    const { closePopover, isPopoverMounted, isPopoverOpen, popoverPlacement, popoverPosition, togglePopover } = useAnchoredPopover(globalCtx.isDesktop, wrapperRef);
 
     // Value is already in string format (YYYY-MM-DD), pass through directly
     const _value: DateRange = {
@@ -122,6 +122,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
             className={`desktop-date-range-picker-popover${isPopoverOpen ? ' open' : ''}${popoverPlacement === 'top' ? ' upward' : ''}`}
             role="dialog"
             aria-label={label}
+            style={popoverPosition ? { top: popoverPosition.top, left: popoverPosition.left } : undefined}
         >
             <CallendarsView
                 title={label || ''}

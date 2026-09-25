@@ -552,6 +552,8 @@ $desktop-view-size-two: 80rem;
   }
 
   .desktop-date-range-picker-popover {
+    position: fixed;
+    z-index: 50;
     width: min(46rem, calc(100vw - 2rem));
     max-height: calc(100dvh - 4rem);
     overflow-y: auto;
@@ -562,6 +564,10 @@ $desktop-view-size-two: 80rem;
       gap: .5rem;
       padding: .75rem;
       border-bottom: 1px solid $border-color;
+
+      .callendar-view-input {
+        cursor: pointer;
+      }
     }
 
     .desktop-date-range-picker-navigation {
@@ -629,6 +635,7 @@ $desktop-view-size-two: 80rem;
 
   .workers-search-sidebar {
     position: sticky;
+    z-index: 40;
     max-height: calc(100dvh - 8rem);
     height: 100%;
     overflow-y: auto;
