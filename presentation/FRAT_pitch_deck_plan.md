@@ -148,12 +148,33 @@ To otwarte hipotezy, a nie ustalony plan ani równoległe źródła przychodu. K
 
 ### SLIDE 11 — ROADMAP
 
-**From MVP to a trusted industry platform.**
+**From a working prototype to a trusted industry platform.**
 
-1. **Validate:** pilotaż, feedback, poprawa UX i potwierdzenie podstawowego problemu.
-2. **Build network:** pierwsze firmy, realne oferty, wzrost bazy techników i mechanizmy discovery.
-3. **Monetize:** test abonamentu B2B i gotowości do płacenia za konkretne funkcje.
-4. **Expand:** wybrane kraje europejskie, kolejne segmenty height-work i elementy ekosystemu.
+#### 1. Validate the core
+
+Rozwijamy prototyp razem z pierwszymi technikami i rozmawiamy z firmami, aby potwierdzić najważniejszą wartość FRAT: szybsze dotarcie do osoby z właściwymi kwalifikacjami, dostępnością i gotowością do mobilności. Równolegle dopracowujemy pozycjonowanie oraz identyfikację marki z partnerem/osobą od brandingu.
+
+#### 2. Build the training ecosystem
+
+Rozwijamy moduł szkoleń i budujemy relacje z ośrodkami szkoleniowymi. Ośrodki są jednocześnie źródłem wartości dla techników, kanałem dotarcia do nowych użytkowników oraz przyszłymi partnerami ekosystemu — nie tylko kolejnym kanałem reklamy.
+
+#### 3. Find what to focus on — and what users will pay for
+
+Na podstawie danych z pilotażu wybieramy problem, segment użytkowników i kanał pozyskania, które tworzą największą wartość. Następnie testujemy, za którą konkretną funkcję lub rezultat firmy i partnerzy są gotowi zapłacić, oraz kierujemy rozwój produktu tam, gdzie pojawia się najsilniejszy sygnał popytu.
+
+#### 4. Turn validation into repeatable growth
+
+Inwestujemy w kanały, które działają: bezpośrednie relacje z firmami, partnerstwa branżowe oraz marketing i social media. Celem jest rosnąca, aktywna sieć techników, firm, ofert i szkoleń — z wartością po obu stronach platformy.
+
+#### 5. Scale selectively
+
+Po potwierdzeniu modelu w Polsce przygotowujemy wejście na wybrane rynki europejskie i do kolejnych segmentów height-work. W dalszej perspektywie sprawdzamy możliwość wykorzystania tej samej infrastruktury w innych rozproszonych zawodach kwalifikowanych, gdzie liczą się kompetencje, uprawnienia, dostępność i zaufanie.
+
+**Across every stage:** budujemy sieć mentorów, partnerów branżowych i rozmów z inwestorami early-stage, aby wzmacniać kompetencje biznesowe, dostęp do rynku i gotowość do skalowania.
+
+**Core principle:** scale what the pilot proves — not what assumptions promise.
+
+Wizualnie: pięć krótkich, rosnących bloków na osi od **Validate** do **Scale**, a pod nimi jeden stały pasek: **Mentors · Industry partners · Early-stage investors**. Nie dodawać dat; slajd ma komunikować logikę wzrostu, nie harmonogram wykonawczy.
 
 ### SLIDE 12 — TEAM
 
