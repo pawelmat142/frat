@@ -30,7 +30,7 @@ Prezentacja ma pokazywać przede wszystkim **realny problem branży, rozwiązani
 
 ## Logika narracji
 
-**Problem** → **rozwiązanie** → **działający produkt** → **pierwszy segment wejścia** → **skala rynku** → **dlaczego teraz** → **walidacja i wejście na rynek** → **model biznesowy** → **zespół, plan i konkretna prośba**.
+**Problem** → **wartość dla technika** → **wartość dla firmy** → **pierwszy segment wejścia** → **skala rynku** → **dlaczego teraz** → **walidacja i wejście na rynek** → **model biznesowy** → **zespół, plan i konkretna prośba**.
 
 Deck ma prowadzić odbiorcę od realnego bólu branży do dowodu, że istnieje już produkt gotowy do pilotażu. Dopiero potem wyjaśnia skalę szansy i plan walidacji. To deck przede wszystkim do mentorów, inkubatorów, partnerów branżowych i firm pilotażowych; wersja inwestorska powstanie po zebraniu danych z pilotażu.
 
@@ -54,34 +54,37 @@ Deck ma prowadzić odbiorcę od realnego bólu branży do dowodu, że istnieje j
 
 Nie przedstawiać niezweryfikowanych obserwacji jako twardych danych rynkowych. To problemy opisane przez zespół i wymagające dalszej walidacji z branżą.
 
-### SLIDE 3 — THE SOLUTION
+### SLIDE 3 — SOLUTION: FOR TECHNICIANS
 
-**FRAT brings the fragmented process into one place.**
+**Make your experience visible and find relevant projects.**
 
-FRAT jest wyspecjalizowaną platformą dla techników rope access i firm kompletujących zespoły do projektów. Technik pokazuje doświadczenie, certyfikaty, dostępność, lokalizację i gotowość do wyjazdu. Firma może znaleźć osoby pasujące do konkretnych wymagań projektu i skontaktować się z nimi bez ręcznego przeszukiwania wielu kanałów.
+- Pokazać jeden czytelny ekran profilu technika z doświadczeniem i certyfikatami.
+- Podkreślić dostępność, lokalizację i gotowość do mobilności.
+- Krótki flow: **profil → znalezienie odpowiedniej oferty → kontakt z firmą**.
 
-Kluczowy przekaz: **right technician → right opportunity → at the right time.**
+Kluczowy przekaz: technik może w jednym miejscu pokazać, do jakich projektów i kiedy jest dostępny.
 
-### SLIDE 4 — PRODUCT: FROM PROFILE TO JOB
+### SLIDE 4 — SOLUTION: FOR COMPANIES
 
-**A product designed around how the industry actually works.**
+**Find qualified technicians for the project at hand.**
 
-Pokazać prawdziwy prototyp/MVP, nie makiety. Wybrać maksymalnie 3–4 czytelne ekrany:
+- Pokazać jeden czytelny, rzeczywisty ekran wyszukiwania lub filtrowania techników.
+- Podkreślić możliwość sprawdzenia kwalifikacji, dostępności i lokalizacji.
+- Krótki flow: **wymagania projektu → wyszukanie techników → weryfikacja profili → kontakt**.
 
-1. profil technika z doświadczeniem i certyfikatami;
-2. dostępność, lokalizacja i gotowość do mobilności;
-3. wyszukiwanie / filtrowanie lub publikacja projektu;
-4. kontakt między firmą a technikiem.
-
-Obok ekranów umieścić prosty flow: **profil → kwalifikacje i dostępność → wyszukanie/dopasowanie → kontakt → projekt**. Każdy ekran powinien mieć jedną krótką adnotację o wartości biznesowej.
+Kluczowy przekaz: firma może szukać osób według potrzeb projektu bez ręcznego przeszukiwania wielu rozproszonych kanałów.
 
 ### SLIDE 5 — BEACHHEAD: WHO WE START WITH
 
 **We start with rope access technicians and companies building project crews.**
 
-Pierwszy segment to technicy dostępu linowego oraz firmy, które muszą szybko znaleźć lub skompletować wykwalifikowany zespół do projektu. Pierwszym obszarem walidacji jest Polska, z wykorzystaniem sieci branżowej zespołu i kontaktów w Trójmieście.
+Pierwszym rynkiem będzie Polska. Pierwszych użytkowników zaprosimy do aplikacji przez sieć kontaktów Kamila i Kuby, a ich feedback wykorzystamy do dalszego dopracowania produktu. Równolegle chcemy rozwijać moduł szkoleń i nawiązywać współpracę z ośrodkami szkoleniowymi: użytkownicy będą mogli znaleźć w FRAT interesujące ich kursy, a zespół będzie promować platformę wśród kursantów.
 
-Nie prezentować na tym slajdzie wszystkich przyszłych grup jako równorzędnych klientów. Wind, offshore, NDT, maintenance, ośrodki szkoleniowe i inne zawody wysokościowe są kierunkami ekspansji pokazanymi później na roadmapie.
+Po stronie firm planujemy rozmowy z podmiotami z branży w Trójmieście, aby poznać ich wymagania wobec takiego narzędzia i sprawdzić możliwości współpracy oraz wdrożenia rozwiązań odpowiadających na ich potrzeby. Kampania marketingowa może wesprzeć pozyskiwanie użytkowników, jeśli uda się zapewnić na nią środki.
+
+Jeśli pilotaż w Polsce potwierdzi wartość produktu, kolejnym kierunkiem będzie ekspansja na rynki europejskie, w pierwszej kolejności do Niemiec i Norwegii. Szczegółowy zakres działań, tempo rozwoju i finansowanie pozostają do dopracowania z mentorami, partnerami i potencjalnymi inwestorami.
+
+Nie prezentować wszystkich przyszłych grup jako równorzędnych klientów. Ośrodki szkoleniowe wspierają początkowo rozwój modułu szkoleń i dotarcie do techników, a wejście na kolejne rynki jest warunkowane wynikami walidacji w Polsce.
 
 ### SLIDE 6 — EUROPEAN MARKET OPPORTUNITY
 
@@ -109,9 +112,13 @@ Wniosek: FRAT nie tworzy nowego rynku pracy — porządkuje istniejący proces �
 
 **Today, the industry relies on general-purpose tools and personal networks.**
 
-Porównać Facebook groups, LinkedIn, ogólne job boards, agencje rekrutacyjne, wewnętrzne bazy firm i prywatne sieci kontaktów z FRAT. Tabela powinna dotyczyć konkretnych potrzeb: profil branżowy, certyfikaty, dostępność, gotowość do wyjazdu i specjalistyczne filtrowanie.
+Obecne kanały to głównie Facebook/Telegram/WhatsApp, prywatne sieci kontaktów, LinkedIn, ogólne portale pracy i ręczne bazy kontaktów w firmach. Brakuje im branżowego kontekstu: filtrowania po kwalifikacjach, dostępności i gotowości do wyjazdu, a także prostego procesu dopasowania technika do konkretnego projektu. Platforma https://www.ropeaccess.network/ ma sens jako społeczność branżowa, ale jej zasięg jest ograniczony — w praktyce to baza rzędu ok. 500 specjalistów, co nie daje firmie wystarczającego zaplecza do szybkiego kompletowania zespołów.
 
-Nie przedstawiać jej jako sztucznego rankingu. Celem jest pokazanie luki między ogólnymi narzędziami a procesem pracy branży rope access.
+FRAT jest bardziej praktycznym narzędziem: wyszukiwarka profili techników, filtracja po kwalifikacjach i dostępności, wbudowany chat do bezpośredniego kontaktu, powiadomienia o nowych ofertach i wiadomościach oraz potencjalna współpraca z ośrodkami szkoleniowymi i katalog szkoleń. To nie jest jeszcze pełne workflow rekrutacji czy kompletowania zespołu, ale jest prostszym i bardziej branżowym sposobem na znalezienie właściwej osoby do konkretnej pracy. W kolejnej fazie może też wspierać cały ekosystem szkoleniowy: technicy szukają kursów, a ośrodki szkoleniowe zyskują kanał dotarcia do odpowiednich odbiorców.
+
+W budowę aplikacji są zaangażowani ludzie z branży, którzy codziennie dyskutują o tym, jak zrobić, żeby narzędzie było jak najbardziej przyjazne dla użytkowników i odpowiadało na realne potrzeby techników oraz firm. FRAT jest projektowane z myślą o mobile-first: nie jest to zwykła strona internetowa dopasowana do ekranu telefonu, tylko produkt zaprojektowany pod szybkie użycie w terenie, z natychmiastowym dostępem do powiadomień, wiadomości i ofert. To nie jest projekt zbudowany „od teorii”, tylko produkt kształtowany przez praktykę pracy w tej branży.
+
+Nie przedstawiać jej jako sztucznego rankingu. Celem jest pokazać różnicę między ogólnymi narzędziami a realnym procesem pracy w branży rope access.
 
 ### SLIDE 9 — VALIDATION AND GO-TO-MARKET
 

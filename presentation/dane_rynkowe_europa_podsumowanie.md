@@ -2,40 +2,38 @@
 **Podsumowanie danych do Pitch Decka FRAT (Aktualizacja: 2026)**
 
 ## 1. Wielkość i struktura rynku w Europie
-Rynek prac wysokościowych i dostępu linowego (Rope Access) w Europie to wielomiliardowy ekosystem, który charakteryzuje się ciągłym niedoborem wykwalifikowanych specjalistów.
-*   **Wartość globalna z silną dominacją Europy:** Globalny rynek usług dostępu linowego wyceniany jest na ok. **3,7 mld USD w 2026 r.** (wzrost CAGR: ~8.2%).
-*   **Bezpieczeństwo i skala pracy:** Według raportów IRATA (2024), technicy zrzeszeni w tej organizacji przepracowali na świecie **33,6 miliona godzin**. Europa odpowiada za lwią część tej statystyki (Wielka Brytania, Norwegia, Niemcy).
-*   **Dywersyfikacja popytu:** Zatrudnienie nie opiera się na jednej branży. Szeroko pojęty przemysł (rafinerie, mosty, elektrownie) generuje **ponad 65%** przychodów z dostępu linowego. 
+Rynek dostępu linowego obsługuje różne sektory przemysłu i energetyki. Poniższe wartości rynkowe są szacunkami komercyjnych firm badawczych, a nie oficjalną statystyką publiczną.
+*   **Szacunki wielkości rynku:** Komercyjne raporty, takie jak [Grand View Research – Rope Access Services Market](https://www.grandviewresearch.com/industry-analysis/rope-access-services-market-report), opisują globalną wartość i prognozy wzrostu rynku. Konkretne wartości zależą od zakresu rynku i metodologii raportu; przed wykorzystaniem liczby w decku należy zweryfikować ją w pełnym raporcie.
+*   **Skala pracy:** Według raportu IRATA za 2024 r. technicy zrzeszeni w tej organizacji przepracowali na świecie **33,6 mln godzin** ([IRATA, WASA 2024](https://tech.irata.org/downloads/26017)). Dane te dotyczą globalnej aktywności członków IRATA, nie całego rynku europejskiego.
 
 ## 2. Zatrudnienie i prognozy: Energetyka (Wind & Offshore)
-Transformacja energetyczna to obecnie największy katalizator wzrostu zatrudnienia dla techników linowych.
-*   **Aktualne zatrudnienie w Europie (Wind Energy):** Sektor wspiera **443 000 miejsc pracy** (w tym 211 000 to zatrudnienie bezpośrednie).
-*   **Prognoza na 2030 r.:** Według WindEurope, liczba etatów w europejskiej branży wiatrowej wzrośnie do **607 000**.
-*   **Sektor Offshore (Morskie farmy):** Generuje **180 000 miejsc pracy** i jest wyceniany na 26 mld EUR. To tu trafiają najlepiej opłacani technicy (posiadający uprawnienia IRATA oraz GWO).
-*   **Główny rynek zbytu (Niemcy):** Sam niemiecki sektor morskich farm wiatrowych generuje ponad **31 530 pełnoetatowych miejsc pracy** (dane BWO), co przy braku rąk do pracy w Niemczech wymusza masowy import podwykonawców z zagranicy.
+Raporty o zatrudnieniu pokazują skalę branży wiatrowej i offshore; nie są to bezpośrednie szacunki liczby techników rope access.
+*   **Zatrudnienie w europejskiej energetyce wiatrowej:** W 2024 r. sektor wspierał **442 800 miejsc pracy**, w tym **210 700 bezpośrednich** i **232 100 pośrednich**. To dane WindEurope ([Europe’s Wind Energy Workforce Report](https://windeurope.org/data/products/europes-wind-energy-workforce-report/)).
+*   **Prognoza na 2030 r.:** WindEurope prognozuje **607 000 miejsc pracy** w europejskiej energetyce wiatrowej ([raport i dane](https://windeurope.org/data/products/europes-wind-energy-workforce-report/)).
+*   **Europejski offshore:** W 2025 r. europejski sektor morskiej energetyki wiatrowej wspierał ok. **180 000 miejsc pracy** i generował ok. **26 mld EUR wartości dodanej**. Dane pochodzą z analizy Menon Economics i TGS | 4C, opisanej przez [BalticWind.EU](https://balticwind.eu/european-offshore-wind-supported-180000-jobs-and-eur-26-billion-in-value-in-2025-study-finds/).
+*   **Niemcy:** Niemiecki sektor offshore wind odpowiadał w 2025 r. za **31 530 etatów w przeliczeniu na pełne etaty** oraz ok. **49 000 stosunków pracy**. Są to wyniki badania wind:research na zlecenie [BWO](https://bwo-offshorewind.de/en/pressemitteilung-offshore-windenergie-schafft-ueber-31-000-vollzeitstellen-und-146-milliarden-euro-wertschoepfung-in-deutschland/).
 
 ## 3. Zatrudnienie i prognozy: Przemysł ciężki i Oil & Gas
-Dostęp linowy (Rope Access) to w dużej mierze wysokospecjalistyczne usługi przemysłowe:
-*   **Inspekcje i NDT (Non-Destructive Testing):** Największy segment usług linowych (32,5% rynku). Firmy poszukują techników łączących umiejętności linowe (IRATA) z uprawnieniami defektoskopowymi.
-*   **Konserwacja (Maintenance):** Odpowiada za 26,3% rynku.
-*   **Oil & Gas (Ropa i Gaz):** Europa jest w tym segmencie globalnym liderem, generując **28,4% światowych przychodów** usług linowych dla branży wydobywczej (szczególnie platformy wiertnicze na Morzu Północnym - Norwegia, UK). 
+Prace rope access są wykorzystywane m.in. w inspekcjach, badaniach nieniszczących (NDT), konserwacji oraz sektorze Oil & Gas.
+*   **Oil & Gas (ropa i gaz):** Według komercyjnego raportu Dataintelo Europa odpowiada za **28,4% światowych przychodów** w segmencie rope access dla Oil & Gas. Przedstawiać tę wartość jako szacunek raportu rynkowego, nie oficjalną statystykę ([Dataintelo – Rope Access Services in Oil and Gas](https://dataintelo.com/report/rope-access-services-in-oil-and-gas-market)).
 
 ## 4. Rola Polski w ekosystemie europejskim
-W architekturze europejskiego rynku pracy na wysokości Polska nie jest głównym zlecającym (popyt), ale **strategicznym dostawcą kompetencji (podaż)**.
-*   **Europejski Hub Kadrowy:** Polska funkcjonuje jako potężne zaplecze łańcucha dostaw (supply chain). Polscy technicy (IRATA, SPRAT, GWO) stanowią kluczową siłę roboczą w zachodnioeuropejskich i skandynawskich projektach offshore, stoczniowych oraz przemysłowych. Pracują głównie w systemach rotacyjnych.
-*   **Rozwój rynku lokalnego:** Rodzimy sektor morskiej energetyki wiatrowej (na Morzu Bałtyckim) jest w fazie dynamicznego rozwoju. Szacuje się, że faza instalacji i budowy wygeneruje lokalnie **ok. 34 000 nowych miejsc pracy**.
-*   **Eksport usług:** Polskie ośrodki szkoleniowe wypuszczają na europejski rynek tysiące specjalistów rocznie, dla których barierą jest fragmentaryzacja ofert (Facebook, poczta pantoflowa).
+Polska może być ważnym źródłem podaży kompetencji dla europejskich projektów, ale tezę o skali i mobilności polskich techników należy potwierdzić danymi lub wywiadami branżowymi. Analiza europejskiego offshore wskazuje, że Polska uczestniczy w łańcuchu dostaw m.in. przez transport morski, instalacje, produkcję i usługi techniczne ([BalticWind.EU, analiza Menon Economics i TGS | 4C](https://balticwind.eu/european-offshore-wind-supported-180000-jobs-and-eur-26-billion-in-value-in-2025-study-finds/)).
+*   **Rozwój rynku lokalnego:** Polski sektor offshore wind rozwija się wraz z budową krajowego łańcucha dostaw. Szczegółowe informacje o udziale polskich firm opisuje [analiza BalticWind.EU dotycząca local content](https://balticwind.eu/local-content-in-polish-offshore-wind-from-pledge-to-purchase-order/). Wcześniejszy szacunek **ok. 34 000 miejsc pracy** usunięto, ponieważ nie udało się przypisać go do jednoznacznego, dostępnego źródła.
+*   **Kanał dotarcia do specjalistów:** Współpraca z polskimi ośrodkami szkoleniowymi jako sposób pozyskiwania użytkowników FRAT jest hipotezą go-to-market do sprawdzenia, a nie potwierdzoną liczbą absolwentów ani eksportu specjalistów.
 
 ## 5. Konkluzja biznesowa dla FRAT
-Powyższe dane jednoznacznie walidują założenia biznesowe FRAT:
-1.  **Potężny rozmiar rynku docelowego (TAM/SAM):** Setki tysięcy miejsc pracy w samej Europie (Offshore + Oil&Gas + Przemysł).
-2.  **Multidyscyplinarność:** Branża potrzebuje platformy potrafiącej filtrować techników po konkretnych "skillsach" (NDT, spawanie, malowanie) połączonych z umiejętnością pracy na linach.
-3.  **Idealny Beachhead Market:** FRAT może rozpocząć działalność pozyskując bazę techników z Polski (podaż) i łącząc ich ze zleceniodawcami (firmami) z Niemiec, Norwegii czy UK (popyt).
+Powyższe źródła pokazują skalę sektorów, w których wykorzystywane są kompetencje rope access; same w sobie nie dowodzą popytu na FRAT ani nie wyliczają jego TAM/SAM/SOM.
+1.  **Kontekst rynkowy:** Energetyka wiatrowa i offshore obejmują setki tysięcy miejsc pracy w Europie ([WindEurope](https://windeurope.org/data/products/europes-wind-energy-workforce-report/), [BalticWind.EU](https://balticwind.eu/european-offshore-wind-supported-180000-jobs-and-eur-26-billion-in-value-in-2025-study-finds/)).
+2.  **Dopasowanie kompetencji:** Filtrowanie po certyfikatach, specjalizacjach, dostępności i mobilności to hipoteza wartości produktu do walidacji z technikami i firmami, nie wniosek bezpośrednio zmierzony w przytoczonych raportach.
+3.  **Pierwszy rynek:** Pozyskanie techników z Polski i łączenie ich z firmami w Europie to kierunek wejścia na rynek FRAT do sprawdzenia w pilotażu.
 
 ---
 **Źródła do wykorzystania w Pitch Decku:**
-*   *WindEurope* – „Europe's Wind Energy Workforce Report” (2025/2026)
-*   *BalticWind.EU* – „Wind jobs in numbers: 180,000 offshore roles” (2026)
-*   *BWO (Bundesverband Windenergie Offshore)* – badania struktury zatrudnienia (2026)
-*   *Grand View Research / Dataintelo* – „Rope Access Services Market Size Report, 2025-2030” (2026)
-*   *IRATA* – Annual Safety and Work Analysis Report
+*   [WindEurope – Europe’s Wind Energy Workforce Report](https://windeurope.org/data/products/europes-wind-energy-workforce-report/) (dane za 2024 r. i prognoza na 2030 r.).
+*   [BalticWind.EU – European offshore wind supported 180,000 jobs and EUR 26 billion in value in 2025](https://balticwind.eu/european-offshore-wind-supported-180000-jobs-and-eur-26-billion-in-value-in-2025-study-finds/) (omówienie analizy Menon Economics i TGS | 4C).
+*   [BWO – Offshore wind energy creates over 31,000 full-time positions in Germany](https://bwo-offshorewind.de/en/pressemitteilung-offshore-windenergie-schafft-ueber-31-000-vollzeitstellen-und-146-milliarden-euro-wertschoepfung-in-deutschland/) (badanie wind:research na zlecenie BWO).
+*   [Grand View Research – Rope Access Services Market](https://www.grandviewresearch.com/industry-analysis/rope-access-services-market-report) (komercyjny szacunek wielkości i wzrostu rynku).
+*   [Dataintelo – Rope Access Services in Oil and Gas](https://dataintelo.com/report/rope-access-services-in-oil-and-gas-market) (komercyjny szacunek segmentu Oil & Gas; sprawdzić pełną metodologię przed cytowaniem).
+*   [IRATA – Work & Safety Analysis Reports](https://tech.irata.org/page/work-safety-analysis-reports), w tym [WASA 2024](https://tech.irata.org/downloads/26017).
+*   [BalticWind.EU – Local content in Polish offshore wind](https://balticwind.eu/local-content-in-polish-offshore-wind-from-pledge-to-purchase-order/) (kontekst polskiego łańcucha dostaw; nie stanowi źródła dla niezweryfikowanego szacunku 34 tys. miejsc pracy).
