@@ -133,11 +133,18 @@ Najważniejsze pytanie pilotażu: **czy FRAT szybciej doprowadza do kontaktu odp
 
 ### SLIDE 10 — BUSINESS-MODEL HYPOTHESIS
 
-**First hypothesis: B2B tools for companies building crews.**
+**The product is nearly ready. The business model is still to be validated.**
 
-Pierwszą hipotezą jest abonament B2B dla firm, które rekrutują i kompletują zespoły; technicy korzystają z podstawowej wersji bezpłatnie, aby zbudować podaż i płynność platformy. Płatne mogą być zaawansowane filtry, dostęp do kontaktów, promowanie ofert i narzędzia rekrutacyjne.
+Prototyp/MVP jest niemal gotowy, ale nie wybraliśmy jeszcze modelu biznesowego. Do rozważenia i walidacji są różne warianty:
 
-Profile ośrodków szkoleniowych, promocja kursów, funkcje premium dla techników oraz reklama to **kolejne hipotezy przychodowe**, nie równoległy model uruchamiany od pierwszego dnia.
+- **Freemium / Plus:** bezpłatne korzystanie z wyszukiwarki, a dostęp do danych kontaktowych i czatu w ramach subskrypcji.
+- **Potencjalne funkcje premium w przyszłości:** czaty grupowe i narzędzia do zarządzania projektem, np. kompletowaniem zespołu i komunikacją wokół zlecenia.
+- **Współpraca z ośrodkami szkoleniowymi:** promocja ośrodków i ich szkoleń wśród użytkowników FRAT.
+- **Współpraca z firmami branżowymi:** płatne rozwiązania lub partnerstwa dopasowane do potrzeb firm.
+- **Reklama:** możliwa przy odpowiednio dużym ruchu, jako alternatywa lub uzupełnienie subskrypcji.
+- **Płatny dostęp do aplikacji:** wariant do porównania z modelem bezpłatnym i freemium.
+
+To otwarte hipotezy, a nie ustalony plan ani równoległe źródła przychodu. Kolejnym krokiem będzie sprawdzenie z technikami, firmami i partnerami, które rozwiązanie najlepiej odpowiada na ich potrzeby i za co są gotowi płacić.
 
 ### SLIDE 11 — ROADMAP
 
