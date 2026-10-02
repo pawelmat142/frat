@@ -38,7 +38,7 @@ const HomePage: React.FC = () => {
         <div className="p-4 md:mt-10 mb-5 md:mb-10">
           <AboutIntroSection showLogo={false}></AboutIntroSection>
           <Button
-            className="ml-auto pt-3"
+            className="ml-auto mt-3"
             mode={BtnModes.PRIMARY_TXT}
             size={BtnSizes.SMALL}
             onClick={() => navigate(Path.ABOUT)}
