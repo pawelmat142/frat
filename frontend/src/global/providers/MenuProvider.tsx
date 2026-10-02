@@ -32,7 +32,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
 }) => {
     const { me } = useUserContext();
     const authCtx = useAuthContext();
-    const { t } = useTranslation();
+    const { t, i18n, ready } = useTranslation();
     const navigate = useNavigate();
 
     const globalCtx = useGlobalContext();
@@ -146,7 +146,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
         return NavBus.subscribe((id) => {
             refreshItems(id);
         });
-    }, [authCtx.isAuthenticated, me, notificationsCtx.unreadCount])
+    }, [authCtx.isAuthenticated, me, notificationsCtx.unreadCount, ready, i18n.language])
     
     useEffect(() => {
         refreshItems();
