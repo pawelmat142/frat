@@ -152,6 +152,7 @@ export const MenuItemIdentifiers = {
     START: 'start',
     WORKERS: 'workers',
     OFFERS: 'offers',
+    ABOUT: 'about',
     MESSAGES: 'messages',
     SIGN_IN: 'sign_in',
 } as const

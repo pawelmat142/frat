@@ -84,6 +84,17 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
             icon: Ico.OFFER
         }]
 
+        const desktopAboutItem: MenuItem = {
+            label: t('nav.about'),
+            id: MenuItemIdentifiers.ABOUT,
+            active: !!matchPath({ path: Path.ABOUT, end: true }, location.pathname),
+            onClick: () => {
+                NavBus.emit(MenuItemIdentifiers.ABOUT);
+                navigate(Path.ABOUT);
+            },
+            icon: Ico.INFO,
+        };
+
         if (authCtx.isAuthenticated) {
             items.push({
                 label: t('chat.chats'),
@@ -96,7 +107,13 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
                 },
                 icon: Ico.CHAT
             });
+            if (globalCtx.isDesktop) {
+                items.push(desktopAboutItem);
+            }
         } else {
+            if (globalCtx.isDesktop) {
+                items.push(desktopAboutItem);
+            }
             items.push({
                 label: t('signin.submit'),
                 id: MenuItemIdentifiers.SIGN_IN,
@@ -133,7 +150,7 @@ export const MenuProvider: React.FC<NavigationProviderProps> = ({
     
     useEffect(() => {
         refreshItems();
-    }, [location, navType]);
+    }, [location, navType, globalCtx.isDesktop]);
 
     const setActiveBottomBarItem = (id: MenuItemIdentifier) => {
         items.forEach(item => item.active = false);
