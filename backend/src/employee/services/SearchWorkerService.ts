@@ -199,31 +199,31 @@ export class SearchWorkersService {
 
             case WorkerSearchSortOptions.START_FROM_ASC:
                 idsQueryBuilder
-                    .addSelect('MIN(profile.start_date)', 'sort_start_date')
+                    .addSelect('profile.start_date', 'sort_start_date')
                     .addOrderBy('sort_start_date', SearchUtil.ASC, 'NULLS LAST');
                 break;
 
             case WorkerSearchSortOptions.START_FROM_DESC:
                 idsQueryBuilder
-                    .addSelect('MIN(profile.start_date)', 'sort_start_date')
+                    .addSelect('profile.start_date', 'sort_start_date')
                     .addOrderBy('sort_start_date', SearchUtil.DESC, 'NULLS FIRST');
                 break;
 
             case WorkerSearchSortOptions.CREATED_AT_DESC:
                 idsQueryBuilder
-                    .addSelect('MAX(profile.created_at)', 'sort_created_at')
+                    .addSelect('profile.created_at', 'sort_created_at')
                     .addOrderBy('sort_created_at', SearchUtil.DESC);
                 break;
             case WorkerSearchSortOptions.CREATED_AT_ASC:
                 idsQueryBuilder
-                    .addSelect('MIN(profile.created_at)', 'sort_created_at')
+                    .addSelect('profile.created_at', 'sort_created_at')
                     .addOrderBy('sort_created_at', SearchUtil.ASC);
                 break;
 
             case WorkerSearchSortOptions.DISTANCE_ASC:
                 if (viewerLocation?.lat != null && viewerLocation?.lng != null) {
                     idsQueryBuilder
-                        .addSelect(`MIN(CASE
+                        .addSelect(`CASE
                             WHEN profile.location_option = :distanceLocationOption AND profile.point IS NOT NULL THEN ST_Distance(
                                 profile.point,
                                 ST_SetSRID(ST_MakePoint(
@@ -232,7 +232,7 @@ export class SearchWorkersService {
                                 ), 4326)::geography
                             )
                             ELSE NULL
-                        END)`, 'sort_distance_m')
+                        END`, 'sort_distance_m')
                         .setParameters({
                             distanceLocationOption: WorkerLocationOptions.POSITION,
                             sortLat: viewerLocation.lat,
