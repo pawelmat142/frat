@@ -22,8 +22,8 @@ export const Themes = {
 export type Theme = typeof Themes[keyof typeof Themes];
 
 export const defaultTheme = {
-    light: Themes.LIGHT1,
-    dark: Themes.DARK1,
+    light: Themes.LIGHT2,
+    dark: Themes.DARK2,
 };
 
 export const defaultSettings: SettingsI = {
