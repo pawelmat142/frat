@@ -25,7 +25,11 @@ import { useOpenChat } from "chat/hooks/useOpenChat";
 import OfferAvatarMock from "offer/components/OfferAvatarMock";
 import { AppConfig } from "@shared/AppConfig";
 
-const SingleNotificationView: React.FC = () => {
+interface Props {
+    showHeader?: boolean;
+}
+
+const SingleNotificationView: React.FC<Props> = ({ showHeader = true }) => {
 
     const notificationsCtx = useNotificationsContext();
     const navigate = useNavigate();
@@ -40,8 +44,19 @@ const SingleNotificationView: React.FC = () => {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        initNotification()
-    }, [notificationId])
+        if (!notificationId) {
+            return;
+        }
+
+        const found = notificationsCtx.notifications.find(n => String(n.notificationId) === notificationId);
+        if (found) {
+            setNotification(found);
+            return;
+        }
+
+        setNotification(null);
+        void fetchNotification();
+    }, [notificationId, notificationsCtx.notifications]);
 
     useEffect(() => {
         if (!notification) {
@@ -49,18 +64,6 @@ const SingleNotificationView: React.FC = () => {
         }
         markNotificationAsRead()
     }, [notification])
-
-    const initNotification = () => {
-        if (!notificationId || notification) {
-            return;
-        }
-        const found = notificationsCtx.notifications.find(n => String(n.notificationId) === notificationId)
-        if (found) {
-            setNotification(found)
-        } else {
-            fetchNotification()
-        }
-    }
 
     const fetchNotification = async () => {
         const numberNotificationId = Number(notificationId)
@@ -310,9 +313,9 @@ const SingleNotificationView: React.FC = () => {
 
     return (
         <>
-            <Header title={t(notification.title)}></Header>
+            {showHeader && <Header title={t(notification.title)}></Header>}
 
-            <div className="view-container">
+            <div className="view-container notification-detail-view">
 
                 <div className="flex flex-col justify-center gap-4 mb-6">
 

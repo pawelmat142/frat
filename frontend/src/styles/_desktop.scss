@@ -986,6 +986,96 @@ $desktop-view-size-two: 80rem;
     padding: 2px;
   }
 
+  // NOTIFICATIONS
+  .desktop-notification-layout {
+    display: grid;
+    grid-template-columns: minmax(20rem, 23rem) minmax(0, 1fr);
+    gap: 1.5rem;
+    flex: 1;
+    height: 100%;
+    min-height: 0;
+    width: 100%;
+    max-width: $desktop-view-size-two;
+    margin: 0 auto;
+    padding: 0 .5rem .5rem;
+    box-sizing: border-box;
+  }
+
+  .desktop-notification-page {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .desktop-notification-list,
+  .desktop-notification-detail {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .desktop-notification-list {
+    display: flex;
+    flex-direction: column;
+    padding-right: 1rem;
+    border-right: 1px solid $border-color;
+  }
+
+  .desktop-notification-list .notification-list-panel {
+    flex: 1;
+    max-width: none;
+    overflow-y: auto;
+  }
+
+  .desktop-notification-list-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 1rem;
+    background-color: $primary-bg;
+  }
+
+  .desktop-notification-list-title {
+    color: $primary-text;
+    font-size: $lFont;
+    font-weight: $font-semibold;
+  }
+
+  .notification-list-panel-item {
+    cursor: pointer;
+  }
+
+  .desktop-notification-detail {
+    display: flex;
+    flex-direction: column;
+    background-color: $primary-bg;
+  }
+
+  .desktop-notification-detail-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .desktop-notification-detail .view-container {
+    width: 100%;
+    max-width: 38rem;
+    margin: 0 auto;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .desktop-notification-empty-state {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: $secondary-text;
+    text-align: center;
+  }
+
   .desktop-worker-profile-main,
   .desktop-worker-profile-sidebar {
     min-width: 0;

@@ -14,9 +14,10 @@ interface Props {
     notification: NotificationI
     first?: boolean,
     last?: boolean,
+    className?: string,
 }
 
-const NotificationListItem: React.FC<Props> = ({ notification, first, last }) => {
+const NotificationListItem: React.FC<Props> = ({ notification, first, last, className }) => {
 
     const navigate = useNavigate()
     const { t } = useTranslation();
@@ -82,6 +83,7 @@ const NotificationListItem: React.FC<Props> = ({ notification, first, last }) =>
                 topRight={shortDate()}
                 first={first}
                 last={last}
+                className={className}
             ></ListItem>
         </div>
     )

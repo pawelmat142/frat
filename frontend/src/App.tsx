@@ -32,13 +32,13 @@ import OfferFormView from 'offer/views/form/OfferFormView';
 import UserOffersList from 'offer/views/UserOffersList';
 import { useRippleEffect } from 'global/hooks/useRippleEffect';
 import { useScrollRestoration } from 'global/hooks/useScrollRestoration';
+import { useGlobalContext } from 'global/providers/GlobalProvider';
 import OfferSearchView from 'offer/views/search/OfferSearchView';
 import AdminOffers from 'admin/views/offer/AdminOffers';
 import TelegramSignPage from 'auth/views/TelegramSignPage';
 import ChatRouteView from 'chat/views/ChatRouteView';
 import FriendsListView from 'friends/views/FriendsListView';
-import SingleNotificationView from 'notification/views/SingleNotificationView';
-import NotificationsView from 'notification/views/NotificationsView';
+import NotificationRouteView from 'notification/views/NotificationRouteView';
 import TranslationItemForm from 'admin/views/translations/TranslationItemForm';
 import SettingsView from 'user/views/SettingsView';
 import DictionaryElementForm from 'admin/views/dictionaries/DictionaryElementForm';
@@ -58,12 +58,15 @@ const trainingAccess = [UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.
 
 const App: React.FC = () => {
     const location = useLocation();
+    const { isDesktop } = useGlobalContext();
     useRippleEffect();
     useScrollRestoration();
     const direction = location.state?.direction === 'back' ? -1 : 1;
     const routeAnimationKey = location.pathname === Path.CHATS || location.pathname.startsWith(`${Path.CHATS}/`)
         ? Path.CHATS
-        : location.pathname;
+        : isDesktop && (location.pathname === Path.NOTIFICATIONS || location.pathname.startsWith(`${Path.NOTIFICATIONS}/`))
+            ? Path.NOTIFICATIONS
+            : location.pathname;
 
     const popupCtx = usePopup();
     const navigate = useNavigate()
@@ -71,6 +74,7 @@ const App: React.FC = () => {
     React.useEffect(() => {
         httpClient.setPopupHandler(popupCtx.popup);
     }, [popupCtx.popup]);
+    
     React.useEffect(() => {
         httpClient.setNavigate(navigate);
     }, [navigate]);
@@ -84,8 +88,7 @@ const App: React.FC = () => {
                 <Route path={Path.PROFILE} element={<PageWrapper isProtected><ProfileView /></PageWrapper>} />
                 <Route path={`${Path.CHATS}/:chatId?`} element={<PageWrapper className="w-full flex flex-col items-center flex-1 desktop-chat-page" isProtected><ChatRouteView /></PageWrapper>} />
                 <Route path={Path.FRIENDS} element={<PageWrapper isProtected><FriendsListView /></PageWrapper>} />
-                <Route path={Path.NOTIFICATIONS} element={<PageWrapper isProtected><NotificationsView /></PageWrapper>} />
-                <Route path={Path.NOTIFICATION} element={<PageWrapper isProtected><SingleNotificationView /></PageWrapper>} />
+                <Route path={`${Path.NOTIFICATIONS}/:notificationId?`} element={<PageWrapper className="w-full flex flex-col items-center flex-1 desktop-notification-page" isProtected><NotificationRouteView /></PageWrapper>} />
                 <Route path={Path.SETTINGS} element={<PageWrapper isProtected><SettingsView /></PageWrapper>} />
                 <Route path={Path.MY_LIST} element={<PageWrapper isProtected><MyListedItemsView /></PageWrapper>} />
                 <Route path={Path.ABOUT} element={<PageWrapper><AboutView /></PageWrapper>} />
