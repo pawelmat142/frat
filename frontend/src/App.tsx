@@ -56,17 +56,28 @@ import AboutView from 'global/views/about/AboutView';
 
 const trainingAccess = [UserRoles.TRAINING_PROVIDER, UserRoles.ADMIN, UserRoles.SUPERADMIN]
 
+const isRouteInSection = (pathname: string, sectionPath: string): boolean => (
+    pathname === sectionPath || pathname.startsWith(`${sectionPath}/`)
+);
+
+const getRouteAnimationKey = (pathname: string, isDesktop: boolean): string => {
+    if (isDesktop && isRouteInSection(pathname, Path.CHATS)) {
+        return Path.CHATS;
+    }
+
+    if (isDesktop && isRouteInSection(pathname, Path.NOTIFICATIONS)) {
+        return Path.NOTIFICATIONS;
+    }
+
+    return pathname;
+};
+
 const App: React.FC = () => {
     const location = useLocation();
     const { isDesktop } = useGlobalContext();
     useRippleEffect();
     useScrollRestoration();
-    const direction = location.state?.direction === 'back' ? -1 : 1;
-    const routeAnimationKey = location.pathname === Path.CHATS || location.pathname.startsWith(`${Path.CHATS}/`)
-        ? Path.CHATS
-        : isDesktop && (location.pathname === Path.NOTIFICATIONS || location.pathname.startsWith(`${Path.NOTIFICATIONS}/`))
-            ? Path.NOTIFICATIONS
-            : location.pathname;
+    const routeAnimationKey = getRouteAnimationKey(location.pathname, isDesktop);
 
     const popupCtx = usePopup();
     const navigate = useNavigate()
@@ -74,7 +85,7 @@ const App: React.FC = () => {
     React.useEffect(() => {
         httpClient.setPopupHandler(popupCtx.popup);
     }, [popupCtx.popup]);
-    
+
     React.useEffect(() => {
         httpClient.setNavigate(navigate);
     }, [navigate]);
