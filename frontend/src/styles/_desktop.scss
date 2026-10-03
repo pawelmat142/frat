@@ -1073,6 +1073,24 @@ $desktop-view-size-two: 80rem;
     gap: .75rem;
   }
 
+  .desktop-offer-profile-author {
+    margin-bottom: 1.5rem;
+  }
+
+  .desktop-offer-profile-author-title {
+    margin-bottom: .5rem;
+    color: $secondary-text;
+    font-size: $sFont;
+  }
+
+  .desktop-offer-profile-author-item {
+    cursor: pointer;
+  }
+
+  .user-item-tile {
+    border-radius: .375rem;
+  }
+
   // CHAT
   // Uses the worker-search container dimensions with a slightly wider chat list.
   .desktop-chat-layout {

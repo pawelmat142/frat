@@ -10,9 +10,10 @@ interface Props {
     uid: string,
     size?: number,
     showNumber?: boolean
-    }
+    allowNavigate?: boolean
+}
 
-const UserItemWithLoading: React.FC<Props> = ({ uid, size = 3.5, showNumber = false }) => {
+const UserItemWithLoading: React.FC<Props> = ({ uid, size = 3.5, showNumber = false, allowNavigate }) => {
 
     if (!uid) return null;
 
@@ -48,7 +49,7 @@ const UserItemWithLoading: React.FC<Props> = ({ uid, size = 3.5, showNumber = fa
         return <span>{t(`user.error.notFound`)}</span>
     }
 
-    return <UserItem user={user} size={size} showNumber={showNumber}></UserItem>
+    return <UserItem user={user} size={size} showNumber={showNumber} allowNavigate={allowNavigate}></UserItem>
 }
 
 export default UserItemWithLoading;

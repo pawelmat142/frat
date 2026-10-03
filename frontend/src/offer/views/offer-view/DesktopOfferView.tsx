@@ -63,12 +63,14 @@ const DesktopOfferView: React.FC<Props> = ({ offer, menu }) => {
             </div>
           </section>
 
-          <TileSection
-            title={t("offer.addedBy")}
-            onClick={() => navigate(Path.getProfilePath(offer.uid))}
-          >
-            <UserItemTile uid={offer.uid} showChat={!isMyOffer} showNumber />
-          </TileSection>
+          <section className="desktop-offer-profile-author">
+            <h2 className="desktop-offer-profile-author-title">{t("offer.addedBy")}</h2>
+            <div
+              className="desktop-offer-profile-author-item"
+            >
+              <UserItemTile uid={offer.uid} showChat={!isMyOffer} showNumber />
+            </div>
+          </section>
 
           <TileSection title={t("offer.descriptionTitle")}>
             <div className="p-3">{offer.description}</div>
