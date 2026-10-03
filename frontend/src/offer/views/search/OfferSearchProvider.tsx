@@ -141,6 +141,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const requestIdRef = useRef(0);
     const requestsLengthRef = useRef(0);
     const hasMoreRef = useRef(false);
+    const lastSearchLocationKeyRef = useRef<string | null>(null);
 
     const navToSearch = () => {
         NavBus.emit(MenuItemIdentifiers.OFFERS);
@@ -228,9 +229,19 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     useEffect(() => {
         if (!location.pathname.includes(Path.OFFERS_SEARCH)) {
-            return
+            return;
         }
-        const parsed = OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters);
+
+        if (lastSearchLocationKeyRef.current === location.key) {
+            return;
+        }
+        lastSearchLocationKeyRef.current = location.key;
+
+        onFiltersChange(location.search);
+    }, [location.key, location.pathname, location.search]);
+
+    const onFiltersChange = (search: string) => {
+        const parsed = OfferUtil.parseFiltersFromSearch(search, defaultOfferFilters);
         const normalized = toStateFilters(parsed);
 
         setFiltersState(normalized);
@@ -241,7 +252,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         const searchFilters = toSearchFilters(normalized, 0, INITIAL_LIMIT);
         void executeSearch(searchFilters, false);
-    }, [location.search, executeSearch]);
+    };
 
     const handleSetFilters = useCallback((newFilters: OfferSearchFilters) => {
         const normalized = toStateFilters(newFilters);
