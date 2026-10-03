@@ -17,6 +17,7 @@ import WorkersListSearchResults from "./WorkersListSearchResults";
 import WorkersViewModeToggle from "./WorkersViewModeToggle";
 import WorkersSearchFiltersView from "./WorkersSearchFiltersView";
 import DesktopWorkersSearchProfilePreview from "./DesktopWorkersSearchProfilePreview";
+import MapNavigation, { MapNavigationProps } from "global/components/map/MapNavigation";
 
 type ViewMode = "list" | "map";
 
@@ -31,8 +32,9 @@ const WorkersSearchView: React.FC = () => {
       "list",
   );
   const directionRef = useRef(1);
-  const showWorkerPreview = globalCtx.isDesktop && viewMode === "list" && !!ctx.selectedWorker;
+  const showWorkerPreview = globalCtx.isDesktop && !!ctx.selectedWorker;
   const [isPreviewSlotVisible, setIsPreviewSlotVisible] = React.useState(showWorkerPreview);
+  const [mapNavigation, setMapNavigation] = React.useState<MapNavigationProps | null>(null);
 
   React.useEffect(() => {
     if (showWorkerPreview) {
@@ -107,16 +109,19 @@ const WorkersSearchView: React.FC = () => {
                   </p>
                 )}
               </div>
-                <WorkersViewModeToggle
-                  viewMode={viewMode}
-                  onClick={toggleViewMode}
-                  disabled={viewMode === "list" && !ctx.selectedWorker}
-                  label={t(
-                    viewMode === "list"
-                      ? "employeeProfile.showMap"
-                      : "employeeProfile.showList",
-                  )}
-                />
+                <div className="workers-search-results-actions">
+                  {viewMode === "map" && mapNavigation && <MapNavigation {...mapNavigation} />}
+                  <WorkersViewModeToggle
+                    viewMode={viewMode}
+                    onClick={toggleViewMode}
+                    disabled={viewMode === "list" && !ctx.selectedWorker}
+                    label={t(
+                      viewMode === "list"
+                        ? "employeeProfile.showMap"
+                        : "employeeProfile.showList",
+                    )}
+                  />
+                </div>
             </div>
           )}
 
@@ -148,7 +153,7 @@ const WorkersSearchView: React.FC = () => {
                 transition={{ duration: 0.22, ease: "easeInOut" }}
               >
                 {viewMode === "map" ? (
-                  <WorkersMapSearchResults />
+                  <WorkersMapSearchResults onNavigationChange={setMapNavigation} />
                 ) : (
                   <WorkersListSearchResults />
                 )}

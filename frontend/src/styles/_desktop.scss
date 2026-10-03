@@ -355,7 +355,7 @@ $desktop-view-size-two: 80rem;
   }
 
   .icon-btn.medium {
-    padding: 1.5rem;
+    padding: 1.2rem;
     font-size: .9375rem;
     border-radius: .25rem;
   }
@@ -617,8 +617,8 @@ $desktop-view-size-two: 80rem;
   .workers-search-layout {
     display: grid;
     grid-template-columns: minmax(17.5rem, 20rem) minmax(0, 1fr);
-    align-items: start;
-    gap: 1.5rem;
+    align-items: stretch;
+    gap: 1rem;
     width: 100%;
     max-width: $desktop-view-size-two;
     margin: 0 auto;
@@ -626,6 +626,9 @@ $desktop-view-size-two: 80rem;
     padding-right: .5rem;
     padding-bottom: .5rem;
     height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
 
     &.has-worker-preview {
       grid-template-columns: minmax(17.5rem, 20rem) minmax(0, 1fr) minmax(24rem, 28rem);
@@ -662,7 +665,11 @@ $desktop-view-size-two: 80rem;
   }
 
   .workers-search-results-area {
+    display: flex;
+    flex-direction: column;
     min-width: 0;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .workers-search-results-area .infinite-scroll-filters {
@@ -673,11 +680,35 @@ $desktop-view-size-two: 80rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
     gap: 1rem;
     margin-bottom: 1rem;
+    flex-shrink: 0;
+  }
+
+  .workers-search-results-actions {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  .workers-search-results-actions .map-overlay-nav {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    gap: .5rem;
+    background-color: transparent;
+  }
+
+  .workers-search-results-actions .map-overlay-nav .icon-btn {
+    min-width: 3.75rem;
+    padding: .5rem 1.25rem;
   }
 
   .workers-search-results-title {
+    margin-top: 1rem;
     color: $primary-text;
     font-size: $xxlFont;
     font-weight: $font-semibold;
@@ -695,7 +726,11 @@ $desktop-view-size-two: 80rem;
   }
 
   .workers-search-results-content {
+    flex: 1;
     min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .worker-search-list-item-selected {
@@ -749,8 +784,8 @@ $desktop-view-size-two: 80rem;
   }
 
   .workers-search-results-content .map-search-container {
-    height: calc(100dvh - 10.5rem);
-    min-height: 30rem;
+    height: 100%;
+    min-height: 0;
   }
 
   // FULL WORKER PROFILE

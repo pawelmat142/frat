@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppConfig } from '@shared/AppConfig';
 import GoogleMapsLoader from 'global/utils/GoogleMapsLoader';
@@ -66,7 +66,10 @@ export function useGoogleMapMarkers<T>({
     const markersRef       = useRef<google.maps.Marker[]>([]);
     const hasRestoredIndex = useRef(false);
 
-    const saveIndex = (index: number) => sessionStorage.setItem(sessionKey, String(index));
+    const saveIndex = useCallback(
+        (index: number) => sessionStorage.setItem(sessionKey, String(index)),
+        [sessionKey],
+    );
 
     const restoreIndex = (sorted: T[]): number =>
         Math.min(
@@ -185,15 +188,15 @@ export function useGoogleMapMarkers<T>({
         centerOnItem(sortedItems[selectedIndex]);
     }, [selectedIndex]); // eslint-disable-line
 
-    const handlePrev = () => {
+    const handlePrev = useCallback(() => {
         directionRef.current = -1;
         setSelectedIndex(i => { const next = Math.max(0, i - 1); saveIndex(next); return next; });
-    };
+    }, [saveIndex]);
 
-    const handleNext = () => {
+    const handleNext = useCallback(() => {
         directionRef.current = 1;
         setSelectedIndex(i => { const next = Math.min(sortedItems.length - 1, i + 1); saveIndex(next); return next; });
-    };
+    }, [saveIndex, sortedItems.length]);
 
     return { mapRef, sortedItems, selectedIndex, directionRef, handlePrev, handleNext };
 }
