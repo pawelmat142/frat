@@ -49,7 +49,12 @@ const DesktopOfferSearchPreview: React.FC<Props> = ({ offer }) => {
               {t("chat.openChat")}
             </Button>
           )}
-          <Button mode={BtnModes.PRIMARY} onClick={() => navigate(Path.getOfferPath(offer.offerId))}>
+          <Button
+            mode={BtnModes.PRIMARY}
+            onClick={() => navigate(Path.getOfferPath(offer.offerId), {
+              state: { fromSearchView: true },
+            })}
+          >
             {t("offer.offerViewTitle")}
             <Ico.CHEVRON_RIGHT size={16} />
           </Button>

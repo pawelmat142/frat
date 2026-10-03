@@ -995,6 +995,84 @@ $desktop-view-size-two: 80rem;
     align-items: start;
   }
 
+  // FULL OFFER VIEW
+  .desktop-offer-profile {
+    width: 100%;
+    max-width: $desktop-view-size-one;
+    margin: 0 auto;
+    padding: .5rem 1.5rem 3rem;
+  }
+
+  .desktop-offer-profile-view-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .desktop-offer-profile-view-title,
+  .desktop-offer-profile-name {
+    color: $primary-text;
+    font-weight: $font-semibold;
+  }
+
+  .desktop-offer-profile-view-title {
+    margin-top: 1rem;
+    font-size: $xxlFont;
+  }
+
+  .desktop-offer-profile-name {
+    font-size: $xxlFont;
+  }
+
+  .desktop-offer-profile-back {
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .desktop-offer-profile-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(21rem, 24rem);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .desktop-offer-profile-header {
+    display: grid;
+    grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: center;
+    padding: 0 1.5rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .desktop-offer-profile-image {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: $tile-radius;
+  }
+
+  .desktop-offer-profile-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .desktop-offer-profile-image .rounded-full {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: $tile-radius;
+  }
+
+  .desktop-offer-profile-summary {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+  }
+
   // CHAT
   // Uses the worker-search container dimensions with a slightly wider chat list.
   .desktop-chat-layout {
@@ -1193,21 +1271,27 @@ $desktop-view-size-two: 80rem;
   }
 
   .desktop-worker-profile-main,
-  .desktop-worker-profile-sidebar {
+  .desktop-worker-profile-sidebar,
+  .desktop-offer-profile-main,
+  .desktop-offer-profile-sidebar {
     min-width: 0;
   }
 
-  .desktop-worker-profile-menu {
+  .desktop-worker-profile-menu,
+  .desktop-offer-profile-menu {
     margin-bottom: 1rem;
   }
 
   .desktop-worker-profile-main > .mx-3.my-4,
-  .desktop-worker-profile-sidebar > .mx-3.my-4 {
+  .desktop-worker-profile-sidebar > .mx-3.my-4,
+  .desktop-offer-profile-main > .mx-3.my-4,
+  .desktop-offer-profile-sidebar > .mx-3.my-4 {
     margin: 0 0 1rem;
   }
 
   .desktop-worker-profile .rounded-xl,
-  .desktop-worker-profile .position-widget {
+  .desktop-worker-profile .position-widget,
+  .desktop-offer-profile .rounded-xl {
     border-radius: .375rem;
   }
 

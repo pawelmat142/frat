@@ -37,7 +37,9 @@ const OfferSearchListItem: React.FC<Props> = ({
   const showDesktopOfferButton = isDesktop && !!onSelect;
 
   const openOffer = () => {
-    navigate(Path.getOfferPath(offer.offerId));
+    navigate(Path.getOfferPath(offer.offerId), {
+      state: { fromSearchView: true },
+    });
   };
 
   const rightSection = (showDesktopOfferButton || !isMyOffer) ? (

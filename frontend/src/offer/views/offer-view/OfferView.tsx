@@ -23,6 +23,8 @@ import UserItemTile from "user/components/UserItemTile";
 import OfferCertificatesSection from "./OfferCertificatesSection";
 import { UserListedItemReferenceTypes, UserListedItemTypes } from "@shared/interfaces/UserListedItem";
 import { UserListedItemService } from "user/services/UserListedItemService";
+import DesktopOfferView from "./DesktopOfferView";
+import { useOpenChat } from "chat/hooks/useOpenChat";
 
 const OfferView: React.FC = () => {
   const params = useParams<{ offerId?: string }>();
@@ -32,6 +34,7 @@ const OfferView: React.FC = () => {
   const navigate = useNavigate();
   const userCtx = useUserContext();
   const globalCtx = useGlobalContext();
+  const openChat = useOpenChat();
 
   const confirm = useConfirm();
   const me = userCtx?.me;
@@ -48,6 +51,12 @@ const OfferView: React.FC = () => {
     const menu: MenuConfig = {
       title: t("offer.offerMenu"),
       items: [
+        {
+          label: t("chat.openChat"),
+          if: !isMyOffer,
+          onClick: () => openChat(offer.uid),
+          icon: Ico.MSG,
+        },
         {
           label: t("offer.editButton"),
           if: isMyOffer,
@@ -214,14 +223,18 @@ const OfferView: React.FC = () => {
   const avatarMock = offer.avatarRef ? undefined : (
     <OfferAvatarMock offer={offer} size={AppConfig.AVATAR.SIZE.BIG}/>
   );
+  const menu = getOfferMenuItems(offer);
 
   return (
     <>
       <Header
         title={t("offer.offerViewTitle")}
-        menu={getOfferMenuItems(offer)}
+        menu={menu}
       />
 
+      {globalCtx.isDesktop ? (
+        <DesktopOfferView offer={offer} menu={menu} />
+      ) : (
       <div className="w-full flex-1">
         <div className="flex gap-3 items-center view-margin">
           <ListItemImg
@@ -256,6 +269,7 @@ const OfferView: React.FC = () => {
 
         <OfferCertificatesSection offer={offer} />
       </div>
+      )}
 
     </>
   );

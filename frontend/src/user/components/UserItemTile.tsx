@@ -26,9 +26,12 @@ const UserItemTile: React.FC<Props> = ({ uid, user, size = 3.5, showNumber = fal
     return (
         <div className="user-item-tile">
             {komponent}
-            {showChat && <div>
+            {showChat && <div className="tile-section-interactive">
                 <IconButton
-                    onClick={() => openChat(uid || user!.uid)}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        openChat(uid || user!.uid);
+                    }}
                     mode={BtnModes.PRIMARY_TXT}
                     icon={<Ico.MSG size={20} />}
                 />
