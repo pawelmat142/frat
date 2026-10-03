@@ -151,6 +151,7 @@ const WorkerFormStepLocation: React.FC<Props> = ({ formRef, initPosition }) => {
                                             label={t("employeeProfile.form.locationCountries")}
                                             code="LANGUAGES"
                                             elementLabelTranslationKey="COUNTRY_NAME"
+                                            chipTranslationKey="COUNTRY_NAME"
                                             fullWidth
                                             required
                                             error={formState?.errors.location?.locationCountries}
