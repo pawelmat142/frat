@@ -10,9 +10,10 @@ interface Props {
     viewMode: ViewMode;
     onClick: () => void;
     label?: string;
+    disabled?: boolean;
 }
 
-const WorkersViewModeToggle: React.FC<Props> = ({ viewMode, onClick, label }) => (
+const WorkersViewModeToggle: React.FC<Props> = ({ viewMode, onClick, label, disabled }) => (
     <IconButton
         mode={label ? BtnModes.SECONDARY_TXT : BtnModes.PRIMARY_TXT}
         className={label ? "workers-search-view-mode-toggle" : undefined}
@@ -34,6 +35,7 @@ const WorkersViewModeToggle: React.FC<Props> = ({ viewMode, onClick, label }) =>
             </>
         }
         onClick={onClick}
+        disabled={disabled}
     />
 );
 

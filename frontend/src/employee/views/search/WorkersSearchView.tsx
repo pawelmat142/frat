@@ -110,6 +110,7 @@ const WorkersSearchView: React.FC = () => {
                 <WorkersViewModeToggle
                   viewMode={viewMode}
                   onClick={toggleViewMode}
+                  disabled={viewMode === "list" && !ctx.selectedWorker}
                   label={t(
                     viewMode === "list"
                       ? "employeeProfile.showMap"
