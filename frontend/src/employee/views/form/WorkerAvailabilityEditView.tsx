@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import Loading from "global/components/Loading";
 import { useNotificationsContext } from "notification/NotificationsProvider";
 import { NotificationTypes } from "@shared/interfaces/NotificationI";
+import { Ico } from "global/icon.def";
 
 const WorkerAvailabilityEditView: React.FC = () => {
 
@@ -99,24 +100,30 @@ const WorkerAvailabilityEditView: React.FC = () => {
     }
 
     return (
-        <div className="relative flex flex-col w-full flex-1">
+        <div className="form-view relative flex flex-col">
             <Header title={t("employeeProfile.form.availability.title")} />
 
+            <div className="form-wizard-progress">
+                <div className="form-wizard-progress-content">
+                    <h1 className="form-wizard-view-title">{t("employeeProfile.form.availability.title")}</h1>
+                </div>
+            </div>
+
             <form className="flex flex-col flex-1">
-                <div className="flex-1 p-4">
+                <div className="flex-1">
                     <WorkerFormStepAvailability formRef={formRef} />
                 </div>
 
-                <div className="view-margin pb-3">
+                <div className="form-wizard-buttons-wrapper">
                     <div className="form-wizard-buttons">
                         <Button
                             type="button"
                             onClick={handleBack}
                             size={BtnSizes.LARGE}
                             mode={BtnModes.SECONDARY_TXT}
-                            className="flex-1"
                             aria-label={t("common.back")}
                         >
+                            <Ico.CHEVRON_LEFT size={16} aria-hidden="true" />
                             {t("common.back")}
                         </Button>
 
@@ -125,9 +132,10 @@ const WorkerAvailabilityEditView: React.FC = () => {
                             onClick={handleSave}
                             size={BtnSizes.LARGE}
                             mode={BtnModes.PRIMARY}
-                            className="flex-1"
+                            className="font-bold px-10"
                             aria-label={t("common.save")}
                         >
+                            <Ico.CHECK size={16} aria-hidden="true" />
                             {t("common.save")}
                         </Button>
                     </div>
