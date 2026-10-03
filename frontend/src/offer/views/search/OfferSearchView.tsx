@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { AnimatePresence } from "framer-motion";
 import { useGlobalContext } from "global/providers/GlobalProvider";
 import { useTranslation } from "react-i18next";
 import { useOfferSearch } from "./OfferSearchProvider";
@@ -19,6 +20,8 @@ import { toast } from "react-toastify";
 import IconButton from "global/components/controls/IconButon";
 import { BtnModes } from "global/interface/controls.interface";
 import { FABkey, FABtype, useFAB } from "global/fab/useFAB";
+import OfferSearchFiltersView from "./OfferSearchFiltersView";
+import DesktopOfferSearchPreview from "./DesktopOfferSearchPreview";
 
 const OfferSearchView: React.FC = () => {
 
@@ -29,6 +32,14 @@ const OfferSearchView: React.FC = () => {
 
     const swipeRefs = useRef<Map<string, SwipeableRowRef>>(new Map());
     const [loading, setLoading] = React.useState(false);
+    const showOfferPreview = globalCtx.isDesktop && !!ctx.selectedOffer;
+    const [isPreviewSlotVisible, setIsPreviewSlotVisible] = React.useState(showOfferPreview);
+
+    React.useEffect(() => {
+        if (showOfferPreview) {
+            setIsPreviewSlotVisible(true);
+        }
+    }, [showOfferPreview]);
 
     useFAB({
         type: FABtype.filters,
@@ -99,64 +110,101 @@ const OfferSearchView: React.FC = () => {
         <>
             <Header title={t('offer.searchTitle')} />
 
-            <div className="list-view pt-0">
+            <div className={`list-view offers-search-layout${showOfferPreview || isPreviewSlotVisible ? " has-offer-preview" : ""}`}>
+                {globalCtx.isDesktop && (
+                    <aside className="offers-search-sidebar" aria-label={t("offer.filtersTitle")}>
+                        <OfferSearchFiltersView />
+                    </aside>
+                )}
 
-                <div className="infinite-scroll-filters">
-                    <OfferSearchFilters />
+                <div className="offers-search-results-area">
+                    <div className="infinite-scroll-filters">
+                        <OfferSearchFilters />
+                    </div>
+
+                    {globalCtx.isDesktop && (
+                        <div className="offers-search-results-toolbar">
+                            <h1 className="offers-search-results-title">{t("offer.searchTitle")}</h1>
+                            {ctx.totalResults !== null && (
+                                <p className="offers-search-results-count">
+                                    {t("offer.searchResultsCount", {
+                                        count: ctx.totalResults,
+                                        defaultValue: `${ctx.totalResults} result${ctx.totalResults === 1 ? "" : "s"}`,
+                                    })}
+                                </p>
+                            )}
+                        </div>
+                    )}
+
+                    {initialLoading ? (
+                        <div className="flex flex-col items-center justify-center mt-20">
+                            <Loading></Loading>
+                        </div>
+                    ) : noResults ? (
+                        <div className="flex flex-col items-center justify-center mt-20">
+                            <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
+                        </div>
+                    ) : (
+                        <div className="offers-search-results-content">
+                            <div className="results flex flex-col">
+                                {(ctx.results ?? []).map((offer, index) => {
+                                    const isSavedOnList = (userCtx.meCtx?.listedItems ?? [])
+                                        .some(item => item.reference === offer?.offerId?.toString() && item.referenceType === UserListedItemReferenceTypes.OFFER);
+
+                                    const rowActions = <>
+                                        {isSavedOnList ? (
+                                            <IconButton className="p-3" mode={BtnModes.ERROR_TXT} icon={<Ico.STAR_OUTLINE />} onClick={() => { removeListItem(offer) }}></IconButton>
+                                        ) : (
+                                            <IconButton className="p-3" icon={<Ico.STAR />} onClick={() => { addItemToMyList(offer) }}></IconButton>
+                                        )}
+                                    </>;
+
+                                    return (
+                                        <SwipeableRow disable={offer.uid === userCtx.me?.uid}
+                                            key={offer.offerId}
+                                            ref={el => el ? swipeRefs.current.set(offer.offerId, el) : swipeRefs.current.delete(offer.offerId)} actions={rowActions}>
+                                            <OfferSearchListItem className="primary-bg"
+                                                offer={offer}
+                                                first={index === 0}
+                                                last={index === (ctx.results?.length ?? 0) - 1}
+                                                onSelect={globalCtx.isDesktop ? selectedOffer => ctx.setSelectedOffer(
+                                                    ctx.selectedOffer?.offerId === selectedOffer.offerId ? null : selectedOffer,
+                                                ) : undefined}
+                                                selected={ctx.selectedOffer?.offerId === offer.offerId}
+                                            />
+                                        </SwipeableRow>
+                                    );
+                                })}
+                                <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} />
+                            </div>
+                        </div>
+                    )}
+
+                    {ctx.loadingMore && ctx.results.length > 0 && (
+                        <div className="flex justify-center py-6">
+                            <Loading></Loading>
+                        </div>
+                    )}
+
+                    {showEndOfResults && (
+                        <div className="flex justify-center py-4">
+                            <span className="secondary-text s-font">{t('common.endOfResults', { defaultValue: 'No more offers to display.' })}</span>
+                        </div>
+                    )}
                 </div>
 
-                {initialLoading ? (
-                    <div className="flex flex-col items-center justify-center mt-20">
-                        <Loading></Loading>
-                    </div>
-                ) : noResults ? (
-                    <div className="flex flex-col items-center justify-center mt-20">
-                        <p className="xl-font mb-4 secondary-text">{t('common.noResults')}</p>
-                    </div>
-                ) : (
-                    <div className="results flex flex-col">
-                        {(ctx.results ?? []).map((offer, index) => {
-
-                            const isSavedOnList = (userCtx.meCtx?.listedItems ?? [])
-                                .some(item => item.reference === offer?.offerId?.toString() && item.referenceType === UserListedItemReferenceTypes.WORKER);
-
-                            const rowActions = <>
-                                {isSavedOnList ? (
-                                    <IconButton className="p-3" mode={BtnModes.ERROR_TXT} icon={<Ico.STAR_OUTLINE />} onClick={() => { removeListItem(offer) }}></IconButton>
-                                ) : (
-                                    <IconButton className="p-3" icon={<Ico.STAR />} onClick={() => { addItemToMyList(offer) }}></IconButton>
-                                )}
-                            </>
-                            
-                            return (
-                                <SwipeableRow disable={offer.uid === userCtx.me?.uid}
-                                    key={offer.offerId}
-                                    ref={el => el ? swipeRefs.current.set(offer.offerId, el) : swipeRefs.current.delete(offer.offerId)} actions={rowActions}>
-                                    <OfferSearchListItem className="primary-bg"
-                                        key={offer.offerId}
-                                        offer={offer}
-                                        first={index === 0}
-                                        last={index === (ctx.results?.length ?? 0) - 1}
-                                    />
-                                </SwipeableRow>
-                            )
-                        })}
-                        <InfiniteScrollEventEmitter emitEvent={ctx.loadMore} />
-                    </div>
-                )}
-
-                {ctx.loadingMore && ctx.results.length > 0 && (
-                    <div className="flex justify-center py-6">
-                        <Loading></Loading>
-                    </div>
-                )}
-
-                {showEndOfResults && (
-                    <div className="flex justify-center py-4">
-                        <span className="secondary-text s-font">{t('common.endOfResults', { defaultValue: 'No more offers to display.' })}</span>
-                    </div>
-                )}
-
+                <AnimatePresence
+                    mode="wait"
+                    onExitComplete={() => {
+                        if (!showOfferPreview) {
+                            setIsPreviewSlotVisible(false);
+                        }
+                    }}
+                >
+                    {showOfferPreview && (
+                        <DesktopOfferSearchPreview key={ctx.selectedOffer!.offerId} offer={ctx.selectedOffer!} />
+                    )}
+                </AnimatePresence>
             </div>
         </>
     );

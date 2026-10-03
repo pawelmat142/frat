@@ -17,6 +17,7 @@ import SkeletonControl from "global/components/controls/SkeletonControl";
 import FloatingSelector from "global/components/selector/FloatingSelector";
 import FloatingDateInput, { datepickerWithDaysConfig } from "global/components/callendar/FloatingDateInput";
 import { DateUtil } from "@shared/utils/DateUtil";
+import { OfferUtil } from "@shared/utils/OfferUtil";
 
 interface Props {
     onClose?: () => void;
@@ -28,6 +29,7 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
     const globalCtx = useGlobalContext();
     const userCtx = useUserContext();
     const ctx = useOfferSearch();
+    const isDesktop = globalCtx.isDesktop;
 
     const [loadingLocation, setLoadingLocation] = useState(false);
 
@@ -40,6 +42,36 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
     const formState = f.watch()
 
     const sortBy = formState.sortBy;
+
+    useEffect(() => {
+        if (!isDesktop || !formState.locationCountries?.length) {
+            return;
+        }
+
+        const formSearchParams = OfferUtil.prepareUrlParams(formState, defaultOfferFilters);
+        const appliedSearchParams = OfferUtil.prepareUrlParams(ctx.filters, defaultOfferFilters);
+        if (formSearchParams === appliedSearchParams) {
+            return;
+        }
+
+        const timeout = window.setTimeout(() => {
+            ctx.setFiltersWithSearchAndNavigate(f.getValues());
+        }, 300);
+
+        return () => window.clearTimeout(timeout);
+    }, [ctx.filters, ctx.setFiltersWithSearchAndNavigate, f, formState, isDesktop]);
+
+    useEffect(() => {
+        if (!isDesktop) {
+            return;
+        }
+
+        const formSearchParams = OfferUtil.prepareUrlParams(f.getValues(), defaultOfferFilters);
+        const appliedSearchParams = OfferUtil.prepareUrlParams(ctx.filters, defaultOfferFilters);
+        if (formSearchParams !== appliedSearchParams) {
+            f.reset(ctx.filters);
+        }
+    }, [ctx.filters, f, isDesktop]);
 
     useEffect(() => {
         const autofillLocationCountry = async () => {
@@ -75,7 +107,11 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
 
     const resetFilters = () => {
         f.reset(defaultOfferFilters);
-        ctx.resetFilters()
+        if (isDesktop) {
+            ctx.setFiltersWithSearchAndNavigate(defaultOfferFilters);
+            return;
+        }
+        ctx.resetFilters();
     }
 
     const sortOptionItems: SelectorItem<string>[] = Object.keys(OfferSearchSortOptions)
@@ -84,12 +120,14 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
             label: t('offer.form.sortOptions.' + option)
         }))
 
-    return (<>
-        <Header onBack={() => onClose?.()} title={t("offer.filtersTitle")} />
-        <div className="form-view relative flex flex-col primary-bg h-full">
+    return (
+        <div className={isDesktop ? "offers-search-filters-sidebar" : "mb-20"}>
+            <div className={isDesktop ? "offers-search-filters-sidebar-content" : "form-view relative flex flex-col primary-bg h-full"}>
+                {!isDesktop && <Header onBack={() => onClose?.()} title={t("offer.filtersTitle")} />}
+                {isDesktop && <h2 className="offers-search-filters-title">{t("common.filters")}</h2>}
 
 
-            <form className='flex flex-col flex-1'
+            <form className={`flex flex-col flex-1 ${isDesktop ? 'offers-search-filters-form' : ''}`}
                 noValidate
                 onSubmit={f.handleSubmit(submit)}
             >
@@ -189,7 +227,7 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                 />
 
 
-                <div className="mt-10">
+                {!isDesktop && <div className="mt-10 mb-8">
                     <Button
                         size={BtnSizes.LARGE}
                         mode={BtnModes.PRIMARY} fullWidth type="submit">
@@ -199,12 +237,17 @@ const OfferSearchFiltersView: React.FC<Props> = ({ onClose }) => {
                     <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-3" fullWidth>
                         {t("common.reset")}
                     </Button>
-                </div>
+                </div>}
+                {isDesktop && (
+                    <Button onClick={resetFilters} mode={BtnModes.ERROR_TXT} className="mt-4" fullWidth>
+                        {t("common.reset")}
+                    </Button>
+                )}
 
             </form>
 
         </div>
-    </>
+    </div>
     )
 }
 export default OfferSearchFiltersView;

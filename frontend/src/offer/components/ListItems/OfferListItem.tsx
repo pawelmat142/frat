@@ -12,10 +12,12 @@ interface Props {
     last?: boolean,
     disableDefaultBorder?: boolean
     rightSection?: React.ReactNode,
-    className?: string
+    className?: string,
+    onClick?: () => void,
+    selected?: boolean,
 }
 
-const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder, rightSection, className }) => {
+const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBorder, rightSection, className, onClick, selected }) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -37,7 +39,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
     />
 
     return (
-        <div onClick={goToOfferView} className={className}>
+        <div onClick={onClick ?? goToOfferView} className={className}>
             <ListItem
                 imgUrl={offer.avatarRef ? offer.avatarRef.url : undefined}
                 imgComponent={avatarMock}
@@ -47,6 +49,7 @@ const OfferListItem: React.FC<Props> = ({ offer, first, last, disableDefaultBord
                 last={last}
                 rightSection={rightSection}
                 disableDefaultBorder={disableDefaultBorder}
+                className={selected ? ' offer-search-list-item-selected' : ''}
             />
         </div>
     )

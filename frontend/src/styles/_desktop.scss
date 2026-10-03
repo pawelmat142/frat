@@ -783,6 +783,122 @@ $desktop-view-size-two: 80rem;
     border-radius: .375rem;
   }
 
+  // OFFER SEARCH
+  .offers-search-layout {
+    display: grid;
+    grid-template-columns: minmax(17.5rem, 20rem) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 1rem;
+    width: 100%;
+    max-width: $desktop-view-size-two;
+    height: 100%;
+    min-height: 0;
+    margin: 0 auto;
+    padding: 0 .5rem .5rem;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    &.has-offer-preview {
+      grid-template-columns: minmax(17.5rem, 20rem) minmax(0, 1fr) minmax(24rem, 28rem);
+      max-width: 100rem;
+    }
+  }
+
+  .offers-search-sidebar {
+    position: sticky;
+    z-index: 40;
+    height: 100%;
+    max-height: calc(100dvh - 8rem);
+    overflow-y: auto;
+    border-right: 1px solid $border-color;
+  }
+
+  .offers-search-filters-sidebar-content {
+    padding: 1rem;
+  }
+
+  .offers-search-filters-title {
+    margin-bottom: .75rem;
+    color: $primary-text;
+    font-size: $lFont;
+    font-weight: $font-semibold;
+  }
+
+  .offers-search-filters-form {
+    gap: 0;
+  }
+
+  .offers-search-results-area {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .offers-search-results-area .infinite-scroll-filters {
+    display: none;
+  }
+
+  .offers-search-results-toolbar {
+    flex-shrink: 0;
+    margin-bottom: 1rem;
+  }
+
+  .offers-search-results-title {
+    margin-top: 1rem;
+    color: $primary-text;
+    font-size: $xxlFont;
+    font-weight: $font-semibold;
+  }
+
+  .offers-search-results-count {
+    margin-top: .15rem;
+    color: $secondary-text;
+    font-size: $sFont;
+  }
+
+  .offers-search-results-content {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .offer-search-list-item-selected {
+    box-sizing: border-box;
+    border-left: 4px solid $primary-color;
+    background-color: $active-bg;
+  }
+
+  .offers-search-preview {
+    align-self: start;
+    max-height: calc(100dvh - 8rem);
+    overflow-y: auto;
+    border-left: 1px solid $border-color;
+  }
+
+  .offers-search-preview-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .offers-search-preview-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .35rem;
+  }
+
+  .offers-search-preview .rounded-xl {
+    border-radius: .375rem;
+  }
+
   .workers-search-results-content .map-search-container {
     height: 100%;
     min-height: 0;

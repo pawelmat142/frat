@@ -12,6 +12,7 @@ import { MenuItemIdentifiers } from "global/interface/controls.interface";
 import { useFloatingBtnContext } from "global/fab/FloatingBtnProvider";
 import { useUserContext } from "user/UserProvider";
 import { createSearchSessionId, SearchSessionStorage } from "employee/views/search/WorkersSearchProvider";
+import { useGlobalContext } from "global/providers/GlobalProvider";
 
 export interface OfferSearchContextProps {
     filters: OfferSearchFilters;
@@ -19,6 +20,9 @@ export interface OfferSearchContextProps {
     setFilters: (filters: OfferSearchFilters) => void;
     resetFilters: () => void;
     results: OfferI[];
+    selectedOffer: OfferI | null;
+    setSelectedOffer: (offer: OfferI | null) => void;
+    totalResults: number | null;
     loading: boolean;
     loadingMore: boolean;
     hasMore: boolean;
@@ -104,12 +108,15 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const navigate = useNavigate();
     const floatingBtnCtx = useFloatingBtnContext();
     const userCtx = useUserContext();
+    const globalCtx = useGlobalContext();
 
     const [filters, setFiltersState] = useState<OfferSearchFilters>(() => {
         const parsed = OfferUtil.parseFiltersFromSearch(location.search, defaultOfferFilters);
         return toStateFilters(parsed);
     });
     const [results, setResults] = useState<OfferI[]>([]);
+    const [selectedOffer, setSelectedOffer] = useState<OfferI | null>(null);
+    const [totalResults, setTotalResults] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
     const [hasMore, setHasMore] = useState(false);
@@ -129,6 +136,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const filtersValid = !!filters.locationCountries?.length
+    const isDesktop = globalCtx.isDesktop
 
     const requestIdRef = useRef(0);
     const requestsLengthRef = useRef(0);
@@ -136,7 +144,7 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const navToSearch = () => {
         NavBus.emit(MenuItemIdentifiers.OFFERS);
-        if (filtersValid) {
+        if (isDesktop || filtersValid) {
             setFiltersWithSearchAndNavigate(filters)
         } else {
             openOfferPseudoView(true)
@@ -170,6 +178,9 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const executeSearch = useCallback(async (searchFilters: OfferSearchFilters, append: boolean) => {
+        if (!searchFilters?.locationCountries?.length) {
+            return;
+        }
         const requestId = ++requestIdRef.current;
         if (append) {
             setLoadingMore(true);
@@ -194,8 +205,10 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 setResults(prev => [...prev, ...result.offers]);
             } else {
                 setResults(result.offers);
+                setSelectedOffer(null);
             }
 
+            setTotalResults(result.count);
             const loaded = searchFilters.skip + result.offers.length;
             setHasMore(loaded < result.count);
         } catch (error: any) {
@@ -222,6 +235,8 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         setFiltersState(normalized);
         setResults([]);
+        setSelectedOffer(null);
+        setTotalResults(null);
         setHasMore(false);
 
         const searchFilters = toSearchFilters(normalized, 0, INITIAL_LIMIT);
@@ -236,6 +251,8 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         setFiltersState(normalized);
         setResults([]);
+        setSelectedOffer(null);
+        setTotalResults(null);
         setHasMore(false);
 
         const searchStr = OfferUtil.prepareUrlParams(normalized, defaultOfferFilters);
@@ -269,6 +286,9 @@ const OfferSearchProvider: React.FC<{ children: React.ReactNode }> = ({ children
             filters,
             setFilters: handleSetFilters,
             results,
+            selectedOffer,
+            setSelectedOffer,
+            totalResults,
             loading,
             loadingMore,
             hasMore,
