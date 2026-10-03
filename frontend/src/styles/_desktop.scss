@@ -845,10 +845,10 @@ $desktop-view-size-two: 80rem;
   }
 
   // CHAT
-  // Uses the same two-column dimensions as the worker search view.
+  // Uses the worker-search container dimensions with a slightly wider chat list.
   .desktop-chat-layout {
     display: grid;
-    grid-template-columns: minmax(17.5rem, 20rem) minmax(0, 1fr);
+    grid-template-columns: minmax(20rem, 23rem) minmax(0, 1fr);
     gap: 1.5rem;
     flex: 1;
     height: 100%;
@@ -923,7 +923,6 @@ $desktop-view-size-two: 80rem;
   .desktop-chat-conversation {
     display: flex;
     flex-direction: column;
-    padding-left: 1rem;
     box-sizing: border-box;
     background-color: $primary-bg;
   }
@@ -948,7 +947,8 @@ $desktop-view-size-two: 80rem;
 
   .desktop-chat-conversation .chat-view {
     min-height: 0;
-    padding: 0;
+    // Keep the focused composer outline inside ancestors that clip overflow.
+    padding: 2px;
   }
 
   .desktop-worker-profile-main,
