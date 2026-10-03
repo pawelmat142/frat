@@ -10,8 +10,6 @@ import MapNavigation, { MapNavigationProps } from "global/components/map/MapNavi
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY ?? '';
 const MAP_SESSION_KEY = 'workerMapSelectedIndex';
 
-// TODO opcje z mapa dostosowac na desktop
-
 interface Props {
     onNavigationChange?: (navigation: MapNavigationProps | null) => void;
 }
@@ -24,7 +22,7 @@ const WorkersMapSearchResults: React.FC<Props> = ({ onNavigationChange }) => {
 
     const center = userCtx.position ?? AppConfig.MAP.DEFAUT_POSITION;
 
-    const { mapRef, sortedItems, selectedIndex, directionRef, handlePrev, handleNext } =
+    const { mapRef, sortedItems, selectedIndex, handlePrev, handleNext } =
         useGoogleMapMarkers({
             items: ctx.results,
             center,
