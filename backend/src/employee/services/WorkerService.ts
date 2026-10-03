@@ -174,6 +174,11 @@ export class WorkersService implements OnModuleInit, OnModuleDestroy {
         }
 
         const profile = await this.prepareProfile(user, { ...form, avatarRef: resolvedAvatarRef });
+
+        profile.bio = profileBefore.bio;
+        profile.skills = profileBefore.skills;
+        profile.images = profileBefore.images;
+
         const result = await this.workerRepo.update(profile, certificatesChanged); // Mark as changed since certificates might have changed
         return result;
     }
