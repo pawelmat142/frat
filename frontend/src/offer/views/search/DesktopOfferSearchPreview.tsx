@@ -6,14 +6,12 @@ import { OfferI } from "@shared/interfaces/OfferI";
 import { AppConfig } from "@shared/AppConfig";
 import ListItemImg from "global/components/ListItemImg";
 import Button from "global/components/controls/Button";
-import TileSection from "global/components/tiles/TileSection";
 import { BtnModes } from "global/interface/controls.interface";
 import { Ico } from "global/icon.def";
 import { Path } from "../../../path";
 import OfferAvatarMock from "offer/components/OfferAvatarMock";
 import OfferStatItems from "offer/components/OfferStatItems";
 import OfferDataSection from "offer/views/offer-view/OfferDataSection";
-import OfferCertificatesSection from "offer/views/offer-view/OfferCertificatesSection";
 import { useOpenChat } from "chat/hooks/useOpenChat";
 import { useUserContext } from "user/UserProvider";
 
@@ -58,13 +56,7 @@ const DesktopOfferSearchPreview: React.FC<Props> = ({ offer }) => {
         </div>
       </div>
 
-      <OfferDataSection offer={offer} />
-      {!!offer.description && (
-        <TileSection title={t("offer.descriptionTitle")}>
-          <div className="p-3">{offer.description}</div>
-        </TileSection>
-      )}
-      <OfferCertificatesSection offer={offer} />
+      <OfferDataSection offer={offer} desktopSearchPreviewMode/>
     </motion.aside>
   );
 };

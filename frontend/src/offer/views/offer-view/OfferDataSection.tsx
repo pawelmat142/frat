@@ -22,9 +22,10 @@ import { useUserContext } from "user/UserProvider";
 
 interface Props {
   offer: OfferI;
+  desktopSearchPreviewMode?: boolean
 }
 
-const OfferDataSection: React.FC<Props> = ({ offer }) => {
+const OfferDataSection: React.FC<Props> = ({ offer, desktopSearchPreviewMode=false }) => {
   const userCtx = useUserContext();
   const globalCtx = useGlobalContext();
   const floatingBtnCtx = useFloatingBtnContext();
@@ -114,7 +115,7 @@ const OfferDataSection: React.FC<Props> = ({ offer }) => {
       onClick: onAvailabilityClick,
     },
     {
-      if: offer.phoneNumber,
+      if: !desktopSearchPreviewMode && offer.phoneNumber,
       label: `${t("employeeProfile.form.phoneNumber")}: ${offer.phoneNumber.prefix} ${offer.phoneNumber.number}`,
       icon: Ico.PHONE,
       onClick: openPhoneCall,
