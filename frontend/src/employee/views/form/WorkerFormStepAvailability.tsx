@@ -327,7 +327,7 @@ const WorkerFormStepAvailability: React.FC<Props> = ({ formRef }) => {
                                                                 error={errorMessage}
                                                                 rightIcon={
                                                                     (ranges?.length > 1 && <IconButton
-                                                                        className="mb-1"
+                                                                        size={BtnSizes.SMALL}
                                                                         icon={<DeleteIcon />}
                                                                         mode={BtnModes.ERROR_TXT}
                                                                         onClick={() => {

@@ -558,6 +558,18 @@ $desktop-view-size-two: 80rem;
     max-height: calc(100dvh - 4rem);
     overflow-y: auto;
 
+    // The portal provides a viewport-relative `top` value. Move the panel's
+    // bottom edge to that anchor when there is more room above the input.
+    &.upward {
+      bottom: auto;
+      transform: translateY(calc(-100% + .375rem)) scale(.98);
+      transform-origin: bottom center;
+
+      &.open {
+        transform: translateY(-100%) scale(1);
+      }
+    }
+
     .desktop-date-range-picker-controls {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));

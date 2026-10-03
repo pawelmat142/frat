@@ -14,6 +14,7 @@ interface PopoverPosition {
 export const useAnchoredPopover = (
     isDesktop: boolean,
     triggerRef: MutableRefObject<HTMLDivElement | null>,
+    popoverRef?: MutableRefObject<HTMLDivElement | null>,
 ) => {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [isPopoverMounted, setIsPopoverMounted] = useState(false);
@@ -84,7 +85,8 @@ export const useAnchoredPopover = (
         updatePopoverPlacement();
 
         const closeOnOutsideClick = (event: MouseEvent) => {
-            if (!triggerRef.current?.contains(event.target as Node)) {
+            const target = event.target as Node;
+            if (!triggerRef.current?.contains(target) && !popoverRef?.current?.contains(target)) {
                 closePopover();
             }
         };
@@ -102,7 +104,7 @@ export const useAnchoredPopover = (
             window.removeEventListener('resize', updatePopoverPlacement);
             document.removeEventListener('scroll', updatePopoverPlacement, true);
         };
-    }, [closePopover, isDesktop, isPopoverOpen, triggerRef, updatePopoverPlacement]);
+    }, [closePopover, isDesktop, isPopoverOpen, popoverRef, triggerRef, updatePopoverPlacement]);
 
     useEffect(() => {
         if (!isDesktop) {

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 import FormError from '../controls/FormError';
 import FloatingLabel from '../controls/FloatingLabel';
 import { DateRange } from '@shared/interfaces/WorkerI';
@@ -42,12 +43,13 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const popoverRef = useRef<HTMLDivElement>(null);
     const bottomSheetCtx = useBottomSheet();
     const globalCtx = useGlobalContext();
     const { t } = useTranslation();
 
     const [openPseudoView, setOpenPseudoView] = useState(false);
-    const { closePopover, isPopoverMounted, isPopoverOpen, popoverPlacement, popoverPosition, togglePopover } = useAnchoredPopover(globalCtx.isDesktop, wrapperRef);
+    const { closePopover, isPopoverMounted, isPopoverOpen, popoverPlacement, popoverPosition, togglePopover } = useAnchoredPopover(globalCtx.isDesktop, wrapperRef, popoverRef);
 
     // Value is already in string format (YYYY-MM-DD), pass through directly
     const _value: DateRange = {
@@ -119,6 +121,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
 
     const desktopPopover = globalCtx.isDesktop && isPopoverMounted ? (
         <div
+            ref={popoverRef}
             className={`desktop-date-range-picker-popover${isPopoverOpen ? ' open' : ''}${popoverPlacement === 'top' ? ' upward' : ''}`}
             role="dialog"
             aria-label={label}
@@ -178,7 +181,7 @@ const DateRangeInputViewSelector: React.FC<DateRangeProps> = ({
             </div>
             <FormError error={error ? { message: error } : undefined} />
 
-            {desktopPopover}
+            {desktopPopover && ReactDOM.createPortal(desktopPopover, document.body)}
 
             <PseudoView show={!globalCtx.isDesktop && openPseudoView}>
                 <CallendarsView
